@@ -1,0 +1,359 @@
+#ifndef TRIAL_PROTOCOL_JSON_DETAIL_ENCODER_IPP
+#define TRIAL_PROTOCOL_JSON_DETAIL_ENCODER_IPP
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+///////////////////////////////////////////////////////////////////////////////
+
+#include <iterator>
+#if defined(BOOST_LEXICAL_CAST_ASSUME_C_LOCALE)
+#define TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+#endif
+#define BOOST_LEXICAL_CAST_ASSUME_C_LOCALE 1
+#include <boost/lexical_cast.hpp>
+#include <boost/array.hpp>
+#include <boost/utility/string_ref.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <trial/protocol/json/detail/traits.hpp>
+
+namespace trial
+{
+namespace protocol
+{
+namespace json
+{
+namespace detail
+{
+
+template <typename CharT>
+basic_encoder<CharT>::basic_encoder(buffer_type& buffer)
+    : buffer(buffer)
+{
+};
+
+template <typename CharT>
+struct outputter
+{
+    static std::size_t write(buffer::base<CharT>& buffer,
+                             CharT character)
+    {
+        if (buffer.grow(1))
+        {
+            buffer.write(character);
+            return 1;
+        }
+        return 0;
+    }
+
+    static std::size_t write(buffer::base<CharT>& buffer,
+                             const boost::basic_string_ref<CharT>& data)
+    {
+        const std::size_t size = data.size();
+        if (buffer.grow(size))
+        {
+            for (std::size_t i = 0; i < size; ++i)
+            {
+                buffer.write(data[i]);
+            }
+            return size;
+        }
+        return 0;
+    }
+};
+
+template <typename CharT, typename T, typename Enable = void>
+struct encoder_converter
+{
+    static std::size_t write(buffer::base<CharT>&, const T& data);
+};
+
+// Integers
+template <typename CharT, typename T>
+struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_integral<T> >::type>
+{
+    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    {
+        typedef boost::array<CharT, std::numeric_limits<T>::digits10> array_type;
+        array_type output;
+
+        // Build buffer backwards
+        typename array_type::reverse_iterator where = output.rbegin();
+        const bool is_negative = data < 0;
+        typename boost::make_unsigned<T>::type number = std::abs(data);
+        if (number == 0)
+        {
+            *where = traits<CharT>::alpha_0;
+            ++where;
+        }
+        else
+        {
+            const T base = T(10);
+            while (number != 0)
+            {
+                *where = traits<CharT>::alpha_0 + (number % base);
+                ++where;
+                number /= base;
+            }
+        }
+        typename array_type::const_iterator begin = where.base();
+        const std::size_t size = std::distance(begin, output.cend()) + (is_negative ? 1 : 0);
+
+        if (!buffer.grow(size))
+        {
+            return 0;
+        }
+        if (is_negative)
+        {
+            buffer.write(traits<CharT>::alpha_minus);
+        }
+        while (begin != output.end())
+        {
+            buffer.write(*begin);
+            ++begin;
+        }
+        return size;
+    }
+};
+
+// Floating point numbers
+template <typename CharT, typename T>
+struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_floating_point<T> >::type>
+{
+    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    {
+        switch (boost::math::fpclassify(data))
+        {
+        case FP_INFINITE:
+        case FP_NAN:
+            // Infinity and NaN must be encoded as null
+            return outputter<CharT>::write(buffer, traits<CharT>::null_text());
+        default:
+            break;
+        }
+
+        std::string work = boost::lexical_cast<std::string>(data);
+        const std::string::size_type size = work.size();
+
+        if (!buffer.grow(size))
+        {
+            return 0;
+        }
+
+        for (std::string::const_iterator it = work.begin();
+             it != work.end();
+             ++it)
+        {
+            buffer.write(*it);
+        }
+
+        return size;
+    }
+};
+
+// Strings
+template <typename CharT, typename T>
+struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_same<T, boost::basic_string_ref<CharT> > >::type>
+{
+    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    {
+        // This is an approximation of the size. Further characters may be
+        // added by escaped characters, in which case we grow the buffer
+        // per escape character.
+        std::size_t size = sizeof(CharT) + data.size() + sizeof(CharT);
+
+        if (!buffer.grow(size))
+        {
+            return 0;
+        }
+
+        buffer.write(traits<char>::alpha_quote);
+        for (typename boost::basic_string_ref<CharT>::const_iterator it = data.begin();
+             it != data.end();
+             ++it)
+        {
+            switch (*it)
+            {
+            case traits<CharT>::alpha_quote:
+            case traits<CharT>::alpha_reverse_solidus:
+            case traits<CharT>::alpha_solidus:
+                if (!buffer.grow(1))
+                {
+                    return 0;
+                }
+                ++size;
+                buffer.write(traits<CharT>::alpha_reverse_solidus);
+                buffer.write(*it);
+                break;
+
+            case traits<CharT>::alpha_backspace:
+                if (!buffer.grow(1))
+                {
+                    return 0;
+                }
+                ++size;
+                buffer.write(traits<CharT>::alpha_reverse_solidus);
+                buffer.write(traits<CharT>::alpha_b);
+                break;
+
+            case traits<CharT>::alpha_formfeed:
+                if (!buffer.grow(1))
+                {
+                    return 0;
+                }
+                ++size;
+                buffer.write(traits<CharT>::alpha_reverse_solidus);
+                buffer.write(traits<CharT>::alpha_f);
+                break;
+
+            case traits<CharT>::alpha_newline:
+                if (!buffer.grow(1))
+                {
+                    return 0;
+                }
+                ++size;
+                buffer.write(traits<CharT>::alpha_reverse_solidus);
+                buffer.write(traits<CharT>::alpha_n);
+                break;
+
+            case traits<CharT>::alpha_return:
+                if (!buffer.grow(1))
+                {
+                    return 0;
+                }
+                ++size;
+                buffer.write(traits<CharT>::alpha_reverse_solidus);
+                buffer.write(traits<CharT>::alpha_r);
+                break;
+
+            case traits<CharT>::alpha_tab:
+                if (!buffer.grow(1))
+                {
+                    return 0;
+                }
+                ++size;
+                buffer.write(traits<CharT>::alpha_reverse_solidus);
+                buffer.write(traits<CharT>::alpha_t);
+                break;
+
+            default:
+                buffer.write(*it);
+                break;
+            }
+        }
+        outputter<CharT>::write(buffer, traits<char>::alpha_quote);
+
+        return size;
+    }
+};
+
+template <typename CharT, typename T>
+struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
+{
+    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    {
+        return encoder_converter< CharT, typename boost::basic_string_ref<CharT> >::write(buffer, data);
+    }
+};
+
+template <typename CharT>
+template <typename U>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(const U& data)
+{
+    return encoder_converter<CharT, U>::write(buffer, data);
+}
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(bool data)
+{
+    if (data)
+    {
+        return outputter<CharT>::write(buffer, traits<CharT>::true_text());
+    }
+    else
+    {
+        return outputter<CharT>::write(buffer, traits<CharT>::false_text());
+    }
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(const CharT *data)
+{
+    return encoder_converter< CharT, typename boost::basic_string_ref<CharT> >::write(buffer, data);
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(json::null_t)
+{
+    return outputter<CharT>::write(buffer, traits<CharT>::null_text());
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(json::array_open_t)
+{
+    return outputter<CharT>::write(buffer, traits<CharT>::alpha_bracket_open);
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(json::array_close_t)
+{
+    return outputter<CharT>::write(buffer, traits<CharT>::alpha_bracket_close);
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(json::object_open_t)
+{
+    return outputter<CharT>::write(buffer, traits<CharT>::alpha_brace_open);
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(json::object_close_t)
+{
+    return outputter<CharT>::write(buffer, traits<CharT>::alpha_brace_close);
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(json::detail::comma_t)
+{
+    return outputter<CharT>::write(buffer, traits<CharT>::alpha_comma);
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(json::detail::colon_t)
+{
+    return outputter<CharT>::write(buffer, traits<CharT>::alpha_colon);
+};
+
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::literal(const view_type& data)
+{
+    return outputter<CharT>::write(buffer, data);
+};
+
+} // namespace detail
+} // namespace json
+} // namespace protocol
+} // namespace trial
+
+#if defined(TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST)
+#define BOOST_LEXICAL_CAST_ASSUME_C_LOCALE TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST
+#undef TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST
+#endif
+
+#endif // TRIAL_PROTOCOL_JSON_DETAIL_ENCODER_IPP
