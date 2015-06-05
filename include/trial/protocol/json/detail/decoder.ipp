@@ -35,6 +35,171 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
+// basic_decoder_functor
+//-----------------------------------------------------------------------------
+
+template <typename CharT, typename ReturnType, typename Enable = void>
+struct basic_decoder_functor
+{
+    static ReturnType convert(const basic_decoder<CharT>&);
+};
+
+template <typename CharT, typename ReturnType>
+struct basic_decoder_functor<CharT,
+                             ReturnType,
+                             typename boost::enable_if< boost::is_integral<ReturnType> >::type>
+{
+    static ReturnType convert(const basic_decoder<CharT>& self)
+    {
+        if (self.type() != token::integer)
+        {
+            self.current.error = json::incompatible_type;
+            return ReturnType();
+        }
+
+        typename basic_decoder<CharT>::view_type::const_iterator it = self.literal().begin();
+
+        const bool is_negative = (*it == traits<CharT>::alpha_minus);
+        if (is_negative)
+            ++it;
+        ReturnType result = ReturnType();
+        while (it != self.literal().end())
+        {
+            const ReturnType old = result;
+            result *= ReturnType(10);
+            result += traits<CharT>::to_int(*it);
+            if (result < old)
+            {
+                // Overflow
+                self.current.error = json::invalid_value;
+                return ReturnType();
+            }
+            ++it;
+        }
+        return is_negative ? -result : result;
+    }
+};
+
+template <typename ReturnType>
+struct basic_decoder_functor<char,
+                             ReturnType,
+                             typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+{
+    static ReturnType convert(const basic_decoder<char>& self)
+    {
+        assert(self.type() == token::floating);
+
+        return std::atof(self.literal().data());
+    }
+};
+
+template <typename ReturnType>
+struct basic_decoder_functor<char,
+                             ReturnType,
+                             typename boost::enable_if< boost::is_same<ReturnType, std::string> >::type>
+{
+    // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
+    static ReturnType convert(const basic_decoder<char>& self)
+    {
+        assert(self.type() == token::string);
+        assert(self.literal().size() >= 2);
+
+        std::ostringstream result;
+        for (typename basic_decoder<char>::view_type::const_iterator it = self.literal().begin();
+             it != self.literal().end();
+             ++it)
+        {
+            if (*it == traits<char>::alpha_reverse_solidus)
+            {
+                assert(self.literal().size() >= 2);
+                ++it;
+                switch (*it)
+                {
+                case traits<char>::alpha_quote:
+                case traits<char>::alpha_reverse_solidus:
+                case traits<char>::alpha_solidus:
+                    result << *it;
+                    break;
+
+                case traits<char>::alpha_b:
+                    result << traits<char>::alpha_backspace;
+                    break;
+
+                case traits<char>::alpha_f:
+                    result << traits<char>::alpha_formfeed;
+                    break;
+
+                case traits<char>::alpha_n:
+                    result << traits<char>::alpha_newline;
+                    break;
+
+                case traits<char>::alpha_r:
+                    result << traits<char>::alpha_return;
+                    break;
+
+                case traits<char>::alpha_t:
+                    result << traits<char>::alpha_tab;
+                    break;
+
+                case traits<char>::alpha_u:
+                    {
+                        // Convert U+XXXX value to UTF-8
+                        assert(self.literal().size() >= 5);
+                        boost::uint32_t number = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            ++it;
+                            number <<= 4;
+                            if (traits<char>::is_hexdigit(*it))
+                            {
+                                number += traits<char>::to_int(*it);
+                            }
+                        }
+                        if (number <= 0x007F)
+                        {
+                            // 0xxxxxxx
+                            const unsigned char byte1 = static_cast<unsigned char>(number & 0x7F);
+                            result << byte1;
+                        }
+                        else if (number <= 0x07FF)
+                        {
+                            // 110xxxxx 10xxxxxx
+                            const unsigned char byte1 = 0xC0 | static_cast<unsigned char>((number >> 6) & 0x1F);
+                            const unsigned char byte2 = 0x80 | static_cast<unsigned char>(number & 0x3F);
+                            result << byte1 << byte2;
+                        }
+                        else
+                        {
+                            // 1110xxxx 10xxxxxx 10xxxxxx
+                            const unsigned char byte1 = 0xE0 | static_cast<unsigned char>((number >> 12) & 0x0F);
+                            const unsigned char byte2 = 0x80 | static_cast<unsigned char>((number >> 6) & 0x3F);
+                            const unsigned char byte3 = 0x80 | static_cast<unsigned char>(number & 0x3F);
+                            result << byte1 << byte2 << byte3;
+                        }
+                    }
+                    break;
+
+                default:
+                    assert(false);
+                    break;
+                }
+            }
+            else if (*it == traits<char>::alpha_quote)
+            {
+                assert((it == self.literal().begin()) ||
+                       (it + 1 == self.literal().end()));
+                // Ignore initial and terminating quotes
+            }
+            else
+            {
+                result << *it;
+            }
+        }
+        return result.str();
+    }
+};
+
+//-----------------------------------------------------------------------------
 // basic_decoder
 //-----------------------------------------------------------------------------
 
@@ -137,166 +302,11 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
     }
 }
 
-template <typename CharT, typename T, typename Enable = void>
-struct converter
-{
-    static T convert(const basic_decoder<CharT>&);
-};
-
-template <typename CharT, typename T>
-struct converter<CharT, T, typename boost::enable_if< boost::is_integral<T> >::type>
-{
-    static T convert(const basic_decoder<CharT>& decoder)
-    {
-        if (decoder.type() != token::integer)
-        {
-            decoder.current.error = json::incompatible_type;
-            return T();
-        }
-
-        typename basic_decoder<CharT>::view_type::const_iterator it = decoder.literal().begin();
-
-        const bool is_negative = (*it == traits<CharT>::alpha_minus);
-        if (is_negative)
-            ++it;
-        T result = T();
-        while (it != decoder.literal().end())
-        {
-            const T old = result;
-            result *= T(10);
-            result += traits<CharT>::to_int(*it);
-            if (result < old)
-            {
-                // Overflow
-                decoder.current.error = json::invalid_value;
-                return T();
-            }
-            ++it;
-        }
-        return is_negative ? -result : result;
-    }
-};
-
-template <typename T>
-struct converter<char, T, typename boost::enable_if< boost::is_floating_point<T> >::type>
-{
-    static T convert(const basic_decoder<char>& decoder)
-    {
-        assert(decoder.type() == token::floating);
-
-        return std::atof(decoder.literal().begin());
-    }
-};
-
-template <typename T>
-struct converter<char, T, typename boost::enable_if< boost::is_same<T, std::string> >::type>
-{
-    // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
-    static T convert(const basic_decoder<char>& decoder)
-    {
-        assert(decoder.type() == token::string);
-        assert(decoder.literal().size() >= 2);
-
-        std::ostringstream result;
-        for (typename basic_decoder<char>::view_type::const_iterator it = decoder.literal().begin();
-             it != decoder.literal().end();
-             ++it)
-        {
-            if (*it == traits<char>::alpha_reverse_solidus)
-            {
-                assert(decoder.literal().size() >= 2);
-                ++it;
-                switch (*it)
-                {
-                case traits<char>::alpha_quote:
-                case traits<char>::alpha_reverse_solidus:
-                case traits<char>::alpha_solidus:
-                    result << *it;
-                    break;
-
-                case traits<char>::alpha_b:
-                    result << traits<char>::alpha_backspace;
-                    break;
-
-                case traits<char>::alpha_f:
-                    result << traits<char>::alpha_formfeed;
-                    break;
-
-                case traits<char>::alpha_n:
-                    result << traits<char>::alpha_newline;
-                    break;
-
-                case traits<char>::alpha_r:
-                    result << traits<char>::alpha_return;
-                    break;
-
-                case traits<char>::alpha_t:
-                    result << traits<char>::alpha_tab;
-                    break;
-
-                case traits<char>::alpha_u:
-                    {
-                        // Convert U+XXXX value to UTF-8
-                        assert(decoder.literal().size() >= 5);
-                        boost::uint32_t number = 0;
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            ++it;
-                            number <<= 4;
-                            if (traits<char>::is_hexdigit(*it))
-                            {
-                                number += traits<char>::to_int(*it);
-                            }
-                        }
-                        if (number <= 0x007F)
-                        {
-                            // 0xxxxxxx
-                            const unsigned char byte1 = static_cast<unsigned char>(number & 0x7F);
-                            result << byte1;
-                        }
-                        else if (number <= 0x07FF)
-                        {
-                            // 110xxxxx 10xxxxxx
-                            const unsigned char byte1 = 0xC0 | static_cast<unsigned char>((number >> 6) & 0x1F);
-                            const unsigned char byte2 = 0x80 | static_cast<unsigned char>(number & 0x3F);
-                            result << byte1 << byte2;
-                        }
-                        else
-                        {
-                            // 1110xxxx 10xxxxxx 10xxxxxx
-                            const unsigned char byte1 = 0xE0 | static_cast<unsigned char>((number >> 12) & 0x0F);
-                            const unsigned char byte2 = 0x80 | static_cast<unsigned char>((number >> 6) & 0x3F);
-                            const unsigned char byte3 = 0x80 | static_cast<unsigned char>(number & 0x3F);
-                            result << byte1 << byte2 << byte3;
-                        }
-                    }
-                    break;
-
-                default:
-                    assert(false);
-                    break;
-                }
-            }
-            else if (*it == traits<char>::alpha_quote)
-            {
-                assert((it == decoder.literal().begin()) ||
-                       (it + 1 == decoder.literal().end()));
-                // Ignore initial and terminating quotes
-            }
-            else
-            {
-                result << *it;
-            }
-        }
-        return result.str();
-    }
-};
-
 template <typename CharT>
-template <typename T>
-T basic_decoder<CharT>::value() const
+template <typename ReturnType>
+ReturnType basic_decoder<CharT>::value() const
 {
-    return converter<CharT, T>::convert(*this);
+    return basic_decoder_functor<CharT, ReturnType>::convert(*this);
 }
 
 template <typename CharT>

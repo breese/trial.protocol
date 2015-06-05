@@ -41,7 +41,7 @@ public:
     token::value type() const BOOST_NOEXCEPT;
     enum json::errors error() const BOOST_NOEXCEPT;
     const view_type& literal() const BOOST_NOEXCEPT;
-    template <typename U> U value() const;
+    template <typename ReturnType> ReturnType value() const;
 
 private:
     token::value next_f_keyword() BOOST_NOEXCEPT;
@@ -53,10 +53,9 @@ private:
     void skip_whitespaces() BOOST_NOEXCEPT;
     bool at_keyword_end() const BOOST_NOEXCEPT;
 
-    template <typename T1, typename T2, typename T3>
-    friend struct converter;
-
 private:
+    template <typename C, typename T, typename Enable> friend struct basic_decoder_functor;
+
     view_type input;
     struct
     {

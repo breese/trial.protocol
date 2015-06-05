@@ -31,11 +31,9 @@ namespace json
 namespace detail
 {
 
-template <typename CharT>
-basic_encoder<CharT>::basic_encoder(buffer_type& buffer)
-    : buffer(buffer)
-{
-};
+//-----------------------------------------------------------------------------
+// Helpers
+//-----------------------------------------------------------------------------
 
 template <typename CharT>
 struct outputter
@@ -67,17 +65,24 @@ struct outputter
     }
 };
 
+//-----------------------------------------------------------------------------
+// basic_encoder_functor
+//-----------------------------------------------------------------------------
+
 template <typename CharT, typename T, typename Enable = void>
-struct encoder_converter
+struct basic_encoder_functor
 {
-    static std::size_t write(buffer::base<CharT>&, const T& data);
+    static std::size_t write(basic_encoder<CharT>&, const T& data);
 };
 
 // Integers
+
 template <typename CharT, typename T>
-struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_integral<T> >::type>
+struct basic_encoder_functor<CharT,
+                             T,
+                             typename boost::enable_if< boost::is_integral<T> >::type>
 {
-    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    static std::size_t write(basic_encoder<CharT>& self, const T& data)
     {
         typedef boost::array<CharT, std::numeric_limits<T>::digits10> array_type;
         array_type output;
@@ -104,17 +109,17 @@ struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_integral
         typename array_type::const_iterator begin = where.base();
         const std::size_t size = std::distance(begin, output.cend()) + (is_negative ? 1 : 0);
 
-        if (!buffer.grow(size))
+        if (!self.buffer.grow(size))
         {
             return 0;
         }
         if (is_negative)
         {
-            buffer.write(traits<CharT>::alpha_minus);
+            self.buffer.write(traits<CharT>::alpha_minus);
         }
         while (begin != output.end())
         {
-            buffer.write(*begin);
+            self.buffer.write(*begin);
             ++begin;
         }
         return size;
@@ -122,17 +127,20 @@ struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_integral
 };
 
 // Floating point numbers
+
 template <typename CharT, typename T>
-struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_floating_point<T> >::type>
+struct basic_encoder_functor<CharT,
+                             T,
+                             typename boost::enable_if< boost::is_floating_point<T> >::type>
 {
-    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    static std::size_t write(basic_encoder<CharT>& self, const T& data)
     {
         switch (boost::math::fpclassify(data))
         {
         case FP_INFINITE:
         case FP_NAN:
             // Infinity and NaN must be encoded as null
-            return outputter<CharT>::write(buffer, traits<CharT>::null_text());
+            return outputter<CharT>::write(self.buffer, traits<CharT>::null_text());
         default:
             break;
         }
@@ -140,7 +148,7 @@ struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_floating
         std::string work = boost::lexical_cast<std::string>(data);
         const std::string::size_type size = work.size();
 
-        if (!buffer.grow(size))
+        if (!self.buffer.grow(size))
         {
             return 0;
         }
@@ -149,7 +157,7 @@ struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_floating
              it != work.end();
              ++it)
         {
-            buffer.write(*it);
+            self.buffer.write(*it);
         }
 
         return size;
@@ -157,22 +165,25 @@ struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_floating
 };
 
 // Strings
+
 template <typename CharT, typename T>
-struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_same<T, boost::basic_string_ref<CharT> > >::type>
+struct basic_encoder_functor<CharT,
+                             T,
+                             typename boost::enable_if< boost::is_same<T, boost::basic_string_ref<CharT> > >::type>
 {
-    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    static std::size_t write(basic_encoder<CharT>& self, const T& data)
     {
         // This is an approximation of the size. Further characters may be
         // added by escaped characters, in which case we grow the buffer
         // per escape character.
         std::size_t size = sizeof(CharT) + data.size() + sizeof(CharT);
 
-        if (!buffer.grow(size))
+        if (!self.buffer.grow(size))
         {
             return 0;
         }
 
-        buffer.write(traits<char>::alpha_quote);
+        self.buffer.write(traits<CharT>::alpha_quote);
         for (typename boost::basic_string_ref<CharT>::const_iterator it = data.begin();
              it != data.end();
              ++it)
@@ -182,83 +193,77 @@ struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_same<T, 
             case traits<CharT>::alpha_quote:
             case traits<CharT>::alpha_reverse_solidus:
             case traits<CharT>::alpha_solidus:
-                if (!buffer.grow(1))
-                {
+                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                }
+                self.buffer.write(*it);
                 ++size;
-                buffer.write(traits<CharT>::alpha_reverse_solidus);
-                buffer.write(*it);
                 break;
 
             case traits<CharT>::alpha_backspace:
-                if (!buffer.grow(1))
-                {
+                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                }
+                self.buffer.write(traits<CharT>::alpha_b);
                 ++size;
-                buffer.write(traits<CharT>::alpha_reverse_solidus);
-                buffer.write(traits<CharT>::alpha_b);
                 break;
 
             case traits<CharT>::alpha_formfeed:
-                if (!buffer.grow(1))
-                {
+                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                }
+                self.buffer.write(traits<CharT>::alpha_f);
                 ++size;
-                buffer.write(traits<CharT>::alpha_reverse_solidus);
-                buffer.write(traits<CharT>::alpha_f);
                 break;
 
             case traits<CharT>::alpha_newline:
-                if (!buffer.grow(1))
-                {
+                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                }
+                self.buffer.write(traits<CharT>::alpha_n);
                 ++size;
-                buffer.write(traits<CharT>::alpha_reverse_solidus);
-                buffer.write(traits<CharT>::alpha_n);
                 break;
 
             case traits<CharT>::alpha_return:
-                if (!buffer.grow(1))
-                {
+                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                }
+                self.buffer.write(traits<CharT>::alpha_r);
                 ++size;
-                buffer.write(traits<CharT>::alpha_reverse_solidus);
-                buffer.write(traits<CharT>::alpha_r);
                 break;
 
             case traits<CharT>::alpha_tab:
-                if (!buffer.grow(1))
-                {
+                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                }
+                self.buffer.write(traits<CharT>::alpha_t);
                 ++size;
-                buffer.write(traits<CharT>::alpha_reverse_solidus);
-                buffer.write(traits<CharT>::alpha_t);
                 break;
 
             default:
-                buffer.write(*it);
+                self.buffer.write(*it);
                 break;
             }
         }
-        outputter<CharT>::write(buffer, traits<char>::alpha_quote);
+        self.buffer.write(traits<CharT>::alpha_quote);
 
         return size;
     }
 };
 
 template <typename CharT, typename T>
-struct encoder_converter<CharT, T, typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
+struct basic_encoder_functor<CharT,
+                             T,
+                             typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
 {
-    static std::size_t write(buffer::base<CharT>& buffer, const T& data)
+    static std::size_t write(basic_encoder<CharT>& self, const T& data)
     {
-        return encoder_converter< CharT, typename boost::basic_string_ref<CharT> >::write(buffer, data);
+        return basic_encoder_functor< CharT, typename boost::basic_string_ref<CharT> >::write(self, data);
     }
+};
+
+//-----------------------------------------------------------------------------
+// basic_encoder
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+basic_encoder<CharT>::basic_encoder(buffer_type& buffer)
+    : buffer(buffer)
+{
 };
 
 template <typename CharT>
@@ -266,7 +271,7 @@ template <typename U>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(const U& data)
 {
-    return encoder_converter<CharT, U>::write(buffer, data);
+    return basic_encoder_functor<CharT, U>::write(*this, data);
 }
 
 template <typename CharT>
@@ -287,7 +292,7 @@ template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(const CharT *data)
 {
-    return encoder_converter< CharT, typename boost::basic_string_ref<CharT> >::write(buffer, data);
+    return basic_encoder_functor< CharT, typename boost::basic_string_ref<CharT> >::write(*this, data);
 };
 
 template <typename CharT>

@@ -44,8 +44,7 @@ public:
 
     basic_encoder(buffer_type&);
 
-    template <typename U>
-    size_type value(const U&);
+    template <typename U> size_type value(const U&);
     size_type value(bool);
     size_type value(const CharT *);
     size_type value(json::null_t);
@@ -59,6 +58,8 @@ public:
     size_type literal(const view_type&);
 
 private:
+    template <typename C, typename T, typename Enable> friend struct basic_encoder_functor;
+
     buffer_type& buffer;
 };
 
