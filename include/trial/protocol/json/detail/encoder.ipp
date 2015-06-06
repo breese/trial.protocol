@@ -332,14 +332,14 @@ basic_encoder<CharT>::value(json::object_close_t)
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::detail::comma_t)
+basic_encoder<CharT>::value(json::detail::value_separator_t)
 {
     return outputter<CharT>::write(buffer, traits<CharT>::alpha_comma);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::detail::colon_t)
+basic_encoder<CharT>::value(json::detail::name_separator_t)
 {
     return outputter<CharT>::write(buffer, traits<CharT>::alpha_colon);
 };

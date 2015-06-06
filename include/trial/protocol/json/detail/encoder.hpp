@@ -27,11 +27,11 @@ namespace json
 namespace detail
 {
 
-struct comma_t {};
-const comma_t comma = comma_t();
+struct value_separator_t {};
+const value_separator_t value_separator = value_separator_t();
 
-struct colon_t {};
-const colon_t colon = colon_t();
+struct name_separator_t {};
+const name_separator_t name_separator = name_separator_t();
 
 template <typename CharT>
 class basic_encoder
@@ -44,16 +44,27 @@ public:
 
     basic_encoder(buffer_type&);
 
+    //! @brief Write value
+    //!
+    //! Type U can be an integral type (except bool), a floating-point type, a
+    //! string, or a string view.
     template <typename U> size_type value(const U&);
+    //! @brief Write boolean value
     size_type value(bool);
+    //! @brief Write string literal
     size_type value(const CharT *);
+    //! @brief Write null type
     size_type value(json::null_t);
+    //! @brief Write opening of array
     size_type value(json::array_open_t);
+    //! @brief Write closing of array
     size_type value(json::array_close_t);
+    //! @brief Write openting of object
     size_type value(json::object_open_t);
+    //! @brief Write closing of object
     size_type value(json::object_close_t);
-    size_type value(json::detail::comma_t);
-    size_type value(json::detail::colon_t);
+    size_type value(json::detail::value_separator_t);
+    size_type value(json::detail::name_separator_t);
 
     size_type literal(const view_type&);
 
