@@ -12,6 +12,8 @@ add_executable(test_json
   runner.cpp
   decoder_suite.cpp
   encoder_suite.cpp
+  reader_suite.cpp
+  writer_suite.cpp
 )
 
 target_link_libraries(test_json ${BOOST_PROTOCOL_DEPENDENT_LIBRARIES})
