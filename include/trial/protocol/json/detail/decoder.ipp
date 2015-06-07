@@ -61,7 +61,14 @@ struct basic_decoder_functor<CharT,
 
         const bool is_negative = (*it == traits<CharT>::alpha_minus);
         if (is_negative)
+        {
+            if (boost::is_unsigned<ReturnType>::value)
+            {
+                self.current.error = json::invalid_value;
+                return ReturnType();
+            }
             ++it;
+        }
         ReturnType result = ReturnType();
         while (it != self.literal().end())
         {
@@ -216,6 +223,12 @@ template <typename CharT>
 token::value basic_decoder<CharT>::type() const BOOST_NOEXCEPT
 {
     return current.type;
+}
+
+template <typename CharT>
+json::errors basic_decoder<CharT>::error() const BOOST_NOEXCEPT
+{
+    return current.error;
 }
 
 template <typename CharT>

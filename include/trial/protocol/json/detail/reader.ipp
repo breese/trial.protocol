@@ -47,8 +47,15 @@ struct basic_reader_functor<CharT,
         switch (self.decoder.type())
         {
         case detail::token::integer:
-            // FIXME: Raise error if value is too large
-            return self.decoder.template value<ReturnType>();
+            {
+                // FIXME: Raise error if value is too large
+                ReturnType result = self.decoder.template value<ReturnType>();
+                if (self.decoder.error() != json::no_error)
+                {
+                    throw boost::system::system_error(self.error());
+                }
+                return result;
+            }
 
         default:
             self.last_error = json::invalid_value;

@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(test_integer_zero)
     const char input[] = "0";
     json::detail::decoder decoder(input);
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
-    BOOST_REQUIRE_EQUAL(decoder.value<boost::int64_t>(), 0);
+    BOOST_REQUIRE_EQUAL(decoder.value<int>(), 0);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
@@ -293,6 +293,37 @@ BOOST_AUTO_TEST_CASE(test_integer_long)
     json::detail::decoder decoder(input);
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
     BOOST_REQUIRE_EQUAL(decoder.value<long>(), 1);
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+BOOST_AUTO_TEST_CASE(test_integer_intmax)
+{
+    const char input[] = "1";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
+    BOOST_REQUIRE_EQUAL(decoder.value<boost::intmax_t>(), 1);
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+BOOST_AUTO_TEST_CASE(test_integer_unsigned)
+{
+    const char input[] = "1";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
+    BOOST_REQUIRE_EQUAL(decoder.value<unsigned int>(), 1);
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+BOOST_AUTO_TEST_CASE(fail_unsigned_negative)
+{
+    const char input[] = "-1";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
+    BOOST_REQUIRE_EQUAL(decoder.value<unsigned int>(), 0);
+    BOOST_REQUIRE_EQUAL(decoder.error(), json::invalid_value);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
