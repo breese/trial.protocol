@@ -25,8 +25,6 @@ namespace protocol
 namespace json
 {
 
-// FIXME: error reporting
-
 template <typename CharT>
 class basic_writer
 {
@@ -37,8 +35,8 @@ public:
 
     basic_writer(buffer_type&);
 
-    boost::system::error_code error() const;
-    size_type size() const;
+    boost::system::error_code error() const BOOST_NOEXCEPT;
+    size_type size() const BOOST_NOEXCEPT;
 
     template <typename T>
     size_type value(BOOST_FWD_REF(T) value);
@@ -49,7 +47,7 @@ public:
     size_type value(json::object_open_t);
     size_type value(json::object_close_t);
 
-    size_type literal(const view_type&);
+    size_type literal(const view_type&) BOOST_NOEXCEPT;
 
 private:
     void validate_scope();

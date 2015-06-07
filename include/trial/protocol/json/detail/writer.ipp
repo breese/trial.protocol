@@ -37,7 +37,7 @@ boost::system::error_code basic_writer<CharT>::error() const BOOST_NOEXCEPT
 
 template <typename CharT>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::size() const
+basic_writer<CharT>::size() const BOOST_NOEXCEPT
 {
     return stack.size() - 1;
 }
@@ -109,7 +109,7 @@ basic_writer<CharT>::value(json::object_close_t)
 
 template <typename CharT>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::literal(const view_type& data)
+basic_writer<CharT>::literal(const view_type& data) BOOST_NOEXCEPT
 {
     return encoder.literal(data);
 }
