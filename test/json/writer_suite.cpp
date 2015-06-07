@@ -14,6 +14,7 @@
 #include <boost/utility/base_from_member.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/json/writer.hpp>
+#include "is_system_error.hpp"
 
 using namespace trial::protocol;
 
@@ -188,6 +189,15 @@ BOOST_AUTO_TEST_CASE(test_array_bool_two)
     BOOST_REQUIRE_EQUAL(buffer.data(), "[false,true]");
 }
 
+BOOST_AUTO_TEST_CASE(fail_array_missing_begin)
+{
+    test_stream buffer;
+    json::writer writer(buffer);
+    BOOST_REQUIRE_EXCEPTION(writer.value(json::array_close),
+                            boost::system::system_error,
+                            test::is_system_error(json::unexpected_token));
+}
+
 //-----------------------------------------------------------------------------
 // Object
 //-----------------------------------------------------------------------------
@@ -223,6 +233,15 @@ BOOST_AUTO_TEST_CASE(test_object_bool_two)
     BOOST_REQUIRE_EQUAL(writer.value(true), 4);
     BOOST_REQUIRE_EQUAL(writer.value(json::object_close), 1);
     BOOST_REQUIRE_EQUAL(buffer.data(), "{\"key1\":false,\"key2\":true}");
+}
+
+BOOST_AUTO_TEST_CASE(fail_object_missing_begin)
+{
+    test_stream buffer;
+    json::writer writer(buffer);
+    BOOST_REQUIRE_EXCEPTION(writer.value(json::object_close),
+                            boost::system::system_error,
+                            test::is_system_error(json::unexpected_token));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

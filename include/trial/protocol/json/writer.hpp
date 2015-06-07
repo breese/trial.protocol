@@ -52,7 +52,8 @@ public:
     size_type literal(const view_type&);
 
 private:
-    bool validate_scope();
+    void validate_scope();
+    void validate_scope(token::value, enum json::errors);
 
 private:
     detail::encoder encoder;
@@ -61,9 +62,6 @@ private:
     struct frame
     {
         frame(detail::encoder& encoder, token::value);
-
-        bool is_array() const;
-        bool is_object() const;
 
         void write_separator();
 
