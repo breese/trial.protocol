@@ -11,6 +11,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <trial/protocol/json/detail/decoder.hpp>
+#include "is_system_error.hpp"
 
 using namespace trial::protocol;
 
@@ -264,7 +265,9 @@ BOOST_AUTO_TEST_CASE(fail_integer_too_large)
     json::detail::decoder decoder(input);
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
     BOOST_REQUIRE_EQUAL(decoder.literal(), "10000000000000000000");
-    BOOST_REQUIRE_EQUAL(decoder.value<boost::int64_t>(), 0);
+    BOOST_REQUIRE_EXCEPTION(decoder.value<boost::int64_t>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::invalid_value));
 }
 
 BOOST_AUTO_TEST_CASE(test_integer_short)
@@ -322,10 +325,9 @@ BOOST_AUTO_TEST_CASE(fail_unsigned_negative)
     const char input[] = "-1";
     json::detail::decoder decoder(input);
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
-    BOOST_REQUIRE_EQUAL(decoder.value<unsigned int>(), 0);
-    BOOST_REQUIRE_EQUAL(decoder.error(), json::invalid_value);
-    decoder.next();
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+    BOOST_REQUIRE_EXCEPTION(decoder.value<unsigned int>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::invalid_value));
 }
 
 //-----------------------------------------------------------------------------

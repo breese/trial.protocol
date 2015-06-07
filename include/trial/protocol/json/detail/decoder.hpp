@@ -14,6 +14,7 @@
 #include <string>
 #include <boost/cstdint.hpp>
 #include <boost/config.hpp>
+#include <boost/system/error_code.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <trial/protocol/json/detail/token.hpp>
 #include <trial/protocol/json/error.hpp>
@@ -39,7 +40,7 @@ public:
     void next() BOOST_NOEXCEPT;
 
     token::value type() const BOOST_NOEXCEPT;
-    enum json::errors error() const BOOST_NOEXCEPT;
+    boost::system::error_code error() const BOOST_NOEXCEPT;
     const view_type& literal() const BOOST_NOEXCEPT;
     template <typename ReturnType> ReturnType value() const;
 

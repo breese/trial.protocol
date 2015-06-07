@@ -17,6 +17,7 @@
 #include <iterator>
 #include <limits>
 #include <sstream>
+#include <boost/system/system_error.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 #include <trial/protocol/json/error.hpp>
@@ -54,7 +55,7 @@ struct basic_decoder_functor<CharT,
         if (self.type() != token::integer)
         {
             self.current.error = json::incompatible_type;
-            return ReturnType();
+            throw boost::system::system_error(self.error());
         }
 
         typename basic_decoder<CharT>::view_type::const_iterator it = self.literal().begin();
@@ -65,7 +66,7 @@ struct basic_decoder_functor<CharT,
             if (boost::is_unsigned<ReturnType>::value)
             {
                 self.current.error = json::invalid_value;
-                return ReturnType();
+                throw boost::system::system_error(self.error());
             }
             ++it;
         }
@@ -79,7 +80,7 @@ struct basic_decoder_functor<CharT,
             {
                 // Overflow
                 self.current.error = json::invalid_value;
-                return ReturnType();
+                throw boost::system::system_error(self.error());
             }
             ++it;
         }
@@ -226,9 +227,9 @@ token::value basic_decoder<CharT>::type() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-json::errors basic_decoder<CharT>::error() const BOOST_NOEXCEPT
+boost::system::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
 {
-    return current.error;
+    return json::make_error_code(current.error);
 }
 
 template <typename CharT>
