@@ -95,7 +95,11 @@ struct basic_decoder_functor<char,
 {
     static ReturnType convert(const basic_decoder<char>& self)
     {
-        assert(self.type() == token::floating);
+        if (self.type() != token::floating)
+        {
+            self.current.error = json::incompatible_type;
+            throw boost::system::system_error(self.error());
+        }
 
         return std::atof(self.literal().data());
     }
@@ -109,7 +113,12 @@ struct basic_decoder_functor<char,
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     static ReturnType convert(const basic_decoder<char>& self)
     {
-        assert(self.type() == token::string);
+        if (self.type() != token::string)
+        {
+            self.current.error = json::incompatible_type;
+            throw boost::system::system_error(self.error());
+        }
+
         assert(self.literal().size() >= 2);
 
         std::ostringstream result;

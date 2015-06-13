@@ -270,6 +270,28 @@ BOOST_AUTO_TEST_CASE(fail_integer_too_large)
                             test::is_system_error(json::invalid_value));
 }
 
+BOOST_AUTO_TEST_CASE(fail_integer_as_float)
+{
+    const char input[] = "1";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
+    BOOST_REQUIRE_EQUAL(decoder.value<int>(), 1);
+    BOOST_REQUIRE_EXCEPTION(decoder.value<float>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::incompatible_type));
+}
+
+BOOST_AUTO_TEST_CASE(fail_integer_as_string)
+{
+    const char input[] = "1";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
+    BOOST_REQUIRE_EQUAL(decoder.value<int>(), 1);
+    BOOST_REQUIRE_EXCEPTION(decoder.value<std::string>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::incompatible_type));
+}
+
 BOOST_AUTO_TEST_CASE(test_integer_short)
 {
     const char input[] = "1";
@@ -495,6 +517,28 @@ BOOST_AUTO_TEST_CASE(fail_floating_missing_exponent_minus)
     json::detail::decoder decoder(input);
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::error);
     BOOST_REQUIRE_EQUAL(decoder.literal(), "0e-");
+}
+
+BOOST_AUTO_TEST_CASE(fail_floating_as_int)
+{
+    const char input[] = "1.0";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::floating);
+    BOOST_REQUIRE_EQUAL(decoder.value<double>(), 1.0);
+    BOOST_REQUIRE_EXCEPTION(decoder.value<int>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::incompatible_type));
+}
+
+BOOST_AUTO_TEST_CASE(fail_floating_as_string)
+{
+    const char input[] = "1.0";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::floating);
+    BOOST_REQUIRE_EQUAL(decoder.value<double>(), 1.0);
+    BOOST_REQUIRE_EXCEPTION(decoder.value<std::string>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::incompatible_type));
 }
 
 //-----------------------------------------------------------------------------
@@ -752,6 +796,29 @@ BOOST_AUTO_TEST_CASE(fail_string_begin)
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
     BOOST_REQUIRE_EQUAL(decoder.literal(), "\"");
 }
+
+BOOST_AUTO_TEST_CASE(fail_string_as_int)
+{
+    const char input[] = "\"alpha\"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "alpha");
+    BOOST_REQUIRE_EXCEPTION(decoder.value<int>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::incompatible_type));
+}
+
+BOOST_AUTO_TEST_CASE(fail_string_as_float)
+{
+    const char input[] = "\"alpha\"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "alpha");
+    BOOST_REQUIRE_EXCEPTION(decoder.value<float>(),
+                            boost::system::system_error,
+                            test::is_system_error(json::incompatible_type));
+}
+
 //-----------------------------------------------------------------------------
 // Container
 //-----------------------------------------------------------------------------
