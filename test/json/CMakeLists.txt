@@ -18,4 +18,4 @@ add_executable(test_json
   oarchive_suite.cpp
 )
 
-target_link_libraries(test_json ${BOOST_PROTOCOL_DEPENDENT_LIBRARIES})
+target_link_libraries(test_json ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
