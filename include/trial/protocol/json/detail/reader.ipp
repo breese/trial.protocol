@@ -29,6 +29,34 @@ namespace json
 namespace detail
 {
 
+template <typename T>
+struct integer_to_floating
+{
+    // This is a crude approximation
+    typedef typename boost::conditional<
+        sizeof(T) <= sizeof(float),
+            float, typename boost::conditional<
+            sizeof(T) <= sizeof(double),
+                double,
+                long double
+                >::type
+            >::type type;
+};
+
+template <typename T>
+struct floating_to_integer
+{
+    // This is a crude approximation
+    typedef typename boost::conditional<
+        sizeof(T) <= sizeof(boost::int32_t),
+            boost::int32_t, typename boost::conditional<
+            sizeof(T) <= sizeof(boost::int64_t),
+                boost::int64_t,
+                boost::intmax_t
+                >::type
+        >::type type;
+};
+
 template <typename CharT, typename ReturnType, typename Enable = void>
 struct basic_reader_functor
 {
@@ -57,12 +85,18 @@ struct basic_reader_functor<CharT,
                 return result;
             }
 
+        case detail::token::floating:
+            typedef typename integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
+            return ReturnType(self.decoder.template value<floating_return_type>() + 0.5);
+
         default:
             self.last_error = json::invalid_value;
             throw boost::system::system_error(self.error());
         }
     }
 };
+
+// Floating-point numbers
 
 template <typename CharT, typename ReturnType>
 struct basic_reader_functor<CharT,
@@ -73,6 +107,10 @@ struct basic_reader_functor<CharT,
     {
         switch (self.decoder.type())
         {
+        case detail::token::integer:
+            typedef typename floating_to_integer<ReturnType>::type integer_return_type;
+            return ReturnType(self.decoder.template value<integer_return_type>());
+
         case detail::token::floating:
             return self.decoder.template value<ReturnType>();
 
@@ -82,6 +120,8 @@ struct basic_reader_functor<CharT,
         }
     }
 };
+
+// Booleans
 
 template <typename CharT, typename ReturnType>
 struct basic_reader_functor<CharT,
@@ -104,6 +144,8 @@ struct basic_reader_functor<CharT,
         }
     }
 };
+
+// Strings
 
 template <typename CharT, typename ReturnType>
 struct basic_reader_functor<CharT,
@@ -302,7 +344,8 @@ template <typename CharT>
 template <typename T>
 T basic_reader<CharT>::value() const
 {
-    return detail::basic_reader_functor<CharT, T>::convert(*this);
+    typedef typename boost::remove_const<T>::type return_type;
+    return detail::basic_reader_functor<CharT, return_type>::convert(*this);
 }
 
 template <typename CharT>

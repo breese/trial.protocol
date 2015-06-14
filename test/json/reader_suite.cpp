@@ -63,6 +63,7 @@ BOOST_AUTO_TEST_CASE(test_integer)
     json::reader reader(input);
     BOOST_REQUIRE_EQUAL(reader.type(), json::token::integer);
     BOOST_REQUIRE_EQUAL(reader.value<int>(), 1);
+    BOOST_REQUIRE_EQUAL(reader.value<double>(), 1.0);
     BOOST_REQUIRE_EQUAL(reader.literal(), "1");
     BOOST_REQUIRE_EQUAL(reader.next(), false);
 }
@@ -72,7 +73,30 @@ BOOST_AUTO_TEST_CASE(test_float)
     const char input[] = "1.0";
     json::reader reader(input);
     BOOST_REQUIRE_EQUAL(reader.type(), json::token::floating);
+    BOOST_REQUIRE_EQUAL(reader.value<float>(), 1.0);
+    BOOST_REQUIRE_EQUAL(reader.value<int>(), 1);
+    BOOST_REQUIRE_EQUAL(reader.literal(), "1.0");
+    BOOST_REQUIRE_EQUAL(reader.next(), false);
+}
+
+BOOST_AUTO_TEST_CASE(test_double)
+{
+    const char input[] = "1.0";
+    json::reader reader(input);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::floating);
     BOOST_REQUIRE_EQUAL(reader.value<double>(), 1.0);
+    BOOST_REQUIRE_EQUAL(reader.value<int>(), 1);
+    BOOST_REQUIRE_EQUAL(reader.literal(), "1.0");
+    BOOST_REQUIRE_EQUAL(reader.next(), false);
+}
+
+BOOST_AUTO_TEST_CASE(test_longdouble)
+{
+    const char input[] = "1.0";
+    json::reader reader(input);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::floating);
+    BOOST_REQUIRE_EQUAL(reader.value<long double>(), 1.0);
+    BOOST_REQUIRE_EQUAL(reader.value<int>(), 1);
     BOOST_REQUIRE_EQUAL(reader.literal(), "1.0");
     BOOST_REQUIRE_EQUAL(reader.next(), false);
 }
@@ -84,6 +108,16 @@ BOOST_AUTO_TEST_CASE(test_string)
     BOOST_REQUIRE_EQUAL(reader.type(), json::token::string);
     BOOST_REQUIRE_EQUAL(reader.value<std::string>(), "alpha");
     BOOST_REQUIRE_EQUAL(reader.literal(), "\"alpha\"");
+    BOOST_REQUIRE_EQUAL(reader.next(), false);
+}
+
+BOOST_AUTO_TEST_CASE(test_integer_const)
+{
+    const char input[] = "1";
+    json::reader reader(input);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::integer);
+    BOOST_REQUIRE_EQUAL(reader.value<const int>(), 1);
+    BOOST_REQUIRE_EQUAL(reader.literal(), "1");
     BOOST_REQUIRE_EQUAL(reader.next(), false);
 }
 
