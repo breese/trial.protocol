@@ -556,12 +556,34 @@ BOOST_AUTO_TEST_CASE(test_string_empty)
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
+BOOST_AUTO_TEST_CASE(test_string_space)
+{
+    const char input[] = "\" \"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), " ");
+    BOOST_REQUIRE_EQUAL(decoder.literal(), "\" \"");
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
 BOOST_AUTO_TEST_CASE(test_string_alpha)
 {
     const char input[] = "\"alpha\"";
     json::detail::decoder decoder(input);
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
     BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "alpha");
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+BOOST_AUTO_TEST_CASE(test_string_alpha_bravo)
+{
+    const char input[] = "\"alpha bravo\"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "alpha bravo");
+    BOOST_REQUIRE_EQUAL(decoder.literal(), input);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }

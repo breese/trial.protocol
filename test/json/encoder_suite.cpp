@@ -460,6 +460,16 @@ BOOST_AUTO_TEST_CASE(test_string_empty)
     BOOST_REQUIRE_EQUAL(result.str().data(), "\"\"");
 }
 
+BOOST_AUTO_TEST_CASE(test_string_space)
+{
+    std::ostringstream result;
+    test_stream buffer(result);
+    std::string text(" ");
+    json::detail::encoder encoder(buffer);
+    BOOST_REQUIRE_EQUAL(encoder.value(text), 3);
+    BOOST_REQUIRE_EQUAL(result.str().data(), "\" \"");
+}
+
 BOOST_AUTO_TEST_CASE(test_string_alpha)
 {
     std::ostringstream result;
@@ -467,6 +477,15 @@ BOOST_AUTO_TEST_CASE(test_string_alpha)
     json::detail::encoder encoder(buffer);
     BOOST_REQUIRE_EQUAL(encoder.value("alpha"), 7);
     BOOST_REQUIRE_EQUAL(result.str().data(), "\"alpha\"");
+}
+
+BOOST_AUTO_TEST_CASE(test_string_alpha_bravo)
+{
+    std::ostringstream result;
+    test_stream buffer(result);
+    json::detail::encoder encoder(buffer);
+    BOOST_REQUIRE_EQUAL(encoder.value("alpha bravo"), 13);
+    BOOST_REQUIRE_EQUAL(result.str().data(), "\"alpha bravo\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_quote)
