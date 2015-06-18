@@ -36,7 +36,7 @@ public:
     basic_writer(buffer_type&);
 
     boost::system::error_code error() const BOOST_NOEXCEPT;
-    size_type size() const BOOST_NOEXCEPT;
+    size_type level() const BOOST_NOEXCEPT;
 
     template <typename T>
     size_type value(BOOST_FWD_REF(T) value);

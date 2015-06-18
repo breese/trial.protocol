@@ -37,7 +37,7 @@ boost::system::error_code basic_writer<CharT>::error() const BOOST_NOEXCEPT
 
 template <typename CharT>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::size() const BOOST_NOEXCEPT
+basic_writer<CharT>::level() const BOOST_NOEXCEPT
 {
     return stack.size() - 1;
 }
