@@ -14,6 +14,7 @@
 #include <boost/system/system_error.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/math/special_functions/round.hpp>
 
 namespace trial
 {
@@ -87,7 +88,7 @@ struct basic_reader_functor<CharT,
 
         case detail::token::floating:
             typedef typename integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
-            return ReturnType(self.decoder.template value<floating_return_type>() + 0.5);
+            return ReturnType(boost::math::round(self.decoder.template value<floating_return_type>()));
 
         default:
             self.last_error = json::invalid_value;
