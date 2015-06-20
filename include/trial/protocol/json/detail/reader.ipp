@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/system/system_error.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/math/special_functions/round.hpp>
@@ -81,7 +80,7 @@ struct basic_reader_functor<CharT,
                 ReturnType result = self.decoder.template value<ReturnType>();
                 if (self.decoder.error() != json::no_error)
                 {
-                    throw boost::system::system_error(self.error());
+                    throw json::error(self.error());
                 }
                 return result;
             }
@@ -92,7 +91,7 @@ struct basic_reader_functor<CharT,
 
         default:
             self.last_error = json::invalid_value;
-            throw boost::system::system_error(self.error());
+            throw json::error(self.error());
         }
     }
 };
@@ -117,7 +116,7 @@ struct basic_reader_functor<CharT,
 
         default:
             self.last_error = json::invalid_value;
-            throw boost::system::system_error(self.error());
+            throw json::error(self.error());
         }
     }
 };
@@ -141,7 +140,7 @@ struct basic_reader_functor<CharT,
 
         default:
             self.last_error = json::invalid_value;
-            throw boost::system::system_error(self.error());
+            throw json::error(self.error());
         }
     }
 };
@@ -162,7 +161,7 @@ struct basic_reader_functor<CharT,
 
         default:
             self.last_error = json::invalid_value;
-            throw boost::system::system_error(self.error());
+            throw json::error(self.error());
         }
     }
 };

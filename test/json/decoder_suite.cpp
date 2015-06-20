@@ -266,7 +266,7 @@ BOOST_AUTO_TEST_CASE(fail_integer_too_large)
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
     BOOST_REQUIRE_EQUAL(decoder.literal(), "10000000000000000000");
     BOOST_REQUIRE_EXCEPTION(decoder.value<boost::int64_t>(),
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::invalid_value));
 }
 
@@ -277,7 +277,7 @@ BOOST_AUTO_TEST_CASE(fail_integer_as_float)
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::integer);
     BOOST_REQUIRE_EQUAL(decoder.value<int>(), 1);
     BOOST_REQUIRE_EXCEPTION(decoder.value<float>(),
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::incompatible_type));
 }
 

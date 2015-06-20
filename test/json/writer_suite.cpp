@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(fail_array_missing_begin)
     test_stream buffer;
     json::writer writer(buffer);
     BOOST_REQUIRE_EXCEPTION(writer.value(json::array_close),
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::unexpected_token));
 }
 
@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE(fail_object_missing_begin)
     test_stream buffer;
     json::writer writer(buffer);
     BOOST_REQUIRE_EXCEPTION(writer.value(json::object_close),
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::unexpected_token));
 }
 

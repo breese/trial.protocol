@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/system/error_code.hpp>
+#include <boost/system/system_error.hpp>
 
 namespace trial
 {
@@ -42,6 +43,14 @@ inline boost::system::error_code make_error_code(json::errors e = no_error)
     return boost::system::error_code(static_cast<int>(e),
                                      json::error_category());
 }
+
+class error : public boost::system::system_error
+{
+public:
+    error(boost::system::error_code ec)
+        : system_error(ec)
+    {}
+};
 
 } // namespace json
 } // namespace protocol

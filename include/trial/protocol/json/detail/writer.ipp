@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/system/system_error.hpp>
 #include <trial/protocol/json/error.hpp>
 
 namespace trial
@@ -120,7 +119,7 @@ void basic_writer<CharT>::validate_scope()
     if (stack.empty())
     {
         last_error = unexpected_token;
-        throw boost::system::system_error(error());
+        throw json::error(error());
     }
 }
 
@@ -131,7 +130,7 @@ void basic_writer<CharT>::validate_scope(token::value type,
     if ((stack.size() < 2) || (stack.top().type != type))
     {
         last_error = e;
-        throw boost::system::system_error(error());
+        throw json::error(error());
     }
 }
 

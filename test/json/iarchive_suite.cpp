@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(fail_false)
     json::iarchive in(input);
     bool value = true;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::invalid_value));
 }
 
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(fail_true)
     json::iarchive in(input);
     bool value = false;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::invalid_value));
 }
 
@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(fail_unsigned_minus_hundred)
     json::iarchive in(input);
     unsigned int value = 99;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::invalid_value));
 }
 
@@ -244,7 +244,7 @@ BOOST_AUTO_TEST_CASE(fail_pair_first)
     json::iarchive in(input);
     std::pair<int, bool> value(42, true);
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::invalid_value));
 }
 
@@ -254,7 +254,7 @@ BOOST_AUTO_TEST_CASE(fail_pair_first_comma)
     json::iarchive in(input);
     std::pair<int, bool> value(42, true);
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::unexpected_token));
 }
 
@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(fail_pair_missing_end)
     json::iarchive in(input);
     std::pair<int, bool> value(42, true);
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::expected_array_end_bracket));
 }
 
@@ -297,7 +297,7 @@ BOOST_AUTO_TEST_CASE(fail_optional_wrong_type)
     json::iarchive in(input);
     boost::optional<std::string> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::invalid_value));
 }
 
@@ -342,7 +342,7 @@ BOOST_AUTO_TEST_CASE(fail_vector_mixed)
     json::iarchive in(input);
     std::vector<bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::invalid_value));
 }
 
@@ -352,7 +352,7 @@ BOOST_AUTO_TEST_CASE(fail_vector_missing_end)
     json::iarchive in(input);
     std::vector<bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::expected_array_end_bracket));
 }
 
@@ -362,7 +362,7 @@ BOOST_AUTO_TEST_CASE(fail_vector_missing_begin)
     json::iarchive in(input);
     std::vector<bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::unexpected_token));
 }
 
@@ -372,7 +372,7 @@ BOOST_AUTO_TEST_CASE(fail_vector_mismatching_end)
     json::iarchive in(input);
     std::vector<bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::expected_array_end_bracket));
 }
 
@@ -442,7 +442,7 @@ BOOST_AUTO_TEST_CASE(fail_map_bool_missing_end)
     json::iarchive in(input);
     std::map<std::string, bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::expected_object_end_bracket));
 }
 
@@ -452,7 +452,7 @@ BOOST_AUTO_TEST_CASE(fail_map_bool_mismatching_end)
     json::iarchive in(input);
     std::map<std::string, bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
-                            boost::system::system_error,
+                            json::error,
                             test::is_system_error(json::expected_object_end_bracket));
 }
 

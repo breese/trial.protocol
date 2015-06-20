@@ -72,10 +72,10 @@ bool basic_iarchive<CharT>::at_array_end() const
         return true;
 
     case json::token::object_close:
-        throw boost::system::system_error(make_error_code(json::expected_array_end_bracket));
+        throw json::error(make_error_code(json::expected_array_end_bracket));
 
     case json::token::end:
-        throw boost::system::system_error(make_error_code(json::unexpected_token));
+        throw json::error(make_error_code(json::unexpected_token));
 
     default:
         return false;
@@ -103,10 +103,10 @@ bool basic_iarchive<CharT>::at_map_end() const
         return true;
 
     case json::token::array_close:
-        throw boost::system::system_error(make_error_code(json::expected_object_end_bracket));
+        throw json::error(make_error_code(json::expected_object_end_bracket));
 
     case json::token::end:
-        throw boost::system::system_error(make_error_code(json::unexpected_token));
+        throw json::error(make_error_code(json::unexpected_token));
 
     default:
         return false;
@@ -124,7 +124,7 @@ void basic_iarchive<CharT>::next()
 {
     if (!reader.next() && (reader.type() == token::error))
     {
-        throw boost::system::system_error(reader.error());
+        throw json::error(reader.error());
     }
 }
 
@@ -133,7 +133,7 @@ void basic_iarchive<CharT>::next(token::value expect)
 {
     if (!reader.next(expect) && (reader.type() == token::error))
     {
-        throw boost::system::system_error(reader.error());
+        throw json::error(reader.error());
     }
 }
 

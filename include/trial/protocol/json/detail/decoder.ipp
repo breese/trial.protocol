@@ -17,7 +17,6 @@
 #include <iterator>
 #include <limits>
 #include <sstream>
-#include <boost/system/system_error.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 #include <trial/protocol/json/error.hpp>
@@ -55,7 +54,7 @@ struct basic_decoder_functor<CharT,
         if (self.type() != token::integer)
         {
             self.current.error = json::incompatible_type;
-            throw boost::system::system_error(self.error());
+            throw json::error(self.error());
         }
 
         typename basic_decoder<CharT>::view_type::const_iterator it = self.literal().begin();
@@ -66,7 +65,7 @@ struct basic_decoder_functor<CharT,
             if (boost::is_unsigned<ReturnType>::value)
             {
                 self.current.error = json::invalid_value;
-                throw boost::system::system_error(self.error());
+                throw json::error(self.error());
             }
             ++it;
         }
@@ -80,7 +79,7 @@ struct basic_decoder_functor<CharT,
             {
                 // Overflow
                 self.current.error = json::invalid_value;
-                throw boost::system::system_error(self.error());
+                throw json::error(self.error());
             }
             ++it;
         }
@@ -98,7 +97,7 @@ struct basic_decoder_functor<char,
         if (self.type() != token::floating)
         {
             self.current.error = json::incompatible_type;
-            throw boost::system::system_error(self.error());
+            throw json::error(self.error());
         }
 
         return std::atof(self.literal().data());
@@ -116,7 +115,7 @@ struct basic_decoder_functor<char,
         if (self.type() != token::string)
         {
             self.current.error = json::incompatible_type;
-            throw boost::system::system_error(self.error());
+            throw json::error(self.error());
         }
 
         assert(self.literal().size() >= 2);
