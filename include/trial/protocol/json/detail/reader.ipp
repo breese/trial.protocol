@@ -375,7 +375,7 @@ bool basic_reader<CharT>::frame::is_object() const
 }
 
 template <typename CharT>
-enum json::errors basic_reader<CharT>::frame::next(detail::decoder& decoder)
+enum json::errc basic_reader<CharT>::frame::next(detail::decoder& decoder)
 {
     //   container = array / object
     //   array = "[" *element "]"

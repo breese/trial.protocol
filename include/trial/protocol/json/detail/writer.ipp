@@ -125,7 +125,7 @@ void basic_writer<CharT>::validate_scope()
 
 template <typename CharT>
 void basic_writer<CharT>::validate_scope(token::value type,
-                                         enum json::errors e)
+                                         enum json::errc e)
 {
     if ((stack.size() < 2) || (stack.top().type != type))
     {

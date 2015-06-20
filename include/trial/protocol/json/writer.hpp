@@ -51,11 +51,11 @@ public:
 
 private:
     void validate_scope();
-    void validate_scope(token::value, enum json::errors);
+    void validate_scope(token::value, enum json::errc);
 
 private:
     detail::encoder encoder;
-    mutable enum json::errors last_error;
+    mutable enum json::errc last_error;
 
     struct frame
     {

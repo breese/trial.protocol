@@ -62,7 +62,7 @@ private:
     {
         token::value type;
         view_type view;
-        mutable json::errors error;
+        mutable json::errc error;
     } current;
 };
 

@@ -23,7 +23,7 @@ namespace json
 
 const boost::system::error_category& error_category();
 
-enum errors
+enum errc
 {
     no_error = 0,
 
@@ -38,7 +38,7 @@ enum errors
     expected_object_end_bracket
 };
 
-inline boost::system::error_code make_error_code(json::errors e = no_error)
+inline boost::system::error_code make_error_code(json::errc e = no_error)
 {
     return boost::system::error_code(static_cast<int>(e),
                                      json::error_category());
@@ -61,7 +61,7 @@ namespace boost
 namespace system
 {
 
-template<> struct is_error_code_enum<trial::protocol::json::errors>
+template<> struct is_error_code_enum<trial::protocol::json::errc>
 {
   static const bool value = true;
 };

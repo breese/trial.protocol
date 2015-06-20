@@ -73,7 +73,7 @@ private:
     template <typename C, typename T, typename Enable> friend struct detail::basic_reader_functor;
 
     detail::basic_decoder<CharT> decoder;
-    mutable enum json::errors last_error;
+    mutable enum json::errc last_error;
 
     struct frame
     {
@@ -82,7 +82,7 @@ private:
         bool is_array() const;
         bool is_object() const;
 
-        enum json::errors next(detail::decoder&);
+        enum json::errc next(detail::decoder&);
 
         token::value type;
         std::size_t counter;
