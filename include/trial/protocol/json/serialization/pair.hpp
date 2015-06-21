@@ -28,10 +28,10 @@ struct save_functor< protocol::json::oarchive, typename std::pair<T1, T2> >
                      const std::pair<T1, T2>& data,
                      const unsigned int version)
     {
-        ar.save(json::array_open);
+        ar.save(json::begin_array);
         ar << data.first;
         ar << data.second;
-        ar.save(json::array_close);
+        ar.save(json::end_array);
     }
 };
 
@@ -42,10 +42,10 @@ struct load_functor< protocol::json::iarchive, typename std::pair<T1, T2> >
                      std::pair<T1, T2>& data,
                      const unsigned int version)
     {
-        ar.load(json::array_open);
+        ar.load(json::begin_array);
         ar >> data.first;
         ar >> data.second;
-        ar.load(json::array_close);
+        ar.load(json::end_array);
     }
 };
 

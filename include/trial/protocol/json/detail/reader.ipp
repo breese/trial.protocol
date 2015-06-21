@@ -236,17 +236,17 @@ token::value basic_reader<CharT>::type() const BOOST_NOEXCEPT
     case detail::token::string:
         return token::string;
 
-    case detail::token::array_open:
-        return token::array_open;
+    case detail::token::begin_array:
+        return token::begin_array;
 
-    case detail::token::array_close:
-        return token::array_close;
+    case detail::token::end_array:
+        return token::end_array;
 
-    case detail::token::object_open:
-        return token::object_open;
+    case detail::token::begin_object:
+        return token::begin_object;
 
-    case detail::token::object_close:
-        return token::object_close;
+    case detail::token::end_object:
+        return token::end_object;
 
     default:
         assert(last_error != json::no_error);
@@ -268,37 +268,37 @@ bool basic_reader<CharT>::next()
     const detail::token::value current = decoder.type();
     switch (current)
     {
-    case detail::token::array_open:
-        stack.push(token::array_close);
+    case detail::token::begin_array:
+        stack.push(token::end_array);
         break;
 
-    case detail::token::array_close:
+    case detail::token::end_array:
         if (stack.empty())
         {
-            last_error = json::unbalanced_array_end_bracket;
+            last_error = json::unbalanced_end_array;
             return false;
         }
         if (!stack.top().is_array())
         {
-            last_error = json::expected_array_end_bracket;
+            last_error = json::expected_end_array;
             return false;
         }
         stack.pop();
         break;
 
-    case detail::token::object_open:
-        stack.push(token::object_close);
+    case detail::token::begin_object:
+        stack.push(token::end_object);
         break;
 
-    case detail::token::object_close:
+    case detail::token::end_object:
         if (stack.empty())
         {
-            last_error = json::unbalanced_object_end_bracket;
+            last_error = json::unbalanced_end_object;
             return false;
         }
         if (!stack.top().is_object())
         {
-            last_error = json::expected_object_end_bracket;
+            last_error = json::expected_end_object;
             return false;
         }
         stack.pop();
@@ -369,13 +369,13 @@ basic_reader<CharT>::frame::frame(token::value scope)
 template <typename CharT>
 bool basic_reader<CharT>::frame::is_array() const
 {
-    return scope == token::array_close;
+    return scope == token::end_array;
 }
 
 template <typename CharT>
 bool basic_reader<CharT>::frame::is_object() const
 {
-    return scope == token::object_close;
+    return scope == token::end_object;
 }
 
 template <typename CharT>
@@ -385,13 +385,13 @@ enum json::errc basic_reader<CharT>::frame::next(detail::decoder& decoder)
 
     switch (scope)
     {
-    case json::token::end:
+    case token::end:
         return check_outer(decoder);
 
-    case json::token::array_close:
+    case token::end_array:
         return check_array(decoder);
 
-    case json::token::object_close:
+    case token::end_object:
         return check_object(decoder);
 
     default:
@@ -432,7 +432,7 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder
         // Expect separator
         switch (current)
         {
-        case detail::token::array_close:
+        case detail::token::end_array:
             return json::no_error;
 
         case detail::token::value_separator:
@@ -440,12 +440,12 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder
             decoder.next();
             ++counter;
             // Prohibit trailing separator
-            if (decoder.type() == detail::token::array_close)
+            if (decoder.type() == detail::token::end_array)
                 return json::unexpected_token;
             return json::no_error;
 
         default:
-            return json::expected_array_end_bracket;
+            return json::expected_end_array;
         }
     }
     else
@@ -459,11 +459,11 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder
         case detail::token::name_separator:
             return json::unexpected_token;
 
-        case detail::token::array_close:
+        case detail::token::end_array:
             return json::no_error;
 
-        case detail::token::object_close:
-            return json::expected_array_end_bracket;
+        case detail::token::end_object:
+            return json::expected_end_array;
 
         default:
             break;
@@ -491,19 +491,19 @@ enum json::errc basic_reader<CharT>::frame::check_object(detail::decoder& decode
         // Expect value separator
         switch (current)
         {
-        case detail::token::object_close:
+        case detail::token::end_object:
             return json::no_error;
 
         case detail::token::value_separator:
             decoder.next();
             ++counter;
             // Prohibit trailing separator
-            if (decoder.type() == detail::token::object_close)
+            if (decoder.type() == detail::token::end_object)
                 return json::unexpected_token;
             return json::no_error;
 
         default:
-            return json::expected_object_end_bracket;
+            return json::expected_end_object;
         }
     }
     else if (counter % 4 == 2)
@@ -515,8 +515,8 @@ enum json::errc basic_reader<CharT>::frame::check_object(detail::decoder& decode
             ++counter;
             switch (decoder.type())
             {
-            case detail::token::array_close:
-            case detail::token::object_close:
+            case detail::token::end_array:
+            case detail::token::end_object:
                 return json::unexpected_token;
 
             default:
@@ -535,10 +535,10 @@ enum json::errc basic_reader<CharT>::frame::check_object(detail::decoder& decode
         case detail::token::name_separator:
             return json::unexpected_token;
 
-        case detail::token::array_close:
-            return json::expected_object_end_bracket;
+        case detail::token::end_array:
+            return json::expected_end_object;
 
-        case detail::token::object_close:
+        case detail::token::end_object:
             return json::no_error;
 
         default:

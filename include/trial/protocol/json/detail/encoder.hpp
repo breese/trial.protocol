@@ -56,13 +56,13 @@ public:
     //! @brief Write null type
     size_type value(json::null_t);
     //! @brief Write opening of array
-    size_type value(json::array_open_t);
+    size_type value(json::begin_array_t);
     //! @brief Write closing of array
-    size_type value(json::array_close_t);
-    //! @brief Write openting of object
-    size_type value(json::object_open_t);
+    size_type value(json::end_array_t);
+    //! @brief Write opening of object
+    size_type value(json::begin_object_t);
     //! @brief Write closing of object
-    size_type value(json::object_close_t);
+    size_type value(json::end_object_t);
     size_type value(json::detail::value_separator_t);
     size_type value(json::detail::name_separator_t);
 

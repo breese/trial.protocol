@@ -33,10 +33,10 @@ enum errc
     invalid_value,
     incompatible_type,
 
-    unbalanced_array_end_bracket,
-    unbalanced_object_end_bracket,
-    expected_array_end_bracket,
-    expected_object_end_bracket
+    unbalanced_end_array,
+    unbalanced_end_object,
+    expected_end_array,
+    expected_end_object
 };
 
 inline boost::system::error_code make_error_code(json::errc e = no_error)

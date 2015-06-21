@@ -42,10 +42,10 @@ public:
     size_type value(BOOST_FWD_REF(T) value);
 
     size_type value(json::null_t);
-    size_type value(json::array_open_t);
-    size_type value(json::array_close_t);
-    size_type value(json::object_open_t);
-    size_type value(json::object_close_t);
+    size_type value(json::begin_array_t);
+    size_type value(json::end_array_t);
+    size_type value(json::begin_object_t);
+    size_type value(json::end_object_t);
 
     size_type literal(const view_type&) BOOST_NOEXCEPT;
 

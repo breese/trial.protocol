@@ -21,15 +21,15 @@ namespace json
 struct null_t {};
 const null_t null = null_t();
 
-struct array_open_t {};
-const array_open_t array_open = array_open_t();
-struct array_close_t {};
-const array_close_t array_close = array_close_t();
+struct begin_array_t {};
+const begin_array_t begin_array = begin_array_t();
+struct end_array_t {};
+const end_array_t end_array = end_array_t();
 
-struct object_open_t {};
-const object_open_t object_open = object_open_t();
-struct object_close_t {};
-const object_close_t object_close = object_close_t();
+struct begin_object_t {};
+const begin_object_t begin_object = begin_object_t();
+struct end_object_t {};
+const end_object_t end_object = end_object_t();
 
 } // namespace json
 } // namespace protocol

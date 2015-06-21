@@ -289,22 +289,22 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
         break;
 
     case traits<CharT>::alpha_brace_open:
-        current.type = token::object_open;
+        current.type = token::begin_object;
         input.remove_prefix(1);
         break;
 
     case traits<CharT>::alpha_brace_close:
-        current.type = token::object_close;
+        current.type = token::end_object;
         input.remove_prefix(1);
         break;
 
     case traits<CharT>::alpha_bracket_open:
-        current.type = token::array_open;
+        current.type = token::begin_array;
         input.remove_prefix(1);
         break;
 
     case traits<CharT>::alpha_bracket_close:
-        current.type = token::array_close;
+        current.type = token::end_array;
         input.remove_prefix(1);
         break;
 

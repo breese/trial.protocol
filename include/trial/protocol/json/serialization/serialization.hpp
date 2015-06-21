@@ -33,9 +33,9 @@ struct save_functor<protocol::json::oarchive, Value>
                      const Value& data,
                      const unsigned int protocol_version)
     {
-        ar.save(json::array_open);
+        ar.save(json::begin_array);
         data.save(ar, protocol_version);
-        ar.save(json::array_close);
+        ar.save(json::end_array);
     }
 };
 
@@ -46,9 +46,9 @@ struct load_functor<protocol::json::iarchive, Value>
                      const Value& data,
                      const unsigned int protocol_version)
     {
-        ar.load(json::array_open);
+        ar.load(json::begin_array);
         data.load(ar, protocol_version);
-        ar.load(json::array_close);
+        ar.load(json::end_array);
     }
 };
 
@@ -61,9 +61,9 @@ struct serialize_functor<Value>
               Value& data,
               const unsigned int protocol_version)
     {
-        ar.load(json::array_open);
+        ar.load(json::begin_array);
         data.serialize(ar, protocol_version);
-        ar.load(json::array_close);
+        ar.load(json::end_array);
     }
 
     template <typename Archive>
@@ -72,9 +72,9 @@ struct serialize_functor<Value>
               Value& data,
               const unsigned int protocol_version)
     {
-        ar.save(json::array_open);
+        ar.save(json::begin_array);
         data.serialize(ar, protocol_version);
-        ar.save(json::array_close);
+        ar.save(json::end_array);
     }
 };
 

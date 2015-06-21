@@ -265,7 +265,7 @@ BOOST_AUTO_TEST_CASE(fail_pair_missing_end)
     std::pair<int, bool> value(42, true);
     BOOST_REQUIRE_EXCEPTION(in >> value,
                             json::error,
-                            test::is_system_error(json::expected_array_end_bracket));
+                            test::is_system_error(json::expected_end_array));
 }
 
 //-----------------------------------------------------------------------------
@@ -353,7 +353,7 @@ BOOST_AUTO_TEST_CASE(fail_vector_missing_end)
     std::vector<bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
                             json::error,
-                            test::is_system_error(json::expected_array_end_bracket));
+                            test::is_system_error(json::expected_end_array));
 }
 
 BOOST_AUTO_TEST_CASE(fail_vector_missing_begin)
@@ -373,7 +373,7 @@ BOOST_AUTO_TEST_CASE(fail_vector_mismatching_end)
     std::vector<bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
                             json::error,
-                            test::is_system_error(json::expected_array_end_bracket));
+                            test::is_system_error(json::expected_end_array));
 }
 
 BOOST_AUTO_TEST_CASE(test_intmap_bool_empty)
@@ -443,7 +443,7 @@ BOOST_AUTO_TEST_CASE(fail_map_bool_missing_end)
     std::map<std::string, bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
                             json::error,
-                            test::is_system_error(json::expected_object_end_bracket));
+                            test::is_system_error(json::expected_end_object));
 }
 
 BOOST_AUTO_TEST_CASE(fail_map_bool_mismatching_end)
@@ -453,7 +453,7 @@ BOOST_AUTO_TEST_CASE(fail_map_bool_mismatching_end)
     std::map<std::string, bool> value;
     BOOST_REQUIRE_EXCEPTION(in >> value,
                             json::error,
-                            test::is_system_error(json::expected_object_end_bracket));
+                            test::is_system_error(json::expected_end_object));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

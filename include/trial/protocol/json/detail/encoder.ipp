@@ -304,28 +304,28 @@ basic_encoder<CharT>::value(json::null_t)
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::array_open_t)
+basic_encoder<CharT>::value(json::begin_array_t)
 {
     return outputter<CharT>::write(buffer, traits<CharT>::alpha_bracket_open);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::array_close_t)
+basic_encoder<CharT>::value(json::end_array_t)
 {
     return outputter<CharT>::write(buffer, traits<CharT>::alpha_bracket_close);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::object_open_t)
+basic_encoder<CharT>::value(json::begin_object_t)
 {
     return outputter<CharT>::write(buffer, traits<CharT>::alpha_brace_open);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::object_close_t)
+basic_encoder<CharT>::value(json::end_object_t)
 {
     return outputter<CharT>::write(buffer, traits<CharT>::alpha_brace_close);
 };

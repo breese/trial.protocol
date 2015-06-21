@@ -43,17 +43,17 @@ public:
         case invalid_value:
             return "invalid value";
 
-        case unbalanced_array_end_bracket:
-            return "unbalanced array end bracket";
+        case unbalanced_end_array:
+            return "unbalanced end array bracket";
 
-        case unbalanced_object_end_bracket:
-            return "unbalanced object end bracket";
+        case unbalanced_end_object:
+            return "unbalanced end object bracket";
 
-        case expected_array_end_bracket:
-            return "expected array end bracket";
+        case expected_end_array:
+            return "expected end array bracket";
 
-        case expected_object_end_bracket:
-            return "expected object end bracket";
+        case expected_end_object:
+            return "expected end object bracket";
         }
         return "trial.protocol.json error";
     }

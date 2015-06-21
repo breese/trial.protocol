@@ -845,38 +845,38 @@ BOOST_AUTO_TEST_CASE(fail_string_as_float)
 // Container
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_object_open)
+BOOST_AUTO_TEST_CASE(test_begin_object)
 {
     const char input[] = "{";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::object_open);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::begin_object);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
-BOOST_AUTO_TEST_CASE(test_white_object_open)
+BOOST_AUTO_TEST_CASE(test_white_begin_object)
 {
     const char input[] = " { ";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::object_open);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::begin_object);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
-BOOST_AUTO_TEST_CASE(test_object_close)
+BOOST_AUTO_TEST_CASE(test_end_object)
 {
     const char input[] = "}";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::object_close);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::end_object);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
-BOOST_AUTO_TEST_CASE(test_white_object_close)
+BOOST_AUTO_TEST_CASE(test_white_end_object)
 {
     const char input[] = " } ";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::object_close);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::end_object);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
@@ -885,7 +885,7 @@ BOOST_AUTO_TEST_CASE(test_object)
 {
     const char input[] = "{ \"key\" : false }";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::object_open);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::begin_object);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
     BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "key");
@@ -894,43 +894,43 @@ BOOST_AUTO_TEST_CASE(test_object)
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::false_value);
     decoder.next();
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::object_close);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::end_object);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
-BOOST_AUTO_TEST_CASE(test_array_open)
+BOOST_AUTO_TEST_CASE(test_array_begin)
 {
     const char input[] = "[";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::array_open);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::begin_array);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
-BOOST_AUTO_TEST_CASE(test_white_array_open)
+BOOST_AUTO_TEST_CASE(test_array_white_begin)
 {
     const char input[] = " [ ";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::array_open);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::begin_array);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
-BOOST_AUTO_TEST_CASE(test_array_close)
+BOOST_AUTO_TEST_CASE(test_array_end)
 {
     const char input[] = "]";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::array_close);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::end_array);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
 
-BOOST_AUTO_TEST_CASE(test_white_array_close)
+BOOST_AUTO_TEST_CASE(test_array_white_end)
 {
     const char input[] = " ] ";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::array_close);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::end_array);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }
@@ -939,7 +939,7 @@ BOOST_AUTO_TEST_CASE(test_array)
 {
     const char input[] = "[true, false]";
     json::detail::decoder decoder(input);
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::array_open);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::begin_array);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::true_value);
     decoder.next();
@@ -947,7 +947,7 @@ BOOST_AUTO_TEST_CASE(test_array)
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::false_value);
     decoder.next();
-    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::array_close);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::end_array);
     decoder.next();
     BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
 }

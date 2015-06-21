@@ -52,27 +52,27 @@ void basic_iarchive<CharT>::load(json::null_t)
 }
 
 template <typename CharT>
-void basic_iarchive<CharT>::load(json::array_open_t)
+void basic_iarchive<CharT>::load(json::begin_array_t)
 {
-    next(json::token::array_open);
+    next(json::token::begin_array);
 }
 
 template <typename CharT>
-void basic_iarchive<CharT>::load(json::array_close_t)
+void basic_iarchive<CharT>::load(json::end_array_t)
 {
-    next(json::token::array_close);
+    next(json::token::end_array);
 }
 
 template <typename CharT>
-bool basic_iarchive<CharT>::at_array_end() const
+bool basic_iarchive<CharT>::at_end_array() const
 {
     switch (reader.type())
     {
-    case json::token::array_close:
+    case json::token::end_array:
         return true;
 
-    case json::token::object_close:
-        throw json::error(make_error_code(json::expected_array_end_bracket));
+    case json::token::end_object:
+        throw json::error(make_error_code(json::expected_end_array));
 
     case json::token::end:
         throw json::error(make_error_code(json::unexpected_token));
@@ -83,27 +83,27 @@ bool basic_iarchive<CharT>::at_array_end() const
 }
 
 template <typename CharT>
-void basic_iarchive<CharT>::load(json::object_open_t)
+void basic_iarchive<CharT>::load(json::begin_object_t)
 {
-    next(json::token::object_open);
+    next(json::token::begin_object);
 }
 
 template <typename CharT>
-void basic_iarchive<CharT>::load(json::object_close_t)
+void basic_iarchive<CharT>::load(json::end_object_t)
 {
-    next(json::token::object_close);
+    next(json::token::end_object);
 }
 
 template <typename CharT>
-bool basic_iarchive<CharT>::at_map_end() const
+bool basic_iarchive<CharT>::at_end_object() const
 {
     switch (reader.type())
     {
-    case json::token::object_close:
+    case json::token::end_object:
         return true;
 
-    case json::token::array_close:
-        throw json::error(make_error_code(json::expected_object_end_bracket));
+    case json::token::end_array:
+        throw json::error(make_error_code(json::expected_end_object));
 
     case json::token::end:
         throw json::error(make_error_code(json::unexpected_token));

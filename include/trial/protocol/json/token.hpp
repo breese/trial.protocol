@@ -31,10 +31,10 @@ struct token
         floating,
         string,
 
-        array_open,
-        array_close,
-        object_open,
-        object_close
+        begin_array,
+        end_array,
+        begin_object,
+        end_object
     };
 };
 

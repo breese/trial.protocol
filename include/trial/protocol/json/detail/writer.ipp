@@ -25,7 +25,7 @@ basic_writer<CharT>::basic_writer(buffer_type& buffer)
     : encoder(buffer)
 {
     // Push outermost scope
-    stack.push(frame(encoder, token::array_close));
+    stack.push(frame(encoder, token::end_array));
 }
 
 template <typename CharT>
@@ -64,44 +64,44 @@ basic_writer<CharT>::value(json::null_t)
 
 template <typename CharT>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::array_open_t)
+basic_writer<CharT>::value(json::begin_array_t)
 {
     validate_scope();
 
     stack.top().write_separator();
-    stack.push(frame(encoder, token::array_close));
-    return encoder.value(json::array_open);
+    stack.push(frame(encoder, token::end_array));
+    return encoder.value(json::begin_array);
 }
 
 template <typename CharT>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::array_close_t)
+basic_writer<CharT>::value(json::end_array_t)
 {
-    validate_scope(token::array_close, json::unexpected_token);
+    validate_scope(token::end_array, json::unexpected_token);
 
-    size_type result = encoder.value(json::array_close);
+    size_type result = encoder.value(json::end_array);
     stack.pop();
     return result;
 }
 
 template <typename CharT>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::object_open_t)
+basic_writer<CharT>::value(json::begin_object_t)
 {
     validate_scope();
 
     stack.top().write_separator();
-    stack.push(frame(encoder, token::object_close));
-    return encoder.value(json::object_open);
+    stack.push(frame(encoder, token::end_object));
+    return encoder.value(json::begin_object);
 }
 
 template <typename CharT>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::object_close_t)
+basic_writer<CharT>::value(json::end_object_t)
 {
-    validate_scope(token::object_close, json::unexpected_token);
+    validate_scope(token::end_object, json::unexpected_token);
 
-    size_type result = encoder.value(json::object_close);
+    size_type result = encoder.value(json::end_object);
     stack.pop();
     return result;
 }
@@ -153,11 +153,11 @@ void basic_writer<CharT>::frame::write_separator()
     {
         switch (type)
         {
-        case token::array_close:
+        case token::end_array:
             encoder.value(detail::value_separator);
             break;
 
-        case token::object_close:
+        case token::end_object:
             if (counter % 2 == 0)
             {
                 encoder.value(detail::value_separator);

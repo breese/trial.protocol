@@ -163,8 +163,8 @@ BOOST_AUTO_TEST_CASE(test_array_empty)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EQUAL(writer.value(json::array_open), 1);
-    BOOST_REQUIRE_EQUAL(writer.value(json::array_close), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::begin_array), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::end_array), 1);
     BOOST_REQUIRE_EQUAL(buffer.data(), "[]");
 }
 
@@ -172,9 +172,9 @@ BOOST_AUTO_TEST_CASE(test_array_bool_one)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EQUAL(writer.value(json::array_open), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::begin_array), 1);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value(json::array_close), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::end_array), 1);
     BOOST_REQUIRE_EQUAL(buffer.data(), "[false]");
 }
 
@@ -182,10 +182,10 @@ BOOST_AUTO_TEST_CASE(test_array_bool_two)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EQUAL(writer.value(json::array_open), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::begin_array), 1);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
     BOOST_REQUIRE_EQUAL(writer.value(true), 4);
-    BOOST_REQUIRE_EQUAL(writer.value(json::array_close), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::end_array), 1);
     BOOST_REQUIRE_EQUAL(buffer.data(), "[false,true]");
 }
 
@@ -193,7 +193,7 @@ BOOST_AUTO_TEST_CASE(fail_array_missing_begin)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EXCEPTION(writer.value(json::array_close),
+    BOOST_REQUIRE_EXCEPTION(writer.value(json::end_array),
                             json::error,
                             test::is_system_error(json::unexpected_token));
 }
@@ -206,8 +206,8 @@ BOOST_AUTO_TEST_CASE(test_object_empty)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EQUAL(writer.value(json::object_open), 1);
-    BOOST_REQUIRE_EQUAL(writer.value(json::object_close), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::begin_object), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::end_object), 1);
     BOOST_REQUIRE_EQUAL(buffer.data(), "{}");
 }
 
@@ -215,10 +215,10 @@ BOOST_AUTO_TEST_CASE(test_object_bool_one)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EQUAL(writer.value(json::object_open), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::begin_object), 1);
     BOOST_REQUIRE_EQUAL(writer.value("key1"), 6);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value(json::object_close), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::end_object), 1);
     BOOST_REQUIRE_EQUAL(buffer.data(), "{\"key1\":false}");
 }
 
@@ -226,12 +226,12 @@ BOOST_AUTO_TEST_CASE(test_object_bool_two)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EQUAL(writer.value(json::object_open), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::begin_object), 1);
     BOOST_REQUIRE_EQUAL(writer.value("key1"), 6);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
     BOOST_REQUIRE_EQUAL(writer.value("key2"), 6);
     BOOST_REQUIRE_EQUAL(writer.value(true), 4);
-    BOOST_REQUIRE_EQUAL(writer.value(json::object_close), 1);
+    BOOST_REQUIRE_EQUAL(writer.value(json::end_object), 1);
     BOOST_REQUIRE_EQUAL(buffer.data(), "{\"key1\":false,\"key2\":true}");
 }
 
@@ -239,7 +239,7 @@ BOOST_AUTO_TEST_CASE(fail_object_missing_begin)
 {
     test_stream buffer;
     json::writer writer(buffer);
-    BOOST_REQUIRE_EXCEPTION(writer.value(json::object_close),
+    BOOST_REQUIRE_EXCEPTION(writer.value(json::end_object),
                             json::error,
                             test::is_system_error(json::unexpected_token));
 }

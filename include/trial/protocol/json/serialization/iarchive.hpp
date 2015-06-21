@@ -47,13 +47,13 @@ public:
     void load(T&);
     void load(json::null_t);
 
-    void load(json::array_open_t);
-    void load(json::array_close_t);
-    bool at_array_end() const;
+    void load(json::begin_array_t);
+    void load(json::end_array_t);
+    bool at_end_array() const;
 
-    void load(json::object_open_t);
-    void load(json::object_close_t);
-    bool at_map_end() const;
+    void load(json::begin_object_t);
+    void load(json::end_object_t);
+    bool at_end_object() const;
 
     json::token::value type() const;
 
