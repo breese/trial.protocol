@@ -44,3 +44,9 @@ set(TRIAL_PROTOCOL_DEPENDENT_LIBRARIES
 include_directories(BEFORE include)
 
 add_subdirectory(test/json)
+
+###############################################################################
+# Examples
+###############################################################################
+
+add_subdirectory(example/json EXCLUDE_FROM_ALL)
