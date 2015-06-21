@@ -83,8 +83,11 @@ private:
         bool is_object() const;
 
         enum json::errc next(detail::decoder&);
+        enum json::errc check_outer(detail::decoder&);
+        enum json::errc check_array(detail::decoder&);
+        enum json::errc check_object(detail::decoder&);
 
-        token::value type;
+        token::value scope;
         std::size_t counter;
     };
     std::stack<frame> stack;
