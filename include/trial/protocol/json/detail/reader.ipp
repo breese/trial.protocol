@@ -402,6 +402,8 @@ enum json::errc basic_reader<CharT>::frame::next(detail::decoder& decoder)
 template <typename CharT>
 enum json::errc basic_reader<CharT>::frame::check_outer(detail::decoder& decoder)
 {
+    // RFC 7159, section 2
+    //
     // JSON-text = value
 
     switch (decoder.type())
@@ -418,8 +420,9 @@ enum json::errc basic_reader<CharT>::frame::check_outer(detail::decoder& decoder
 template <typename CharT>
 enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder)
 {
-    //   array = "[" *element "]"
-    //   element = value *( "," value )
+    // RFC 7159, section 5
+    //
+    // array = begin-array [ value *( value-separator value ) ] end-array
 
     const detail::token::value current = decoder.type();
 
@@ -473,7 +476,6 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder
 template <typename CharT>
 enum json::errc basic_reader<CharT>::frame::check_object(detail::decoder& decoder)
 {
-
     // RFC 7159, section 4
     //
     // object = begin-object [ member *( value-separator member ) ]
