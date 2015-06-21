@@ -458,6 +458,50 @@ BOOST_AUTO_TEST_CASE(fail_object_trailing_separator)
     BOOST_REQUIRE_EQUAL(reader.error(), json::unexpected_token);
 }
 
+BOOST_AUTO_TEST_CASE(fail_object_invalid_integer_key)
+{
+    const char input[] = "{1:1}";
+    json::reader reader(input);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::object_open);
+    BOOST_REQUIRE_EQUAL(reader.level(), 0);
+    BOOST_REQUIRE_EQUAL(reader.next(), false);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::error);
+    BOOST_REQUIRE_EQUAL(reader.error(), json::invalid_key);
+}
+
+BOOST_AUTO_TEST_CASE(fail_object_invalid_null_key)
+{
+    const char input[] = "{null:1}";
+    json::reader reader(input);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::object_open);
+    BOOST_REQUIRE_EQUAL(reader.level(), 0);
+    BOOST_REQUIRE_EQUAL(reader.next(), false);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::error);
+    BOOST_REQUIRE_EQUAL(reader.error(), json::invalid_key);
+}
+
+BOOST_AUTO_TEST_CASE(fail_object_invalid_true_key)
+{
+    const char input[] = "{true:1}";
+    json::reader reader(input);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::object_open);
+    BOOST_REQUIRE_EQUAL(reader.level(), 0);
+    BOOST_REQUIRE_EQUAL(reader.next(), false);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::error);
+    BOOST_REQUIRE_EQUAL(reader.error(), json::invalid_key);
+}
+
+BOOST_AUTO_TEST_CASE(fail_object_invalid_object_key)
+{
+    const char input[] = "{{\"key\":1}:2}";
+    json::reader reader(input);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::object_open);
+    BOOST_REQUIRE_EQUAL(reader.level(), 0);
+    BOOST_REQUIRE_EQUAL(reader.next(), false);
+    BOOST_REQUIRE_EQUAL(reader.type(), json::token::error);
+    BOOST_REQUIRE_EQUAL(reader.error(), json::invalid_key);
+}
+
 BOOST_AUTO_TEST_CASE(fail_object_empty_mismatched)
 {
     const char input[] = "{]";

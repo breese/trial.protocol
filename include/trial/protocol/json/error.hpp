@@ -29,6 +29,7 @@ enum errc
 
     not_implemented,
     unexpected_token,
+    invalid_key,
     invalid_value,
     incompatible_type,
 

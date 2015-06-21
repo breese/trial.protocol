@@ -473,9 +473,13 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder
 template <typename CharT>
 enum json::errc basic_reader<CharT>::frame::check_object(detail::decoder& decoder)
 {
-    //   object = "{" *member "}"
-    //   member = pair *( "," pair )
-    //   pair = string ":" value
+
+    // RFC 7159, section 4
+    //
+    // object = begin-object [ member *( value-separator member ) ]
+    //          end-object
+    //
+    // member = string name-separator value
 
     const detail::token::value current = decoder.type();
 
@@ -536,9 +540,11 @@ enum json::errc basic_reader<CharT>::frame::check_object(detail::decoder& decode
             return json::no_error;
 
         default:
-            break;
+            // Key must be string type
+            if ((counter % 4 == 1) && (current != detail::token::string))
+                return json::invalid_key;
+            return json::no_error;
         }
-        return json::no_error;
     }
 
     return json::unexpected_token;
