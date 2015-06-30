@@ -117,32 +117,21 @@ inline bool traits<char>::is_keyword(value_type value) BOOST_NOEXCEPT
 
 inline int traits<char>::extra_bytes(value_type value) BOOST_NOEXCEPT
 {
-    switch (static_cast<boost::make_unsigned<value_type>::type>(value))
-    {
-    case 0xC0: case 0xC1: case 0xC2: case 0xC3:
-    case 0xC4: case 0xC5: case 0xC6: case 0xC7:
-    case 0xC8: case 0xC9: case 0xCA: case 0xCB:
-    case 0xCC: case 0xCD: case 0xCE: case 0xCF:
-    case 0xD0: case 0xD1: case 0xD2: case 0xD3:
-    case 0xD4: case 0xD5: case 0xD6: case 0xD7:
-    case 0xD8: case 0xD9: case 0xDA: case 0xDB:
-    case 0xDC: case 0xDD: case 0xDE: case 0xDF:
-        return 1;
-    case 0xE0: case 0xE1: case 0xE2: case 0xE3:
-    case 0xE4: case 0xE5: case 0xE6: case 0xE7:
-    case 0xE8: case 0xE9: case 0xEA: case 0xEB:
-    case 0xEC: case 0xED: case 0xEE: case 0xEF:
-        return 2;
-    case 0xF0: case 0xF1: case 0xF2: case 0xF3:
-    case 0xF4: case 0xF5: case 0xF6: case 0xF7:
-        return 3;
-    case 0xF8: case 0xF9: case 0xFA: case 0xFB:
-        return 4;
-    case 0xFC: case 0xFD: case 0xFE: case 0xFF:
-        return 5;
-    default:
+    typedef boost::make_unsigned<value_type>::type unsigned_value_type;
+    const unsigned_value_type v = static_cast<unsigned_value_type>(value);
+
+    if (v < 0xC0)
         return 0;
-    }
+    else if (v < 0xE0)
+        return 1;
+    else if (v < 0xF0)
+        return 2;
+    else if (v < 0xF8)
+        return 3;
+    else if (v < 0xFC)
+        return 4;
+    else
+        return 5;
 }
 
 inline int traits<char>::to_int(value_type value) BOOST_NOEXCEPT
