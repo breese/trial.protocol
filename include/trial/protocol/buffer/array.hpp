@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <algorithm>
 #include <boost/array.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
@@ -27,6 +28,7 @@ class array : public base<CharT>
 public:
     typedef typename base<CharT>::value_type value_type;
     typedef typename base<CharT>::size_type size_type;
+    typedef typename base<CharT>::view_type view_type;
     typedef value_type* iterator;
     typedef const value_type* const_iterator;
 
@@ -61,14 +63,10 @@ private:
         ++current;
     }
 
-    virtual void write(const value_type *values, size_type size)
+    virtual void write(const view_type& view)
     {
-        assert(grow(size));
-        for (size_type i = 0; i < size; ++i)
-        {
-            current[i] = values[i];
-        }
-        current += size;
+        assert(grow(view.size()));
+        current = std::copy(view.begin(), view.end(), current);
     }
 
 private:

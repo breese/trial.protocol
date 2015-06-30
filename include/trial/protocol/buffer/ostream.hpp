@@ -28,6 +28,7 @@ class basic_ostream : public base<CharT>
 public:
     typedef typename base<CharT>::value_type value_type;
     typedef typename base<CharT>::size_type size_type;
+    typedef typename base<CharT>::view_type view_type;
 
     basic_ostream(std::ostream& stream) : content(stream) {}
 
@@ -42,14 +43,11 @@ private:
         content << value;
     }
 
-    virtual void write(const value_type *values, size_type size)
+    virtual void write(const view_type& view)
     {
-        for (size_type i = 0; i < size; ++i)
-        {
-            assert(grow(1));
-            write(values[i]);
-        }
+        content << view;
     }
+
 private:
     std::ostream& content;
 };

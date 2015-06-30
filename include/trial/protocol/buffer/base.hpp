@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstddef> // std::size_t
+#include <boost/utility/string_ref.hpp>
 
 namespace trial
 {
@@ -26,12 +27,13 @@ class base
 public:
     typedef CharT value_type;
     typedef std::size_t size_type;
+    typedef boost::basic_string_ref<value_type> view_type;
 
     virtual ~base() {}
 
     virtual bool grow(size_type) = 0;
     virtual void write(value_type) = 0;
-    virtual void write(const value_type*, size_type) = 0;
+    virtual void write(const view_type&) = 0;
 };
 
 } // namespace buffer

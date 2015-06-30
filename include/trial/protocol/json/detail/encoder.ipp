@@ -55,10 +55,7 @@ struct outputter
         const std::size_t size = data.size();
         if (buffer.grow(size))
         {
-            for (std::size_t i = 0; i < size; ++i)
-            {
-                buffer.write(data[i]);
-            }
+            buffer.write(data);
             return size;
         }
         return 0;
