@@ -289,33 +289,27 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
         break;
 
     case traits<CharT>::alpha_brace_open:
-        current.type = token::begin_object;
-        input.remove_prefix(1);
+        current.type = next_token(token::begin_object);
         break;
 
     case traits<CharT>::alpha_brace_close:
-        current.type = token::end_object;
-        input.remove_prefix(1);
+        current.type = next_token(token::end_object);
         break;
 
     case traits<CharT>::alpha_bracket_open:
-        current.type = token::begin_array;
-        input.remove_prefix(1);
+        current.type = next_token(token::begin_array);
         break;
 
     case traits<CharT>::alpha_bracket_close:
-        current.type = token::end_array;
-        input.remove_prefix(1);
+        current.type = next_token(token::end_array);
         break;
 
     case traits<CharT>::alpha_comma:
-        current.type = token::value_separator;
-        input.remove_prefix(1);
+        current.type = next_token(token::value_separator);
         break;
 
     case traits<CharT>::alpha_colon:
-        current.type = token::name_separator;
-        input.remove_prefix(1);
+        current.type = next_token(token::name_separator);
         break;
 
     default:
@@ -336,6 +330,14 @@ inline const typename basic_decoder<CharT>::view_type&
 basic_decoder<CharT>::literal() const BOOST_NOEXCEPT
 {
     return current.view;
+}
+
+template <typename CharT>
+token::value basic_decoder<CharT>::next_token(token::value type) BOOST_NOEXCEPT
+{
+    current.view = view_type(input.begin(), 1);
+    input.remove_prefix(1);
+    return type;
 }
 
 template <typename CharT>
@@ -536,15 +538,16 @@ token::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
     assert(input.front() == traits<CharT>::alpha_quote);
 
     typename view_type::const_iterator marker = input.begin();
+    typename view_type::const_iterator end = input.end();
     ++marker; // Skip initial '"'
-    while (marker != input.end())
+    while (marker != end)
     {
         const typename view_type::size_type amount = traits<CharT>::extra_bytes(*marker);
 
         if (amount > 0)
         {
             // Skip UTF-8 characters
-            if (amount >= std::distance(marker, input.end()))
+            if (amount >= std::distance(marker, end))
                 goto error;
 
             ++marker;
@@ -563,7 +566,7 @@ token::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
             if (character == traits<CharT>::alpha_reverse_solidus)
             {
                 // Handle escaped character
-                if (marker == input.end())
+                if (marker == end)
                     goto eof;
                 switch (*marker++)
                 {
@@ -578,7 +581,7 @@ token::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
                     break;
 
                 case traits<CharT>::alpha_u:
-                    switch (std::distance(marker, input.end()))
+                    switch (std::distance(marker, end))
                     {
                     case 0:
                         goto eof;
@@ -650,8 +653,9 @@ template <typename CharT>
 void basic_decoder<CharT>::skip_whitespaces() BOOST_NOEXCEPT
 {
     typename view_type::size_type size = typename view_type::size_type();
+    typename view_type::const_iterator end = input.end();
     for (typename view_type::const_iterator it = input.begin();
-         it != input.end();
+         it != end;
          ++it)
     {
         if (!traits<CharT>::is_space(*it))

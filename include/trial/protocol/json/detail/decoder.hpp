@@ -45,6 +45,7 @@ public:
     template <typename ReturnType> ReturnType value() const;
 
 private:
+    token::value next_token(token::value) BOOST_NOEXCEPT;
     token::value next_f_keyword() BOOST_NOEXCEPT;
     token::value next_n_keyword() BOOST_NOEXCEPT;
     token::value next_t_keyword() BOOST_NOEXCEPT;
