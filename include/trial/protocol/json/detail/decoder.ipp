@@ -16,7 +16,6 @@
 #include <cstdlib> // std::atof
 #include <iterator>
 #include <limits>
-#include <sstream>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 #include <trial/protocol/json/error.hpp>
@@ -109,6 +108,7 @@ struct basic_decoder_functor<char,
                              ReturnType,
                              typename boost::enable_if< boost::is_same<ReturnType, std::string> >::type>
 {
+    typedef typename basic_decoder<char>::view_type view_type;
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     static ReturnType convert(const basic_decoder<char>& self)
     {
@@ -118,49 +118,54 @@ struct basic_decoder_functor<char,
             throw json::error(self.error());
         }
 
-        assert(self.literal().size() >= 2);
+        const typename view_type::size_type  approximateSize = self.literal().size();
+        assert(approximateSize >= 2);
 
-        std::ostringstream result;
-        for (typename basic_decoder<char>::view_type::const_iterator it = self.literal().begin();
-             it != self.literal().end();
+        std::string result;
+        result.reserve(approximateSize);
+
+        typename view_type::const_iterator it = self.literal().begin();
+        typename view_type::const_iterator end = self.literal().end();
+        for (;
+             it != end;
              ++it)
         {
             if (*it == traits<char>::alpha_reverse_solidus)
             {
-                assert(self.literal().size() >= 2);
+                assert(std::distance(it, end) >= 2);
                 ++it;
                 switch (*it)
                 {
                 case traits<char>::alpha_quote:
                 case traits<char>::alpha_reverse_solidus:
                 case traits<char>::alpha_solidus:
-                    result << *it;
+                    result += *it;
                     break;
 
                 case traits<char>::alpha_b:
-                    result << traits<char>::alpha_backspace;
+                    result += traits<char>::alpha_backspace;
                     break;
 
                 case traits<char>::alpha_f:
-                    result << traits<char>::alpha_formfeed;
+                    result += traits<char>::alpha_formfeed;
                     break;
 
                 case traits<char>::alpha_n:
-                    result << traits<char>::alpha_newline;
+                    result += traits<char>::alpha_newline;
                     break;
 
                 case traits<char>::alpha_r:
-                    result << traits<char>::alpha_return;
+                    result += traits<char>::alpha_return;
                     break;
 
                 case traits<char>::alpha_t:
-                    result << traits<char>::alpha_tab;
+                    result += traits<char>::alpha_tab;
                     break;
 
                 case traits<char>::alpha_u:
                     {
                         // Convert U+XXXX value to UTF-8
-                        assert(self.literal().size() >= 5);
+                        assert(std::distance(it, end) >= 5);
                         boost::uint32_t number = 0;
                         for (int i = 0; i < 4; ++i)
                         {
@@ -175,14 +180,15 @@ struct basic_decoder_functor<char,
                         {
                             // 0xxxxxxx
                             const unsigned char byte1 = static_cast<unsigned char>(number & 0x7F);
-                            result << byte1;
+                            result += byte1;
                         }
                         else if (number <= 0x07FF)
                         {
                             // 110xxxxx 10xxxxxx
                             const unsigned char byte1 = 0xC0 | static_cast<unsigned char>((number >> 6) & 0x1F);
                             const unsigned char byte2 = 0x80 | static_cast<unsigned char>(number & 0x3F);
-                            result << byte1 << byte2;
+                            result += byte1;
+                            result += byte2;
                         }
                         else
                         {
@@ -190,7 +196,9 @@ struct basic_decoder_functor<char,
                             const unsigned char byte1 = 0xE0 | static_cast<unsigned char>((number >> 12) & 0x0F);
                             const unsigned char byte2 = 0x80 | static_cast<unsigned char>((number >> 6) & 0x3F);
                             const unsigned char byte3 = 0x80 | static_cast<unsigned char>(number & 0x3F);
-                            result << byte1 << byte2 << byte3;
+                            result += byte1;
+                            result += byte2;
+                            result += byte3;
                         }
                     }
                     break;
@@ -202,16 +210,15 @@ struct basic_decoder_functor<char,
             }
             else if (*it == traits<char>::alpha_quote)
             {
-                assert((it == self.literal().begin()) ||
-                       (it + 1 == self.literal().end()));
+                assert((it == begin) || (it + 1 == end));
                 // Ignore initial and terminating quotes
             }
             else
             {
-                result << *it;
+                result += *it;
             }
         }
-        return result.str();
+        return result;
     }
 };
 
