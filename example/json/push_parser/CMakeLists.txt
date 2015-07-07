@@ -8,6 +8,8 @@
 #
 ###############################################################################
 
-add_subdirectory(pretty_printer)
-add_subdirectory(property_tree)
-add_subdirectory(push_parser)
+add_executable(json_push_parser
+  main.cpp
+)
+
+target_link_libraries(json_push_parser ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
