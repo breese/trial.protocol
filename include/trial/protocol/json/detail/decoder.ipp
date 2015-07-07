@@ -124,9 +124,9 @@ struct basic_decoder_functor<char,
         std::string result;
         result.reserve(approximateSize);
 
-        typename view_type::const_iterator it = self.literal().begin();
+        typename view_type::const_iterator begin = self.literal().begin();
         typename view_type::const_iterator end = self.literal().end();
-        for (;
+        for (typename view_type::const_iterator it = begin;
              it != end;
              ++it)
         {
