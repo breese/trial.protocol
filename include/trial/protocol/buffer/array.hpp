@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cassert>
 #include <algorithm>
 #include <boost/array.hpp>
 #include <trial/protocol/buffer/base.hpp>
