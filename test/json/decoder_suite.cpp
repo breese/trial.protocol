@@ -843,6 +843,52 @@ BOOST_AUTO_TEST_CASE(fail_string_as_float)
 }
 
 //-----------------------------------------------------------------------------
+// String pangram
+//
+// Adapted from http://www.cl.cam.ac.uk/~mgk25/ucs/examples/quickbrown.txt
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(test_string_pangram_english)
+{
+    const char input[] = "\"The quick brown fox jumps over the lazy dog\"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "The quick brown fox jumps over the lazy dog");
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+BOOST_AUTO_TEST_CASE(test_string_pangram_german)
+{
+    const char input[] = "\"Falsches \\u00DCben von Xylophonmusik qu\\u00E4lt jeden gr\\u00F6\\u00DFeren Zwerg\"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "Falsches Üben von Xylophonmusik quält jeden größeren Zwerg");
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+BOOST_AUTO_TEST_CASE(test_string_pangram_danish)
+{
+    const char input[] = "\"Quizdeltagerne spiste jordb\\u00E6r med fl\\u00F8de, mens cirkusklovnen Wolther spillede p\\u00E5 xylofon\"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "Quizdeltagerne spiste jordbær med fløde, mens cirkusklovnen Wolther spillede på xylofon");
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+BOOST_AUTO_TEST_CASE(test_string_pangram_greek)
+{
+    const char input[] = "\"\\u0393\\u03B1\\u03B6\\u03AD\\u03B5\\u03C2 \\u03BA\\u03B1\\u1F76 \\u03BC\\u03C5\\u03C1\\u03C4\\u03B9\\u1F72\\u03C2 \\u03B4\\u1F72\\u03BD \\u03B8\\u1F70 \\u03B2\\u03C1\\u1FF6 \\u03C0\\u03B9\\u1F70 \\u03C3\\u03C4\\u1F78 \\u03C7\\u03C1\\u03C5\\u03C3\\u03B1\\u03C6\\u1F76 \\u03BE\\u03AD\\u03C6\\u03C9\\u03C4\\u03BF\"";
+    json::detail::decoder decoder(input);
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::string);
+    BOOST_REQUIRE_EQUAL(decoder.value<std::string>(), "Γαζέες καὶ μυρτιὲς δὲν θὰ βρῶ πιὰ στὸ χρυσαφὶ ξέφωτο");
+    decoder.next();
+    BOOST_REQUIRE_EQUAL(decoder.type(), json::detail::token::eof);
+}
+
+//-----------------------------------------------------------------------------
 // Container
 //-----------------------------------------------------------------------------
 
