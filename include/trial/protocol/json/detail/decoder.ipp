@@ -164,7 +164,7 @@ struct basic_decoder_functor<char,
 
                 case traits<char>::alpha_u:
                     {
-                        // Convert U+XXXX value to UTF-8
+                        // Convert \uXXXX value to UTF-8
                         assert(std::distance(it, end) >= 5);
                         boost::uint32_t number = 0;
                         for (int i = 0; i < 4; ++i)
@@ -179,26 +179,20 @@ struct basic_decoder_functor<char,
                         if (number <= 0x007F)
                         {
                             // 0xxxxxxx
-                            const unsigned char byte1 = static_cast<unsigned char>(number & 0x7F);
-                            result += byte1;
+                            result += std::char_traits<char>::to_char_type(number & 0x7F);
                         }
                         else if (number <= 0x07FF)
                         {
                             // 110xxxxx 10xxxxxx
-                            const unsigned char byte1 = 0xC0 | static_cast<unsigned char>((number >> 6) & 0x1F);
-                            const unsigned char byte2 = 0x80 | static_cast<unsigned char>(number & 0x3F);
-                            result += byte1;
-                            result += byte2;
+                            result += 0xC0 | std::char_traits<char>::to_char_type((number >> 6) & 0x1F);
+                            result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
                         }
                         else
                         {
                             // 1110xxxx 10xxxxxx 10xxxxxx
-                            const unsigned char byte1 = 0xE0 | static_cast<unsigned char>((number >> 12) & 0x0F);
-                            const unsigned char byte2 = 0x80 | static_cast<unsigned char>((number >> 6) & 0x3F);
-                            const unsigned char byte3 = 0x80 | static_cast<unsigned char>(number & 0x3F);
-                            result += byte1;
-                            result += byte2;
-                            result += byte3;
+                            result += 0xE0 | std::char_traits<char>::to_char_type((number >> 12) & 0x0F);
+                            result += 0x80 | std::char_traits<char>::to_char_type((number >> 6) & 0x3F);
+                            result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
                         }
                     }
                     break;
