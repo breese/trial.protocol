@@ -43,6 +43,7 @@ set(TRIAL_PROTOCOL_DEPENDENT_LIBRARIES
 
 include_directories(BEFORE include)
 
+add_subdirectory(test/buffer)
 add_subdirectory(test/json)
 
 ###############################################################################
