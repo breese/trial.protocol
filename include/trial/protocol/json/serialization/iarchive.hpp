@@ -43,6 +43,12 @@ public:
         boost::archive::load(*this->This(), data);
     }
 
+    template<typename value_type>
+    void load_override(value_type& data, long /* version */)
+    {
+        load_override(data);
+    }
+
     template <typename T>
     void load(T&);
     void load(json::null_t);
