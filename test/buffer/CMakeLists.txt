@@ -11,6 +11,7 @@
 add_executable(test_buffer
   runner.cpp
   container_suite.cpp
+  vector_suite.cpp
 )
 
 target_link_libraries(test_buffer ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
