@@ -15,11 +15,50 @@
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/buffer/vector.hpp>
+#include <trial/protocol/buffer/string.hpp>
 #include <trial/protocol/json/detail/encoder.hpp>
 
 using namespace trial::protocol;
 
 BOOST_AUTO_TEST_SUITE(json_encoder_suite)
+
+//-----------------------------------------------------------------------------
+// Buffer
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(test_boost_array)
+{
+    boost::array<char, 2> result;
+    json::detail::encoder encoder(result);
+    BOOST_REQUIRE_EQUAL(encoder.value(42), 2);
+    BOOST_REQUIRE_EQUAL(std::string(result.begin(), result.size()), "42");
+}
+
+BOOST_AUTO_TEST_CASE(test_ostringstream)
+{
+    std::ostringstream result;
+    json::detail::encoder encoder(result);
+    BOOST_REQUIRE_EQUAL(encoder.value(42), 2);
+    BOOST_REQUIRE_EQUAL(result.str(), "42");
+}
+
+BOOST_AUTO_TEST_CASE(test_vector)
+{
+    std::vector<char> result;
+    json::detail::encoder encoder(result);
+    BOOST_REQUIRE_EQUAL(encoder.value(42), 2);
+    std::string expected("42");
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                    expected.begin(), expected.end());
+}
+
+BOOST_AUTO_TEST_CASE(test_string)
+{
+    std::string result;
+    json::detail::encoder encoder(result);
+    BOOST_REQUIRE_EQUAL(encoder.value(42), 2);
+    BOOST_REQUIRE_EQUAL(result, "42");
+}
 
 //-----------------------------------------------------------------------------
 // Basic
@@ -86,16 +125,6 @@ BOOST_AUTO_TEST_CASE(test_true)
     json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
     BOOST_REQUIRE_EQUAL(result.str(), "true");
-}
-
-BOOST_AUTO_TEST_CASE(test_vector_true)
-{
-    std::vector<char> result;
-    json::detail::encoder encoder(result);
-    BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
-    std::string expected("true");
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                    expected.begin(), expected.end());
 }
 
 BOOST_AUTO_TEST_CASE(test_true_true)
