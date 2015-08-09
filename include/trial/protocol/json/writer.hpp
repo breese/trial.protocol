@@ -30,10 +30,10 @@ class basic_writer
 {
 public:
     typedef std::size_t size_type;
-    typedef typename detail::basic_encoder<CharT>::buffer_type buffer_type;
     typedef typename detail::basic_encoder<CharT>::view_type view_type;
 
-    basic_writer(buffer_type&);
+    basic_writer(const basic_writer<CharT>&);
+    template <typename T> basic_writer(T&);
 
     boost::system::error_code error() const BOOST_NOEXCEPT;
     size_type level() const BOOST_NOEXCEPT;

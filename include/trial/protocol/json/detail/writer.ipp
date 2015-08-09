@@ -21,7 +21,15 @@ namespace json
 {
 
 template <typename CharT>
-basic_writer<CharT>::basic_writer(buffer_type& buffer)
+basic_writer<CharT>::basic_writer(const basic_writer<CharT>& other)
+    : encoder(other.encoder),
+      stack(other.stack)
+{
+}
+
+template <typename CharT>
+template <typename T>
+basic_writer<CharT>::basic_writer(T& buffer)
     : encoder(buffer)
 {
     // Push outermost scope

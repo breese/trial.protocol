@@ -64,6 +64,12 @@ private:
     std::vector<value_type>& buffer;
 };
 
+template <typename CharT>
+struct traits< std::vector<CharT> >
+{
+    typedef buffer::vector<CharT> buffer_type;
+};
+
 } // namespace buffer
 } // namespace protocol
 } // namespace trial

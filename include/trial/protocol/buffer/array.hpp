@@ -33,7 +33,10 @@ public:
     typedef value_type* iterator;
     typedef const value_type* const_iterator;
 
-    array() : current(content.begin()) {}
+    array(boost::array<CharT, N>& output)
+        : content(output),
+          current(content.begin())
+    {}
 
     const_iterator begin() const
     {
@@ -71,8 +74,14 @@ private:
     }
 
 private:
-    boost::array<CharT, N> content;
+    boost::array<CharT, N>& content;
     iterator current;
+};
+
+template <typename CharT, std::size_t N>
+struct traits< boost::array<CharT, N> >
+{
+    typedef buffer::array<CharT, N> buffer_type;
 };
 
 } // namespace buffer

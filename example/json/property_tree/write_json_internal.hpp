@@ -39,8 +39,7 @@ class printer
 public:
     printer(std::basic_ostream<value_type>& stream,
             const Ptree& input)
-        : output(stream),
-          writer(output),
+        : writer(stream),
           input(input)
     {
     }
@@ -116,7 +115,6 @@ public:
     }
 
 private:
-    buffer::ostream output;
     json::basic_writer<value_type> writer;
     const Ptree& input;
 };

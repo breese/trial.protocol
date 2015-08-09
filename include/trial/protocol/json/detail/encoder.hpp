@@ -14,6 +14,7 @@
 #include <string>
 #include <boost/cstdint.hpp>
 #include <boost/none.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/types.hpp>
@@ -42,7 +43,8 @@ public:
     typedef buffer::base<CharT> buffer_type;
     typedef boost::basic_string_ref<CharT> view_type;
 
-    basic_encoder(buffer_type&);
+    template <typename T>
+    basic_encoder(T&);
 
     //! @brief Write value
     //!
@@ -71,7 +73,7 @@ public:
 private:
     template <typename C, typename T, typename Enable> friend struct basic_encoder_functor;
 
-    buffer_type& buffer;
+    boost::scoped_ptr<buffer_type> buffer;
 };
 
 typedef basic_encoder<char> encoder;

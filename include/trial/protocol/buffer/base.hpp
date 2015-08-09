@@ -36,6 +36,11 @@ public:
     virtual void write(const view_type&) = 0;
 };
 
+template <typename T, typename Enable = void>
+struct traits
+{
+};
+
 } // namespace buffer
 } // namespace protocol
 } // namespace trial

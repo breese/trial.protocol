@@ -20,6 +20,7 @@
 #include <boost/array.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 
 namespace trial
@@ -106,17 +107,17 @@ struct basic_encoder_functor<CharT,
         typename array_type::const_iterator begin = where.base();
         const std::size_t size = std::distance(begin, output.cend()) + (is_negative ? 1 : 0);
 
-        if (!self.buffer.grow(size))
+        if (!self.buffer->grow(size))
         {
             return 0;
         }
         if (is_negative)
         {
-            self.buffer.write(traits<CharT>::alpha_minus);
+            self.buffer->write(traits<CharT>::alpha_minus);
         }
         while (begin != output.end())
         {
-            self.buffer.write(*begin);
+            self.buffer->write(*begin);
             ++begin;
         }
         return size;
@@ -137,7 +138,7 @@ struct basic_encoder_functor<CharT,
         case FP_INFINITE:
         case FP_NAN:
             // Infinity and NaN must be encoded as null
-            return outputter<CharT>::write(self.buffer, traits<CharT>::null_text());
+            return outputter<CharT>::write(*self.buffer, traits<CharT>::null_text());
         default:
             break;
         }
@@ -145,7 +146,7 @@ struct basic_encoder_functor<CharT,
         std::string work = boost::lexical_cast<std::string>(data);
         const std::string::size_type size = work.size();
 
-        if (!self.buffer.grow(size))
+        if (!self.buffer->grow(size))
         {
             return 0;
         }
@@ -154,7 +155,7 @@ struct basic_encoder_functor<CharT,
              it != work.end();
              ++it)
         {
-            self.buffer.write(*it);
+            self.buffer->write(*it);
         }
 
         return size;
@@ -175,12 +176,12 @@ struct basic_encoder_functor<CharT,
         // per escape character.
         std::size_t size = sizeof(CharT) + data.size() + sizeof(CharT);
 
-        if (!self.buffer.grow(size))
+        if (!self.buffer->grow(size))
         {
             return 0;
         }
 
-        self.buffer.write(traits<CharT>::alpha_quote);
+        self.buffer->write(traits<CharT>::alpha_quote);
         for (typename boost::basic_string_ref<CharT>::const_iterator it = data.begin();
              it != data.end();
              ++it)
@@ -190,53 +191,53 @@ struct basic_encoder_functor<CharT,
             case traits<CharT>::alpha_quote:
             case traits<CharT>::alpha_reverse_solidus:
             case traits<CharT>::alpha_solidus:
-                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer.write(*it);
+                self.buffer->write(*it);
                 ++size;
                 break;
 
             case traits<CharT>::alpha_backspace:
-                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer.write(traits<CharT>::alpha_b);
+                self.buffer->write(traits<CharT>::alpha_b);
                 ++size;
                 break;
 
             case traits<CharT>::alpha_formfeed:
-                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer.write(traits<CharT>::alpha_f);
+                self.buffer->write(traits<CharT>::alpha_f);
                 ++size;
                 break;
 
             case traits<CharT>::alpha_newline:
-                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer.write(traits<CharT>::alpha_n);
+                self.buffer->write(traits<CharT>::alpha_n);
                 ++size;
                 break;
 
             case traits<CharT>::alpha_return:
-                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer.write(traits<CharT>::alpha_r);
+                self.buffer->write(traits<CharT>::alpha_r);
                 ++size;
                 break;
 
             case traits<CharT>::alpha_tab:
-                if (outputter<CharT>::write(self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer.write(traits<CharT>::alpha_t);
+                self.buffer->write(traits<CharT>::alpha_t);
                 ++size;
                 break;
 
             default:
-                self.buffer.write(*it);
+                self.buffer->write(*it);
                 break;
             }
         }
-        self.buffer.write(traits<CharT>::alpha_quote);
+        self.buffer->write(traits<CharT>::alpha_quote);
 
         return size;
     }
@@ -258,8 +259,9 @@ struct basic_encoder_functor<CharT,
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
-basic_encoder<CharT>::basic_encoder(buffer_type& buffer)
-    : buffer(buffer)
+template <typename T>
+basic_encoder<CharT>::basic_encoder(T& output)
+    : buffer(new typename buffer::traits<T>::buffer_type(output))
 {
 };
 
@@ -277,11 +279,11 @@ basic_encoder<CharT>::value(bool data)
 {
     if (data)
     {
-        return outputter<CharT>::write(buffer, traits<CharT>::true_text());
+        return outputter<CharT>::write(*buffer, traits<CharT>::true_text());
     }
     else
     {
-        return outputter<CharT>::write(buffer, traits<CharT>::false_text());
+        return outputter<CharT>::write(*buffer, traits<CharT>::false_text());
     }
 };
 
@@ -296,56 +298,56 @@ template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(json::null_t)
 {
-    return outputter<CharT>::write(buffer, traits<CharT>::null_text());
+    return outputter<CharT>::write(*buffer, traits<CharT>::null_text());
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(json::begin_array_t)
 {
-    return outputter<CharT>::write(buffer, traits<CharT>::alpha_bracket_open);
+    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_bracket_open);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(json::end_array_t)
 {
-    return outputter<CharT>::write(buffer, traits<CharT>::alpha_bracket_close);
+    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_bracket_close);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(json::begin_object_t)
 {
-    return outputter<CharT>::write(buffer, traits<CharT>::alpha_brace_open);
+    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_brace_open);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(json::end_object_t)
 {
-    return outputter<CharT>::write(buffer, traits<CharT>::alpha_brace_close);
+    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_brace_close);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(json::detail::value_separator_t)
 {
-    return outputter<CharT>::write(buffer, traits<CharT>::alpha_comma);
+    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_comma);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(json::detail::name_separator_t)
 {
-    return outputter<CharT>::write(buffer, traits<CharT>::alpha_colon);
+    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_colon);
 };
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::literal(const view_type& data)
 {
-    return outputter<CharT>::write(buffer, data);
+    return outputter<CharT>::write(*buffer, data);
 };
 
 } // namespace detail

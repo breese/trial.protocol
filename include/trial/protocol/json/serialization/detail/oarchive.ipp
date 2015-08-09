@@ -19,7 +19,8 @@ namespace json
 {
 
 template <typename CharT>
-basic_oarchive<CharT>::basic_oarchive(buffer_type& buffer)
+template <typename T>
+basic_oarchive<CharT>::basic_oarchive(T& buffer)
     : writer(buffer)
 {
 }

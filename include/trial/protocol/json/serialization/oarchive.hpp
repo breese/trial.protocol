@@ -30,9 +30,8 @@ class basic_oarchive
     friend class boost::archive::save_access;
 
 public:
-    typedef typename json::basic_writer<CharT>::buffer_type buffer_type;
-
-    basic_oarchive(buffer_type&);
+    template <typename T>
+    basic_oarchive(T&);
 
     template <typename T>
     void save(const T& data);

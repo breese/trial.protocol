@@ -35,8 +35,7 @@ int main(int argc, char *argv[])
                                (std::istream_iterator<char>()));
 
             json::reader reader(buffer);
-            trial::protocol::buffer::ostream stream(std::cout);
-            json::writer writer(stream);
+            json::writer writer(std::cout);
             json::example::pretty_printer printer(reader, writer);
             printer.print();
         }

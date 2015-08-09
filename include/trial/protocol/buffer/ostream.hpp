@@ -12,6 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <ostream>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -51,7 +53,11 @@ private:
     std::ostream& content;
 };
 
-typedef basic_ostream<char> ostream;
+template <typename T>
+struct traits<T, typename boost::enable_if< boost::is_base_of<std::ostream, T> >::type>
+{
+    typedef buffer::basic_ostream<char> buffer_type;
+};
 
 } // namespace buffer
 } // namespace protocol

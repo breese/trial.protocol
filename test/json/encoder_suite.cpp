@@ -14,19 +14,10 @@
 #include <limits>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
+#include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/json/detail/encoder.hpp>
 
 using namespace trial::protocol;
-
-template<std::size_t N>
-struct test_array : public buffer::array<char, N>
-{
-};
-
-struct test_stream : public buffer::ostream
-{
-    test_stream(std::ostream& stream) : buffer::ostream(stream) {}
-};
 
 BOOST_AUTO_TEST_SUITE(json_encoder_suite)
 
@@ -36,7 +27,7 @@ BOOST_AUTO_TEST_SUITE(json_encoder_suite)
 
 BOOST_AUTO_TEST_CASE(test_comma)
 {
-    test_array<1> buffer;
+    boost::array<char, 1> buffer;
     json::detail::encoder encoder(buffer);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::value_separator), 1);
     BOOST_REQUIRE_EQUAL(std::string(buffer.begin(), buffer.size()), ",");
@@ -44,14 +35,14 @@ BOOST_AUTO_TEST_CASE(test_comma)
 
 BOOST_AUTO_TEST_CASE(test_fail_comma)
 {
-    test_array<0> buffer;
+    boost::array<char, 0> buffer;
     json::detail::encoder encoder(buffer);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::value_separator), 0);
 }
 
 BOOST_AUTO_TEST_CASE(test_colon)
 {
-    test_array<1> buffer;
+    boost::array<char, 1> buffer;
     json::detail::encoder encoder(buffer);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::name_separator), 1);
     BOOST_REQUIRE_EQUAL(std::string(buffer.begin(), buffer.size()), ":");
@@ -59,14 +50,14 @@ BOOST_AUTO_TEST_CASE(test_colon)
 
 BOOST_AUTO_TEST_CASE(test_fail_colon)
 {
-    test_array<0> buffer;
+    boost::array<char, 0> buffer;
     json::detail::encoder encoder(buffer);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::name_separator), 0);
 }
 
 BOOST_AUTO_TEST_CASE(test_null)
 {
-    test_array<4> buffer;
+    boost::array<char, 4> buffer;
     json::detail::encoder encoder(buffer);
     BOOST_REQUIRE_EQUAL(encoder.value(json::null), 4);
     BOOST_REQUIRE_EQUAL(std::string(buffer.begin(), buffer.size()), "null");
@@ -74,7 +65,7 @@ BOOST_AUTO_TEST_CASE(test_null)
 
 BOOST_AUTO_TEST_CASE(test_fail_null)
 {
-    test_array<3> buffer;
+    boost::array<char, 3> buffer;
     json::detail::encoder encoder(buffer);
     BOOST_REQUIRE_EQUAL(encoder.value(json::null), 0);
 }
@@ -82,52 +73,57 @@ BOOST_AUTO_TEST_CASE(test_fail_null)
 BOOST_AUTO_TEST_CASE(test_null_null)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::null), 4);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::value_separator), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(json::null), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null,null");
+    BOOST_REQUIRE_EQUAL(result.str(), "null,null");
 }
 
 BOOST_AUTO_TEST_CASE(test_true)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "true");
+    BOOST_REQUIRE_EQUAL(result.str(), "true");
+}
+
+BOOST_AUTO_TEST_CASE(test_vector_true)
+{
+    std::vector<char> result;
+    json::detail::encoder encoder(result);
+    BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
+    std::string expected("true");
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                    expected.begin(), expected.end());
 }
 
 BOOST_AUTO_TEST_CASE(test_true_true)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::value_separator), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "true,true");
+    BOOST_REQUIRE_EQUAL(result.str(), "true,true");
 }
 
 BOOST_AUTO_TEST_CASE(test_false)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(false), 5);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "false");
+    BOOST_REQUIRE_EQUAL(result.str(), "false");
 }
 
 BOOST_AUTO_TEST_CASE(test_false_false)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(false), 5);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::value_separator), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(false), 5);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "false,false");
+    BOOST_REQUIRE_EQUAL(result.str(), "false,false");
 }
 
 //-----------------------------------------------------------------------------
@@ -137,138 +133,123 @@ BOOST_AUTO_TEST_CASE(test_false_false)
 BOOST_AUTO_TEST_CASE(test_int_zero)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(0)), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0");
+    BOOST_REQUIRE_EQUAL(result.str(), "0");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_zero_zero)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(0)), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::value_separator), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(0)), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0,0");
+    BOOST_REQUIRE_EQUAL(result.str(), "0,0");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_one)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(1)), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1");
+    BOOST_REQUIRE_EQUAL(result.str(), "1");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_minus_one)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(-1)), 2);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-1");
+    BOOST_REQUIRE_EQUAL(result.str(), "-1");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_nine)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(9)), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "9");
+    BOOST_REQUIRE_EQUAL(result.str(), "9");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_minus_nine)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(-9)), 2);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-9");
+    BOOST_REQUIRE_EQUAL(result.str(), "-9");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_ten)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(10)), 2);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "10");
+    BOOST_REQUIRE_EQUAL(result.str(), "10");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_minus_ten)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(-10)), 3);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-10");
+    BOOST_REQUIRE_EQUAL(result.str(), "-10");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_almost_hundred)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(99)), 2);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "99");
+    BOOST_REQUIRE_EQUAL(result.str(), "99");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_hundred)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(100)), 3);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "100");
+    BOOST_REQUIRE_EQUAL(result.str(), "100");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_almost_minus_hundred)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(-99)), 3);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-99");
+    BOOST_REQUIRE_EQUAL(result.str(), "-99");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_minus_hundred)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(boost::int64_t(-100)), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-100");
+    BOOST_REQUIRE_EQUAL(result.str(), "-100");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_max)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<boost::int64_t>::max()), 19);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "9223372036854775807");
+    BOOST_REQUIRE_EQUAL(result.str(), "9223372036854775807");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_almost_min)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<boost::int64_t>::min() + 1), 20);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-9223372036854775807");
+    BOOST_REQUIRE_EQUAL(result.str(), "-9223372036854775807");
 }
 
 BOOST_AUTO_TEST_CASE(test_int_min)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<boost::int64_t>::min()), 20);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-9223372036854775808");
+    BOOST_REQUIRE_EQUAL(result.str(), "-9223372036854775808");
 }
 
 //-----------------------------------------------------------------------------
@@ -278,163 +259,145 @@ BOOST_AUTO_TEST_CASE(test_int_min)
 BOOST_AUTO_TEST_CASE(test_float_zero)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(0.0f), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0");
+    BOOST_REQUIRE_EQUAL(result.str(), "0");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_zero)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(0.0), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0");
+    BOOST_REQUIRE_EQUAL(result.str(), "0");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_one)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(1.0), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1");
+    BOOST_REQUIRE_EQUAL(result.str(), "1");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_minus_one)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(-1.0), 2);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-1");
+    BOOST_REQUIRE_EQUAL(result.str(), "-1");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_dot_five)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(0.5), 3);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0.5");
+    BOOST_REQUIRE_EQUAL(result.str(), "0.5");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_minus_dot_five)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(-0.5), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-0.5");
+    BOOST_REQUIRE_EQUAL(result.str(), "-0.5");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_e_100)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(1e100), 6);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1e+100");
+    BOOST_REQUIRE_EQUAL(result.str(), "1e+100");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_e_minus_100)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(1e-100), 6);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1e-100");
+    BOOST_REQUIRE_EQUAL(result.str(), "1e-100");
 }
 
 BOOST_AUTO_TEST_CASE(test_float_max)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<float>::max()), 14);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "3.40282347e+38");
+    BOOST_REQUIRE_EQUAL(result.str(), "3.40282347e+38");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_max)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<double>::max()), 23);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1.7976931348623157e+308");
+    BOOST_REQUIRE_EQUAL(result.str(), "1.7976931348623157e+308");
 }
 
 BOOST_AUTO_TEST_CASE(test_float_min)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<float>::min()), 14);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1.17549435e-38");
+    BOOST_REQUIRE_EQUAL(result.str(), "1.17549435e-38");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_min)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<double>::min()), 23);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "2.2250738585072014e-308");
+    BOOST_REQUIRE_EQUAL(result.str(), "2.2250738585072014e-308");
 }
 
 BOOST_AUTO_TEST_CASE(test_float_infinity)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<float>::infinity()), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    BOOST_REQUIRE_EQUAL(result.str(), "null");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_infinity)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<double>::infinity()), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    BOOST_REQUIRE_EQUAL(result.str(), "null");
 }
 
 BOOST_AUTO_TEST_CASE(test_float_minus_infinity)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(-std::numeric_limits<float>::infinity()), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    BOOST_REQUIRE_EQUAL(result.str(), "null");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_minus_infinity)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(-std::numeric_limits<double>::infinity()), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    BOOST_REQUIRE_EQUAL(result.str(), "null");
 }
 
 BOOST_AUTO_TEST_CASE(test_float_nan)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<float>::quiet_NaN()), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    BOOST_REQUIRE_EQUAL(result.str(), "null");
 }
 
 BOOST_AUTO_TEST_CASE(test_double_nan)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(std::numeric_limits<double>::quiet_NaN()), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    BOOST_REQUIRE_EQUAL(result.str(), "null");
 }
 
 //-----------------------------------------------------------------------------
@@ -444,120 +407,107 @@ BOOST_AUTO_TEST_CASE(test_double_nan)
 BOOST_AUTO_TEST_CASE(test_literal_empty)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(""), 2);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_empty)
 {
     std::ostringstream result;
-    test_stream buffer(result);
     std::string text("");
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(text), 2);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_space)
 {
     std::ostringstream result;
-    test_stream buffer(result);
     std::string text(" ");
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(text), 3);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\" \"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\" \"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_alpha)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("alpha"), 7);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"alpha\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"alpha\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_alpha_bravo)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("alpha bravo"), 13);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"alpha bravo\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"alpha bravo\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_quote)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("\""), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\\"\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\\"\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_reverse_solidus)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("\\"), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\\\\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\\\\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_solidus)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("/"), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\/\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\/\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_backspace)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("\b"), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\b\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\b\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_formfeed)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("\f"), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\f\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\f\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_newline)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("\n"), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\n\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\n\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_carriage_return)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("\r"), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\r\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\r\"");
 }
 
 BOOST_AUTO_TEST_CASE(test_string_escape_tab)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value("\t"), 4);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\\t\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"\\t\"");
 }
 
 //-----------------------------------------------------------------------------
@@ -567,101 +517,91 @@ BOOST_AUTO_TEST_CASE(test_string_escape_tab)
 BOOST_AUTO_TEST_CASE(test_array_begin)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_array), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[");
+    BOOST_REQUIRE_EQUAL(result.str(), "[");
 }
 
 BOOST_AUTO_TEST_CASE(test_array_end)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_array), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "]");
+    BOOST_REQUIRE_EQUAL(result.str(), "]");
 }
 
 BOOST_AUTO_TEST_CASE(test_array_empty)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_array), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_array), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[]");
+    BOOST_REQUIRE_EQUAL(result.str(), "[]");
 }
 
 BOOST_AUTO_TEST_CASE(test_array_bool_one)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_array), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(false), 5);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_array), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[false]");
+    BOOST_REQUIRE_EQUAL(result.str(), "[false]");
 }
 
 BOOST_AUTO_TEST_CASE(test_array_bool_two)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_array), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(false), 5);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::value_separator), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_array), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[false,true]");
+    BOOST_REQUIRE_EQUAL(result.str(), "[false,true]");
 }
 
 BOOST_AUTO_TEST_CASE(test_object_begin)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_object), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "{");
+    BOOST_REQUIRE_EQUAL(result.str(), "{");
 }
 
 BOOST_AUTO_TEST_CASE(test_object_end)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_object), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "}");
+    BOOST_REQUIRE_EQUAL(result.str(), "}");
 }
 
 BOOST_AUTO_TEST_CASE(test_object_empty)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_object), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_object), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "{}");
+    BOOST_REQUIRE_EQUAL(result.str(), "{}");
 }
 
 BOOST_AUTO_TEST_CASE(test_object_bool_one)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_object), 1);
     BOOST_REQUIRE_EQUAL(encoder.value("false"), 7);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::name_separator), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(false), 5);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_object), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "{\"false\":false}");
+    BOOST_REQUIRE_EQUAL(result.str(), "{\"false\":false}");
 }
 
 BOOST_AUTO_TEST_CASE(test_object_bool_two)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.value(json::begin_object), 1);
     BOOST_REQUIRE_EQUAL(encoder.value("false"), 7);
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::name_separator), 1);
@@ -671,7 +611,7 @@ BOOST_AUTO_TEST_CASE(test_object_bool_two)
     BOOST_REQUIRE_EQUAL(encoder.value(json::detail::name_separator), 1);
     BOOST_REQUIRE_EQUAL(encoder.value(true), 4);
     BOOST_REQUIRE_EQUAL(encoder.value(json::end_object), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "{\"false\":false,\"true\":true}");
+    BOOST_REQUIRE_EQUAL(result.str(), "{\"false\":false,\"true\":true}");
 }
 
 //-----------------------------------------------------------------------------
@@ -681,19 +621,17 @@ BOOST_AUTO_TEST_CASE(test_object_bool_two)
 BOOST_AUTO_TEST_CASE(test_literal_string)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.literal("alpha"), 5);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "alpha");
+    BOOST_REQUIRE_EQUAL(result.str(), "alpha");
 }
 
 BOOST_AUTO_TEST_CASE(test_literal_quote)
 {
     std::ostringstream result;
-    test_stream buffer(result);
-    json::detail::encoder encoder(buffer);
+    json::detail::encoder encoder(result);
     BOOST_REQUIRE_EQUAL(encoder.literal("\""), 1);
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"");
+    BOOST_REQUIRE_EQUAL(result.str(), "\"");
 }
 
 BOOST_AUTO_TEST_SUITE_END()
