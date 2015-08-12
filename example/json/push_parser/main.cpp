@@ -20,47 +20,47 @@ namespace json = trial::protocol::json;
 class printing_callbacks
 {
 public:
-    virtual void on_null()
+    void on_null()
     {
         std::cout << "null" << std::endl;
     }
 
-    virtual void on_boolean(bool value)
+    void on_boolean(bool value)
     {
         std::cout << "bool: " << std::boolalpha << value << std::endl;
     }
 
-    virtual void on_integer(boost::intmax_t value)
+    void on_integer(boost::intmax_t value)
     {
         std::cout << "integer: " << value << std::endl;
     }
 
-    virtual void on_floating(double value)
+    void on_floating(double value)
     {
         std::cout << "float: " << value << std::endl;
     }
 
-    virtual void on_string(const std::string& value)
+    void on_string(const std::string& value)
     {
         std::cout << "string: " << value << std::endl;
     }
 
-    virtual void on_begin_array()
+    void on_begin_array()
     {
         std::cout << "begin_array" << std::endl;
     }
 
-    virtual void on_end_array()
+    void on_end_array()
     {
         std::cout << "end_array" << std::endl;
     }
 
-    virtual void on_begin_object()
+    void on_begin_object()
     {
         std::cout << "begin_object" << std::endl;
     }
 
-    virtual void on_end_object()
+    void on_end_object()
     {
         std::cout << "end_object" << std::endl;
     }
