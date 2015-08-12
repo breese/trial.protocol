@@ -32,22 +32,6 @@ public:
         {
             switch (reader.type())
             {
-            case json::token::begin_array:
-                callbacks.on_begin_array();
-                break;
-
-            case json::token::end_array:
-                callbacks.on_end_array();
-                break;
-
-            case json::token::begin_object:
-                callbacks.on_begin_object();
-                break;
-
-            case json::token::end_object:
-                callbacks.on_end_object();
-                break;
-
             case json::token::null:
                 callbacks.on_null();
                 break;
@@ -68,10 +52,26 @@ public:
                 callbacks.on_string(reader.value<std::string>());
                 break;
 
+            case json::token::begin_array:
+                callbacks.on_begin_array();
+                break;
+
+            case json::token::end_array:
+                callbacks.on_end_array();
+                break;
+
+            case json::token::begin_object:
+                callbacks.on_begin_object();
+                break;
+
+            case json::token::end_object:
+                callbacks.on_end_object();
+                break;
+
             default:
                 break;
             }
-            
+
         } while (reader.next());
     }
 
