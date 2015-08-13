@@ -20,15 +20,22 @@ namespace protocol
 namespace buffer
 {
 
-template <typename CharT,
-          template <typename, typename = std::allocator<CharT> > class ContainerType>
-class basic_container : public base<CharT>
+template <typename T>
+class basic_container
+{
+};
+
+template <template <typename, typename> class ContainerType,
+          typename CharT,
+          typename AllocatorType>
+class basic_container< ContainerType<CharT, AllocatorType> >
+    : public base<CharT>
 {
 public:
     typedef typename base<CharT>::value_type value_type;
     typedef typename base<CharT>::size_type size_type;
     typedef typename base<CharT>::view_type view_type;
-    typedef ContainerType<value_type> container_type;
+    typedef ContainerType<CharT, AllocatorType> container_type;
 
     basic_container(container_type& buffer)
         : buffer(buffer)

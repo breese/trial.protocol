@@ -16,9 +16,9 @@
 using namespace trial::protocol;
 
 template <typename CharT>
-class vector_buffer : buffer::basic_container<CharT, std::vector>
+class vector_buffer : buffer::basic_container< std::vector<CharT> >
 {
-    typedef buffer::basic_container<CharT, std::vector> super;
+    typedef buffer::basic_container< std::vector<CharT> > super;
 
 public:
     typedef typename super::value_type value_type;
