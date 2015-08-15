@@ -46,6 +46,8 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// std::ostringstream
+//-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_SUITE(buffer_ostream_suite)
 
@@ -74,6 +76,41 @@ BOOST_AUTO_TEST_CASE(test_view)
     BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
     BOOST_REQUIRE_NO_THROW(container.write(input));
     BOOST_REQUIRE_EQUAL(output.str(), input);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+//-----------------------------------------------------------------------------
+// std::wostringstream
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_SUITE(buffer_wostream_suite)
+
+BOOST_AUTO_TEST_CASE(test_empty)
+{
+    std::wstringstream output;
+    ostream_buffer<wchar_t> container(output);
+
+    BOOST_REQUIRE(output.str() == L"");
+}
+
+BOOST_AUTO_TEST_CASE(test_single)
+{
+    std::wostringstream output;
+    ostream_buffer<wchar_t> container(output);
+    BOOST_REQUIRE_EQUAL(container.grow(1), true);
+    BOOST_REQUIRE_NO_THROW(container.write(L'A'));
+    BOOST_REQUIRE(output.str() == L"A");
+}
+
+BOOST_AUTO_TEST_CASE(test_view)
+{
+    std::wostringstream output;
+    ostream_buffer<wchar_t> container(output);
+    std::wstring input = L"alpha";
+    BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
+    BOOST_REQUIRE_NO_THROW(container.write(input));
+    BOOST_REQUIRE(output.str() == input);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

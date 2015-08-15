@@ -31,7 +31,7 @@ public:
     typedef typename base<CharT>::size_type size_type;
     typedef typename base<CharT>::view_type view_type;
 
-    basic_ostream(std::ostream& stream) : content(stream) {}
+    basic_ostream(std::basic_ostream<CharT>& stream) : content(stream) {}
 
 protected:
     virtual bool grow(size_type delta)
@@ -50,7 +50,7 @@ protected:
     }
 
 private:
-    std::ostream& content;
+    std::basic_ostream<CharT>& content;
 };
 
 // Specialization for basic_ostream
