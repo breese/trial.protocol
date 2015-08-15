@@ -47,6 +47,8 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// std::vector<char>
+//-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_SUITE(buffer_vector_suite)
 
@@ -77,6 +79,48 @@ BOOST_AUTO_TEST_CASE(test_view)
     std::vector<char> output;
     vector_buffer<char> container(output);
     std::string input = "alpha";
+    BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
+    BOOST_REQUIRE_NO_THROW(container.write(input));
+
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                    input.begin(), input.end());
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+//-----------------------------------------------------------------------------
+// std::vector<wchar_t>
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_SUITE(buffer_wvector_suite)
+
+BOOST_AUTO_TEST_CASE(test_empty)
+{
+    std::vector<wchar_t> output;
+    vector_buffer<wchar_t> container(output);
+
+    wchar_t expected[] = { };
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                    expected, expected + sizeof(expected) / sizeof(wchar_t));
+}
+
+BOOST_AUTO_TEST_CASE(test_single)
+{
+    std::vector<wchar_t> output;
+    vector_buffer<wchar_t> container(output);
+    BOOST_REQUIRE_EQUAL(container.grow(1), true);
+    BOOST_REQUIRE_NO_THROW(container.write(L'A'));
+
+    wchar_t expected[] = { L'A' };
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                    expected, expected + sizeof(expected) / sizeof(wchar_t));
+}
+
+BOOST_AUTO_TEST_CASE(test_view)
+{
+    std::vector<wchar_t> output;
+    vector_buffer<wchar_t> container(output);
+    std::wstring input = L"alpha";
     BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
     BOOST_REQUIRE_NO_THROW(container.write(input));
 
