@@ -14,6 +14,10 @@
 
 using namespace trial::protocol;
 
+//-----------------------------------------------------------------------------
+// Helper
+//-----------------------------------------------------------------------------
+
 template <typename CharT>
 class string_buffer : buffer::basic_string<CharT>
 {
@@ -45,9 +49,11 @@ public:
     }
 };
 
-//-----------------------------------------------------------------------------
-
 BOOST_AUTO_TEST_SUITE(buffer_string_suite)
+
+//-----------------------------------------------------------------------------
+// std::string
+//-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_CASE(test_empty)
 {
@@ -73,6 +79,36 @@ BOOST_AUTO_TEST_CASE(test_view)
     BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
     BOOST_REQUIRE_NO_THROW(container.write(input));
     BOOST_REQUIRE_EQUAL(output, input);
+}
+
+//-----------------------------------------------------------------------------
+// std::wstring
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(wtest_empty)
+{
+    std::wstring output;
+    string_buffer<std::wstring::value_type> container(output);
+    BOOST_REQUIRE(output == L"");
+}
+
+BOOST_AUTO_TEST_CASE(wtest_single)
+{
+    std::wstring output;
+    string_buffer<std::wstring::value_type> container(output);
+    BOOST_REQUIRE_EQUAL(container.grow(1), true);
+    BOOST_REQUIRE_NO_THROW(container.write(L'A'));
+    BOOST_REQUIRE(output == L"A");
+}
+
+BOOST_AUTO_TEST_CASE(wtest_view)
+{
+    std::wstring output;
+    string_buffer<std::wstring::value_type> container(output);
+    std::wstring input = L"alpha";
+    BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
+    BOOST_REQUIRE_NO_THROW(container.write(input));
+    BOOST_REQUIRE(output == input);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
