@@ -49,11 +49,11 @@ public:
     }
 };
 
-BOOST_AUTO_TEST_SUITE(buffer_string_suite)
-
 //-----------------------------------------------------------------------------
 // std::string
 //-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_SUITE(buffer_string_suite)
 
 BOOST_AUTO_TEST_CASE(test_empty)
 {
@@ -81,18 +81,22 @@ BOOST_AUTO_TEST_CASE(test_view)
     BOOST_REQUIRE_EQUAL(output, input);
 }
 
+BOOST_AUTO_TEST_SUITE_END()
+
 //-----------------------------------------------------------------------------
 // std::wstring
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(wtest_empty)
+BOOST_AUTO_TEST_SUITE(buffer_wstring_suite)
+
+BOOST_AUTO_TEST_CASE(test_empty)
 {
     std::wstring output;
     string_buffer<std::wstring::value_type> container(output);
     BOOST_REQUIRE(output == L"");
 }
 
-BOOST_AUTO_TEST_CASE(wtest_single)
+BOOST_AUTO_TEST_CASE(test_single)
 {
     std::wstring output;
     string_buffer<std::wstring::value_type> container(output);
@@ -101,7 +105,7 @@ BOOST_AUTO_TEST_CASE(wtest_single)
     BOOST_REQUIRE(output == L"A");
 }
 
-BOOST_AUTO_TEST_CASE(wtest_view)
+BOOST_AUTO_TEST_CASE(test_view)
 {
     std::wstring output;
     string_buffer<std::wstring::value_type> container(output);
