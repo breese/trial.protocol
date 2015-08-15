@@ -54,16 +54,16 @@ private:
     void validate_scope(token::value, enum json::errc);
 
 private:
-    detail::encoder encoder;
+    detail::basic_encoder<CharT> encoder;
     mutable enum json::errc last_error;
 
     struct frame
     {
-        frame(detail::encoder& encoder, token::value);
+        frame(detail::basic_encoder<CharT>& encoder, token::value);
 
         void write_separator();
 
-        detail::encoder& encoder;
+        detail::basic_encoder<CharT>& encoder;
         token::value type;
         std::size_t counter;
     };

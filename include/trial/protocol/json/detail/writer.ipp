@@ -147,7 +147,8 @@ void basic_writer<CharT>::validate_scope(token::value type,
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
-basic_writer<CharT>::frame::frame(detail::encoder& encoder, token::value type)
+basic_writer<CharT>::frame::frame(detail::basic_encoder<CharT>& encoder,
+                                  token::value type)
     : encoder(encoder),
       type(type),
       counter(0)
