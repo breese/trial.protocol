@@ -26,7 +26,7 @@ namespace example
 class pretty_printer
 {
 public:
-    pretty_printer(json::reader reader, json::writer writer)
+    pretty_printer(json::reader& reader, json::writer& writer)
         : reader(reader),
           writer(writer),
           indent_width(4)
@@ -226,8 +226,8 @@ private:
     }
 
 private:
-    json::reader reader;
-    json::writer writer;
+    json::reader& reader;
+    json::writer& writer;
     int indent_width;
 };
 
