@@ -56,8 +56,8 @@ BOOST_AUTO_TEST_CASE(test_empty)
     vector_buffer<char> container(output);
 
     char expected[] = { };
-    BOOST_CHECK_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                  expected, expected + sizeof(expected));
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                    expected, expected + sizeof(expected));
 }
 
 BOOST_AUTO_TEST_CASE(test_single)
@@ -68,8 +68,8 @@ BOOST_AUTO_TEST_CASE(test_single)
     BOOST_REQUIRE_NO_THROW(container.write('A'));
 
     char expected[] = { 'A' };
-    BOOST_CHECK_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                  expected, expected + sizeof(expected));
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                    expected, expected + sizeof(expected));
 }
 
 BOOST_AUTO_TEST_CASE(test_view)
@@ -80,8 +80,8 @@ BOOST_AUTO_TEST_CASE(test_view)
     BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
     BOOST_REQUIRE_NO_THROW(container.write(input));
 
-    BOOST_CHECK_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                  input.begin(), input.end());
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                    input.begin(), input.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

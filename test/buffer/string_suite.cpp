@@ -10,22 +10,21 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <vector>
-#include <trial/protocol/buffer/vector.hpp>
+#include <trial/protocol/buffer/string.hpp>
 
 using namespace trial::protocol;
 
 template <typename CharT>
-class vector_buffer : buffer::vector<CharT>
+class string_buffer : buffer::basic_string<CharT>
 {
-    typedef buffer::vector<CharT> super;
+    typedef buffer::basic_string<CharT> super;
 
 public:
     typedef typename super::value_type value_type;
     typedef typename super::size_type size_type;
     typedef typename super::view_type view_type;
 
-    vector_buffer(std::vector<CharT>& data)
+    string_buffer(std::basic_string<CharT>& data)
         : super(data)
     {
     }
@@ -48,40 +47,32 @@ public:
 
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_SUITE(buffer_vector_suite)
+BOOST_AUTO_TEST_SUITE(buffer_string_suite)
 
 BOOST_AUTO_TEST_CASE(test_empty)
 {
-    std::vector<char> output;
-    vector_buffer<char> container(output);
-
-    char expected[] = { };
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    expected, expected + sizeof(expected));
+    std::string output;
+    string_buffer<char> container(output);
+    BOOST_REQUIRE_EQUAL(output, "");
 }
 
 BOOST_AUTO_TEST_CASE(test_single)
 {
-    std::vector<char> output;
-    vector_buffer<char> container(output);
+    std::string output;
+    string_buffer<char> container(output);
     BOOST_REQUIRE_EQUAL(container.grow(1), true);
     BOOST_REQUIRE_NO_THROW(container.write('A'));
-
-    char expected[] = { 'A' };
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    expected, expected + sizeof(expected));
+    BOOST_REQUIRE_EQUAL(output, "A");
 }
 
 BOOST_AUTO_TEST_CASE(test_view)
 {
-    std::vector<char> output;
-    vector_buffer<char> container(output);
+    std::string output;
+    string_buffer<char> container(output);
     std::string input = "alpha";
     BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
     BOOST_REQUIRE_NO_THROW(container.write(input));
-
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    input.begin(), input.end());
+    BOOST_REQUIRE_EQUAL(output, input);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -33,7 +33,7 @@ public:
 
     basic_ostream(std::ostream& stream) : content(stream) {}
 
-private:
+protected:
     virtual bool grow(size_type delta)
     {
         return content.good();
@@ -53,10 +53,27 @@ private:
     std::ostream& content;
 };
 
-template <typename T>
-struct traits<T, typename boost::enable_if< boost::is_base_of<std::ostream, T> >::type>
+// Specialization for basic_ostream
+template <template <typename, typename> class T,
+          typename CharT,
+          typename Traits>
+struct traits<T<CharT, Traits>,
+              typename boost::enable_if< boost::is_base_of<std::basic_ostream<CharT, Traits>,
+                                                           T<CharT, Traits> > >::type>
 {
-    typedef buffer::basic_ostream<char> buffer_type;
+    typedef buffer::basic_ostream<CharT> buffer_type;
+};
+
+// Specialization for C++11 basic_ostringstream with allocator
+template <template <typename, typename, typename> class T,
+          typename CharT,
+          typename Traits,
+          typename Allocator>
+struct traits<T<CharT, Traits, Allocator>,
+              typename boost::enable_if< boost::is_base_of<std::basic_ostream<CharT, Traits>,
+                                                           T<CharT, Traits, Allocator> > >::type>
+{
+    typedef buffer::basic_ostream<CharT> buffer_type;
 };
 
 } // namespace buffer

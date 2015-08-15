@@ -11,6 +11,8 @@
 add_executable(test_buffer
   runner.cpp
   container_suite.cpp
+  ostream_suite.cpp
+  string_suite.cpp
   vector_suite.cpp
 )
 

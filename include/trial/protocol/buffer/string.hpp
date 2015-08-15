@@ -12,8 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <string>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -36,7 +34,7 @@ public:
     {
     }
 
-private:
+protected:
     virtual bool grow(size_type delta)
     {
         const size_type size = content.size() + delta + 1;
@@ -63,10 +61,10 @@ private:
     std::basic_string<CharT>& content;
 };
 
-template <typename T>
-struct traits<T, typename boost::enable_if<boost::is_same<std::string, T> >::type>
+template <typename CharT>
+struct traits< std::basic_string<CharT> >
 {
-    typedef buffer::basic_string<char> buffer_type;
+    typedef buffer::basic_string<CharT> buffer_type;
 };
 
 } // namespace buffer
