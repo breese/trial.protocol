@@ -82,10 +82,10 @@ private:
         bool is_array() const;
         bool is_object() const;
 
-        enum json::errc next(detail::decoder&);
-        enum json::errc check_outer(detail::decoder&);
-        enum json::errc check_array(detail::decoder&);
-        enum json::errc check_object(detail::decoder&);
+        enum json::errc next(detail::basic_decoder<CharT>&);
+        enum json::errc check_outer(detail::basic_decoder<CharT>&);
+        enum json::errc check_array(detail::basic_decoder<CharT>&);
+        enum json::errc check_object(detail::basic_decoder<CharT>&);
 
         token::value scope;
         std::size_t counter;

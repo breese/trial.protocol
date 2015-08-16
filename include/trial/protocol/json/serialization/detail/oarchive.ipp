@@ -47,7 +47,7 @@ void basic_oarchive<CharT>::save_override(const T& data, long /* version */)
 }
 
 template <typename CharT>
-void basic_oarchive<CharT>::save_override(const char *data)
+void basic_oarchive<CharT>::save_override(const CharT *data)
 {
     save(data);
 }

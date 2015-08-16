@@ -22,10 +22,11 @@ namespace protocol
 namespace serialization
 {
 
-template <typename T>
-struct save_functor< protocol::json::oarchive, typename boost::optional<T> >
+template <typename CharT, typename T>
+struct save_functor< protocol::json::basic_oarchive<CharT>,
+                     typename boost::optional<T> >
 {
-    static void save(protocol::json::oarchive& ar,
+    static void save(protocol::json::basic_oarchive<CharT>& ar,
                      const boost::optional<T>& data,
                      const unsigned int /* protocol_version */)
     {
@@ -40,10 +41,11 @@ struct save_functor< protocol::json::oarchive, typename boost::optional<T> >
     }
 };
 
-template <typename T>
-struct load_functor< protocol::json::iarchive, typename boost::optional<T> >
+template <typename CharT, typename T>
+struct load_functor< protocol::json::basic_iarchive<CharT>,
+                     typename boost::optional<T> >
 {
-    static void load(protocol::json::iarchive& ar,
+    static void load(protocol::json::basic_iarchive<CharT>& ar,
                      boost::optional<T>& data,
                      const unsigned int /* protocol_version */)
     {

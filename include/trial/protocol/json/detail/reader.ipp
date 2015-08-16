@@ -379,7 +379,7 @@ bool basic_reader<CharT>::frame::is_object() const
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::next(detail::decoder& decoder)
+enum json::errc basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>& decoder)
 {
     decoder.next();
 
@@ -400,7 +400,7 @@ enum json::errc basic_reader<CharT>::frame::next(detail::decoder& decoder)
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::check_outer(detail::decoder& decoder)
+enum json::errc basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 2
     //
@@ -418,7 +418,7 @@ enum json::errc basic_reader<CharT>::frame::check_outer(detail::decoder& decoder
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder)
+enum json::errc basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 5
     //
@@ -474,7 +474,7 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::decoder& decoder
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::check_object(detail::decoder& decoder)
+enum json::errc basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 4
     //

@@ -21,10 +21,11 @@ namespace protocol
 namespace serialization
 {
 
-template <typename T1, typename T2>
-struct save_functor< protocol::json::oarchive, typename std::pair<T1, T2> >
+template <typename CharT, typename T1, typename T2>
+struct save_functor< protocol::json::basic_oarchive<CharT>,
+                     typename std::pair<T1, T2> >
 {
-    static void save(protocol::json::oarchive& ar,
+    static void save(protocol::json::basic_oarchive<CharT>& ar,
                      const std::pair<T1, T2>& data,
                      const unsigned int version)
     {
@@ -35,10 +36,11 @@ struct save_functor< protocol::json::oarchive, typename std::pair<T1, T2> >
     }
 };
 
-template <typename T1, typename T2>
-struct load_functor< protocol::json::iarchive, typename std::pair<T1, T2> >
+template <typename CharT, typename T1, typename T2>
+struct load_functor< protocol::json::basic_iarchive<CharT>,
+                     typename std::pair<T1, T2> >
 {
-    static void load(protocol::json::iarchive& ar,
+    static void load(protocol::json::basic_iarchive<CharT>& ar,
                      std::pair<T1, T2>& data,
                      const unsigned int version)
     {

@@ -43,7 +43,7 @@ public:
     void save_override(const T& data, long);
 
     // String literal
-    void save_override(const char *data);
+    void save_override(const CharT *data);
 
     // Ignore these
     void save_override(const boost::archive::version_type) {}
