@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/mpl/logical.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/math/special_functions/round.hpp>
 
@@ -68,7 +67,7 @@ struct basic_reader_functor
 template <typename CharT, typename ReturnType>
 struct basic_reader_functor<CharT,
                             ReturnType,
-                            typename boost::enable_if< boost::mpl::and_< boost::is_integral<ReturnType>, boost::mpl::not_< boost::is_same<ReturnType, bool> > > >::type>
+                            typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
