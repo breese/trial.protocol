@@ -32,39 +32,39 @@ public:
         {
             switch (reader.type())
             {
-            case json::token::null:
+            case json::type::null:
                 callbacks.on_null();
                 break;
 
-            case json::token::boolean:
+            case json::type::boolean:
                 callbacks.on_boolean(reader.value<bool>());
                 break;
 
-            case json::token::integer:
+            case json::type::integer:
                 callbacks.on_integer(reader.value<boost::intmax_t>());
                 break;
 
-            case json::token::floating:
+            case json::type::floating:
                 callbacks.on_floating(reader.value<double>());
                 break;
 
-            case json::token::string:
+            case json::type::string:
                 callbacks.on_string(reader.value<std::string>());
                 break;
 
-            case json::token::begin_array:
+            case json::type::begin_array:
                 callbacks.on_begin_array();
                 break;
 
-            case json::token::end_array:
+            case json::type::end_array:
                 callbacks.on_end_array();
                 break;
 
-            case json::token::begin_object:
+            case json::type::begin_object:
                 callbacks.on_begin_object();
                 break;
 
-            case json::token::end_object:
+            case json::type::end_object:
                 callbacks.on_end_object();
                 break;
 

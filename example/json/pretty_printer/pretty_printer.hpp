@@ -38,18 +38,18 @@ public:
         // Print outer scope
         switch (type())
         {
-        case json::token::begin_array:
+        case json::type::begin_array:
             print_array(false);
             break;
 
-        case json::token::end_array:
+        case json::type::end_array:
             throw json::error(make_error_code(json::unbalanced_end_array));
 
-        case json::token::begin_object:
+        case json::type::begin_object:
             print_object(false);
             break;
 
-        case json::token::end_object:
+        case json::type::end_object:
             throw json::error(make_error_code(json::unbalanced_end_object));
 
         default:
@@ -62,7 +62,7 @@ public:
 private:
     void print_array(bool do_indent)
     {
-        assert(reader.type() == json::token::begin_array);
+        assert(reader.type() == json::type::begin_array);
 
         if (do_indent)
             indent(reader.level());
@@ -72,13 +72,13 @@ private:
         int count = 0;
         while (reader.next())
         {
-            if (reader.type() == json::token::end_array)
+            if (reader.type() == json::type::end_array)
                 break;
             print_array_element(count);
             ++count;
         }
 
-        if (reader.type() != json::token::end_array)
+        if (reader.type() != json::type::end_array)
             throw json::error(make_error_code(json::expected_end_array));
         newline();
         indent(reader.level() - 1);
@@ -89,7 +89,7 @@ private:
     {
         switch (type())
         {
-        case json::token::begin_array:
+        case json::type::begin_array:
             if (count > 0)
             {
                 writer.literal(",");
@@ -98,10 +98,10 @@ private:
             print_array(true);
             break;
 
-        case json::token::end_array:
+        case json::type::end_array:
             break;
 
-        case json::token::begin_object:
+        case json::type::begin_object:
             if (count > 0)
             {
                 writer.literal(",");
@@ -110,7 +110,7 @@ private:
             print_object(true);
             break;
 
-        case json::token::end_object:
+        case json::type::end_object:
             throw json::error(make_error_code(json::unbalanced_end_object));
 
         default:
@@ -127,7 +127,7 @@ private:
 
     void print_object(bool do_indent)
     {
-        assert(reader.type() == json::token::begin_object);
+        assert(reader.type() == json::type::begin_object);
 
         if (do_indent)
             indent(reader.level());
@@ -137,13 +137,13 @@ private:
         int count = 0;
         while (reader.next())
         {
-            if (reader.type() == json::token::end_object)
+            if (reader.type() == json::type::end_object)
                 break;
             print_object_element(count);
             ++count;
         }
 
-        if (reader.type() != json::token::end_object)
+        if (reader.type() != json::type::end_object)
             throw json::error(make_error_code(json::expected_end_object));
         newline();
         indent(reader.level() - 1);
@@ -152,7 +152,7 @@ private:
 
     void print_object_element(int count)
     {
-        if (reader.type() != json::token::string)
+        if (reader.type() != json::type::string)
             throw json::error(make_error_code(json::invalid_key));
 
         // Print value separator
@@ -176,11 +176,11 @@ private:
         // Print value
         switch (reader.type())
         {
-        case json::token::begin_array:
+        case json::type::begin_array:
             print_array(false);
             break;
 
-        case json::token::begin_object:
+        case json::type::begin_object:
             print_object(false);
             break;
 
@@ -194,10 +194,10 @@ private:
     {
         switch (reader.type())
         {
-        case json::token::begin_array:
-        case json::token::end_array:
-        case json::token::begin_object:
-        case json::token::end_object:
+        case json::type::begin_array:
+        case json::type::end_array:
+        case json::type::begin_object:
+        case json::type::end_object:
             assert(false);
             break;
 
@@ -207,10 +207,10 @@ private:
         }
     }
 
-    json::token::value type()
+    json::type::value type()
     {
-        json::token::value token = reader.type();
-        if (token == json::token::end)
+        json::type::value token = reader.type();
+        if (token == json::type::end)
             throw json::error(reader.error());
         return token;
     }

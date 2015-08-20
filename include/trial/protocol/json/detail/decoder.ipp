@@ -50,9 +50,9 @@ struct basic_decoder_functor<CharT,
 {
     static ReturnType convert(const basic_decoder<CharT>& self)
     {
-        if (self.type() != token::integer)
+        if (self.token() != token::integer)
         {
-            self.current.error = json::incompatible_type;
+            self.current.token = token::error_incompatible_type;
             throw json::error(self.error());
         }
 
@@ -63,7 +63,7 @@ struct basic_decoder_functor<CharT,
         {
             if (boost::is_unsigned<ReturnType>::value)
             {
-                self.current.error = json::invalid_value;
+                self.current.token = token::error_invalid_value;
                 throw json::error(self.error());
             }
             ++it;
@@ -77,7 +77,7 @@ struct basic_decoder_functor<CharT,
             if (result < old)
             {
                 // Overflow
-                self.current.error = json::invalid_value;
+                self.current.token = token::error_invalid_value;
                 throw json::error(self.error());
             }
             ++it;
@@ -93,9 +93,9 @@ struct basic_decoder_functor<char,
 {
     static ReturnType convert(const basic_decoder<char>& self)
     {
-        if (self.type() != token::floating)
+        if (self.token() != token::floating)
         {
-            self.current.error = json::incompatible_type;
+            self.current.token = token::error_incompatible_type;
             throw json::error(self.error());
         }
 
@@ -112,9 +112,9 @@ struct basic_decoder_functor<char,
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     static ReturnType convert(const basic_decoder<char>& self)
     {
-        if (self.type() != token::string)
+        if (self.token() != token::string)
         {
-            self.current.error = json::incompatible_type;
+            self.current.token = token::error_incompatible_type;
             throw json::error(self.error());
         }
 
@@ -224,27 +224,75 @@ template <typename CharT>
 basic_decoder<CharT>::basic_decoder(const view_type& input)
     : input(input)
 {
-    current.type = token::eof;
-    current.error = json::no_error;
+    current.token = token::end;
     next();
 }
 
 template <typename CharT>
-token::value basic_decoder<CharT>::type() const BOOST_NOEXCEPT
+void basic_decoder<CharT>::token(json::token::value value) BOOST_NOEXCEPT
 {
-    return current.type;
+    current.token = value;
+}
+
+template <typename CharT>
+token::value basic_decoder<CharT>::token() const BOOST_NOEXCEPT
+{
+    return current.token;
+}
+
+template <typename CharT>
+type::value basic_decoder<CharT>::type() const BOOST_NOEXCEPT
+{
+    return type::convert(current.token);
+}
+
+template <typename CharT>
+category::value basic_decoder<CharT>::category() const BOOST_NOEXCEPT
+{
+    return category::convert(current.token);
 }
 
 template <typename CharT>
 boost::system::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
 {
-    return json::make_error_code(current.error);
+    switch (token())
+    {
+    case token::error_not_implemented:
+        return json::make_error_code(not_implemented);
+
+    case token::error_unexpected_token:
+        return json::make_error_code(unexpected_token);
+
+    case token::error_invalid_key:
+        return json::make_error_code(invalid_key);
+
+    case token::error_invalid_value:
+        return json::make_error_code(invalid_value);
+
+    case token::error_incompatible_type:
+        return json::make_error_code(incompatible_type);
+
+    case token::error_unbalanced_end_array:
+        return json::make_error_code(unbalanced_end_array);
+
+    case token::error_unbalanced_end_object:
+        return json::make_error_code(unbalanced_end_object);
+
+    case token::error_expected_end_array:
+        return json::make_error_code(expected_end_array);
+
+    case token::error_expected_end_object:
+        return json::make_error_code(expected_end_object);
+
+    default:
+        return json::make_error_code(no_error);
+    }
 }
 
 template <typename CharT>
 void basic_decoder<CharT>::next() BOOST_NOEXCEPT
 {
-    if (current.type == token::error)
+    if (type() == json::type::error)
     {
         return;
     }
@@ -253,22 +301,22 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
 
     if (input.empty())
     {
-        current.type = token::eof;
+        current.token = token::end;
         return;
     }
 
     switch (input.front())
     {
     case traits<CharT>::alpha_f:
-        current.type = next_f_keyword();
+        current.token = next_f_keyword();
         break;
 
     case traits<CharT>::alpha_n:
-        current.type = next_n_keyword();
+        current.token = next_n_keyword();
         break;
 
     case traits<CharT>::alpha_t:
-        current.type = next_t_keyword();
+        current.token = next_t_keyword();
         break;
 
     case traits<CharT>::alpha_minus:
@@ -282,39 +330,39 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
     case traits<CharT>::alpha_7:
     case traits<CharT>::alpha_8:
     case traits<CharT>::alpha_9:
-        current.type = next_number();
+        current.token = next_number();
         break;
 
     case traits<CharT>::alpha_quote:
-        current.type = next_string();
+        current.token = next_string();
         break;
 
     case traits<CharT>::alpha_brace_open:
-        current.type = next_token(token::begin_object);
+        current.token = next_token(token::begin_object);
         break;
 
     case traits<CharT>::alpha_brace_close:
-        current.type = next_token(token::end_object);
+        current.token = next_token(token::end_object);
         break;
 
     case traits<CharT>::alpha_bracket_open:
-        current.type = next_token(token::begin_array);
+        current.token = next_token(token::begin_array);
         break;
 
     case traits<CharT>::alpha_bracket_close:
-        current.type = next_token(token::end_array);
+        current.token = next_token(token::end_array);
         break;
 
     case traits<CharT>::alpha_comma:
-        current.type = next_token(token::value_separator);
+        current.token = next_token(token::value_separator);
         break;
 
     case traits<CharT>::alpha_colon:
-        current.type = next_token(token::name_separator);
+        current.token = next_token(token::name_separator);
         break;
 
     default:
-        current.type = token::error;
+        current.token = token::error_unexpected_token;
         break;
     }
 }
@@ -351,12 +399,12 @@ token::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
     if (input.size() < size)
     {
         input.remove_prefix(input.size());
-        type = token::eof;
+        type = token::end;
         goto end;
     }
     if (traits<CharT>::false_text().compare(0, size, begin, size) != 0)
     {
-        type = token::error;
+        type = token::error_unexpected_token;
         goto end;
     }
     input.remove_prefix(size);
@@ -364,7 +412,7 @@ token::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
     {
         while (!at_keyword_end())
             input.remove_prefix(1);
-        type = token::error;
+        type = token::error_unexpected_token;
     }
 
  end:
@@ -375,19 +423,19 @@ token::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
 template <typename CharT>
 token::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
 {
-    token::value type = token::null_value;
+    token::value type = token::null;
     typename view_type::const_iterator begin = input.begin();
 
     const std::size_t size = traits<CharT>::null_text().size();
     if (input.size() < size)
     {
         input.remove_prefix(input.size());
-        type = token::eof;
+        type = token::end;
         goto end;
     }
     if (traits<CharT>::null_text().compare(0, size, begin, size) != 0)
     {
-        type = token::error;
+        type = token::error_unexpected_token;
         goto end;
     }
     input.remove_prefix(size);
@@ -395,7 +443,7 @@ token::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
     {
         while (!at_keyword_end())
             input.remove_prefix(1);
-        type = token::error;
+        type = token::error_unexpected_token;
     }
 
  end:
@@ -413,12 +461,12 @@ token::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
     if (input.size() < size)
     {
         input.remove_prefix(input.size());
-        type = token::eof;
+        type = token::end;
         goto end;
     }
     if (traits<CharT>::true_text().compare(0, size, begin, size) != 0)
     {
-        type = token::error;
+        type = token::error_unexpected_token;
         goto end;
     }
     input.remove_prefix(size);
@@ -426,7 +474,7 @@ token::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
     {
         while (!at_keyword_end())
             input.remove_prefix(1);
-        type = token::error;
+        type = token::error_unexpected_token;
     }
 
  end:
@@ -446,7 +494,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
         input.remove_prefix(1); // Skip '-'
         if (input.empty())
         {
-            type = token::eof;
+            type = token::end;
             goto end;
         }
     }
@@ -460,7 +508,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
         if (input.begin() == digit_begin)
         {
             // No digits found
-            type = token::error;
+            type = token::error_unexpected_token;
             goto end;
         }
         if (!input.empty())
@@ -471,7 +519,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                 input.remove_prefix(1);
                 if (input.empty())
                 {
-                    type = token::eof;
+                    type = token::end;
                     goto end;
                 }
                 typename view_type::const_iterator fraction_begin = input.begin();
@@ -481,7 +529,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                 }
                 if (input.begin() == fraction_begin)
                 {
-                    type = token::error;
+                    type = token::error_unexpected_token;
                     goto end;
                 }
             }
@@ -492,7 +540,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                 input.remove_prefix(1);
                 if (input.empty())
                 {
-                    type = token::eof;
+                    type = token::end;
                     goto end;
                 }
 
@@ -501,7 +549,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     input.remove_prefix(1);
                     if (input.empty())
                     {
-                        type = token::eof;
+                        type = token::end;
                         goto end;
                     }
                 }
@@ -510,7 +558,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     input.remove_prefix(1);
                     if (input.empty())
                     {
-                        type = token::eof;
+                        type = token::end;
                         goto end;
                     }
                 }
@@ -521,7 +569,7 @@ token::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                 }
                 if (input.begin() == exponent_begin)
                 {
-                    type = token::error;
+                    type = token::error_unexpected_token;
                     goto end;
                 }
             }
@@ -642,12 +690,11 @@ token::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
     }
  eof:
     current.view = view_type(input.begin(), std::distance(input.begin(), marker));
-    return token::eof;
+    return token::end;
 
  error:
     current.view = view_type(input.begin(), std::distance(input.begin(), marker));
-    current.error = json::unexpected_token;
-    return token::error;
+    return token::error_unexpected_token;
 }
 
 template <typename CharT>

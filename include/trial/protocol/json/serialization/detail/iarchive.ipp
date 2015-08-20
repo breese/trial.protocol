@@ -66,7 +66,7 @@ void basic_iarchive<CharT>::load(json::end_array_t)
 template <typename CharT>
 bool basic_iarchive<CharT>::at_end_array() const
 {
-    switch (reader.type())
+    switch (reader.token())
     {
     case json::token::end_array:
         return true;
@@ -97,7 +97,7 @@ void basic_iarchive<CharT>::load(json::end_object_t)
 template <typename CharT>
 bool basic_iarchive<CharT>::at_end_object() const
 {
-    switch (reader.type())
+    switch (reader.token())
     {
     case json::token::end_object:
         return true;
@@ -116,13 +116,13 @@ bool basic_iarchive<CharT>::at_end_object() const
 template <typename CharT>
 json::token::value basic_iarchive<CharT>::type() const
 {
-    return reader.type();
+    return reader.token();
 }
 
 template <typename CharT>
 void basic_iarchive<CharT>::next()
 {
-    if (!reader.next() && (reader.type() == token::error))
+    if (!reader.next() && (reader.type() == type::error))
     {
         throw json::error(reader.error());
     }
@@ -131,7 +131,7 @@ void basic_iarchive<CharT>::next()
 template <typename CharT>
 void basic_iarchive<CharT>::next(token::value expect)
 {
-    if (!reader.next(expect) && (reader.type() == token::error))
+    if (!reader.next(expect) && (reader.type() == type::error))
     {
         throw json::error(reader.error());
     }

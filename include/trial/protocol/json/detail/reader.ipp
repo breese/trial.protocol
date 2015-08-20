@@ -71,9 +71,9 @@ struct basic_reader_functor<CharT,
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
-        switch (self.decoder.type())
+        switch (self.decoder.token())
         {
-        case detail::token::integer:
+        case token::integer:
             {
                 // FIXME: Raise error if value is too large
                 ReturnType result = self.decoder.template value<ReturnType>();
@@ -84,12 +84,12 @@ struct basic_reader_functor<CharT,
                 return result;
             }
 
-        case detail::token::floating:
+        case token::floating:
             typedef typename integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
             return ReturnType(boost::math::round(self.decoder.template value<floating_return_type>()));
 
         default:
-            self.last_error = json::invalid_value;
+            self.decoder.token(token::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -104,17 +104,17 @@ struct basic_reader_functor<CharT,
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
-        switch (self.decoder.type())
+        switch (self.decoder.token())
         {
-        case detail::token::integer:
+        case token::integer:
             typedef typename floating_to_integer<ReturnType>::type integer_return_type;
             return ReturnType(self.decoder.template value<integer_return_type>());
 
-        case detail::token::floating:
+        case token::floating:
             return self.decoder.template value<ReturnType>();
 
         default:
-            self.last_error = json::invalid_value;
+            self.decoder.token(token::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -129,16 +129,16 @@ struct basic_reader_functor<CharT,
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
-        switch (self.decoder.type())
+        switch (self.decoder.token())
         {
-        case detail::token::true_value:
+        case token::true_value:
             return true;
 
-        case detail::token::false_value:
+        case token::false_value:
             return false;
 
         default:
-            self.last_error = json::invalid_value;
+            self.decoder.token(token::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -153,13 +153,13 @@ struct basic_reader_functor<CharT,
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
-        switch (self.decoder.type())
+        switch (self.decoder.token())
         {
-        case detail::token::string:
+        case token::string:
             return self.decoder.template value<ReturnType>();
 
         default:
-            self.last_error = json::invalid_value;
+            self.decoder.token(token::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -174,24 +174,21 @@ struct basic_reader_functor<CharT,
 template <typename CharT>
 template <typename ForwardIterator>
 basic_reader<CharT>::basic_reader(ForwardIterator begin, ForwardIterator end)
-    : decoder(view_type(begin, std::distance(begin, end))),
-      last_error(json::no_error)
+    : decoder(view_type(begin, std::distance(begin, end)))
 {
     stack.push(token::end);
 }
 
 template <typename CharT>
 basic_reader<CharT>::basic_reader(const view_type& input)
-    : decoder(input),
-      last_error(json::no_error)
+    : decoder(input)
 {
     stack.push(token::end);
 }
 
 template <typename CharT>
 basic_reader<CharT>::basic_reader(const basic_reader& other)
-    : decoder(other.decoder),
-      last_error(json::no_error)
+    : decoder(other.decoder)
 {
     stack.push(token::end);
 }
@@ -204,100 +201,66 @@ typename basic_reader<CharT>::size_type basic_reader<CharT>::level() const BOOST
 }
 
 template <typename CharT>
-token::value basic_reader<CharT>::type() const BOOST_NOEXCEPT
+json::token::value basic_reader<CharT>::token() const BOOST_NOEXCEPT
 {
-    if (last_error != json::no_error)
-    {
-        return token::error;
-    }
+    return decoder.token();
+}
 
-    switch (decoder.type())
-    {
-    case detail::token::eof:
-        return token::end;
+template <typename CharT>
+json::type::value basic_reader<CharT>::type() const BOOST_NOEXCEPT
+{
+    return decoder.type();
+}
 
-    case detail::token::error:
-        return token::error;
-
-    case detail::token::null_value:
-        return token::null;
-
-    case detail::token::true_value:
-    case detail::token::false_value:
-        return token::boolean;
-
-    case detail::token::integer:
-        return token::integer;
-
-    case detail::token::floating:
-        return token::floating;
-
-    case detail::token::string:
-        return token::string;
-
-    case detail::token::begin_array:
-        return token::begin_array;
-
-    case detail::token::end_array:
-        return token::end_array;
-
-    case detail::token::begin_object:
-        return token::begin_object;
-
-    case detail::token::end_object:
-        return token::end_object;
-
-    default:
-        assert(last_error != json::no_error);
-        return token::error;
-    }
+template <typename CharT>
+json::category::value basic_reader<CharT>::category() const BOOST_NOEXCEPT
+{
+    return decoder.category();
 }
 
 template <typename CharT>
 boost::system::error_code basic_reader<CharT>::error() const BOOST_NOEXCEPT
 {
-    return make_error_code(last_error);
+    return decoder.error();
 }
 
 template <typename CharT>
 bool basic_reader<CharT>::next()
 {
-    last_error = json::no_error;
-
-    const detail::token::value current = decoder.type();
+    const token::value current = decoder.token();
     switch (current)
     {
-    case detail::token::begin_array:
+    case token::begin_array:
         stack.push(token::end_array);
         break;
 
-    case detail::token::end_array:
+    case token::end_array:
         if (stack.empty())
         {
-            last_error = json::unbalanced_end_array;
+            decoder.token(token::error_unbalanced_end_array);
             return false;
         }
         if (!stack.top().is_array())
         {
-            last_error = json::expected_end_array;
+            decoder.token(token::error_expected_end_array);
             return false;
         }
         stack.pop();
         break;
 
-    case detail::token::begin_object:
+    case token::begin_object:
         stack.push(token::end_object);
         break;
 
-    case detail::token::end_object:
+    case token::end_object:
         if (stack.empty())
         {
-            last_error = json::unbalanced_end_object;
+            decoder.token(token::error_unbalanced_end_object);
             return false;
         }
         if (!stack.top().is_object())
         {
-            last_error = json::expected_end_object;
+            decoder.token(token::error_expected_end_object);
             return false;
         }
         stack.pop();
@@ -309,27 +272,23 @@ bool basic_reader<CharT>::next()
 
     if (stack.empty())
     {
-        last_error = json::unexpected_token;
+        decoder.token(token::error_unexpected_token);
     }
     else
     {
-        last_error = stack.top().next(decoder);
-    }
-    if (last_error != json::no_error)
-    {
-        return false;
+        decoder.token(stack.top().next(decoder));
     }
 
-    return ((type() != token::end) && (type() != token::error));
+    return (category() != category::status);
 }
 
 template <typename CharT>
 bool basic_reader<CharT>::next(token::value expect)
 {
-    const token::value current = type();
+    const token::value current = token();
     if (current != expect)
     {
-        last_error = json::unexpected_token;
+        decoder.token(token::error_unexpected_token);
         return false;
     }
     return next();
@@ -339,7 +298,7 @@ template <typename CharT>
 bool basic_reader<CharT>::next_sibling()
 {
     // FIXME: Skip over children
-    last_error = json::not_implemented;
+    decoder.token(token::error_not_implemented);
     return false;
 }
 
@@ -378,7 +337,7 @@ bool basic_reader<CharT>::frame::is_object() const
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>& decoder)
+token::value basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>& decoder)
 {
     decoder.next();
 
@@ -394,36 +353,36 @@ enum json::errc basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>& d
         return check_object(decoder);
 
     default:
-        return json::unexpected_token;
+        return token::error_unexpected_token;
     }
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>& decoder)
+token::value basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 2
     //
     // JSON-text = value
 
-    switch (decoder.type())
+    switch (decoder.token())
     {
-    case detail::token::value_separator:
-    case detail::token::name_separator:
-        return json::unexpected_token;
+    case token::value_separator:
+    case token::name_separator:
+        return token::error_unexpected_token;
 
     default:
-        return json::no_error;
+        return decoder.token();
     }
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>& decoder)
+token::value basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 5
     //
     // array = begin-array [ value *( value-separator value ) ] end-array
 
-    const detail::token::value current = decoder.type();
+    const token::value current = decoder.token();
 
     ++counter;
     if (counter % 2 == 0)
@@ -431,20 +390,20 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::basic_decoder<Ch
         // Expect separator
         switch (current)
         {
-        case detail::token::end_array:
-            return json::no_error;
+        case token::end_array:
+            return current;
 
-        case detail::token::value_separator:
+        case token::value_separator:
             // Skip over separator
             decoder.next();
             ++counter;
             // Prohibit trailing separator
-            if (decoder.type() == detail::token::end_array)
-                return json::unexpected_token;
-            return json::no_error;
+            if (decoder.token() == token::end_array)
+                return token::error_unexpected_token;
+            return decoder.token();
 
         default:
-            return json::expected_end_array;
+            return token::error_expected_end_array;
         }
     }
     else
@@ -452,28 +411,28 @@ enum json::errc basic_reader<CharT>::frame::check_array(detail::basic_decoder<Ch
         // Expect value
         switch (current)
         {
-        case detail::token::value_separator:
-            return json::unexpected_token;
+        case token::value_separator:
+            return token::error_unexpected_token;
 
-        case detail::token::name_separator:
-            return json::unexpected_token;
+        case token::name_separator:
+            return token::error_unexpected_token;
 
-        case detail::token::end_array:
-            return json::no_error;
+        case token::end_array:
+            return current;
 
-        case detail::token::end_object:
-            return json::expected_end_array;
+        case token::end_object:
+            return token::error_expected_end_array;
 
         default:
             break;
         }
-        return json::no_error;
+        return current;
     }
-    return json::unexpected_token;
+    return token::error_unexpected_token;
 }
 
 template <typename CharT>
-enum json::errc basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT>& decoder)
+token::value basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 4
     //
@@ -482,7 +441,7 @@ enum json::errc basic_reader<CharT>::frame::check_object(detail::basic_decoder<C
     //
     // member = string name-separator value
 
-    const detail::token::value current = decoder.type();
+    const token::value current = decoder.token();
 
     ++counter;
     if (counter % 4 == 0)
@@ -490,36 +449,36 @@ enum json::errc basic_reader<CharT>::frame::check_object(detail::basic_decoder<C
         // Expect value separator
         switch (current)
         {
-        case detail::token::end_object:
-            return json::no_error;
+        case token::end_object:
+            return current;
 
-        case detail::token::value_separator:
+        case token::value_separator:
             decoder.next();
             ++counter;
             // Prohibit trailing separator
-            if (decoder.type() == detail::token::end_object)
-                return json::unexpected_token;
-            return json::no_error;
+            if (decoder.token() == token::end_object)
+                return token::error_unexpected_token;
+            return decoder.token();
 
         default:
-            return json::expected_end_object;
+            return token::error_expected_end_object;
         }
     }
     else if (counter % 4 == 2)
     {
         // Expect name separator
-        if (current == detail::token::name_separator)
+        if (current == token::name_separator)
         {
             decoder.next();
             ++counter;
-            switch (decoder.type())
+            switch (decoder.token())
             {
-            case detail::token::end_array:
-            case detail::token::end_object:
-                return json::unexpected_token;
+            case token::end_array:
+            case token::end_object:
+                return token::error_unexpected_token;
 
             default:
-                return json::no_error;
+                return decoder.token();
             }
         }
     }
@@ -528,27 +487,25 @@ enum json::errc basic_reader<CharT>::frame::check_object(detail::basic_decoder<C
         // Expect value
         switch (current)
         {
-        case detail::token::value_separator:
-            return json::unexpected_token;
+        case token::value_separator:
+        case token::name_separator:
+            return token::error_unexpected_token;
 
-        case detail::token::name_separator:
-            return json::unexpected_token;
+        case token::end_array:
+            return token::error_expected_end_object;
 
-        case detail::token::end_array:
-            return json::expected_end_object;
-
-        case detail::token::end_object:
-            return json::no_error;
+        case token::end_object:
+            return current;
 
         default:
             // Key must be string type
-            if ((counter % 4 == 1) && (current != detail::token::string))
-                return json::invalid_key;
-            return json::no_error;
+            if ((counter % 4 == 1) && (current != token::string))
+                return token::error_invalid_key;
+            return current;
         }
     }
 
-    return json::unexpected_token;
+    return token::error_unexpected_token;
 }
 
 } // namespace json

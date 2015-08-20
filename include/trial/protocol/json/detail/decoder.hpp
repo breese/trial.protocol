@@ -16,7 +16,7 @@
 #include <boost/config.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/utility/string_ref.hpp>
-#include <trial/protocol/json/detail/token.hpp>
+#include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/error.hpp>
 
 namespace trial
@@ -39,7 +39,10 @@ public:
 
     void next() BOOST_NOEXCEPT;
 
-    token::value type() const BOOST_NOEXCEPT;
+    void token(json::token::value) BOOST_NOEXCEPT;
+    json::token::value token() const BOOST_NOEXCEPT;
+    json::type::value type() const BOOST_NOEXCEPT;
+    json::category::value category() const BOOST_NOEXCEPT;
     boost::system::error_code error() const BOOST_NOEXCEPT;
     const view_type& literal() const BOOST_NOEXCEPT;
     template <typename ReturnType> ReturnType value() const;
@@ -61,14 +64,12 @@ private:
     view_type input;
     struct
     {
-        token::value type;
+        mutable json::token::value token;
         view_type view;
-        mutable json::errc error;
     } current;
 };
 
 typedef basic_decoder<char> decoder;
-typedef basic_decoder<wchar_t> wdecoder;
 
 } // namespace detail
 } // namespace json
