@@ -174,7 +174,7 @@ struct basic_reader_functor<CharT,
 template <typename CharT>
 template <typename ForwardIterator>
 basic_reader<CharT>::basic_reader(ForwardIterator begin, ForwardIterator end)
-    : decoder(view_type(begin, std::distance(begin, end)))
+    : decoder(view_type(&*begin, std::distance(begin, end)))
 {
     stack.push(token::end);
 }
