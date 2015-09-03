@@ -596,7 +596,8 @@ token::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
         if (amount > 0)
         {
             // Skip UTF-8 characters
-            if (amount >= std::distance(marker, end))
+            const typename view_type::size_type distance = std::distance(marker, end);
+            if (amount >= distance)
                 goto error;
 
             ++marker;
