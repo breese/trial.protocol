@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(test_unsigned_zero)
     json::iarchive in(input);
     unsigned int value = 99;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value, 0);
+    BOOST_REQUIRE_EQUAL(value, 0U);
 }
 
 BOOST_AUTO_TEST_CASE(test_int_hundred)
@@ -311,7 +311,7 @@ BOOST_AUTO_TEST_CASE(test_vector_bool_empty)
     json::iarchive in(input);
     std::vector<bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 0);
+    BOOST_REQUIRE_EQUAL(value.size(), 0U);
 }
 
 BOOST_AUTO_TEST_CASE(test_vector_bool_one)
@@ -320,7 +320,7 @@ BOOST_AUTO_TEST_CASE(test_vector_bool_one)
     json::iarchive in(input, input + sizeof(input) - 1);
     std::vector<bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 1);
+    BOOST_REQUIRE_EQUAL(value.size(), 1U);
     BOOST_REQUIRE_EQUAL(value[0], true);
 }
 
@@ -330,7 +330,7 @@ BOOST_AUTO_TEST_CASE(test_vector_bool_two)
     json::iarchive in(input);
     std::vector<bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 2);
+    BOOST_REQUIRE_EQUAL(value.size(), 2U);
     BOOST_REQUIRE_EQUAL(value[0], true);
     BOOST_REQUIRE_EQUAL(value[1], false);
 }
@@ -382,7 +382,7 @@ BOOST_AUTO_TEST_CASE(test_intmap_bool_empty)
     json::iarchive in(input);
     std::map<boost::int64_t, bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 0);
+    BOOST_REQUIRE_EQUAL(value.size(), 0U);
 }
 
 BOOST_AUTO_TEST_CASE(test_intmap_bool_one)
@@ -391,7 +391,7 @@ BOOST_AUTO_TEST_CASE(test_intmap_bool_one)
     json::iarchive in(input);
     std::map<boost::int64_t, bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 1);
+    BOOST_REQUIRE_EQUAL(value.size(), 1U);
     BOOST_REQUIRE_EQUAL(value[2], true);
 }
 
@@ -401,7 +401,7 @@ BOOST_AUTO_TEST_CASE(test_intmap_bool_two)
     json::iarchive in(input);
     std::map<boost::int64_t, bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 2);
+    BOOST_REQUIRE_EQUAL(value.size(), 2U);
     BOOST_REQUIRE_EQUAL(value[2], true);
     BOOST_REQUIRE_EQUAL(value[4], false);
 }
@@ -412,7 +412,7 @@ BOOST_AUTO_TEST_CASE(test_map_bool_empty)
     json::iarchive in(input);
     std::map<std::string, bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 0);
+    BOOST_REQUIRE_EQUAL(value.size(), 0U);
 }
 
 BOOST_AUTO_TEST_CASE(test_map_bool_one)
@@ -421,7 +421,7 @@ BOOST_AUTO_TEST_CASE(test_map_bool_one)
     json::iarchive in(input);
     std::map<std::string, bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 1);
+    BOOST_REQUIRE_EQUAL(value.size(), 1U);
     BOOST_REQUIRE_EQUAL(value["alpha"], true);
 }
 
@@ -431,7 +431,7 @@ BOOST_AUTO_TEST_CASE(test_map_bool_two)
     json::iarchive in(input);
     std::map<std::string, bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
-    BOOST_REQUIRE_EQUAL(value.size(), 2);
+    BOOST_REQUIRE_EQUAL(value.size(), 2U);
     BOOST_REQUIRE_EQUAL(value["alpha"], true);
     BOOST_REQUIRE_EQUAL(value["bravo"], false);
 }
