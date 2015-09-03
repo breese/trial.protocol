@@ -39,7 +39,7 @@ public:
         return super::write(value);
     }
 
-    virtual void write(view_type view)
+    virtual void write(const view_type& view)
     {
         return super::write(view);
     }
