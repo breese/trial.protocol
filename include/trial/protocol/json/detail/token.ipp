@@ -18,54 +18,54 @@ namespace protocol
 namespace json
 {
 
-inline symbol::value symbol::convert(token::value value)
+inline symbol::value symbol::convert(code::value value)
 {
     switch (value)
     {
-    case token::end:
+    case code::end:
         return symbol::end;
 
-    case token::error_not_implemented:
-    case token::error_unexpected_token:
-    case token::error_invalid_key:
-    case token::error_invalid_value:
-    case token::error_incompatible_type:
-    case token::error_unbalanced_end_array:
-    case token::error_unbalanced_end_object:
-    case token::error_expected_end_array:
-    case token::error_expected_end_object:
+    case code::error_not_implemented:
+    case code::error_unexpected_token:
+    case code::error_invalid_key:
+    case code::error_invalid_value:
+    case code::error_incompatible_type:
+    case code::error_unbalanced_end_array:
+    case code::error_unbalanced_end_object:
+    case code::error_expected_end_array:
+    case code::error_expected_end_object:
         return symbol::error;
 
-    case token::null:
+    case code::null:
         return symbol::null;
 
-    case token::true_value:
-    case token::false_value:
+    case code::true_value:
+    case code::false_value:
         return symbol::boolean;
 
-    case token::integer:
+    case code::integer:
         return symbol::integer;
 
-    case token::floating:
+    case code::floating:
         return symbol::floating;
 
-    case token::string:
+    case code::string:
         return symbol::string;
 
-    case token::begin_array:
+    case code::begin_array:
         return symbol::begin_array;
 
-    case token::end_array:
+    case code::end_array:
         return symbol::end_array;
 
-    case token::begin_object:
+    case code::begin_object:
         return symbol::begin_object;
 
-    case token::end_object:
+    case code::end_object:
         return symbol::end_object;
 
-    case token::value_separator:
-    case token::name_separator:
+    case code::value_separator:
+    case code::name_separator:
         return symbol::separator;
     }
     return symbol::error;
@@ -99,7 +99,7 @@ inline category::value category::convert(symbol::value value)
     return category::status;
 }
 
-inline category::value category::convert(token::value value)
+inline category::value category::convert(code::value value)
 {
     return category::convert(symbol::convert(value));
 }

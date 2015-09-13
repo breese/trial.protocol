@@ -18,7 +18,7 @@ namespace protocol
 namespace json
 {
 
-struct token
+struct code
 {
     enum value
     {
@@ -71,7 +71,7 @@ struct symbol
         separator
     };
 
-    static value convert(token::value);
+    static value convert(code::value);
 };
 
 struct category
@@ -84,7 +84,7 @@ struct category
         structural,
     };
 
-    static value convert(token::value);
+    static value convert(code::value);
     static value convert(symbol::value);
 };
 

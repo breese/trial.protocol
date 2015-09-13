@@ -61,7 +61,7 @@ public:
     void load(json::end_object_t);
     bool at_end_object() const;
 
-    json::token::value token() const;
+    json::code::value code() const;
 
     // Ignore these
     void load(boost::archive::version_type&) {}
@@ -75,7 +75,7 @@ public:
 
 private:
     void next();
-    void next(token::value);
+    void next(code::value);
 
 private:
     json::basic_reader<CharT> reader;

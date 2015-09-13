@@ -39,8 +39,8 @@ public:
 
     void next() BOOST_NOEXCEPT;
 
-    void token(json::token::value) BOOST_NOEXCEPT;
-    json::token::value token() const BOOST_NOEXCEPT;
+    void code(json::code::value) BOOST_NOEXCEPT;
+    json::code::value code() const BOOST_NOEXCEPT;
     json::symbol::value symbol() const BOOST_NOEXCEPT;
     json::category::value category() const BOOST_NOEXCEPT;
     boost::system::error_code error() const BOOST_NOEXCEPT;
@@ -48,12 +48,12 @@ public:
     template <typename ReturnType> ReturnType value() const;
 
 private:
-    token::value next_token(token::value) BOOST_NOEXCEPT;
-    token::value next_f_keyword() BOOST_NOEXCEPT;
-    token::value next_n_keyword() BOOST_NOEXCEPT;
-    token::value next_t_keyword() BOOST_NOEXCEPT;
-    token::value next_number() BOOST_NOEXCEPT;
-    token::value next_string() BOOST_NOEXCEPT;
+    code::value next_token(code::value) BOOST_NOEXCEPT;
+    code::value next_f_keyword() BOOST_NOEXCEPT;
+    code::value next_n_keyword() BOOST_NOEXCEPT;
+    code::value next_t_keyword() BOOST_NOEXCEPT;
+    code::value next_number() BOOST_NOEXCEPT;
+    code::value next_string() BOOST_NOEXCEPT;
 
     void skip_whitespaces() BOOST_NOEXCEPT;
     bool at_keyword_end() const BOOST_NOEXCEPT;
@@ -64,7 +64,7 @@ private:
     view_type input;
     struct
     {
-        mutable json::token::value token;
+        json::code::value code;
         view_type view;
     } current;
 };

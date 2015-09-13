@@ -51,9 +51,9 @@ public:
 
     void parse()
     {
-        switch (type())
+        switch (symbol())
         {
-        case json::type::begin_object:
+        case json::symbol::begin_object:
             parse_object(result);
             break;
 
@@ -71,16 +71,16 @@ public:
 private:
     void parse_object(Ptree& scope)
     {
-        assert(reader.type() == json::type::begin_object);
+        assert(reader.symbol() == json::symbol::begin_object);
 
         while (reader.next())
         {
-            switch (reader.type())
+            switch (reader.symbol())
             {
-            case json::type::end_object:
+            case json::symbol::end_object:
                 return;
 
-            case json::type::string:
+            case json::symbol::string:
                 parse_object_element(scope);
                 break;
 
@@ -92,7 +92,7 @@ private:
 
     void parse_object_element(Ptree& scope)
     {
-        assert(reader.type() == json::type::string);
+        assert(reader.symbol() == json::symbol::string);
 
         const string_type key = reader.template value<string_type>();
         Ptree& child = scope.push_back(std::make_pair(key, Ptree()))->second;
@@ -100,27 +100,27 @@ private:
         if (!reader.next())
             throw_error("expected object value");
 
-        switch (reader.type())
+        switch (reader.symbol())
         {
-        case json::type::begin_array:
+        case json::symbol::begin_array:
             parse_array(key, child);
             break;
 
-        case json::type::begin_object:
+        case json::symbol::begin_object:
             parse_object(child);
             break;
 
-        case json::type::null:
+        case json::symbol::null:
             break;
 
-        case json::type::boolean:
-        case json::type::integer:
-        case json::type::floating:
-        case json::type::string:
+        case json::symbol::boolean:
+        case json::symbol::integer:
+        case json::symbol::floating:
+        case json::symbol::string:
             parse_value(child);
             break;
 
-        case json::type::error:
+        case json::symbol::error:
             throw_error(reader.error().message());
 
         default:
@@ -131,20 +131,20 @@ private:
     void parse_array(const std::string& key,
                      Ptree& scope)
     {
-        assert(reader.type() == json::type::begin_array);
+        assert(reader.symbol() == json::symbol::begin_array);
 
         while (reader.next())
         {
-            switch (reader.type())
+            switch (reader.symbol())
             {
-            case json::type::end_array:
+            case json::symbol::end_array:
                 return;
 
-            case json::type::end:
-            case json::type::end_object:
+            case json::symbol::end:
+            case json::symbol::end_object:
                 throw_error("expected array value");
 
-            case json::type::error:
+            case json::symbol::error:
                 throw_error(reader.error().message());
 
             default:
@@ -160,23 +160,23 @@ private:
 
     void parse_array_element(Ptree& scope)
     {
-        switch (reader.type())
+        switch (reader.symbol())
         {
-        case json::type::begin_object:
+        case json::symbol::begin_object:
             parse_object(scope);
             break;
 
-        case json::type::null:
+        case json::symbol::null:
             break;
 
-        case json::type::boolean:
-        case json::type::integer:
-        case json::type::floating:
-        case json::type::string:
+        case json::symbol::boolean:
+        case json::symbol::integer:
+        case json::symbol::floating:
+        case json::symbol::string:
             parse_value(scope);
             break;
 
-        case json::type::error:
+        case json::symbol::error:
             throw_error(reader.error().message());
 
         default:
@@ -186,22 +186,22 @@ private:
 
     void parse_value(Ptree& scope)
     {
-        switch (reader.type())
+        switch (reader.symbol())
         {
-        case json::type::boolean:
+        case json::symbol::boolean:
             // Read as bool to ensure that it becomes converted to the correct
             // format for boost::property_tree.
             scope.put_value(reader.template value<bool>());
             break;
 
-        case json::type::integer:
-        case json::type::floating:
+        case json::symbol::integer:
+        case json::symbol::floating:
             // Read literal value to avoid choosing a concrete number type.
             scope.put_value(string_type(reader.literal().begin(),
                                         reader.literal().end()));
             break;
 
-        case json::type::string:
+        case json::symbol::string:
             // Read as value to ensure that string is properly UTF-8 encoded.
             scope.put_value(reader.template value<string_type>());
             break;
@@ -212,17 +212,17 @@ private:
         }
     }
 
-    json::type::value type()
+    json::symbol::value symbol()
     {
-        json::type::value type = reader.type();
-        switch (type)
+        json::symbol::value symbol = reader.symbol();
+        switch (symbol)
         {
-        case json::type::end:
-        case json::type::error:
+        case json::symbol::end:
+        case json::symbol::error:
             throw json::error(reader.error());
 
         default:
-            return type;
+            return symbol;
         }
     }
 
