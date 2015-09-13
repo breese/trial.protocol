@@ -50,7 +50,7 @@ struct token
     };
 };
 
-struct type
+struct symbol
 {
     enum value
     {
@@ -85,7 +85,7 @@ struct category
     };
 
     static value convert(token::value);
-    static value convert(type::value);
+    static value convert(symbol::value);
 };
 
 } // namespace json

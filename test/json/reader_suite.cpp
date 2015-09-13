@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(test_false)
     const char input[] = "false";
     json::reader reader(input);
     BOOST_REQUIRE_EQUAL(reader.token(), json::token::false_value);
-    BOOST_REQUIRE_EQUAL(reader.type(), json::type::boolean);
+    BOOST_REQUIRE_EQUAL(reader.symbol(), json::symbol::boolean);
     BOOST_REQUIRE_EQUAL(reader.value<bool>(), false);
     BOOST_REQUIRE_EQUAL(reader.literal(), "false");
     BOOST_REQUIRE_EQUAL(reader.next(), false);
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(test_true)
     const char input[] = "true";
     json::reader reader(input);
     BOOST_REQUIRE_EQUAL(reader.token(), json::token::true_value);
-    BOOST_REQUIRE_EQUAL(reader.type(), json::type::boolean);
+    BOOST_REQUIRE_EQUAL(reader.symbol(), json::symbol::boolean);
     BOOST_REQUIRE_EQUAL(reader.value<bool>(), true);
     BOOST_REQUIRE_EQUAL(reader.literal(), "true");
     BOOST_REQUIRE_EQUAL(reader.next(), false);
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(fail_true_true)
     const char input[] = "true,true";
     json::reader reader(input);
     BOOST_REQUIRE_EQUAL(reader.token(), json::token::true_value);
-    BOOST_REQUIRE_EQUAL(reader.type(), json::type::boolean);
+    BOOST_REQUIRE_EQUAL(reader.symbol(), json::symbol::boolean);
     BOOST_REQUIRE_EQUAL(reader.value<bool>(), true);
     BOOST_REQUIRE_EQUAL(reader.literal(), "true");
     BOOST_REQUIRE_EQUAL(reader.next(), false);

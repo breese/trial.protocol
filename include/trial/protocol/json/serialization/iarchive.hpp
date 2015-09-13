@@ -61,7 +61,7 @@ public:
     void load(json::end_object_t);
     bool at_end_object() const;
 
-    json::token::value type() const;
+    json::token::value token() const;
 
     // Ignore these
     void load(boost::archive::version_type&) {}

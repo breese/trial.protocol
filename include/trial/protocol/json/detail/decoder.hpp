@@ -41,7 +41,7 @@ public:
 
     void token(json::token::value) BOOST_NOEXCEPT;
     json::token::value token() const BOOST_NOEXCEPT;
-    json::type::value type() const BOOST_NOEXCEPT;
+    json::symbol::value symbol() const BOOST_NOEXCEPT;
     json::category::value category() const BOOST_NOEXCEPT;
     boost::system::error_code error() const BOOST_NOEXCEPT;
     const view_type& literal() const BOOST_NOEXCEPT;

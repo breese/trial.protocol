@@ -18,12 +18,12 @@ namespace protocol
 namespace json
 {
 
-inline type::value type::convert(token::value value)
+inline symbol::value symbol::convert(token::value value)
 {
     switch (value)
     {
     case token::end:
-        return type::end;
+        return symbol::end;
 
     case token::error_not_implemented:
     case token::error_unexpected_token:
@@ -34,65 +34,65 @@ inline type::value type::convert(token::value value)
     case token::error_unbalanced_end_object:
     case token::error_expected_end_array:
     case token::error_expected_end_object:
-        return type::error;
+        return symbol::error;
 
     case token::null:
-        return type::null;
+        return symbol::null;
 
     case token::true_value:
     case token::false_value:
-        return type::boolean;
+        return symbol::boolean;
 
     case token::integer:
-        return type::integer;
+        return symbol::integer;
 
     case token::floating:
-        return type::floating;
+        return symbol::floating;
 
     case token::string:
-        return type::string;
+        return symbol::string;
 
     case token::begin_array:
-        return type::begin_array;
+        return symbol::begin_array;
 
     case token::end_array:
-        return type::end_array;
+        return symbol::end_array;
 
     case token::begin_object:
-        return type::begin_object;
+        return symbol::begin_object;
 
     case token::end_object:
-        return type::end_object;
+        return symbol::end_object;
 
     case token::value_separator:
     case token::name_separator:
-        return type::separator;
+        return symbol::separator;
     }
-    return type::error;
+    return symbol::error;
 }
 
-inline category::value category::convert(type::value value)
+inline category::value category::convert(symbol::value value)
 {
     switch (value)
     {
-    case type::end:
-    case type::error:
+    case symbol::end:
+    case symbol::error:
         return category::status;
 
-    case type::null:
+    case symbol::null:
         return category::nullable;
 
-    case type::boolean:
-    case type::integer:
-    case type::floating:
-    case type::string:
+    case symbol::boolean:
+    case symbol::integer:
+    case symbol::floating:
+    case symbol::string:
         return category::data;
 
-    case type::begin_array:
-    case type::end_array:
-    case type::begin_object:
-    case type::end_object:
-    case type::separator:
+    case symbol::begin_array:
+    case symbol::end_array:
+    case symbol::begin_object:
+    case symbol::end_object:
+    case symbol::separator:
         return category::structural;
     }
 
@@ -101,7 +101,7 @@ inline category::value category::convert(type::value value)
 
 inline category::value category::convert(token::value value)
 {
-    return category::convert(type::convert(value));
+    return category::convert(symbol::convert(value));
 }
 
 } // namespace json

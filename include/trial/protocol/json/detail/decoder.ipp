@@ -241,9 +241,9 @@ token::value basic_decoder<CharT>::token() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-type::value basic_decoder<CharT>::type() const BOOST_NOEXCEPT
+symbol::value basic_decoder<CharT>::symbol() const BOOST_NOEXCEPT
 {
-    return type::convert(current.token);
+    return symbol::convert(current.token);
 }
 
 template <typename CharT>
@@ -292,7 +292,7 @@ boost::system::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
 template <typename CharT>
 void basic_decoder<CharT>::next() BOOST_NOEXCEPT
 {
-    if (type() == json::type::error)
+    if (symbol() == json::symbol::error)
     {
         return;
     }

@@ -207,9 +207,9 @@ json::token::value basic_reader<CharT>::token() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-json::type::value basic_reader<CharT>::type() const BOOST_NOEXCEPT
+json::symbol::value basic_reader<CharT>::symbol() const BOOST_NOEXCEPT
 {
-    return decoder.type();
+    return decoder.symbol();
 }
 
 template <typename CharT>

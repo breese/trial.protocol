@@ -59,8 +59,8 @@ public:
     //! @brief Returns the current token.
     json::token::value token() const BOOST_NOEXCEPT;
 
-    //! @brief Returns the type of the current token.
-    json::type::value type() const BOOST_NOEXCEPT;
+    //! @brief Returns the symbol of the current token.
+    json::symbol::value symbol() const BOOST_NOEXCEPT;
 
     //! @brief Returns the category of the current token.
     json::category::value category() const BOOST_NOEXCEPT;
