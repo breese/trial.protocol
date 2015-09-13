@@ -49,7 +49,7 @@ struct load_functor< protocol::json::basic_iarchive<CharT>,
                      boost::optional<T>& data,
                      const unsigned int /* protocol_version */)
     {
-        if (ar.code() == protocol::json::code::null)
+        if (ar.code() == protocol::json::token::code::null)
         {
             ar.load(json::null);
             data = boost::none;

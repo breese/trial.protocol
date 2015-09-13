@@ -49,7 +49,7 @@ public:
     //! @brief Advance to the next token if current token has a given value.
     //! @param[in] expect Expected value of current token.
     //! @throws system_error If current token does not have the expected value.
-    bool next(code::value expect);
+    bool next(token::code::value expect);
 
     bool next_sibling();
 
@@ -57,13 +57,13 @@ public:
     size_type level() const BOOST_NOEXCEPT;
 
     //! @brief Returns the current token.
-    json::code::value code() const BOOST_NOEXCEPT;
+    token::code::value code() const BOOST_NOEXCEPT;
 
     //! @brief Returns the symbol of the current token.
-    json::symbol::value symbol() const BOOST_NOEXCEPT;
+    token::symbol::value symbol() const BOOST_NOEXCEPT;
 
     //! @brief Returns the category of the current token.
-    json::category::value category() const BOOST_NOEXCEPT;
+    token::category::value category() const BOOST_NOEXCEPT;
 
     //! @brief Returns the last error code.
     boost::system::error_code error() const BOOST_NOEXCEPT;
@@ -82,17 +82,17 @@ private:
 
     struct frame
     {
-        frame(code::value);
+        frame(token::code::value);
 
         bool is_array() const;
         bool is_object() const;
 
-        code::value next(detail::basic_decoder<CharT>&);
-        code::value check_outer(detail::basic_decoder<CharT>&);
-        code::value check_array(detail::basic_decoder<CharT>&);
-        code::value check_object(detail::basic_decoder<CharT>&);
+        token::code::value next(detail::basic_decoder<CharT>&);
+        token::code::value check_outer(detail::basic_decoder<CharT>&);
+        token::code::value check_array(detail::basic_decoder<CharT>&);
+        token::code::value check_object(detail::basic_decoder<CharT>&);
 
-        code::value scope;
+        token::code::value scope;
         std::size_t counter;
     };
     std::stack<frame> stack;

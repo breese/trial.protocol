@@ -73,7 +73,7 @@ struct basic_reader_functor<CharT,
     {
         switch (self.decoder.code())
         {
-        case code::integer:
+        case token::code::integer:
             {
                 // FIXME: Raise error if value is too large
                 ReturnType result = self.decoder.template value<ReturnType>();
@@ -84,12 +84,12 @@ struct basic_reader_functor<CharT,
                 return result;
             }
 
-        case code::floating:
+        case token::code::floating:
             typedef typename integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
             return ReturnType(boost::math::round(self.decoder.template value<floating_return_type>()));
 
         default:
-            self.decoder.code(code::error_invalid_value);
+            self.decoder.code(token::code::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -106,15 +106,15 @@ struct basic_reader_functor<CharT,
     {
         switch (self.decoder.code())
         {
-        case code::integer:
+        case token::code::integer:
             typedef typename floating_to_integer<ReturnType>::type integer_return_type;
             return ReturnType(self.decoder.template value<integer_return_type>());
 
-        case code::floating:
+        case token::code::floating:
             return self.decoder.template value<ReturnType>();
 
         default:
-            self.decoder.code(code::error_invalid_value);
+            self.decoder.code(token::code::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -131,14 +131,14 @@ struct basic_reader_functor<CharT,
     {
         switch (self.decoder.code())
         {
-        case code::true_value:
+        case token::code::true_value:
             return true;
 
-        case code::false_value:
+        case token::code::false_value:
             return false;
 
         default:
-            self.decoder.code(code::error_invalid_value);
+            self.decoder.code(token::code::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -155,11 +155,11 @@ struct basic_reader_functor<CharT,
     {
         switch (self.decoder.code())
         {
-        case code::string:
+        case token::code::string:
             return self.decoder.template value<ReturnType>();
 
         default:
-            self.decoder.code(code::error_invalid_value);
+            self.decoder.code(token::code::error_invalid_value);
             throw json::error(self.error());
         }
     }
@@ -176,21 +176,21 @@ template <typename ForwardIterator>
 basic_reader<CharT>::basic_reader(ForwardIterator begin, ForwardIterator end)
     : decoder(view_type(&*begin, std::distance(begin, end)))
 {
-    stack.push(code::end);
+    stack.push(token::code::end);
 }
 
 template <typename CharT>
 basic_reader<CharT>::basic_reader(const view_type& input)
     : decoder(input)
 {
-    stack.push(code::end);
+    stack.push(token::code::end);
 }
 
 template <typename CharT>
 basic_reader<CharT>::basic_reader(const basic_reader& other)
     : decoder(other.decoder)
 {
-    stack.push(code::end);
+    stack.push(token::code::end);
 }
 
 template <typename CharT>
@@ -201,19 +201,19 @@ typename basic_reader<CharT>::size_type basic_reader<CharT>::level() const BOOST
 }
 
 template <typename CharT>
-json::code::value basic_reader<CharT>::code() const BOOST_NOEXCEPT
+token::code::value basic_reader<CharT>::code() const BOOST_NOEXCEPT
 {
     return decoder.code();
 }
 
 template <typename CharT>
-json::symbol::value basic_reader<CharT>::symbol() const BOOST_NOEXCEPT
+token::symbol::value basic_reader<CharT>::symbol() const BOOST_NOEXCEPT
 {
     return decoder.symbol();
 }
 
 template <typename CharT>
-json::category::value basic_reader<CharT>::category() const BOOST_NOEXCEPT
+token::category::value basic_reader<CharT>::category() const BOOST_NOEXCEPT
 {
     return decoder.category();
 }
@@ -227,40 +227,40 @@ boost::system::error_code basic_reader<CharT>::error() const BOOST_NOEXCEPT
 template <typename CharT>
 bool basic_reader<CharT>::next()
 {
-    const code::value current = decoder.code();
+    const token::code::value current = decoder.code();
     switch (current)
     {
-    case code::begin_array:
-        stack.push(code::end_array);
+    case token::code::begin_array:
+        stack.push(token::code::end_array);
         break;
 
-    case code::end_array:
+    case token::code::end_array:
         if (stack.empty())
         {
-            decoder.code(code::error_unbalanced_end_array);
+            decoder.code(token::code::error_unbalanced_end_array);
             return false;
         }
         if (!stack.top().is_array())
         {
-            decoder.code(code::error_expected_end_array);
+            decoder.code(token::code::error_expected_end_array);
             return false;
         }
         stack.pop();
         break;
 
-    case code::begin_object:
-        stack.push(code::end_object);
+    case token::code::begin_object:
+        stack.push(token::code::end_object);
         break;
 
-    case code::end_object:
+    case token::code::end_object:
         if (stack.empty())
         {
-            decoder.code(code::error_unbalanced_end_object);
+            decoder.code(token::code::error_unbalanced_end_object);
             return false;
         }
         if (!stack.top().is_object())
         {
-            decoder.code(code::error_expected_end_object);
+            decoder.code(token::code::error_expected_end_object);
             return false;
         }
         stack.pop();
@@ -272,23 +272,23 @@ bool basic_reader<CharT>::next()
 
     if (stack.empty())
     {
-        decoder.code(code::error_unexpected_token);
+        decoder.code(token::code::error_unexpected_token);
     }
     else
     {
         decoder.code(stack.top().next(decoder));
     }
 
-    return (category() != category::status);
+    return (category() != token::category::status);
 }
 
 template <typename CharT>
-bool basic_reader<CharT>::next(code::value expect)
+bool basic_reader<CharT>::next(token::code::value expect)
 {
-    const code::value current = code();
+    const token::code::value current = code();
     if (current != expect)
     {
-        decoder.code(code::error_unexpected_token);
+        decoder.code(token::code::error_unexpected_token);
         return false;
     }
     return next();
@@ -298,7 +298,7 @@ template <typename CharT>
 bool basic_reader<CharT>::next_sibling()
 {
     // FIXME: Skip over children
-    decoder.code(code::error_not_implemented);
+    decoder.code(token::code::error_not_implemented);
     return false;
 }
 
@@ -318,7 +318,7 @@ basic_reader<CharT>::literal() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-basic_reader<CharT>::frame::frame(code::value scope)
+basic_reader<CharT>::frame::frame(token::code::value scope)
     : scope(scope),
       counter(0)
 {
@@ -327,38 +327,38 @@ basic_reader<CharT>::frame::frame(code::value scope)
 template <typename CharT>
 bool basic_reader<CharT>::frame::is_array() const
 {
-    return scope == code::end_array;
+    return scope == token::code::end_array;
 }
 
 template <typename CharT>
 bool basic_reader<CharT>::frame::is_object() const
 {
-    return scope == code::end_object;
+    return scope == token::code::end_object;
 }
 
 template <typename CharT>
-code::value basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>& decoder)
+token::code::value basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>& decoder)
 {
     decoder.next();
 
     switch (scope)
     {
-    case code::end:
+    case token::code::end:
         return check_outer(decoder);
 
-    case code::end_array:
+    case token::code::end_array:
         return check_array(decoder);
 
-    case code::end_object:
+    case token::code::end_object:
         return check_object(decoder);
 
     default:
-        return code::error_unexpected_token;
+        return token::code::error_unexpected_token;
     }
 }
 
 template <typename CharT>
-code::value basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>& decoder)
+token::code::value basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 2
     //
@@ -366,9 +366,9 @@ code::value basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>
 
     switch (decoder.code())
     {
-    case code::value_separator:
-    case code::name_separator:
-        return code::error_unexpected_token;
+    case token::code::value_separator:
+    case token::code::name_separator:
+        return token::code::error_unexpected_token;
 
     default:
         return decoder.code();
@@ -376,13 +376,13 @@ code::value basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>
 }
 
 template <typename CharT>
-code::value basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>& decoder)
+token::code::value basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 5
     //
     // array = begin-array [ value *( value-separator value ) ] end-array
 
-    const code::value current = decoder.code();
+    const token::code::value current = decoder.code();
 
     ++counter;
     if (counter % 2 == 0)
@@ -390,20 +390,20 @@ code::value basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>
         // Expect separator
         switch (current)
         {
-        case code::end_array:
+        case token::code::end_array:
             return current;
 
-        case code::value_separator:
+        case token::code::value_separator:
             // Skip over separator
             decoder.next();
             ++counter;
             // Prohibit trailing separator
-            if (decoder.code() == code::end_array)
-                return code::error_unexpected_token;
+            if (decoder.code() == token::code::end_array)
+                return token::code::error_unexpected_token;
             return decoder.code();
 
         default:
-            return code::error_expected_end_array;
+            return token::code::error_expected_end_array;
         }
     }
     else
@@ -411,28 +411,28 @@ code::value basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>
         // Expect value
         switch (current)
         {
-        case code::value_separator:
-            return code::error_unexpected_token;
+        case token::code::value_separator:
+            return token::code::error_unexpected_token;
 
-        case code::name_separator:
-            return code::error_unexpected_token;
+        case token::code::name_separator:
+            return token::code::error_unexpected_token;
 
-        case code::end_array:
+        case token::code::end_array:
             return current;
 
-        case code::end_object:
-            return code::error_expected_end_array;
+        case token::code::end_object:
+            return token::code::error_expected_end_array;
 
         default:
             break;
         }
         return current;
     }
-    return code::error_unexpected_token;
+    return token::code::error_unexpected_token;
 }
 
 template <typename CharT>
-code::value basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT>& decoder)
+token::code::value basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT>& decoder)
 {
     // RFC 7159, section 4
     //
@@ -441,7 +441,7 @@ code::value basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT
     //
     // member = string name-separator value
 
-    const code::value current = decoder.code();
+    const token::code::value current = decoder.code();
 
     ++counter;
     if (counter % 4 == 0)
@@ -449,33 +449,33 @@ code::value basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT
         // Expect value separator
         switch (current)
         {
-        case code::end_object:
+        case token::code::end_object:
             return current;
 
-        case code::value_separator:
+        case token::code::value_separator:
             decoder.next();
             ++counter;
             // Prohibit trailing separator
-            if (decoder.code() == code::end_object)
-                return code::error_unexpected_token;
+            if (decoder.code() == token::code::end_object)
+                return token::code::error_unexpected_token;
             return decoder.code();
 
         default:
-            return code::error_expected_end_object;
+            return token::code::error_expected_end_object;
         }
     }
     else if (counter % 4 == 2)
     {
         // Expect name separator
-        if (current == code::name_separator)
+        if (current == token::code::name_separator)
         {
             decoder.next();
             ++counter;
             switch (decoder.code())
             {
-            case code::end_array:
-            case code::end_object:
-                return code::error_unexpected_token;
+            case token::code::end_array:
+            case token::code::end_object:
+                return token::code::error_unexpected_token;
 
             default:
                 return decoder.code();
@@ -487,25 +487,25 @@ code::value basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT
         // Expect value
         switch (current)
         {
-        case code::value_separator:
-        case code::name_separator:
-            return code::error_unexpected_token;
+        case token::code::value_separator:
+        case token::code::name_separator:
+            return token::code::error_unexpected_token;
 
-        case code::end_array:
-            return code::error_expected_end_object;
+        case token::code::end_array:
+            return token::code::error_expected_end_object;
 
-        case code::end_object:
+        case token::code::end_object:
             return current;
 
         default:
             // Key must be string type
-            if ((counter % 4 == 1) && (current != code::string))
-                return code::error_invalid_key;
+            if ((counter % 4 == 1) && (current != token::code::string))
+                return token::code::error_invalid_key;
             return current;
         }
     }
 
-    return code::error_unexpected_token;
+    return token::code::error_unexpected_token;
 }
 
 } // namespace json

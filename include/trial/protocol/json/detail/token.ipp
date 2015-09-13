@@ -17,6 +17,8 @@ namespace protocol
 {
 namespace json
 {
+namespace token
+{
 
 inline symbol::value symbol::convert(code::value value)
 {
@@ -104,6 +106,7 @@ inline category::value category::convert(code::value value)
     return category::convert(symbol::convert(value));
 }
 
+} // namespace token
 } // namespace json
 } // namespace protocol
 } // namespace trial

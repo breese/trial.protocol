@@ -33,7 +33,7 @@ basic_writer<CharT>::basic_writer(T& buffer)
     : encoder(buffer)
 {
     // Push outermost scope
-    stack.push(frame(encoder, code::end_array));
+    stack.push(frame(encoder, token::code::end_array));
 }
 
 template <typename CharT>
@@ -77,7 +77,7 @@ basic_writer<CharT>::value(json::begin_array_t)
     validate_scope();
 
     stack.top().write_separator();
-    stack.push(frame(encoder, code::end_array));
+    stack.push(frame(encoder, token::code::end_array));
     return encoder.value(json::begin_array);
 }
 
@@ -85,7 +85,7 @@ template <typename CharT>
 typename basic_writer<CharT>::size_type
 basic_writer<CharT>::value(json::end_array_t)
 {
-    validate_scope(code::end_array, json::unexpected_token);
+    validate_scope(token::code::end_array, json::unexpected_token);
 
     size_type result = encoder.value(json::end_array);
     stack.pop();
@@ -99,7 +99,7 @@ basic_writer<CharT>::value(json::begin_object_t)
     validate_scope();
 
     stack.top().write_separator();
-    stack.push(frame(encoder, code::end_object));
+    stack.push(frame(encoder, token::code::end_object));
     return encoder.value(json::begin_object);
 }
 
@@ -107,7 +107,7 @@ template <typename CharT>
 typename basic_writer<CharT>::size_type
 basic_writer<CharT>::value(json::end_object_t)
 {
-    validate_scope(code::end_object, json::unexpected_token);
+    validate_scope(token::code::end_object, json::unexpected_token);
 
     size_type result = encoder.value(json::end_object);
     stack.pop();
@@ -132,7 +132,7 @@ void basic_writer<CharT>::validate_scope()
 }
 
 template <typename CharT>
-void basic_writer<CharT>::validate_scope(code::value code,
+void basic_writer<CharT>::validate_scope(token::code::value code,
                                          enum json::errc e)
 {
     if ((stack.size() < 2) || (stack.top().code != code))
@@ -148,7 +148,7 @@ void basic_writer<CharT>::validate_scope(code::value code,
 
 template <typename CharT>
 basic_writer<CharT>::frame::frame(detail::basic_encoder<CharT>& encoder,
-                                  json::code::value code)
+                                  token::code::value code)
     : encoder(encoder),
       code(code),
       counter(0)
@@ -162,11 +162,11 @@ void basic_writer<CharT>::frame::write_separator()
     {
         switch (code)
         {
-        case code::end_array:
+        case token::code::end_array:
             encoder.value(detail::value_separator);
             break;
 
-        case code::end_object:
+        case token::code::end_object:
             if (counter % 2 == 0)
             {
                 encoder.value(detail::value_separator);

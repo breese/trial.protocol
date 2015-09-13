@@ -17,6 +17,8 @@ namespace protocol
 {
 namespace json
 {
+namespace token
+{
 
 struct code
 {
@@ -88,6 +90,7 @@ struct category
     static value convert(symbol::value);
 };
 
+} // namespace token
 } // namespace json
 } // namespace protocol
 } // namespace trial
