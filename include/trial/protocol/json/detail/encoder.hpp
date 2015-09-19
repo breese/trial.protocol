@@ -53,7 +53,7 @@ public:
     size_type literal(const view_type&);
 
 private:
-    template <typename C, typename T, typename Enable> friend struct basic_encoder_functor;
+    template <typename T, typename Enable = void> struct type_matcher;
 
     boost::scoped_ptr<buffer_type> buffer;
 };
