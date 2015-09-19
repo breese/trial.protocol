@@ -59,12 +59,12 @@ private:
     bool at_keyword_end() const BOOST_NOEXCEPT;
 
 private:
-    template <typename C, typename T, typename Enable> friend struct basic_decoder_functor;
+    template <typename T, typename Enable = void> struct type_matcher;
 
     view_type input;
     struct
     {
-        token::code::value code;
+        mutable token::code::value code;
         view_type view;
     } current;
 };

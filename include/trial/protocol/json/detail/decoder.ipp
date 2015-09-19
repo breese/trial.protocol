@@ -34,18 +34,21 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
-// basic_decoder_functor
+// basic_decoder::type_matcher
 //-----------------------------------------------------------------------------
 
-template <typename CharT, typename ReturnType, typename Enable = void>
-struct basic_decoder_functor
+template <typename CharT>
+template <typename ReturnType, typename Enable>
+struct basic_decoder<CharT>::type_matcher
 {
 };
 
-template <typename CharT, typename ReturnType>
-struct basic_decoder_functor<CharT,
-                             ReturnType,
-                             typename boost::enable_if< boost::is_integral<ReturnType> >::type>
+// Integers
+
+template <typename CharT>
+template <typename ReturnType>
+struct basic_decoder<CharT>::type_matcher<ReturnType,
+                                          typename boost::enable_if< boost::is_integral<ReturnType> >::type>
 {
     static ReturnType convert(basic_decoder<CharT>& self)
     {
@@ -55,7 +58,7 @@ struct basic_decoder_functor<CharT,
             throw json::error(self.error());
         }
 
-        typename basic_decoder<CharT>::view_type::const_iterator it = self.literal().begin();
+        typename view_type::const_iterator it = self.literal().begin();
 
         const bool is_negative = (*it == traits<CharT>::alpha_minus);
         if (is_negative)
@@ -85,12 +88,14 @@ struct basic_decoder_functor<CharT,
     }
 };
 
+// Floating-point numbers
+
+template <typename CharT>
 template <typename ReturnType>
-struct basic_decoder_functor<char,
-                             ReturnType,
-                             typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+struct basic_decoder<CharT>::type_matcher<ReturnType,
+                                          typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
-    static ReturnType convert(basic_decoder<char>& self)
+    static ReturnType convert(basic_decoder<CharT>& self)
     {
         if (self.code() != token::code::floating)
         {
@@ -102,14 +107,15 @@ struct basic_decoder_functor<char,
     }
 };
 
+// Strings
+
+template <typename CharT>
 template <typename ReturnType>
-struct basic_decoder_functor<char,
-                             ReturnType,
-                             typename boost::enable_if< boost::is_same<ReturnType, std::string> >::type>
+struct basic_decoder<CharT>::type_matcher<ReturnType,
+                                          typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
 {
-    typedef typename basic_decoder<char>::view_type view_type;
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
-    static ReturnType convert(basic_decoder<char>& self)
+    static ReturnType convert(basic_decoder<CharT>& self)
     {
         if (self.code() != token::code::string)
         {
@@ -120,7 +126,7 @@ struct basic_decoder_functor<char,
         const typename view_type::size_type  approximateSize = self.literal().size();
         assert(approximateSize >= 2);
 
-        std::string result;
+        ReturnType result;
         result.reserve(approximateSize);
 
         typename view_type::const_iterator begin = self.literal().begin();
@@ -371,7 +377,7 @@ template <typename ReturnType>
 ReturnType basic_decoder<CharT>::value() const
 {
     // Remove constness because we may need to update error state
-    return basic_decoder_functor<CharT, ReturnType>::convert(const_cast<basic_decoder<CharT>&>(*this));
+    return type_matcher<ReturnType>::convert(const_cast<basic_decoder<CharT>&>(*this));
 }
 
 template <typename CharT>
