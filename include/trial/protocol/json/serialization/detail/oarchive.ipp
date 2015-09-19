@@ -26,6 +26,13 @@ basic_oarchive<CharT>::basic_oarchive(T& buffer)
 }
 
 template <typename CharT>
+template <typename Tag>
+void basic_oarchive<CharT>::save()
+{
+    writer.template value<Tag>();
+}
+
+template <typename CharT>
 template <typename T>
 void basic_oarchive<CharT>::save(const T& data)
 {

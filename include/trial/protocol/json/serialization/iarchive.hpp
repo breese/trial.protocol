@@ -15,7 +15,6 @@
 #include <boost/optional.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/archive/detail/register_archive.hpp>
-#include <trial/protocol/json/types.hpp>
 #include <trial/protocol/json/reader.hpp>
 
 namespace trial
@@ -49,17 +48,14 @@ public:
         load_override(data);
     }
 
+    template <typename Tag>
+    void load();
+
     template <typename T>
     void load(T&);
-    void load(json::null_t);
 
-    void load(json::begin_array_t);
-    void load(json::end_array_t);
-    bool at_end_array() const;
-
-    void load(json::begin_object_t);
-    void load(json::end_object_t);
-    bool at_end_object() const;
+    template <typename Tag>
+    bool at() const;
 
     token::code::value code() const;
 

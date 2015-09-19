@@ -16,6 +16,7 @@
 #include "is_system_error.hpp"
 
 using namespace trial::protocol;
+namespace token = json::token;
 
 BOOST_AUTO_TEST_SUITE(json_writer_suite)
 
@@ -34,7 +35,7 @@ BOOST_AUTO_TEST_CASE(test_null)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(json::null), 4);
+    BOOST_REQUIRE_EQUAL(writer.value<token::null>(), 4);
     BOOST_REQUIRE_EQUAL(result.str(), "null");
 }
 
@@ -147,8 +148,8 @@ BOOST_AUTO_TEST_CASE(test_array_empty)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(json::begin_array), 1);
-    BOOST_REQUIRE_EQUAL(writer.value(json::end_array), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::begin_array>(), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::end_array>(), 1);
     BOOST_REQUIRE_EQUAL(result.str(), "[]");
 }
 
@@ -156,9 +157,9 @@ BOOST_AUTO_TEST_CASE(test_array_bool_one)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(json::begin_array), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::begin_array>(), 1);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value(json::end_array), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::end_array>(), 1);
     BOOST_REQUIRE_EQUAL(result.str(), "[false]");
 }
 
@@ -166,10 +167,10 @@ BOOST_AUTO_TEST_CASE(test_array_bool_two)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(json::begin_array), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::begin_array>(), 1);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
     BOOST_REQUIRE_EQUAL(writer.value(true), 4);
-    BOOST_REQUIRE_EQUAL(writer.value(json::end_array), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::end_array>(), 1);
     BOOST_REQUIRE_EQUAL(result.str(), "[false,true]");
 }
 
@@ -177,7 +178,7 @@ BOOST_AUTO_TEST_CASE(fail_array_missing_begin)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EXCEPTION(writer.value(json::end_array),
+    BOOST_REQUIRE_EXCEPTION(writer.value<token::end_array>(),
                             json::error,
                             test::is_system_error(json::unexpected_token));
 }
@@ -190,8 +191,8 @@ BOOST_AUTO_TEST_CASE(test_object_empty)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(json::begin_object), 1);
-    BOOST_REQUIRE_EQUAL(writer.value(json::end_object), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::begin_object>(), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::end_object>(), 1);
     BOOST_REQUIRE_EQUAL(result.str(), "{}");
 }
 
@@ -199,10 +200,10 @@ BOOST_AUTO_TEST_CASE(test_object_bool_one)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(json::begin_object), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::begin_object>(), 1);
     BOOST_REQUIRE_EQUAL(writer.value("key1"), 6);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value(json::end_object), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::end_object>(), 1);
     BOOST_REQUIRE_EQUAL(result.str(), "{\"key1\":false}");
 }
 
@@ -210,12 +211,12 @@ BOOST_AUTO_TEST_CASE(test_object_bool_two)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(json::begin_object), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::begin_object>(), 1);
     BOOST_REQUIRE_EQUAL(writer.value("key1"), 6);
     BOOST_REQUIRE_EQUAL(writer.value(false), 5);
     BOOST_REQUIRE_EQUAL(writer.value("key2"), 6);
     BOOST_REQUIRE_EQUAL(writer.value(true), 4);
-    BOOST_REQUIRE_EQUAL(writer.value(json::end_object), 1);
+    BOOST_REQUIRE_EQUAL(writer.value<token::end_object>(), 1);
     BOOST_REQUIRE_EQUAL(result.str(), "{\"key1\":false,\"key2\":true}");
 }
 
@@ -223,7 +224,7 @@ BOOST_AUTO_TEST_CASE(fail_object_missing_begin)
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EXCEPTION(writer.value(json::end_object),
+    BOOST_REQUIRE_EXCEPTION(writer.value<token::end_object>(),
                             json::error,
                             test::is_system_error(json::unexpected_token));
 }

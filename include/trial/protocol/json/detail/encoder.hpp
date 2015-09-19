@@ -17,7 +17,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <trial/protocol/buffer/base.hpp>
-#include <trial/protocol/json/types.hpp>
 
 namespace trial
 {
@@ -27,12 +26,6 @@ namespace json
 {
 namespace detail
 {
-
-struct value_separator_t {};
-const value_separator_t value_separator = value_separator_t();
-
-struct name_separator_t {};
-const name_separator_t name_separator = name_separator_t();
 
 template <typename CharT>
 class basic_encoder
@@ -51,22 +44,11 @@ public:
     //! Type U can be an integral type (except bool), a floating-point type, a
     //! string, or a string view.
     template <typename U> size_type value(const U&);
+    template <typename U> size_type value();
     //! @brief Write boolean value
     size_type value(bool);
     //! @brief Write string literal
     size_type value(const CharT *);
-    //! @brief Write null type
-    size_type value(json::null_t);
-    //! @brief Write opening of array
-    size_type value(json::begin_array_t);
-    //! @brief Write closing of array
-    size_type value(json::end_array_t);
-    //! @brief Write opening of object
-    size_type value(json::begin_object_t);
-    //! @brief Write closing of object
-    size_type value(json::end_object_t);
-    size_type value(json::detail::value_separator_t);
-    size_type value(json::detail::name_separator_t);
 
     size_type literal(const view_type&);
 

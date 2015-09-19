@@ -36,7 +36,7 @@ struct save_functor< protocol::json::basic_oarchive<CharT>,
         }
         else
         {
-            ar.save(json::null);
+            ar.template save<json::token::null>();
         }
     }
 };
@@ -51,7 +51,7 @@ struct load_functor< protocol::json::basic_iarchive<CharT>,
     {
         if (ar.code() == protocol::json::token::code::null)
         {
-            ar.load(json::null);
+            ar.template load<json::token::null>();
             data = boost::none;
         }
         else

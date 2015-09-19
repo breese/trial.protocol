@@ -27,28 +27,28 @@ namespace serialization
 {
 
 template <typename CharT, typename Value>
-struct save_functor<protocol::json::basic_oarchive<CharT>, Value>
+struct save_functor<json::basic_oarchive<CharT>, Value>
 {
-    static void save(protocol::json::basic_oarchive<CharT>& ar,
+    static void save(json::basic_oarchive<CharT>& ar,
                      const Value& data,
                      const unsigned int protocol_version)
     {
-        ar.save(json::begin_array);
+        ar.template save<json::token::begin_array>();
         data.save(ar, protocol_version);
-        ar.save(json::end_array);
+        ar.template save<json::token::end_array>();
     }
 };
 
 template <typename CharT, typename Value>
-struct load_functor<protocol::json::basic_iarchive<CharT>, Value>
+struct load_functor<json::basic_iarchive<CharT>, Value>
 {
-    static void load(protocol::json::basic_iarchive<CharT>& ar,
+    static void load(json::basic_iarchive<CharT>& ar,
                      const Value& data,
                      const unsigned int protocol_version)
     {
-        ar.load(json::begin_array);
+        ar.template load<json::token::begin_array>();
         data.load(ar, protocol_version);
-        ar.load(json::end_array);
+        ar.template load<json::token::end_array>();
     }
 };
 
@@ -56,25 +56,25 @@ template <typename Value>
 struct serialize_functor<Value>
 {
     template <typename CharT, template <typename> class Archive>
-    static typename boost::enable_if<typename boost::is_base_of< protocol::json::basic_iarchive<CharT>, Archive<CharT> >::type, void>::type
+    static typename boost::enable_if<typename boost::is_base_of< json::basic_iarchive<CharT>, Archive<CharT> >::type, void>::type
     serialize(Archive<CharT>& ar,
               Value& data,
               const unsigned int protocol_version)
     {
-        ar.load(json::begin_array);
+        ar.template load<json::token::begin_array>();
         data.serialize(ar, protocol_version);
-        ar.load(json::end_array);
+        ar.template load<json::token::end_array>();
     }
 
     template <typename CharT, template <typename> class Archive>
-    static typename boost::enable_if<typename boost::is_base_of< protocol::json::basic_oarchive<CharT>, Archive<CharT> >::type, void>::type
+    static typename boost::enable_if<typename boost::is_base_of< json::basic_oarchive<CharT>, Archive<CharT> >::type, void>::type
     serialize(Archive<CharT>& ar,
               Value& data,
               const unsigned int protocol_version)
     {
-        ar.save(json::begin_array);
+        ar.template save<json::token::begin_array>();
         data.serialize(ar, protocol_version);
-        ar.save(json::end_array);
+        ar.template save<json::token::end_array>();
     }
 };
 

@@ -20,6 +20,10 @@ namespace json
 namespace token
 {
 
+//-----------------------------------------------------------------------------
+// Token constants
+//-----------------------------------------------------------------------------
+
 struct code
 {
     enum value
@@ -88,6 +92,45 @@ struct category
 
     static value convert(code::value);
     static value convert(symbol::value);
+};
+
+//-----------------------------------------------------------------------------
+// Token tags
+//-----------------------------------------------------------------------------
+
+struct null
+{
+    static const token::code::value code = token::code::null;
+};
+
+struct begin_array
+{
+    static const token::code::value code = token::code::begin_array;
+};
+
+struct end_array
+{
+    static const token::code::value code = token::code::end_array;
+};
+
+struct begin_object
+{
+    static const token::code::value code = token::code::begin_object;
+};
+
+struct end_object
+{
+    static const token::code::value code = token::code::end_object;
+};
+
+struct value_separator
+{
+    static const token::code::value code = token::code::value_separator;
+};
+
+struct name_separator
+{
+    static const token::code::value code = token::code::name_separator;
 };
 
 } // namespace token

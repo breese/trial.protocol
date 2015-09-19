@@ -11,6 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <trial/protocol/json/error.hpp>
 
 namespace trial
@@ -19,6 +21,99 @@ namespace protocol
 {
 namespace json
 {
+
+//-----------------------------------------------------------------------------
+// basic_writer::type_matcher
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+template <typename T, typename Enable>
+struct basic_writer<CharT>::type_matcher
+{
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::type_matcher<T,
+                                         typename boost::enable_if< boost::is_same<T, token::null> >::type>
+{
+    static basic_writer<CharT>::size_type value(basic_writer<CharT>& self)
+    {
+        self.validate_scope();
+        self.stack.top().write_separator();
+        return self.encoder.template value<T>();
+    }
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::type_matcher<T,
+                                         typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
+{
+    typedef basic_writer<CharT>::size_type size_type;
+
+    static size_type value(basic_writer<CharT>& self)
+    {
+        self.validate_scope();
+        self.stack.top().write_separator();
+        self.stack.push(frame(self.encoder, token::code::end_array));
+        return self.encoder.template value<T>();
+    }
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::type_matcher<T,
+                                         typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
+{
+    typedef basic_writer<CharT>::size_type size_type;
+
+    static size_type value(basic_writer<CharT>& self)
+    {
+        self.validate_scope(token::code::end_array, json::unexpected_token);
+
+        size_type result = self.encoder.template value<T>();
+        self.stack.pop();
+        return result;
+    }
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::type_matcher<T,
+                                         typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
+{
+    typedef basic_writer<CharT>::size_type size_type;
+
+    static size_type value(basic_writer<CharT>& self)
+    {
+        self.validate_scope();
+        self.stack.top().write_separator();
+        self.stack.push(frame(self.encoder, token::code::end_object));
+        return self.encoder.template value<T>();
+    }
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::type_matcher<T,
+                                         typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
+{
+    typedef basic_writer<CharT>::size_type size_type;
+
+    static size_type value(basic_writer<CharT>& self)
+    {
+        self.validate_scope(token::code::end_object, json::unexpected_token);
+
+        size_type result = self.encoder.template value<T>();
+        self.stack.pop();
+        return result;
+    }
+};
+
+//-----------------------------------------------------------------------------
+// basic_writer
+//-----------------------------------------------------------------------------
 
 template <typename CharT>
 basic_writer<CharT>::basic_writer(const basic_writer<CharT>& other)
@@ -52,66 +147,20 @@ basic_writer<CharT>::level() const BOOST_NOEXCEPT
 template <typename CharT>
 template <typename T>
 typename basic_writer<CharT>::size_type
+basic_writer<CharT>::value()
+{
+    return type_matcher<T>::value(*this);
+}
+
+template <typename CharT>
+template <typename T>
+typename basic_writer<CharT>::size_type
 basic_writer<CharT>::value(BOOST_FWD_REF(T) value)
 {
     validate_scope();
 
     stack.top().write_separator();
     return encoder.value(boost::forward<T>(value));
-}
-
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::null_t)
-{
-    validate_scope();
-
-    stack.top().write_separator();
-    return encoder.value(json::null);
-}
-
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::begin_array_t)
-{
-    validate_scope();
-
-    stack.top().write_separator();
-    stack.push(frame(encoder, token::code::end_array));
-    return encoder.value(json::begin_array);
-}
-
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::end_array_t)
-{
-    validate_scope(token::code::end_array, json::unexpected_token);
-
-    size_type result = encoder.value(json::end_array);
-    stack.pop();
-    return result;
-}
-
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::begin_object_t)
-{
-    validate_scope();
-
-    stack.top().write_separator();
-    stack.push(frame(encoder, token::code::end_object));
-    return encoder.value(json::begin_object);
-}
-
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(json::end_object_t)
-{
-    validate_scope(token::code::end_object, json::unexpected_token);
-
-    size_type result = encoder.value(json::end_object);
-    stack.pop();
-    return result;
 }
 
 template <typename CharT>
@@ -163,17 +212,17 @@ void basic_writer<CharT>::frame::write_separator()
         switch (code)
         {
         case token::code::end_array:
-            encoder.value(detail::value_separator);
+            encoder.template value<token::value_separator>();
             break;
 
         case token::code::end_object:
             if (counter % 2 == 0)
             {
-                encoder.value(detail::value_separator);
+                encoder.template value<token::value_separator>();
             }
             else
             {
-                encoder.value(detail::name_separator);
+                encoder.template value<token::name_separator>();
             }
             break;
 

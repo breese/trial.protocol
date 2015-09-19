@@ -22,32 +22,32 @@ namespace serialization
 {
 
 template <typename CharT, typename T1, typename T2>
-struct save_functor< protocol::json::basic_oarchive<CharT>,
+struct save_functor< json::basic_oarchive<CharT>,
                      typename std::pair<T1, T2> >
 {
-    static void save(protocol::json::basic_oarchive<CharT>& ar,
+    static void save(json::basic_oarchive<CharT>& archive,
                      const std::pair<T1, T2>& data,
                      const unsigned int version)
     {
-        ar.save(json::begin_array);
-        ar << data.first;
-        ar << data.second;
-        ar.save(json::end_array);
+        archive.template save<json::token::begin_array>();
+        archive.save_override(data.first);
+        archive.save_override(data.second);
+        archive.template save<json::token::end_array>();
     }
 };
 
 template <typename CharT, typename T1, typename T2>
-struct load_functor< protocol::json::basic_iarchive<CharT>,
+struct load_functor< json::basic_iarchive<CharT>,
                      typename std::pair<T1, T2> >
 {
-    static void load(protocol::json::basic_iarchive<CharT>& ar,
+    static void load(json::basic_iarchive<CharT>& archive,
                      std::pair<T1, T2>& data,
                      const unsigned int version)
     {
-        ar.load(json::begin_array);
-        ar >> data.first;
-        ar >> data.second;
-        ar.load(json::end_array);
+        archive.template load<json::token::begin_array>();
+        archive.load_override(data.first);
+        archive.load_override(data.second);
+        archive.template load<json::token::end_array>();
     }
 };
 

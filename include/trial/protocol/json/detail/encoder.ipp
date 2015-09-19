@@ -17,11 +17,13 @@
 #endif
 #define BOOST_LEXICAL_CAST_ASSUME_C_LOCALE 1
 #include <boost/lexical_cast.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/array.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
+#include <trial/protocol/json/token.hpp>
 
 namespace trial
 {
@@ -70,7 +72,71 @@ struct outputter
 template <typename CharT, typename T, typename Enable = void>
 struct basic_encoder_functor
 {
-    static std::size_t write(basic_encoder<CharT>&, const T& data);
+};
+
+// Tags
+
+template <typename CharT>
+struct basic_encoder_functor<CharT, token::null>
+{
+    static std::size_t write(basic_encoder<CharT>& self)
+    {
+        return outputter<CharT>::write(*self.buffer, traits<CharT>::null_text());
+    }
+};
+
+template <typename CharT>
+struct basic_encoder_functor<CharT, token::begin_array>
+{
+    static std::size_t write(basic_encoder<CharT>& self)
+    {
+        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_bracket_open);
+    }
+};
+
+template <typename CharT>
+struct basic_encoder_functor<CharT, token::end_array>
+{
+    static std::size_t write(basic_encoder<CharT>& self)
+    {
+        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_bracket_close);
+    }
+};
+
+template <typename CharT>
+struct basic_encoder_functor<CharT, token::begin_object>
+{
+    static std::size_t write(basic_encoder<CharT>& self)
+    {
+        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_brace_open);
+    }
+};
+
+template <typename CharT>
+struct basic_encoder_functor<CharT, token::end_object>
+{
+    static std::size_t write(basic_encoder<CharT>& self)
+    {
+        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_brace_close);
+    }
+};
+
+template <typename CharT>
+struct basic_encoder_functor<CharT, token::value_separator>
+{
+    static std::size_t write(basic_encoder<CharT>& self)
+    {
+        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_comma);
+    }
+};
+
+template <typename CharT>
+struct basic_encoder_functor<CharT, token::name_separator>
+{
+    static std::size_t write(basic_encoder<CharT>& self)
+    {
+        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_colon);
+    }
 };
 
 // Integers
@@ -295,53 +361,11 @@ basic_encoder<CharT>::value(const CharT *data)
 };
 
 template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::null_t)
+template <typename U>
+typename basic_encoder<CharT>::size_type basic_encoder<CharT>::value()
 {
-    return outputter<CharT>::write(*buffer, traits<CharT>::null_text());
-};
-
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::begin_array_t)
-{
-    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_bracket_open);
-};
-
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::end_array_t)
-{
-    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_bracket_close);
-};
-
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::begin_object_t)
-{
-    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_brace_open);
-};
-
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::end_object_t)
-{
-    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_brace_close);
-};
-
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::detail::value_separator_t)
-{
-    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_comma);
-};
-
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(json::detail::name_separator_t)
-{
-    return outputter<CharT>::write(*buffer, traits<CharT>::alpha_colon);
-};
+    return basic_encoder_functor<CharT, U>::write(*this);
+}
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type

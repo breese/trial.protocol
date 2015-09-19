@@ -33,6 +33,9 @@ public:
     template <typename T>
     basic_oarchive(T&);
 
+    template <typename Tag>
+    void save();
+
     template <typename T>
     void save(const T& data);
 

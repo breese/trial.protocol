@@ -20,6 +20,10 @@ namespace json
 namespace token
 {
 
+//-----------------------------------------------------------------------------
+// Token constants
+//-----------------------------------------------------------------------------
+
 inline symbol::value symbol::convert(code::value value)
 {
     switch (value)

@@ -38,6 +38,13 @@ basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
 }
 
 template <typename CharT>
+template <typename Tag>
+void basic_iarchive<CharT>::load()
+{
+    next(Tag::code);
+}
+
+template <typename CharT>
 template <typename T>
 void basic_iarchive<CharT>::load(T& value)
 {
@@ -46,71 +53,10 @@ void basic_iarchive<CharT>::load(T& value)
 }
 
 template <typename CharT>
-void basic_iarchive<CharT>::load(json::null_t)
+template <typename Tag>
+bool basic_iarchive<CharT>::at() const
 {
-    next(token::code::null);
-}
-
-template <typename CharT>
-void basic_iarchive<CharT>::load(json::begin_array_t)
-{
-    next(token::code::begin_array);
-}
-
-template <typename CharT>
-void basic_iarchive<CharT>::load(json::end_array_t)
-{
-    next(token::code::end_array);
-}
-
-template <typename CharT>
-bool basic_iarchive<CharT>::at_end_array() const
-{
-    switch (reader.code())
-    {
-    case token::code::end_array:
-        return true;
-
-    case token::code::end_object:
-        throw json::error(make_error_code(json::expected_end_array));
-
-    case token::code::end:
-        throw json::error(make_error_code(json::unexpected_token));
-
-    default:
-        return false;
-    }
-}
-
-template <typename CharT>
-void basic_iarchive<CharT>::load(json::begin_object_t)
-{
-    next(token::code::begin_object);
-}
-
-template <typename CharT>
-void basic_iarchive<CharT>::load(json::end_object_t)
-{
-    next(token::code::end_object);
-}
-
-template <typename CharT>
-bool basic_iarchive<CharT>::at_end_object() const
-{
-    switch (reader.code())
-    {
-    case token::code::end_object:
-        return true;
-
-    case token::code::end_array:
-        throw json::error(make_error_code(json::expected_end_object));
-
-    case token::code::end:
-        throw json::error(make_error_code(json::unexpected_token));
-
-    default:
-        return false;
-    }
+    return (reader.code() == Tag::code);
 }
 
 template <typename CharT>

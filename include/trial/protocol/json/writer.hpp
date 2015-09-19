@@ -39,13 +39,10 @@ public:
     size_type level() const BOOST_NOEXCEPT;
 
     template <typename T>
-    size_type value(BOOST_FWD_REF(T) value);
+    size_type value();
 
-    size_type value(json::null_t);
-    size_type value(json::begin_array_t);
-    size_type value(json::end_array_t);
-    size_type value(json::begin_object_t);
-    size_type value(json::end_object_t);
+    template <typename T>
+    size_type value(BOOST_FWD_REF(T) value);
 
     size_type literal(const view_type&) BOOST_NOEXCEPT;
 
@@ -54,6 +51,7 @@ private:
     void validate_scope(token::code::value, enum json::errc);
 
 private:
+    template <typename T, typename Enable = void> struct type_matcher;
     detail::basic_encoder<CharT> encoder;
     mutable enum json::errc last_error;
 
