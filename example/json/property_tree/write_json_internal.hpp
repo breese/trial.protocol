@@ -54,14 +54,14 @@ public:
         if (scope.empty())
             return;
 
-        writer.value(json::begin_object);
+        writer.template value<json::token::begin_object>();
         for (const_iterator it = scope.begin();
              it != scope.end();
              ++it)
         {
             print_object_element(it->second, it->first);
         }
-        writer.value(json::end_object);
+        writer.template value<json::token::end_object>();
     }
 
     void print_object_element(const Ptree& scope,
@@ -73,14 +73,14 @@ public:
 
     void print_array(const Ptree& scope)
     {
-        writer.value(json::begin_array);
+        writer.template value<json::token::begin_array>();
         for (const_iterator it = scope.begin();
              it != scope.end();
              ++it)
         {
             print_array_element(it->second);
         }
-        writer.value(json::end_array);
+        writer.template value<json::token::end_array>();
     }
 
     void print_array_element(const Ptree& scope)
@@ -104,7 +104,7 @@ public:
         const string_type value = scope.template get_value<string_type>();
         if (value.empty())
         {
-            writer.value(json::null);
+            writer.template value<json::token::null>();
         }
         else
         {
