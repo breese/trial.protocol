@@ -27,8 +27,6 @@ namespace protocol
 namespace json
 {
 
-namespace detail { template <typename C, typename T, typename Enable> struct basic_reader_functor; }
-
 template <typename CharT>
 class basic_reader
 {
@@ -76,8 +74,7 @@ public:
     const view_type& literal() const BOOST_NOEXCEPT;
 
 private:
-    template <typename C, typename T, typename Enable> friend struct detail::basic_reader_functor;
-
+    template <typename T, typename Enable = void> struct type_matcher;
     mutable detail::basic_decoder<CharT> decoder;
 
     struct frame

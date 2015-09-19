@@ -22,7 +22,7 @@ namespace json
 {
 
 //-----------------------------------------------------------------------------
-// detail::basic_reader_functor
+// Utility
 //-----------------------------------------------------------------------------
 
 namespace detail
@@ -56,18 +56,24 @@ struct floating_to_integer
         >::type type;
 };
 
-template <typename CharT, typename ReturnType, typename Enable = void>
-struct basic_reader_functor
+} // namespace detail
+
+//-----------------------------------------------------------------------------
+// basic_reader::type_matcher
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+template <typename ReturnType, typename Enable>
+struct basic_reader<CharT>::type_matcher
 {
-    static ReturnType convert(const basic_reader<CharT>&);
 };
 
 // Integers (not booleans)
 
-template <typename CharT, typename ReturnType>
-struct basic_reader_functor<CharT,
-                            ReturnType,
-                            typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::type_matcher<ReturnType,
+                                         typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
@@ -85,7 +91,7 @@ struct basic_reader_functor<CharT,
             }
 
         case token::code::floating:
-            typedef typename integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
+            typedef typename detail::integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
             return ReturnType(boost::math::round(self.decoder.template value<floating_return_type>()));
 
         default:
@@ -97,17 +103,17 @@ struct basic_reader_functor<CharT,
 
 // Floating-point numbers
 
-template <typename CharT, typename ReturnType>
-struct basic_reader_functor<CharT,
-                            ReturnType,
-                            typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::type_matcher<ReturnType,
+                                         typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
         switch (self.decoder.code())
         {
         case token::code::integer:
-            typedef typename floating_to_integer<ReturnType>::type integer_return_type;
+            typedef typename detail::floating_to_integer<ReturnType>::type integer_return_type;
             return ReturnType(self.decoder.template value<integer_return_type>());
 
         case token::code::floating:
@@ -122,10 +128,10 @@ struct basic_reader_functor<CharT,
 
 // Booleans
 
-template <typename CharT, typename ReturnType>
-struct basic_reader_functor<CharT,
-                            ReturnType,
-                            typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::type_matcher<ReturnType,
+                                         typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
@@ -146,10 +152,10 @@ struct basic_reader_functor<CharT,
 
 // Strings
 
-template <typename CharT, typename ReturnType>
-struct basic_reader_functor<CharT,
-                            ReturnType,
-                            typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::type_matcher<ReturnType,
+                                         typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
 {
     static ReturnType convert(const basic_reader<CharT>& self)
     {
@@ -164,8 +170,6 @@ struct basic_reader_functor<CharT,
         }
     }
 };
-
-} // namespace detail
 
 //-----------------------------------------------------------------------------
 // basic_reader
@@ -307,7 +311,7 @@ template <typename T>
 T basic_reader<CharT>::value() const
 {
     typedef typename boost::remove_const<T>::type return_type;
-    return detail::basic_reader_functor<CharT, return_type>::convert(*this);
+    return type_matcher<return_type>::convert(*this);
 }
 
 template <typename CharT>
