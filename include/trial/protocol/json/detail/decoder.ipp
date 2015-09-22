@@ -12,7 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cassert>
-#include <cstring> // std::memcmp
 #include <cstdlib> // std::atof
 #include <iterator>
 #include <limits>
