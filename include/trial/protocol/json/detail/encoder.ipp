@@ -38,11 +38,10 @@ namespace detail
 // Helpers
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
 struct outputter
 {
-    static std::size_t write(buffer::base<CharT>& buffer,
-                             CharT character)
+    static std::size_t write(encoder::buffer_type& buffer,
+                             char character)
     {
         if (buffer.grow(1))
         {
@@ -52,10 +51,10 @@ struct outputter
         return 0;
     }
 
-    static std::size_t write(buffer::base<CharT>& buffer,
-                             const boost::basic_string_ref<CharT>& data)
+    static std::size_t write(encoder::buffer_type& buffer,
+                             const encoder::view_type& data)
     {
-        const std::size_t size = data.size();
+        const encoder::view_type::size_type size = data.size();
         if (buffer.grow(size))
         {
             buffer.write(data);
@@ -66,104 +65,88 @@ struct outputter
 };
 
 //-----------------------------------------------------------------------------
-// basic_encoder::type_matcher
+// encoder::type_matcher
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
 template <typename T, typename Enable>
-struct basic_encoder<CharT>::type_matcher
+struct encoder::type_matcher
 {
 };
 
 // Tags
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, token::null> >::type>
+template <>
+struct encoder::type_matcher<token::null>
 {
-    static size_type write(basic_encoder<CharT>& self)
+    static size_type write(encoder& self)
     {
-        return outputter<CharT>::write(*self.buffer, traits<CharT>::null_text());
+        return outputter::write(*self.buffer, traits<char>::null_text());
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
+template <>
+struct encoder::type_matcher<token::begin_array>
 {
-    static size_type write(basic_encoder<CharT>& self)
+    static size_type write(encoder& self)
     {
-        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_bracket_open);
+        return outputter::write(*self.buffer, traits<char>::alpha_bracket_open);
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
+template <>
+struct encoder::type_matcher<token::end_array>
 {
-    static size_type write(basic_encoder<CharT>& self)
+    static size_type write(encoder& self)
     {
-        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_bracket_close);
+        return outputter::write(*self.buffer, traits<char>::alpha_bracket_close);
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
+template <>
+struct encoder::type_matcher<token::begin_object>
 {
-    static size_type write(basic_encoder<CharT>& self)
+    static size_type write(encoder& self)
     {
-        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_brace_open);
+        return outputter::write(*self.buffer, traits<char>::alpha_brace_open);
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
+template <>
+struct encoder::type_matcher<token::end_object>
 {
-    static size_type write(basic_encoder<CharT>& self)
+    static size_type write(encoder& self)
     {
-        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_brace_close);
+        return outputter::write(*self.buffer, traits<char>::alpha_brace_close);
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, token::value_separator> >::type>
+template <>
+struct encoder::type_matcher<token::value_separator>
 {
-    static size_type write(basic_encoder<CharT>& self)
+    static size_type write(encoder& self)
     {
-        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_comma);
+        return outputter::write(*self.buffer, traits<char>::alpha_comma);
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, token::name_separator> >::type>
+template <>
+struct encoder::type_matcher<token::name_separator>
 {
-    static size_type write(basic_encoder<CharT>& self)
+    static size_type write(encoder& self)
     {
-        return outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_colon);
+        return outputter::write(*self.buffer, traits<char>::alpha_colon);
     }
 };
 
 // Integers
 
-template <typename CharT>
 template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_integral<T> >::type>
+struct encoder::type_matcher<T,
+                             typename boost::enable_if< boost::is_integral<T> >::type>
 {
-    static size_type write(basic_encoder<CharT>& self, const T& data)
+    static size_type write(encoder& self, const T& data)
     {
-        typedef boost::array<CharT, std::numeric_limits<T>::digits10> array_type;
+        typedef boost::array<encoder::value_type, std::numeric_limits<T>::digits10> array_type;
         array_type output;
 
         // Build buffer backwards
@@ -172,7 +155,7 @@ struct basic_encoder<CharT>::type_matcher<T,
         typename boost::make_unsigned<T>::type number = std::abs(data);
         if (number == 0)
         {
-            *where = traits<CharT>::alpha_0;
+            *where = traits<char>::alpha_0;
             ++where;
         }
         else
@@ -180,7 +163,7 @@ struct basic_encoder<CharT>::type_matcher<T,
             const T base = T(10);
             while (number != 0)
             {
-                *where = traits<CharT>::alpha_0 + (number % base);
+                *where = traits<char>::alpha_0 + (number % base);
                 ++where;
                 number /= base;
             }
@@ -194,7 +177,7 @@ struct basic_encoder<CharT>::type_matcher<T,
         }
         if (is_negative)
         {
-            self.buffer->write(traits<CharT>::alpha_minus);
+            self.buffer->write(traits<char>::alpha_minus);
         }
         while (begin != output.end())
         {
@@ -207,19 +190,18 @@ struct basic_encoder<CharT>::type_matcher<T,
 
 // Floating point numbers
 
-template <typename CharT>
 template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_floating_point<T> >::type>
+struct encoder::type_matcher<T,
+                             typename boost::enable_if< boost::is_floating_point<T> >::type>
 {
-    static size_type write(basic_encoder<CharT>& self, const T& data)
+    static size_type write(encoder& self, const T& data)
     {
         switch (boost::math::fpclassify(data))
         {
         case FP_INFINITE:
         case FP_NAN:
             // Infinity and NaN must be encoded as null
-            return outputter<CharT>::write(*self.buffer, traits<CharT>::null_text());
+            return outputter::write(*self.buffer, traits<char>::null_text());
         default:
             break;
         }
@@ -245,73 +227,69 @@ struct basic_encoder<CharT>::type_matcher<T,
 
 // Strings
 
-// Floating point numbers
-
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, boost::basic_string_ref<CharT> > >::type>
+template <>
+struct encoder::type_matcher<encoder::view_type>
 {
-    static size_type write(basic_encoder<CharT>& self, const T& data)
+    static size_type write(encoder& self, const view_type& data)
     {
         // This is an approximation of the size. Further characters may be
         // added by escaped characters, in which case we grow the buffer
         // per escape character.
-        size_type size = sizeof(CharT) + data.size() + sizeof(CharT);
+        size_type size = sizeof(char) + data.size() + sizeof(char);
 
         if (!self.buffer->grow(size))
         {
             return 0;
         }
 
-        self.buffer->write(traits<CharT>::alpha_quote);
+        self.buffer->write(traits<char>::alpha_quote);
         for (typename view_type::const_iterator it = data.begin();
              it != data.end();
              ++it)
         {
             switch (*it)
             {
-            case traits<CharT>::alpha_quote:
-            case traits<CharT>::alpha_reverse_solidus:
-            case traits<CharT>::alpha_solidus:
-                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+            case traits<char>::alpha_quote:
+            case traits<char>::alpha_reverse_solidus:
+            case traits<char>::alpha_solidus:
+                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
                     return 0;
                 self.buffer->write(*it);
                 ++size;
                 break;
 
-            case traits<CharT>::alpha_backspace:
-                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+            case traits<char>::alpha_backspace:
+                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer->write(traits<CharT>::alpha_b);
+                self.buffer->write(traits<char>::alpha_b);
                 ++size;
                 break;
 
-            case traits<CharT>::alpha_formfeed:
-                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+            case traits<char>::alpha_formfeed:
+                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer->write(traits<CharT>::alpha_f);
+                self.buffer->write(traits<char>::alpha_f);
                 ++size;
                 break;
 
-            case traits<CharT>::alpha_newline:
-                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+            case traits<char>::alpha_newline:
+                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer->write(traits<CharT>::alpha_n);
+                self.buffer->write(traits<char>::alpha_n);
                 ++size;
                 break;
 
-            case traits<CharT>::alpha_return:
-                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+            case traits<char>::alpha_return:
+                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer->write(traits<CharT>::alpha_r);
+                self.buffer->write(traits<char>::alpha_r);
                 ++size;
                 break;
 
-            case traits<CharT>::alpha_tab:
-                if (outputter<CharT>::write(*self.buffer, traits<CharT>::alpha_reverse_solidus) == 0)
+            case traits<char>::alpha_tab:
+                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
                     return 0;
-                self.buffer->write(traits<CharT>::alpha_t);
+                self.buffer->write(traits<char>::alpha_t);
                 ++size;
                 break;
 
@@ -320,75 +298,63 @@ struct basic_encoder<CharT>::type_matcher<T,
                 break;
             }
         }
-        self.buffer->write(traits<CharT>::alpha_quote);
+        self.buffer->write(traits<char>::alpha_quote);
 
         return size;
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_encoder<CharT>::type_matcher<T,
-                                          typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
+template <>
+struct encoder::type_matcher<std::string>
 {
-    static size_type write(basic_encoder<CharT>& self, const T& data)
+    static size_type write(encoder& self, const std::string& data)
     {
-        return type_matcher< typename boost::basic_string_ref<CharT> >::write(self, data);
+        return type_matcher<encoder::view_type>::write(self, data);
     }
 };
 
 //-----------------------------------------------------------------------------
-// basic_encoder
+// encoder
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
 template <typename T>
-basic_encoder<CharT>::basic_encoder(T& output)
+encoder::encoder(T& output)
     : buffer(new typename buffer::traits<T>::buffer_type(output))
 {
 };
 
-template <typename CharT>
 template <typename U>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(const U& data)
+typename encoder::size_type encoder::value(const U& data)
 {
     return type_matcher<U>::write(*this, data);
 }
 
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(bool data)
+inline encoder::size_type encoder::value(bool data)
 {
     if (data)
     {
-        return outputter<CharT>::write(*buffer, traits<CharT>::true_text());
+        return outputter::write(*buffer, traits<char>::true_text());
     }
     else
     {
-        return outputter<CharT>::write(*buffer, traits<CharT>::false_text());
+        return outputter::write(*buffer, traits<char>::false_text());
     }
 };
 
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::value(const CharT *data)
+inline encoder::size_type encoder::value(const char *data)
 {
-    return type_matcher< typename boost::basic_string_ref<CharT> >::write(*this, data);
+    return type_matcher<view_type>::write(*this, data);
 };
 
-template <typename CharT>
 template <typename U>
-typename basic_encoder<CharT>::size_type basic_encoder<CharT>::value()
+encoder::size_type encoder::value()
 {
     return type_matcher<U>::write(*this);
 }
 
-template <typename CharT>
-typename basic_encoder<CharT>::size_type
-basic_encoder<CharT>::literal(const view_type& data)
+inline encoder::size_type encoder::literal(const view_type& data)
 {
-    return outputter<CharT>::write(*buffer, data);
+    return outputter::write(*buffer, data);
 };
 
 } // namespace detail

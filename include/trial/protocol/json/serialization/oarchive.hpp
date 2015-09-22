@@ -23,15 +23,14 @@ namespace protocol
 namespace json
 {
 
-template <typename CharT>
-class basic_oarchive
-    : public boost::archive::detail::common_oarchive< basic_oarchive<CharT> >
+class oarchive
+    : public boost::archive::detail::common_oarchive<oarchive>
 {
     friend class boost::archive::save_access;
 
 public:
     template <typename T>
-    basic_oarchive(T&);
+    oarchive(T&);
 
     template <typename Tag>
     void save();
@@ -46,7 +45,7 @@ public:
     void save_override(const T& data, long);
 
     // String literal
-    void save_override(const CharT *data);
+    void save_override(const char *data);
 
     // Ignore these
     void save_override(const boost::archive::version_type) {}
@@ -59,10 +58,8 @@ public:
     void save_override(const boost::archive::class_name_type&) {}
 
 protected:
-    json::basic_writer<CharT> writer;
+    json::writer writer;
 };
-
-typedef basic_oarchive<char> oarchive;
 
 } // namespace json
 } // namespace protocol

@@ -25,15 +25,13 @@ namespace protocol
 namespace json
 {
 
-template <typename CharT>
-class basic_writer
+class writer
 {
 public:
     typedef std::size_t size_type;
-    typedef typename detail::basic_encoder<CharT>::view_type view_type;
+    typedef detail::encoder::view_type view_type;
 
-    basic_writer(const basic_writer<CharT>&);
-    template <typename T> basic_writer(T&);
+    template <typename T> writer(T&);
 
     boost::system::error_code error() const BOOST_NOEXCEPT;
     size_type level() const BOOST_NOEXCEPT;
@@ -52,23 +50,21 @@ private:
 
 private:
     template <typename T, typename Enable = void> struct type_matcher;
-    detail::basic_encoder<CharT> encoder;
+    detail::encoder encoder;
     mutable enum json::errc last_error;
 
     struct frame
     {
-        frame(detail::basic_encoder<CharT>& encoder, token::code::value);
+        frame(detail::encoder& encoder, token::code::value);
 
         void write_separator();
 
-        detail::basic_encoder<CharT>& encoder;
+        detail::encoder& encoder;
         token::code::value code;
         std::size_t counter;
     };
     std::stack<frame> stack;
 };
-
-typedef basic_writer<char> writer;
 
 } // namespace json
 } // namespace protocol

@@ -59,23 +59,21 @@ struct floating_to_integer
 } // namespace detail
 
 //-----------------------------------------------------------------------------
-// basic_reader::type_matcher
+// reader::type_matcher
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
 template <typename ReturnType, typename Enable>
-struct basic_reader<CharT>::type_matcher
+struct reader::type_matcher
 {
 };
 
 // Integers (not booleans)
 
-template <typename CharT>
 template <typename ReturnType>
-struct basic_reader<CharT>::type_matcher<ReturnType,
-                                         typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
+struct reader::type_matcher<ReturnType,
+                            typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
 {
-    static ReturnType convert(const basic_reader<CharT>& self)
+    static ReturnType convert(const reader& self)
     {
         switch (self.decoder.code())
         {
@@ -103,12 +101,11 @@ struct basic_reader<CharT>::type_matcher<ReturnType,
 
 // Floating-point numbers
 
-template <typename CharT>
 template <typename ReturnType>
-struct basic_reader<CharT>::type_matcher<ReturnType,
-                                         typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+struct reader::type_matcher<ReturnType,
+                            typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
-    static ReturnType convert(const basic_reader<CharT>& self)
+    static ReturnType convert(const reader& self)
     {
         switch (self.decoder.code())
         {
@@ -128,12 +125,11 @@ struct basic_reader<CharT>::type_matcher<ReturnType,
 
 // Booleans
 
-template <typename CharT>
 template <typename ReturnType>
-struct basic_reader<CharT>::type_matcher<ReturnType,
-                                         typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
+struct reader::type_matcher<ReturnType,
+                            typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
 {
-    static ReturnType convert(const basic_reader<CharT>& self)
+    static ReturnType convert(const reader& self)
     {
         switch (self.decoder.code())
         {
@@ -152,17 +148,17 @@ struct basic_reader<CharT>::type_matcher<ReturnType,
 
 // Strings
 
-template <typename CharT>
-template <typename ReturnType>
-struct basic_reader<CharT>::type_matcher<ReturnType,
-                                         typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
+template <>
+struct reader::type_matcher<std::string>
 {
-    static ReturnType convert(const basic_reader<CharT>& self)
+    typedef std::string return_type;
+
+    static return_type convert(const reader& self)
     {
         switch (self.decoder.code())
         {
         case token::code::string:
-            return self.decoder.template value<ReturnType>();
+            return self.decoder.template value<return_type>();
 
         default:
             self.decoder.code(token::code::error_invalid_value);
@@ -172,64 +168,55 @@ struct basic_reader<CharT>::type_matcher<ReturnType,
 };
 
 //-----------------------------------------------------------------------------
-// basic_reader
+// reader
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
 template <typename ForwardIterator>
-basic_reader<CharT>::basic_reader(ForwardIterator begin, ForwardIterator end)
+reader::reader(ForwardIterator begin, ForwardIterator end)
     : decoder(view_type(&*begin, std::distance(begin, end)))
 {
     stack.push(token::code::end);
 }
 
-template <typename CharT>
-basic_reader<CharT>::basic_reader(const view_type& input)
+inline reader::reader(const view_type& input)
     : decoder(input)
 {
     stack.push(token::code::end);
 }
 
-template <typename CharT>
-basic_reader<CharT>::basic_reader(const basic_reader& other)
+inline reader::reader(const reader& other)
     : decoder(other.decoder)
 {
     stack.push(token::code::end);
 }
 
-template <typename CharT>
-typename basic_reader<CharT>::size_type basic_reader<CharT>::level() const BOOST_NOEXCEPT
+inline reader::size_type reader::level() const BOOST_NOEXCEPT
 {
     assert(stack.size() > 0);
     return stack.size() - 1;
 }
 
-template <typename CharT>
-token::code::value basic_reader<CharT>::code() const BOOST_NOEXCEPT
+inline token::code::value reader::code() const BOOST_NOEXCEPT
 {
     return decoder.code();
 }
 
-template <typename CharT>
-token::symbol::value basic_reader<CharT>::symbol() const BOOST_NOEXCEPT
+inline token::symbol::value reader::symbol() const BOOST_NOEXCEPT
 {
     return decoder.symbol();
 }
 
-template <typename CharT>
-token::category::value basic_reader<CharT>::category() const BOOST_NOEXCEPT
+inline token::category::value reader::category() const BOOST_NOEXCEPT
 {
     return decoder.category();
 }
 
-template <typename CharT>
-boost::system::error_code basic_reader<CharT>::error() const BOOST_NOEXCEPT
+inline boost::system::error_code reader::error() const BOOST_NOEXCEPT
 {
     return decoder.error();
 }
 
-template <typename CharT>
-bool basic_reader<CharT>::next()
+inline bool reader::next()
 {
     const token::code::value current = decoder.code();
     switch (current)
@@ -286,8 +273,7 @@ bool basic_reader<CharT>::next()
     return (category() != token::category::status);
 }
 
-template <typename CharT>
-bool basic_reader<CharT>::next(token::code::value expect)
+inline bool reader::next(token::code::value expect)
 {
     const token::code::value current = code();
     if (current != expect)
@@ -298,50 +284,42 @@ bool basic_reader<CharT>::next(token::code::value expect)
     return next();
 }
 
-template <typename CharT>
-bool basic_reader<CharT>::next_sibling()
+inline bool reader::next_sibling()
 {
     // FIXME: Skip over children
     decoder.code(token::code::error_not_implemented);
     return false;
 }
 
-template <typename CharT>
 template <typename T>
-T basic_reader<CharT>::value() const
+T reader::value() const
 {
     typedef typename boost::remove_const<T>::type return_type;
     return type_matcher<return_type>::convert(*this);
 }
 
-template <typename CharT>
-inline const typename basic_reader<CharT>::view_type&
-basic_reader<CharT>::literal() const BOOST_NOEXCEPT
+inline const reader::view_type& reader::literal() const BOOST_NOEXCEPT
 {
     return decoder.literal();
 }
 
-template <typename CharT>
-basic_reader<CharT>::frame::frame(token::code::value scope)
+inline reader::frame::frame(token::code::value scope)
     : scope(scope),
       counter(0)
 {
 }
 
-template <typename CharT>
-bool basic_reader<CharT>::frame::is_array() const
+inline bool reader::frame::is_array() const
 {
     return scope == token::code::end_array;
 }
 
-template <typename CharT>
-bool basic_reader<CharT>::frame::is_object() const
+inline bool reader::frame::is_object() const
 {
     return scope == token::code::end_object;
 }
 
-template <typename CharT>
-token::code::value basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>& decoder)
+inline token::code::value reader::frame::next(detail::decoder& decoder)
 {
     decoder.next();
 
@@ -361,8 +339,7 @@ token::code::value basic_reader<CharT>::frame::next(detail::basic_decoder<CharT>
     }
 }
 
-template <typename CharT>
-token::code::value basic_reader<CharT>::frame::check_outer(detail::basic_decoder<CharT>& decoder)
+inline token::code::value reader::frame::check_outer(detail::decoder& decoder)
 {
     // RFC 7159, section 2
     //
@@ -379,8 +356,7 @@ token::code::value basic_reader<CharT>::frame::check_outer(detail::basic_decoder
     }
 }
 
-template <typename CharT>
-token::code::value basic_reader<CharT>::frame::check_array(detail::basic_decoder<CharT>& decoder)
+inline token::code::value reader::frame::check_array(detail::decoder& decoder)
 {
     // RFC 7159, section 5
     //
@@ -435,8 +411,7 @@ token::code::value basic_reader<CharT>::frame::check_array(detail::basic_decoder
     return token::code::error_unexpected_token;
 }
 
-template <typename CharT>
-token::code::value basic_reader<CharT>::frame::check_object(detail::basic_decoder<CharT>& decoder)
+inline token::code::value reader::frame::check_object(detail::decoder& decoder)
 {
     // RFC 7159, section 4
     //

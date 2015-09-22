@@ -18,55 +18,47 @@ namespace protocol
 namespace json
 {
 
-template <typename CharT>
-basic_iarchive<CharT>::basic_iarchive(const json::basic_reader<CharT>& reader)
+inline iarchive::iarchive(const json::reader& reader)
     : reader(reader)
 {
 }
 
-template <typename CharT>
-basic_iarchive<CharT>::basic_iarchive(const typename json::basic_reader<CharT>::view_type& view)
+inline iarchive::iarchive(const json::reader::view_type& view)
     : reader(view)
 {
 }
 
-template <typename CharT>
 template <typename Iterator>
-basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
+iarchive::iarchive(Iterator begin, Iterator end)
     : reader(begin, end)
 {
 }
 
-template <typename CharT>
 template <typename Tag>
-void basic_iarchive<CharT>::load()
+void iarchive::load()
 {
     next(Tag::code);
 }
 
-template <typename CharT>
 template <typename T>
-void basic_iarchive<CharT>::load(T& value)
+void iarchive::load(T& value)
 {
     value = reader.template value<T>();
     next();
 }
 
-template <typename CharT>
 template <typename Tag>
-bool basic_iarchive<CharT>::at() const
+bool iarchive::at() const
 {
     return (reader.code() == Tag::code);
 }
 
-template <typename CharT>
-token::code::value basic_iarchive<CharT>::code() const
+inline token::code::value iarchive::code() const
 {
     return reader.code();
 }
 
-template <typename CharT>
-void basic_iarchive<CharT>::next()
+inline void iarchive::next()
 {
     if (!reader.next() && (reader.symbol() == token::symbol::error))
     {
@@ -74,8 +66,7 @@ void basic_iarchive<CharT>::next()
     }
 }
 
-template <typename CharT>
-void basic_iarchive<CharT>::next(token::code::value expect)
+inline void iarchive::next(token::code::value expect)
 {
     if (!reader.next(expect) && (reader.symbol() == token::symbol::error))
     {

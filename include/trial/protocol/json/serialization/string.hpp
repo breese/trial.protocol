@@ -21,24 +21,22 @@ namespace protocol
 namespace serialization
 {
 
-template <typename CharT, typename Traits, typename Allocator>
-struct save_functor< protocol::json::basic_oarchive<CharT>,
-                     typename std::basic_string<CharT, Traits, Allocator> >
+template <>
+struct save_functor<protocol::json::oarchive, std::string>
 {
-    static void save(protocol::json::basic_oarchive<CharT>& ar,
-                     const std::basic_string<CharT, Traits, Allocator>& data,
+    static void save(protocol::json::oarchive& ar,
+                     const std::string& data,
                      const unsigned int)
     {
         ar.save(data);
     }
 };
 
-template <typename CharT, typename Traits, typename Allocator>
-struct load_functor< protocol::json::basic_iarchive<CharT>,
-                     typename std::basic_string<CharT, Traits, Allocator> >
+template <>
+struct load_functor<protocol::json::iarchive, std::string>
 {
-    static void load(protocol::json::basic_iarchive<CharT>& ar,
-                     std::basic_string<CharT, Traits, Allocator>& data,
+    static void load(protocol::json::iarchive& ar,
+                     std::string& data,
                      const unsigned int)
     {
         ar.load(data);

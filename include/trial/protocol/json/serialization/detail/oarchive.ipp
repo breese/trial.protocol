@@ -18,43 +18,37 @@ namespace protocol
 namespace json
 {
 
-template <typename CharT>
 template <typename T>
-basic_oarchive<CharT>::basic_oarchive(T& buffer)
+oarchive::oarchive(T& buffer)
     : writer(buffer)
 {
 }
 
-template <typename CharT>
 template <typename Tag>
-void basic_oarchive<CharT>::save()
+void oarchive::save()
 {
     writer.template value<Tag>();
 }
 
-template <typename CharT>
 template <typename T>
-void basic_oarchive<CharT>::save(const T& data)
+void oarchive::save(const T& data)
 {
     writer.value(data);
 }
 
-template <typename CharT>
 template<typename T>
-void basic_oarchive<CharT>::save_override(const T& data)
+void oarchive::save_override(const T& data)
 {
     boost::archive::save(*this->This(), data);
 }
 
-template <typename CharT>
 template<typename T>
-void basic_oarchive<CharT>::save_override(const T& data, long /* version */)
+void oarchive::save_override(const T& data, long /* version */)
 {
     save_override(data);
 }
 
-template <typename CharT>
-void basic_oarchive<CharT>::save_override(const CharT *data)
+inline void oarchive::save_override(const char *data)
 {
     save(data);
 }

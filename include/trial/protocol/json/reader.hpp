@@ -27,19 +27,18 @@ namespace protocol
 namespace json
 {
 
-template <typename CharT>
-class basic_reader
+class reader
 {
 public:
     typedef std::size_t size_type;
-    typedef const CharT value_type;
+    typedef const char value_type;
     typedef value_type * pointer;
-    typedef typename detail::basic_decoder<CharT>::view_type view_type;
+    typedef detail::decoder::view_type view_type;
 
     template <typename ForwardIterator>
-    basic_reader(ForwardIterator begin, ForwardIterator end);
-    basic_reader(const view_type&);
-    basic_reader(const basic_reader&);
+    reader(ForwardIterator begin, ForwardIterator end);
+    reader(const view_type&);
+    reader(const reader&);
 
     //! @brief Advance to the next token.
     bool next();
@@ -75,7 +74,7 @@ public:
 
 private:
     template <typename T, typename Enable = void> struct type_matcher;
-    mutable detail::basic_decoder<CharT> decoder;
+    mutable detail::decoder decoder;
 
     struct frame
     {
@@ -84,10 +83,10 @@ private:
         bool is_array() const;
         bool is_object() const;
 
-        token::code::value next(detail::basic_decoder<CharT>&);
-        token::code::value check_outer(detail::basic_decoder<CharT>&);
-        token::code::value check_array(detail::basic_decoder<CharT>&);
-        token::code::value check_object(detail::basic_decoder<CharT>&);
+        token::code::value next(detail::decoder&);
+        token::code::value check_outer(detail::decoder&);
+        token::code::value check_array(detail::decoder&);
+        token::code::value check_object(detail::decoder&);
 
         token::code::value scope;
         std::size_t counter;
@@ -100,21 +99,6 @@ private:
 } // namespace trial
 
 #include <trial/protocol/json/detail/reader.ipp>
-
-// Specializations
-
-namespace trial
-{
-namespace protocol
-{
-namespace json
-{
-
-typedef basic_reader<char> reader;
-
-} // namespace json
-} // namespace protocol
-} // namespace trial
 
 namespace boost
 {

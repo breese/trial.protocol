@@ -21,11 +21,11 @@ namespace protocol
 namespace serialization
 {
 
-template <typename CharT, typename Key, typename T, typename Compare, typename Allocator>
-struct save_functor< json::basic_oarchive<CharT>,
+template <typename Key, typename T, typename Compare, typename Allocator>
+struct save_functor< json::oarchive,
                      typename std::map<Key, T, Compare, Allocator> >
 {
-    static void save(json::basic_oarchive<CharT>& archive,
+    static void save(json::oarchive& archive,
                      const std::map<Key, T, Compare, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
@@ -40,11 +40,11 @@ struct save_functor< json::basic_oarchive<CharT>,
     }
 };
 
-template <typename CharT, typename Key, typename T, typename Compare, typename Allocator>
-struct load_functor< json::basic_iarchive<CharT>,
+template <typename Key, typename T, typename Compare, typename Allocator>
+struct load_functor< json::iarchive,
                      typename std::map<Key, T, Compare, Allocator> >
 {
-    static void load(json::basic_iarchive<CharT>& archive,
+    static void load(json::iarchive& archive,
                      std::map<Key, T, Compare, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
@@ -61,18 +61,16 @@ struct load_functor< json::basic_iarchive<CharT>,
 };
 
 // Specialization for map<string, T>
-template <typename CharT, typename Traits, typename StringAllocator,
-          typename T, typename Compare, typename MapAllocator>
-struct save_functor< json::basic_oarchive<CharT>,
-                     typename std::map<std::basic_string<CharT, Traits, StringAllocator>, T, Compare, MapAllocator> >
+template <typename T, typename Compare, typename MapAllocator>
+struct save_functor< json::oarchive,
+                     typename std::map<std::string, T, Compare, MapAllocator> >
 {
-    typedef std::basic_string<CharT, Traits, StringAllocator> key_type;
-    static void save(json::basic_oarchive<CharT>& archive,
-                     const std::map<key_type, T, Compare, MapAllocator>& data,
+    static void save(json::oarchive& archive,
+                     const std::map<std::string, T, Compare, MapAllocator>& data,
                      const unsigned int /* protocol_version */)
     {
         archive.template save<json::token::begin_object>();
-        for (typename std::map<key_type, T, Compare, MapAllocator>::const_iterator it = data.begin();
+        for (typename std::map<std::string, T, Compare, MapAllocator>::const_iterator it = data.begin();
              it != data.end();
              ++it)
         {
@@ -83,21 +81,19 @@ struct save_functor< json::basic_oarchive<CharT>,
     }
 };
 
-template <typename CharT, typename Traits, typename StringAllocator,
-          typename T, typename Compare, typename MapAllocator>
-struct load_functor< json::basic_iarchive<CharT>,
-                     typename std::map<std::basic_string<CharT, Traits, StringAllocator>, T, Compare, MapAllocator> >
+template <typename T, typename Compare, typename MapAllocator>
+struct load_functor< json::iarchive,
+                     typename std::map<std::string, T, Compare, MapAllocator> >
 {
-    typedef std::basic_string<CharT, Traits, StringAllocator> key_type;
-    static void load(json::basic_iarchive<CharT>& archive,
-                     std::map<key_type, T, Compare, MapAllocator>& data,
+    static void load(json::iarchive& archive,
+                     std::map<std::string, T, Compare, MapAllocator>& data,
                      const unsigned int /* protocol_version*/)
     {
         archive.template load<json::token::begin_object>();
         while (!archive.template at<json::token::end_object>())
         {
             // We cannot use std::map<Key, T>::value_type because it has a const key
-            std::pair<key_type, T> value;
+            std::pair<std::string, T> value;
             archive.load_override(value.first);
             archive.load_override(value.second);
             data.insert(value);

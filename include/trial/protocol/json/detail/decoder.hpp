@@ -28,14 +28,13 @@ namespace json
 namespace detail
 {
 
-template <typename CharT>
-class basic_decoder
+class decoder
 {
 public:
-    typedef const CharT value_type;
-    typedef boost::basic_string_ref<CharT> view_type;
+    typedef const char value_type;
+    typedef boost::basic_string_ref<char> view_type;
 
-    basic_decoder(const view_type& input);
+    decoder(const view_type& input);
 
     void next() BOOST_NOEXCEPT;
 
@@ -68,8 +67,6 @@ private:
         view_type view;
     } current;
 };
-
-typedef basic_decoder<char> decoder;
 
 } // namespace detail
 } // namespace json

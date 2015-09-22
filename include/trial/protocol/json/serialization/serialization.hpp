@@ -26,10 +26,10 @@ namespace protocol
 namespace serialization
 {
 
-template <typename CharT, typename Value>
-struct save_functor<json::basic_oarchive<CharT>, Value>
+template <typename Value>
+struct save_functor<json::oarchive, Value>
 {
-    static void save(json::basic_oarchive<CharT>& ar,
+    static void save(json::oarchive& ar,
                      const Value& data,
                      const unsigned int protocol_version)
     {
@@ -39,10 +39,10 @@ struct save_functor<json::basic_oarchive<CharT>, Value>
     }
 };
 
-template <typename CharT, typename Value>
-struct load_functor<json::basic_iarchive<CharT>, Value>
+template <typename Value>
+struct load_functor<json::iarchive, Value>
 {
-    static void load(json::basic_iarchive<CharT>& ar,
+    static void load(json::iarchive& ar,
                      const Value& data,
                      const unsigned int protocol_version)
     {
@@ -55,9 +55,9 @@ struct load_functor<json::basic_iarchive<CharT>, Value>
 template <typename Value>
 struct serialize_functor<Value>
 {
-    template <typename CharT, template <typename> class Archive>
-    static typename boost::enable_if<typename boost::is_base_of< json::basic_iarchive<CharT>, Archive<CharT> >::type, void>::type
-    serialize(Archive<CharT>& ar,
+    template <typename Archive>
+    static typename boost::enable_if<typename boost::is_base_of<json::iarchive, Archive>::type, void>::type
+    serialize(Archive& ar,
               Value& data,
               const unsigned int protocol_version)
     {
@@ -66,9 +66,9 @@ struct serialize_functor<Value>
         ar.template load<json::token::end_array>();
     }
 
-    template <typename CharT, template <typename> class Archive>
-    static typename boost::enable_if<typename boost::is_base_of< json::basic_oarchive<CharT>, Archive<CharT> >::type, void>::type
-    serialize(Archive<CharT>& ar,
+    template <typename Archive>
+    static typename boost::enable_if<typename boost::is_base_of<json::oarchive, Archive>::type, void>::type
+    serialize(Archive& ar,
               Value& data,
               const unsigned int protocol_version)
     {
@@ -94,20 +94,20 @@ namespace serialization
 // C++ does not have partial specialization of template functions so we use
 // functors to achieve the same effect.
 
-template <typename CharT, typename Value>
-void save(trial::protocol::json::basic_oarchive<CharT>& ar,
+template <typename Value>
+void save(trial::protocol::json::oarchive& ar,
           const Value& data,
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    save_functor<trial::protocol::json::basic_oarchive<CharT>, Value>::save(ar, data, version);
+    save_functor<trial::protocol::json::oarchive, Value>::save(ar, data, version);
 }
 
 // Boost.Serialization does not support perfect forwarding so we need two
 // overloads (for const and non-const values)
 
-template <typename CharT, typename Value>
-void serialize(trial::protocol::json::basic_oarchive<CharT>& ar,
+template <typename Value>
+void serialize(trial::protocol::json::oarchive& ar,
                const Value& data,
                const unsigned int version)
 {
@@ -115,8 +115,8 @@ void serialize(trial::protocol::json::basic_oarchive<CharT>& ar,
     serialize_functor<Value>::serialize(ar, data, version);
 }
 
-template <typename CharT, typename Value>
-void serialize(trial::protocol::json::basic_oarchive<CharT>& ar,
+template <typename Value>
+void serialize(trial::protocol::json::oarchive& ar,
                Value& data,
                const unsigned int version)
 {
@@ -128,17 +128,17 @@ void serialize(trial::protocol::json::basic_oarchive<CharT>& ar,
 // iarchive
 //-----------------------------------------------------------------------------
 
-template <typename CharT, typename Value>
-void load(trial::protocol::json::basic_iarchive<CharT>& ar,
+template <typename Value>
+void load(trial::protocol::json::iarchive& ar,
           Value& data,
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    load_functor<trial::protocol::json::basic_iarchive<CharT>, Value>::load(ar, data, version);
+    load_functor<trial::protocol::json::iarchive, Value>::load(ar, data, version);
 }
 
-template <typename CharT, typename Value>
-void serialize(trial::protocol::json::basic_iarchive<CharT>& ar,
+template <typename Value>
+void serialize(trial::protocol::json::iarchive& ar,
                Value& data,
                const unsigned int version)
 {

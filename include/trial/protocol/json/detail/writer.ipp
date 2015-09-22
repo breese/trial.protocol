@@ -23,139 +23,105 @@ namespace json
 {
 
 //-----------------------------------------------------------------------------
-// basic_writer::type_matcher
+// writer::type_matcher
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
 template <typename T, typename Enable>
-struct basic_writer<CharT>::type_matcher
+struct writer::type_matcher
 {
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_writer<CharT>::type_matcher<T,
-                                         typename boost::enable_if< boost::is_same<T, token::null> >::type>
+template <>
+struct writer::type_matcher<token::null>
 {
-    static basic_writer<CharT>::size_type value(basic_writer<CharT>& self)
+    static size_type value(writer& self)
     {
         self.validate_scope();
         self.stack.top().write_separator();
-        return self.encoder.template value<T>();
+        return self.encoder.template value<token::null>();
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_writer<CharT>::type_matcher<T,
-                                         typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
+template <>
+struct writer::type_matcher<token::begin_array>
 {
-    typedef basic_writer<CharT>::size_type size_type;
-
-    static size_type value(basic_writer<CharT>& self)
+    static size_type value(writer& self)
     {
         self.validate_scope();
         self.stack.top().write_separator();
         self.stack.push(frame(self.encoder, token::code::end_array));
-        return self.encoder.template value<T>();
+        return self.encoder.template value<token::begin_array>();
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_writer<CharT>::type_matcher<T,
-                                         typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
+template <>
+struct writer::type_matcher<token::end_array>
 {
-    typedef basic_writer<CharT>::size_type size_type;
-
-    static size_type value(basic_writer<CharT>& self)
+    static size_type value(writer& self)
     {
         self.validate_scope(token::code::end_array, json::unexpected_token);
 
-        size_type result = self.encoder.template value<T>();
+        size_type result = self.encoder.template value<token::end_array>();
         self.stack.pop();
         return result;
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_writer<CharT>::type_matcher<T,
-                                         typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
+template <>
+struct writer::type_matcher<token::begin_object>
 {
-    typedef basic_writer<CharT>::size_type size_type;
-
-    static size_type value(basic_writer<CharT>& self)
+    static size_type value(writer& self)
     {
         self.validate_scope();
         self.stack.top().write_separator();
         self.stack.push(frame(self.encoder, token::code::end_object));
-        return self.encoder.template value<T>();
+        return self.encoder.template value<token::begin_object>();
     }
 };
 
-template <typename CharT>
-template <typename T>
-struct basic_writer<CharT>::type_matcher<T,
-                                         typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
+template <>
+struct writer::type_matcher<token::end_object>
 {
-    typedef basic_writer<CharT>::size_type size_type;
-
-    static size_type value(basic_writer<CharT>& self)
+    static size_type value(writer& self)
     {
         self.validate_scope(token::code::end_object, json::unexpected_token);
 
-        size_type result = self.encoder.template value<T>();
+        size_type result = self.encoder.template value<token::end_object>();
         self.stack.pop();
         return result;
     }
 };
 
 //-----------------------------------------------------------------------------
-// basic_writer
+// writer
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-basic_writer<CharT>::basic_writer(const basic_writer<CharT>& other)
-    : encoder(other.encoder),
-      stack(other.stack)
-{
-}
-
-template <typename CharT>
 template <typename T>
-basic_writer<CharT>::basic_writer(T& buffer)
+writer::writer(T& buffer)
     : encoder(buffer)
 {
     // Push outermost scope
     stack.push(frame(encoder, token::code::end_array));
 }
 
-template <typename CharT>
-boost::system::error_code basic_writer<CharT>::error() const BOOST_NOEXCEPT
+inline boost::system::error_code writer::error() const BOOST_NOEXCEPT
 {
     return make_error_code(last_error);
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::level() const BOOST_NOEXCEPT
+inline writer::size_type writer::level() const BOOST_NOEXCEPT
 {
     return stack.size() - 1;
 }
 
-template <typename CharT>
 template <typename T>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value()
+writer::size_type writer::value()
 {
     return type_matcher<T>::value(*this);
 }
 
-template <typename CharT>
 template <typename T>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(BOOST_FWD_REF(T) value)
+writer::size_type writer::value(BOOST_FWD_REF(T) value)
 {
     validate_scope();
 
@@ -163,15 +129,12 @@ basic_writer<CharT>::value(BOOST_FWD_REF(T) value)
     return encoder.value(boost::forward<T>(value));
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::literal(const view_type& data) BOOST_NOEXCEPT
+inline writer::size_type writer::literal(const view_type& data) BOOST_NOEXCEPT
 {
     return encoder.literal(data);
 }
 
-template <typename CharT>
-void basic_writer<CharT>::validate_scope()
+inline void writer::validate_scope()
 {
     if (stack.empty())
     {
@@ -180,9 +143,8 @@ void basic_writer<CharT>::validate_scope()
     }
 }
 
-template <typename CharT>
-void basic_writer<CharT>::validate_scope(token::code::value code,
-                                         enum json::errc e)
+inline void writer::validate_scope(token::code::value code,
+                                   enum json::errc e)
 {
     if ((stack.size() < 2) || (stack.top().code != code))
     {
@@ -195,34 +157,32 @@ void basic_writer<CharT>::validate_scope(token::code::value code,
 // frame
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-basic_writer<CharT>::frame::frame(detail::basic_encoder<CharT>& encoder,
-                                  token::code::value code)
+inline writer::frame::frame(detail::encoder& encoder,
+                            token::code::value code)
     : encoder(encoder),
       code(code),
       counter(0)
 {
 }
 
-template <typename CharT>
-void basic_writer<CharT>::frame::write_separator()
+inline void writer::frame::write_separator()
 {
     if (counter != 0)
     {
         switch (code)
         {
         case token::code::end_array:
-            encoder.template value<token::value_separator>();
+            encoder.value<token::value_separator>();
             break;
 
         case token::code::end_object:
             if (counter % 2 == 0)
             {
-                encoder.template value<token::value_separator>();
+                encoder.value<token::value_separator>();
             }
             else
             {
-                encoder.template value<token::name_separator>();
+                encoder.value<token::name_separator>();
             }
             break;
 
