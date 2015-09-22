@@ -67,6 +67,42 @@ inline const boost::system::error_category& error_category()
     return instance;
 }
 
+inline enum errc to_errc(token::code::value value)
+{
+    switch (value)
+    {
+    case token::code::error_not_implemented:
+        return not_implemented;
+
+    case token::code::error_unexpected_token:
+        return unexpected_token;
+
+    case token::code::error_invalid_key:
+        return invalid_key;
+
+    case token::code::error_invalid_value:
+        return invalid_value;
+
+    case token::code::error_incompatible_type:
+        return incompatible_type;
+
+    case token::code::error_unbalanced_end_array:
+        return unbalanced_end_array;
+
+    case token::code::error_unbalanced_end_object:
+        return unbalanced_end_object;
+
+    case token::code::error_expected_end_array:
+        return expected_end_array;
+
+    case token::code::error_expected_end_object:
+        return expected_end_object;
+
+    default:
+        return no_error;
+    }
+}
+
 } // namespace json
 } // namespace protocol
 } // namespace trial

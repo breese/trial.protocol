@@ -13,6 +13,7 @@
 
 #include <boost/system/error_code.hpp>
 #include <boost/system/system_error.hpp>
+#include <trial/protocol/json/token.hpp>
 
 namespace trial
 {
@@ -20,8 +21,6 @@ namespace protocol
 {
 namespace json
 {
-
-const boost::system::error_category& error_category();
 
 enum errc
 {
@@ -38,6 +37,10 @@ enum errc
     expected_end_array,
     expected_end_object
 };
+
+const boost::system::error_category& error_category();
+
+enum errc to_errc(token::code::value);
 
 inline boost::system::error_code make_error_code(json::errc e = no_error)
 {

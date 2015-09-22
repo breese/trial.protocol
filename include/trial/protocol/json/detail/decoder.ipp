@@ -251,38 +251,7 @@ inline token::category::value decoder::category() const BOOST_NOEXCEPT
 
 inline boost::system::error_code decoder::error() const BOOST_NOEXCEPT
 {
-    switch (code())
-    {
-    case token::code::error_not_implemented:
-        return json::make_error_code(not_implemented);
-
-    case token::code::error_unexpected_token:
-        return json::make_error_code(unexpected_token);
-
-    case token::code::error_invalid_key:
-        return json::make_error_code(invalid_key);
-
-    case token::code::error_invalid_value:
-        return json::make_error_code(invalid_value);
-
-    case token::code::error_incompatible_type:
-        return json::make_error_code(incompatible_type);
-
-    case token::code::error_unbalanced_end_array:
-        return json::make_error_code(unbalanced_end_array);
-
-    case token::code::error_unbalanced_end_object:
-        return json::make_error_code(unbalanced_end_object);
-
-    case token::code::error_expected_end_array:
-        return json::make_error_code(expected_end_array);
-
-    case token::code::error_expected_end_object:
-        return json::make_error_code(expected_end_object);
-
-    default:
-        return json::make_error_code(no_error);
-    }
+    return json::make_error_code(to_errc(code()));
 }
 
 inline void decoder::next() BOOST_NOEXCEPT
