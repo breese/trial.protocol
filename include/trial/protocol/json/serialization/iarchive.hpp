@@ -58,6 +58,7 @@ public:
 
     token::code::value code() const;
 
+#ifndef BOOST_DOXYGEN_INVOKED
     // Ignore these
     void load(boost::archive::version_type&) {}
     void load(boost::archive::object_id_type) {}
@@ -67,13 +68,16 @@ public:
     void load(boost::archive::class_id_reference_type) {}
     void load(boost::archive::tracking_type) {}
     void load(boost::archive::class_name_type&) {}
+#endif
 
+#ifndef BOOST_DOXYGEN_INVOKED
 private:
     void next();
     void next(token::code::value);
 
 private:
     json::reader reader;
+#endif
 };
 
 } // namespace json

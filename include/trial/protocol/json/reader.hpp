@@ -72,6 +72,7 @@ public:
     //! @brief Return a view of the current value before it is converted into its type.
     const view_type& literal() const BOOST_NOEXCEPT;
 
+#ifndef BOOST_DOXYGEN_INVOKED
 private:
     template <typename T, typename Enable = void> struct type_matcher;
     mutable detail::decoder decoder;
@@ -92,6 +93,7 @@ private:
         std::size_t counter;
     };
     std::stack<frame> stack;
+#endif
 };
 
 } // namespace json
