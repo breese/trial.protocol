@@ -1,0 +1,38 @@
+[/ 
+  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+
+  Distributed under the Boost Software License, Version 1.0.
+     (See accompanying file LICENSE_1_0.txt or copy at
+           http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:incremental Overview]
+
+__protocol__ provides several ways of parsing and generating JSON as shown in
+the table below.
+
+[table Approaches to parsing and generating JSON
+[[][Parser][Generator]]
+[[*Incremental*]
+ [The JSON input can be parsed token by token with an [link protocol.json.reader
+  incremental parser]. For each token we can obtain its current type and value.]
+ [The JSON output can be generated token by token with an
+  [link protocol.json.writer incremental generator].]]
+[[*Serialization*]
+ [The JSON input can be deserialized directly into our C++ data structures with an
+  [link protocol.json.iarchive input archive].
+  Notice that the input archive does not go through an intermediate
+  [@http://en.wikipedia.org/wiki/Document_Object_Model@ Document Object Model],
+  so we can get better performance.]
+ [Our C++ data structures can be serialized directly into a JSON output with an
+  [link protocol.json.oarchive output archive].]]
+]
+
+The incremental parser and generator are the basic building-blocks.
+Serialization combines these building-blocks with Boost.Serialization to offer
+an API that is easier to use.
+
+The incremental parser can also be used to create other kinds of parser interfaces,
+such as a push parser as we shall see in the tutorial.
+
+[endsect]

@@ -1,0 +1,49 @@
+[/ 
+  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+
+  Distributed under the Boost Software License, Version 1.0.
+     (See accompanying file LICENSE_1_0.txt or copy at
+           http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[library Trial.Protocol
+    [quickbook 1.5]
+    [id protocol]
+    [dirname protocol]
+    [purpose JSON parser and generator]
+    [authors [Reese, Bjorn]]
+    [copyright 2015 Bjorn Reese]
+    [license Distributed under the [@http://www.boost.org/LICENSE_1_0.txt Boost Software License, Version 1.0].]
+]
+
+[def __protocol__ Trial.Protocol]
+
+[important __protocol__ is not an official Boost library.
+
+__protocol__ is still work-in-progress.
+]
+
+[section Introduction]
+__protocol__ is a header-only library that provides parsers and generators for
+network wire protocols.
+Currently supported protocols are:
+
+* [link protocol.json JSON]
+
+The basic building-block for each protocol is an incremental parser (or pull parser)
+and an incremental generator (or push formatter.)
+These can either be used directly, or together with Boost.Serialization.
+
+__protocol__ serialization relies on Boost.Serialization, which is not header-only.
+
+The protocol generators can write the encoded output to different types of
+[link protocol.buffer buffers].
+The correct header files must be included for this to work seamlessly.
+[endsect]
+
+[note For brevity all examples in this documentation assumes
+```using namespace trial::protocol;```
+]
+
+[include json/json.qbk]
+[include buffer.qbk]
