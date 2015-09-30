@@ -35,8 +35,6 @@ public:
     typedef value_type * pointer;
     typedef detail::decoder::view_type view_type;
 
-    template <typename ForwardIterator>
-    reader(ForwardIterator begin, ForwardIterator end);
     reader(const view_type&);
     reader(const reader&);
 

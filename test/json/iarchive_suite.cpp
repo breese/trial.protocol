@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_CASE(test_vector_bool_empty)
 BOOST_AUTO_TEST_CASE(test_vector_bool_one)
 {
     const char input[] = "[true]";
-    json::iarchive in(input, input + sizeof(input) - 1);
+    json::iarchive in(input);
     std::vector<bool> value;
     BOOST_REQUIRE_NO_THROW(in >> value);
     BOOST_REQUIRE_EQUAL(value.size(), 1U);

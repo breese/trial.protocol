@@ -178,13 +178,6 @@ struct reader::type_matcher<std::string>
 // reader
 //-----------------------------------------------------------------------------
 
-template <typename ForwardIterator>
-reader::reader(ForwardIterator begin, ForwardIterator end)
-    : decoder(view_type(&*begin, std::distance(begin, end)))
-{
-    stack.push(token::code::end);
-}
-
 inline reader::reader(const view_type& input)
     : decoder(input)
 {
