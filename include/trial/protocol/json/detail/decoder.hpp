@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstddef> // std::size_t
 #include <string>
 #include <boost/cstdint.hpp>
 #include <boost/config.hpp>
@@ -31,6 +32,7 @@ namespace detail
 class decoder
 {
 public:
+    typedef std::size_t size_type;
     typedef const char value_type;
     typedef boost::basic_string_ref<char> view_type;
 

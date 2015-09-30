@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cstddef> // std::size_t
 #include <string>
 #include <stack>
 #include <boost/config.hpp>
@@ -30,9 +29,8 @@ namespace json
 class reader
 {
 public:
-    typedef std::size_t size_type;
-    typedef const char value_type;
-    typedef value_type * pointer;
+    typedef detail::decoder::size_type size_type;
+    typedef detail::decoder::value_type value_type;
     typedef detail::decoder::view_type view_type;
 
     reader(const view_type&);
@@ -88,7 +86,7 @@ private:
         token::code::value check_object(detail::decoder&);
 
         token::code::value scope;
-        std::size_t counter;
+        size_type counter;
     };
     std::stack<frame> stack;
 #endif
