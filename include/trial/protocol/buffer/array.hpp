@@ -51,7 +51,8 @@ public:
     // Returns the number of elements that has been inserted into the array
     size_type size() const
     {
-        return (current - begin());
+        assert(current >= begin());
+        return size_type(current - begin());
     }
 
 private:

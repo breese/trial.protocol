@@ -152,7 +152,8 @@ struct encoder::overloader<T,
         // Build buffer backwards
         typename array_type::reverse_iterator where = output.rbegin();
         const bool is_negative = data < 0;
-        typename boost::make_unsigned<T>::type number = std::abs(data);
+        typedef typename boost::make_unsigned<T>::type unsigned_type;
+        unsigned_type number = unsigned_type(std::abs(data));
         if (number == 0)
         {
             *where = traits<char>::alpha_0;
@@ -169,7 +170,7 @@ struct encoder::overloader<T,
             }
         }
         typename array_type::const_iterator begin = where.base();
-        const size_type size = std::distance(begin, output.cend()) + (is_negative ? 1 : 0);
+        const size_type size = size_type(std::distance(begin, output.cend()) + (is_negative ? 1 : 0));
 
         if (!self.buffer->grow(size))
         {
