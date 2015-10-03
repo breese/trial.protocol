@@ -37,8 +37,8 @@ public:
     typedef typename base<CharT>::view_type view_type;
     typedef ContainerType<CharT, AllocatorType> container_type;
 
-    basic_container(container_type& buffer)
-        : buffer(buffer)
+    basic_container(container_type& data)
+        : buffer(data)
     {
     }
 

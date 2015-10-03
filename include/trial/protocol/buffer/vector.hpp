@@ -29,8 +29,8 @@ public:
     typedef typename base<CharT>::size_type size_type;
     typedef typename base<CharT>::view_type view_type;
 
-    vector(std::vector<value_type>& buffer)
-        : buffer(buffer)
+    vector(std::vector<value_type>& data)
+        : buffer(data)
     {
     }
 

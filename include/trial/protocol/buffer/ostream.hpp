@@ -34,7 +34,7 @@ public:
     basic_ostream(std::basic_ostream<CharT>& stream) : content(stream) {}
 
 protected:
-    virtual bool grow(size_type delta)
+    virtual bool grow(size_type)
     {
         return content.good();
     }
