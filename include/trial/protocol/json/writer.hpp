@@ -49,7 +49,7 @@ private:
     void validate_scope(token::code::value, enum json::errc);
 
 private:
-    template <typename T, typename Enable = void> struct type_matcher;
+    template <typename T, typename Enable = void> struct overloader;
     detail::encoder encoder;
     mutable enum json::errc last_error;
 

@@ -66,19 +66,19 @@ struct floating_to_integer
 } // namespace detail
 
 //-----------------------------------------------------------------------------
-// reader::type_matcher
+// reader::overloader
 //-----------------------------------------------------------------------------
 
 template <typename ReturnType, typename Enable>
-struct reader::type_matcher
+struct reader::overloader
 {
 };
 
 // Integers (not booleans)
 
 template <typename ReturnType>
-struct reader::type_matcher<ReturnType,
-                            typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
+struct reader::overloader<ReturnType,
+                          typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
 {
     static ReturnType convert(const reader& self)
     {
@@ -109,8 +109,8 @@ struct reader::type_matcher<ReturnType,
 // Floating-point numbers
 
 template <typename ReturnType>
-struct reader::type_matcher<ReturnType,
-                            typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+struct reader::overloader<ReturnType,
+                          typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
     static ReturnType convert(const reader& self)
     {
@@ -133,8 +133,8 @@ struct reader::type_matcher<ReturnType,
 // Booleans
 
 template <typename ReturnType>
-struct reader::type_matcher<ReturnType,
-                            typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
+struct reader::overloader<ReturnType,
+                          typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
 {
     static ReturnType convert(const reader& self)
     {
@@ -156,7 +156,7 @@ struct reader::type_matcher<ReturnType,
 // Strings
 
 template <>
-struct reader::type_matcher<std::string>
+struct reader::overloader<std::string>
 {
     typedef std::string return_type;
 
@@ -295,7 +295,7 @@ template <typename T>
 T reader::value() const
 {
     typedef typename boost::remove_const<T>::type return_type;
-    return type_matcher<return_type>::convert(*this);
+    return overloader<return_type>::convert(*this);
 }
 
 inline const reader::view_type& reader::literal() const BOOST_NOEXCEPT

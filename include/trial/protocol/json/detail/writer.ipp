@@ -23,16 +23,16 @@ namespace json
 {
 
 //-----------------------------------------------------------------------------
-// writer::type_matcher
+// writer::overloader
 //-----------------------------------------------------------------------------
 
 template <typename T, typename Enable>
-struct writer::type_matcher
+struct writer::overloader
 {
 };
 
 template <>
-struct writer::type_matcher<token::null>
+struct writer::overloader<token::null>
 {
     static size_type value(writer& self)
     {
@@ -43,7 +43,7 @@ struct writer::type_matcher<token::null>
 };
 
 template <>
-struct writer::type_matcher<token::begin_array>
+struct writer::overloader<token::begin_array>
 {
     static size_type value(writer& self)
     {
@@ -55,7 +55,7 @@ struct writer::type_matcher<token::begin_array>
 };
 
 template <>
-struct writer::type_matcher<token::end_array>
+struct writer::overloader<token::end_array>
 {
     static size_type value(writer& self)
     {
@@ -68,7 +68,7 @@ struct writer::type_matcher<token::end_array>
 };
 
 template <>
-struct writer::type_matcher<token::begin_object>
+struct writer::overloader<token::begin_object>
 {
     static size_type value(writer& self)
     {
@@ -80,7 +80,7 @@ struct writer::type_matcher<token::begin_object>
 };
 
 template <>
-struct writer::type_matcher<token::end_object>
+struct writer::overloader<token::end_object>
 {
     static size_type value(writer& self)
     {
@@ -117,7 +117,7 @@ inline writer::size_type writer::level() const BOOST_NOEXCEPT
 template <typename T>
 writer::size_type writer::value()
 {
-    return type_matcher<T>::value(*this);
+    return overloader<T>::value(*this);
 }
 
 template <typename T>

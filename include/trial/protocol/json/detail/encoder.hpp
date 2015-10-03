@@ -52,7 +52,7 @@ public:
     size_type literal(const view_type&);
 
 private:
-    template <typename T, typename Enable = void> struct type_matcher;
+    template <typename T, typename Enable = void> struct overloader;
 
     boost::scoped_ptr<buffer_type> buffer;
 };

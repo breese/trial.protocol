@@ -33,19 +33,19 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
-// decoder::type_matcher
+// decoder::overloader
 //-----------------------------------------------------------------------------
 
 template <typename ReturnType, typename Enable>
-struct decoder::type_matcher
+struct decoder::overloader
 {
 };
 
 // Integers
 
 template <typename ReturnType>
-struct decoder::type_matcher<ReturnType,
-                             typename boost::enable_if< boost::is_integral<ReturnType> >::type>
+struct decoder::overloader<ReturnType,
+                           typename boost::enable_if< boost::is_integral<ReturnType> >::type>
 {
     static ReturnType convert(decoder& self)
     {
@@ -88,8 +88,8 @@ struct decoder::type_matcher<ReturnType,
 // Floating-point numbers
 
 template <typename ReturnType>
-struct decoder::type_matcher<ReturnType,
-                             typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+struct decoder::overloader<ReturnType,
+                           typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
     static ReturnType convert(decoder& self)
     {
@@ -106,7 +106,7 @@ struct decoder::type_matcher<ReturnType,
 // Strings
 
 template <>
-struct decoder::type_matcher<std::string>
+struct decoder::overloader<std::string>
 {
     typedef std::string return_type;
 
@@ -334,7 +334,7 @@ template <typename ReturnType>
 ReturnType decoder::value() const
 {
     // Remove constness because we may need to update error state
-    return type_matcher<ReturnType>::convert(const_cast<decoder&>(*this));
+    return overloader<ReturnType>::convert(const_cast<decoder&>(*this));
 }
 
 inline const decoder::view_type& decoder::literal() const BOOST_NOEXCEPT

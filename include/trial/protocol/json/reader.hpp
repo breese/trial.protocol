@@ -70,7 +70,7 @@ public:
 
 #ifndef BOOST_DOXYGEN_INVOKED
 private:
-    template <typename T, typename Enable = void> struct type_matcher;
+    template <typename T, typename Enable = void> struct overloader;
     mutable detail::decoder decoder;
 
     struct frame

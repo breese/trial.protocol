@@ -65,18 +65,18 @@ struct outputter
 };
 
 //-----------------------------------------------------------------------------
-// encoder::type_matcher
+// encoder::overloader
 //-----------------------------------------------------------------------------
 
 template <typename T, typename Enable>
-struct encoder::type_matcher
+struct encoder::overloader
 {
 };
 
 // Tags
 
 template <>
-struct encoder::type_matcher<token::null>
+struct encoder::overloader<token::null>
 {
     static size_type write(encoder& self)
     {
@@ -85,7 +85,7 @@ struct encoder::type_matcher<token::null>
 };
 
 template <>
-struct encoder::type_matcher<token::begin_array>
+struct encoder::overloader<token::begin_array>
 {
     static size_type write(encoder& self)
     {
@@ -94,7 +94,7 @@ struct encoder::type_matcher<token::begin_array>
 };
 
 template <>
-struct encoder::type_matcher<token::end_array>
+struct encoder::overloader<token::end_array>
 {
     static size_type write(encoder& self)
     {
@@ -103,7 +103,7 @@ struct encoder::type_matcher<token::end_array>
 };
 
 template <>
-struct encoder::type_matcher<token::begin_object>
+struct encoder::overloader<token::begin_object>
 {
     static size_type write(encoder& self)
     {
@@ -112,7 +112,7 @@ struct encoder::type_matcher<token::begin_object>
 };
 
 template <>
-struct encoder::type_matcher<token::end_object>
+struct encoder::overloader<token::end_object>
 {
     static size_type write(encoder& self)
     {
@@ -121,7 +121,7 @@ struct encoder::type_matcher<token::end_object>
 };
 
 template <>
-struct encoder::type_matcher<token::value_separator>
+struct encoder::overloader<token::value_separator>
 {
     static size_type write(encoder& self)
     {
@@ -130,7 +130,7 @@ struct encoder::type_matcher<token::value_separator>
 };
 
 template <>
-struct encoder::type_matcher<token::name_separator>
+struct encoder::overloader<token::name_separator>
 {
     static size_type write(encoder& self)
     {
@@ -141,8 +141,8 @@ struct encoder::type_matcher<token::name_separator>
 // Integers
 
 template <typename T>
-struct encoder::type_matcher<T,
-                             typename boost::enable_if< boost::is_integral<T> >::type>
+struct encoder::overloader<T,
+                           typename boost::enable_if< boost::is_integral<T> >::type>
 {
     static size_type write(encoder& self, const T& data)
     {
@@ -191,8 +191,8 @@ struct encoder::type_matcher<T,
 // Floating point numbers
 
 template <typename T>
-struct encoder::type_matcher<T,
-                             typename boost::enable_if< boost::is_floating_point<T> >::type>
+struct encoder::overloader<T,
+                           typename boost::enable_if< boost::is_floating_point<T> >::type>
 {
     static size_type write(encoder& self, const T& data)
     {
@@ -228,7 +228,7 @@ struct encoder::type_matcher<T,
 // Strings
 
 template <>
-struct encoder::type_matcher<encoder::view_type>
+struct encoder::overloader<encoder::view_type>
 {
     static size_type write(encoder& self, const view_type& data)
     {
@@ -305,11 +305,11 @@ struct encoder::type_matcher<encoder::view_type>
 };
 
 template <>
-struct encoder::type_matcher<std::string>
+struct encoder::overloader<std::string>
 {
     static size_type write(encoder& self, const std::string& data)
     {
-        return type_matcher<encoder::view_type>::write(self, data);
+        return overloader<encoder::view_type>::write(self, data);
     }
 };
 
@@ -326,7 +326,7 @@ encoder::encoder(T& output)
 template <typename U>
 typename encoder::size_type encoder::value(const U& data)
 {
-    return type_matcher<U>::write(*this, data);
+    return overloader<U>::write(*this, data);
 }
 
 inline encoder::size_type encoder::value(bool data)
@@ -343,13 +343,13 @@ inline encoder::size_type encoder::value(bool data)
 
 inline encoder::size_type encoder::value(const char *data)
 {
-    return type_matcher<view_type>::write(*this, data);
+    return overloader<view_type>::write(*this, data);
 };
 
 template <typename U>
 encoder::size_type encoder::value()
 {
-    return type_matcher<U>::write(*this);
+    return overloader<U>::write(*this);
 }
 
 inline encoder::size_type encoder::literal(const view_type& data)

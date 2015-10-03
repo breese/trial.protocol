@@ -60,7 +60,7 @@ private:
     bool at_keyword_end() const BOOST_NOEXCEPT;
 
 private:
-    template <typename T, typename Enable = void> struct type_matcher;
+    template <typename T, typename Enable = void> struct overloader;
 
     view_type input;
     struct
