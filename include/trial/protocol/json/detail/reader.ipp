@@ -37,7 +37,7 @@ struct integer_to_floating
     typedef typename boost::conditional
     <sizeof(T) <= sizeof(boost::float32_t),
                   boost::float32_t,
-#if BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
+#if defined(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE)
                   typename boost::conditional
                   <sizeof(T) <= sizeof(boost::float64_t),
                       boost::float64_t,

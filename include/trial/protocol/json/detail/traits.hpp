@@ -44,7 +44,7 @@ public:
     static bool is_digit(value_type value) BOOST_NOEXCEPT;
     static bool is_hexdigit(value_type value) BOOST_NOEXCEPT;
     static bool is_keyword(value_type value) BOOST_NOEXCEPT;
-    static int extra_bytes(value_type value) BOOST_NOEXCEPT;
+    static size_type extra_bytes(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
 
     static const std::basic_string<value_type>& false_text() BOOST_NOEXCEPT;

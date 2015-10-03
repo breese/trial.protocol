@@ -115,7 +115,7 @@ inline bool traits<char>::is_keyword(value_type value) BOOST_NOEXCEPT
     }
 }
 
-inline int traits<char>::extra_bytes(value_type value) BOOST_NOEXCEPT
+inline traits<char>::size_type traits<char>::extra_bytes(value_type value) BOOST_NOEXCEPT
 {
     typedef boost::make_unsigned<value_type>::type unsigned_value_type;
     const unsigned_value_type v = static_cast<unsigned_value_type>(value);

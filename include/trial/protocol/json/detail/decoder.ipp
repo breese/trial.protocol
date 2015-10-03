@@ -72,7 +72,7 @@ struct decoder::overloader<ReturnType,
         {
             const ReturnType old = result;
             result *= ReturnType(10);
-            result += traits<char>::to_int(*it);
+            result += ReturnType(traits<char>::to_int(*it));
             if (result < old)
             {
                 // Overflow
@@ -99,7 +99,7 @@ struct decoder::overloader<ReturnType,
             throw json::error(self.error());
         }
 
-        return std::atof(self.literal().data());
+        return ReturnType(std::atof(self.literal().data()));
     }
 };
 
@@ -174,7 +174,7 @@ struct decoder::overloader<std::string>
                             number <<= 4;
                             if (traits<char>::is_hexdigit(*it))
                             {
-                                number += traits<char>::to_int(*it);
+                                number += boost::uint32_t(traits<char>::to_int(*it));
                             }
                         }
                         if (number <= 0x007F)
@@ -221,8 +221,8 @@ struct decoder::overloader<std::string>
 // decoder
 //-----------------------------------------------------------------------------
 
-inline decoder::decoder(const view_type& input)
-    : input(input)
+inline decoder::decoder(const view_type& view)
+    : input(view)
 {
     current.code = token::code::end;
     next();
