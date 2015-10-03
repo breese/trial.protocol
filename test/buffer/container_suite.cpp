@@ -11,6 +11,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <vector>
+#include <boost/array.hpp>
 #include <trial/protocol/buffer/container.hpp>
 
 using namespace trial::protocol;
@@ -55,9 +56,9 @@ BOOST_AUTO_TEST_CASE(test_empty)
     std::vector<char> output;
     vector_buffer<char> container(output);
 
-    char expected[] = { };
+    boost::array<char, 0> expected;
     BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    expected, expected + sizeof(expected));
+                                    expected.begin(), expected.end());
 }
 
 BOOST_AUTO_TEST_CASE(test_single)
