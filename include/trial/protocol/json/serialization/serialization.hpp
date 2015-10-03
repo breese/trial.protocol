@@ -27,7 +27,7 @@ namespace serialization
 {
 
 template <typename Value>
-struct save_functor<json::oarchive, Value>
+struct save_overloader<json::oarchive, Value>
 {
     static void save(json::oarchive& ar,
                      const Value& data,
@@ -40,7 +40,7 @@ struct save_functor<json::oarchive, Value>
 };
 
 template <typename Value>
-struct load_functor<json::iarchive, Value>
+struct load_overloader<json::iarchive, Value>
 {
     static void load(json::iarchive& ar,
                      const Value& data,
@@ -53,7 +53,7 @@ struct load_functor<json::iarchive, Value>
 };
 
 template <typename Value>
-struct serialize_functor<Value>
+struct serialize_overloader<Value>
 {
     template <typename Archive>
     static typename boost::enable_if<typename boost::is_base_of<json::iarchive, Archive>::type, void>::type
@@ -100,7 +100,7 @@ void save(trial::protocol::json::oarchive& ar,
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    save_functor<trial::protocol::json::oarchive, Value>::save(ar, data, version);
+    save_overloader<trial::protocol::json::oarchive, Value>::save(ar, data, version);
 }
 
 // Boost.Serialization does not support perfect forwarding so we need two
@@ -112,7 +112,7 @@ void serialize(trial::protocol::json::oarchive& ar,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_functor<Value>::serialize(ar, data, version);
+    serialize_overloader<Value>::serialize(ar, data, version);
 }
 
 template <typename Value>
@@ -121,7 +121,7 @@ void serialize(trial::protocol::json::oarchive& ar,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_functor<Value>::serialize(ar, data, version);
+    serialize_overloader<Value>::serialize(ar, data, version);
 }
 
 //-----------------------------------------------------------------------------
@@ -134,7 +134,7 @@ void load(trial::protocol::json::iarchive& ar,
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    load_functor<trial::protocol::json::iarchive, Value>::load(ar, data, version);
+    load_overloader<trial::protocol::json::iarchive, Value>::load(ar, data, version);
 }
 
 template <typename Value>
@@ -143,7 +143,7 @@ void serialize(trial::protocol::json::iarchive& ar,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_functor<Value>::serialize(ar, data, version);
+    serialize_overloader<Value>::serialize(ar, data, version);
 }
 
 

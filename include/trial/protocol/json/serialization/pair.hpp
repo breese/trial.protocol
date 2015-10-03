@@ -22,8 +22,8 @@ namespace serialization
 {
 
 template <typename T1, typename T2>
-struct save_functor< json::oarchive,
-                     typename std::pair<T1, T2> >
+struct save_overloader< json::oarchive,
+                        typename std::pair<T1, T2> >
 {
     static void save(json::oarchive& archive,
                      const std::pair<T1, T2>& data,
@@ -37,8 +37,8 @@ struct save_functor< json::oarchive,
 };
 
 template <typename T1, typename T2>
-struct load_functor< json::iarchive,
-                     typename std::pair<T1, T2> >
+struct load_overloader< json::iarchive,
+                        typename std::pair<T1, T2> >
 {
     static void load(json::iarchive& archive,
                      std::pair<T1, T2>& data,

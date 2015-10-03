@@ -22,7 +22,7 @@ namespace serialization
 {
 
 template <>
-struct save_functor<protocol::json::oarchive, std::string>
+struct save_overloader<protocol::json::oarchive, std::string>
 {
     static void save(protocol::json::oarchive& ar,
                      const std::string& data,
@@ -33,7 +33,7 @@ struct save_functor<protocol::json::oarchive, std::string>
 };
 
 template <>
-struct load_functor<protocol::json::iarchive, std::string>
+struct load_overloader<protocol::json::iarchive, std::string>
 {
     static void load(protocol::json::iarchive& ar,
                      std::string& data,

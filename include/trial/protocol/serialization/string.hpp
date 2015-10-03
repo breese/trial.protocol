@@ -22,7 +22,7 @@ namespace serialization
 {
 
 template <typename Archive, typename CharT, typename Traits, typename Allocator>
-struct save_functor< Archive, typename std::basic_string<CharT, Traits, Allocator> >
+struct save_overloader< Archive, typename std::basic_string<CharT, Traits, Allocator> >
 {
     static void save(Archive&,
                      const std::basic_string<CharT, Traits, Allocator>&,
@@ -30,7 +30,7 @@ struct save_functor< Archive, typename std::basic_string<CharT, Traits, Allocato
 };
 
 template <typename Archive, typename CharT, typename Traits, typename Allocator>
-struct load_functor< Archive, typename std::basic_string<CharT, Traits, Allocator> >
+struct load_overloader< Archive, typename std::basic_string<CharT, Traits, Allocator> >
 {
     static void load(Archive&,
                      std::basic_string<CharT, Traits, Allocator>&,
@@ -38,7 +38,7 @@ struct load_functor< Archive, typename std::basic_string<CharT, Traits, Allocato
 };
 
 template <typename CharT, typename Traits, typename Allocator>
-struct serialize_functor< typename std::basic_string<CharT, Traits, Allocator> >
+struct serialize_overloader< typename std::basic_string<CharT, Traits, Allocator> >
 {
     template <typename Archive>
     static typename boost::enable_if<typename Archive::is_loading, void>::type

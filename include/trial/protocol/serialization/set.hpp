@@ -22,7 +22,7 @@ namespace serialization
 {
 
 template <typename Archive, typename Key, typename Compare, typename Allocator>
-struct save_functor< Archive, typename std::set<Key, Compare, Allocator> >
+struct save_overloader< Archive, typename std::set<Key, Compare, Allocator> >
 {
     static void save(Archive&,
                      const std::set<Key, Compare, Allocator>&,
@@ -30,7 +30,7 @@ struct save_functor< Archive, typename std::set<Key, Compare, Allocator> >
 };
 
 template <typename Archive, typename Key, typename Compare, typename Allocator>
-struct load_functor< Archive, typename std::set<Key, Compare, Allocator> >
+struct load_overloader< Archive, typename std::set<Key, Compare, Allocator> >
 {
     static void load(Archive&,
                      std::set<Key, Compare, Allocator>&,
@@ -38,7 +38,7 @@ struct load_functor< Archive, typename std::set<Key, Compare, Allocator> >
 };
 
 template <typename Key, typename Compare, typename Allocator>
-struct serialize_functor< typename std::set<Key, Compare, Allocator> >
+struct serialize_overloader< typename std::set<Key, Compare, Allocator> >
 {
     template <typename Archive>
     static typename boost::enable_if<typename Archive::is_loading, void>::type

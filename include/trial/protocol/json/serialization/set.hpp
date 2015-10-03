@@ -22,8 +22,8 @@ namespace serialization
 {
 
 template <typename Key, typename Compare, typename Allocator>
-struct save_functor< json::oarchive,
-                     typename std::set<Key, Compare, Allocator> >
+struct save_overloader< json::oarchive,
+                        typename std::set<Key, Compare, Allocator> >
 {
     static void save(json::oarchive& archive,
                      const std::set<Key, Compare, Allocator>& data,
@@ -41,8 +41,8 @@ struct save_functor< json::oarchive,
 };
 
 template <typename Key, typename Compare, typename Allocator>
-struct load_functor< json::iarchive,
-                     typename std::set<Key, Compare, Allocator> >
+struct load_overloader< json::iarchive,
+                        typename std::set<Key, Compare, Allocator> >
 {
     static void load(json::iarchive& archive,
                      std::set<Key, Compare, Allocator>& data,

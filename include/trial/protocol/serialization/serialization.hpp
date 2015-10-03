@@ -28,19 +28,19 @@ namespace serialization
 // These must be specialized by the concrete protocols.
 
 template <typename Archive, typename Value>
-struct save_functor
+struct save_overloader
 {
     static void save(Archive&, const Value&, const unsigned int);
 };
 
 template <typename Archive, typename Value>
-struct load_functor
+struct load_overloader
 {
     static void load(Archive&, const Value&, const unsigned int);
 };
 
 template <typename Value, typename Enable = void>
-struct serialize_functor
+struct serialize_overloader
 {
     template <typename Archive>
     static void serialize(Archive&, Value&, const unsigned int);

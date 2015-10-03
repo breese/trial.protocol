@@ -22,7 +22,7 @@ namespace serialization
 {
 
 template <typename Archive, typename T1, typename T2>
-struct save_functor< Archive, typename std::pair<T1, T2> >
+struct save_overloader< Archive, typename std::pair<T1, T2> >
 {
     static void save(Archive&,
                      const std::pair<T1, T2>&,
@@ -30,7 +30,7 @@ struct save_functor< Archive, typename std::pair<T1, T2> >
 };
 
 template <typename Archive, typename T1, typename T2>
-struct load_functor< Archive, typename std::pair<T1, T2> >
+struct load_overloader< Archive, typename std::pair<T1, T2> >
 {
     static void load(Archive&,
                      std::pair<T1, T2>&,
@@ -38,7 +38,7 @@ struct load_functor< Archive, typename std::pair<T1, T2> >
 };
 
 template <typename T1, typename T2>
-struct serialize_functor< typename std::pair<T1, T2> >
+struct serialize_overloader< typename std::pair<T1, T2> >
 {
     template <typename Archive>
     static typename boost::enable_if<typename Archive::is_loading, void>::type

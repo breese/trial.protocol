@@ -22,8 +22,8 @@ namespace serialization
 {
 
 template <typename Key, typename T, typename Compare, typename Allocator>
-struct save_functor< json::oarchive,
-                     typename std::map<Key, T, Compare, Allocator> >
+struct save_overloader< json::oarchive,
+                        typename std::map<Key, T, Compare, Allocator> >
 {
     static void save(json::oarchive& archive,
                      const std::map<Key, T, Compare, Allocator>& data,
@@ -41,8 +41,8 @@ struct save_functor< json::oarchive,
 };
 
 template <typename Key, typename T, typename Compare, typename Allocator>
-struct load_functor< json::iarchive,
-                     typename std::map<Key, T, Compare, Allocator> >
+struct load_overloader< json::iarchive,
+                        typename std::map<Key, T, Compare, Allocator> >
 {
     static void load(json::iarchive& archive,
                      std::map<Key, T, Compare, Allocator>& data,
@@ -62,8 +62,8 @@ struct load_functor< json::iarchive,
 
 // Specialization for map<string, T>
 template <typename T, typename Compare, typename MapAllocator>
-struct save_functor< json::oarchive,
-                     typename std::map<std::string, T, Compare, MapAllocator> >
+struct save_overloader< json::oarchive,
+                        typename std::map<std::string, T, Compare, MapAllocator> >
 {
     static void save(json::oarchive& archive,
                      const std::map<std::string, T, Compare, MapAllocator>& data,
@@ -82,8 +82,8 @@ struct save_functor< json::oarchive,
 };
 
 template <typename T, typename Compare, typename MapAllocator>
-struct load_functor< json::iarchive,
-                     typename std::map<std::string, T, Compare, MapAllocator> >
+struct load_overloader< json::iarchive,
+                        typename std::map<std::string, T, Compare, MapAllocator> >
 {
     static void load(json::iarchive& archive,
                      std::map<std::string, T, Compare, MapAllocator>& data,

@@ -23,7 +23,7 @@ namespace serialization
 {
 
 template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
-struct save_functor< Archive, typename std::map<Key, T, Compare, Allocator> >
+struct save_overloader< Archive, typename std::map<Key, T, Compare, Allocator> >
 {
     // If this is missing while linking, then you probably forgot to include the
     // map serialization for a specific protocol.
@@ -33,7 +33,7 @@ struct save_functor< Archive, typename std::map<Key, T, Compare, Allocator> >
 };
 
 template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
-struct load_functor< Archive, typename std::map<Key, T, Compare, Allocator> >
+struct load_overloader< Archive, typename std::map<Key, T, Compare, Allocator> >
 {
     static void load(Archive&,
                      std::map<Key, T, Compare, Allocator>&,
@@ -41,7 +41,7 @@ struct load_functor< Archive, typename std::map<Key, T, Compare, Allocator> >
 };
 
 template <typename Key, typename T, typename Compare, typename Allocator>
-struct serialize_functor< typename std::map<Key, T, Compare, Allocator> >
+struct serialize_overloader< typename std::map<Key, T, Compare, Allocator> >
 {
     template <typename Archive>
     static typename boost::enable_if<typename Archive::is_loading, void>::type

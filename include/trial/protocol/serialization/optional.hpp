@@ -23,7 +23,7 @@ namespace serialization
 {
 
 template <typename Archive, typename T>
-struct save_functor< Archive, typename boost::optional<T> >
+struct save_overloader< Archive, typename boost::optional<T> >
 {
     static void save(Archive&,
                      const boost::optional<T>&,
@@ -31,7 +31,7 @@ struct save_functor< Archive, typename boost::optional<T> >
 };
 
 template <typename Archive, typename T>
-struct load_functor< Archive, typename boost::optional<T> >
+struct load_overloader< Archive, typename boost::optional<T> >
 {
     static void load(Archive&,
                      boost::optional<T>&,
@@ -39,7 +39,7 @@ struct load_functor< Archive, typename boost::optional<T> >
 };
 
 template <typename T>
-struct serialize_functor< typename boost::optional<T> >
+struct serialize_overloader< typename boost::optional<T> >
 {
     template <typename Archive>
     static typename boost::enable_if<typename Archive::is_loading, void>::type

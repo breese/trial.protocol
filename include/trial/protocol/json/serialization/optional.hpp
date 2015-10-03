@@ -23,8 +23,8 @@ namespace serialization
 {
 
 template <typename T>
-struct save_functor< protocol::json::oarchive,
-                     typename boost::optional<T> >
+struct save_overloader< protocol::json::oarchive,
+                        typename boost::optional<T> >
 {
     static void save(protocol::json::oarchive& ar,
                      const boost::optional<T>& data,
@@ -42,8 +42,8 @@ struct save_functor< protocol::json::oarchive,
 };
 
 template <typename T>
-struct load_functor< protocol::json::iarchive,
-                     typename boost::optional<T> >
+struct load_overloader< protocol::json::iarchive,
+                        typename boost::optional<T> >
 {
     static void load(protocol::json::iarchive& ar,
                      boost::optional<T>& data,
