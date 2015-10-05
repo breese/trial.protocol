@@ -58,6 +58,16 @@ inline token::code::value iarchive::code() const
     return reader.code();
 }
 
+inline token::symbol::value iarchive::symbol() const
+{
+    return reader.symbol();
+}
+
+inline token::category::value iarchive::category() const
+{
+    return reader.category();
+}
+
 inline void iarchive::next()
 {
     if (!reader.next() && (reader.symbol() == token::symbol::error))

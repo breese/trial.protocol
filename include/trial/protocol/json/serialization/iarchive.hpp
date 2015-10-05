@@ -57,6 +57,8 @@ public:
     bool at() const;
 
     token::code::value code() const;
+    token::symbol::value symbol() const;
+    token::category::value category() const;
 
 #ifndef BOOST_DOXYGEN_INVOKED
     // Ignore these

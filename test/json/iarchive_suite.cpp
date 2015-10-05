@@ -33,6 +33,9 @@ BOOST_AUTO_TEST_CASE(test_false)
     const char input[] = "false";
     json::iarchive in(input);
     bool value = true;
+    BOOST_REQUIRE_EQUAL(in.code(), json::token::code::false_value);
+    BOOST_REQUIRE_EQUAL(in.symbol(), json::token::symbol::boolean);
+    BOOST_REQUIRE_EQUAL(in.category(), json::token::category::data);
     BOOST_REQUIRE_NO_THROW(in >> value);
     BOOST_REQUIRE_EQUAL(value, false);
 }
