@@ -12,7 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/cstdint.hpp>
-#include <boost/cstdfloat.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/math/special_functions/round.hpp>
 
@@ -35,17 +34,13 @@ struct integer_to_floating
 {
     // This is a crude approximation
     typedef typename boost::conditional
-    <sizeof(T) <= sizeof(boost::float32_t),
-                  boost::float32_t,
-#if defined(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE)
+    <sizeof(T) <= sizeof(float),
+                  float,
                   typename boost::conditional
-                  <sizeof(T) <= sizeof(boost::float64_t),
-                      boost::float64_t,
-                      boost::float128_t
+                  <sizeof(T) <= sizeof(double),
+                      double,
+                      long double
                       >::type
-#else
-    boost::float64_t
-#endif
                    >::type type;
 };
 
