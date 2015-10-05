@@ -25,7 +25,7 @@ add_definitions(-Wall)
 ###############################################################################
 
 set(Boost_COMPONENTS serialization unit_test_framework system)
-find_package(Boost 1.56.0 COMPONENTS ${Boost_COMPONENTS})
+find_package(Boost 1.55.0 COMPONENTS ${Boost_COMPONENTS})
 if (NOT ${Boost_FOUND})
   message(FATAL_ERROR "${Boost_ERROR_REASON}")
 endif()
