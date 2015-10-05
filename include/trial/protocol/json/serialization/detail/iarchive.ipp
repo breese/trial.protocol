@@ -30,7 +30,7 @@ inline iarchive::iarchive(const json::reader::view_type& view)
 
 template <typename Iterator>
 iarchive::iarchive(Iterator begin, Iterator end)
-    : reader(begin, end)
+    : reader(json::reader::view_type(&*begin, std::distance(begin, end)))
 {
 }
 
