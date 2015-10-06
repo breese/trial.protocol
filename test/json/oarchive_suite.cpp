@@ -13,13 +13,7 @@
 #include <sstream>
 #include <limits>
 #include <trial/protocol/buffer/ostream.hpp>
-#include <trial/protocol/json/serialization/oarchive.hpp>
-#include <trial/protocol/json/serialization/pair.hpp>
-#include <trial/protocol/json/serialization/string.hpp>
-#include <trial/protocol/json/serialization/vector.hpp>
-#include <trial/protocol/json/serialization/set.hpp>
-#include <trial/protocol/json/serialization/map.hpp>
-#include <trial/protocol/json/serialization/optional.hpp>
+#include <trial/protocol/json/serialization.hpp>
 
 using namespace trial::protocol;
 

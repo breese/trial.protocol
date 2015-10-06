@@ -11,13 +11,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <sstream>
-#include <trial/protocol/json/serialization/iarchive.hpp>
-#include <trial/protocol/json/serialization/pair.hpp>
-#include <trial/protocol/json/serialization/string.hpp>
-#include <trial/protocol/json/serialization/vector.hpp>
-#include <trial/protocol/json/serialization/set.hpp>
-#include <trial/protocol/json/serialization/map.hpp>
-#include <trial/protocol/json/serialization/optional.hpp>
+#include <trial/protocol/json/serialization.hpp>
 #include "is_system_error.hpp"
 
 using namespace trial::protocol;
