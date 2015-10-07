@@ -198,6 +198,32 @@ BOOST_AUTO_TEST_CASE(test_string_alpha)
 }
 
 //-----------------------------------------------------------------------------
+// Binary
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(test_binary_empty)
+{
+    const value_type input[] = { token::code::binary8, 0x00 };
+    format::iarchive in(input);
+    std::vector<boost::uint8_t> value(4, 0xFF);
+    BOOST_REQUIRE_NO_THROW(in >> value);
+    BOOST_REQUIRE_EQUAL(value.size(), 0);
+}
+
+BOOST_AUTO_TEST_CASE(test_binary_many)
+{
+    const value_type input[] = { token::code::binary8, 0x04, 0x11, 0x22, 0x33, 0x44 };
+    format::iarchive in(input);
+    std::vector<boost::uint8_t> value(4, 0xFF);
+    BOOST_REQUIRE_NO_THROW(in >> value);
+    BOOST_REQUIRE_EQUAL(value.size(), 4);
+    BOOST_REQUIRE_EQUAL(value[0], 0x11);
+    BOOST_REQUIRE_EQUAL(value[1], 0x22);
+    BOOST_REQUIRE_EQUAL(value[2], 0x33);
+    BOOST_REQUIRE_EQUAL(value[3], 0x44);
+}
+
+//-----------------------------------------------------------------------------
 // Pair
 //-----------------------------------------------------------------------------
 

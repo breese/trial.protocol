@@ -22,11 +22,52 @@ namespace protocol
 namespace serialization
 {
 
+// Specialization for binary data
+
+template <typename Allocator>
+struct save_overloader< transenc::oarchive,
+                        typename std::vector<boost::uint8_t, Allocator> >
+{
+    static void save(transenc::oarchive& ar,
+                     const std::vector<boost::uint8_t, Allocator>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save(data);
+    }
+};
+
+template <typename Allocator>
+struct load_overloader< transenc::iarchive,
+                        typename std::vector<boost::uint8_t, Allocator> >
+{
+    static void load(transenc::iarchive& ar,
+                     std::vector<boost::uint8_t, Allocator>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.symbol())
+        {
+        case transenc::token::symbol::binary:
+            {
+                transenc::iarchive::view_type view;
+                ar.load(view);
+                data.clear();
+                data.insert(data.begin(), view.begin(), view.end());
+            }
+            break;
+
+        default:
+            throw transenc::error(transenc::incompatible_type);
+        }
+    }
+};
+
+// Specialization for generic vector data
+
 template <typename T, typename Allocator>
-struct save_overloader< protocol::transenc::oarchive,
+struct save_overloader< transenc::oarchive,
                         typename std::vector<T, Allocator> >
 {
-    static void save(protocol::transenc::oarchive& ar,
+    static void save(transenc::oarchive& ar,
                      const std::vector<T, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
@@ -43,10 +84,10 @@ struct save_overloader< protocol::transenc::oarchive,
 };
 
 template <typename T, typename Allocator>
-struct load_overloader< protocol::transenc::iarchive,
+struct load_overloader< transenc::iarchive,
                         typename std::vector<T, Allocator> >
 {
-    static void load(protocol::transenc::iarchive& ar,
+    static void load(transenc::iarchive& ar,
                      std::vector<T, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {

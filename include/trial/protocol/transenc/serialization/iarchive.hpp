@@ -30,6 +30,7 @@ class iarchive
 
 public:
     typedef transenc::reader::value_type value_type;
+    typedef transenc::reader::view_type view_type;
 
     template <typename T>
     iarchive(const T&);
@@ -45,6 +46,8 @@ public:
     {
         load_override(data);
     }
+
+    void load(view_type&);
 
     template <typename T>
     void load(T&);

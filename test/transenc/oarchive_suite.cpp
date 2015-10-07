@@ -232,6 +232,46 @@ BOOST_AUTO_TEST_CASE(test_string_many)
 }
 
 //-----------------------------------------------------------------------------
+// Binary
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(test_binary_empty)
+{
+    std::vector<value_type> result;
+    format::oarchive ar(result);
+    std::vector<boost::uint8_t> value;
+    ar << value;
+
+    value_type expected[] = { token::code::binary8, 0x00 };
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                    expected, expected + sizeof(expected));
+}
+
+BOOST_AUTO_TEST_CASE(test_binary_one)
+{
+    std::vector<value_type> result;
+    format::oarchive ar(result);
+    std::vector<boost::uint8_t> value(1, 0xFF);
+    ar << value;
+
+    value_type expected[] = { token::code::binary8, 0x01, 0xFF };
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                    expected, expected + sizeof(expected));
+}
+
+BOOST_AUTO_TEST_CASE(test_binary_many)
+{
+    std::vector<value_type> result;
+    format::oarchive ar(result);
+    std::vector<boost::uint8_t> value(4, 0xFF);
+    ar << value;
+
+    value_type expected[] = { token::code::binary8, 0x04, 0xFF, 0xFF, 0xFF, 0xFF };
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                    expected, expected + sizeof(expected));
+}
+
+//-----------------------------------------------------------------------------
 // Pair
 //-----------------------------------------------------------------------------
 

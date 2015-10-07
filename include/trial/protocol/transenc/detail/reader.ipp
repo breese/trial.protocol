@@ -163,6 +163,30 @@ struct reader::overloader<std::string>
     }
 };
 
+// Binary
+
+template <>
+struct reader::overloader< std::vector<boost::uint8_t> >
+{
+    typedef view_type return_type;
+
+    static return_type convert(const reader& self)
+    {
+        switch (self.code())
+        {
+        case token::code::binary8:
+        case token::code::binary16:
+        case token::code::binary32:
+        case token::code::binary64:
+            return self.literal();
+            break;
+
+        default:
+            throw transenc::error(invalid_value);
+        }
+    }
+};
+
 //-----------------------------------------------------------------------------
 // reader
 //-----------------------------------------------------------------------------

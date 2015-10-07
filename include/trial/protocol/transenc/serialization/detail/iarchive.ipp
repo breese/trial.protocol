@@ -26,6 +26,12 @@ iarchive::iarchive(const T& input)
 {
 }
 
+inline void iarchive::load(view_type& data)
+{
+    data = reader.literal();
+    next();
+}
+
 template <typename T>
 void iarchive::load(T& data)
 {
@@ -44,7 +50,7 @@ template <typename Tag>
 bool iarchive::at() const
 {
     BOOST_STATIC_ASSERT_MSG(token::is_tag<Tag>::value, "Cannot use type as tag");
-    return reader.code() == Tag::code;
+    return Tag::same(reader.code());
 }
 
 inline token::code::value iarchive::code() const
