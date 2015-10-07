@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_JSON_SERIALIZATION_IARCHIVE_HPP
-#define TRIAL_PROTOCOL_JSON_SERIALIZATION_IARCHIVE_HPP
+#ifndef TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_IARCHIVE_HPP
+#define TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_IARCHIVE_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,16 +11,16 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <string>
+#include <boost/optional.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
-#include <boost/archive/detail/register_archive.hpp>
-#include <trial/protocol/json/reader.hpp>
+#include <trial/protocol/transenc/reader.hpp>
+#include <trial/protocol/transenc/token.hpp>
 
 namespace trial
 {
 namespace protocol
 {
-namespace json
+namespace transenc
 {
 
 class iarchive
@@ -29,28 +29,28 @@ class iarchive
     friend class boost::archive::load_access;
 
 public:
-    iarchive(const json::reader&);
-    iarchive(const json::reader::view_type&);
-    template <typename Iterator>
-    iarchive(Iterator begin, Iterator end);
+    typedef transenc::reader::value_type value_type;
 
-    template<typename value_type>
-    void load_override(value_type& data)
+    template <typename T>
+    iarchive(const T&);
+
+    template <typename T>
+    void load_override(T& data)
     {
         boost::archive::load(*this->This(), data);
     }
 
-    template<typename value_type>
-    void load_override(value_type& data, long /* version */)
+    template <typename T>
+    void load_override(T& data, long /* version */)
     {
         load_override(data);
     }
 
-    template <typename Tag>
-    void load();
-
     template <typename T>
     void load(T&);
+
+    template <typename Tag>
+    void load();
 
     template <typename Tag>
     bool at() const;
@@ -59,7 +59,6 @@ public:
     token::symbol::value symbol() const;
     token::category::value category() const;
 
-#ifndef BOOST_DOXYGEN_INVOKED
     // Ignore these
     void load(boost::archive::version_type&) {}
     void load(boost::archive::object_id_type) {}
@@ -69,25 +68,22 @@ public:
     void load(boost::archive::class_id_reference_type) {}
     void load(boost::archive::tracking_type) {}
     void load(boost::archive::class_name_type&) {}
-#endif
 
-#ifndef BOOST_DOXYGEN_INVOKED
-private:
     void next();
     void next(token::code::value);
 
 private:
-    json::reader reader;
-#endif
+    transenc::reader reader;
 };
 
-} // namespace json
+} // namespace transenc
 } // namespace protocol
 } // namespace trial
 
-#include <trial/protocol/json/serialization/detail/iarchive.ipp>
+#include <trial/protocol/transenc/serialization/detail/iarchive.ipp>
+
 #include <boost/archive/detail/register_archive.hpp>
 
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::json::iarchive);
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::transenc::iarchive);
 
-#endif // TRIAL_PROTOCOL_JSON_SERIALIZATION_IARCHIVE_HPP
+#endif // TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_IARCHIVE_HPP

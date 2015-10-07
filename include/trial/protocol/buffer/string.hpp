@@ -12,6 +12,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <string>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/decay.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -65,6 +68,22 @@ template <typename CharT>
 struct traits< std::basic_string<CharT> >
 {
     typedef buffer::basic_string<CharT> buffer_type;
+};
+
+template <typename T>
+struct is_text<T,
+               typename boost::enable_if< boost::is_same<typename boost::decay<T>::type,
+                                                         char *> >::type>
+{
+    static const bool value = true;
+};
+
+template <typename T>
+struct is_text<T,
+               typename boost::enable_if< boost::is_same<typename boost::decay<T>::type,
+                                                         const char *> >::type>
+{
+    static const bool value = true;
 };
 
 } // namespace buffer

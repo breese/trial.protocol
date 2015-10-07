@@ -67,7 +67,19 @@ private:
 template <typename CharT>
 struct traits< std::vector<CharT> >
 {
+    typedef typename base<CharT>::view_type view_type;
     typedef buffer::vector<CharT> buffer_type;
+
+    static view_type view_cast(const std::vector<CharT>& data)
+    {
+        return view_type(data.data(), data.size());
+    }
+};
+
+template <typename CharT>
+struct is_binary< std::vector<CharT> >
+{
+    static const bool value = true;
 };
 
 } // namespace buffer

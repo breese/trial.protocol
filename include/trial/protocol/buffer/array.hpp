@@ -13,6 +13,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <boost/cstdint.hpp>
 #include <boost/array.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
@@ -82,7 +83,37 @@ private:
 template <typename CharT, std::size_t N>
 struct traits< boost::array<CharT, N> >
 {
+    typedef typename base<CharT>::view_type view_type;
     typedef buffer::array<CharT, N> buffer_type;
+
+    static view_type view_cast(const boost::array<CharT, N>& data)
+    {
+        return view_type(data.data(), data.size());
+    }
+};
+
+template <typename CharT, std::size_t N>
+struct traits<CharT[N]>
+{
+    typedef typename base<CharT>::view_type view_type;
+    typedef buffer::array<CharT, N> buffer_type;
+
+    static view_type view_cast(const CharT(&data)[N])
+    {
+        return view_type(data, N);
+    }
+};
+
+template <typename CharT, std::size_t N>
+struct is_binary< boost::array<CharT, N> >
+{
+    static const bool value = true;
+};
+
+template <std::size_t N>
+struct is_binary<boost::uint8_t[N]>
+{
+    static const bool value = true;
 };
 
 } // namespace buffer

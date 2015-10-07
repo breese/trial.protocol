@@ -19,6 +19,7 @@ set(EXECUTABLE_OUTPUT_PATH ${TRIAL_PROTOCOL_BUILD_DIR}/bin)
 add_definitions(-g)
 add_definitions(-Wall)
 #add_definitions(-std=c++11)
+add_definitions(-ftemplate-backtrace-limit=0)
 
 ###############################################################################
 # Boost package
@@ -45,6 +46,7 @@ include_directories(BEFORE include)
 
 add_subdirectory(test/buffer)
 add_subdirectory(test/json)
+add_subdirectory(test/transenc)
 
 ###############################################################################
 # Examples

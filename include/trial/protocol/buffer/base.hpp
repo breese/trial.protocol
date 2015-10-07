@@ -41,6 +41,18 @@ struct traits
 {
 };
 
+template <typename T, typename Enable = void>
+struct is_text
+{
+    static const bool value = false;
+};
+
+template <typename T>
+struct is_binary
+{
+    static const bool value = false;
+};
+
 } // namespace buffer
 } // namespace protocol
 } // namespace trial
