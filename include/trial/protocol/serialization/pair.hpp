@@ -37,23 +37,27 @@ struct load_overloader< Archive, typename std::pair<T1, T2> >
                      const unsigned int);
 };
 
-template <typename T1, typename T2>
-struct serialize_overloader< typename std::pair<T1, T2> >
+template <typename Archive, typename T1, typename T2>
+struct serialize_overloader<Archive,
+                            typename std::pair<T1, T2>,
+                            typename boost::enable_if<typename Archive::is_loading>::type>
 {
-    template <typename Archive>
-    static typename boost::enable_if<typename Archive::is_loading, void>::type
-    serialize(Archive& ar,
-              std::pair<T1, T2>& data,
-              const unsigned int version)
+    static void serialize(Archive& ar,
+                          std::pair<T1, T2>& data,
+                          const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
+};
 
-    template <typename Archive>
-    static typename boost::enable_if<typename Archive::is_saving, void>::type
-    serialize(Archive& ar,
-              const std::pair<T1, T2>& data,
-              const unsigned int version)
+template <typename Archive, typename T1, typename T2>
+struct serialize_overloader<Archive,
+                            typename std::pair<T1, T2>,
+                            typename boost::enable_if<typename Archive::is_saving>::type>
+{
+    static void serialize(Archive& ar,
+                          const std::pair<T1, T2>& data,
+                          const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }

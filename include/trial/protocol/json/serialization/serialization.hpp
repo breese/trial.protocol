@@ -27,7 +27,9 @@ namespace serialization
 {
 
 template <typename Value>
-struct save_overloader<json::oarchive, Value>
+struct save_overloader<json::oarchive,
+                       Value,
+                       typename boost::enable_if_c<has_save<json::oarchive, Value>::value>::type>
 {
     static void save(json::oarchive& ar,
                      const Value& data,
@@ -40,7 +42,9 @@ struct save_overloader<json::oarchive, Value>
 };
 
 template <typename Value>
-struct load_overloader<json::iarchive, Value>
+struct load_overloader<json::iarchive,
+                       Value,
+                       typename boost::enable_if_c<has_load<json::iarchive, Value>::value>::type>
 {
     static void load(json::iarchive& ar,
                      const Value& data,
@@ -53,24 +57,30 @@ struct load_overloader<json::iarchive, Value>
 };
 
 template <typename Value>
-struct serialize_overloader<Value>
+struct serialize_overloader<json::iarchive,
+                            Value,
+                            typename boost::enable_if_c<has_serialize<json::iarchive, Value>::value ||
+                                                        has_load<json::iarchive, Value>::value>::type>
 {
-    template <typename Archive>
-    static typename boost::enable_if<typename boost::is_base_of<json::iarchive, Archive>::type, void>::type
-    serialize(Archive& ar,
-              Value& data,
-              const unsigned int protocol_version)
+    static void serialize(json::iarchive& ar,
+                          Value& data,
+                          const unsigned int protocol_version)
     {
         ar.template load<json::token::begin_array>();
         data.serialize(ar, protocol_version);
         ar.template load<json::token::end_array>();
     }
+};
 
-    template <typename Archive>
-    static typename boost::enable_if<typename boost::is_base_of<json::oarchive, Archive>::type, void>::type
-    serialize(Archive& ar,
-              Value& data,
-              const unsigned int protocol_version)
+template <typename Value>
+struct serialize_overloader<json::oarchive,
+                            Value,
+                            typename boost::enable_if_c<has_serialize<json::oarchive, Value>::value ||
+                                                        has_save<json::oarchive, Value>::value>::type>
+{
+    static void serialize(json::oarchive& ar,
+                          Value& data,
+                          const unsigned int protocol_version)
     {
         ar.template save<json::token::begin_array>();
         data.serialize(ar, protocol_version);
@@ -112,7 +122,7 @@ void serialize(trial::protocol::json::oarchive& ar,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<Value>::serialize(ar, data, version);
+    serialize_overloader<trial::protocol::json::oarchive, Value>::serialize(ar, data, version);
 }
 
 template <typename Value>
@@ -121,7 +131,7 @@ void serialize(trial::protocol::json::oarchive& ar,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<Value>::serialize(ar, data, version);
+    serialize_overloader<trial::protocol::json::oarchive, Value>::serialize(ar, data, version);
 }
 
 //-----------------------------------------------------------------------------
@@ -143,7 +153,7 @@ void serialize(trial::protocol::json::iarchive& ar,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<Value>::serialize(ar, data, version);
+    serialize_overloader<trial::protocol::json::iarchive, Value>::serialize(ar, data, version);
 }
 
 

@@ -37,23 +37,28 @@ struct load_overloader< Archive, typename std::set<Key, Compare, Allocator> >
                      const unsigned int);
 };
 
-template <typename Key, typename Compare, typename Allocator>
-struct serialize_overloader< typename std::set<Key, Compare, Allocator> >
+template <typename Archive, typename Key, typename Compare, typename Allocator>
+struct serialize_overloader<Archive,
+                            typename std::set<Key, Compare, Allocator>,
+                            typename boost::enable_if<typename Archive::is_loading>::type>
 {
-    template <typename Archive>
-    static typename boost::enable_if<typename Archive::is_loading, void>::type
-    serialize(Archive& ar,
-              std::set<Key, Compare, Allocator>& data,
-              const unsigned int version)
+    static void serialize(Archive& ar,
+                          std::set<Key, Compare, Allocator>& data,
+                          const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
+};
 
-    template <typename Archive>
-    static typename boost::enable_if<typename Archive::is_saving, void>::type
-    serialize(Archive& ar,
-              const std::set<Key, Compare, Allocator>& data,
-              const unsigned int version)
+
+template <typename Archive, typename Key, typename Compare, typename Allocator>
+struct serialize_overloader<Archive,
+                            typename std::set<Key, Compare, Allocator>,
+                            typename boost::enable_if<typename Archive::is_saving>::type>
+{
+    static void serialize(Archive& ar,
+                          const std::set<Key, Compare, Allocator>& data,
+                          const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }

@@ -23,27 +23,100 @@ namespace protocol
 namespace serialization
 {
 
-// Generalized functors.
-//
-// These must be specialized by the concrete protocols.
+//-----------------------------------------------------------------------------
+// Traits
+//-----------------------------------------------------------------------------
 
-template <typename Archive, typename Value>
+template <typename Archive, class Type>
+struct has_serialize
+{
+private:
+    template <typename T, T> struct type_check;
+
+    typedef char yes[1];
+    typedef char no[2];
+
+    template <typename A, typename T> struct signature_ptr
+    {
+        typedef void (T::*type)(A&, const unsigned int);
+    };
+
+    template <typename A, typename T> static no& has(...);
+    template <typename A, typename T> static yes& has(type_check< typename signature_ptr<A, T>::type,
+                                                                  &T::template serialize<A> >*);
+
+public:
+    enum { value = (sizeof(has<Archive, Type>(0)) == sizeof(yes)) };
+};
+
+template <typename Archive, class Type>
+struct has_load
+{
+private:
+    template <typename T, T> struct type_check;
+
+    typedef char yes[1];
+    typedef char no[2];
+
+    template <typename A, typename T> struct signature_ptr
+    {
+        typedef void (T::*type)(A&, const unsigned int);
+    };
+
+    template <typename A, typename T> static no& has(...);
+    template <typename A, typename T> static yes& has(type_check< typename signature_ptr<A, T>::type,
+                                                                  &T::template load<A> >*);
+
+public:
+    enum { value = (sizeof(has<Archive, Type>(0)) == sizeof(yes)) };
+};
+
+template <typename Archive, class Type>
+struct has_save
+{
+private:
+    template <typename T, T> struct type_check;
+
+    typedef char yes[1];
+    typedef char no[2];
+
+    template <typename A, typename T> struct signature_ptr
+    {
+        typedef void (T::*type)(A&, const unsigned int);
+    };
+
+    template <typename A, typename T> static no& has(...);
+    template <typename A, typename T> static yes& has(type_check< typename signature_ptr<A, T>::type,
+                                                                  &T::template save<A> >*);
+
+public:
+    enum { value = (sizeof(has<Archive, Type>(0)) == sizeof(yes)) };
+};
+
+//-----------------------------------------------------------------------------
+// Generalized overloaders.
+//
+// These must be specialized by the concrete archives.
+//-----------------------------------------------------------------------------
+
+template <typename Archive, typename Value, typename Enable = void>
 struct save_overloader
 {
-    static void save(Archive&, const Value&, const unsigned int);
 };
 
-template <typename Archive, typename Value>
+template <typename Archive, typename Value, typename Enable = void>
 struct load_overloader
 {
-    static void load(Archive&, const Value&, const unsigned int);
 };
 
-template <typename Value, typename Enable = void>
+template <typename Archive, typename Value, typename Enable = void>
 struct serialize_overloader
 {
-    template <typename Archive>
-    static void serialize(Archive&, Value&, const unsigned int);
+    // If the compiler complains about a missing serialize function here
+    // then you need to add serialization to the Value type, either
+    // intrusively by adding a serialize() function or non-intrusively
+    // by adding a serialize_overloader specialization (or by including
+    // the appropriate header files for pre-defined types.)
 };
 
 } // namespace serialization

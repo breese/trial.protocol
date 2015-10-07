@@ -38,23 +38,27 @@ struct load_overloader< Archive, typename boost::optional<T> >
                      const unsigned int);
 };
 
-template <typename T>
-struct serialize_overloader< typename boost::optional<T> >
+template <typename Archive, typename T>
+struct serialize_overloader<Archive,
+                            typename boost::optional<T>,
+                            typename boost::enable_if<typename Archive::is_loading>::type>
 {
-    template <typename Archive>
-    static typename boost::enable_if<typename Archive::is_loading, void>::type
-    serialize(Archive& ar,
-              boost::optional<T>& data,
-              const unsigned int version)
+    static void serialize(Archive& ar,
+                          boost::optional<T>& data,
+                          const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
+};
 
-    template <typename Archive>
-    static typename boost::enable_if<typename Archive::is_saving, void>::type
-    serialize(Archive& ar,
-              const boost::optional<T>& data,
-              const unsigned int version)
+template <typename Archive, typename T>
+struct serialize_overloader<Archive,
+                            typename boost::optional<T>,
+                            typename boost::enable_if<typename Archive::is_saving>::type>
+{
+    static void serialize(Archive& ar,
+                          const boost::optional<T>& data,
+                          const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
