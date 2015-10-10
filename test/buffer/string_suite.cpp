@@ -8,9 +8,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/test/unit_test.hpp>
-
 #include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 
@@ -53,66 +52,94 @@ public:
 // std::string
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_SUITE(buffer_string_suite)
+namespace string_suite
+{
 
-BOOST_AUTO_TEST_CASE(test_empty)
+void test_empty()
 {
     std::string output;
     string_buffer<char> container(output);
-    BOOST_REQUIRE_EQUAL(output, "");
+    TRIAL_PROTOCOL_TEST_EQUAL(output, "");
 }
 
-BOOST_AUTO_TEST_CASE(test_single)
+void test_single()
 {
     std::string output;
     string_buffer<char> container(output);
-    BOOST_REQUIRE_EQUAL(container.grow(1), true);
-    BOOST_REQUIRE_NO_THROW(container.write('A'));
-    BOOST_REQUIRE_EQUAL(output, "A");
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(1), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write('A'));
+    TRIAL_PROTOCOL_TEST_EQUAL(output, "A");
 }
 
-BOOST_AUTO_TEST_CASE(test_view)
+void test_view()
 {
     std::string output;
     string_buffer<char> container(output);
     std::string input = "alpha";
-    BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
-    BOOST_REQUIRE_NO_THROW(container.write(input));
-    BOOST_REQUIRE_EQUAL(output, input);
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(input.size()), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write(input));
+    TRIAL_PROTOCOL_TEST_EQUAL(output, input);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+void test()
+{
+    test_empty();
+    test_single();
+    test_view();
+}
+
+} // namespace string_suite
 
 //-----------------------------------------------------------------------------
 // std::wstring
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_SUITE(buffer_wstring_suite)
+namespace wstring_suite
+{
 
-BOOST_AUTO_TEST_CASE(test_empty)
+void test_empty()
 {
     std::wstring output;
     string_buffer<std::wstring::value_type> container(output);
-    BOOST_REQUIRE(output == L"");
+    TRIAL_PROTOCOL_TEST(output == L"");
 }
 
-BOOST_AUTO_TEST_CASE(test_single)
+void test_single()
 {
     std::wstring output;
     string_buffer<std::wstring::value_type> container(output);
-    BOOST_REQUIRE_EQUAL(container.grow(1), true);
-    BOOST_REQUIRE_NO_THROW(container.write(L'A'));
-    BOOST_REQUIRE(output == L"A");
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(1), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write(L'A'));
+    TRIAL_PROTOCOL_TEST(output == L"A");
 }
 
-BOOST_AUTO_TEST_CASE(test_view)
+void test_view()
 {
     std::wstring output;
     string_buffer<std::wstring::value_type> container(output);
     std::wstring input = L"alpha";
-    BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
-    BOOST_REQUIRE_NO_THROW(container.write(input));
-    BOOST_REQUIRE(output == input);
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(input.size()), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write(input));
+    TRIAL_PROTOCOL_TEST(output == input);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+void test()
+{
+    test_empty();
+    test_single();
+    test_view();
+}
+
+} // namespace wstring_suite
+
+//-----------------------------------------------------------------------------
+// main
+//-----------------------------------------------------------------------------
+
+int main()
+{
+    string_suite::test();
+    wstring_suite::test();
+
+    return boost::report_errors();
+}

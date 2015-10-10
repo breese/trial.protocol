@@ -44,6 +44,14 @@ set(TRIAL_PROTOCOL_DEPENDENT_LIBRARIES
 
 include_directories(BEFORE include)
 
+function(trial_add_test name)
+  add_executable(${name} ${ARGN})
+  target_link_libraries(${name} ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+  add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
+endfunction()
+
+enable_testing()
+
 add_subdirectory(test/buffer)
 add_subdirectory(test/json)
 add_subdirectory(test/transenc)

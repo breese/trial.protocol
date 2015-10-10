@@ -8,12 +8,7 @@
 #
 ###############################################################################
 
-add_executable(test_buffer
-  runner.cpp
-  container_suite.cpp
-  ostream_suite.cpp
-  string_suite.cpp
-  vector_suite.cpp
-)
-
-target_link_libraries(test_buffer ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+trial_add_test(buffer_container_suite container_suite.cpp)
+trial_add_test(buffer_ostream_suite ostream_suite.cpp)
+trial_add_test(buffer_string_suite string_suite.cpp)
+trial_add_test(buffer_vector_suite vector_suite.cpp)

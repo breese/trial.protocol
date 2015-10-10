@@ -8,11 +8,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/test/unit_test.hpp>
-
 #include <vector>
 #include <boost/array.hpp>
 #include <trial/protocol/buffer/vector.hpp>
+#include <trial/protocol/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 
@@ -51,82 +50,110 @@ public:
 // std::vector<char>
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_SUITE(buffer_vector_suite)
+namespace vector_suite
+{
 
-BOOST_AUTO_TEST_CASE(test_empty)
+void test_empty()
 {
     std::vector<char> output;
     vector_buffer<char> container(output);
 
     boost::array<char, 0> expected;
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    expected.begin(), expected.end());
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          expected.begin(), expected.end());
 }
 
-BOOST_AUTO_TEST_CASE(test_single)
+void test_single()
 {
     std::vector<char> output;
     vector_buffer<char> container(output);
-    BOOST_REQUIRE_EQUAL(container.grow(1), true);
-    BOOST_REQUIRE_NO_THROW(container.write('A'));
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(1), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write('A'));
 
     char expected[] = { 'A' };
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          expected, expected + sizeof(expected));
 }
 
-BOOST_AUTO_TEST_CASE(test_view)
+void test_view()
 {
     std::vector<char> output;
     vector_buffer<char> container(output);
     std::string input = "alpha";
-    BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
-    BOOST_REQUIRE_NO_THROW(container.write(input));
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(input.size()), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write(input));
 
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    input.begin(), input.end());
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          input.begin(), input.end());
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+void test()
+{
+    test_empty();
+    test_single();
+    test_view();
+}
+
+} // namespace vector_suite
 
 //-----------------------------------------------------------------------------
 // std::vector<wchar_t>
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_SUITE(buffer_wvector_suite)
+namespace wvector_suite
+{
 
-BOOST_AUTO_TEST_CASE(test_empty)
+void test_empty()
 {
     std::vector<wchar_t> output;
     vector_buffer<wchar_t> container(output);
 
     boost::array<wchar_t, 0> expected;
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    expected.begin(), expected.end());
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          expected.begin(), expected.end());
 }
 
-BOOST_AUTO_TEST_CASE(test_single)
+void test_single()
 {
     std::vector<wchar_t> output;
     vector_buffer<wchar_t> container(output);
-    BOOST_REQUIRE_EQUAL(container.grow(1), true);
-    BOOST_REQUIRE_NO_THROW(container.write(L'A'));
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(1), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write(L'A'));
 
     wchar_t expected[] = { L'A' };
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    expected, expected + sizeof(expected) / sizeof(wchar_t));
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          expected, expected + sizeof(expected) / sizeof(wchar_t));
 }
 
-BOOST_AUTO_TEST_CASE(test_view)
+void test_view()
 {
     std::vector<wchar_t> output;
     vector_buffer<wchar_t> container(output);
     std::wstring input = L"alpha";
-    BOOST_REQUIRE_EQUAL(container.grow(input.size()), true);
-    BOOST_REQUIRE_NO_THROW(container.write(input));
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(input.size()), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write(input));
 
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                    input.begin(), input.end());
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          input.begin(), input.end());
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+void test()
+{
+    test_empty();
+    test_single();
+    test_view();
+}
+
+} // namespace wvector_suite
+
+//-----------------------------------------------------------------------------
+// main
+//-----------------------------------------------------------------------------
+
+int main()
+{
+    vector_suite::test();
+    wvector_suite::test();
+
+    return boost::report_errors();
+}
