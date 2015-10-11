@@ -241,7 +241,7 @@ private:
     }
 
 private:
-    json::basic_reader<value_type> reader;
+    json::reader reader;
     Ptree& result;
     std::string filename;
     typename std::basic_string<value_type>::const_iterator begin;
