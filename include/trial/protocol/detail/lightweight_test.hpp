@@ -34,21 +34,6 @@
             (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);       \
     }
 
-#define TRIAL_PROTOCOL_TEST_THROWS_CODE(EXPR, EXCEP, CODE)              \
-    try {                                                               \
-        EXPR;                                                           \
-        ::boost::detail::throw_failed_impl                              \
-              (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);     \
-    }                                                                   \
-    catch(EXCEP const& ex) {                                            \
-        ::boost::detail::test_eq_impl                                   \
-            (#EXPR, #CODE, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, ex.code(), CODE); \
-    }                                                                   \
-    catch(...) {                                                        \
-        ::boost::detail::throw_failed_impl                              \
-            (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);       \
-    }
-
 #define TRIAL_PROTOCOL_TEST_NO_THROW(EXPR)                              \
     try {                                                               \
         EXPR;                                                           \
