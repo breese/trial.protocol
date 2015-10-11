@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <string>
 #include <algorithm>
 #include <iterator>
 #include <boost/detail/lightweight_test.hpp>
@@ -18,7 +19,22 @@
 #define TRIAL_PROTOCOL_TEST BOOST_TEST
 #define TRIAL_PROTOCOL_TEST_EQUAL BOOST_TEST_EQ
 
-#define TRIAL_PROTOCOL_TEST_THROWS_CODE( EXPR, EXCEP, CODE )            \
+#define TRIAL_PROTOCOL_TEST_THROW(EXPR, EXCEP, MSG)                     \
+        try {                                                           \
+        EXPR;                                                           \
+        ::boost::detail::throw_failed_impl                              \
+              (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);     \
+    }                                                                   \
+    catch(EXCEP const& ex) {                                            \
+        ::boost::detail::test_eq_impl                                   \
+            (#EXPR, #EXPR, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, std::string(ex.what()), MSG); \
+    }                                                                   \
+    catch(...) {                                                        \
+        ::boost::detail::throw_failed_impl                              \
+            (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);       \
+    }
+
+#define TRIAL_PROTOCOL_TEST_THROWS_CODE(EXPR, EXCEP, CODE)              \
     try {                                                               \
         EXPR;                                                           \
         ::boost::detail::throw_failed_impl                              \
@@ -31,9 +47,9 @@
     catch(...) {                                                        \
         ::boost::detail::throw_failed_impl                              \
             (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);       \
-    }                                                                   \
+    }
 
-#define TRIAL_PROTOCOL_TEST_NO_THROW( EXPR )                            \
+#define TRIAL_PROTOCOL_TEST_NO_THROW(EXPR)                              \
     try {                                                               \
         EXPR;                                                           \
     }                                                                   \
