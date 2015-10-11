@@ -8,297 +8,377 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/test/unit_test.hpp>
-
 #include <sstream>
 #include <limits>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/json/serialization.hpp>
+#include <trial/protocol/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
-
-BOOST_AUTO_TEST_SUITE(json_oarchive_suite)
 
 //-----------------------------------------------------------------------------
 // Basic types
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_empty)
+namespace basic_suite
+{
+
+void test_empty()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    BOOST_REQUIRE_EQUAL(result.str(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "");
 }
 
-BOOST_AUTO_TEST_CASE(test_false)
+void test_false()
 {
     std::ostringstream result;
     json::oarchive out(result);
     bool value = false;
     out << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "false");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "false");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_false)
+void test_const_false()
 {
     std::ostringstream result;
     json::oarchive out(result);
     const bool value = false;
     out << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "false");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "false");
 }
 
-BOOST_AUTO_TEST_CASE(test_true)
+void test_true()
 {
     std::ostringstream result;
     json::oarchive out(result);
     bool value = true;
     out << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "true");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "true");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_true)
+void test_const_true()
 {
     std::ostringstream result;
     json::oarchive out(result);
     const bool value = true;
     out << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "true");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "true");
 }
+
+void run()
+{
+    test_empty();
+    test_false();
+    test_const_false();
+    test_true();
+    test_const_true();
+}
+
+} // namespace basic_suite
 
 //-----------------------------------------------------------------------------
 // Integers
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_int_zero)
+namespace integer_suite
+{
+
+void test_zero()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     int value = 0;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_int_zero)
+void test_const_zero()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     const int value = 0;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
 
-BOOST_AUTO_TEST_CASE(test_int_one)
+void test_one()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     int value = 1;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1");
 }
 
-BOOST_AUTO_TEST_CASE(test_int_minus_one)
+void test_minus_one()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     int value = -1;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "-1");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-1");
 }
+
+void run()
+{
+    test_zero();
+    test_const_zero();
+    test_one();
+    test_minus_one();
+}
+
+} // namespace integer_suite
 
 //-----------------------------------------------------------------------------
 // Float
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_double_one)
+namespace floating_suite
+{
+
+void test_one()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     double value = 1.0;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_double_one)
+void test_const_one()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     const double value = 1.0;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1");
 }
 
-BOOST_AUTO_TEST_CASE(test_double_half)
+void test_half()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     double value = 0.5;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "0.5");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.5");
 }
 
-BOOST_AUTO_TEST_CASE(test_double_max)
+void test_max()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     double value = std::numeric_limits<double>::max();
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "1.7976931348623157e+308");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.7976931348623157e+308");
 }
 
-BOOST_AUTO_TEST_CASE(test_double_min)
+void test_min()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     double value = std::numeric_limits<double>::min();
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "2.2250738585072014e-308");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "2.2250738585072014e-308");
 }
 
-BOOST_AUTO_TEST_CASE(test_double_infinity)
+void test_infinity()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     double value = std::numeric_limits<double>::infinity();
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
 }
 
-BOOST_AUTO_TEST_CASE(test_double_minus_infinity)
+void test_minus_infinity()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     double value = -std::numeric_limits<double>::infinity();
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
 }
 
-BOOST_AUTO_TEST_CASE(test_double_nan)
+void test_nan()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     double value = std::numeric_limits<double>::quiet_NaN();
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
 }
+
+void run()
+{
+    test_one();
+    test_const_one();
+    test_half();
+    test_max();
+    test_min();
+    test_infinity();
+    test_minus_infinity();
+    test_nan();
+}
+
+} // namespace floating_suite
 
 //-----------------------------------------------------------------------------
 // String
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_string_empty)
+namespace string_suite
+{
+
+void test_empty()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::string value("");
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\"");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_string_empty)
+void test_const_empty()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     const std::string value("");
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\"");
 }
 
-BOOST_AUTO_TEST_CASE(test_string_alpha)
+void test_alpha()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::string value("alpha");
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"alpha\"");
 }
+
+void run()
+{
+    test_empty();
+    test_const_empty();
+    test_alpha();
+}
+
+} // namespace string_suite
 
 //-----------------------------------------------------------------------------
 // Pair
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_pair)
+namespace pair_suite
+{
+
+void test_string_bool()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::pair<std::string, bool> value("alpha", true);
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[\"alpha\",true]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[\"alpha\",true]");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_pair)
+void test_const_string_bool()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     const std::pair<std::string, bool> value("alpha", true);
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[\"alpha\",true]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[\"alpha\",true]");
 }
+
+void run()
+{
+    test_string_bool();
+    test_const_string_bool();
+}
+
+} // namespace pair_suite
 
 //-----------------------------------------------------------------------------
 // Optional
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_optional)
+namespace optional_suite
+{
+
+void test_value()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     boost::optional<std::string> value("alpha");
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"alpha\"");
 }
 
-BOOST_AUTO_TEST_CASE(test_optional_null)
+void test_null()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     boost::optional<std::string> value;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_optional)
+void test_const_value()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     const boost::optional<std::string> value("alpha");
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"alpha\"");
 }
 
-BOOST_AUTO_TEST_CASE(test_const_optional_null)
+void test_const_null()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     const boost::optional<std::string> value;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
 }
 
+void run()
+{
+    test_value();
+    test_null();
+    test_const_value();
+    test_const_null();
+}
+
+} // namespace optional_suite
+
 //-----------------------------------------------------------------------------
-// Container
+// Vector
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_array_bool_empty)
+namespace vector_suite
+{
+
+void test_bool_empty()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::vector<bool> value;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[]");
 }
 
-BOOST_AUTO_TEST_CASE(test_array_bool_one)
+void test_bool_one()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::vector<bool> value;
     value.push_back(true);
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[true]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[true]");
 }
 
-BOOST_AUTO_TEST_CASE(test_array_bool_two)
+void test_bool_two()
 {
     std::ostringstream result;
     json::oarchive ar(result);
@@ -306,29 +386,45 @@ BOOST_AUTO_TEST_CASE(test_array_bool_two)
     value.push_back(true);
     value.push_back(false);
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[true,false]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[true,false]");
 }
 
-BOOST_AUTO_TEST_CASE(test_object_bool_empty)
+void run()
+{
+    test_bool_empty();
+    test_bool_one();
+    test_bool_two();
+}
+
+} // namespace vector_suite
+
+//-----------------------------------------------------------------------------
+// Map
+//-----------------------------------------------------------------------------
+
+namespace map_suite
+{
+
+void test_bool_empty()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::map<std::string, bool> value;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "{}");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{}");
 }
 
-BOOST_AUTO_TEST_CASE(test_object_bool_one)
+void test_bool_one()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::map<std::string, bool> value;
     value["A"] = true;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "{\"A\":true}");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"A\":true}");
 }
 
-BOOST_AUTO_TEST_CASE(test_object_bool_two)
+void test_bool_two()
 {
     std::ostringstream result;
     json::oarchive ar(result);
@@ -336,29 +432,29 @@ BOOST_AUTO_TEST_CASE(test_object_bool_two)
     value["A"] = true;
     value["B"] = false;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "{\"A\":true,\"B\":false}");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"A\":true,\"B\":false}");
 }
 
-BOOST_AUTO_TEST_CASE(test_nonobject_bool_empty)
+void test_nonobject_bool_empty()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::map<int, bool> value;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[]");
 }
 
-BOOST_AUTO_TEST_CASE(test_nonobject_bool_one)
+void test_nonobject_bool_one()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     std::map<int, bool> value;
     value[2] = true;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[[2,true]]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[[2,true]]");
 }
 
-BOOST_AUTO_TEST_CASE(test_nonobject_bool_two)
+void test_nonobject_bool_two()
 {
     std::ostringstream result;
     json::oarchive ar(result);
@@ -366,10 +462,29 @@ BOOST_AUTO_TEST_CASE(test_nonobject_bool_two)
     value[2] = true;
     value[4] = false;
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[[2,true],[4,false]]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[[2,true],[4,false]]");
 }
 
-BOOST_AUTO_TEST_CASE(test_set_empty)
+void run()
+{
+    test_bool_empty();
+    test_bool_one();
+    test_bool_two();
+    test_nonobject_bool_empty();
+    test_nonobject_bool_one();
+    test_nonobject_bool_two();
+}
+
+} // namespace map_suite
+
+//-----------------------------------------------------------------------------
+// Set
+//-----------------------------------------------------------------------------
+
+namespace set_suite
+{
+
+void test_empty()
 {
     std::ostringstream result;
     json::oarchive ar(result);
@@ -377,8 +492,22 @@ BOOST_AUTO_TEST_CASE(test_set_empty)
     value.insert(2);
     value.insert(4);
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[2,4]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[2,4]");
 }
+
+void run()
+{
+    test_empty();
+}
+
+} // namespace set_suite
+
+//-----------------------------------------------------------------------------
+// Record
+//-----------------------------------------------------------------------------
+
+namespace record_suite
+{
 
 struct person
 {
@@ -398,13 +527,38 @@ struct person
     boost::int16_t age;
 };
 
-BOOST_AUTO_TEST_CASE(test_array_struct)
+void test_struct()
 {
     std::ostringstream result;
     json::oarchive ar(result);
     person value("Kant", 127);
     ar << value;
-    BOOST_REQUIRE_EQUAL(result.str().data(), "[\"Kant\",127]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[\"Kant\",127]");
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+void run()
+{
+    test_struct();
+}
+
+} // namespace record_suite
+
+//-----------------------------------------------------------------------------
+// main
+//-----------------------------------------------------------------------------
+
+int main()
+{
+    basic_suite::run();
+    integer_suite::run();
+    floating_suite::run();
+    string_suite::run();
+    pair_suite::run();
+    optional_suite::run();
+    vector_suite::run();
+    map_suite::run();
+    set_suite::run();
+    record_suite::run();
+
+    return boost::report_errors();
+}

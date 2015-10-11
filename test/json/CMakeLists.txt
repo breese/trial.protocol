@@ -8,14 +8,9 @@
 #
 ###############################################################################
 
-add_executable(test_json
-  runner.cpp
-  decoder_suite.cpp
-  encoder_suite.cpp
-  reader_suite.cpp
-  writer_suite.cpp
-  iarchive_suite.cpp
-  oarchive_suite.cpp
-)
-
-target_link_libraries(test_json ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+trial_add_test(json_decoder_suite decoder_suite.cpp)
+trial_add_test(json_encoder_suite encoder_suite.cpp)
+trial_add_test(json_reader_suite reader_suite.cpp)
+trial_add_test(json_writer_suite writer_suite.cpp)
+trial_add_test(json_iarchive_suite iarchive_suite.cpp)
+trial_add_test(json_oarchive_suite oarchive_suite.cpp)

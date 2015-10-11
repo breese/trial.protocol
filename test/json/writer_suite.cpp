@@ -8,225 +8,347 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/test/unit_test.hpp>
-
 #include <sstream>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/json/writer.hpp>
-#include "is_system_error.hpp"
+#include <trial/protocol/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 namespace token = json::token;
-
-BOOST_AUTO_TEST_SUITE(json_writer_suite)
 
 //-----------------------------------------------------------------------------
 // Basic types
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_empty)
+namespace basic_suite
+{
+
+void test_empty()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(result.str(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "");
 }
 
-BOOST_AUTO_TEST_CASE(test_null)
+void test_null()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value<token::null>(), 4);
-    BOOST_REQUIRE_EQUAL(result.str(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::null>(), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
 }
 
-BOOST_AUTO_TEST_CASE(test_true)
+void test_true()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(true), 4);
-    BOOST_REQUIRE_EQUAL(result.str(), "true");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(true), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "true");
 }
 
-BOOST_AUTO_TEST_CASE(test_false)
+void test_false()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(result.str(), "false");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "false");
 }
+
+void run()
+{
+    test_empty();
+    test_null();
+    test_true();
+    test_false();
+}
+
+} // namespace basic_suite
 
 //-----------------------------------------------------------------------------
 // Integer
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_int_literal_zero)
+namespace integer_suite
+{
+
+void test_literal_zero()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(0), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
 
-BOOST_AUTO_TEST_CASE(test_int_zero)
+void test_zero()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(int(0)), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(int(0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
 
-BOOST_AUTO_TEST_CASE(test_intmax_zero)
+void test_intmax_zero()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(boost::intmax_t(0)), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::intmax_t(0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
 
-BOOST_AUTO_TEST_CASE(test_int_literal_zero_one)
+void test_literal_zero_one()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(0), 1);
-    BOOST_REQUIRE_EQUAL(writer.value(1), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "0,1");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(1), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0,1");
 }
+
+void run()
+{
+    test_literal_zero();
+    test_zero();
+    test_intmax_zero();
+    test_literal_zero_one();
+}
+
+} // namespace integer_suite
 
 //-----------------------------------------------------------------------------
 // Float
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_float_literal_zero)
+namespace floating_suite
+{
+
+void test_literal_zero()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(0.0), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0.0), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
+
+void test_zero()
+{
+    std::ostringstream result;
+    json::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(double(0.0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
+}
+
+void run()
+{
+    test_literal_zero();
+    test_zero();
+}
+
+} // namespace floating_suite
 
 //-----------------------------------------------------------------------------
 // String
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_string_literal_empty)
+namespace string_suite
+{
+
+void test_literal_empty()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(""), 2);
-    BOOST_REQUIRE_EQUAL(result.str(), "\"\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(""), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\"");
 }
 
-BOOST_AUTO_TEST_CASE(test_string_literal_alpha)
+void test_literal_alpha()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value("alpha"), 7);
-    BOOST_REQUIRE_EQUAL(result.str(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value("alpha"), 7);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"alpha\"");
 }
 
-BOOST_AUTO_TEST_CASE(test_string_empty)
+void test_empty()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(std::string()), 2);
-    BOOST_REQUIRE_EQUAL(result.str(), "\"\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::string()), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\"");
 }
 
-BOOST_AUTO_TEST_CASE(test_string_alpha)
+void test_alpha()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value(std::string("alpha")), 7);
-    BOOST_REQUIRE_EQUAL(result.str(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::string("alpha")), 7);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"alpha\"");
 }
+
+void run()
+{
+    test_literal_empty();
+    test_literal_alpha();
+    test_empty();
+    test_alpha();
+}
+
+} // namespace string_suite
 
 //-----------------------------------------------------------------------------
 // Array
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_array_empty)
+namespace array_suite
+{
+
+void test_empty()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value<token::begin_array>(), 1);
-    BOOST_REQUIRE_EQUAL(writer.value<token::end_array>(), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "[]");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[]");
 }
 
-BOOST_AUTO_TEST_CASE(test_array_bool_one)
+void test_bool_one()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value<token::begin_array>(), 1);
-    BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value<token::end_array>(), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "[false]");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[false]");
 }
 
-BOOST_AUTO_TEST_CASE(test_array_bool_two)
+void test_bool_two()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value<token::begin_array>(), 1);
-    BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value(true), 4);
-    BOOST_REQUIRE_EQUAL(writer.value<token::end_array>(), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "[false,true]");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(true), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[false,true]");
 }
 
-BOOST_AUTO_TEST_CASE(fail_array_missing_begin)
+void test_nested_bool_one()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EXCEPTION(writer.value<token::end_array>(),
-                            json::error,
-                            test::is_system_error(json::unexpected_token));
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[[false]]");
 }
+
+void fail_missing_begin()
+{
+    std::ostringstream result;
+    json::writer writer(result);
+    TRIAL_PROTOCOL_TEST_THROW(writer.value<token::end_array>(),
+                              json::error,
+                              "unexpected token");
+}
+
+void run()
+{
+    test_empty();
+    test_bool_one();
+    test_bool_two();
+    test_nested_bool_one();
+    fail_missing_begin();
+}
+
+} // namespace array_suite
 
 //-----------------------------------------------------------------------------
 // Object
 //-----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(test_object_empty)
+namespace object_suite
+{
+
+void test_empty()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value<token::begin_object>(), 1);
-    BOOST_REQUIRE_EQUAL(writer.value<token::end_object>(), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "{}");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{}");
 }
 
-BOOST_AUTO_TEST_CASE(test_object_bool_one)
+void test_bool_one()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value<token::begin_object>(), 1);
-    BOOST_REQUIRE_EQUAL(writer.value("key1"), 6);
-    BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value<token::end_object>(), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "{\"key1\":false}");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value("key1"), 6);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"key1\":false}");
 }
 
-BOOST_AUTO_TEST_CASE(test_object_bool_two)
+void test_bool_two()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EQUAL(writer.value<token::begin_object>(), 1);
-    BOOST_REQUIRE_EQUAL(writer.value("key1"), 6);
-    BOOST_REQUIRE_EQUAL(writer.value(false), 5);
-    BOOST_REQUIRE_EQUAL(writer.value("key2"), 6);
-    BOOST_REQUIRE_EQUAL(writer.value(true), 4);
-    BOOST_REQUIRE_EQUAL(writer.value<token::end_object>(), 1);
-    BOOST_REQUIRE_EQUAL(result.str(), "{\"key1\":false,\"key2\":true}");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value("key1"), 6);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value("key2"), 6);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(true), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"key1\":false,\"key2\":true}");
 }
 
-BOOST_AUTO_TEST_CASE(fail_object_missing_begin)
+void test_nested_bool_one()
 {
     std::ostringstream result;
     json::writer writer(result);
-    BOOST_REQUIRE_EXCEPTION(writer.value<token::end_object>(),
-                            json::error,
-                            test::is_system_error(json::unexpected_token));
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value("key1"), 6);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value("key2"), 6);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_object>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"key1\":{\"key2\":false}}");
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+void fail_missing_begin()
+{
+    std::ostringstream result;
+    json::writer writer(result);
+    TRIAL_PROTOCOL_TEST_THROW(writer.value<token::end_object>(),
+                              json::error,
+                              "unexpected token");
+}
+
+void run()
+{
+    test_empty();
+    test_bool_one();
+    test_bool_two();
+    test_nested_bool_one();
+    fail_missing_begin();
+}
+
+} // namespace object_suite
+
+//-----------------------------------------------------------------------------
+// main
+//-----------------------------------------------------------------------------
+
+int main()
+{
+    basic_suite::run();
+    integer_suite::run();
+    floating_suite::run();
+    string_suite::run();
+    array_suite::run();
+    object_suite::run();
+
+    return boost::report_errors();
+}
