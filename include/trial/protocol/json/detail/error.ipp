@@ -43,6 +43,9 @@ public:
         case invalid_value:
             return "invalid value";
 
+        case incompatible_type:
+            return "incompatible type";
+
         case unbalanced_end_array:
             return "unbalanced end array bracket";
 
