@@ -13,6 +13,7 @@
 
 #include <cassert>
 #include <limits>
+#include <vector>
 #include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
