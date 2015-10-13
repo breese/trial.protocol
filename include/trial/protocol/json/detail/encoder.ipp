@@ -146,7 +146,7 @@ struct encoder::overloader<T,
 {
     static size_type write(encoder& self, const T& data)
     {
-        typedef boost::array<encoder::value_type, std::numeric_limits<T>::digits10> array_type;
+        typedef boost::array<encoder::value_type, std::numeric_limits<T>::digits10 + 1> array_type;
         array_type output;
 
         // Build buffer backwards

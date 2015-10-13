@@ -282,6 +282,14 @@ BOOST_AUTO_TEST_CASE(test_int_min)
     BOOST_REQUIRE_EQUAL(result.str(), "-9223372036854775808");
 }
 
+BOOST_AUTO_TEST_CASE(regress_digits10)
+{
+    std::ostringstream result;
+    json::detail::encoder encoder(result);
+    BOOST_REQUIRE_EQUAL(encoder.value(1561718168), 10);
+    BOOST_REQUIRE_EQUAL(result.str(), "1561718168");
+}
+
 //-----------------------------------------------------------------------------
 // Floating-point
 //-----------------------------------------------------------------------------
