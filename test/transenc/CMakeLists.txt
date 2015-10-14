@@ -8,14 +8,9 @@
 #
 ###############################################################################
 
-add_executable(test_transenc
-  runner.cpp
-  decoder_suite.cpp
-  encoder_suite.cpp
-  reader_suite.cpp
-  writer_suite.cpp
-  iarchive_suite.cpp
-  oarchive_suite.cpp
-)
-
-target_link_libraries(test_transenc ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+trial_add_test(transenc_decoder_suite decoder_suite.cpp)
+trial_add_test(transenc_encoder_suite encoder_suite.cpp)
+trial_add_test(transenc_reader_suite reader_suite.cpp)
+trial_add_test(transenc_writer_suite writer_suite.cpp)
+trial_add_test(transenc_iarchive_suite iarchive_suite.cpp)
+trial_add_test(transenc_oarchive_suite oarchive_suite.cpp)

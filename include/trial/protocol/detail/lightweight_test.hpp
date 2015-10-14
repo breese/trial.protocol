@@ -34,6 +34,8 @@
             (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);       \
     }
 
+#define TRIAL_PROTOCOL_TEST_THROW_EQUAL TRIAL_PROTOCOL_TEST_THROW
+
 #define TRIAL_PROTOCOL_TEST_NO_THROW(EXPR)                              \
     try {                                                               \
         EXPR;                                                           \
