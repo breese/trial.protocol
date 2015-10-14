@@ -25,7 +25,7 @@ add_definitions(-ftemplate-backtrace-limit=0)
 # Boost package
 ###############################################################################
 
-set(Boost_COMPONENTS serialization unit_test_framework system)
+set(Boost_COMPONENTS filesystem serialization system)
 find_package(Boost 1.55.0 COMPONENTS ${Boost_COMPONENTS})
 if (NOT ${Boost_FOUND})
   message(FATAL_ERROR "${Boost_ERROR_REASON}")
@@ -34,8 +34,8 @@ endif()
 include_directories(BEFORE ${Boost_INCLUDE_DIR})
 
 set(TRIAL_PROTOCOL_DEPENDENT_LIBRARIES
+  ${Boost_FILESYSTEM_LIBRARY} # For examples
   ${Boost_SERIALIZATION_LIBRARY}
-  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
   ${Boost_SYSTEM_LIBRARY})
 
 ###############################################################################
