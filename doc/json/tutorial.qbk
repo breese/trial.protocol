@@ -19,11 +19,11 @@ Let us start by serializing some plain old data.
 First we include some headers:
 ```
 #include <trial/protocol/buffer/string.hpp> // Use std::string as output buffer
-#include <trial/protocol/json/serialization/oarchive.hpp>
+#include <trial/protocol/json/serialization.hpp>
 ```
-The `<trial/protocol/json/serialization/oarchive.hpp>` header is needed to get
-the [link protocol.json.oarchive JSON output archive] that converts our data
-into JSON.
+The `<trial/protocol/json/serialization.hpp>` header is needed to get the
+[link protocol.json.oarchive JSON output archive] that converts our data into
+JSON.
 The `json::oarchive` constructor takes an [link protocol.buffer output buffer],
 and because we want to serialize the result into a `std::string` we must
 include an appropriate wrapper from the `<trial/protocol/buffer/string.hpp>`
@@ -45,17 +45,14 @@ assert(result == "true");
 
 [heading Non-intrusive serialization]
 
-If the data is stored in an STL container, then you must include an appropriate
-header file to handle non-intrusive serialization.
+There is build-in support for serialization of certain STL containers.
 The following example shows how to serialize an `std::map`.
 In addition to the previously mentioned headers, we also include headers to
 serialize both `std::string` and `std::map`.
 
 ```
 #include <trial/protocol/buffer/string.hpp>
-#include <trial/protocol/json/serialization/oarchive.hpp>
-#include <trial/protocol/json/serialization/string.hpp>
-#include <trial/protocol/json/serialization/map.hpp>
+#include <trial/protocol/json/serialization.hpp>
 ```
 The serialization code is exactly the same as in the previous example.
 ```

@@ -21,7 +21,8 @@ The full parser transforms the entire input into a data structure. This is done 
 [heading Simple types]
 
 ```
-#include <trial/protocol/json/serialization/iarchive.hpp>
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/serialization.hpp>
 
 std::string input = "true";
 json::iarchive archive(input);
@@ -36,8 +37,8 @@ assert(result == true);
 [heading STL types]
 
 ```
-#include <trial/protocol/json/serialization/iarchive.hpp>
-#include <trial/protocol/json/serialization/vector.hpp>
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/serialization.hpp>
 
 std::string input = "[1,2,3]";
 json::iarchive archive(input);
