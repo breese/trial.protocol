@@ -247,9 +247,8 @@ void fail_missing_begin()
 {
     std::ostringstream result;
     json::writer writer(result);
-    TRIAL_PROTOCOL_TEST_THROW(writer.value<token::end_array>(),
-                              json::error,
-                              "unexpected token");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
+                                    json::error, "unexpected token");
 }
 
 void run()
@@ -321,9 +320,8 @@ void fail_missing_begin()
 {
     std::ostringstream result;
     json::writer writer(result);
-    TRIAL_PROTOCOL_TEST_THROW(writer.value<token::end_object>(),
-                              json::error,
-                              "unexpected token");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_object>(),
+                                    json::error, "unexpected token");
 }
 
 void run()

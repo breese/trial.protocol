@@ -12,6 +12,7 @@
 #include <trial/protocol/buffer/string.hpp>
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/transenc/writer.hpp>
+#include <trial/protocol/transenc/error.hpp>
 #include <trial/protocol/detail/lightweight_test.hpp>
 
 namespace format = trial::protocol::transenc;
@@ -278,6 +279,42 @@ void run()
 } // namespace binary_suite
 
 //-----------------------------------------------------------------------------
+// Record
+//-----------------------------------------------------------------------------
+
+namespace record_suite
+{
+
+void test_one()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_record>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_record>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::begin_record);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x80);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[2], token::code::end_record);
+}
+
+void fail_missing_begin()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_record>(),
+                                    format::error, "");
+}
+
+void run()
+{
+    test_one();
+    // fail_missing_begin(); // FIXME
+}
+
+} // namespace record_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -287,6 +324,7 @@ int main()
     number_suite::run();
     string_suite::run();
     binary_suite::run();
+    record_suite::run();
 
     return boost::report_errors();
 }

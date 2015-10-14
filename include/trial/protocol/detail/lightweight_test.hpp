@@ -19,7 +19,7 @@
 #define TRIAL_PROTOCOL_TEST BOOST_TEST
 #define TRIAL_PROTOCOL_TEST_EQUAL BOOST_TEST_EQ
 
-#define TRIAL_PROTOCOL_TEST_THROW(EXPR, EXCEP, MSG)                     \
+#define TRIAL_PROTOCOL_TEST_THROW_EQUAL(EXPR, EXCEP, MSG)               \
         try {                                                           \
         EXPR;                                                           \
         ::boost::detail::throw_failed_impl                              \
@@ -33,8 +33,6 @@
         ::boost::detail::throw_failed_impl                              \
             (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);       \
     }
-
-#define TRIAL_PROTOCOL_TEST_THROW_EQUAL TRIAL_PROTOCOL_TEST_THROW
 
 #define TRIAL_PROTOCOL_TEST_NO_THROW(EXPR)                              \
     try {                                                               \

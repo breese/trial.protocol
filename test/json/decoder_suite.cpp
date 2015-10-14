@@ -303,9 +303,8 @@ void fail_too_large()
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "10000000000000000000");
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<boost::int64_t>(),
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<boost::int64_t>(),
+                                    json::error, "invalid value");
 }
 
 void fail_as_float()
@@ -314,9 +313,8 @@ void fail_as_float()
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<int>(), 1);
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<float>(),
-                              json::error,
-                              "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<float>(),
+                                    json::error, "incompatible type");
 }
 
 void fail_as_string()
@@ -325,9 +323,8 @@ void fail_as_string()
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<int>(), 1);
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<std::string>(),
-                              boost::system::system_error,
-                              "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::string>(),
+                                    json::error, "incompatible type");
 }
 
 void test_short()
@@ -385,9 +382,8 @@ void fail_unsigned_negative()
     const char input[] = "-1";
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<unsigned int>(),
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<unsigned int>(),
+                                    json::error, "invalid value");
 }
 
 void run()
@@ -591,9 +587,8 @@ void fail_as_int()
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<int>(),
-                              json::error,
-                              "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
+                                    json::error, "incompatible type");
 }
 
 void fail_as_string()
@@ -602,9 +597,8 @@ void fail_as_string()
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<std::string>(),
-                              json::error,
-                              "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::string>(),
+                                    json::error, "incompatible type");
 }
 void run()
 {
@@ -919,9 +913,8 @@ void fail_as_int()
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha");
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<int>(),
-                              json::error,
-                              "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
+                                    json::error, "incompatible type");
 }
 
 void fail_as_float()
@@ -930,9 +923,8 @@ void fail_as_float()
     json::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha");
-    TRIAL_PROTOCOL_TEST_THROW(decoder.value<float>(),
-                              json::error,
-                              "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<float>(),
+                                    json::error, "incompatible type");
 }
 
 void run()

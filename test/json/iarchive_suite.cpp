@@ -38,9 +38,8 @@ void fail_false()
     const char input[] = "fals";
     json::iarchive in(input);
     bool value = true;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
 }
 
 void test_true()
@@ -57,9 +56,8 @@ void fail_true()
     const char input[] = "tru";
     json::iarchive in(input);
     bool value = false;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
 }
 
 void run()
@@ -147,9 +145,8 @@ void fail_unsigned_minus_hundred()
     const char input[] = "-100";
     json::iarchive in(input);
     unsigned int value = 99;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
 }
 
 void run()
@@ -294,9 +291,8 @@ void fail_first()
     const char input[] = "[42]";
     json::iarchive in(input);
     std::pair<int, bool> value(42, true);
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
 }
 
 void fail_first_comma()
@@ -304,9 +300,8 @@ void fail_first_comma()
     const char input[] = "[42,]";
     json::iarchive in(input);
     std::pair<int, bool> value(42, true);
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "unexpected token");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "unexpected token");
 }
 
 void fail_missing_end()
@@ -314,9 +309,8 @@ void fail_missing_end()
     const char input[] = "[42,true";
     json::iarchive in(input);
     std::pair<int, bool> value(42, true);
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "expected end array bracket");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end array bracket");
 }
 
 void run()
@@ -361,9 +355,8 @@ void fail_wrong_type()
     const char input[] = "true";
     json::iarchive in(input);
     boost::optional<std::string> value;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
 }
 
 void run()
@@ -429,9 +422,8 @@ void fail_mixed()
     const char input[] = "[true,0]";
     json::iarchive in(input);
     std::vector<bool> value;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "invalid value");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
 }
 
 void fail_missing_end()
@@ -439,9 +431,8 @@ void fail_missing_end()
     const char input[] = "[true";
     json::iarchive in(input);
     std::vector<bool> value;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "expected end array bracket");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end array bracket");
 }
 
 void fail_missing_begin()
@@ -449,9 +440,8 @@ void fail_missing_begin()
     const char input[] = "true]";
     json::iarchive in(input);
     std::vector<bool> value;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "unexpected token");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "unexpected token");
 }
 
 void fail_mismatching_end()
@@ -459,9 +449,8 @@ void fail_mismatching_end()
     const char input[] = "[true}";
     json::iarchive in(input);
     std::vector<bool> value;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "expected end array bracket");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end array bracket");
 }
 
 void run()
@@ -561,9 +550,8 @@ void fail_string_bool_missing_end()
     const char input[] = "{\"alpha\":true";
     json::iarchive in(input);
     std::map<std::string, bool> value;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "expected end object bracket");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end object bracket");
 }
 
 void fail_string_bool_mismatching_end()
@@ -571,9 +559,8 @@ void fail_string_bool_mismatching_end()
     const char input[] = "{\"alpha\":true]";
     json::iarchive in(input);
     std::map<std::string, bool> value;
-    TRIAL_PROTOCOL_TEST_THROW(in >> value,
-                              json::error,
-                              "expected end object bracket");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end object bracket");
 }
 
 void run()
