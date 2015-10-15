@@ -303,16 +303,88 @@ void fail_missing_begin()
     std::vector<value_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_record>(),
-                                    format::error, "");
+                                    format::error, "unexpected token");
 }
 
 void run()
 {
     test_one();
-    // fail_missing_begin(); // FIXME
+    fail_missing_begin();
 }
 
 } // namespace record_suite
+
+//-----------------------------------------------------------------------------
+// Array
+//-----------------------------------------------------------------------------
+
+namespace array_suite
+{
+
+void test_one()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x80);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[2], token::code::end_array);
+}
+
+void fail_missing_begin()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
+                                    format::error, "unexpected token");
+}
+
+void run()
+{
+    test_one();
+    fail_missing_begin();
+}
+
+} // namespace array_suite
+
+//-----------------------------------------------------------------------------
+// Associative array
+//-----------------------------------------------------------------------------
+
+namespace assoc_array_suite
+{
+
+void test_one()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_assoc_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_assoc_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::begin_assoc_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x80);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[2], token::code::end_assoc_array);
+}
+
+void fail_missing_begin()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_assoc_array>(),
+                                    format::error, "unexpected token");
+}
+
+void run()
+{
+    test_one();
+    fail_missing_begin();
+}
+
+} // namespace assoc_array_suite
 
 //-----------------------------------------------------------------------------
 // main
@@ -325,6 +397,8 @@ int main()
     string_suite::run();
     binary_suite::run();
     record_suite::run();
+    array_suite::run();
+    assoc_array_suite::run();
 
     return boost::report_errors();
 }

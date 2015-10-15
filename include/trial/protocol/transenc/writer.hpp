@@ -11,6 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <stack>
+#include <trial/protocol/transenc/error.hpp>
 #include <trial/protocol/transenc/detail/encoder.hpp>
 
 namespace trial
@@ -37,8 +39,13 @@ public:
     size_type value(const T&);
 
 private:
+    void validate_scope(token::code::value, enum transenc::errc);
+
+private:
     template <typename T, typename Enable = void> struct overloader;
     detail::encoder encoder;
+
+    std::stack<token::code::value> stack;
 };
 
 } // namespace transenc

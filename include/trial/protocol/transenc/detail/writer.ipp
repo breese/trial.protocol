@@ -33,7 +33,7 @@ namespace transenc
 template <typename T, typename Enable>
 struct writer::overloader
 {
-    static writer::size_type value(writer& self, const T& data)
+    static size_type value(writer& self, const T& data)
     {
         return self.encoder.value(buffer::traits<T>::view_cast(data));
     }
@@ -42,7 +42,7 @@ struct writer::overloader
 template <>
 struct writer::overloader<bool>
 {
-    static writer::size_type value(writer& self, bool data)
+    static size_type value(writer& self, bool data)
     {
         return self.encoder.value(data);
     }
@@ -54,7 +54,7 @@ struct writer::overloader<T,
                                                       boost::is_signed<T>::value &&
                                                       !boost::is_same<T, bool>::value>::type>
 {
-    static writer::size_type value(writer& self, T data)
+    static size_type value(writer& self, T data)
     {
         if ((data <= std::numeric_limits<boost::int8_t>::max()) &&
             (data >= std::numeric_limits<boost::int8_t>::min()))
@@ -84,7 +84,7 @@ struct writer::overloader<T,
                                                       !boost::is_signed<T>::value &&
                                                       !boost::is_same<T, bool>::value>::type>
 {
-    static writer::size_type value(writer& self, T data)
+    static size_type value(writer& self, T data)
     {
         if (data <= std::numeric_limits<boost::int8_t>::max())
         {
@@ -109,7 +109,7 @@ template <typename T>
 struct writer::overloader<T,
                           typename boost::enable_if< boost::is_floating_point<T> >::type>
 {
-    static writer::size_type value(writer& self, T data)
+    static size_type value(writer& self, T data)
     {
         return self.encoder.value(data);
     }
@@ -120,7 +120,7 @@ struct writer::overloader<CharT[N],
                           typename boost::enable_if< buffer::is_text<CharT[N]> >::type>
 {
     typedef CharT (type)[N];
-    static writer::size_type value(writer& self, const type& data)
+    static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data, N - 1); // Drop terminating zero
     }
@@ -129,8 +129,8 @@ struct writer::overloader<CharT[N],
 template <>
 struct writer::overloader<writer::string_view_type>
 {
-    typedef writer::string_view_type type;
-    static writer::size_type value(writer& self, const type& data)
+    typedef string_view_type type;
+    static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data);
     }
@@ -140,7 +140,7 @@ template <>
 struct writer::overloader<std::string>
 {
     typedef std::string type;
-    static writer::size_type value(writer& self, const type& data)
+    static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data);
     }
@@ -150,7 +150,7 @@ template <typename T>
 struct writer::overloader<T,
                           typename boost::enable_if< buffer::is_binary<T> >::type>
 {
-    static writer::size_type value(writer& self, const T& data)
+    static size_type value(writer& self, const T& data)
     {
         return self.encoder.binary(buffer::traits<T>::view_cast(data));
     }
@@ -159,19 +159,87 @@ struct writer::overloader<T,
 template <>
 struct writer::overloader<token::null>
 {
-    static writer::size_type value(writer& self)
+    static size_type value(writer& self)
     {
         return self.encoder.value<token::null>();
     }
 };
 
-template <typename T>
-struct writer::overloader<T,
-                          typename boost::enable_if< token::is_structural<T> >::type>
+template <>
+struct writer::overloader<token::begin_record>
 {
-    static writer::size_type value(writer& self)
+    typedef token::begin_record type;
+
+    static size_type value(writer& self)
     {
-        return self.encoder.value<T>();
+        self.stack.push(token::code::end_record);
+        return self.encoder.value<type>();
+    }
+};
+
+template <>
+struct writer::overloader<token::end_record>
+{
+    typedef token::end_record type;
+
+    static size_type value(writer& self)
+    {
+        self.validate_scope(token::code::end_record, unexpected_token);
+        size_type result = self.encoder.value<type>();
+        self.stack.pop();
+        return result;
+    }
+};
+
+template <>
+struct writer::overloader<token::begin_array>
+{
+    typedef token::begin_array type;
+
+    static size_type value(writer& self)
+    {
+        self.stack.push(token::code::end_array);
+        return self.encoder.value<type>();
+    }
+};
+
+template <>
+struct writer::overloader<token::end_array>
+{
+    typedef token::end_array type;
+
+    static size_type value(writer& self)
+    {
+        self.validate_scope(token::code::end_array, unexpected_token);
+        size_type result = self.encoder.value<type>();
+        self.stack.pop();
+        return result;
+    }
+};
+
+template <>
+struct writer::overloader<token::begin_assoc_array>
+{
+    typedef token::begin_assoc_array type;
+
+    static size_type value(writer& self)
+    {
+        self.stack.push(token::code::end_assoc_array);
+        return self.encoder.value<type>();
+    }
+};
+
+template <>
+struct writer::overloader<token::end_assoc_array>
+{
+    typedef token::end_assoc_array type;
+
+    static size_type value(writer& self)
+    {
+        self.validate_scope(token::code::end_assoc_array, unexpected_token);
+        size_type result = self.encoder.value<type>();
+        self.stack.pop();
+        return result;
     }
 };
 
@@ -183,6 +251,7 @@ template <typename T>
 writer::writer(T& buffer)
     : encoder(buffer)
 {
+    stack.push(token::code::end_array);
 }
 
 template <typename T>
@@ -195,6 +264,15 @@ template <typename T>
 writer::size_type writer::value()
 {
     return overloader<T>::value(*this);
+}
+
+inline void writer::validate_scope(token::code::value code,
+                                   enum transenc::errc e)
+{
+    if ((stack.size() < 2) || (stack.top() != code))
+    {
+        throw transenc::error(transenc::make_error_code(e));
+    }
 }
 
 } // namespace transenc
