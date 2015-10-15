@@ -12,4 +12,6 @@ add_executable(json_push_parser
   main.cpp
 )
 
-target_link_libraries(json_push_parser ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+target_link_libraries(json_push_parser
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})

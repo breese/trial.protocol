@@ -12,4 +12,6 @@ add_executable(json_pretty_printer
   main.cpp
 )
 
-target_link_libraries(json_pretty_printer ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+target_link_libraries(json_pretty_printer
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})

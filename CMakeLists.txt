@@ -34,7 +34,6 @@ endif()
 include_directories(BEFORE ${Boost_INCLUDE_DIR})
 
 set(TRIAL_PROTOCOL_DEPENDENT_LIBRARIES
-  ${Boost_FILESYSTEM_LIBRARY} # For examples
   ${Boost_SERIALIZATION_LIBRARY}
   ${Boost_SYSTEM_LIBRARY})
 
