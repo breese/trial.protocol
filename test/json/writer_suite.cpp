@@ -251,6 +251,15 @@ void fail_missing_begin()
                                     json::error, "unexpected token");
 }
 
+void fail_mismatched_end()
+{
+    std::ostringstream result;
+    json::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_object>(),
+                                    json::error, "unexpected token");
+}
+
 void run()
 {
     test_empty();
@@ -258,6 +267,7 @@ void run()
     test_bool_two();
     test_nested_bool_one();
     fail_missing_begin();
+    fail_mismatched_end();
 }
 
 } // namespace array_suite
@@ -324,6 +334,15 @@ void fail_missing_begin()
                                     json::error, "unexpected token");
 }
 
+void fail_mismatched_end()
+{
+    std::ostringstream result;
+    json::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_object>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
+                                    json::error, "unexpected token");
+}
+
 void run()
 {
     test_empty();
@@ -331,6 +350,7 @@ void run()
     test_bool_two();
     test_nested_bool_one();
     fail_missing_begin();
+    fail_mismatched_end();
 }
 
 } // namespace object_suite

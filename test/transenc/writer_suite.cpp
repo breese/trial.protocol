@@ -306,10 +306,30 @@ void fail_missing_begin()
                                     format::error, "unexpected token");
 }
 
+void fail_mismatched_end_array()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_record>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
+                                    format::error, "unexpected token");
+}
+
+void fail_mismatched_end_assoc_array()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_record>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_assoc_array>(),
+                                    format::error, "unexpected token");
+}
+
 void run()
 {
     test_one();
     fail_missing_begin();
+    fail_mismatched_end_array();
+    fail_mismatched_end_assoc_array();
 }
 
 } // namespace record_suite
@@ -342,10 +362,30 @@ void fail_missing_begin()
                                     format::error, "unexpected token");
 }
 
+void fail_mismatched_end_record()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_record>(),
+                                    format::error, "unexpected token");
+}
+
+void fail_mismatched_end_assoc_array()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_assoc_array>(),
+                                    format::error, "unexpected token");
+}
+
 void run()
 {
     test_one();
     fail_missing_begin();
+    fail_mismatched_end_record();
+    fail_mismatched_end_assoc_array();
 }
 
 } // namespace array_suite
@@ -378,10 +418,30 @@ void fail_missing_begin()
                                     format::error, "unexpected token");
 }
 
+void fail_mismatched_end_record()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_assoc_array>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_record>(),
+                                    format::error, "unexpected token");
+}
+
+void fail_mismatched_end_array()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_assoc_array>(), 1);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
+                                    format::error, "unexpected token");
+}
+
 void run()
 {
     test_one();
     fail_missing_begin();
+    fail_mismatched_end_record();
+    fail_mismatched_end_array();
 }
 
 } // namespace assoc_array_suite
