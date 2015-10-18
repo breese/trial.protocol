@@ -26,6 +26,12 @@ namespace protocol
 namespace json
 {
 
+//! @brief Incremental JSON reader.
+//!
+//! Parse a JSON formatted input buffer incrementally. Incrementally means that
+//! the reader only parses enough of the input to identify the next token.
+//! The entire input has to be parsed by repeating parsing the next token until
+//! the end of the input.
 class reader
 {
 public:
@@ -33,39 +39,81 @@ public:
     typedef detail::decoder::value_type value_type;
     typedef detail::decoder::view_type view_type;
 
-    reader(const view_type&);
-    reader(const reader&);
+    //! @brief Construct an incremental JSON reader.
+    //!
+    //! The first token is automatically parsed.
+    //!
+    //! The reader does not assume ownership of the view.
+    //!
+    //! @param[in] view A string view of a JSON formatted buffer.
+    reader(const view_type& view);
 
-    //! @brief Advance to the next token.
+    //! @brief Copy-construct an incremental JSON reader.
+    //!
+    //! Copies the internal parsing state from the input reader, and continues
+    //! parsing independently from where the input reader had reached.
+    //!
+    //! @param[in] other The reader that is copied.
+    reader(const reader& other);
+
+    //! @brief Parse the next token.
+    //!
+    //! @returns false if an error occurred or end-of-input was reached, true otherwise.
     bool next();
 
-    //! @brief Advance to the next token if current token has a given value.
+    //! @brief Parse the next token if current token has a given value.
+    //!
     //! @param[in] expect Expected value of current token.
-    //! @throws system_error If current token does not have the expected value.
+    //! @returns false if current token does not have the expected value.
     bool next(token::code::value expect);
 
     bool next_sibling();
 
-    //! @brief Returns the current nesting level.
+    //! @brief Get the current nesting level.
+    //!
+    //! Keep track of the nesting level of containers.
+    //! The outermost root level is 0.
+    //!
+    //! @returns The current nesting level.
     size_type level() const BOOST_NOEXCEPT;
 
-    //! @brief Returns the current token.
+    //! @brief Get the current token as a detailed code.
+    //!
+    //! @returns The code of the current token.
     token::code::value code() const BOOST_NOEXCEPT;
 
-    //! @brief Returns the symbol of the current token.
+    //! @brief Get the current token as a symbol.
+    //!
+    //! @returns The symbol of the current token.
     token::symbol::value symbol() const BOOST_NOEXCEPT;
 
-    //! @brief Returns the category of the current token.
+    //! @brief Get the current token as a category.
+    //!
+    //! @returns The category of the current token.
     token::category::value category() const BOOST_NOEXCEPT;
 
-    //! @brief Returns the last error code.
+    //! @brief Get the current error.
+    //!
+    //! The error code contains an error enumerator. If parsing did not result
+    //! in an error, the json::no_error enumerator is used.
+    //!
+    //! @returns The current error code.
     boost::system::error_code error() const BOOST_NOEXCEPT;
 
-    //! @brief Return the current value.
-    //! @throws system_error If requested type is incompatible with the current token.
+    //! @brief Converts the current value into ReturnType.
+    //!
+    //! The following conversions are valid:
+    //! -# Convert a symbol::boolean token into bool.
+    //! -# Convert a symbol::integer token into an integral C++ type (expect bool.)
+    //! -# Convert a symbol::floating token into a floating-point C++ type.
+    //! -# Convert a symbol::string token into std::string.
+    //!
+    //! @pre category() returns token::category::data
+    //! @returns The converted value.
+    //! @throws json::error If requested type is incompatible with the current token.
     template <typename ReturnType> ReturnType value() const;
 
-    //! @brief Return a view of the current value before it is converted into its type.
+    //! @returns A view of the current value before it is converted into its type.
     const view_type& literal() const BOOST_NOEXCEPT;
 
 #ifndef BOOST_DOXYGEN_INVOKED
