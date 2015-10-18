@@ -29,7 +29,6 @@ struct code
     enum value
     {
         end,
-        error_not_implemented,
         error_unexpected_token,
         error_invalid_key,
         error_invalid_value,

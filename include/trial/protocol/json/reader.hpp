@@ -67,8 +67,6 @@ public:
     //! @returns false if current token does not have the expected value.
     bool next(token::code::value expect);
 
-    bool next_sibling();
-
     //! @brief Get the current nesting level.
     //!
     //! Keep track of the nesting level of containers.

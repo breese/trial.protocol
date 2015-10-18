@@ -26,7 +26,6 @@ enum errc
 {
     no_error = 0,
 
-    not_implemented,
     unexpected_token,
     invalid_key,
     invalid_value,

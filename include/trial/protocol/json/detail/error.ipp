@@ -34,9 +34,6 @@ public:
     {
         switch (value)
         {
-        case not_implemented:
-            return "not implemented";
-
         case unexpected_token:
             return "unexpected token";
 
@@ -74,9 +71,6 @@ inline enum errc to_errc(token::code::value value)
 {
     switch (value)
     {
-    case token::code::error_not_implemented:
-        return not_implemented;
-
     case token::code::error_unexpected_token:
         return unexpected_token;
 

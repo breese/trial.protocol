@@ -31,7 +31,6 @@ inline symbol::value symbol::convert(code::value value)
     case code::end:
         return symbol::end;
 
-    case code::error_not_implemented:
     case code::error_unexpected_token:
     case code::error_invalid_key:
     case code::error_invalid_value:

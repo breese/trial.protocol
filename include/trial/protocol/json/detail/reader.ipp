@@ -279,13 +279,6 @@ inline bool reader::next(token::code::value expect)
     return next();
 }
 
-inline bool reader::next_sibling()
-{
-    // FIXME: Skip over children
-    decoder.code(token::code::error_not_implemented);
-    return false;
-}
-
 template <typename T>
 T reader::value() const
 {
