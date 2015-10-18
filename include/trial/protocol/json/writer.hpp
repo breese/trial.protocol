@@ -25,25 +25,37 @@ namespace protocol
 namespace json
 {
 
+//! @brief Incremental JSON writer.
+//!
+//! Generate JSON output incrementally by appending C++ data.
 class writer
 {
 public:
     typedef std::size_t size_type;
     typedef detail::encoder::view_type view_type;
 
-    template <typename T> writer(T&);
+    //! @brief Construct an incremental JSON writer.
+    //!
+    //! The buffer type can be any for which a buffer wrapper exists.
+    //!
+    //! @param[in] buffer A buffer where the JSON formatted output is stored.
+    template <typename T> writer(T& buffer);
 
     boost::system::error_code error() const BOOST_NOEXCEPT;
     size_type level() const BOOST_NOEXCEPT;
 
+    //! @brief Write structural output.
     template <typename T>
     size_type value();
 
+    //! @brief Write data output.
     template <typename T>
     size_type value(BOOST_FWD_REF(T) value);
 
+    //! @brief Write raw output.
     size_type literal(const view_type&) BOOST_NOEXCEPT;
 
+#ifndef BOOST_DOXYGEN_INVOKED
 private:
     void validate_scope();
     void validate_scope(token::code::value, enum json::errc);
@@ -64,6 +76,7 @@ private:
         std::size_t counter;
     };
     std::stack<frame> stack;
+#endif // BOOST_DOXYGEN_INVOKED
 };
 
 } // namespace json
