@@ -47,41 +47,9 @@ template <typename ReturnType>
 struct decoder::overloader<ReturnType,
                            typename boost::enable_if< boost::is_integral<ReturnType> >::type>
 {
-    static ReturnType convert(decoder& self)
+    inline static ReturnType value(const decoder& self)
     {
-        if (self.code() != token::code::integer)
-        {
-            self.code(token::code::error_incompatible_type);
-            throw json::error(self.error());
-        }
-
-        typename view_type::const_iterator it = self.literal().begin();
-
-        const bool is_negative = (*it == traits<char>::alpha_minus);
-        if (is_negative)
-        {
-            if (boost::is_unsigned<ReturnType>::value)
-            {
-                self.code(token::code::error_invalid_value);
-                throw json::error(self.error());
-            }
-            ++it;
-        }
-        ReturnType result = ReturnType();
-        while (it != self.literal().end())
-        {
-            const ReturnType old = result;
-            result *= ReturnType(10);
-            result += ReturnType(traits<char>::to_int(*it));
-            if (result < old)
-            {
-                // Overflow
-                self.code(token::code::error_invalid_value);
-                throw json::error(self.error());
-            }
-            ++it;
-        }
-        return is_negative ? -result : result;
+        return self.integral_value<ReturnType>();
     }
 };
 
@@ -91,15 +59,9 @@ template <typename ReturnType>
 struct decoder::overloader<ReturnType,
                            typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
-    static ReturnType convert(decoder& self)
+    inline static ReturnType value(const decoder& self)
     {
-        if (self.code() != token::code::floating)
-        {
-            self.code(token::code::error_incompatible_type);
-            throw json::error(self.error());
-        }
-
-        return ReturnType(std::atof(self.literal().data()));
+        return self.floating_value<ReturnType>();
     }
 };
 
@@ -108,112 +70,9 @@ struct decoder::overloader<ReturnType,
 template <>
 struct decoder::overloader<std::string>
 {
-    typedef std::string return_type;
-
-    // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
-    static return_type convert(decoder& self)
+    inline static std::string value(const decoder& self)
     {
-        if (self.code() != token::code::string)
-        {
-            self.code(token::code::error_incompatible_type);
-            throw json::error(self.error());
-        }
-
-        const typename view_type::size_type  approximateSize = self.literal().size();
-        assert(approximateSize >= 2);
-
-        return_type result;
-        result.reserve(approximateSize);
-
-        typename view_type::const_iterator begin = self.literal().begin();
-        typename view_type::const_iterator end = self.literal().end();
-        for (typename view_type::const_iterator it = begin;
-             it != end;
-             ++it)
-        {
-            if (*it == traits<char>::alpha_reverse_solidus)
-            {
-                assert(std::distance(it, end) >= 2);
-                ++it;
-                switch (*it)
-                {
-                case traits<char>::alpha_quote:
-                case traits<char>::alpha_reverse_solidus:
-                case traits<char>::alpha_solidus:
-                    result += *it;
-                    break;
-
-                case traits<char>::alpha_b:
-                    result += traits<char>::alpha_backspace;
-                    break;
-
-                case traits<char>::alpha_f:
-                    result += traits<char>::alpha_formfeed;
-                    break;
-
-                case traits<char>::alpha_n:
-                    result += traits<char>::alpha_newline;
-                    break;
-
-                case traits<char>::alpha_r:
-                    result += traits<char>::alpha_return;
-                    break;
-
-                case traits<char>::alpha_t:
-                    result += traits<char>::alpha_tab;
-                    break;
-
-                case traits<char>::alpha_u:
-                    {
-                        // Convert \uXXXX value to UTF-8
-                        assert(std::distance(it, end) >= 5);
-                        boost::uint32_t number = 0;
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            ++it;
-                            number <<= 4;
-                            if (traits<char>::is_hexdigit(*it))
-                            {
-                                number += boost::uint32_t(traits<char>::to_int(*it));
-                            }
-                        }
-                        if (number <= 0x007F)
-                        {
-                            // 0xxxxxxx
-                            result += std::char_traits<char>::to_char_type(number & 0x7F);
-                        }
-                        else if (number <= 0x07FF)
-                        {
-                            // 110xxxxx 10xxxxxx
-                            result += 0xC0 | std::char_traits<char>::to_char_type((number >> 6) & 0x1F);
-                            result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
-                        }
-                        else
-                        {
-                            // 1110xxxx 10xxxxxx 10xxxxxx
-                            result += 0xE0 | std::char_traits<char>::to_char_type((number >> 12) & 0x0F);
-                            result += 0x80 | std::char_traits<char>::to_char_type((number >> 6) & 0x3F);
-                            result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
-                        }
-                    }
-                    break;
-
-                default:
-                    assert(false);
-                    break;
-                }
-            }
-            else if (*it == traits<char>::alpha_quote)
-            {
-                assert((it == begin) || (it + 1 == end));
-                // Ignore initial and terminating quotes
-            }
-            else
-            {
-                result += *it;
-            }
-        }
-        return result;
+        return self.string_value();
     }
 };
 
@@ -333,8 +192,163 @@ inline void decoder::next() BOOST_NOEXCEPT
 template <typename ReturnType>
 ReturnType decoder::value() const
 {
-    // Remove constness because we may need to update error state
-    return overloader<ReturnType>::convert(const_cast<decoder&>(*this));
+    return overloader<ReturnType>::value(*this);
+}
+
+template <typename ReturnType>
+ReturnType decoder::integral_value() const
+{
+    if (current.code != token::code::integer)
+    {
+        current.code = token::code::error_incompatible_type;
+        throw json::error(error());
+    }
+
+    typename view_type::const_iterator it = literal().begin();
+
+    const bool is_negative = (*it == traits<char>::alpha_minus);
+    if (is_negative)
+    {
+        if (boost::is_unsigned<ReturnType>::value)
+        {
+            current.code = token::code::error_invalid_value;
+            throw json::error(error());
+        }
+        ++it;
+    }
+    ReturnType result = ReturnType();
+    while (it != literal().end())
+    {
+        const ReturnType old = result;
+        result *= ReturnType(10);
+        result += ReturnType(traits<char>::to_int(*it));
+        if (result < old)
+        {
+            // Overflow
+            current.code = token::code::error_invalid_value;
+            throw json::error(error());
+        }
+        ++it;
+    }
+    return is_negative ? -result : result;
+}
+
+template <typename ReturnType>
+ReturnType decoder::floating_value() const
+{
+    if (current.code != token::code::floating)
+    {
+        current.code = token::code::error_incompatible_type;
+        throw json::error(error());
+    }
+    
+    return ReturnType(std::atof(literal().data()));
+}
+
+inline std::string decoder::string_value() const
+{
+    // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
+    if (current.code != token::code::string)
+    {
+        current.code = token::code::error_incompatible_type;
+        throw json::error(error());
+    }
+
+    const typename view_type::size_type  approximateSize = literal().size();
+    assert(approximateSize >= 2);
+
+    std::string result;
+    result.reserve(approximateSize);
+
+    typename view_type::const_iterator begin = literal().begin();
+    typename view_type::const_iterator end = literal().end();
+    for (typename view_type::const_iterator it = begin;
+         it != end;
+         ++it)
+    {
+        if (*it == traits<char>::alpha_reverse_solidus)
+        {
+            assert(std::distance(it, end) >= 2);
+            ++it;
+            switch (*it)
+            {
+            case traits<char>::alpha_quote:
+            case traits<char>::alpha_reverse_solidus:
+            case traits<char>::alpha_solidus:
+                result += *it;
+                break;
+
+            case traits<char>::alpha_b:
+                result += traits<char>::alpha_backspace;
+                break;
+
+            case traits<char>::alpha_f:
+                result += traits<char>::alpha_formfeed;
+                break;
+
+            case traits<char>::alpha_n:
+                result += traits<char>::alpha_newline;
+                break;
+
+            case traits<char>::alpha_r:
+                result += traits<char>::alpha_return;
+                break;
+
+            case traits<char>::alpha_t:
+                result += traits<char>::alpha_tab;
+                break;
+
+            case traits<char>::alpha_u:
+                {
+                    // Convert \uXXXX value to UTF-8
+                    assert(std::distance(it, end) >= 5);
+                    boost::uint32_t number = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        ++it;
+                        number <<= 4;
+                        if (traits<char>::is_hexdigit(*it))
+                        {
+                            number += boost::uint32_t(traits<char>::to_int(*it));
+                        }
+                    }
+                    if (number <= 0x007F)
+                    {
+                        // 0xxxxxxx
+                        result += std::char_traits<char>::to_char_type(number & 0x7F);
+                    }
+                    else if (number <= 0x07FF)
+                    {
+                        // 110xxxxx 10xxxxxx
+                        result += 0xC0 | std::char_traits<char>::to_char_type((number >> 6) & 0x1F);
+                        result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
+                    }
+                    else
+                    {
+                        // 1110xxxx 10xxxxxx 10xxxxxx
+                        result += 0xE0 | std::char_traits<char>::to_char_type((number >> 12) & 0x0F);
+                        result += 0x80 | std::char_traits<char>::to_char_type((number >> 6) & 0x3F);
+                        result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
+                    }
+                }
+                break;
+
+            default:
+                assert(false);
+                break;
+            }
+        }
+        else if (*it == traits<char>::alpha_quote)
+        {
+            assert((it == begin) || (it + 1 == end));
+            // Ignore initial and terminating quotes
+        }
+        else
+        {
+            result += *it;
+        }
+    }
+    return result;
 }
 
 inline const decoder::view_type& decoder::literal() const BOOST_NOEXCEPT
