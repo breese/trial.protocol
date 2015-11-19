@@ -54,6 +54,21 @@ public:
 private:
     template <typename T, typename Enable = void> struct overloader;
 
+    template <typename T> size_type integral_value(const T&);
+    template <typename T> size_type floating_value(const T&);
+    template <typename T> size_type string_value(const T&);
+    size_type null_value();
+    size_type begin_array_value();
+    size_type end_array_value();
+    size_type begin_object_value();
+    size_type end_object_value();
+    size_type value_separator_value();
+    size_type name_separator_value();
+
+    size_type write(value_type);
+    size_type write(const view_type&);
+
+private:
     boost::scoped_ptr<buffer_type> buffer;
 };
 

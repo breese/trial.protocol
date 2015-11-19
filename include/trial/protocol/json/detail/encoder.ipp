@@ -35,36 +35,6 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
-// Helpers
-//-----------------------------------------------------------------------------
-
-struct outputter
-{
-    static std::size_t write(encoder::buffer_type& buffer,
-                             char character)
-    {
-        if (buffer.grow(1))
-        {
-            buffer.write(character);
-            return 1;
-        }
-        return 0;
-    }
-
-    static std::size_t write(encoder::buffer_type& buffer,
-                             const encoder::view_type& data)
-    {
-        const encoder::view_type::size_type size = data.size();
-        if (buffer.grow(size))
-        {
-            buffer.write(data);
-            return size;
-        }
-        return 0;
-    }
-};
-
-//-----------------------------------------------------------------------------
 // encoder::overloader
 //-----------------------------------------------------------------------------
 
@@ -78,45 +48,45 @@ struct encoder::overloader
 template <>
 struct encoder::overloader<token::null>
 {
-    static size_type write(encoder& self)
+    inline static size_type write(encoder& self)
     {
-        return outputter::write(*self.buffer, traits<char>::null_text());
+        return self.null_value();
     }
 };
 
 template <>
 struct encoder::overloader<token::begin_array>
 {
-    static size_type write(encoder& self)
+    inline static size_type write(encoder& self)
     {
-        return outputter::write(*self.buffer, traits<char>::alpha_bracket_open);
+        return self.begin_array_value();
     }
 };
 
 template <>
 struct encoder::overloader<token::end_array>
 {
-    static size_type write(encoder& self)
+    inline static size_type write(encoder& self)
     {
-        return outputter::write(*self.buffer, traits<char>::alpha_bracket_close);
+        return self.end_array_value();
     }
 };
 
 template <>
 struct encoder::overloader<token::begin_object>
 {
-    static size_type write(encoder& self)
+    inline static size_type write(encoder& self)
     {
-        return outputter::write(*self.buffer, traits<char>::alpha_brace_open);
+        return self.begin_object_value();
     }
 };
 
 template <>
 struct encoder::overloader<token::end_object>
 {
-    static size_type write(encoder& self)
+    inline static size_type write(encoder& self)
     {
-        return outputter::write(*self.buffer, traits<char>::alpha_brace_close);
+        return self.end_object_value();
     }
 };
 
@@ -125,7 +95,7 @@ struct encoder::overloader<token::value_separator>
 {
     static size_type write(encoder& self)
     {
-        return outputter::write(*self.buffer, traits<char>::alpha_comma);
+        return self.value_separator_value();
     }
 };
 
@@ -134,7 +104,7 @@ struct encoder::overloader<token::name_separator>
 {
     static size_type write(encoder& self)
     {
-        return outputter::write(*self.buffer, traits<char>::alpha_colon);
+        return self.name_separator_value();
     }
 };
 
@@ -144,48 +114,9 @@ template <typename T>
 struct encoder::overloader<T,
                            typename boost::enable_if< boost::is_integral<T> >::type>
 {
-    static size_type write(encoder& self, const T& data)
+    inline static size_type write(encoder& self, const T& data)
     {
-        typedef boost::array<encoder::value_type, std::numeric_limits<T>::digits10 + 1> array_type;
-        array_type output;
-
-        // Build buffer backwards
-        typename array_type::reverse_iterator where = output.rbegin();
-        const bool is_negative = data < 0;
-        typedef typename boost::make_unsigned<T>::type unsigned_type;
-        unsigned_type number = unsigned_type(std::abs(data));
-        if (number == 0)
-        {
-            *where = traits<char>::alpha_0;
-            ++where;
-        }
-        else
-        {
-            const T base = T(10);
-            while (number != 0)
-            {
-                *where = traits<char>::alpha_0 + (number % base);
-                ++where;
-                number /= base;
-            }
-        }
-        typename array_type::const_iterator begin = where.base();
-        const size_type size = size_type(std::distance(begin, output.cend()) + (is_negative ? 1 : 0));
-
-        if (!self.buffer->grow(size))
-        {
-            return 0;
-        }
-        if (is_negative)
-        {
-            self.buffer->write(traits<char>::alpha_minus);
-        }
-        while (begin != output.end())
-        {
-            self.buffer->write(*begin);
-            ++begin;
-        }
-        return size;
+        return self.integral_value(data);
     }
 };
 
@@ -195,34 +126,9 @@ template <typename T>
 struct encoder::overloader<T,
                            typename boost::enable_if< boost::is_floating_point<T> >::type>
 {
-    static size_type write(encoder& self, const T& data)
+    inline static size_type write(encoder& self, const T& data)
     {
-        switch (boost::math::fpclassify(data))
-        {
-        case FP_INFINITE:
-        case FP_NAN:
-            // Infinity and NaN must be encoded as null
-            return outputter::write(*self.buffer, traits<char>::null_text());
-        default:
-            break;
-        }
-
-        std::string work = boost::lexical_cast<std::string>(data);
-        const std::string::size_type size = work.size();
-
-        if (!self.buffer->grow(size))
-        {
-            return 0;
-        }
-
-        for (std::string::const_iterator it = work.begin();
-             it != work.end();
-             ++it)
-        {
-            self.buffer->write(*it);
-        }
-
-        return size;
+        return self.floating_value(data);
     }
 };
 
@@ -233,75 +139,7 @@ struct encoder::overloader<encoder::view_type>
 {
     static size_type write(encoder& self, const view_type& data)
     {
-        // This is an approximation of the size. Further characters may be
-        // added by escaped characters, in which case we grow the buffer
-        // per escape character.
-        size_type size = sizeof(char) + data.size() + sizeof(char);
-
-        if (!self.buffer->grow(size))
-        {
-            return 0;
-        }
-
-        self.buffer->write(traits<char>::alpha_quote);
-        for (typename view_type::const_iterator it = data.begin();
-             it != data.end();
-             ++it)
-        {
-            switch (*it)
-            {
-            case traits<char>::alpha_quote:
-            case traits<char>::alpha_reverse_solidus:
-            case traits<char>::alpha_solidus:
-                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
-                    return 0;
-                self.buffer->write(*it);
-                ++size;
-                break;
-
-            case traits<char>::alpha_backspace:
-                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
-                    return 0;
-                self.buffer->write(traits<char>::alpha_b);
-                ++size;
-                break;
-
-            case traits<char>::alpha_formfeed:
-                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
-                    return 0;
-                self.buffer->write(traits<char>::alpha_f);
-                ++size;
-                break;
-
-            case traits<char>::alpha_newline:
-                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
-                    return 0;
-                self.buffer->write(traits<char>::alpha_n);
-                ++size;
-                break;
-
-            case traits<char>::alpha_return:
-                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
-                    return 0;
-                self.buffer->write(traits<char>::alpha_r);
-                ++size;
-                break;
-
-            case traits<char>::alpha_tab:
-                if (outputter::write(*self.buffer, traits<char>::alpha_reverse_solidus) == 0)
-                    return 0;
-                self.buffer->write(traits<char>::alpha_t);
-                ++size;
-                break;
-
-            default:
-                self.buffer->write(*it);
-                break;
-            }
-        }
-        self.buffer->write(traits<char>::alpha_quote);
-
-        return size;
+        return self.string_value(data);
     }
 };
 
@@ -310,7 +148,7 @@ struct encoder::overloader<std::string>
 {
     static size_type write(encoder& self, const std::string& data)
     {
-        return overloader<encoder::view_type>::write(self, data);
+        return self.string_value(data);
     }
 };
 
@@ -334,11 +172,11 @@ inline encoder::size_type encoder::value(bool data)
 {
     if (data)
     {
-        return outputter::write(*buffer, traits<char>::true_text());
+        return write(traits<char>::true_text());
     }
     else
     {
-        return outputter::write(*buffer, traits<char>::false_text());
+        return write(traits<char>::false_text());
     }
 };
 
@@ -355,8 +193,201 @@ encoder::size_type encoder::value()
 
 inline encoder::size_type encoder::literal(const view_type& data)
 {
-    return outputter::write(*buffer, data);
-};
+    return write(data);
+}
+
+template <typename T>
+encoder::size_type encoder::integral_value(const T& data)
+{
+    typedef boost::array<value_type, std::numeric_limits<T>::digits10 + 1> array_type;
+    array_type output;
+
+    // Build buffer backwards
+    typename array_type::reverse_iterator where = output.rbegin();
+    const bool is_negative = data < 0;
+    typedef typename boost::make_unsigned<T>::type unsigned_type;
+    unsigned_type number = unsigned_type(std::abs(data));
+    if (number == 0)
+    {
+        *where = traits<char>::alpha_0;
+        ++where;
+    }
+    else
+    {
+        const T base = T(10);
+        while (number != 0)
+        {
+            *where = traits<char>::alpha_0 + (number % base);
+            ++where;
+            number /= base;
+        }
+    }
+    typename array_type::const_iterator begin = where.base();
+    const size_type size = size_type(std::distance(begin, output.cend()) + (is_negative ? 1 : 0));
+
+    if (!buffer->grow(size))
+    {
+        return 0;
+    }
+    if (is_negative)
+    {
+        buffer->write(traits<char>::alpha_minus);
+    }
+    while (begin != output.end())
+    {
+        buffer->write(*begin);
+        ++begin;
+    }
+    return size;
+}
+
+template <typename T>
+encoder::size_type encoder::floating_value(const T& data)
+{
+    switch (boost::math::fpclassify(data))
+    {
+    case FP_INFINITE:
+    case FP_NAN:
+        // Infinity and NaN must be encoded as null
+        return write(traits<char>::null_text());
+    default:
+        break;
+    }
+
+    std::string work = boost::lexical_cast<std::string>(data);
+    return write(work);
+}
+
+template <typename T>
+encoder::size_type encoder::string_value(const T& data)
+{
+    // This is an approximation of the size. Further characters may be
+    // added by escaped characters, in which case we grow the buffer
+    // per escape character.
+    size_type size = sizeof(char) + data.size() + sizeof(char);
+
+    if (!buffer->grow(size))
+    {
+        return 0;
+    }
+
+    buffer->write(traits<char>::alpha_quote);
+    for (typename T::const_iterator it = data.begin();
+         it != data.end();
+         ++it)
+    {
+        switch (*it)
+        {
+        case traits<char>::alpha_quote:
+        case traits<char>::alpha_reverse_solidus:
+        case traits<char>::alpha_solidus:
+            if (write(traits<char>::alpha_reverse_solidus) == 0)
+                return 0;
+            buffer->write(*it);
+            ++size;
+            break;
+
+        case traits<char>::alpha_backspace:
+            if (write(traits<char>::alpha_reverse_solidus) == 0)
+                return 0;
+            buffer->write(traits<char>::alpha_b);
+            ++size;
+            break;
+
+        case traits<char>::alpha_formfeed:
+            if (write(traits<char>::alpha_reverse_solidus) == 0)
+                return 0;
+            buffer->write(traits<char>::alpha_f);
+            ++size;
+            break;
+
+        case traits<char>::alpha_newline:
+            if (write(traits<char>::alpha_reverse_solidus) == 0)
+                return 0;
+            buffer->write(traits<char>::alpha_n);
+            ++size;
+            break;
+
+        case traits<char>::alpha_return:
+            if (write(traits<char>::alpha_reverse_solidus) == 0)
+                return 0;
+            buffer->write(traits<char>::alpha_r);
+            ++size;
+            break;
+
+        case traits<char>::alpha_tab:
+            if (write(traits<char>::alpha_reverse_solidus) == 0)
+                return 0;
+            buffer->write(traits<char>::alpha_t);
+            ++size;
+            break;
+
+        default:
+            buffer->write(*it);
+            break;
+        }
+    }
+    buffer->write(traits<char>::alpha_quote);
+
+    return size;
+}
+
+inline encoder::size_type encoder::null_value()
+{
+    return write(traits<char>::null_text());
+}
+
+inline encoder::size_type encoder::begin_array_value()
+{
+    return write(traits<char>::alpha_bracket_open);
+}
+
+inline encoder::size_type encoder::end_array_value()
+{
+    return write(traits<char>::alpha_bracket_close);
+}
+
+inline encoder::size_type encoder::begin_object_value()
+{
+    return write(traits<char>::alpha_brace_open);
+}
+
+inline encoder::size_type encoder::end_object_value()
+{
+    return write(traits<char>::alpha_brace_close);
+}
+
+inline encoder::size_type encoder::value_separator_value()
+{
+    return write(traits<char>::alpha_comma);
+}
+
+inline encoder::size_type encoder::name_separator_value()
+{
+    return write(traits<char>::alpha_colon);
+}
+
+inline encoder::size_type encoder::write(value_type character)
+{
+    const size_type size = sizeof(character);
+    if (buffer->grow(size))
+    {
+        buffer->write(character);
+        return size;
+    }
+    return 0;
+}
+
+inline encoder::size_type encoder::write(const view_type& data)
+{
+    const view_type::size_type size = data.size();
+    if (buffer->grow(size))
+    {
+        buffer->write(data);
+        return size;
+    }
+    return 0;
+}
 
 } // namespace detail
 } // namespace json
