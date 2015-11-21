@@ -13,6 +13,8 @@
 
 #include <boost/cstdint.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/decay.hpp>
+#include <boost/type_traits/remove_cv.hpp>
 #include <boost/math/special_functions/round.hpp>
 
 namespace trial
@@ -75,29 +77,9 @@ template <typename ReturnType>
 struct reader::overloader<ReturnType,
                           typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
 {
-    static ReturnType convert(const reader& self)
+    inline static ReturnType value(const reader& self)
     {
-        switch (self.decoder.code())
-        {
-        case token::code::integer:
-            {
-                // FIXME: Raise error if value is too large
-                ReturnType result = self.decoder.template value<ReturnType>();
-                if (self.decoder.error() != json::no_error)
-                {
-                    throw json::error(self.error());
-                }
-                return result;
-            }
-
-        case token::code::floating:
-            typedef typename detail::integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
-            return ReturnType(boost::math::round(self.decoder.template value<floating_return_type>()));
-
-        default:
-            self.decoder.code(token::code::error_invalid_value);
-            throw json::error(self.error());
-        }
+        return self.integral_value<ReturnType>();
     }
 };
 
@@ -107,21 +89,9 @@ template <typename ReturnType>
 struct reader::overloader<ReturnType,
                           typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
-    static ReturnType convert(const reader& self)
+    inline static ReturnType value(const reader& self)
     {
-        switch (self.decoder.code())
-        {
-        case token::code::integer:
-            typedef typename detail::floating_to_integer<ReturnType>::type integer_return_type;
-            return ReturnType(self.decoder.template value<integer_return_type>());
-
-        case token::code::floating:
-            return self.decoder.template value<ReturnType>();
-
-        default:
-            self.decoder.code(token::code::error_invalid_value);
-            throw json::error(self.error());
-        }
+        return self.floating_value<ReturnType>();
     }
 };
 
@@ -131,20 +101,9 @@ template <typename ReturnType>
 struct reader::overloader<ReturnType,
                           typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
 {
-    static ReturnType convert(const reader& self)
+    inline static ReturnType value(const reader& self)
     {
-        switch (self.decoder.code())
-        {
-        case token::code::true_value:
-            return true;
-
-        case token::code::false_value:
-            return false;
-
-        default:
-            self.decoder.code(token::code::error_invalid_value);
-            throw json::error(self.error());
-        }
+        return self.bool_value<ReturnType>();
     }
 };
 
@@ -155,17 +114,9 @@ struct reader::overloader<std::string>
 {
     typedef std::string return_type;
 
-    static return_type convert(const reader& self)
+    inline static return_type value(const reader& self)
     {
-        switch (self.decoder.code())
-        {
-        case token::code::string:
-            return self.decoder.template value<return_type>();
-
-        default:
-            self.decoder.code(token::code::error_invalid_value);
-            throw json::error(self.error());
-        }
+        return self.string_value<return_type>();
     }
 };
 
@@ -282,13 +233,88 @@ inline bool reader::next(token::code::value expect)
 template <typename T>
 T reader::value() const
 {
-    typedef typename boost::remove_const<T>::type return_type;
-    return overloader<return_type>::convert(*this);
+    typedef typename boost::remove_cv<typename boost::decay<T>::type>::type return_type;
+    return overloader<return_type>::value(*this);
 }
 
 inline const reader::view_type& reader::literal() const BOOST_NOEXCEPT
 {
     return decoder.literal();
+}
+
+template <typename ReturnType>
+ReturnType reader::bool_value() const
+{
+    switch (decoder.code())
+    {
+    case token::code::true_value:
+        return true;
+
+    case token::code::false_value:
+        return false;
+
+    default:
+        decoder.code(token::code::error_invalid_value);
+        throw json::error(error());
+    }
+}
+
+template <typename ReturnType>
+ReturnType reader::integral_value() const
+{
+    switch (decoder.code())
+    {
+    case token::code::integer:
+        {
+            // FIXME: Raise error if value is too large
+            ReturnType result = decoder.template value<ReturnType>();
+            if (decoder.symbol() == token::symbol::error)
+            {
+                throw json::error(error());
+            }
+            return result;
+        }
+
+    case token::code::floating:
+        typedef typename detail::integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
+        return ReturnType(boost::math::round(decoder.template value<floating_return_type>()));
+
+    default:
+        decoder.code(token::code::error_invalid_value);
+        throw json::error(error());
+    }
+}
+
+template <typename ReturnType>
+ReturnType reader::floating_value() const
+{
+    switch (decoder.code())
+    {
+    case token::code::integer:
+        typedef typename detail::floating_to_integer<ReturnType>::type integer_return_type;
+        return ReturnType(decoder.template value<integer_return_type>());
+
+    case token::code::floating:
+        return decoder.template value<ReturnType>();
+
+    default:
+        decoder.code(token::code::error_invalid_value);
+        throw json::error(error());
+    }
+}
+
+template <typename ReturnType>
+ReturnType reader::string_value() const
+{
+    switch (decoder.code())
+    {
+    case token::code::string:
+        return decoder.template value<ReturnType>();
+
+    default:
+        decoder.code(token::code::error_invalid_value);
+        throw json::error(error());
+    }
 }
 
 inline reader::frame::frame(token::code::value scope)

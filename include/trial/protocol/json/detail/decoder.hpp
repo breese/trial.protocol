@@ -59,13 +59,12 @@ private:
     void skip_whitespaces() BOOST_NOEXCEPT;
     bool at_keyword_end() const BOOST_NOEXCEPT;
 
+    template <typename ReturnType, typename Enable = void> struct overloader;
     template <typename ReturnType> ReturnType integral_value() const;
     template <typename ReturnType> ReturnType floating_value() const;
     std::string string_value() const;
 
 private:
-    template <typename T, typename Enable = void> struct overloader;
-
     view_type input;
     struct
     {

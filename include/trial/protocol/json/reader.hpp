@@ -116,7 +116,13 @@ public:
 
 #ifndef BOOST_DOXYGEN_INVOKED
 private:
-    template <typename T, typename Enable = void> struct overloader;
+    template <typename ReturnType, typename Enable = void> struct overloader;
+    template <typename ReturnType> ReturnType bool_value() const;
+    template <typename ReturnType> ReturnType integral_value() const;
+    template <typename ReturnType> ReturnType floating_value() const;
+    template <typename ReturnType> ReturnType string_value() const;
+
+private:
     mutable detail::decoder decoder;
 
     struct frame
