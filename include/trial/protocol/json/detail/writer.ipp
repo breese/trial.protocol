@@ -34,61 +34,45 @@ struct writer::overloader
 template <>
 struct writer::overloader<token::null>
 {
-    static size_type value(writer& self)
+    inline static size_type value(writer& self)
     {
-        self.validate_scope();
-        self.stack.top().write_separator();
-        return self.encoder.template value<token::null>();
+        return self.null_value();
     }
 };
 
 template <>
 struct writer::overloader<token::begin_array>
 {
-    static size_type value(writer& self)
+    inline static size_type value(writer& self)
     {
-        self.validate_scope();
-        self.stack.top().write_separator();
-        self.stack.push(frame(self.encoder, token::code::end_array));
-        return self.encoder.template value<token::begin_array>();
+        return self.begin_array_value();
     }
 };
 
 template <>
 struct writer::overloader<token::end_array>
 {
-    static size_type value(writer& self)
+    inline static size_type value(writer& self)
     {
-        self.validate_scope(token::code::end_array, json::unexpected_token);
-
-        size_type result = self.encoder.template value<token::end_array>();
-        self.stack.pop();
-        return result;
+        return self.end_array_value();
     }
 };
 
 template <>
 struct writer::overloader<token::begin_object>
 {
-    static size_type value(writer& self)
+    inline static size_type value(writer& self)
     {
-        self.validate_scope();
-        self.stack.top().write_separator();
-        self.stack.push(frame(self.encoder, token::code::end_object));
-        return self.encoder.template value<token::begin_object>();
+        return self.begin_object_value();
     }
 };
 
 template <>
 struct writer::overloader<token::end_object>
 {
-    static size_type value(writer& self)
+    inline static size_type value(writer& self)
     {
-        self.validate_scope(token::code::end_object, json::unexpected_token);
-
-        size_type result = self.encoder.template value<token::end_object>();
-        self.stack.pop();
-        return result;
+        return self.end_object_value();
     }
 };
 
@@ -151,6 +135,50 @@ inline void writer::validate_scope(token::code::value code,
         last_error = e;
         throw json::error(error());
     }
+}
+
+inline writer::size_type writer::null_value()
+{
+    validate_scope();
+
+    stack.top().write_separator();
+    return encoder.template value<token::null>();
+}
+
+inline writer::size_type writer::begin_array_value()
+{
+    validate_scope();
+
+    stack.top().write_separator();
+    stack.push(frame(encoder, token::code::end_array));
+    return encoder.template value<token::begin_array>();
+}
+
+inline writer::size_type writer::end_array_value()
+{
+    validate_scope(token::code::end_array, json::unexpected_token);
+
+    size_type result = encoder.template value<token::end_array>();
+    stack.pop();
+    return result;
+}
+
+inline writer::size_type writer::begin_object_value()
+{
+    validate_scope();
+
+    stack.top().write_separator();
+    stack.push(frame(encoder, token::code::end_object));
+    return encoder.template value<token::begin_object>();
+}
+
+inline writer::size_type writer::end_object_value()
+{
+    validate_scope(token::code::end_object, json::unexpected_token);
+
+    size_type result = encoder.template value<token::end_object>();
+    stack.pop();
+    return result;
 }
 
 //-----------------------------------------------------------------------------

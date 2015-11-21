@@ -60,8 +60,14 @@ private:
     void validate_scope();
     void validate_scope(token::code::value, enum json::errc);
 
-private:
     template <typename T, typename Enable = void> struct overloader;
+    size_type null_value();
+    size_type begin_array_value();
+    size_type end_array_value();
+    size_type begin_object_value();
+    size_type end_object_value();
+
+private:
     detail::encoder encoder;
     mutable enum json::errc last_error;
 
