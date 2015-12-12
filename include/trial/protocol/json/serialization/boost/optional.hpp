@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_JSON_SERIALIZATION_OPTIONAL_HPP
-#define TRIAL_PROTOCOL_JSON_SERIALIZATION_OPTIONAL_HPP
+#ifndef TRIAL_PROTOCOL_JSON_SERIALIZATION_BOOST_OPTIONAL_HPP
+#define TRIAL_PROTOCOL_JSON_SERIALIZATION_BOOST_OPTIONAL_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/serialization/serialization.hpp>
-#include <trial/protocol/serialization/optional.hpp>
+#include <trial/protocol/serialization/boost/optional.hpp>
 #include <trial/protocol/json/token.hpp>
 
 namespace trial
@@ -67,4 +67,4 @@ struct load_overloader< protocol::json::iarchive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_JSON_SERIALIZATION_OPTIONAL_HPP
+#endif // TRIAL_PROTOCOL_JSON_SERIALIZATION_BOOST_OPTIONAL_HPP

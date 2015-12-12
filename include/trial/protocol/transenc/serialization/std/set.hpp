@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_JSON_SERIALIZATION_SET_HPP
-#define TRIAL_PROTOCOL_JSON_SERIALIZATION_SET_HPP
+#ifndef TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_SET_HPP
+#define TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_SET_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,8 +11,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/json/serialization/serialization.hpp>
-#include <trial/protocol/serialization/set.hpp>
+#include <trial/protocol/transenc/serialization/serialization.hpp>
+#include <trial/protocol/transenc/serialization/boost/optional.hpp>
+#include <trial/protocol/serialization/std/set.hpp>
 
 namespace trial
 {
@@ -22,40 +23,45 @@ namespace serialization
 {
 
 template <typename Key, typename Compare, typename Allocator>
-struct save_overloader< json::oarchive,
+struct save_overloader< protocol::transenc::oarchive,
                         typename std::set<Key, Compare, Allocator> >
 {
-    static void save(json::oarchive& archive,
+    static void save(protocol::transenc::oarchive& ar,
                      const std::set<Key, Compare, Allocator>& data,
                      const unsigned int)
     {
-        archive.template save<json::token::begin_array>();
+        ar.save<transenc::token::begin_array>();
+        ar.save<transenc::token::null>();
         for (typename std::set<Key, Compare, Allocator>::const_iterator it = data.begin();
              it != data.end();
              ++it)
         {
-            archive.save_override(*it);
+            ar.save_override(*it);
         }
-        archive.template save<json::token::end_array>();
+        ar.save<transenc::token::end_array>();
     }
 };
 
 template <typename Key, typename Compare, typename Allocator>
-struct load_overloader< json::iarchive,
+struct load_overloader< protocol::transenc::iarchive,
                         typename std::set<Key, Compare, Allocator> >
 {
-    static void load(json::iarchive& archive,
+    static void load(protocol::transenc::iarchive& ar,
                      std::set<Key, Compare, Allocator>& data,
                      const unsigned int)
     {
-        archive.template load<json::token::begin_array>();
-        while (!archive.template at<json::token::end_array>())
+        ar.load<transenc::token::begin_array>();
+
+        boost::optional<std::size_t> count;
+        ar.load_override(count);
+
+        while (!ar.at<transenc::token::end_array>())
         {
             Key value;
-            archive.load_override(value);
+            ar.load_override(value);
             data.insert(value);
         }
-        archive.template load<json::token::end_array>();
+        ar.load<transenc::token::end_array>();
     }
 };
 
@@ -63,4 +69,4 @@ struct load_overloader< json::iarchive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_JSON_SERIALIZATION_SET_HPP
+#endif // TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_SET_HPP

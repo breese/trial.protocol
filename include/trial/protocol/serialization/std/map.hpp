@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_PAIR_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_PAIR_HPP
+#ifndef TRIAL_PROTOCOL_SERIALIZATION_STD_MAP_HPP
+#define TRIAL_PROTOCOL_SERIALIZATION_STD_MAP_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,8 +11,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <utility> // std::pair
+#include <map>
 #include <trial/protocol/serialization/serialization.hpp>
+#include <trial/protocol/serialization/std/pair.hpp>
 
 namespace trial
 {
@@ -21,42 +22,44 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Archive, typename T1, typename T2>
-struct save_overloader< Archive, typename std::pair<T1, T2> >
+template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
+struct save_overloader< Archive, typename std::map<Key, T, Compare, Allocator> >
 {
+    // If this is missing while linking, then you probably forgot to include the
+    // map serialization for a specific protocol.
     static void save(Archive&,
-                     const std::pair<T1, T2>&,
+                     const std::map<Key, T, Compare, Allocator>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename T1, typename T2>
-struct load_overloader< Archive, typename std::pair<T1, T2> >
+template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
+struct load_overloader< Archive, typename std::map<Key, T, Compare, Allocator> >
 {
     static void load(Archive&,
-                     std::pair<T1, T2>&,
+                     std::map<Key, T, Compare, Allocator>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename T1, typename T2>
+template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename std::pair<T1, T2>,
+                            typename std::map<Key, T, Compare, Allocator>,
                             typename boost::enable_if<typename Archive::is_loading>::type>
 {
     static void serialize(Archive& ar,
-                          std::pair<T1, T2>& data,
+                          std::map<Key, T, Compare, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
 };
 
-template <typename Archive, typename T1, typename T2>
+template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename std::pair<T1, T2>,
+                            typename std::map<Key, T, Compare, Allocator>,
                             typename boost::enable_if<typename Archive::is_saving>::type>
 {
     static void serialize(Archive& ar,
-                          const std::pair<T1, T2>& data,
+                          const std::map<Key, T, Compare, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
@@ -67,4 +70,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_PAIR_HPP
+#endif // TRIAL_PROTOCOL_SERIALIZATION_STD_MAP_HPP

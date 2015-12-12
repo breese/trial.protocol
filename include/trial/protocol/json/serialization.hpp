@@ -12,11 +12,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/serialization/serialization.hpp>
-#include <trial/protocol/json/serialization/optional.hpp>
-#include <trial/protocol/json/serialization/pair.hpp>
-#include <trial/protocol/json/serialization/map.hpp>
-#include <trial/protocol/json/serialization/set.hpp>
-#include <trial/protocol/json/serialization/string.hpp>
-#include <trial/protocol/json/serialization/vector.hpp>
+#include <trial/protocol/json/serialization/std/pair.hpp>
+#include <trial/protocol/json/serialization/std/map.hpp>
+#include <trial/protocol/json/serialization/std/set.hpp>
+#include <trial/protocol/json/serialization/std/string.hpp>
+#include <trial/protocol/json/serialization/std/vector.hpp>
+#include <trial/protocol/json/serialization/boost/optional.hpp>
 
 #endif // TRIAL_PROTOCOL_JSON_SERIALIZATION_HPP

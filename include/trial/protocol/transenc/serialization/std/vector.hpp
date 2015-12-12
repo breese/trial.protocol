@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_VECTOR_HPP
-#define TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_VECTOR_HPP
+#ifndef TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_VECTOR_HPP
+#define TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_VECTOR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -12,8 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/transenc/serialization/serialization.hpp>
-#include <trial/protocol/transenc/serialization/optional.hpp>
-#include <trial/protocol/serialization/vector.hpp>
+#include <trial/protocol/transenc/serialization/boost/optional.hpp>
+#include <trial/protocol/serialization/std/vector.hpp>
 
 namespace trial
 {
@@ -114,4 +114,4 @@ struct load_overloader< transenc::iarchive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_VECTOR_HPP
+#endif // TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_VECTOR_HPP

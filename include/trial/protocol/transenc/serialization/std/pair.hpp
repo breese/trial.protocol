@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_PAIR_HPP
-#define TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_PAIR_HPP
+#ifndef TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_PAIR_HPP
+#define TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_PAIR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/transenc/serialization/serialization.hpp>
-#include <trial/protocol/serialization/pair.hpp>
+#include <trial/protocol/serialization/std/pair.hpp>
 
 namespace trial
 {
@@ -55,4 +55,4 @@ struct load_overloader< protocol::transenc::iarchive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_PAIR_HPP
+#endif // TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_STD_PAIR_HPP

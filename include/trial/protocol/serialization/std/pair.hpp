@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_VECTOR_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_VECTOR_HPP
+#ifndef TRIAL_PROTOCOL_SERIALIZATION_STD_PAIR_HPP
+#define TRIAL_PROTOCOL_SERIALIZATION_STD_PAIR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <vector>
+#include <utility> // std::pair
 #include <trial/protocol/serialization/serialization.hpp>
 
 namespace trial
@@ -21,42 +21,42 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Archive, typename T, typename Allocator>
-struct save_overloader< Archive, typename std::vector<T, Allocator> >
+template <typename Archive, typename T1, typename T2>
+struct save_overloader< Archive, typename std::pair<T1, T2> >
 {
-    static void save (Archive&,
-                      const std::vector<T, Allocator>&,
-                      const unsigned int);
-};
-
-template <typename Archive, typename T, typename Allocator>
-struct load_overloader< Archive, typename std::vector<T, Allocator> >
-{
-    static void load(Archive&,
-                     std::vector<T, Allocator>&,
+    static void save(Archive&,
+                     const std::pair<T1, T2>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename T, typename Allocator>
+template <typename Archive, typename T1, typename T2>
+struct load_overloader< Archive, typename std::pair<T1, T2> >
+{
+    static void load(Archive&,
+                     std::pair<T1, T2>&,
+                     const unsigned int);
+};
+
+template <typename Archive, typename T1, typename T2>
 struct serialize_overloader<Archive,
-                            typename std::vector<T, Allocator>,
+                            typename std::pair<T1, T2>,
                             typename boost::enable_if<typename Archive::is_loading>::type>
 {
     static void serialize(Archive& ar,
-                          std::vector<T, Allocator>& data,
+                          std::pair<T1, T2>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
 };
 
-template <typename Archive, typename T, typename Allocator>
+template <typename Archive, typename T1, typename T2>
 struct serialize_overloader<Archive,
-                            typename std::vector<T, Allocator>,
+                            typename std::pair<T1, T2>,
                             typename boost::enable_if<typename Archive::is_saving>::type>
 {
     static void serialize(Archive& ar,
-                          const std::vector<T, Allocator>& data,
+                          const std::pair<T1, T2>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
@@ -67,4 +67,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_VECTOR_HPP
+#endif // TRIAL_PROTOCOL_SERIALIZATION_STD_PAIR_HPP

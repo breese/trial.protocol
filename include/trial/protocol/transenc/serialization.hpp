@@ -13,10 +13,10 @@
 
 #include <trial/protocol/transenc/serialization/serialization.hpp>
 #include <trial/protocol/transenc/serialization/array.hpp>
-#include <trial/protocol/transenc/serialization/optional.hpp>
-#include <trial/protocol/transenc/serialization/map.hpp>
-#include <trial/protocol/transenc/serialization/set.hpp>
-#include <trial/protocol/transenc/serialization/string.hpp>
-#include <trial/protocol/transenc/serialization/vector.hpp>
+#include <trial/protocol/transenc/serialization/std/map.hpp>
+#include <trial/protocol/transenc/serialization/std/set.hpp>
+#include <trial/protocol/transenc/serialization/std/string.hpp>
+#include <trial/protocol/transenc/serialization/std/vector.hpp>
+#include <trial/protocol/transenc/serialization/boost/optional.hpp>
 
 #endif // TRIAL_PROTOCOL_TRANSENC_SERIALIZATION_HPP
