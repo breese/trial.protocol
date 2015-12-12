@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_class.hpp>
 #include <boost/serialization/split_free.hpp>
 
 // Non-intrusive serialization
@@ -27,8 +28,14 @@ namespace serialization
 // Traits
 //-----------------------------------------------------------------------------
 
-template <typename Archive, class Type>
+template <typename Archive, typename Type, typename Enable = void>
 struct has_serialize
+{
+    enum { value = 0 };
+};
+
+template <typename Archive, typename Type>
+struct has_serialize<Archive, Type, typename boost::enable_if_c<boost::is_class<Type>::value>::type>
 {
 private:
     template <typename T, T> struct type_check;
@@ -49,8 +56,14 @@ public:
     enum { value = (sizeof(has<Archive, Type>(0)) == sizeof(yes)) };
 };
 
-template <typename Archive, class Type>
+template <typename Archive, typename Type, typename Enable = void>
 struct has_load
+{
+    enum { value = 0 };
+};
+
+template <typename Archive, typename Type>
+struct has_load<Archive, Type, typename boost::enable_if_c<boost::is_class<Type>::value>::type>
 {
 private:
     template <typename T, T> struct type_check;
@@ -71,8 +84,14 @@ public:
     enum { value = (sizeof(has<Archive, Type>(0)) == sizeof(yes)) };
 };
 
-template <typename Archive, class Type>
+template <typename Archive, typename Type, typename Enable = void>
 struct has_save
+{
+    enum { value = 0 };
+};
+
+template <typename Archive, typename Type>
+struct has_save<Archive, Type, typename boost::enable_if_c<boost::is_class<Type>::value>::type>
 {
 private:
     template <typename T, T> struct type_check;
