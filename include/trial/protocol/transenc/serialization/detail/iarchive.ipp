@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/static_assert.hpp>
+#include <trial/protocol/transenc/serialization/detail/array_load.hpp>
 
 namespace trial
 {
@@ -24,6 +25,25 @@ template <typename T>
 iarchive::iarchive(const T& input)
     : reader(input)
 {
+}
+
+template <typename T>
+void iarchive::load_override(T& data)
+{
+    boost::archive::load(*this, data);
+}
+
+template <typename T, std::size_t N>
+void iarchive::load_override(T (&data)[N])
+{
+    // By-pass Boost.Serialization which has its own array formatting
+    serialization::load_overloader<iarchive, T[N]>::load(*this, data, 0);
+}
+
+template <typename T>
+void iarchive::load_override(T& data, long /* PFTO */)
+{
+    load_override(data);
 }
 
 inline void iarchive::load(view_type& data)

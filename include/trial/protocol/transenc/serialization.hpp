@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/transenc/serialization/serialization.hpp>
+#include <trial/protocol/transenc/serialization/array.hpp>
 #include <trial/protocol/transenc/serialization/optional.hpp>
 #include <trial/protocol/transenc/serialization/map.hpp>
 #include <trial/protocol/transenc/serialization/set.hpp>

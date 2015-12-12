@@ -32,6 +32,8 @@ public:
 
     template <typename T>
     void save_override(const T& data);
+    template <typename T, std::size_t N>
+    void save_override(const T (&data)[N]);
     template <typename T>
     void save_override(const T& data, long);
 

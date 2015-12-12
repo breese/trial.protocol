@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/static_assert.hpp>
+#include <trial/protocol/transenc/serialization/detail/array_save.hpp>
 
 namespace trial
 {
@@ -29,11 +30,18 @@ oarchive::oarchive(T& buffer)
 template <typename T>
 inline void oarchive::save_override(const T& data)
 {
-    boost::archive::save(*this->This(), data);
+    boost::archive::save(*this, data);
+}
+
+template <typename T, std::size_t N>
+inline void oarchive::save_override(const T (&data)[N])
+{
+    // By-pass Boost.Serialization which has its own array formatting
+    serialization::save_overloader<oarchive, const T[N]>::save(*this, data, 0);
 }
 
 template <typename T>
-inline void oarchive::save_override(const T& data, long /* version */)
+inline void oarchive::save_override(const T& data, long /* PFTO */)
 {
     save_override(data);
 }

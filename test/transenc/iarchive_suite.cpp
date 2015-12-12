@@ -276,6 +276,111 @@ void run()
 } // namespace binary_suite
 
 //-----------------------------------------------------------------------------
+// Array
+//-----------------------------------------------------------------------------
+
+namespace array_suite
+{
+
+void test_four()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x04,
+                                 0x01, 0x02, 0x03, 0x04,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    value_type value[4] = { 0x10, 0x20, 0x30, 0x40 };
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[0], 0x01);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[1], 0x02);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[2], 0x03);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[3], 0x04);
+}
+
+void fail_too_short()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x04,
+                                 0x01, 0x02, 0x03,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    value_type value[4] = { 0x10, 0x20, 0x30, 0x40 };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "invalid value");
+}
+
+void fail_too_long()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x04,
+                                 0x01, 0x02, 0x03, 0x04, 0x05,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    value_type value[4] = { 0x10, 0x20, 0x30, 0x40 };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "expected end array bracket");
+}
+
+void fail_missing_end()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x04,
+                                 0x01, 0x02, 0x03, 0x04 };
+    format::iarchive in(input);
+    value_type value[4] = { 0x10, 0x20, 0x30, 0x40 };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "expected end array bracket");
+}
+
+void fail_missing_begin()
+{
+    const value_type input[] = { 0x04,
+                                 0x01, 0x02, 0x03, 0x04,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    value_type value[4] = { 0x10, 0x20, 0x30, 0x40 };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "unexpected token");
+}
+
+void fail_array_too_short()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x04,
+                                 0x01, 0x02, 0x03, 0x04,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    value_type value[3] = { 0x10, 0x20, 0x30 };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "incompatible type");
+}
+
+void fail_array_too_long()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x04,
+                                 0x01, 0x02, 0x03, 0x04,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    value_type value[5] = { 0x10, 0x20, 0x30, 0x40, 0x50 };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "incompatible type");
+}
+
+void run()
+{
+    test_four();
+    fail_too_short();
+    fail_too_long();
+    fail_missing_end();
+    fail_missing_begin();
+    fail_array_too_short();
+    fail_array_too_long();
+}
+
+} // namespace array_suite
+
+//-----------------------------------------------------------------------------
 // Pair
 //-----------------------------------------------------------------------------
 
@@ -1177,6 +1282,7 @@ int main()
     floating_suite::run();
     string_suite::run();
     binary_suite::run();
+    array_suite::run();
     pair_suite::run();
     optional_suite::run();
     vector_suite::run();

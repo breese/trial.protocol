@@ -328,6 +328,51 @@ void run()
 } // namespace binary_suite
 
 //-----------------------------------------------------------------------------
+// Array
+//-----------------------------------------------------------------------------
+
+namespace array_suite
+{
+
+void test_one()
+{
+    std::vector<value_type> result;
+    format::oarchive ar(result);
+    value_type array[] = { 1 };
+    ar << array;
+
+    value_type expected[] = { token::code::begin_array,
+                              0x01,
+                              0x01,
+                              token::code::end_array };
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                          expected, expected + sizeof(expected));
+}
+
+void test_four()
+{
+    std::vector<value_type> result;
+    format::oarchive ar(result);
+    value_type array[] = { 1, 2, 3, 4 };
+    ar << array;
+
+    value_type expected[] = { token::code::begin_array,
+                              0x04,
+                              0x01, 0x02, 0x03, 0x04,
+                              token::code::end_array };
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                          expected, expected + sizeof(expected));
+}
+
+void run()
+{
+    test_one();
+    test_four();
+}
+
+} // namespace array_suite
+
+//-----------------------------------------------------------------------------
 // Pair
 //-----------------------------------------------------------------------------
 
@@ -764,6 +809,7 @@ int main()
     floating_suite::run();
     string_suite::run();
     binary_suite::run();
+    array_suite::run();
     pair_suite::run();
     optional_suite::run();
     vector_suite::run();
