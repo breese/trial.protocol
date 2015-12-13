@@ -44,6 +44,7 @@ struct load_overloader< transenc::iarchive,
         }
         if (!ar.at<transenc::token::end_array>())
             throw transenc::error(transenc::expected_end_array);
+        ar.load<transenc::token::end_array>();
     }
 };
 
