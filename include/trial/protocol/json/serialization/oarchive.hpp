@@ -44,6 +44,10 @@ public:
     template<typename T>
     void save_override(const T& data, long);
 
+    // Arrays
+    template <typename T, std::size_t N>
+    void save_override(const T (&data)[N]);
+
     // String literal
     void save_override(const char *data);
 

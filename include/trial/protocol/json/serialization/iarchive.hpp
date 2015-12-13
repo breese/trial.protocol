@@ -35,16 +35,13 @@ public:
     iarchive(Iterator begin, Iterator end);
 
     template<typename value_type>
-    void load_override(value_type& data)
-    {
-        boost::archive::load(*this->This(), data);
-    }
+    void load_override(value_type& data);
 
     template<typename value_type>
-    void load_override(value_type& data, long /* version */)
-    {
-        load_override(data);
-    }
+    void load_override(value_type& data, long);
+
+    template <typename T, std::size_t N>
+    void load_override(T (&data)[N]);
 
     template <typename Tag>
     void load();

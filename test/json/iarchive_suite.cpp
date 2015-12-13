@@ -260,6 +260,92 @@ void run()
 } // namespace string_suite
 
 //-----------------------------------------------------------------------------
+// Array
+//-----------------------------------------------------------------------------
+
+namespace array_suite
+{
+
+void test_four()
+{
+    const char input[] = "[1,2,3,4]";
+    json::iarchive in(input);
+    int value[4];
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[0], 0x01);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[1], 0x02);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[2], 0x03);
+    TRIAL_PROTOCOL_TEST_EQUAL(value[3], 0x04);
+}
+
+void fail_too_short()
+{
+    const char input[] = "[1,2,3]";
+    json::iarchive in(input);
+    int value[4];
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
+}
+
+void fail_too_long()
+{
+    const char input[] = "[1,2,3,4,5]";
+    json::iarchive in(input);
+    int value[4];
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end array bracket");
+}
+
+void fail_missing_end()
+{
+    const char input[] = "[1,2,3,4";
+    json::iarchive in(input);
+    int value[4];
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end array bracket");
+}
+
+void fail_missing_begin()
+{
+    const char input[] = "1,2,3,4]";
+    json::iarchive in(input);
+    int value[4];
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "unexpected token");
+}
+
+void fail_array_too_short()
+{
+    const char input[] = "[1,2,3,4]";
+    json::iarchive in(input);
+    int value[3];
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "expected end array bracket");
+}
+
+void fail_array_too_long()
+{
+    const char input[] = "[1,2,3,4]";
+    json::iarchive in(input);
+    int value[5];
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "invalid value");
+}
+
+void run()
+{
+    test_four();
+    fail_too_short();
+    fail_too_long();
+    fail_missing_end();
+    fail_missing_begin();
+    fail_array_too_short();
+    fail_array_too_long();
+}
+
+} // namespace array_suite
+
+//-----------------------------------------------------------------------------
 // Pair
 //-----------------------------------------------------------------------------
 
@@ -588,6 +674,7 @@ int main()
     integer_suite::run();
     floating_suite::run();
     string_suite::run();
+    array_suite::run();
     pair_suite::run();
     optional_suite::run();
     vector_suite::run();

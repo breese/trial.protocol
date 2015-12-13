@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/serialization/serialization.hpp>
+#include <trial/protocol/json/serialization/array.hpp>
 #include <trial/protocol/json/serialization/std/pair.hpp>
 #include <trial/protocol/json/serialization/std/map.hpp>
 #include <trial/protocol/json/serialization/std/set.hpp>

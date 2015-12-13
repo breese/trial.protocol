@@ -11,6 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <trial/protocol/json/serialization/detail/array_save.hpp>
+
 namespace trial
 {
 namespace protocol
@@ -39,13 +41,20 @@ void oarchive::save(const T& data)
 template<typename T>
 void oarchive::save_override(const T& data)
 {
-    boost::archive::save(*this->This(), data);
+    boost::archive::save(*this, data);
 }
 
 template<typename T>
-void oarchive::save_override(const T& data, long /* version */)
+void oarchive::save_override(const T& data, long /* PFTO */)
 {
     save_override(data);
+}
+
+template <typename T, std::size_t N>
+inline void oarchive::save_override(const T (&data)[N])
+{
+    // By-pass Boost.Serialization which has its own array formatting
+    serialization::save_overloader<oarchive, const T[N]>::save(*this, data, 0);
 }
 
 inline void oarchive::save_override(const char *data)

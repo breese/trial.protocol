@@ -267,6 +267,49 @@ void run()
 } // namespace string_suite
 
 //-----------------------------------------------------------------------------
+// Array
+//-----------------------------------------------------------------------------
+
+namespace array_suite
+{
+
+void test_int_one()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    int array[] = { 1 };
+    ar << array;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[1]");
+}
+
+void test_int_four()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    int array[] = { 1, 2, 3, 4 };
+    ar << array;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[1,2,3,4]");
+}
+
+void test_double_four()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    double array[] = { 1.5, 2.5, 3.5, 4.5 };
+    ar << array;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[1.5,2.5,3.5,4.5]");
+}
+
+void run()
+{
+    test_int_one();
+    test_int_four();
+    test_double_four();
+}
+
+} // namespace array_suite
+
+//-----------------------------------------------------------------------------
 // Pair
 //-----------------------------------------------------------------------------
 
@@ -553,6 +596,7 @@ int main()
     integer_suite::run();
     floating_suite::run();
     string_suite::run();
+    array_suite::run();
     pair_suite::run();
     optional_suite::run();
     vector_suite::run();
