@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/static_assert.hpp>
 #include <trial/protocol/transenc/serialization/detail/array_save.hpp>
 
 namespace trial
