@@ -426,7 +426,7 @@ inline token::code::value decoder::next(value_type element, boost::int64_t size)
     if (size < 0)
         return token::code::error_negative_length;
 
-    if (input.size() < size)
+    if (boost::int64_t(input.size()) < size)
         return token::code::end;
 
     current.view = input.substr(0, size);
