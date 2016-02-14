@@ -16,6 +16,7 @@
 #include <boost/type_traits/decay.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/math/special_functions/round.hpp>
+#include <trial/protocol/detail/type_traits.hpp>
 
 namespace trial
 {
@@ -23,44 +24,6 @@ namespace protocol
 {
 namespace json
 {
-
-//-----------------------------------------------------------------------------
-// Utility
-//-----------------------------------------------------------------------------
-
-namespace detail
-{
-
-template <typename T>
-struct integer_to_floating
-{
-    // This is a crude approximation
-    typedef typename boost::conditional
-    <sizeof(T) <= sizeof(float),
-                  float,
-                  typename boost::conditional
-                  <sizeof(T) <= sizeof(double),
-                      double,
-                      long double
-                      >::type
-                   >::type type;
-};
-
-template <typename T>
-struct floating_to_integer
-{
-    // This is a crude approximation
-    typedef typename boost::conditional<
-        sizeof(T) <= sizeof(boost::int32_t),
-            boost::int32_t, typename boost::conditional<
-            sizeof(T) <= sizeof(boost::int64_t),
-                boost::int64_t,
-                boost::intmax_t
-                >::type
-        >::type type;
-};
-
-} // namespace detail
 
 //-----------------------------------------------------------------------------
 // reader::overloader
@@ -276,7 +239,7 @@ ReturnType reader::integral_value() const
         }
 
     case token::code::floating:
-        typedef typename detail::integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
+        typedef typename protocol::detail::integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
         return ReturnType(boost::math::round(decoder.template value<floating_return_type>()));
 
     default:
@@ -291,7 +254,7 @@ ReturnType reader::floating_value() const
     switch (decoder.code())
     {
     case token::code::integer:
-        typedef typename detail::floating_to_integer<ReturnType>::type integer_return_type;
+        typedef typename protocol::detail::floating_to_integer<ReturnType>::type integer_return_type;
         return ReturnType(decoder.template value<integer_return_type>());
 
     case token::code::floating:
