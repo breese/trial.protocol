@@ -11,8 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/type_traits/conditional.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/type_traits/conditional.hpp>
 
 namespace trial
 {
@@ -48,6 +48,12 @@ struct floating_to_integer
                 boost::intmax_t
                 >::type
         >::type type;
+};
+
+template <typename T, typename U>
+struct select_widest
+{
+    typedef typename boost::conditional<sizeof(T) >= sizeof(U), T, U>::type type;
 };
 
 } // namespace detail

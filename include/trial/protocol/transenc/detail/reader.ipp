@@ -19,6 +19,7 @@
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <trial/protocol/detail/type_traits.hpp>
 #include <trial/protocol/transenc/token.hpp>
 
 namespace trial
@@ -89,7 +90,8 @@ struct reader::overloader<ReturnType,
         case token::int8::code:
             {
                 token::int8::type result = self.decoder.value<token::int8>();
-                if (result > std::numeric_limits<ReturnType>::max())
+                typedef typename protocol::detail::select_widest<ReturnType, token::int8::type>::type widest_type;
+                if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw transenc::error(overflow);
                 return ReturnType(result);
             }
@@ -97,7 +99,8 @@ struct reader::overloader<ReturnType,
         case token::int16::code:
             {
                 token::int16::type result = self.decoder.value<token::int16>();
-                if (result > std::numeric_limits<ReturnType>::max())
+                typedef typename protocol::detail::select_widest<ReturnType, token::int16::type>::type widest_type;
+                if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw transenc::error(overflow);
                 return ReturnType(result);
             }
@@ -105,7 +108,8 @@ struct reader::overloader<ReturnType,
         case token::int32::code:
             {
                 token::int32::type result = self.decoder.value<token::int32>();
-                if (result > std::numeric_limits<ReturnType>::max())
+                typedef typename protocol::detail::select_widest<ReturnType, token::int32::type>::type widest_type;
+                if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw transenc::error(overflow);
                 return ReturnType(result);
             }
@@ -113,7 +117,8 @@ struct reader::overloader<ReturnType,
         case token::int64::code:
             {
                 token::int64::type result = self.decoder.value<token::int64>();
-                if (result > std::numeric_limits<ReturnType>::max())
+                typedef typename protocol::detail::select_widest<ReturnType, token::int64::type>::type widest_type;
+                if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw transenc::error(overflow);
                 return ReturnType(result);
             }
