@@ -228,11 +228,11 @@ basic_encoder<CharT>::value(bool data)
 {
     if (data)
     {
-        return write(traits<char>::true_text());
+        return write(traits<CharT>::true_text());
     }
     else
     {
-        return write(traits<char>::false_text());
+        return write(traits<CharT>::false_text());
     }
 };
 
@@ -273,7 +273,7 @@ basic_encoder<CharT>::integral_value(const T& data)
     unsigned_type number = unsigned_type(std::abs(data));
     if (number == 0)
     {
-        *where = traits<char>::alpha_0;
+        *where = traits<CharT>::alpha_0;
         ++where;
     }
     else
@@ -281,7 +281,7 @@ basic_encoder<CharT>::integral_value(const T& data)
         const T base = T(10);
         while (number != 0)
         {
-            *where = traits<char>::alpha_0 + (number % base);
+            *where = traits<CharT>::alpha_0 + (number % base);
             ++where;
             number /= base;
         }
@@ -295,7 +295,7 @@ basic_encoder<CharT>::integral_value(const T& data)
     }
     if (is_negative)
     {
-        buffer->write(traits<char>::alpha_minus);
+        buffer->write(traits<CharT>::alpha_minus);
     }
     while (begin != output.end())
     {
@@ -315,7 +315,7 @@ basic_encoder<CharT>::floating_value(const T& data)
     case FP_INFINITE:
     case FP_NAN:
         // Infinity and NaN must be encoded as null
-        return write(traits<char>::null_text());
+        return write(traits<CharT>::null_text());
     default:
         break;
     }
@@ -339,54 +339,54 @@ basic_encoder<CharT>::string_value(const T& data)
         return 0;
     }
 
-    buffer->write(traits<char>::alpha_quote);
+    buffer->write(traits<CharT>::alpha_quote);
     for (typename T::const_iterator it = data.begin();
          it != data.end();
          ++it)
     {
         switch (*it)
         {
-        case traits<char>::alpha_quote:
-        case traits<char>::alpha_reverse_solidus:
-        case traits<char>::alpha_solidus:
-            if (write(traits<char>::alpha_reverse_solidus) == 0)
+        case traits<CharT>::alpha_quote:
+        case traits<CharT>::alpha_reverse_solidus:
+        case traits<CharT>::alpha_solidus:
+            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
                 return 0;
             buffer->write(*it);
             ++size;
             break;
 
-        case traits<char>::alpha_backspace:
-            if (write(traits<char>::alpha_reverse_solidus) == 0)
+        case traits<CharT>::alpha_backspace:
+            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
                 return 0;
-            buffer->write(traits<char>::alpha_b);
+            buffer->write(traits<CharT>::alpha_b);
             ++size;
             break;
 
-        case traits<char>::alpha_formfeed:
-            if (write(traits<char>::alpha_reverse_solidus) == 0)
+        case traits<CharT>::alpha_formfeed:
+            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
                 return 0;
-            buffer->write(traits<char>::alpha_f);
+            buffer->write(traits<CharT>::alpha_f);
             ++size;
             break;
 
-        case traits<char>::alpha_newline:
-            if (write(traits<char>::alpha_reverse_solidus) == 0)
+        case traits<CharT>::alpha_newline:
+            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
                 return 0;
-            buffer->write(traits<char>::alpha_n);
+            buffer->write(traits<CharT>::alpha_n);
             ++size;
             break;
 
-        case traits<char>::alpha_return:
-            if (write(traits<char>::alpha_reverse_solidus) == 0)
+        case traits<CharT>::alpha_return:
+            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
                 return 0;
-            buffer->write(traits<char>::alpha_r);
+            buffer->write(traits<CharT>::alpha_r);
             ++size;
             break;
 
-        case traits<char>::alpha_tab:
-            if (write(traits<char>::alpha_reverse_solidus) == 0)
+        case traits<CharT>::alpha_tab:
+            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
                 return 0;
-            buffer->write(traits<char>::alpha_t);
+            buffer->write(traits<CharT>::alpha_t);
             ++size;
             break;
 
@@ -395,7 +395,7 @@ basic_encoder<CharT>::string_value(const T& data)
             break;
         }
     }
-    buffer->write(traits<char>::alpha_quote);
+    buffer->write(traits<CharT>::alpha_quote);
 
     return size;
 }
@@ -404,49 +404,49 @@ template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::null_value()
 {
-    return write(traits<char>::null_text());
+    return write(traits<CharT>::null_text());
 }
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::begin_array_value()
 {
-    return write(traits<char>::alpha_bracket_open);
+    return write(traits<CharT>::alpha_bracket_open);
 }
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::end_array_value()
 {
-    return write(traits<char>::alpha_bracket_close);
+    return write(traits<CharT>::alpha_bracket_close);
 }
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::begin_object_value()
 {
-    return write(traits<char>::alpha_brace_open);
+    return write(traits<CharT>::alpha_brace_open);
 }
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::end_object_value()
 {
-    return write(traits<char>::alpha_brace_close);
+    return write(traits<CharT>::alpha_brace_close);
 }
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value_separator_value()
 {
-    return write(traits<char>::alpha_comma);
+    return write(traits<CharT>::alpha_comma);
 }
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::name_separator_value()
 {
-    return write(traits<char>::alpha_colon);
+    return write(traits<CharT>::alpha_colon);
 }
 
 template <typename CharT>
