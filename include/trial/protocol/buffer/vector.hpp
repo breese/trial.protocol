@@ -21,7 +21,8 @@ namespace protocol
 namespace buffer
 {
 
-template <typename CharT>
+template <typename CharT,
+          typename Allocator = typename std::vector<CharT>::allocator_type>
 class vector : public base<CharT>
 {
 public:
@@ -61,14 +62,14 @@ protected:
     }
 
 private:
-    std::vector<value_type>& buffer;
+    std::vector<value_type, Allocator>& buffer;
 };
 
-template <typename CharT>
-struct traits< std::vector<CharT> >
+template <typename CharT, typename Allocator>
+struct traits< std::vector<CharT, Allocator> >
 {
     typedef typename base<CharT>::view_type view_type;
-    typedef buffer::vector<CharT> buffer_type;
+    typedef buffer::vector<CharT, Allocator> buffer_type;
 
     static view_type view_cast(const std::vector<CharT>& data)
     {
@@ -76,8 +77,8 @@ struct traits< std::vector<CharT> >
     }
 };
 
-template <typename CharT>
-struct is_binary< std::vector<CharT> >
+template <typename CharT, typename Allocator>
+struct is_binary< std::vector<CharT, Allocator> >
 {
     static const bool value = true;
 };

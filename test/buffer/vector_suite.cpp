@@ -97,6 +97,61 @@ void test()
 } // namespace vector_suite
 
 //-----------------------------------------------------------------------------
+// std::vector<unsigned char>
+//-----------------------------------------------------------------------------
+
+namespace uvector_suite
+{
+
+void test_empty()
+{
+    std::vector<unsigned char> output;
+    vector_buffer<unsigned char> container(output);
+
+    boost::array<unsigned char, 0> expected;
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          expected.begin(), expected.end());
+}
+
+void test_single()
+{
+    std::vector<unsigned char> output;
+    vector_buffer<unsigned char> container(output);
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(1), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write('A'));
+
+    unsigned char expected[] = { 'A' };
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          expected, expected + sizeof(expected));
+}
+
+void test_view()
+{
+    std::vector<unsigned char> output;
+    vector_buffer<unsigned char> container(output);
+    std::basic_string<unsigned char> input;
+    input += 'a';
+    input += 'l';
+    input += 'p';
+    input += 'h';
+    input += 'a';
+    TRIAL_PROTOCOL_TEST_EQUAL(container.grow(input.size()), true);
+    TRIAL_PROTOCOL_TEST_NO_THROW(container.write(input));
+
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
+                                          input.begin(), input.end());
+}
+
+void test()
+{
+    test_empty();
+    test_single();
+    test_view();
+}
+
+} // namespace uvector_suite
+
+//-----------------------------------------------------------------------------
 // std::vector<wchar_t>
 //-----------------------------------------------------------------------------
 
@@ -153,6 +208,7 @@ void test()
 int main()
 {
     vector_suite::test();
+    uvector_suite::test();
     wvector_suite::test();
 
     return boost::report_errors();
