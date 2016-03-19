@@ -26,19 +26,20 @@ namespace json
 {
 
 //-----------------------------------------------------------------------------
-// reader::overloader
+// detail_reader_overloader
 //-----------------------------------------------------------------------------
 
-template <typename ReturnType, typename Enable>
-struct reader::overloader
+template <typename CharT, typename ReturnType, typename Enable = void>
+struct detail_reader_overloader
 {
 };
 
 // Integers (not booleans)
 
-template <typename ReturnType>
-struct reader::overloader<ReturnType,
-                          typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
+template <typename CharT, typename ReturnType>
+struct detail_reader_overloader<CharT,
+                                ReturnType,
+                                typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
 {
     inline static ReturnType value(const reader& self)
     {
@@ -48,9 +49,10 @@ struct reader::overloader<ReturnType,
 
 // Floating-point numbers
 
-template <typename ReturnType>
-struct reader::overloader<ReturnType,
-                          typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+template <typename CharT, typename ReturnType>
+struct detail_reader_overloader<CharT,
+                                ReturnType,
+                                typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
     inline static ReturnType value(const reader& self)
     {
@@ -60,9 +62,10 @@ struct reader::overloader<ReturnType,
 
 // Booleans
 
-template <typename ReturnType>
-struct reader::overloader<ReturnType,
-                          typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
+template <typename CharT, typename ReturnType>
+struct detail_reader_overloader<CharT,
+                                ReturnType,
+                                typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
 {
     inline static ReturnType value(const reader& self)
     {
@@ -72,8 +75,10 @@ struct reader::overloader<ReturnType,
 
 // Strings
 
-template <>
-struct reader::overloader<std::string>
+template <typename CharT, typename ReturnType>
+struct detail_reader_overloader<CharT,
+                                ReturnType,
+                                typename boost::enable_if< boost::is_same< ReturnType, std::basic_string<CharT> > >::type>
 {
     typedef std::string return_type;
 
@@ -84,48 +89,57 @@ struct reader::overloader<std::string>
 };
 
 //-----------------------------------------------------------------------------
-// reader
+// basic_reader
 //-----------------------------------------------------------------------------
 
-inline reader::reader(const view_type& input)
+template <typename CharT>
+basic_reader<CharT>::basic_reader(const view_type& input)
     : decoder(input)
 {
     stack.push(token::code::end);
 }
 
-inline reader::reader(const reader& other)
+template <typename CharT>
+basic_reader<CharT>::basic_reader(const basic_reader<CharT>& other)
     : decoder(other.decoder)
 {
     stack.push(token::code::end);
 }
 
-inline reader::size_type reader::level() const BOOST_NOEXCEPT
+template <typename CharT>
+typename basic_reader<CharT>::size_type
+basic_reader<CharT>::level() const BOOST_NOEXCEPT
 {
     assert(stack.size() > 0);
     return stack.size() - 1;
 }
 
-inline token::code::value reader::code() const BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_reader<CharT>::code() const BOOST_NOEXCEPT
 {
     return decoder.code();
 }
 
-inline token::symbol::value reader::symbol() const BOOST_NOEXCEPT
+template <typename CharT>
+token::symbol::value basic_reader<CharT>::symbol() const BOOST_NOEXCEPT
 {
     return decoder.symbol();
 }
 
-inline token::category::value reader::category() const BOOST_NOEXCEPT
+template <typename CharT>
+token::category::value basic_reader<CharT>::category() const BOOST_NOEXCEPT
 {
     return decoder.category();
 }
 
-inline boost::system::error_code reader::error() const BOOST_NOEXCEPT
+template <typename CharT>
+boost::system::error_code basic_reader<CharT>::error() const BOOST_NOEXCEPT
 {
     return decoder.error();
 }
 
-inline bool reader::next()
+template <typename CharT>
+bool basic_reader<CharT>::next()
 {
     const token::code::value current = decoder.code();
     switch (current)
@@ -182,7 +196,8 @@ inline bool reader::next()
     return (category() != token::category::status);
 }
 
-inline bool reader::next(token::code::value expect)
+template <typename CharT>
+bool basic_reader<CharT>::next(token::code::value expect)
 {
     const token::code::value current = code();
     if (current != expect)
@@ -193,20 +208,24 @@ inline bool reader::next(token::code::value expect)
     return next();
 }
 
+template <typename CharT>
 template <typename T>
-T reader::value() const
+T basic_reader<CharT>::value() const
 {
     typedef typename boost::remove_cv<typename boost::decay<T>::type>::type return_type;
-    return overloader<return_type>::value(*this);
+    return detail_reader_overloader<CharT, return_type>::value(*this);
 }
 
-inline const reader::view_type& reader::literal() const BOOST_NOEXCEPT
+template <typename CharT>
+const typename basic_reader<CharT>::view_type&
+basic_reader<CharT>::literal() const BOOST_NOEXCEPT
 {
     return decoder.literal();
 }
 
+template <typename CharT>
 template <typename ReturnType>
-ReturnType reader::bool_value() const
+ReturnType basic_reader<CharT>::bool_value() const
 {
     switch (decoder.code())
     {
@@ -222,8 +241,9 @@ ReturnType reader::bool_value() const
     }
 }
 
+template <typename CharT>
 template <typename ReturnType>
-ReturnType reader::integral_value() const
+ReturnType basic_reader<CharT>::integral_value() const
 {
     switch (decoder.code())
     {
@@ -248,8 +268,9 @@ ReturnType reader::integral_value() const
     }
 }
 
+template <typename CharT>
 template <typename ReturnType>
-ReturnType reader::floating_value() const
+ReturnType basic_reader<CharT>::floating_value() const
 {
     switch (decoder.code())
     {
@@ -266,8 +287,9 @@ ReturnType reader::floating_value() const
     }
 }
 
+template <typename CharT>
 template <typename ReturnType>
-ReturnType reader::string_value() const
+ReturnType basic_reader<CharT>::string_value() const
 {
     switch (decoder.code())
     {
@@ -280,23 +302,27 @@ ReturnType reader::string_value() const
     }
 }
 
-inline reader::frame::frame(token::code::value scope)
+template <typename CharT>
+basic_reader<CharT>::frame::frame(token::code::value scope)
     : scope(scope),
       counter(0)
 {
 }
 
-inline bool reader::frame::is_array() const
+template <typename CharT>
+bool basic_reader<CharT>::frame::is_array() const
 {
     return scope == token::code::end_array;
 }
 
-inline bool reader::frame::is_object() const
+template <typename CharT>
+bool basic_reader<CharT>::frame::is_object() const
 {
     return scope == token::code::end_object;
 }
 
-inline token::code::value reader::frame::next(decoder_type& decoder)
+template <typename CharT>
+token::code::value basic_reader<CharT>::frame::next(decoder_type& decoder)
 {
     decoder.next();
 
@@ -316,7 +342,8 @@ inline token::code::value reader::frame::next(decoder_type& decoder)
     }
 }
 
-inline token::code::value reader::frame::check_outer(decoder_type& decoder)
+template <typename CharT>
+token::code::value basic_reader<CharT>::frame::check_outer(decoder_type& decoder)
 {
     // RFC 7159, section 2
     //
@@ -333,7 +360,8 @@ inline token::code::value reader::frame::check_outer(decoder_type& decoder)
     }
 }
 
-inline token::code::value reader::frame::check_array(decoder_type& decoder)
+template <typename CharT>
+token::code::value basic_reader<CharT>::frame::check_array(decoder_type& decoder)
 {
     // RFC 7159, section 5
     //
@@ -388,7 +416,8 @@ inline token::code::value reader::frame::check_array(decoder_type& decoder)
     return token::code::error_unexpected_token;
 }
 
-inline token::code::value reader::frame::check_object(decoder_type& decoder)
+template <typename CharT>
+token::code::value basic_reader<CharT>::frame::check_object(decoder_type& decoder)
 {
     // RFC 7159, section 4
     //

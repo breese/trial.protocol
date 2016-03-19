@@ -32,12 +32,13 @@ namespace json
 //! the reader only parses enough of the input to identify the next token.
 //! The entire input has to be parsed by repeating parsing the next token until
 //! the end of the input.
-class reader
+template <typename CharT>
+class basic_reader
 {
 public:
-    typedef detail::basic_decoder<char>::value_type value_type;
-    typedef detail::basic_decoder<char>::size_type size_type;
-    typedef detail::basic_decoder<char>::view_type view_type;
+    typedef typename detail::basic_decoder<CharT>::value_type value_type;
+    typedef typename detail::basic_decoder<CharT>::size_type size_type;
+    typedef typename detail::basic_decoder<CharT>::view_type view_type;
 
     //! @brief Construct an incremental JSON reader.
     //!
@@ -46,7 +47,7 @@ public:
     //! The reader does not assume ownership of the view.
     //!
     //! @param[in] view A string view of a JSON formatted buffer.
-    reader(const view_type& view);
+    basic_reader(const view_type& view);
 
     //! @brief Copy-construct an incremental JSON reader.
     //!
@@ -54,7 +55,7 @@ public:
     //! parsing independently from where the input reader had reached.
     //!
     //! @param[in] other The reader that is copied.
-    reader(const reader& other);
+    basic_reader(const basic_reader& other);
 
     //! @brief Parse the next token.
     //!
@@ -116,7 +117,9 @@ public:
 
 #ifndef BOOST_DOXYGEN_INVOKED
 private:
-    template <typename ReturnType, typename Enable = void> struct overloader;
+    template <typename C, typename ReturnType, typename Enable>
+    friend struct detail_reader_overloader;
+
     template <typename ReturnType> ReturnType bool_value() const;
     template <typename ReturnType> ReturnType integral_value() const;
     template <typename ReturnType> ReturnType floating_value() const;
@@ -144,6 +147,8 @@ private:
     std::stack<frame> stack;
 #endif
 };
+
+typedef basic_reader<char> reader;
 
 } // namespace json
 } // namespace protocol
