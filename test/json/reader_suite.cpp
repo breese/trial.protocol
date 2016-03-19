@@ -163,6 +163,23 @@ void run()
 
 } // namespace basic_suite
 
+namespace ubasic_suite
+{
+
+void test_empty()
+{
+    const unsigned char input[] = "";
+    json::basic_reader<unsigned char> reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+}
+
+void run()
+{
+    test_empty();
+}
+
+} // namespace ubasic_suite
+
 //-----------------------------------------------------------------------------
 // Array
 //-----------------------------------------------------------------------------
@@ -688,6 +705,7 @@ void run()
 int main()
 {
     basic_suite::run();
+    ubasic_suite::run();
     array_suite::run();
     object_suite::run();
     get_suite::run();

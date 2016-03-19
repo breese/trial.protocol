@@ -64,6 +64,23 @@ void run()
 
 } // namespace basic_suite
 
+namespace ubasic_suite
+{
+
+void test_empty()
+{
+    std::basic_ostringstream<unsigned char> result;
+    json::basic_writer<unsigned char> writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str().empty(), true);
+}
+
+void run()
+{
+    test_empty();
+}
+
+} // namespace ubasic_suite
+
 //-----------------------------------------------------------------------------
 // Integer
 //-----------------------------------------------------------------------------
@@ -362,6 +379,7 @@ void run()
 int main()
 {
     basic_suite::run();
+    ubasic_suite::run();
     integer_suite::run();
     floating_suite::run();
     string_suite::run();
