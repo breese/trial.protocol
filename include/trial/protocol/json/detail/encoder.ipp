@@ -320,7 +320,7 @@ basic_encoder<CharT>::floating_value(const T& data)
         break;
     }
 
-    std::string work = boost::lexical_cast<std::string>(data);
+    std::basic_string<CharT> work = boost::lexical_cast< std::basic_string<CharT> >(data);
     return write(work);
 }
 
