@@ -296,7 +296,7 @@ inline bool reader::frame::is_object() const
     return scope == token::code::end_object;
 }
 
-inline token::code::value reader::frame::next(detail::decoder& decoder)
+inline token::code::value reader::frame::next(decoder_type& decoder)
 {
     decoder.next();
 
@@ -316,7 +316,7 @@ inline token::code::value reader::frame::next(detail::decoder& decoder)
     }
 }
 
-inline token::code::value reader::frame::check_outer(detail::decoder& decoder)
+inline token::code::value reader::frame::check_outer(decoder_type& decoder)
 {
     // RFC 7159, section 2
     //
@@ -333,7 +333,7 @@ inline token::code::value reader::frame::check_outer(detail::decoder& decoder)
     }
 }
 
-inline token::code::value reader::frame::check_array(detail::decoder& decoder)
+inline token::code::value reader::frame::check_array(decoder_type& decoder)
 {
     // RFC 7159, section 5
     //
@@ -388,7 +388,7 @@ inline token::code::value reader::frame::check_array(detail::decoder& decoder)
     return token::code::error_unexpected_token;
 }
 
-inline token::code::value reader::frame::check_object(detail::decoder& decoder)
+inline token::code::value reader::frame::check_object(decoder_type& decoder)
 {
     // RFC 7159, section 4
     //

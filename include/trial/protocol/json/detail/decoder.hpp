@@ -29,14 +29,15 @@ namespace json
 namespace detail
 {
 
-class decoder
+template <typename CharT>
+class basic_decoder
 {
 public:
     typedef std::size_t size_type;
-    typedef const char value_type;
-    typedef boost::basic_string_ref<char> view_type;
+    typedef CharT value_type;
+    typedef boost::basic_string_ref<CharT> view_type;
 
-    decoder(const view_type& input);
+    basic_decoder(const view_type& input);
 
     void next() BOOST_NOEXCEPT;
 
@@ -59,10 +60,11 @@ private:
     void skip_whitespaces() BOOST_NOEXCEPT;
     bool at_keyword_end() const BOOST_NOEXCEPT;
 
-    template <typename ReturnType, typename Enable = void> struct overloader;
+    template <typename C, typename ReturnType, typename Enable>
+    friend struct decoder_overloader;
     template <typename ReturnType> ReturnType integral_value() const;
     template <typename ReturnType> ReturnType floating_value() const;
-    std::string string_value() const;
+    std::basic_string<CharT> string_value() const;
 
 private:
     view_type input;

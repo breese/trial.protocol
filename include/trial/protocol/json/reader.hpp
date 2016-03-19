@@ -35,9 +35,9 @@ namespace json
 class reader
 {
 public:
-    typedef detail::decoder::size_type size_type;
-    typedef detail::decoder::value_type value_type;
-    typedef detail::decoder::view_type view_type;
+    typedef detail::basic_decoder<char>::value_type value_type;
+    typedef detail::basic_decoder<char>::size_type size_type;
+    typedef detail::basic_decoder<char>::view_type view_type;
 
     //! @brief Construct an incremental JSON reader.
     //!
@@ -123,7 +123,8 @@ private:
     template <typename ReturnType> ReturnType string_value() const;
 
 private:
-    mutable detail::decoder decoder;
+    typedef detail::basic_decoder<value_type> decoder_type;
+    mutable decoder_type decoder;
 
     struct frame
     {
@@ -132,10 +133,10 @@ private:
         bool is_array() const;
         bool is_object() const;
 
-        token::code::value next(detail::decoder&);
-        token::code::value check_outer(detail::decoder&);
-        token::code::value check_array(detail::decoder&);
-        token::code::value check_object(detail::decoder&);
+        token::code::value next(decoder_type&);
+        token::code::value check_outer(decoder_type&);
+        token::code::value check_array(decoder_type&);
+        token::code::value check_object(decoder_type&);
 
         token::code::value scope;
         size_type counter;

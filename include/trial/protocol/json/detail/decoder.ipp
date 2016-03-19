@@ -33,86 +33,97 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
-// decoder::overloader
+// decoder_overloader
 //-----------------------------------------------------------------------------
 
-template <typename ReturnType, typename Enable>
-struct decoder::overloader
+template <typename CharT, typename ReturnType, typename Enable = void>
+struct decoder_overloader
 {
 };
 
 // Integers
 
-template <typename ReturnType>
-struct decoder::overloader<ReturnType,
-                           typename boost::enable_if< boost::is_integral<ReturnType> >::type>
+template <typename CharT, typename ReturnType>
+struct decoder_overloader<CharT,
+                          ReturnType,
+                          typename boost::enable_if< boost::is_integral<ReturnType> >::type>
 {
-    inline static ReturnType value(const decoder& self)
+    inline static ReturnType value(const basic_decoder<CharT>& self)
     {
-        return self.integral_value<ReturnType>();
+        return self.template integral_value<ReturnType>();
     }
 };
 
 // Floating-point numbers
 
-template <typename ReturnType>
-struct decoder::overloader<ReturnType,
-                           typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+template <typename CharT, typename ReturnType>
+struct decoder_overloader<CharT,
+                          ReturnType,
+                          typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
-    inline static ReturnType value(const decoder& self)
+    inline static ReturnType value(const basic_decoder<CharT>& self)
     {
-        return self.floating_value<ReturnType>();
+        return self.template floating_value<ReturnType>();
     }
 };
 
 // Strings
 
-template <>
-struct decoder::overloader<std::string>
+template <typename CharT, typename ReturnType>
+struct decoder_overloader<CharT,
+                          ReturnType,
+                          typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
 {
-    inline static std::string value(const decoder& self)
+    inline static std::string value(const basic_decoder<CharT>& self)
     {
         return self.string_value();
     }
 };
 
 //-----------------------------------------------------------------------------
-// decoder
+// basic_decoder
 //-----------------------------------------------------------------------------
 
-inline decoder::decoder(const view_type& view)
+template <typename CharT>
+basic_decoder<CharT>::basic_decoder(const view_type& view)
     : input(view)
 {
     current.code = token::code::end;
     next();
 }
 
-inline void decoder::code(token::code::value value) BOOST_NOEXCEPT
+template <typename CharT>
+void basic_decoder<CharT>::code(token::code::value value) BOOST_NOEXCEPT
 {
     current.code = value;
 }
 
-inline token::code::value decoder::code() const BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_decoder<CharT>::code() const BOOST_NOEXCEPT
 {
     return current.code;
 }
 
-inline token::symbol::value decoder::symbol() const BOOST_NOEXCEPT
+template <typename CharT>
+token::symbol::value basic_decoder<CharT>::symbol() const BOOST_NOEXCEPT
 {
     return token::symbol::convert(current.code);
 }
 
-inline token::category::value decoder::category() const BOOST_NOEXCEPT
+template <typename CharT>
+token::category::value basic_decoder<CharT>::category() const BOOST_NOEXCEPT
 {
     return token::category::convert(current.code);
 }
 
-inline boost::system::error_code decoder::error() const BOOST_NOEXCEPT
+template <typename CharT>
+boost::system::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
 {
     return json::make_error_code(to_errc(code()));
 }
 
-inline void decoder::next() BOOST_NOEXCEPT
+template <typename CharT>
+void basic_decoder<CharT>::next() BOOST_NOEXCEPT
 {
     if (symbol() == token::symbol::error)
     {
@@ -129,57 +140,57 @@ inline void decoder::next() BOOST_NOEXCEPT
 
     switch (input.front())
     {
-    case traits<char>::alpha_f:
+    case traits<CharT>::alpha_f:
         current.code = next_f_keyword();
         break;
 
-    case traits<char>::alpha_n:
+    case traits<CharT>::alpha_n:
         current.code = next_n_keyword();
         break;
 
-    case traits<char>::alpha_t:
+    case traits<CharT>::alpha_t:
         current.code = next_t_keyword();
         break;
 
-    case traits<char>::alpha_minus:
-    case traits<char>::alpha_0:
-    case traits<char>::alpha_1:
-    case traits<char>::alpha_2:
-    case traits<char>::alpha_3:
-    case traits<char>::alpha_4:
-    case traits<char>::alpha_5:
-    case traits<char>::alpha_6:
-    case traits<char>::alpha_7:
-    case traits<char>::alpha_8:
-    case traits<char>::alpha_9:
+    case traits<CharT>::alpha_minus:
+    case traits<CharT>::alpha_0:
+    case traits<CharT>::alpha_1:
+    case traits<CharT>::alpha_2:
+    case traits<CharT>::alpha_3:
+    case traits<CharT>::alpha_4:
+    case traits<CharT>::alpha_5:
+    case traits<CharT>::alpha_6:
+    case traits<CharT>::alpha_7:
+    case traits<CharT>::alpha_8:
+    case traits<CharT>::alpha_9:
         current.code = next_number();
         break;
 
-    case traits<char>::alpha_quote:
+    case traits<CharT>::alpha_quote:
         current.code = next_string();
         break;
 
-    case traits<char>::alpha_brace_open:
+    case traits<CharT>::alpha_brace_open:
         current.code = next_token(token::code::begin_object);
         break;
 
-    case traits<char>::alpha_brace_close:
+    case traits<CharT>::alpha_brace_close:
         current.code = next_token(token::code::end_object);
         break;
 
-    case traits<char>::alpha_bracket_open:
+    case traits<CharT>::alpha_bracket_open:
         current.code = next_token(token::code::begin_array);
         break;
 
-    case traits<char>::alpha_bracket_close:
+    case traits<CharT>::alpha_bracket_close:
         current.code = next_token(token::code::end_array);
         break;
 
-    case traits<char>::alpha_comma:
+    case traits<CharT>::alpha_comma:
         current.code = next_token(token::code::value_separator);
         break;
 
-    case traits<char>::alpha_colon:
+    case traits<CharT>::alpha_colon:
         current.code = next_token(token::code::name_separator);
         break;
 
@@ -189,14 +200,16 @@ inline void decoder::next() BOOST_NOEXCEPT
     }
 }
 
+template <typename CharT>
 template <typename ReturnType>
-ReturnType decoder::value() const
+ReturnType basic_decoder<CharT>::value() const
 {
-    return overloader<ReturnType>::value(*this);
+    return decoder_overloader<CharT, ReturnType>::value(*this);
 }
 
+template <typename CharT>
 template <typename ReturnType>
-ReturnType decoder::integral_value() const
+ReturnType basic_decoder<CharT>::integral_value() const
 {
     if (current.code != token::code::integer)
     {
@@ -206,7 +219,7 @@ ReturnType decoder::integral_value() const
 
     typename view_type::const_iterator it = literal().begin();
 
-    const bool is_negative = (*it == traits<char>::alpha_minus);
+    const bool is_negative = (*it == traits<CharT>::alpha_minus);
     if (is_negative)
     {
         if (boost::is_unsigned<ReturnType>::value)
@@ -221,7 +234,7 @@ ReturnType decoder::integral_value() const
     {
         const ReturnType old = result;
         result *= ReturnType(10);
-        result += ReturnType(traits<char>::to_int(*it));
+        result += ReturnType(traits<CharT>::to_int(*it));
         if (result < old)
         {
             // Overflow
@@ -233,8 +246,9 @@ ReturnType decoder::integral_value() const
     return is_negative ? -result : result;
 }
 
+template <typename CharT>
 template <typename ReturnType>
-ReturnType decoder::floating_value() const
+ReturnType basic_decoder<CharT>::floating_value() const
 {
     if (current.code != token::code::floating)
     {
@@ -245,7 +259,8 @@ ReturnType decoder::floating_value() const
     return ReturnType(std::atof(literal().data()));
 }
 
-inline std::string decoder::string_value() const
+template <typename CharT>
+std::basic_string<CharT> basic_decoder<CharT>::string_value() const
 {
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     if (current.code != token::code::string)
@@ -257,7 +272,7 @@ inline std::string decoder::string_value() const
     const typename view_type::size_type  approximateSize = literal().size();
     assert(approximateSize >= 2);
 
-    std::string result;
+    std::basic_string<CharT> result;
     result.reserve(approximateSize);
 
     typename view_type::const_iterator begin = literal().begin();
@@ -266,39 +281,39 @@ inline std::string decoder::string_value() const
          it != end;
          ++it)
     {
-        if (*it == traits<char>::alpha_reverse_solidus)
+        if (*it == traits<CharT>::alpha_reverse_solidus)
         {
             assert(std::distance(it, end) >= 2);
             ++it;
             switch (*it)
             {
-            case traits<char>::alpha_quote:
-            case traits<char>::alpha_reverse_solidus:
-            case traits<char>::alpha_solidus:
+            case traits<CharT>::alpha_quote:
+            case traits<CharT>::alpha_reverse_solidus:
+            case traits<CharT>::alpha_solidus:
                 result += *it;
                 break;
 
-            case traits<char>::alpha_b:
-                result += traits<char>::alpha_backspace;
+            case traits<CharT>::alpha_b:
+                result += traits<CharT>::alpha_backspace;
                 break;
 
-            case traits<char>::alpha_f:
-                result += traits<char>::alpha_formfeed;
+            case traits<CharT>::alpha_f:
+                result += traits<CharT>::alpha_formfeed;
                 break;
 
-            case traits<char>::alpha_n:
-                result += traits<char>::alpha_newline;
+            case traits<CharT>::alpha_n:
+                result += traits<CharT>::alpha_newline;
                 break;
 
-            case traits<char>::alpha_r:
-                result += traits<char>::alpha_return;
+            case traits<CharT>::alpha_r:
+                result += traits<CharT>::alpha_return;
                 break;
 
-            case traits<char>::alpha_t:
-                result += traits<char>::alpha_tab;
+            case traits<CharT>::alpha_t:
+                result += traits<CharT>::alpha_tab;
                 break;
 
-            case traits<char>::alpha_u:
+            case traits<CharT>::alpha_u:
                 {
                     // Convert \uXXXX value to UTF-8
                     assert(std::distance(it, end) >= 5);
@@ -307,28 +322,28 @@ inline std::string decoder::string_value() const
                     {
                         ++it;
                         number <<= 4;
-                        if (traits<char>::is_hexdigit(*it))
+                        if (traits<CharT>::is_hexdigit(*it))
                         {
-                            number += boost::uint32_t(traits<char>::to_int(*it));
+                            number += boost::uint32_t(traits<CharT>::to_int(*it));
                         }
                     }
                     if (number <= 0x007F)
                     {
                         // 0xxxxxxx
-                        result += std::char_traits<char>::to_char_type(number & 0x7F);
+                        result += std::char_traits<CharT>::to_char_type(number & 0x7F);
                     }
                     else if (number <= 0x07FF)
                     {
                         // 110xxxxx 10xxxxxx
-                        result += 0xC0 | std::char_traits<char>::to_char_type((number >> 6) & 0x1F);
-                        result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
+                        result += 0xC0 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x1F);
+                        result += 0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F);
                     }
                     else
                     {
                         // 1110xxxx 10xxxxxx 10xxxxxx
-                        result += 0xE0 | std::char_traits<char>::to_char_type((number >> 12) & 0x0F);
-                        result += 0x80 | std::char_traits<char>::to_char_type((number >> 6) & 0x3F);
-                        result += 0x80 | std::char_traits<char>::to_char_type(number & 0x3F);
+                        result += 0xE0 | std::char_traits<CharT>::to_char_type((number >> 12) & 0x0F);
+                        result += 0x80 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x3F);
+                        result += 0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F);
                     }
                 }
                 break;
@@ -338,7 +353,7 @@ inline std::string decoder::string_value() const
                 break;
             }
         }
-        else if (*it == traits<char>::alpha_quote)
+        else if (*it == traits<CharT>::alpha_quote)
         {
             assert((it == begin) || (it + 1 == end));
             // Ignore initial and terminating quotes
@@ -351,31 +366,35 @@ inline std::string decoder::string_value() const
     return result;
 }
 
-inline const decoder::view_type& decoder::literal() const BOOST_NOEXCEPT
+template <typename CharT>
+const typename basic_decoder<CharT>::view_type&
+basic_decoder<CharT>::literal() const BOOST_NOEXCEPT
 {
     return current.view;
 }
 
-inline token::code::value decoder::next_token(token::code::value type) BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_decoder<CharT>::next_token(token::code::value type) BOOST_NOEXCEPT
 {
     current.view = view_type(input.begin(), 1);
     input.remove_prefix(1);
     return type;
 }
 
-inline token::code::value decoder::next_f_keyword() BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
 {
     token::code::value type = token::code::false_value;
-    view_type::const_iterator begin = input.begin();
+    typename view_type::const_iterator begin = input.begin();
 
-    const std::size_t size = traits<char>::false_text().size();
+    const std::size_t size = traits<CharT>::false_text().size();
     if (input.size() < size)
     {
         input.remove_prefix(input.size());
         type = token::code::end;
         goto end;
     }
-    if (traits<char>::false_text().compare(0, size, begin, size) != 0)
+    if (traits<CharT>::false_text().compare(0, size, begin, size) != 0)
     {
         type = token::code::error_unexpected_token;
         goto end;
@@ -393,19 +412,20 @@ inline token::code::value decoder::next_f_keyword() BOOST_NOEXCEPT
     return type;
 }
 
-inline token::code::value decoder::next_n_keyword() BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
 {
     token::code::value type = token::code::null;
-    view_type::const_iterator begin = input.begin();
+    typename view_type::const_iterator begin = input.begin();
 
-    const std::size_t size = traits<char>::null_text().size();
+    const std::size_t size = traits<CharT>::null_text().size();
     if (input.size() < size)
     {
         input.remove_prefix(input.size());
         type = token::code::end;
         goto end;
     }
-    if (traits<char>::null_text().compare(0, size, begin, size) != 0)
+    if (traits<CharT>::null_text().compare(0, size, begin, size) != 0)
     {
         type = token::code::error_unexpected_token;
         goto end;
@@ -423,19 +443,20 @@ inline token::code::value decoder::next_n_keyword() BOOST_NOEXCEPT
     return type;
 }
 
-inline token::code::value decoder::next_t_keyword() BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
 {
     token::code::value type = token::code::true_value;
-    view_type::const_iterator begin = input.begin();
+    typename view_type::const_iterator begin = input.begin();
 
-    const std::size_t size = traits<char>::true_text().size();
+    const std::size_t size = traits<CharT>::true_text().size();
     if (input.size() < size)
     {
         input.remove_prefix(input.size());
         type = token::code::end;
         goto end;
     }
-    if (traits<char>::true_text().compare(0, size, begin, size) != 0)
+    if (traits<CharT>::true_text().compare(0, size, begin, size) != 0)
     {
         type = token::code::error_unexpected_token;
         goto end;
@@ -453,12 +474,13 @@ inline token::code::value decoder::next_t_keyword() BOOST_NOEXCEPT
     return type;
 }
 
-inline token::code::value decoder::next_number() BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
 {
-    view_type::const_iterator begin = input.begin();
+    typename view_type::const_iterator begin = input.begin();
     token::code::value type = token::code::integer;
 
-    const bool is_negative = (*begin == traits<char>::alpha_minus);
+    const bool is_negative = (*begin == traits<CharT>::alpha_minus);
     if (is_negative)
     {
         input.remove_prefix(1); // Skip '-'
@@ -470,8 +492,8 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
     }
 
     {
-        view_type::const_iterator digit_begin = input.begin();
-        while (!input.empty() && traits<char>::is_digit(input.front()))
+        typename view_type::const_iterator digit_begin = input.begin();
+        while (!input.empty() && traits<CharT>::is_digit(input.front()))
         {
             input.remove_prefix(1);
         }
@@ -483,7 +505,7 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
         }
         if (!input.empty())
         {
-            if (input.front() == traits<char>::alpha_dot)
+            if (input.front() == traits<CharT>::alpha_dot)
             {
                 type = token::code::floating;
                 input.remove_prefix(1);
@@ -492,8 +514,8 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
                     type = token::code::end;
                     goto end;
                 }
-                view_type::const_iterator fraction_begin = input.begin();
-                while (!input.empty() && traits<char>::is_digit(input.front()))
+                typename view_type::const_iterator fraction_begin = input.begin();
+                while (!input.empty() && traits<CharT>::is_digit(input.front()))
                 {
                     input.remove_prefix(1);
                 }
@@ -503,8 +525,8 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
                     goto end;
                 }
             }
-            if (!input.empty() && ((input.front() == traits<char>::alpha_E) ||
-                                   (input.front() == traits<char>::alpha_e)))
+            if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
+                                   (input.front() == traits<CharT>::alpha_e)))
             {
                 type = token::code::floating;
                 input.remove_prefix(1);
@@ -514,7 +536,7 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
                     goto end;
                 }
 
-                if (input.front() == traits<char>::alpha_plus)
+                if (input.front() == traits<CharT>::alpha_plus)
                 {
                     input.remove_prefix(1);
                     if (input.empty())
@@ -523,7 +545,7 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
                         goto end;
                     }
                 }
-                else if (input.front() == traits<char>::alpha_minus)
+                else if (input.front() == traits<CharT>::alpha_minus)
                 {
                     input.remove_prefix(1);
                     if (input.empty())
@@ -532,8 +554,8 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
                         goto end;
                     }
                 }
-                view_type::const_iterator exponent_begin = input.begin();
-                while (!input.empty() && traits<char>::is_digit(input.front()))
+                typename view_type::const_iterator exponent_begin = input.begin();
+                while (!input.empty() && traits<CharT>::is_digit(input.front()))
                 {
                     input.remove_prefix(1);
                 }
@@ -551,27 +573,28 @@ inline token::code::value decoder::next_number() BOOST_NOEXCEPT
     return type;
 }
 
-inline token::code::value decoder::next_string() BOOST_NOEXCEPT
+template <typename CharT>
+token::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
 {
-    assert(input.front() == traits<char>::alpha_quote);
+    assert(input.front() == traits<CharT>::alpha_quote);
 
-    view_type::const_iterator marker = input.begin();
-    view_type::const_iterator end = input.end();
+    typename view_type::const_iterator marker = input.begin();
+    typename view_type::const_iterator end = input.end();
     ++marker; // Skip initial '"'
     while (marker != end)
     {
-        const view_type::size_type amount = traits<char>::extra_bytes(*marker);
+        const typename view_type::size_type amount = traits<CharT>::extra_bytes(*marker);
 
         if (amount > 0)
         {
             // Skip UTF-8 characters
-            const view_type::size_type distance = std::distance(marker, end);
+            const typename view_type::size_type distance = std::distance(marker, end);
             if (amount >= distance)
                 goto error;
 
             ++marker;
 
-            for (view_type::size_type i = 0; i < amount; ++i)
+            for (typename view_type::size_type i = 0; i < amount; ++i)
             {
                 // Check for 10xxxxxx pattern of subsequent bytes
                 if ((*marker & 0xC0) != 0x80)
@@ -582,63 +605,63 @@ inline token::code::value decoder::next_string() BOOST_NOEXCEPT
         else
         {
             const value_type character = *marker++;
-            if (character == traits<char>::alpha_reverse_solidus)
+            if (character == traits<CharT>::alpha_reverse_solidus)
             {
                 // Handle escaped character
                 if (marker == end)
                     goto eof;
                 switch (*marker++)
                 {
-                case traits<char>::alpha_quote:
-                case traits<char>::alpha_reverse_solidus:
-                case traits<char>::alpha_solidus:
-                case traits<char>::alpha_b:
-                case traits<char>::alpha_f:
-                case traits<char>::alpha_n:
-                case traits<char>::alpha_r:
-                case traits<char>::alpha_t:
+                case traits<CharT>::alpha_quote:
+                case traits<CharT>::alpha_reverse_solidus:
+                case traits<CharT>::alpha_solidus:
+                case traits<CharT>::alpha_b:
+                case traits<CharT>::alpha_f:
+                case traits<CharT>::alpha_n:
+                case traits<CharT>::alpha_r:
+                case traits<CharT>::alpha_t:
                     break;
 
-                case traits<char>::alpha_u:
+                case traits<CharT>::alpha_u:
                     switch (std::distance(marker, end))
                     {
                     case 0:
                         goto eof;
                     case 1:
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         goto eof;
                     case 2:
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         goto eof;
                     case 3:
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         goto eof;
                     default:
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<char>::is_hexdigit(*marker))
+                        if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         break;
@@ -649,7 +672,7 @@ inline token::code::value decoder::next_string() BOOST_NOEXCEPT
                     goto error;
                 }
             }
-            else if (character == traits<char>::alpha_quote)
+            else if (character == traits<CharT>::alpha_quote)
             {
                 // Handle end of string
                 current.view = view_type(input.begin(), std::distance(input.begin(), marker)); // Includes terminating '"'
@@ -667,15 +690,16 @@ inline token::code::value decoder::next_string() BOOST_NOEXCEPT
     return token::code::error_unexpected_token;
 }
 
-inline void decoder::skip_whitespaces() BOOST_NOEXCEPT
+template <typename CharT>
+void basic_decoder<CharT>::skip_whitespaces() BOOST_NOEXCEPT
 {
-    view_type::size_type size = view_type::size_type();
-    view_type::const_iterator end = input.end();
-    for (view_type::const_iterator it = input.begin();
+    typename view_type::size_type size = typename view_type::size_type();
+    typename view_type::const_iterator end = input.end();
+    for (typename view_type::const_iterator it = input.begin();
          it != end;
          ++it)
     {
-        if (!traits<char>::is_space(*it))
+        if (!traits<CharT>::is_space(*it))
             break;
         ++size;
     }
@@ -685,13 +709,14 @@ inline void decoder::skip_whitespaces() BOOST_NOEXCEPT
     }
 }
 
-inline bool decoder::at_keyword_end() const BOOST_NOEXCEPT
+template <typename CharT>
+bool basic_decoder<CharT>::at_keyword_end() const BOOST_NOEXCEPT
 {
     if (input.empty())
     {
         return true;
     }
-    return !traits<char>::is_keyword(input.front());
+    return !traits<CharT>::is_keyword(input.front());
 }
 
 } // namespace detail

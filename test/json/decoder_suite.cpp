@@ -14,6 +14,8 @@
 using namespace trial::protocol;
 namespace token = json::token;
 
+typedef json::detail::basic_decoder<char> decoder_type;
+
 //-----------------------------------------------------------------------------
 // Whitespaces
 //-----------------------------------------------------------------------------
@@ -24,42 +26,42 @@ namespace whitespace_suite
 void test_empty()
 {
     const char input[] = "";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
 void test_spaces()
 {
     const char input[] = "  ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
 void test_tabs()
 {
     const char input[] = "\t\t";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
 void test_carriage_returns()
 {
     const char input[] = "\r\r";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
 void test_newlines()
 {
     const char input[] = "\n\n";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
 void test_junk()
 {
     const char input[] = "n true";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
@@ -87,7 +89,7 @@ namespace basic_suite
 void test_null()
 {
     const char input[] = "null";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::null);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
@@ -96,7 +98,7 @@ void test_null()
 void test_null_white()
 {
     const char input[] = "  null  ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::null);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
@@ -105,7 +107,7 @@ void test_null_white()
 void fail_nul()
 {
     const char input[] = "nul";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "nul");
 }
@@ -113,7 +115,7 @@ void fail_nul()
 void fail_nuller()
 {
     const char input[] = "nuller";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "nuller");
 }
@@ -121,7 +123,7 @@ void fail_nuller()
 void test_false()
 {
     const char input[] = "false";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::false_value);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
@@ -130,7 +132,7 @@ void test_false()
 void test_false_white()
 {
     const char input[] = "  false  ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::false_value);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
@@ -139,7 +141,7 @@ void test_false_white()
 void fail_fals()
 {
     const char input[] = "fals";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "fals");
 }
@@ -147,7 +149,7 @@ void fail_fals()
 void fail_falser()
 {
     const char input[] = "falser";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "falser");
 }
@@ -155,7 +157,7 @@ void fail_falser()
 void test_true()
 {
     const char input[] = "true";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::true_value);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
@@ -164,7 +166,7 @@ void test_true()
 void test_true_white()
 {
     const char input[] = "  true  ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::true_value);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
@@ -173,7 +175,7 @@ void test_true_white()
 void fail_tru()
 {
     const char input[] = "tru";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "tru");
 }
@@ -181,7 +183,7 @@ void fail_tru()
 void fail_truer()
 {
     const char input[] = "truer";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "truer");
 }
@@ -216,7 +218,7 @@ namespace integer_suite
 void test_zero()
 {
     const char input[] = "0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<int>(), 0);
     decoder.next();
@@ -226,7 +228,7 @@ void test_zero()
 void test_zero_white()
 {
     const char input[] = "  0  ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), 0);
     decoder.next();
@@ -236,7 +238,7 @@ void test_zero_white()
 void test_hundred()
 {
     const char input[] = "100";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), 100);
     decoder.next();
@@ -246,7 +248,7 @@ void test_hundred()
 void test_minus_hundred()
 {
     const char input[] = "-100";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), -100);
     decoder.next();
@@ -256,7 +258,7 @@ void test_minus_hundred()
 void test_large()
 {
     const char input[] = "100000000000000000";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), INT64_C(100000000000000000));
     decoder.next();
@@ -266,7 +268,7 @@ void test_large()
 void test_max()
 {
     const char input[] = "9223372036854775807";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), INT64_C(9223372036854775807));
     decoder.next();
@@ -276,7 +278,7 @@ void test_max()
 void fail_minus()
 {
     const char input[] = "-";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "-");
 }
@@ -284,7 +286,7 @@ void fail_minus()
 void fail_minus_white()
 {
     const char input[] = "- 0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "-");
 }
@@ -292,7 +294,7 @@ void fail_minus_white()
 void fail_minus_alpha()
 {
     const char input[] = "-a";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "-");
 }
@@ -300,7 +302,7 @@ void fail_minus_alpha()
 void fail_too_large()
 {
     const char input[] = "10000000000000000000";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "10000000000000000000");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<boost::int64_t>(),
@@ -310,7 +312,7 @@ void fail_too_large()
 void fail_as_float()
 {
     const char input[] = "1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<float>(),
@@ -320,7 +322,7 @@ void fail_as_float()
 void fail_as_string()
 {
     const char input[] = "1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::string>(),
@@ -330,7 +332,7 @@ void fail_as_string()
 void test_short()
 {
     const char input[] = "1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<short>(), 1);
     decoder.next();
@@ -340,7 +342,7 @@ void test_short()
 void test_int()
 {
     const char input[] = "1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<int>(), 1);
     decoder.next();
@@ -350,7 +352,7 @@ void test_int()
 void test_long()
 {
     const char input[] = "1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<long>(), 1);
     decoder.next();
@@ -360,7 +362,7 @@ void test_long()
 void test_intmax()
 {
     const char input[] = "1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::intmax_t>(), 1);
     decoder.next();
@@ -370,7 +372,7 @@ void test_intmax()
 void test_unsigned()
 {
     const char input[] = "1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<unsigned int>(), 1);
     decoder.next();
@@ -380,7 +382,7 @@ void test_unsigned()
 void fail_unsigned_negative()
 {
     const char input[] = "-1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<unsigned int>(),
                                     json::error, "invalid value");
@@ -421,7 +423,7 @@ namespace floating_suite
 void test_zero()
 {
     const char input[] = "0.0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 0.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 0.0);
@@ -432,7 +434,7 @@ void test_zero()
 void test_one()
 {
     const char input[] = "1.0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
@@ -443,7 +445,7 @@ void test_one()
 void test_minus_one()
 {
     const char input[] = "-1.0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), -1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), -1.0);
@@ -454,7 +456,7 @@ void test_minus_one()
 void test_half()
 {
     const char input[] = "0.5";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 0.5f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 0.5);
@@ -465,7 +467,7 @@ void test_half()
 void test_one_exp_one()
 {
     const char input[] = "1e1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
@@ -476,7 +478,7 @@ void test_one_exp_one()
 void test_one_upper_exp_one()
 {
     const char input[] = "1E1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
@@ -487,7 +489,7 @@ void test_one_upper_exp_one()
 void test_one_dot_exp_one()
 {
     const char input[] = "1.0e1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
@@ -498,7 +500,7 @@ void test_one_dot_exp_one()
 void test_one_exp_plus_one()
 {
     const char input[] = "1e+1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
@@ -509,7 +511,7 @@ void test_one_exp_plus_one()
 void test_one_exp_minus_one()
 {
     const char input[] = "1e-1";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e-1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e-1);
@@ -520,7 +522,7 @@ void test_one_exp_minus_one()
 void fail_missing_fraction()
 {
     const char input[] = "0.";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0.");
 }
@@ -528,7 +530,7 @@ void fail_missing_fraction()
 void fail_missing_fraction_white()
 {
     const char input[] = "0. ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0.");
 }
@@ -536,7 +538,7 @@ void fail_missing_fraction_white()
 void fail_missing_exponent()
 {
     const char input[] = "0e";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0e");
 }
@@ -544,7 +546,7 @@ void fail_missing_exponent()
 void fail_missing_exponent_white()
 {
     const char input[] = "0e ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0e");
 }
@@ -552,7 +554,7 @@ void fail_missing_exponent_white()
 void fail_missing_exponent_plus()
 {
     const char input[] = "0e+";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0e+");
 }
@@ -560,7 +562,7 @@ void fail_missing_exponent_plus()
 void fail_missing_exponent_plus_white()
 {
     const char input[] = "0e+ ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0e+");
 }
@@ -568,7 +570,7 @@ void fail_missing_exponent_plus_white()
 void fail_missing_exponent_minus()
 {
     const char input[] = "0e-";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0e-");
 }
@@ -576,7 +578,7 @@ void fail_missing_exponent_minus()
 void fail_missing_exponent_minus_white()
 {
     const char input[] = "0e- ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0e-");
 }
@@ -584,7 +586,7 @@ void fail_missing_exponent_minus_white()
 void fail_as_int()
 {
     const char input[] = "1.0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
@@ -594,7 +596,7 @@ void fail_as_int()
 void fail_as_string()
 {
     const char input[] = "1.0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::string>(),
@@ -635,7 +637,7 @@ namespace string_suite
 void test_empty()
 {
     const char input[] = "\"\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\"");
@@ -646,7 +648,7 @@ void test_empty()
 void test_space()
 {
     const char input[] = "\" \"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), " ");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\" \"");
@@ -657,7 +659,7 @@ void test_space()
 void test_alpha()
 {
     const char input[] = "\"alpha\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha");
     decoder.next();
@@ -667,7 +669,7 @@ void test_alpha()
 void test_alpha_bravo()
 {
     const char input[] = "\"alpha bravo\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), input);
@@ -678,7 +680,7 @@ void test_alpha_bravo()
 void test_escape_quote()
 {
     const char input[] = "\"\\\"\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\"");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\\"\"");
@@ -689,7 +691,7 @@ void test_escape_quote()
 void test_escape_reverse_solidus()
 {
     const char input[] = "\"\\\\\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\\");
     decoder.next();
@@ -699,7 +701,7 @@ void test_escape_reverse_solidus()
 void test_escape_solidus()
 {
     const char input[] = "\"\\/\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "/");
     decoder.next();
@@ -709,7 +711,7 @@ void test_escape_solidus()
 void test_escape_backspace()
 {
     const char input[] = "\"\\b\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\b");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\b\"");
@@ -720,7 +722,7 @@ void test_escape_backspace()
 void test_escape_formfeed()
 {
     const char input[] = "\"\\f\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\f");
     decoder.next();
@@ -730,7 +732,7 @@ void test_escape_formfeed()
 void test_escape_newline()
 {
     const char input[] = "\"\\n\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\n");
     decoder.next();
@@ -740,7 +742,7 @@ void test_escape_newline()
 void test_escape_carriage_return()
 {
     const char input[] = "\"\\r\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\r");
     decoder.next();
@@ -750,7 +752,7 @@ void test_escape_carriage_return()
 void test_escape_tab()
 {
     const char input[] = "\"\\t\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\t");
     decoder.next();
@@ -760,7 +762,7 @@ void test_escape_tab()
 void test_escape_unicode_one()
 {
     const char input[] = "\"\\u0001\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\x01");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u0001\"");
@@ -771,7 +773,7 @@ void test_escape_unicode_one()
 void test_escape_unicode_a()
 {
     const char input[] = "\"\\u0061\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "a");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u0061\"");
@@ -782,7 +784,7 @@ void test_escape_unicode_a()
 void test_escape_unicode_0123()
 {
     const char input[] = "\"\\u0123\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\u0123");
     decoder.next();
@@ -792,7 +794,7 @@ void test_escape_unicode_0123()
 void test_escape_unicode_4567()
 {
     const char input[] = "\"\\u4567\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\u4567");
     decoder.next();
@@ -802,7 +804,7 @@ void test_escape_unicode_4567()
 void test_escape_unicode_89AB()
 {
     const char input[] = "\"\\u89AB\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\u89AB");
     decoder.next();
@@ -812,7 +814,7 @@ void test_escape_unicode_89AB()
 void test_escape_unicode_CDEF()
 {
     const char input[] = "\"\\uCDEF\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\uCDEF");
     decoder.next();
@@ -822,7 +824,7 @@ void test_escape_unicode_CDEF()
 void fail_escape_unicode_missing_one()
 {
     const char input[] = "\"\\u000\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u000");
 }
@@ -830,7 +832,7 @@ void fail_escape_unicode_missing_one()
 void fail_escape_unicode_missing_two()
 {
     const char input[] = "\"\\u00\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u00");
 }
@@ -838,7 +840,7 @@ void fail_escape_unicode_missing_two()
 void fail_escape_unicode_missing_three()
 {
     const char input[] = "\"\\u0\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u0");
 }
@@ -846,7 +848,7 @@ void fail_escape_unicode_missing_three()
 void fail_escape_unicode_missing_four()
 {
     const char input[] = "\"\\u\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u");
 }
@@ -854,7 +856,7 @@ void fail_escape_unicode_missing_four()
 void fail_escape_unicode_eof()
 {
     const char input[] = "\"\\u0000";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u0000");
 }
@@ -862,7 +864,7 @@ void fail_escape_unicode_eof()
 void fail_escape_unicode_eof_one()
 {
     const char input[] = "\"\\u000";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u000");
 }
@@ -870,7 +872,7 @@ void fail_escape_unicode_eof_one()
 void fail_escape_unicode_eof_two()
 {
     const char input[] = "\"\\u00";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u00");
 }
@@ -878,7 +880,7 @@ void fail_escape_unicode_eof_two()
 void fail_escape_unicode_eof_three()
 {
     const char input[] = "\"\\u0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u0");
 }
@@ -886,7 +888,7 @@ void fail_escape_unicode_eof_three()
 void fail_escape_unicode_eof_four()
 {
     const char input[] = "\"\\u";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u");
 }
@@ -894,7 +896,7 @@ void fail_escape_unicode_eof_four()
 void fail_escape()
 {
     const char input[] = "\"\\\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\\"");
 }
@@ -902,7 +904,7 @@ void fail_escape()
 void fail_begin()
 {
     const char input[] = "\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"");
 }
@@ -910,7 +912,7 @@ void fail_begin()
 void fail_as_int()
 {
     const char input[] = "\"alpha\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
@@ -920,7 +922,7 @@ void fail_as_int()
 void fail_as_float()
 {
     const char input[] = "\"alpha\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<float>(),
@@ -976,7 +978,7 @@ namespace pangram_suite
 void test_english()
 {
     const char input[] = "\"The quick brown fox jumps over the lazy dog\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "The quick brown fox jumps over the lazy dog");
     decoder.next();
@@ -986,7 +988,7 @@ void test_english()
 void test_german()
 {
     const char input[] = "\"Falsches \\u00DCben von Xylophonmusik qu\\u00E4lt jeden gr\\u00F6\\u00DFeren Zwerg\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "Falsches Üben von Xylophonmusik quält jeden größeren Zwerg");
     decoder.next();
@@ -996,7 +998,7 @@ void test_german()
 void test_danish()
 {
     const char input[] = "\"Quizdeltagerne spiste jordb\\u00E6r med fl\\u00F8de, mens cirkusklovnen Wolther spillede p\\u00E5 xylofon\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "Quizdeltagerne spiste jordbær med fløde, mens cirkusklovnen Wolther spillede på xylofon");
     decoder.next();
@@ -1006,7 +1008,7 @@ void test_danish()
 void test_greek()
 {
     const char input[] = "\"\\u0393\\u03B1\\u03B6\\u03AD\\u03B5\\u03C2 \\u03BA\\u03B1\\u1F76 \\u03BC\\u03C5\\u03C1\\u03C4\\u03B9\\u1F72\\u03C2 \\u03B4\\u1F72\\u03BD \\u03B8\\u1F70 \\u03B2\\u03C1\\u1FF6 \\u03C0\\u03B9\\u1F70 \\u03C3\\u03C4\\u1F78 \\u03C7\\u03C1\\u03C5\\u03C3\\u03B1\\u03C6\\u1F76 \\u03BE\\u03AD\\u03C6\\u03C9\\u03C4\\u03BF\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "Γαζέες καὶ μυρτιὲς δὲν θὰ βρῶ πιὰ στὸ χρυσαφὶ ξέφωτο");
     decoder.next();
@@ -1033,7 +1035,7 @@ namespace container_suite
 void test_begin_object()
 {
     const char input[] = "{";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "{");
     decoder.next();
@@ -1043,7 +1045,7 @@ void test_begin_object()
 void test_begin_object_white()
 {
     const char input[] = " { ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "{");
     decoder.next();
@@ -1053,7 +1055,7 @@ void test_begin_object_white()
 void test_end_object()
 {
     const char input[] = "}";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "}");
     decoder.next();
@@ -1063,7 +1065,7 @@ void test_end_object()
 void test_end_object_white()
 {
     const char input[] = " } ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "}");
     decoder.next();
@@ -1073,7 +1075,7 @@ void test_end_object_white()
 void test_object()
 {
     const char input[] = "{ \"key\" : false }";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "{");
     decoder.next();
@@ -1094,7 +1096,7 @@ void test_object()
 void test_array_begin()
 {
     const char input[] = "[";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "[");
     decoder.next();
@@ -1104,7 +1106,7 @@ void test_array_begin()
 void test_array_begin_white()
 {
     const char input[] = " [ ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "[");
     decoder.next();
@@ -1114,7 +1116,7 @@ void test_array_begin_white()
 void test_array_end()
 {
     const char input[] = "]";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "]");
     decoder.next();
@@ -1124,7 +1126,7 @@ void test_array_end()
 void test_array_end_white()
 {
     const char input[] = " ] ";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "]");
     decoder.next();
@@ -1134,7 +1136,7 @@ void test_array_end_white()
 void test_array()
 {
     const char input[] = "[true, false]";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "[");
     decoder.next();
@@ -1177,7 +1179,7 @@ namespace view_suite
 void test_null()
 {
     const char input[] = "null";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::null);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "null");
     decoder.next();
@@ -1187,7 +1189,7 @@ void test_null()
 void test_true()
 {
     const char input[] = "true";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::true_value);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "true");
     decoder.next();
@@ -1197,7 +1199,7 @@ void test_true()
 void test_false()
 {
     const char input[] = "false";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::false_value);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "false");
     decoder.next();
@@ -1207,7 +1209,7 @@ void test_false()
 void test_integer_zero()
 {
     const char input[] = "0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::intmax_t>(), 0);
@@ -1218,7 +1220,7 @@ void test_integer_zero()
 void test_floating_zero()
 {
     const char input[] = "0.0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0.0");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 0.0);
@@ -1229,7 +1231,7 @@ void test_floating_zero()
 void test_floating_float()
 {
     const char input[] = "1.0";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "1.0");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1.0f);
@@ -1240,7 +1242,7 @@ void test_floating_float()
 void test_string_empty()
 {
     const char input[] = "\"\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\"");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "");
@@ -1251,7 +1253,7 @@ void test_string_empty()
 void test_string_alpha()
 {
     const char input[] = "\"alpha\"";
-    json::detail::decoder decoder(input);
+    decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"alpha\"");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha");
