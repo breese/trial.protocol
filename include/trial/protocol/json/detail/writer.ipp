@@ -51,7 +51,7 @@ struct detail_writer_overloader<CharT,
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
-    inline static size_type value(writer& self)
+    inline static size_type value(basic_writer<CharT>& self)
     {
         return self.begin_array_value();
     }
@@ -64,7 +64,7 @@ struct detail_writer_overloader<CharT,
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
-    inline static size_type value(writer& self)
+    inline static size_type value(basic_writer<CharT>& self)
     {
         return self.end_array_value();
     }
@@ -77,7 +77,7 @@ struct detail_writer_overloader<CharT,
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
-    inline static size_type value(writer& self)
+    inline static size_type value(basic_writer<CharT>& self)
     {
         return self.begin_object_value();
     }
@@ -90,7 +90,7 @@ struct detail_writer_overloader<CharT,
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
-    inline static size_type value(writer& self)
+    inline static size_type value(basic_writer<CharT>& self)
     {
         return self.end_object_value();
     }
