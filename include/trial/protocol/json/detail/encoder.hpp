@@ -27,16 +27,17 @@ namespace json
 namespace detail
 {
 
-class encoder
+template <typename CharT>
+class basic_encoder
 {
 public:
-    typedef char value_type;
+    typedef CharT value_type;
     typedef std::size_t size_type;
     typedef buffer::base<value_type> buffer_type;
-    typedef boost::basic_string_ref<char> view_type;
+    typedef boost::basic_string_ref<value_type> view_type;
 
     template <typename T>
-    encoder(T&);
+    basic_encoder(T&);
 
     //! @brief Write value
     //!
@@ -47,12 +48,13 @@ public:
     //! @brief Write boolean value
     size_type value(bool);
     //! @brief Write string literal
-    size_type value(const char *);
+    size_type value(const value_type *);
 
     size_type literal(const view_type&);
 
 private:
-    template <typename T, typename Enable = void> struct overloader;
+    template <typename C, typename T, typename Enable>
+    friend struct encoder_overloader;
 
     template <typename T> size_type integral_value(const T&);
     template <typename T> size_type floating_value(const T&);

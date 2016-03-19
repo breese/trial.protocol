@@ -20,6 +20,10 @@
 #include <boost/static_assert.hpp>
 #include <boost/array.hpp>
 #include <boost/utility/string_ref.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_floating_point.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
@@ -35,74 +39,102 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
-// encoder::overloader
+// encoder_overloader
 //-----------------------------------------------------------------------------
 
-template <typename T, typename Enable>
-struct encoder::overloader
+template <typename CharT, typename T, typename Enable = void>
+struct encoder_overloader
 {
 };
 
 // Tags
 
-template <>
-struct encoder::overloader<token::null>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, token::null> >::type>
 {
-    inline static size_type write(encoder& self)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    inline static size_type write(basic_encoder<CharT>& self)
     {
         return self.null_value();
     }
 };
 
-template <>
-struct encoder::overloader<token::begin_array>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
 {
-    inline static size_type write(encoder& self)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    inline static size_type write(basic_encoder<CharT>& self)
     {
         return self.begin_array_value();
     }
 };
 
-template <>
-struct encoder::overloader<token::end_array>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
 {
-    inline static size_type write(encoder& self)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    inline static size_type write(basic_encoder<CharT>& self)
     {
         return self.end_array_value();
     }
 };
 
-template <>
-struct encoder::overloader<token::begin_object>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
 {
-    inline static size_type write(encoder& self)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    inline static size_type write(basic_encoder<CharT>& self)
     {
         return self.begin_object_value();
     }
 };
 
-template <>
-struct encoder::overloader<token::end_object>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
 {
-    inline static size_type write(encoder& self)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    inline static size_type write(basic_encoder<CharT>& self)
     {
         return self.end_object_value();
     }
 };
 
-template <>
-struct encoder::overloader<token::value_separator>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, token::value_separator> >::type>
 {
-    static size_type write(encoder& self)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    static size_type write(basic_encoder<CharT>& self)
     {
         return self.value_separator_value();
     }
 };
 
-template <>
-struct encoder::overloader<token::name_separator>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, token::name_separator> >::type>
 {
-    static size_type write(encoder& self)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    static size_type write(basic_encoder<CharT>& self)
     {
         return self.name_separator_value();
     }
@@ -110,11 +142,15 @@ struct encoder::overloader<token::name_separator>
 
 // Integers
 
-template <typename T>
-struct encoder::overloader<T,
-                           typename boost::enable_if< boost::is_integral<T> >::type>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_integral<T> >::type>
 {
-    inline static size_type write(encoder& self, const T& data)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    inline static size_type write(basic_encoder<CharT>& self,
+                                  const T& data)
     {
         return self.integral_value(data);
     }
@@ -122,11 +158,15 @@ struct encoder::overloader<T,
 
 // Floating point numbers
 
-template <typename T>
-struct encoder::overloader<T,
-                           typename boost::enable_if< boost::is_floating_point<T> >::type>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_floating_point<T> >::type>
 {
-    inline static size_type write(encoder& self, const T& data)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    inline static size_type write(basic_encoder<CharT>& self,
+                                  const T& data)
     {
         return self.floating_value(data);
     }
@@ -134,41 +174,57 @@ struct encoder::overloader<T,
 
 // Strings
 
-template <>
-struct encoder::overloader<encoder::view_type>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, typename basic_encoder<CharT>::view_type> >::type>
 {
-    static size_type write(encoder& self, const view_type& data)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+    typedef typename basic_encoder<CharT>::view_type view_type;
+
+    static size_type write(basic_encoder<CharT>& self,
+                           const view_type& data)
     {
         return self.string_value(data);
     }
 };
 
-template <>
-struct encoder::overloader<std::string>
+template <typename CharT, typename T>
+struct encoder_overloader<CharT,
+                          T,
+                          typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
 {
-    static size_type write(encoder& self, const std::string& data)
+    typedef typename basic_encoder<CharT>::size_type size_type;
+
+    static size_type write(basic_encoder<CharT>& self,
+                           const std::basic_string<CharT>& data)
     {
         return self.string_value(data);
     }
 };
 
 //-----------------------------------------------------------------------------
-// encoder
+// basic_encoder<CharT>
 //-----------------------------------------------------------------------------
 
+template <typename CharT>
 template <typename T>
-encoder::encoder(T& output)
+basic_encoder<CharT>::basic_encoder(T& output)
     : buffer(new typename buffer::traits<T>::buffer_type(output))
 {
 };
 
+template <typename CharT>
 template <typename U>
-typename encoder::size_type encoder::value(const U& data)
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(const U& data)
 {
-    return overloader<U>::write(*this, data);
+    return encoder_overloader<CharT, U>::write(*this, data);
 }
 
-inline encoder::size_type encoder::value(bool data)
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(bool data)
 {
     if (data)
     {
@@ -180,24 +236,32 @@ inline encoder::size_type encoder::value(bool data)
     }
 };
 
-inline encoder::size_type encoder::value(const char *data)
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value(const value_type *data)
 {
-    return overloader<view_type>::write(*this, data);
+    return encoder_overloader<CharT, view_type>::write(*this, data);
 };
 
+template <typename CharT>
 template <typename U>
-encoder::size_type encoder::value()
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value()
 {
-    return overloader<U>::write(*this);
+    return encoder_overloader<CharT, U>::write(*this);
 }
 
-inline encoder::size_type encoder::literal(const view_type& data)
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::literal(const view_type& data)
 {
     return write(data);
 }
 
+template <typename CharT>
 template <typename T>
-encoder::size_type encoder::integral_value(const T& data)
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::integral_value(const T& data)
 {
     typedef boost::array<value_type, std::numeric_limits<T>::digits10 + 1> array_type;
     array_type output;
@@ -241,8 +305,10 @@ encoder::size_type encoder::integral_value(const T& data)
     return size;
 }
 
+template <typename CharT>
 template <typename T>
-encoder::size_type encoder::floating_value(const T& data)
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::floating_value(const T& data)
 {
     switch (boost::math::fpclassify(data))
     {
@@ -258,8 +324,10 @@ encoder::size_type encoder::floating_value(const T& data)
     return write(work);
 }
 
+template <typename CharT>
 template <typename T>
-encoder::size_type encoder::string_value(const T& data)
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::string_value(const T& data)
 {
     // This is an approximation of the size. Further characters may be
     // added by escaped characters, in which case we grow the buffer
@@ -332,42 +400,58 @@ encoder::size_type encoder::string_value(const T& data)
     return size;
 }
 
-inline encoder::size_type encoder::null_value()
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::null_value()
 {
     return write(traits<char>::null_text());
 }
 
-inline encoder::size_type encoder::begin_array_value()
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::begin_array_value()
 {
     return write(traits<char>::alpha_bracket_open);
 }
 
-inline encoder::size_type encoder::end_array_value()
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::end_array_value()
 {
     return write(traits<char>::alpha_bracket_close);
 }
 
-inline encoder::size_type encoder::begin_object_value()
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::begin_object_value()
 {
     return write(traits<char>::alpha_brace_open);
 }
 
-inline encoder::size_type encoder::end_object_value()
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::end_object_value()
 {
     return write(traits<char>::alpha_brace_close);
 }
 
-inline encoder::size_type encoder::value_separator_value()
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::value_separator_value()
 {
     return write(traits<char>::alpha_comma);
 }
 
-inline encoder::size_type encoder::name_separator_value()
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::name_separator_value()
 {
     return write(traits<char>::alpha_colon);
 }
 
-inline encoder::size_type encoder::write(value_type character)
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::write(value_type character)
 {
     const size_type size = sizeof(character);
     if (buffer->grow(size))
@@ -378,9 +462,11 @@ inline encoder::size_type encoder::write(value_type character)
     return 0;
 }
 
-inline encoder::size_type encoder::write(const view_type& data)
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::write(const view_type& data)
 {
-    const view_type::size_type size = data.size();
+    const typename view_type::size_type size = data.size();
     if (buffer->grow(size))
     {
         buffer->write(data);

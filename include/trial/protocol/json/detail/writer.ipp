@@ -185,7 +185,7 @@ inline writer::size_type writer::end_object_value()
 // frame
 //-----------------------------------------------------------------------------
 
-inline writer::frame::frame(detail::encoder& encoder,
+inline writer::frame::frame(encoder_type& encoder,
                             token::code::value code)
     : encoder(encoder),
       code(code),

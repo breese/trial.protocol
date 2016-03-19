@@ -31,8 +31,9 @@ namespace json
 class writer
 {
 public:
+    typedef char value_type;
     typedef std::size_t size_type;
-    typedef detail::encoder::view_type view_type;
+    typedef detail::basic_encoder<value_type>::view_type view_type;
 
     //! @brief Construct an incremental JSON writer.
     //!
@@ -68,16 +69,17 @@ private:
     size_type end_object_value();
 
 private:
-    detail::encoder encoder;
+    typedef detail::basic_encoder<value_type> encoder_type;
+    encoder_type encoder;
     mutable enum json::errc last_error;
 
     struct frame
     {
-        frame(detail::encoder& encoder, token::code::value);
+        frame(encoder_type& encoder, token::code::value);
 
         void write_separator();
 
-        detail::encoder& encoder;
+        encoder_type& encoder;
         token::code::value code;
         std::size_t counter;
     };
