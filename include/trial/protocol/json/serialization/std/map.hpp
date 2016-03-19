@@ -21,11 +21,11 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Key, typename T, typename Compare, typename Allocator>
-struct save_overloader< json::oarchive,
+template <typename CharT, typename Key, typename T, typename Compare, typename Allocator>
+struct save_overloader< json::basic_oarchive<CharT>,
                         typename std::map<Key, T, Compare, Allocator> >
 {
-    static void save(json::oarchive& archive,
+    static void save(json::basic_oarchive<CharT>& archive,
                      const std::map<Key, T, Compare, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
@@ -40,11 +40,11 @@ struct save_overloader< json::oarchive,
     }
 };
 
-template <typename Key, typename T, typename Compare, typename Allocator>
-struct load_overloader< json::iarchive,
+template <typename CharT, typename Key, typename T, typename Compare, typename Allocator>
+struct load_overloader< json::basic_iarchive<CharT>,
                         typename std::map<Key, T, Compare, Allocator> >
 {
-    static void load(json::iarchive& archive,
+    static void load(json::basic_iarchive<CharT>& archive,
                      std::map<Key, T, Compare, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
@@ -61,11 +61,11 @@ struct load_overloader< json::iarchive,
 };
 
 // Specialization for map<string, T>
-template <typename T, typename Compare, typename MapAllocator>
-struct save_overloader< json::oarchive,
+template <typename CharT, typename T, typename Compare, typename MapAllocator>
+struct save_overloader< json::basic_oarchive<CharT>,
                         typename std::map<std::string, T, Compare, MapAllocator> >
 {
-    static void save(json::oarchive& archive,
+    static void save(json::basic_oarchive<CharT>& archive,
                      const std::map<std::string, T, Compare, MapAllocator>& data,
                      const unsigned int /* protocol_version */)
     {
@@ -81,11 +81,11 @@ struct save_overloader< json::oarchive,
     }
 };
 
-template <typename T, typename Compare, typename MapAllocator>
-struct load_overloader< json::iarchive,
+template <typename CharT, typename T, typename Compare, typename MapAllocator>
+struct load_overloader< json::basic_iarchive<CharT>,
                         typename std::map<std::string, T, Compare, MapAllocator> >
 {
-    static void load(json::iarchive& archive,
+    static void load(json::basic_iarchive<CharT>& archive,
                      std::map<std::string, T, Compare, MapAllocator>& data,
                      const unsigned int /* protocol_version*/)
     {

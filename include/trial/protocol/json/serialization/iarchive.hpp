@@ -23,22 +23,25 @@ namespace protocol
 namespace json
 {
 
-class iarchive
-    : public boost::archive::detail::common_iarchive<iarchive>
+template <typename CharT>
+class basic_iarchive
+    : public boost::archive::detail::common_iarchive< basic_iarchive<CharT> >
 {
     friend class boost::archive::load_access;
 
 public:
-    iarchive(const json::reader&);
-    iarchive(const json::reader::view_type&);
+    typedef CharT value_type;
+
+    basic_iarchive(const json::reader&);
+    basic_iarchive(const json::reader::view_type&);
     template <typename Iterator>
-    iarchive(Iterator begin, Iterator end);
+    basic_iarchive(Iterator begin, Iterator end);
 
-    template<typename value_type>
-    void load_override(value_type& data);
+    template<typename T>
+    void load_override(T& data);
 
-    template<typename value_type>
-    void load_override(value_type& data, long);
+    template<typename T>
+    void load_override(T& data, long);
 
     template <typename T, std::size_t N>
     void load_override(T (&data)[N]);
@@ -74,9 +77,11 @@ private:
     void next(token::code::value);
 
 private:
-    json::reader reader;
+    json::basic_reader<value_type> reader;
 #endif
 };
+
+typedef basic_iarchive<char> iarchive;
 
 } // namespace json
 } // namespace protocol

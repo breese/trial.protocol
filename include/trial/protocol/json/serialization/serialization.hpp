@@ -26,12 +26,12 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Value>
-struct save_overloader<json::oarchive,
+template <typename CharT, typename Value>
+struct save_overloader<json::basic_oarchive<CharT>,
                        Value,
-                       typename boost::enable_if_c<has_save<json::oarchive, Value>::value>::type>
+                       typename boost::enable_if_c<has_save<json::basic_oarchive<CharT>, Value>::value>::type>
 {
-    static void save(json::oarchive& ar,
+    static void save(json::basic_oarchive<CharT>& ar,
                      const Value& data,
                      const unsigned int protocol_version)
     {
@@ -41,12 +41,12 @@ struct save_overloader<json::oarchive,
     }
 };
 
-template <typename Value>
-struct load_overloader<json::iarchive,
+template <typename CharT, typename Value>
+struct load_overloader<json::basic_iarchive<CharT>,
                        Value,
-                       typename boost::enable_if_c<has_load<json::iarchive, Value>::value>::type>
+                       typename boost::enable_if_c<has_load<json::basic_iarchive<CharT>, Value>::value>::type>
 {
-    static void load(json::iarchive& ar,
+    static void load(json::basic_iarchive<CharT>& ar,
                      const Value& data,
                      const unsigned int protocol_version)
     {
@@ -56,13 +56,13 @@ struct load_overloader<json::iarchive,
     }
 };
 
-template <typename Value>
-struct serialize_overloader<json::iarchive,
+template <typename CharT, typename Value>
+struct serialize_overloader<json::basic_iarchive<CharT>,
                             Value,
-                            typename boost::enable_if_c<has_serialize<json::iarchive, Value>::value ||
-                                                        has_load<json::iarchive, Value>::value>::type>
+                            typename boost::enable_if_c<has_serialize<json::basic_iarchive<CharT>, Value>::value ||
+                                                        has_load<json::basic_iarchive<CharT>, Value>::value>::type>
 {
-    static void serialize(json::iarchive& ar,
+    static void serialize(json::basic_iarchive<CharT>& ar,
                           Value& data,
                           const unsigned int protocol_version)
     {
@@ -72,13 +72,13 @@ struct serialize_overloader<json::iarchive,
     }
 };
 
-template <typename Value>
-struct serialize_overloader<json::oarchive,
+template <typename CharT, typename Value>
+struct serialize_overloader<json::basic_oarchive<CharT>,
                             Value,
-                            typename boost::enable_if_c<has_serialize<json::oarchive, Value>::value ||
-                                                        has_save<json::oarchive, Value>::value>::type>
+                            typename boost::enable_if_c<has_serialize<json::basic_oarchive<CharT>, Value>::value ||
+                                                        has_save<json::basic_oarchive<CharT>, Value>::value>::type>
 {
-    static void serialize(json::oarchive& ar,
+    static void serialize(json::basic_oarchive<CharT>& ar,
                           Value& data,
                           const unsigned int protocol_version)
     {
@@ -104,56 +104,56 @@ namespace serialization
 // C++ does not have partial specialization of template functions so we use
 // functors to achieve the same effect.
 
-template <typename Value>
-void save(trial::protocol::json::oarchive& ar,
+template <typename CharT, typename Value>
+void save(trial::protocol::json::basic_oarchive<CharT>& ar,
           const Value& data,
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    save_overloader<trial::protocol::json::oarchive, Value>::save(ar, data, version);
+    save_overloader<trial::protocol::json::basic_oarchive<CharT>, Value>::save(ar, data, version);
 }
 
 // Boost.Serialization does not support perfect forwarding so we need two
 // overloads (for const and non-const values)
 
-template <typename Value>
-void serialize(trial::protocol::json::oarchive& ar,
+template <typename CharT, typename Value>
+void serialize(trial::protocol::json::basic_oarchive<CharT>& ar,
                const Value& data,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<trial::protocol::json::oarchive, Value>::serialize(ar, data, version);
+    serialize_overloader<trial::protocol::json::basic_oarchive<CharT>, Value>::serialize(ar, data, version);
 }
 
-template <typename Value>
-void serialize(trial::protocol::json::oarchive& ar,
+template <typename CharT, typename Value>
+void serialize(trial::protocol::json::basic_oarchive<CharT>& ar,
                Value& data,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<trial::protocol::json::oarchive, Value>::serialize(ar, data, version);
+    serialize_overloader<trial::protocol::json::basic_oarchive<CharT>, Value>::serialize(ar, data, version);
 }
 
 //-----------------------------------------------------------------------------
 // iarchive
 //-----------------------------------------------------------------------------
 
-template <typename Value>
-void load(trial::protocol::json::iarchive& ar,
+template <typename CharT, typename Value>
+void load(trial::protocol::json::basic_iarchive<CharT>& ar,
           Value& data,
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    load_overloader<trial::protocol::json::iarchive, Value>::load(ar, data, version);
+    load_overloader<trial::protocol::json::basic_iarchive<CharT>, Value>::load(ar, data, version);
 }
 
-template <typename Value>
-void serialize(trial::protocol::json::iarchive& ar,
+template <typename CharT, typename Value>
+void serialize(trial::protocol::json::basic_iarchive<CharT>& ar,
                Value& data,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<trial::protocol::json::iarchive, Value>::serialize(ar, data, version);
+    serialize_overloader<trial::protocol::json::basic_iarchive<CharT>, Value>::serialize(ar, data, version);
 }
 
 

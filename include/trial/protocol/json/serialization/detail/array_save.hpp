@@ -21,20 +21,20 @@ namespace protocol
 namespace serialization
 {
 
-template <typename T, std::size_t N>
-struct save_overloader< json::oarchive,
+template <typename CharT, typename T, std::size_t N>
+struct save_overloader< json::basic_oarchive<CharT>,
                         T[N] >
 {
-    static void save(json::oarchive& ar,
+    static void save(json::basic_oarchive<CharT>& ar,
                      const T (&data)[N],
                      const unsigned int /* protocol_version */)
     {
-        ar.save<json::token::begin_array>();
+        ar.template save<json::token::begin_array>();
         for (std::size_t i = 0; i < N; ++i)
         {
             ar.save_override(data[i]);
         }
-        ar.save<json::token::end_array>();
+        ar.template save<json::token::end_array>();
     }
 };
 

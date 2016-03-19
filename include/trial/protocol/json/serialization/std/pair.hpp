@@ -21,11 +21,11 @@ namespace protocol
 namespace serialization
 {
 
-template <typename T1, typename T2>
-struct save_overloader< json::oarchive,
+template <typename CharT, typename T1, typename T2>
+struct save_overloader< json::basic_oarchive<CharT>,
                         typename std::pair<T1, T2> >
 {
-    static void save(json::oarchive& archive,
+    static void save(json::basic_oarchive<CharT>& archive,
                      const std::pair<T1, T2>& data,
                      const unsigned int)
     {
@@ -36,11 +36,11 @@ struct save_overloader< json::oarchive,
     }
 };
 
-template <typename T1, typename T2>
-struct load_overloader< json::iarchive,
+template <typename CharT, typename T1, typename T2>
+struct load_overloader< json::basic_iarchive<CharT>,
                         typename std::pair<T1, T2> >
 {
-    static void load(json::iarchive& archive,
+    static void load(json::basic_iarchive<CharT>& archive,
                      std::pair<T1, T2>& data,
                      const unsigned int)
     {

@@ -21,22 +21,24 @@ namespace protocol
 namespace serialization
 {
 
-template <>
-struct save_overloader<protocol::json::oarchive, std::string>
+template <typename CharT>
+struct save_overloader< protocol::json::basic_oarchive<CharT>,
+                        std::basic_string<CharT> >
 {
-    static void save(protocol::json::oarchive& ar,
-                     const std::string& data,
+    static void save(protocol::json::basic_oarchive<CharT>& ar,
+                     const std::basic_string<CharT>& data,
                      const unsigned int)
     {
         ar.save(data);
     }
 };
 
-template <>
-struct load_overloader<protocol::json::iarchive, std::string>
+template <typename CharT>
+struct load_overloader< protocol::json::basic_iarchive<CharT>,
+                        std::basic_string<CharT> >
 {
-    static void load(protocol::json::iarchive& ar,
-                     std::string& data,
+    static void load(protocol::json::basic_iarchive<CharT>& ar,
+                     std::basic_string<CharT>& data,
                      const unsigned int)
     {
         ar.load(data);

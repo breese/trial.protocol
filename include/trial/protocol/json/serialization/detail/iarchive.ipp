@@ -20,76 +20,89 @@ namespace protocol
 namespace json
 {
 
-inline iarchive::iarchive(const json::reader& reader)
+template <typename CharT>
+basic_iarchive<CharT>::basic_iarchive(const json::reader& reader)
     : reader(reader)
 {
 }
 
-inline iarchive::iarchive(const json::reader::view_type& view)
+template <typename CharT>
+basic_iarchive<CharT>::basic_iarchive(const json::reader::view_type& view)
     : reader(view)
 {
 }
 
+template <typename CharT>
 template <typename Iterator>
-iarchive::iarchive(Iterator begin, Iterator end)
-    : reader(json::reader::view_type(&*begin, std::distance(begin, end)))
+basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
+    : reader(json::basic_reader<CharT>::view_type(&*begin, std::distance(begin, end)))
 {
 }
 
-template<typename value_type>
-void iarchive::load_override(value_type& data)
+template <typename CharT>
+template<typename T>
+void basic_iarchive<CharT>::load_override(T& data)
 {
     boost::archive::load(*this, data);
 }
 
-template<typename value_type>
-void iarchive::load_override(value_type& data, long /* PFTO */)
+template <typename CharT>
+template<typename T>
+void basic_iarchive<CharT>::load_override(T& data, long /* PFTO */)
 {
     load_override(data);
 }
 
+template <typename CharT>
 template <typename T, std::size_t N>
-void iarchive::load_override(T (&data)[N])
+void basic_iarchive<CharT>::load_override(T (&data)[N])
 {
     // By-pass Boost.Serialization which has its own array formatting
     serialization::load_overloader<iarchive, T[N]>::load(*this, data, 0);
 }
 
+template <typename CharT>
 template <typename Tag>
-void iarchive::load()
+void basic_iarchive<CharT>::load()
 {
     next(Tag::code);
 }
 
+template <typename CharT>
 template <typename T>
-void iarchive::load(T& value)
+void basic_iarchive<CharT>::load(T& value)
 {
     value = reader.template value<T>();
     next();
 }
 
+template <typename CharT>
 template <typename Tag>
-bool iarchive::at() const
+bool basic_iarchive<CharT>::at() const
 {
     return (reader.code() == Tag::code);
 }
 
-inline token::code::value iarchive::code() const
+template <typename CharT>
+token::code::value basic_iarchive<CharT>::code() const
 {
     return reader.code();
 }
 
-inline token::symbol::value iarchive::symbol() const
+template <typename CharT>
+token::symbol::value basic_iarchive<CharT>::symbol() const
 {
     return reader.symbol();
 }
 
-inline token::category::value iarchive::category() const
+template <typename CharT>
+token::category::value basic_iarchive<CharT>::category() const
 {
     return reader.category();
 }
 
-inline void iarchive::next()
+template <typename CharT>
+void basic_iarchive<CharT>::next()
 {
     if (!reader.next() && (reader.symbol() == token::symbol::error))
     {
@@ -97,7 +110,8 @@ inline void iarchive::next()
     }
 }
 
-inline void iarchive::next(token::code::value expect)
+template <typename CharT>
+void basic_iarchive<CharT>::next(token::code::value expect)
 {
     if (!reader.next(expect) && (reader.symbol() == token::symbol::error))
     {

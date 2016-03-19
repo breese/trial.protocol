@@ -20,44 +20,51 @@ namespace protocol
 namespace json
 {
 
+template <typename CharT>
 template <typename T>
-oarchive::oarchive(T& buffer)
+basic_oarchive<CharT>::basic_oarchive(T& buffer)
     : writer(buffer)
 {
 }
 
+template <typename CharT>
 template <typename Tag>
-void oarchive::save()
+void basic_oarchive<CharT>::save()
 {
     writer.template value<Tag>();
 }
 
+template <typename CharT>
 template <typename T>
-void oarchive::save(const T& data)
+void basic_oarchive<CharT>::save(const T& data)
 {
     writer.value(data);
 }
 
+template <typename CharT>
 template<typename T>
-void oarchive::save_override(const T& data)
+void basic_oarchive<CharT>::save_override(const T& data)
 {
     boost::archive::save(*this, data);
 }
 
+template <typename CharT>
 template<typename T>
-void oarchive::save_override(const T& data, long /* PFTO */)
+void basic_oarchive<CharT>::save_override(const T& data, long /* PFTO */)
 {
     save_override(data);
 }
 
+template <typename CharT>
 template <typename T, std::size_t N>
-inline void oarchive::save_override(const T (&data)[N])
+void basic_oarchive<CharT>::save_override(const T (&data)[N])
 {
     // By-pass Boost.Serialization which has its own array formatting
     serialization::save_overloader<oarchive, const T[N]>::save(*this, data, 0);
 }
 
-inline void oarchive::save_override(const char *data)
+template <typename CharT>
+void basic_oarchive<CharT>::save_override(const char *data)
 {
     save(data);
 }

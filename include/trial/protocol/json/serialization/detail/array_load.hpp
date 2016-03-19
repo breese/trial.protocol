@@ -21,24 +21,24 @@ namespace protocol
 namespace serialization
 {
 
-template <typename T, std::size_t N>
-struct load_overloader< json::iarchive,
+template <typename CharT, typename T, std::size_t N>
+struct load_overloader< json::basic_iarchive<CharT>,
                         T[N] >
 {
-    static void load(json::iarchive& ar,
+    static void load(json::basic_iarchive<CharT>& ar,
                      T (&data)[N],
                      const unsigned int /* protocol_version */)
     {
-        ar.load<json::token::begin_array>();
+        ar.template load<json::token::begin_array>();
         for (std::size_t i = 0; i < N; ++i)
         {
             T value;
             ar.load_override(value);
             data[i] = value;
         }
-        if (!ar.at<json::token::end_array>())
+        if (!ar.template at<json::token::end_array>())
             throw json::error(json::expected_end_array);
-        ar.load<json::token::end_array>();
+        ar.template load<json::token::end_array>();
     }
 };
 
