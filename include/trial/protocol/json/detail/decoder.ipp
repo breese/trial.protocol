@@ -93,9 +93,9 @@ basic_decoder<CharT>::basic_decoder(const view_type& view)
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::code(token::code::value value) BOOST_NOEXCEPT
+void basic_decoder<CharT>::code(token::code::value code) BOOST_NOEXCEPT
 {
-    current.code = value;
+    current.code = code;
 }
 
 template <typename CharT>

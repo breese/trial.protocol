@@ -27,7 +27,7 @@ struct save_overloader< protocol::transenc::oarchive,
 {
     static void save(protocol::transenc::oarchive& ar,
                      const std::pair<T1, T2>& data,
-                     const unsigned int version)
+                     const unsigned int)
     {
         ar.save<transenc::token::begin_record>();
         ar.save_override(data.first);
@@ -42,7 +42,7 @@ struct load_overloader< protocol::transenc::iarchive,
 {
     static void load(protocol::transenc::iarchive& ar,
                      std::pair<T1, T2>& data,
-                     const unsigned int version)
+                     const unsigned int)
     {
         ar.load<transenc::token::begin_record>();
         ar.load_override(data.first);

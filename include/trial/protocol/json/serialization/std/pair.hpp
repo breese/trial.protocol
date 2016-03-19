@@ -27,7 +27,7 @@ struct save_overloader< json::oarchive,
 {
     static void save(json::oarchive& archive,
                      const std::pair<T1, T2>& data,
-                     const unsigned int version)
+                     const unsigned int)
     {
         archive.template save<json::token::begin_array>();
         archive.save_override(data.first);
@@ -42,7 +42,7 @@ struct load_overloader< json::iarchive,
 {
     static void load(json::iarchive& archive,
                      std::pair<T1, T2>& data,
-                     const unsigned int version)
+                     const unsigned int)
     {
         archive.template load<json::token::begin_array>();
         archive.load_override(data.first);
