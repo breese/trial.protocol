@@ -115,7 +115,7 @@ public:
     }
 
 private:
-    json::writer writer;
+    json::basic_writer<value_type> writer;
     const Ptree& input;
 };
 
