@@ -35,7 +35,7 @@ basic_iarchive<CharT>::basic_iarchive(const json::reader::view_type& view)
 template <typename CharT>
 template <typename Iterator>
 basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
-    : reader(json::basic_reader<CharT>::view_type(&*begin, std::distance(begin, end)))
+    : reader(typename json::basic_reader<CharT>::view_type(&*begin, std::distance(begin, end)))
 {
 }
 
