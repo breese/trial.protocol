@@ -51,10 +51,11 @@ dummy d = reader.value<dummy>(); // Causes compilation error
 
 The unconverted textual data of the current token can be obtained with
 `reader::literal()`.
-This can be useful useful when displaying errors.
+This can be useful when displaying errors.
 The result of `reader::literal()` is different from `reader::value<std::string>()`.
 
-When done with the current token, the next token is found with `reader::next()`.
+When you are done with the current token, the next token is found with
+`reader::next()`.
 This function returns a bool, which is true unless either an error or the end of
 the input was encountered.
 Whitespaces and separators are skipped.
