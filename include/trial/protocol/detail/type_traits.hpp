@@ -50,12 +50,6 @@ struct floating_to_integer
         >::type type;
 };
 
-template <typename T, typename U>
-struct select_widest
-{
-    typedef typename boost::conditional<sizeof(T) >= sizeof(U), T, U>::type type;
-};
-
 } // namespace detail
 } // namespace protocol
 } // namespace trial
