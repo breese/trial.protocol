@@ -22,22 +22,21 @@ namespace detail
 {
 
 template <typename T>
-struct integer_to_floating
+struct make_floating_point
 {
-    // This is a crude approximation
-    typedef typename boost::conditional
-    <sizeof(T) <= sizeof(float),
-                  float,
-                  typename boost::conditional
-                  <sizeof(T) <= sizeof(double),
-                      double,
-                      long double
-                      >::type
-                   >::type type;
+    typedef typename boost::conditional<
+        boost::is_same< float, boost::common_type<T, float> >::value,
+        float,
+        typename boost::conditional<
+            boost::is_same< double, boost::common_type<T, double> >::value,
+            double,
+            long double
+            >::type
+        >::type type;
 };
 
 template <typename T>
-struct floating_to_integer
+struct make_integral
 {
     // This is a crude approximation
     typedef typename boost::conditional<

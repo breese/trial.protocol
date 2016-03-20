@@ -259,7 +259,7 @@ ReturnType basic_reader<CharT>::integral_value() const
         }
 
     case token::code::floating:
-        typedef typename protocol::detail::integer_to_floating<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
+        typedef typename protocol::detail::make_floating_point<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
         return ReturnType(boost::math::round(decoder.template value<floating_return_type>()));
 
     default:
@@ -275,7 +275,7 @@ ReturnType basic_reader<CharT>::floating_value() const
     switch (decoder.code())
     {
     case token::code::integer:
-        typedef typename protocol::detail::floating_to_integer<ReturnType>::type integer_return_type;
+        typedef typename protocol::detail::make_integral<ReturnType>::type integer_return_type;
         return ReturnType(decoder.template value<integer_return_type>());
 
     case token::code::floating:
