@@ -358,96 +358,96 @@ void test_float_zero()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0f), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0f), 7);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.00000");
 }
 
 void test_double_zero()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 16);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.00000000000000");
 }
 
 void test_double_one()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1.0), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1.0), 16);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.00000000000000");
 }
 
 void test_double_minus_one()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-1.0), 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-1");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-1.0), 17);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-1.00000000000000");
 }
 
 void test_double_half()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.5), 3);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.5");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.5), 17);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.500000000000000");
 }
 
 void test_double_minus_half()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-0.5), 4);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-0.5");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-0.5), 18);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-0.500000000000000");
 }
 
 void test_double_e_100()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1e100), 6);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1e+100");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1e100), 21);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.00000000000000e+100");
 }
 
 void test_double_e_minus_100()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1e-100), 6);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1e-100");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1e-100), 21);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.00000000000000e-100");
 }
 
 void test_float_max()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<float>::max()), 14);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "3.40282347e+38");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<float>::max()), 11);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "3.40282e+38");
 }
 
 void test_double_max()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<double>::max()), 23);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.7976931348623157e+308");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<double>::max()), 21);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.79769313486232e+308");
 }
 
 void test_float_min()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<float>::min()), 14);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.17549435e-38");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<float>::min()), 11);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.17549e-38");
 }
 
 void test_double_min()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<double>::min()), 23);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "2.2250738585072014e-308");
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<double>::min()), 21);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "2.22507385850720e-308");
 }
 
 void test_float_infinity()

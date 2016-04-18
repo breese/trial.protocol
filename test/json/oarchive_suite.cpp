@@ -143,7 +143,7 @@ void test_one()
     json::oarchive ar(result);
     double value = 1.0;
     ar << value;
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.00000000000000");
 }
 
 void test_const_one()
@@ -152,7 +152,7 @@ void test_const_one()
     json::oarchive ar(result);
     const double value = 1.0;
     ar << value;
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.00000000000000");
 }
 
 void test_half()
@@ -161,7 +161,7 @@ void test_half()
     json::oarchive ar(result);
     double value = 0.5;
     ar << value;
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.5");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.500000000000000");
 }
 
 void test_max()
@@ -170,7 +170,7 @@ void test_max()
     json::oarchive ar(result);
     double value = std::numeric_limits<double>::max();
     ar << value;
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.7976931348623157e+308");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1.79769313486232e+308");
 }
 
 void test_min()
@@ -179,7 +179,7 @@ void test_min()
     json::oarchive ar(result);
     double value = std::numeric_limits<double>::min();
     ar << value;
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "2.2250738585072014e-308");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "2.22507385850720e-308");
 }
 
 void test_infinity()
@@ -297,7 +297,7 @@ void test_double_four()
     json::oarchive ar(result);
     double array[] = { 1.5, 2.5, 3.5, 4.5 };
     ar << array;
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[1.5,2.5,3.5,4.5]");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[1.50000000000000,2.50000000000000,3.50000000000000,4.50000000000000]");
 }
 
 void run()

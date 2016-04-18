@@ -11,12 +11,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <sstream>
+#include <iomanip>
+#include <locale>
 #include <iterator>
-#if defined(BOOST_LEXICAL_CAST_ASSUME_C_LOCALE)
-#define TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
-#endif
-#define BOOST_LEXICAL_CAST_ASSUME_C_LOCALE 1
-#include <boost/lexical_cast.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/array.hpp>
 #include <boost/utility/string_ref.hpp>
@@ -320,11 +318,10 @@ basic_encoder<CharT>::floating_value(const T& data)
         break;
     }
 
-    // Workaround for CharT = unsigned char, which boost::lexical_cast
-    // does not support.
-    std::string work = boost::lexical_cast<std::string>(data);
-    std::basic_string<CharT> work_copy(work.begin(), work.end());
-    return write(work_copy);
+    std::basic_ostringstream<CharT> stream;
+    stream.imbue(std::locale::classic());
+    stream << std::showpoint << std::setprecision(std::numeric_limits<T>::digits10) << data;
+    return write(stream.str());
 }
 
 template <typename CharT>
@@ -482,10 +479,5 @@ basic_encoder<CharT>::write(const view_type& data)
 } // namespace json
 } // namespace protocol
 } // namespace trial
-
-#if defined(TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST)
-#define BOOST_LEXICAL_CAST_ASSUME_C_LOCALE TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST
-#undef TRIAL_PROTOCOL_JSON_DETAIL_LEXICAL_CAST
-#endif
 
 #endif // TRIAL_PROTOCOL_JSON_DETAIL_ENCODER_IPP

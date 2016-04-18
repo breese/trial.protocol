@@ -142,16 +142,16 @@ void test_literal_zero()
 {
     std::ostringstream result;
     json::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0.0), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0.0), 16);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.00000000000000");
 }
 
 void test_zero()
 {
     std::ostringstream result;
     json::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(double(0.0)), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(double(0.0)), 16);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.00000000000000");
 }
 
 void run()
