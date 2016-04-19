@@ -22,6 +22,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
+#include <boost/type_traits/make_unsigned.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
@@ -318,10 +319,13 @@ basic_encoder<CharT>::floating_value(const T& data)
         break;
     }
 
-    std::basic_ostringstream<CharT> stream;
+    // Workaround for CharT = unsigned char, which std::locale does not support
+    std::ostringstream stream;
     stream.imbue(std::locale::classic());
     stream << std::showpoint << std::setprecision(std::numeric_limits<T>::digits10) << data;
-    return write(stream.str());
+    std::string work = stream.str();
+    std::basic_string<CharT> work_copy(work.begin(), work.end());
+    return write(work_copy);
 }
 
 template <typename CharT>

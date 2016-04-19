@@ -21,6 +21,7 @@ using namespace trial::protocol;
 namespace token = json::token;
 
 typedef json::detail::basic_encoder<char> encoder_type;
+typedef json::detail::basic_encoder<unsigned char> unsigned_encoder_type;
 
 //-----------------------------------------------------------------------------
 // Buffer
@@ -370,6 +371,17 @@ void test_double_zero()
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0.00000000000000");
 }
 
+void test_unsigned_double_zero()
+{
+    std::basic_ostringstream<unsigned char> buffer;
+    unsigned_encoder_type encoder(buffer);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 16);
+    unsigned char expect[] = { '0', '.', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' };
+    std::basic_string<unsigned char> result = buffer.str();
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                          expect, expect + sizeof(expect));
+}
+
 void test_double_one()
 {
     std::ostringstream result;
@@ -502,6 +514,7 @@ void run()
 {
     test_float_zero();
     test_double_zero();
+    test_unsigned_double_zero();
     test_double_one();
     test_double_minus_one();
     test_double_half();
