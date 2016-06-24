@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <limits>
+#include <boost/cstdint.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_integral.hpp>
@@ -86,15 +87,15 @@ struct writer::overloader<T,
 {
     static size_type value(writer& self, T data)
     {
-        if (data <= std::numeric_limits<boost::int8_t>::max())
+        if (data <= boost::uint8_t(std::numeric_limits<boost::int8_t>::max()))
         {
             return self.encoder.value(static_cast<boost::int8_t>(data));
         }
-        else if (data <= std::numeric_limits<boost::int16_t>::max())
+        else if (data <= boost::uint16_t(std::numeric_limits<boost::int16_t>::max()))
         {
             return self.encoder.value(static_cast<boost::int16_t>(data));
         }
-        else if (data <= std::numeric_limits<boost::int32_t>::max())
+        else if (data <= boost::uint32_t(std::numeric_limits<boost::int32_t>::max()))
         {
             return self.encoder.value(static_cast<boost::int32_t>(data));
         }
