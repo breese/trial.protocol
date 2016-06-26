@@ -11,9 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <sstream>
-#include <iomanip>
-#include <locale>
 #include <iterator>
 #include <boost/static_assert.hpp>
 #include <boost/array.hpp>
@@ -25,6 +22,7 @@
 #include <boost/type_traits/make_unsigned.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <trial/protocol/buffer/base.hpp>
+#include <trial/protocol/json/detail/to_string.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 #include <trial/protocol/json/token.hpp>
 
@@ -316,16 +314,8 @@ basic_encoder<CharT>::floating_value(const T& data)
         // Infinity and NaN must be encoded as null
         return write(traits<CharT>::null_text());
     default:
-        break;
+        return write(detail::to_string<CharT>(data));
     }
-
-    // Workaround for CharT = unsigned char, which std::locale does not support
-    std::ostringstream stream;
-    stream.imbue(std::locale::classic());
-    stream << std::showpoint << std::setprecision(std::numeric_limits<T>::digits10) << data;
-    std::string work = stream.str();
-    std::basic_string<CharT> work_copy(work.begin(), work.end());
-    return write(work_copy);
 }
 
 template <typename CharT>
