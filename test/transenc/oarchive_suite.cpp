@@ -318,11 +318,33 @@ void test_many()
                                           expected, expected + sizeof(expected));
 }
 
+void test_big()
+{
+    std::vector<value_type> result;
+    format::oarchive ar(result);
+    std::vector<boost::uint8_t> value(0x10000, 0xFF);
+    ar << value;
+
+    std::vector<value_type> expected;
+    expected.push_back(token::code::binary32);
+    expected.push_back(0x00);
+    expected.push_back(0x00);
+    expected.push_back(0x01);
+    expected.push_back(0x00);
+    for (std::vector<value_type>::size_type i = 0; i < value.size(); ++i)
+    {
+        expected.push_back(0xFF);
+    }
+    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                          expected.begin(), expected.end());
+}
+
 void run()
 {
     test_empty();
     test_one();
     test_many();
+    test_big();
 }
 
 } // namespace binary_suite
