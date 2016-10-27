@@ -142,6 +142,38 @@ void test_int8()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
 
+void test_uint8()
+{
+    const value_type input[] = {
+        0x00,
+        0x7F,
+        token::code::int8, 0xD0,
+        0xFF
+    };
+    format::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0x7F);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0xD0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+}
+
 void test_int16()
 {
     const value_type input[] = { token::code::int16, 0x00, 0x01 };
@@ -171,6 +203,32 @@ void test_int16()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::int64::type>(), UINT64_C(0x0100));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float32::type>(), 256.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float64::type>(), 256.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+}
+
+void test_uint16()
+{
+    const value_type input[] = {
+        token::code::int16, 0xFF, 0x7F,
+        token::code::int16, 0x00, 0x80,
+        token::code::int16, 0xFF, 0xFF
+    };
+    format::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x7FFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x8000);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0xFFFF);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
@@ -209,6 +267,32 @@ void test_int32()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
 
+void test_uint32()
+{
+    const value_type input[] = {
+        token::code::int32, 0xFF, 0xFF, 0xFF, 0x7F,
+        token::code::int32, 0x00, 0x00, 0x00, 0x80,
+        token::code::int32, 0xFF, 0xFF, 0xFF, 0xFF
+    };
+    format::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x7FFFFFFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x80000000);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0xFFFFFFFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+}
+
 void test_int64()
 {
     const value_type input[] = { token::code::int64, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
@@ -240,6 +324,32 @@ void test_int64()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::int64::type>(), UINT64_C(0x100000000));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float32::type>(), 4294967296.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float64::type>(), 4294967296.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+}
+
+void test_uint64()
+{
+    const value_type input[] = {
+        token::code::int64, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F,
+        token::code::int64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
+        token::code::int64, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+    };
+    format::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x7FFFFFFFFFFFFFFF));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x8000000000000000));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0xFFFFFFFFFFFFFFFF));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
@@ -281,9 +391,13 @@ void test_float64()
 void run()
 {
     test_int8();
+    test_uint8();
     test_int16();
+    test_uint16();
     test_int32();
+    test_uint32();
     test_int64();
+    test_uint64();
     test_float32();
     test_float64();
 }

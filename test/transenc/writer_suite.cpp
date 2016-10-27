@@ -8,6 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <limits>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/buffer/string.hpp>
 #include <trial/protocol/buffer/vector.hpp>
@@ -96,6 +97,22 @@ void test_int8()
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x80);
 }
 
+void test_uint8()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0x00)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0x7F)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0xD0)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0xFF)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[0], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x7F);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[2], token::code::int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[3], 0xD0);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[4], 0xFF);
+}
+
 void test_int16()
 {
     std::vector<value_type> result;
@@ -105,6 +122,25 @@ void test_int16()
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x00);
     TRIAL_PROTOCOL_TEST_EQUAL(result[2], 0x01);
+}
+
+void test_uint16()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint16_t(0x7FFF)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint16_t(0x8000)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint16_t(0xFFFF)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[2], 0x7F);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[3], token::code::int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[4], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[5], 0x80);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[6], token::code::int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[7], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[8], 0xFF);
 }
 
 void test_int32()
@@ -120,11 +156,36 @@ void test_int32()
     TRIAL_PROTOCOL_TEST_EQUAL(result[4], 0x01);
 }
 
+void test_uint32()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint32_t(0x7FFFFFFF)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint32_t(0x80000000)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint32_t(0xFFFFFFFF)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 15);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[2], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[3], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[4], 0x7F);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[5], token::code::int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[6], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[7], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[8], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[9], 0x80);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[10], token::code::int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[11], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[12], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[13], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[14], 0xFF);
+}
+
 void test_int64()
 {
     std::vector<value_type> result;
     format::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(UINT64_C(0x100000000000000)), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(INT64_C(0x100000000000000)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x00);
@@ -135,6 +196,43 @@ void test_int64()
     TRIAL_PROTOCOL_TEST_EQUAL(result[6], 0x00);
     TRIAL_PROTOCOL_TEST_EQUAL(result[7], 0x00);
     TRIAL_PROTOCOL_TEST_EQUAL(result[8], 0x01);
+}
+
+void test_uint64()
+{
+    std::vector<value_type> result;
+    format::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint64_t(UINT64_C(0x7FFFFFFFFFFFFFFF))), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint64_t(UINT64_C(0x8000000000000000))), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint64_t(UINT64_C(0xFFFFFFFFFFFFFFFF))), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 27);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[2], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[3], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[4], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[5], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[6], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[7], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[8], 0x7F);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[9], token::code::int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[10], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[11], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[12], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[13], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[14], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[15], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[16], 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[17], 0x80);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[18], token::code::int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[19], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[20], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[21], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[22], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[23], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[24], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[25], 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(result[26], 0xFF);
 }
 
 void test_float()
@@ -171,9 +269,13 @@ void run()
 {
     test_zero();
     test_int8();
+    test_uint8();
     test_int16();
+    test_uint16();
     test_int32();
+    test_uint32();
     test_int64();
+    test_uint64();
     test_float();
     test_double();
 }
