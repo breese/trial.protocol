@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cassert>
+#include <cmath>
 #include <limits>
 #include <vector>
 #include <boost/static_assert.hpp>
@@ -19,6 +20,8 @@
 #include <boost/type_traits/common_type.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_unsigned.hpp>
+#include <boost/type_traits/make_unsigned.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <trial/protocol/detail/type_traits.hpp>
 #include <trial/protocol/transenc/token.hpp>
@@ -82,6 +85,7 @@ struct reader::overloader<bool>
 template <typename ReturnType>
 struct reader::overloader<ReturnType,
                           typename boost::enable_if_c< boost::is_arithmetic<ReturnType>::value &&
+                                                       !boost::is_unsigned<ReturnType>::value &&
                                                        !boost::is_same<ReturnType, bool>::value >::type>
 {
     static ReturnType convert(const reader& self)
@@ -138,6 +142,66 @@ struct reader::overloader<ReturnType,
                 if (result > std::numeric_limits<ReturnType>::max())
                     throw transenc::error(overflow);
                 return ReturnType(result);
+            }
+
+        default:
+            throw transenc::error(invalid_value);
+        }
+    }
+};
+
+template <typename ReturnType>
+struct reader::overloader<ReturnType,
+                          typename boost::enable_if_c< boost::is_arithmetic<ReturnType>::value &&
+                                                       boost::is_unsigned<ReturnType>::value &&
+                                                       !boost::is_same<ReturnType, bool>::value >::type>
+{
+    static ReturnType convert(const reader& self)
+    {
+        switch (self.code())
+        {
+        case token::int8::code:
+            {
+                token::int8::type result = self.decoder.value<token::int8>();
+                typedef typename boost::make_unsigned<token::int8::type>::type unsigned_type;
+                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
+                if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
+                    throw transenc::error(overflow);
+                return ReturnType(wide);
+            }
+
+        case token::int16::code:
+            {
+                token::int16::type result = self.decoder.value<token::int16>();
+                typedef typename boost::make_unsigned<token::int16::type>::type unsigned_type;
+                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
+                if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
+                    throw transenc::error(overflow);
+                return ReturnType(wide);
+            }
+
+        case token::int32::code:
+            {
+                token::int32::type result = self.decoder.value<token::int32>();
+                typedef typename boost::make_unsigned<token::int32::type>::type unsigned_type;
+                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
+                if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
+                    throw transenc::error(overflow);
+                return ReturnType(wide);
+            }
+
+        case token::int64::code:
+            {
+                token::int64::type result = self.decoder.value<token::int64>();
+                typedef typename boost::make_unsigned<token::int64::type>::type unsigned_type;
+                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
+                if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
+                    throw transenc::error(overflow);
+                return ReturnType(wide);
             }
 
         default:
