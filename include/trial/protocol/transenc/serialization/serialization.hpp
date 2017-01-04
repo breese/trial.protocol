@@ -49,7 +49,7 @@ struct load_overloader<transenc::iarchive,
 {
     static void load(transenc::iarchive& ar,
                      const Value& data,
-                     const unsigned int protocol_version)
+                     const unsigned int)
     {
         ar.load<transenc::token::begin_record>();
         data.load(ar);
