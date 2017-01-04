@@ -244,17 +244,17 @@ void basic_writer<CharT>::frame::write_separator()
         switch (code)
         {
         case token::code::end_array:
-            encoder.value<token::value_separator>();
+            encoder.template value<token::value_separator>();
             break;
 
         case token::code::end_object:
             if (counter % 2 == 0)
             {
-                encoder.value<token::value_separator>();
+                encoder.template value<token::value_separator>();
             }
             else
             {
-                encoder.value<token::name_separator>();
+                encoder.template value<token::name_separator>();
             }
             break;
 
