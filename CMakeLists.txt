@@ -16,10 +16,7 @@ set(TRIAL_PROTOCOL_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 set(LIBRARY_OUTPUT_PATH ${TRIAL_PROTOCOL_BUILD_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${TRIAL_PROTOCOL_BUILD_DIR}/bin)
 
-add_definitions(-g)
-add_definitions(-Wall)
-#add_definitions(-std=c++11)
-add_definitions(-ftemplate-backtrace-limit=0)
+#set(CMAKE_CXX_STANDARD 11)
 
 ###############################################################################
 # Boost package
@@ -47,6 +44,7 @@ function(trial_add_test name)
   add_executable(${name} ${ARGN})
   target_link_libraries(${name} ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
   add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
+  target_compile_options(${name} PRIVATE -Wall -Wextra)
 endfunction()
 
 enable_testing()
