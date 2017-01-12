@@ -51,7 +51,7 @@ enable_testing()
 
 add_subdirectory(test/buffer)
 add_subdirectory(test/json)
-add_subdirectory(test/transenc)
+add_subdirectory(test/bintoken)
 
 ###############################################################################
 # Examples
