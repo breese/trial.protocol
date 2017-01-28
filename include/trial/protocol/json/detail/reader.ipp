@@ -224,6 +224,13 @@ basic_reader<CharT>::literal() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
+const typename basic_reader<CharT>::view_type&
+basic_reader<CharT>::tail() const BOOST_NOEXCEPT
+{
+    return decoder.tail();
+}
+
+template <typename CharT>
 template <typename ReturnType>
 ReturnType basic_reader<CharT>::bool_value() const
 {

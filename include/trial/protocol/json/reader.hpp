@@ -115,6 +115,9 @@ public:
     //! @returns A view of the current value before it is converted into its type.
     const view_type& literal() const BOOST_NOEXCEPT;
 
+    //! @returns A view of the remaining buffer.
+    const view_type& tail() const BOOST_NOEXCEPT;
+
 #ifndef BOOST_DOXYGEN_INVOKED
 private:
     template <typename C, typename ReturnType, typename Enable>

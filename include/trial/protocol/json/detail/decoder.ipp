@@ -374,6 +374,13 @@ basic_decoder<CharT>::literal() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
+const typename basic_decoder<CharT>::view_type&
+basic_decoder<CharT>::tail() const BOOST_NOEXCEPT
+{
+    return input;
+}
+
+template <typename CharT>
 token::code::value basic_decoder<CharT>::next_token(token::code::value type) BOOST_NOEXCEPT
 {
     current.view = view_type(input.begin(), 1);

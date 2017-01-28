@@ -47,6 +47,7 @@ public:
     token::category::value category() const BOOST_NOEXCEPT;
     boost::system::error_code error() const BOOST_NOEXCEPT;
     const view_type& literal() const BOOST_NOEXCEPT;
+    const view_type& tail() const BOOST_NOEXCEPT;
     template <typename ReturnType> ReturnType value() const;
 
 private:

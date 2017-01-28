@@ -91,6 +91,8 @@ void test_null()
     const char input[] = "null";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -100,8 +102,11 @@ void test_null_white()
     const char input[] = "  null  ";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "  ");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "");
 }
 
 void fail_nul()
@@ -110,6 +115,7 @@ void fail_nul()
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "nul");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "");
 }
 
 void fail_nuller()
@@ -118,6 +124,7 @@ void fail_nuller()
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "nuller");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "");
 }
 
 void test_false()
@@ -1078,17 +1085,24 @@ void test_object()
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "{");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), " \"key\" : false }");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "key");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"key\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), " : false }");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::name_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), ":");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), " false }");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::false_value);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "false");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), " }");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "}");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1139,16 +1153,23 @@ void test_array()
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "true, false]");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::true_value);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "true");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), ", false]");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::value_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), ",");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), " false]");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::false_value);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "false");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "]");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "");
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }

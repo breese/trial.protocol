@@ -229,21 +229,36 @@ void test_integer_many()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "1,2,3]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",2,3]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "2");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",3]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "3");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -279,29 +294,53 @@ void test_integer_nested_many_siblings()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "[1],[2]]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "1],[2]]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "],[2]]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",[2]]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "2]]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "2");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -313,8 +352,13 @@ void fail_missing_value()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",]");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), ",");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
 }
 
 void fail_trailing_separator()
@@ -329,6 +373,8 @@ void fail_trailing_separator()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
 }
 
 void fail_empty_mismatched()
@@ -339,6 +385,8 @@ void fail_empty_mismatched()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::expected_end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "}");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
 }
 
 void fail_integer_one_mismatched()
@@ -353,6 +401,8 @@ void fail_integer_one_mismatched()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::expected_end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "}");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
 }
 
 void fail_outer()
@@ -366,6 +416,8 @@ void fail_outer()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), ",");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "false");
 }
 
 void run()
@@ -437,25 +489,43 @@ void test_many()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "{");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "\"alpha\":1,\"bravo\":2}");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ":1,\"bravo\":2}");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",\"bravo\":2}");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"bravo\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ":2}");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "2");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "}");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "}");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
+
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -545,6 +615,8 @@ void fail_invalid_integer_key()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::invalid_key);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ":1}");
 }
 
 void fail_invalid_null_key()
@@ -556,6 +628,8 @@ void fail_invalid_null_key()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::invalid_key);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ":1}");
 }
 
 void fail_invalid_true_key()
