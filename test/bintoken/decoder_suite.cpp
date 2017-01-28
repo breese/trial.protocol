@@ -10,6 +10,7 @@
 
 #include <limits>
 #include <algorithm> // std::fill_n
+#include <functional>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/bintoken/detail/decoder.hpp>
 #include <trial/protocol/detail/lightweight_test.hpp>
@@ -294,7 +295,7 @@ void test_max()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::int16>(),
-                        std::numeric_limits<token::int16::type>::max());
+                              std::numeric_limits<token::int16::type>::max());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -305,7 +306,7 @@ void test_min()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::int16>(),
-                        std::numeric_limits<token::int16::type>::min());
+                              std::numeric_limits<token::int16::type>::min());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -413,7 +414,7 @@ void test_max()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::int32>(),
-                        std::numeric_limits<token::int32::type>::max());
+                              std::numeric_limits<token::int32::type>::max());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -424,7 +425,7 @@ void test_min()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::int32>(),
-                        std::numeric_limits<token::int32::type>::min());
+                              std::numeric_limits<token::int32::type>::min());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -530,7 +531,7 @@ void test_max()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::int64>(),
-                        std::numeric_limits<token::int64::type>::max());
+                              std::numeric_limits<token::int64::type>::max());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -541,7 +542,7 @@ void test_min()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::int64>(),
-                        std::numeric_limits<token::int64::type>::min());
+                              std::numeric_limits<token::int64::type>::min());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -707,7 +708,7 @@ void test_max()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float32);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float32>(),
-                        std::numeric_limits<token::float32::type>::max());
+                              std::numeric_limits<token::float32::type>::max());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -718,7 +719,7 @@ void test_minus_max()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float32);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float32>(),
-                        -std::numeric_limits<token::float32::type>::max());
+                              -std::numeric_limits<token::float32::type>::max());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -729,7 +730,7 @@ void test_min()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float32);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float32>(),
-                        std::numeric_limits<token::float32::type>::min());
+                              std::numeric_limits<token::float32::type>::min());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -867,7 +868,7 @@ void test_max()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float64);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float64>(),
-                        std::numeric_limits<token::float64::type>::max());
+                              std::numeric_limits<token::float64::type>::max());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -878,7 +879,7 @@ void test_minus_max()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float64);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float64>(),
-                        -std::numeric_limits<token::float64::type>::max());
+                              -std::numeric_limits<token::float64::type>::max());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -889,7 +890,7 @@ void test_min()
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float64);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float64>(),
-                        std::numeric_limits<token::float64::type>::min());
+                              std::numeric_limits<token::float64::type>::min());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1359,8 +1360,9 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1373,8 +1375,9 @@ void test_one()
     const value_type expected[] = {
         0x12
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1387,8 +1390,9 @@ void test_two()
     const value_type expected[] = {
         0x12, 0x34
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1401,8 +1405,9 @@ void test_128()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary8);
     value_type expected[0x80];
     std::fill_n(&expected[0], sizeof(expected), 0x12);
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1436,8 +1441,9 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1450,8 +1456,9 @@ void test_one()
     const value_type expected[] = {
         0x12
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1464,8 +1471,9 @@ void test_two()
     const value_type expected[] = {
         0x12, 0x34
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1506,8 +1514,9 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1520,8 +1529,9 @@ void test_one()
     const value_type expected[] = {
         0x12
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1534,8 +1544,9 @@ void test_two()
     const value_type expected[] = {
         0x12, 0x34
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1592,8 +1603,9 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1606,8 +1618,9 @@ void test_one()
     const value_type expected[] = {
         0x12
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1620,8 +1633,9 @@ void test_two()
     const value_type expected[] = {
         0x12, 0x34
     };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(decoder.literal().begin(), decoder.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }

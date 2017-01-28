@@ -10,6 +10,7 @@
 
 #include <sstream>
 #include <limits>
+#include <functional>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/buffer/vector.hpp>
@@ -52,8 +53,9 @@ void test_vector()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(42), 2);
     std::string expected("42");
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected.begin(), expected.end());
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected.begin(), expected.end(),
+                                 std::equal_to<char>());
 }
 
 void test_string()
@@ -378,8 +380,9 @@ void test_unsigned_double_zero()
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 16);
     unsigned char expect[] = { '0', '.', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' };
     std::basic_string<unsigned char> result = buffer.str();
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expect, expect + sizeof(expect));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect, expect + sizeof(expect),
+                                 std::equal_to<unsigned char>());
 }
 
 void test_double_one()

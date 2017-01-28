@@ -8,6 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <functional>
 #include <vector>
 #include <boost/array.hpp>
 #include <trial/protocol/buffer/container.hpp>
@@ -59,8 +60,9 @@ void test_empty()
     vector_buffer<char> container(output);
 
     boost::array<char, 0> expected;
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                          expected.begin(), expected.end());
+    TRIAL_PROTOCOL_TEST_ALL_WITH(output.begin(), output.end(),
+                                 expected.begin(), expected.end(),
+                                 std::equal_to<char>());
 }
 
 void test_single()
@@ -71,8 +73,9 @@ void test_single()
     TRIAL_PROTOCOL_TEST_NO_THROW(container.write('A'));
 
     char expected[] = { 'A' };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(output.begin(), output.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<char>());
 }
 
 void test_view()
@@ -83,8 +86,9 @@ void test_view()
     TRIAL_PROTOCOL_TEST_EQUAL(container.grow(input.size()), true);
     TRIAL_PROTOCOL_TEST_NO_THROW(container.write(input));
 
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(output.begin(), output.end(),
-                                          input.begin(), input.end());
+    TRIAL_PROTOCOL_TEST_ALL_WITH(output.begin(), output.end(),
+                                 input.begin(), input.end(),
+                                 std::equal_to<char>());
 }
 
 void test()

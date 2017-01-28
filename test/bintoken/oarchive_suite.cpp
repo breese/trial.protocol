@@ -8,6 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <functional>
 #include <vector>
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/bintoken/serialization.hpp>
@@ -143,8 +144,9 @@ void test_all_types()
                               token::code::int16, 0x00, 0x01,
                               token::code::int32, 0x00, 0x00, 0x01, 0x00,
                               token::code::int64, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -173,8 +175,9 @@ void test_float32_one()
     ar << value;
 
     value_type expected[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_const_float32_one()
@@ -185,8 +188,9 @@ void test_const_float32_one()
     ar << value;
 
     value_type expected[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_float64_one()
@@ -197,8 +201,9 @@ void test_float64_one()
     ar << value;
 
     value_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -225,8 +230,9 @@ void test_empty()
     ar << value;
 
     value_type expected[] = { token::code::string8, 0x00 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_const_empty()
@@ -237,8 +243,9 @@ void test_const_empty()
     ar << value;
 
     value_type expected[] = { token::code::string8, 0x00 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_one()
@@ -249,8 +256,9 @@ void test_one()
     ar << value;
 
     value_type expected[] = { token::code::string8, 0x01, 0x41 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_many()
@@ -261,8 +269,9 @@ void test_many()
     ar << value;
 
     value_type expected[] = { token::code::string8, 0x04, 0x41, 0x42, 0x43, 0x44 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -290,8 +299,9 @@ void test_empty()
     ar << value;
 
     value_type expected[] = { token::code::binary8, 0x00 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_one()
@@ -302,8 +312,9 @@ void test_one()
     ar << value;
 
     value_type expected[] = { token::code::binary8, 0x01, 0xFF };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_many()
@@ -314,8 +325,9 @@ void test_many()
     ar << value;
 
     value_type expected[] = { token::code::binary8, 0x04, 0xFF, 0xFF, 0xFF, 0xFF };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_big()
@@ -335,8 +347,9 @@ void test_big()
     {
         expected.push_back(0xFF);
     }
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected.begin(), expected.end());
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected.begin(), expected.end(),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -367,8 +380,9 @@ void test_one()
                               0x01,
                               0x01,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_four()
@@ -382,8 +396,9 @@ void test_four()
                               0x04,
                               0x01, 0x02, 0x03, 0x04,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -412,8 +427,9 @@ void test_string_bool()
                               token::code::string8, 0x01, 0x41,
                               token::code::true_value,
                               token::code::end_record };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_const_string_bool()
@@ -427,8 +443,9 @@ void test_const_string_bool()
                               token::code::string8, 0x01, 0x41,
                               token::code::true_value,
                               token::code::end_record };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -454,8 +471,9 @@ void test_value()
     ar << value;
 
     value_type expected[] = { token::code::string8, 0x01, 0x41 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_const_value()
@@ -466,8 +484,9 @@ void test_const_value()
     ar << value;
 
     value_type expected[] = { token::code::string8, 0x01, 0x41 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_null()
@@ -478,8 +497,9 @@ void test_null()
     ar << value;
 
     value_type expected[] = { token::code::null };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -508,8 +528,9 @@ void test_bool_empty()
     value_type expected[] = { token::code::begin_array,
                               0x00,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_bool_one()
@@ -524,8 +545,9 @@ void test_bool_one()
                               0x01,
                               token::code::true_value,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_bool_two()
@@ -542,8 +564,9 @@ void test_bool_two()
                               token::code::true_value,
                               token::code::false_value,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -572,8 +595,9 @@ void test_int_empty()
     value_type expected[] = { token::code::begin_array,
                               token::code::null,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_int_one()
@@ -588,8 +612,9 @@ void test_int_one()
                               token::code::null,
                               0x11,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_int_two()
@@ -606,8 +631,9 @@ void test_int_two()
                               0x11,
                               0x22,
                               token::code::end_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -636,8 +662,9 @@ void test_string_bool_empty()
     value_type expected[] = { token::code::begin_assoc_array,
                               token::code::null,
                               token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_string_bool_one()
@@ -655,8 +682,9 @@ void test_string_bool_one()
                               token::code::true_value,
                               token::code::end_record,
                               token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_string_bool_two()
@@ -679,8 +707,9 @@ void test_string_bool_two()
                               token::code::false_value,
                               token::code::end_record,
                               token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void test_int_string_two()
@@ -703,8 +732,9 @@ void test_int_string_two()
                               token::code::string8, 0x01, 0x42,
                               token::code::end_record,
                               token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -753,8 +783,9 @@ void test_person()
                               token::code::string8, 0x03, 0x41, 0x42, 0x43,
                               0x7F,
                               token::code::end_record };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
@@ -809,8 +840,9 @@ void test_split_person()
                               token::code::string8, 0x03, 0x41, 0x42, 0x43,
                               0x7F,
                               token::code::end_record };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()

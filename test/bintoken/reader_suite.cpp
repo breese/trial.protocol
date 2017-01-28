@@ -8,6 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <functional>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/bintoken/reader.hpp>
 #include <trial/protocol/detail/lightweight_test.hpp>
@@ -475,8 +476,9 @@ void test_string8()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "ABC");
     const value_type expected[] = { 0x41, 0x42, 0x43 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(reader.literal().begin(), reader.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(reader.literal().begin(), reader.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<int>(),
                                     format::error, "invalid value");
 }
@@ -503,8 +505,9 @@ void test_binary8()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
     const value_type expected[] = { 0x41, 0x42, 0x43 };
-    TRIAL_PROTOCOL_TEST_EQUAL_COLLECTIONS(reader.literal().begin(), reader.literal().end(),
-                                          expected, expected + sizeof(expected));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(reader.literal().begin(), reader.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
 }
 
 void run()
