@@ -36,20 +36,21 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
-// encoder_overloader
+// encoder::overloader
 //-----------------------------------------------------------------------------
 
-template <typename CharT, typename T, typename Enable = void>
-struct encoder_overloader
+template <typename CharT>
+template <typename T, typename Enable>
+struct basic_encoder<CharT>::overloader
 {
 };
 
 // Tags
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, token::null> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, token::null> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -59,10 +60,10 @@ struct encoder_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -72,10 +73,10 @@ struct encoder_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -85,10 +86,10 @@ struct encoder_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -98,10 +99,10 @@ struct encoder_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -111,10 +112,10 @@ struct encoder_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, token::value_separator> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, token::value_separator> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -124,10 +125,10 @@ struct encoder_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, token::name_separator> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, token::name_separator> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -139,10 +140,10 @@ struct encoder_overloader<CharT,
 
 // Integers
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_integral<T> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_integral<T> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -155,10 +156,10 @@ struct encoder_overloader<CharT,
 
 // Floating point numbers
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_floating_point<T> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_floating_point<T> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -171,10 +172,10 @@ struct encoder_overloader<CharT,
 
 // Strings
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, typename basic_encoder<CharT>::view_type> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, typename basic_encoder<CharT>::view_type> >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
     typedef typename basic_encoder<CharT>::view_type view_type;
@@ -186,10 +187,10 @@ struct encoder_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct encoder_overloader<CharT,
-                          T,
-                          typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
+template <typename CharT>
+template <typename T>
+struct basic_encoder<CharT>::overloader<T,
+                                        typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
 {
     typedef typename basic_encoder<CharT>::size_type size_type;
 
@@ -216,7 +217,7 @@ template <typename U>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(const U& data)
 {
-    return encoder_overloader<CharT, U>::write(*this, data);
+    return basic_encoder<CharT>::overloader<U>::write(*this, data);
 }
 
 template <typename CharT>
@@ -237,7 +238,7 @@ template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(const value_type *data)
 {
-    return encoder_overloader<CharT, view_type>::write(*this, data);
+    return basic_encoder<CharT>::overloader<view_type>::write(*this, data);
 };
 
 template <typename CharT>
@@ -245,7 +246,7 @@ template <typename U>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value()
 {
-    return encoder_overloader<CharT, U>::write(*this);
+    return basic_encoder<CharT>::overloader<U>::write(*this);
 }
 
 template <typename CharT>

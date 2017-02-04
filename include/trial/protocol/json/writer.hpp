@@ -62,8 +62,8 @@ private:
     void validate_scope();
     void validate_scope(token::code::value, enum json::errc);
 
-    template <typename C, typename T, typename Enable>
-    friend struct detail_writer_overloader;
+    template <typename T, typename Enable = void>
+    struct overloader;
 
     size_type null_value();
     size_type begin_array_value();

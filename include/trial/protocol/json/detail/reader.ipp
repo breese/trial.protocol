@@ -26,65 +26,66 @@ namespace json
 {
 
 //-----------------------------------------------------------------------------
-// detail_reader_overloader
+// reader::overloader
 //-----------------------------------------------------------------------------
 
-template <typename CharT, typename ReturnType, typename Enable = void>
-struct detail_reader_overloader
+template <typename CharT>
+template <typename ReturnType, typename Enable>
+struct basic_reader<CharT>::overloader
 {
 };
 
 // Integers (not booleans)
 
-template <typename CharT, typename ReturnType>
-struct detail_reader_overloader<CharT,
-                                ReturnType,
-                                typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::overloader<ReturnType,
+                                       typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
 {
-    inline static ReturnType value(const reader& self)
+    inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.integral_value<ReturnType>();
+        return self.template integral_value<ReturnType>();
     }
 };
 
 // Floating-point numbers
 
-template <typename CharT, typename ReturnType>
-struct detail_reader_overloader<CharT,
-                                ReturnType,
-                                typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::overloader<ReturnType,
+                                       typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
-    inline static ReturnType value(const reader& self)
+    inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.floating_value<ReturnType>();
+        return self.template floating_value<ReturnType>();
     }
 };
 
 // Booleans
 
-template <typename CharT, typename ReturnType>
-struct detail_reader_overloader<CharT,
-                                ReturnType,
-                                typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::overloader<ReturnType,
+                                       typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
 {
-    inline static ReturnType value(const reader& self)
+    inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.bool_value<ReturnType>();
+        return self.template bool_value<ReturnType>();
     }
 };
 
 // Strings
 
-template <typename CharT, typename ReturnType>
-struct detail_reader_overloader<CharT,
-                                ReturnType,
-                                typename boost::enable_if< boost::is_same< ReturnType, std::basic_string<CharT> > >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::overloader<ReturnType,
+                                       typename boost::enable_if< boost::is_same< ReturnType, std::basic_string<CharT> > >::type>
 {
     typedef std::string return_type;
 
-    inline static return_type value(const reader& self)
+    inline static return_type value(const basic_reader<CharT>& self)
     {
-        return self.string_value<return_type>();
+        return self.template string_value<return_type>();
     }
 };
 
@@ -213,7 +214,7 @@ template <typename T>
 T basic_reader<CharT>::value() const
 {
     typedef typename boost::remove_cv<typename boost::decay<T>::type>::type return_type;
-    return detail_reader_overloader<CharT, return_type>::value(*this);
+    return basic_reader<CharT>::overloader<return_type>::value(*this);
 }
 
 template <typename CharT>

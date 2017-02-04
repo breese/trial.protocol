@@ -53,8 +53,8 @@ public:
     size_type literal(const view_type&);
 
 private:
-    template <typename C, typename T, typename Enable>
-    friend struct encoder_overloader;
+    template <typename T, typename Enable = void>
+    struct overloader;
 
     template <typename T> size_type integral_value(const T&);
     template <typename T> size_type floating_value(const T&);

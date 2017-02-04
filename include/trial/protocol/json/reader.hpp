@@ -120,8 +120,8 @@ public:
 
 #ifndef BOOST_DOXYGEN_INVOKED
 private:
-    template <typename C, typename ReturnType, typename Enable>
-    friend struct detail_reader_overloader;
+    template <typename ReturnType, typename Enable = void>
+    struct overloader;
 
     template <typename ReturnType> ReturnType bool_value() const;
     template <typename ReturnType> ReturnType integral_value() const;

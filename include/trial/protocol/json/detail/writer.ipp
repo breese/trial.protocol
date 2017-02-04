@@ -23,18 +23,19 @@ namespace json
 {
 
 //-----------------------------------------------------------------------------
-// detail_writer_overloader
+// writer::overloader
 //-----------------------------------------------------------------------------
 
-template <typename CharT, typename T, typename Enable = void>
-struct detail_writer_overloader
+template <typename CharT>
+template <typename T, typename Enable>
+struct basic_writer<CharT>::overloader
 {
 };
 
-template <typename CharT, typename T>
-struct detail_writer_overloader<CharT,
-                                T,
-                                typename boost::enable_if< boost::is_same<T, token::null> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::overloader<T,
+                                       typename boost::enable_if< boost::is_same<T, token::null> >::type>
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
@@ -44,10 +45,10 @@ struct detail_writer_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct detail_writer_overloader<CharT,
-                                T,
-                                typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::overloader<T,
+                                       typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
@@ -57,10 +58,10 @@ struct detail_writer_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct detail_writer_overloader<CharT,
-                                T,
-                                typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::overloader<T,
+                                       typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
@@ -70,10 +71,10 @@ struct detail_writer_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct detail_writer_overloader<CharT,
-                                T,
-                                typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::overloader<T,
+                                       typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
@@ -83,10 +84,10 @@ struct detail_writer_overloader<CharT,
     }
 };
 
-template <typename CharT, typename T>
-struct detail_writer_overloader<CharT,
-                                T,
-                                typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
+template <typename CharT>
+template <typename T>
+struct basic_writer<CharT>::overloader<T,
+                                       typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
 {
     typedef typename basic_writer<CharT>::size_type size_type;
 
@@ -127,7 +128,7 @@ template <typename T>
 typename basic_writer<CharT>::size_type
 basic_writer<CharT>::value()
 {
-    return detail_writer_overloader<CharT, T>::value(*this);
+    return basic_writer<CharT>::overloader<T>::value(*this);
 }
 
 template <typename CharT>

@@ -33,20 +33,21 @@ namespace detail
 {
 
 //-----------------------------------------------------------------------------
-// decoder_overloader
+// decoder::overloader
 //-----------------------------------------------------------------------------
 
-template <typename CharT, typename ReturnType, typename Enable = void>
-struct decoder_overloader
+template <typename CharT>
+template <typename ReturnType, typename Enable>
+struct basic_decoder<CharT>::overloader
 {
 };
 
 // Integers
 
-template <typename CharT, typename ReturnType>
-struct decoder_overloader<CharT,
-                          ReturnType,
-                          typename boost::enable_if< boost::is_integral<ReturnType> >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_decoder<CharT>::overloader<ReturnType,
+                                        typename boost::enable_if< boost::is_integral<ReturnType> >::type>
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
@@ -56,10 +57,10 @@ struct decoder_overloader<CharT,
 
 // Floating-point numbers
 
-template <typename CharT, typename ReturnType>
-struct decoder_overloader<CharT,
-                          ReturnType,
-                          typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_decoder<CharT>::overloader<ReturnType,
+                                        typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
@@ -69,10 +70,10 @@ struct decoder_overloader<CharT,
 
 // Strings
 
-template <typename CharT, typename ReturnType>
-struct decoder_overloader<CharT,
-                          ReturnType,
-                          typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
+template <typename CharT>
+template <typename ReturnType>
+struct basic_decoder<CharT>::overloader<ReturnType,
+                                        typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
 {
     inline static std::string value(const basic_decoder<CharT>& self)
     {
@@ -204,7 +205,7 @@ template <typename CharT>
 template <typename ReturnType>
 ReturnType basic_decoder<CharT>::value() const
 {
-    return decoder_overloader<CharT, ReturnType>::value(*this);
+    return basic_decoder<CharT>::overloader<ReturnType>::value(*this);
 }
 
 template <typename CharT>
