@@ -11,9 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstdint>
 #include <boost/config.hpp>
-#include <boost/cstdint.hpp>
-#include <boost/array.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 #include <trial/protocol/bintoken/error.hpp>
@@ -30,8 +29,8 @@ namespace detail
 class decoder
 {
 public:
-    typedef boost::uint8_t value_type;
-    typedef boost::basic_string_ref<value_type> view_type;
+    using value_type = std::uint8_t;
+    using view_type = boost::basic_string_ref<value_type>;
 
     template <typename T>
     decoder(const T& input);
@@ -42,13 +41,13 @@ public:
     token::code::value code() const BOOST_NOEXCEPT;
     token::symbol::value symbol() const BOOST_NOEXCEPT;
     token::category::value category() const BOOST_NOEXCEPT;
-    boost::system::error_code error() const BOOST_NOEXCEPT;
+    std::error_code error() const BOOST_NOEXCEPT;
 
     const view_type& literal() const BOOST_NOEXCEPT;
     template <typename Tag> typename Tag::type value() const;
 
 private:
-    token::code::value next(value_type, boost::int64_t) BOOST_NOEXCEPT;
+    token::code::value next(value_type, std::int64_t) BOOST_NOEXCEPT;
     token::code::value next_string(value_type) BOOST_NOEXCEPT;
     token::code::value next_binary(value_type) BOOST_NOEXCEPT;
 

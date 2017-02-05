@@ -14,34 +14,33 @@
 
 using namespace trial::protocol;
 
-template <typename CharT>
-class ostream_buffer : buffer::basic_ostream<CharT>
+template <typename CharT,
+          typename Super = buffer::basic_ostream<CharT> >
+class ostream_buffer : Super
 {
-    typedef buffer::basic_ostream<CharT> super;
-
 public:
-    typedef typename super::value_type value_type;
-    typedef typename super::size_type size_type;
-    typedef typename super::view_type view_type;
+    using value_type = typename Super::value_type;
+    using size_type = typename Super::size_type;
+    using view_type = typename Super::view_type;
 
     ostream_buffer(std::basic_ostream<CharT>& data)
-        : super(data)
+        : Super(data)
     {
     }
 
     virtual bool grow(size_type size)
     {
-        return super::grow(size);
+        return Super::grow(size);
     }
 
     virtual void write(value_type value)
     {
-        return super::write(value);
+        return Super::write(value);
     }
 
     virtual void write(const view_type& view)
     {
-        return super::write(view);
+        return Super::write(view);
     }
 };
 

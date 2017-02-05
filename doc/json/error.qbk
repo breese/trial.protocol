@@ -40,7 +40,7 @@ assert(reader.code() == json::code::error_invalid_value);
 enum json::errc ec = json::to_errc(reader.code());
 assert(ec == json::invalid_value);
 
-boost::system::error_code error = json::make_error_code(ec);
+auto error = json::make_error_code(ec);
 assert(error == json::invalid_value);
 ```
 
@@ -62,7 +62,7 @@ The following error codes exists.
 [h5 Exception]
 
 Conversion errors will result in `json::error` exceptions being thrown.
-`json::error` inherits from `boost::system::system_error` which contains
-a `boost::system::error_code`.
+`json::error` inherits from `std::system_error` which contains
+a `std::error_code`.
 
 [endsect]

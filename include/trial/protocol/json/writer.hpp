@@ -12,7 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <stack>
-#include <boost/move/move.hpp>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/error.hpp>
 #include <trial/protocol/json/token.hpp>
@@ -32,9 +31,9 @@ template <typename CharT>
 class basic_writer
 {
 public:
-    typedef CharT value_type;
-    typedef std::size_t size_type;
-    typedef typename detail::basic_encoder<value_type>::view_type view_type;
+    using value_type = CharT;
+    using size_type = std::size_t;
+    using view_type = typename detail::basic_encoder<value_type>::view_type;
 
     //! @brief Construct an incremental JSON writer.
     //!
@@ -43,7 +42,7 @@ public:
     //! @param[in] buffer A buffer where the JSON formatted output is stored.
     template <typename T> basic_writer(T& buffer);
 
-    boost::system::error_code error() const BOOST_NOEXCEPT;
+    std::error_code error() const BOOST_NOEXCEPT;
     size_type level() const BOOST_NOEXCEPT;
 
     //! @brief Write structural output.
@@ -52,7 +51,7 @@ public:
 
     //! @brief Write data output.
     template <typename T>
-    size_type value(BOOST_FWD_REF(T) value);
+    size_type value(T&& value);
 
     //! @brief Write raw output.
     size_type literal(const view_type&) BOOST_NOEXCEPT;
@@ -72,7 +71,7 @@ private:
     size_type end_object_value();
 
 private:
-    typedef detail::basic_encoder<value_type> encoder_type;
+    using encoder_type = detail::basic_encoder<value_type>;
     encoder_type encoder;
     mutable enum json::errc last_error;
 
@@ -90,7 +89,7 @@ private:
 #endif // BOOST_DOXYGEN_INVOKED
 };
 
-typedef basic_writer<char> writer;
+using writer = basic_writer<char>;
 
 } // namespace json
 } // namespace protocol

@@ -17,34 +17,33 @@ using namespace trial::protocol;
 // Helper
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-class string_buffer : buffer::basic_string<CharT>
+template <typename CharT,
+          typename Super = buffer::basic_string<CharT> >
+class string_buffer : Super
 {
-    typedef buffer::basic_string<CharT> super;
-
 public:
-    typedef typename super::value_type value_type;
-    typedef typename super::size_type size_type;
-    typedef typename super::view_type view_type;
+    using value_type = typename Super::value_type;
+    using size_type = typename Super::size_type;
+    using view_type = typename Super::view_type;
 
     string_buffer(std::basic_string<CharT>& data)
-        : super(data)
+        : Super(data)
     {
     }
 
     virtual bool grow(size_type size)
     {
-        return super::grow(size);
+        return Super::grow(size);
     }
 
     virtual void write(value_type value)
     {
-        return super::write(value);
+        return Super::write(value);
     }
 
     virtual void write(const view_type& view)
     {
-        return super::write(view);
+        return Super::write(view);
     }
 };
 

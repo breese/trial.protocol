@@ -17,7 +17,7 @@
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-typedef format::detail::encoder::value_type value_type;
+using value_type = format::detail::encoder::value_type;
 
 //-----------------------------------------------------------------------------
 // Basic
@@ -37,7 +37,7 @@ void test_null()
 
 void fail_null_empty()
 {
-    boost::array<value_type, 0> buffer;
+    std::array<value_type, 0> buffer;
     format::detail::encoder encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 0);
 }
@@ -53,7 +53,7 @@ void test_false()
 
 void fail_false_empty()
 {
-    boost::array<value_type, 0> buffer;
+    std::array<value_type, 0> buffer;
     format::detail::encoder encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 0);
 }
@@ -69,7 +69,7 @@ void test_true()
 
 void fail_true_empty()
 {
-    boost::array<value_type, 0> buffer;
+    std::array<value_type, 0> buffer;
     format::detail::encoder encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 0);
 }
@@ -97,7 +97,7 @@ void test_zero()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0x00);
 }
@@ -106,7 +106,7 @@ void test_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(1)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(1)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0x01);
 }
@@ -115,7 +115,7 @@ void test_minus_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(-1)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-1)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0xFF);
 }
@@ -124,7 +124,7 @@ void test_lower()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(-32)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-32)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0xE0);
 }
@@ -133,16 +133,16 @@ void test_upper()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(127)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(127)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0x7F);
 }
 
 void fail_empty()
 {
-    boost::array<value_type, 0> buffer;
+    std::array<value_type, 0> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(0)), 0);
 }
 
 void run()
@@ -164,7 +164,7 @@ void test_negative_min()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(-33)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-33)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int8);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0xDF);
@@ -174,7 +174,7 @@ void test_negative_max()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(-128)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-128)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int8);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0x80);
@@ -182,16 +182,16 @@ void test_negative_max()
 
 void fail_missing_one()
 {
-    boost::array<value_type, 1> buffer;
+    std::array<value_type, 1> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(-128)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-128)), 0);
 }
 
 void fail_missing_two()
 {
-    boost::array<value_type, 0> buffer;
+    std::array<value_type, 0> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int8_t(-128)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-128)), 0);
 }
 
 void run()
@@ -211,7 +211,7 @@ void test_zero()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int16_t(0)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int16_t(0)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0x00);
@@ -222,7 +222,7 @@ void test_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int16_t(1)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int16_t(1)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0x01);
@@ -233,7 +233,7 @@ void test_minus_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int16_t(-1)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int16_t(-1)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0xFF);
@@ -280,7 +280,7 @@ void test_zero()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int32_t(0)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int32_t(0)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0x00);
@@ -293,7 +293,7 @@ void test_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int32_t(1)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int32_t(1)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0x01);
@@ -306,7 +306,7 @@ void test_minus_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int32_t(-1)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int32_t(-1)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0xFF);
@@ -359,7 +359,7 @@ void test_zero()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(0)), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0x00);
@@ -376,7 +376,7 @@ void test_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(1)), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(1)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0x01);
@@ -393,7 +393,7 @@ void test_minus_one()
 {
     std::vector<value_type> buffer;
     format::detail::encoder encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(-1)), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(-1)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[1], 0xFF);

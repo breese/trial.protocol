@@ -25,10 +25,10 @@ namespace bintoken
 class writer
 {
 public:
-    typedef detail::encoder::value_type value_type;
-    typedef detail::encoder::size_type size_type;
-    typedef detail::encoder::view_type view_type;
-    typedef detail::encoder::string_view_type string_view_type;
+    using value_type = detail::encoder::value_type;
+    using size_type = detail::encoder::size_type;
+    using view_type = detail::encoder::view_type;
+    using string_view_type = detail::encoder::string_view_type;
 
     template <typename T> writer(T&);
 

@@ -17,7 +17,7 @@
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-typedef format::detail::decoder::value_type value_type;
+using value_type = format::detail::decoder::value_type;
 
 //-----------------------------------------------------------------------------
 // Basic types
@@ -28,7 +28,7 @@ namespace basic_suite
 
 void test_empty()
 {
-    const boost::array<value_type, 0> input = {};
+    const std::array<value_type, 0> input = {};
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::end);

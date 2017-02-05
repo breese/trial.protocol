@@ -29,8 +29,8 @@ class iarchive
     friend class boost::archive::load_access;
 
 public:
-    typedef bintoken::reader::value_type value_type;
-    typedef bintoken::reader::view_type view_type;
+    using value_type = bintoken::reader::value_type;
+    using view_type = bintoken::reader::view_type;
 
     template <typename T>
     iarchive(const T&);

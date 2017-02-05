@@ -26,9 +26,9 @@ template <typename CharT,
 class vector : public base<CharT>
 {
 public:
-    typedef typename base<CharT>::value_type value_type;
-    typedef typename base<CharT>::size_type size_type;
-    typedef typename base<CharT>::view_type view_type;
+    using value_type = typename base<CharT>::value_type;
+    using size_type = typename base<CharT>::size_type;
+    using view_type = typename base<CharT>::view_type;
 
     vector(std::vector<value_type>& data)
         : buffer(data)
@@ -68,8 +68,8 @@ private:
 template <typename CharT, typename Allocator>
 struct traits< std::vector<CharT, Allocator> >
 {
-    typedef typename base<CharT>::view_type view_type;
-    typedef buffer::vector<CharT, Allocator> buffer_type;
+    using view_type = typename base<CharT>::view_type;
+    using buffer_type = buffer::vector<CharT, Allocator>;
 
     static view_type view_cast(const std::vector<CharT>& data)
     {

@@ -12,9 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <string>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/decay.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <type_traits>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -24,13 +22,13 @@ namespace protocol
 namespace buffer
 {
 
-template <typename CharT>
-class basic_string : public base<CharT>
+template <typename CharT, typename Super = base<CharT> >
+class basic_string : public Super
 {
 public:
-    typedef typename base<CharT>::value_type value_type;
-    typedef typename base<CharT>::size_type size_type;
-    typedef typename base<CharT>::view_type view_type;
+    using value_type = typename Super::value_type;
+    using size_type = typename Super::size_type;
+    using view_type = typename Super::view_type;
 
     basic_string(std::basic_string<CharT>& output)
         : content(output)
@@ -67,21 +65,21 @@ private:
 template <typename CharT>
 struct traits< std::basic_string<CharT> >
 {
-    typedef buffer::basic_string<CharT> buffer_type;
+    using buffer_type = buffer::basic_string<CharT>;
 };
 
 template <typename T>
 struct is_text<T,
-               typename boost::enable_if< boost::is_same<typename boost::decay<T>::type,
-                                                         char *> >::type>
+               typename std::enable_if< std::is_same<typename std::decay<T>::type,
+                                                     char *>::value >::type>
 {
     static const bool value = true;
 };
 
 template <typename T>
 struct is_text<T,
-               typename boost::enable_if< boost::is_same<typename boost::decay<T>::type,
-                                                         const char *> >::type>
+               typename std::enable_if< std::is_same<typename std::decay<T>::type,
+                                                     const char *>::value >::type>
 {
     static const bool value = true;
 };

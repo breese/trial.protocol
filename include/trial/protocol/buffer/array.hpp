@@ -12,9 +12,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cassert>
+#include <cstdint>
 #include <algorithm>
-#include <boost/cstdint.hpp>
-#include <boost/array.hpp>
+#include <array>
+#include <type_traits>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -24,17 +25,17 @@ namespace protocol
 namespace buffer
 {
 
-template <typename CharT, int N>
-class array : public base<CharT>
+template <typename CharT, std::size_t N, typename Super = base<CharT> >
+class array : public Super
 {
 public:
-    typedef typename base<CharT>::value_type value_type;
-    typedef typename base<CharT>::size_type size_type;
-    typedef typename base<CharT>::view_type view_type;
-    typedef value_type* iterator;
-    typedef const value_type* const_iterator;
+    using value_type = typename Super::value_type;
+    using size_type = typename Super::size_type;
+    using view_type = typename Super::view_type;
+    using iterator = typename std::add_pointer<value_type>::type;
+    using const_iterator = typename std::add_pointer<const value_type>::type;
 
-    array(boost::array<CharT, N>& output)
+    array(std::array<CharT, N>& output)
         : content(output),
           current(content.begin())
     {}
@@ -76,17 +77,17 @@ private:
     }
 
 private:
-    boost::array<CharT, N>& content;
+    std::array<CharT, N>& content;
     iterator current;
 };
 
 template <typename CharT, std::size_t N>
-struct traits< boost::array<CharT, N> >
+struct traits< std::array<CharT, N> >
 {
-    typedef typename base<CharT>::view_type view_type;
-    typedef buffer::array<CharT, N> buffer_type;
+    using view_type = typename base<CharT>::view_type;
+    using buffer_type = buffer::array<CharT, N>;
 
-    static view_type view_cast(const boost::array<CharT, N>& data)
+    static view_type view_cast(const std::array<CharT, N>& data)
     {
         return view_type(data.data(), data.size());
     }
@@ -95,8 +96,8 @@ struct traits< boost::array<CharT, N> >
 template <typename CharT, std::size_t N>
 struct traits<CharT[N]>
 {
-    typedef typename base<CharT>::view_type view_type;
-    typedef buffer::array<CharT, N> buffer_type;
+    using view_type = typename base<CharT>::view_type;
+    using buffer_type = buffer::array<CharT, N>;
 
     static view_type view_cast(const CharT(&data)[N])
     {
@@ -105,13 +106,13 @@ struct traits<CharT[N]>
 };
 
 template <typename CharT, std::size_t N>
-struct is_binary< boost::array<CharT, N> >
+struct is_binary< std::array<CharT, N> >
 {
     static const bool value = true;
 };
 
 template <std::size_t N>
-struct is_binary<boost::uint8_t[N]>
+struct is_binary<std::uint8_t[N]>
 {
     static const bool value = true;
 };

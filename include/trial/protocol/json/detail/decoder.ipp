@@ -15,6 +15,7 @@
 #include <cstdlib> // std::atof
 #include <iterator>
 #include <limits>
+#include <type_traits>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 #include <trial/protocol/json/error.hpp>
@@ -47,7 +48,7 @@ struct basic_decoder<CharT>::overloader
 template <typename CharT>
 template <typename ReturnType>
 struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename boost::enable_if< boost::is_integral<ReturnType> >::type>
+                                        typename std::enable_if<std::is_integral<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
@@ -60,7 +61,7 @@ struct basic_decoder<CharT>::overloader<ReturnType,
 template <typename CharT>
 template <typename ReturnType>
 struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+                                        typename std::enable_if<std::is_floating_point<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
@@ -73,7 +74,7 @@ struct basic_decoder<CharT>::overloader<ReturnType,
 template <typename CharT>
 template <typename ReturnType>
 struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename boost::enable_if< boost::is_same<ReturnType, std::basic_string<CharT> > >::type>
+                                        typename std::enable_if<std::is_same<ReturnType, std::basic_string<CharT> >::value>::type>
 {
     inline static std::string value(const basic_decoder<CharT>& self)
     {
@@ -118,7 +119,7 @@ token::category::value basic_decoder<CharT>::category() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-boost::system::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
+std::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
 {
     return json::make_error_code(to_errc(code()));
 }
@@ -223,7 +224,7 @@ ReturnType basic_decoder<CharT>::integral_value() const
     const bool is_negative = (*it == traits<CharT>::alpha_minus);
     if (is_negative)
     {
-        if (boost::is_unsigned<ReturnType>::value)
+        if (std::is_unsigned<ReturnType>::value)
         {
             current.code = token::code::error_invalid_value;
             throw json::error(error());
@@ -318,14 +319,14 @@ std::basic_string<CharT> basic_decoder<CharT>::string_value() const
                 {
                     // Convert \uXXXX value to UTF-8
                     assert(std::distance(it, end) >= 5);
-                    boost::uint32_t number = 0;
+                    std::uint32_t number = 0;
                     for (int i = 0; i < 4; ++i)
                     {
                         ++it;
                         number <<= 4;
                         if (traits<CharT>::is_hexdigit(*it))
                         {
-                            number += boost::uint32_t(traits<CharT>::to_int(*it));
+                            number += std::uint32_t(traits<CharT>::to_int(*it));
                         }
                     }
                     if (number <= 0x007F)

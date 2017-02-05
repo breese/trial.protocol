@@ -21,8 +21,8 @@
 using namespace trial::protocol;
 namespace token = json::token;
 
-typedef json::detail::basic_encoder<char> encoder_type;
-typedef json::detail::basic_encoder<unsigned char> unsigned_encoder_type;
+using encoder_type = json::detail::basic_encoder<char>;
+using unsigned_encoder_type = json::detail::basic_encoder<unsigned char>;
 
 //-----------------------------------------------------------------------------
 // Buffer
@@ -31,9 +31,9 @@ typedef json::detail::basic_encoder<unsigned char> unsigned_encoder_type;
 namespace buffer_suite
 {
 
-void test_boost_array()
+void test_std_array()
 {
-    boost::array<char, 2> result;
+    std::array<char, 2> result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(42), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(result.begin(), result.size()), "42");
@@ -68,7 +68,7 @@ void test_string()
 
 void run()
 {
-    test_boost_array();
+    test_std_array();
     test_ostringstream();
     test_vector();
     test_string();
@@ -85,7 +85,7 @@ namespace basic_suite
 
 void test_comma()
 {
-    boost::array<char, 1> buffer;
+    std::array<char, 1> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.size()), ",");
@@ -93,14 +93,14 @@ void test_comma()
 
 void fail_comma()
 {
-    boost::array<char, 0> buffer;
+    std::array<char, 0> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 0);
 }
 
 void test_colon()
 {
-    boost::array<char, 1> buffer;
+    std::array<char, 1> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.size()), ":");
@@ -108,14 +108,14 @@ void test_colon()
 
 void fail_colon()
 {
-    boost::array<char, 0> buffer;
+    std::array<char, 0> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 0);
 }
 
 void test_null()
 {
-    boost::array<char, 4> buffer;
+    std::array<char, 4> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.size()), "null");
@@ -123,7 +123,7 @@ void test_null()
 
 void fail_null()
 {
-    boost::array<char, 3> buffer;
+    std::array<char, 3> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 0);
 }
@@ -202,7 +202,7 @@ void test_zero()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
 
@@ -210,9 +210,9 @@ void test_zero_zero()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0,0");
 }
 
@@ -220,7 +220,7 @@ void test_one()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(1)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(1)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "1");
 }
 
@@ -228,7 +228,7 @@ void test_minus_one()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(-1)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(-1)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-1");
 }
 
@@ -236,7 +236,7 @@ void test_nine()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(9)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(9)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "9");
 }
 
@@ -244,7 +244,7 @@ void test_minus_nine()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(-9)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(-9)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-9");
 }
 
@@ -252,7 +252,7 @@ void test_ten()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(10)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(10)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "10");
 }
 
@@ -260,7 +260,7 @@ void test_minus_ten()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(-10)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(-10)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-10");
 }
 
@@ -268,7 +268,7 @@ void test_almost_hundred()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(99)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(99)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "99");
 }
 
@@ -276,7 +276,7 @@ void test_hundred()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(100)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(100)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "100");
 }
 
@@ -284,7 +284,7 @@ void test_almost_minus_hundred()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(-99)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(-99)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-99");
 }
 
@@ -292,7 +292,7 @@ void test_minus_hundred()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(boost::int64_t(-100)), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(-100)), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-100");
 }
 
@@ -300,7 +300,7 @@ void test_max()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<boost::int64_t>::max()), 19);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<std::int64_t>::max()), 19);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "9223372036854775807");
 }
 
@@ -308,7 +308,7 @@ void test_almost_min()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<boost::int64_t>::min() + 1), 20);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<std::int64_t>::min() + 1), 20);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-9223372036854775807");
 }
 
@@ -316,7 +316,7 @@ void test_min()
 {
     std::ostringstream result;
     encoder_type encoder(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<boost::int64_t>::min()), 20);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<std::int64_t>::min()), 20);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "-9223372036854775808");
 }
 

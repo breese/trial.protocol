@@ -719,60 +719,6 @@ void run()
 } // namespace object_suite
 
 //-----------------------------------------------------------------------------
-// boost::get
-//-----------------------------------------------------------------------------
-
-namespace get_suite
-{
-
-void test_bool()
-{
-    const char input[] = "true";
-    json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::true_value);
-    TRIAL_PROTOCOL_TEST_EQUAL(boost::get<bool>(reader), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
-}
-
-void test_integer()
-{
-    const char input[] = "1";
-    json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(boost::get<int>(reader), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
-}
-
-void test_float()
-{
-    const char input[] = "1.0";
-    json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::floating);
-    TRIAL_PROTOCOL_TEST_EQUAL(boost::get<double>(reader), 1.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(boost::get<float>(reader), 1.0f);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
-}
-
-void test_string()
-{
-    const char input[] = "\"alpha\"";
-    json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
-    TRIAL_PROTOCOL_TEST_EQUAL(boost::get<std::string>(reader), "alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
-}
-
-void run()
-{
-    test_bool();
-    test_integer();
-    test_float();
-    test_string();
-}
-
-} // namespace get_suite
-
-//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -782,7 +728,6 @@ int main()
     ubasic_suite::run();
     array_suite::run();
     object_suite::run();
-    get_suite::run();
 
     return boost::report_errors();
 }

@@ -11,8 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <type_traits>
 #include <trial/protocol/json/error.hpp>
 
 namespace trial
@@ -35,9 +34,9 @@ struct basic_writer<CharT>::overloader
 template <typename CharT>
 template <typename T>
 struct basic_writer<CharT>::overloader<T,
-                                       typename boost::enable_if< boost::is_same<T, token::null> >::type>
+                                       typename std::enable_if<std::is_same<T, token::null>::value>::type>
 {
-    typedef typename basic_writer<CharT>::size_type size_type;
+    using size_type = typename basic_writer<CharT>::size_type;
 
     inline static size_type value(basic_writer<CharT>& self)
     {
@@ -48,9 +47,9 @@ struct basic_writer<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_writer<CharT>::overloader<T,
-                                       typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
+                                       typename std::enable_if<std::is_same<T, token::begin_array>::value>::type>
 {
-    typedef typename basic_writer<CharT>::size_type size_type;
+    using size_type = typename basic_writer<CharT>::size_type;
 
     inline static size_type value(basic_writer<CharT>& self)
     {
@@ -61,9 +60,9 @@ struct basic_writer<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_writer<CharT>::overloader<T,
-                                       typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
+                                       typename std::enable_if<std::is_same<T, token::end_array>::value>::type>
 {
-    typedef typename basic_writer<CharT>::size_type size_type;
+    using size_type = typename basic_writer<CharT>::size_type;
 
     inline static size_type value(basic_writer<CharT>& self)
     {
@@ -74,9 +73,9 @@ struct basic_writer<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_writer<CharT>::overloader<T,
-                                       typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
+                                       typename std::enable_if<std::is_same<T, token::begin_object>::value>::type>
 {
-    typedef typename basic_writer<CharT>::size_type size_type;
+    using size_type = typename basic_writer<CharT>::size_type;
 
     inline static size_type value(basic_writer<CharT>& self)
     {
@@ -87,9 +86,9 @@ struct basic_writer<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_writer<CharT>::overloader<T,
-                                       typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
+                                       typename std::enable_if<std::is_same<T, token::end_object>::value>::type>
 {
-    typedef typename basic_writer<CharT>::size_type size_type;
+    using size_type = typename basic_writer<CharT>::size_type;
 
     inline static size_type value(basic_writer<CharT>& self)
     {
@@ -111,7 +110,7 @@ basic_writer<CharT>::basic_writer(T& buffer)
 }
 
 template <typename CharT>
-boost::system::error_code basic_writer<CharT>::error() const BOOST_NOEXCEPT
+std::error_code basic_writer<CharT>::error() const BOOST_NOEXCEPT
 {
     return make_error_code(last_error);
 }
@@ -134,12 +133,12 @@ basic_writer<CharT>::value()
 template <typename CharT>
 template <typename T>
 typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(BOOST_FWD_REF(T) data)
+basic_writer<CharT>::value(T&& data)
 {
     validate_scope();
 
     stack.top().write_separator();
-    return encoder.value(boost::forward<T>(data));
+    return encoder.value(std::forward<T>(data));
 }
 
 template <typename CharT>

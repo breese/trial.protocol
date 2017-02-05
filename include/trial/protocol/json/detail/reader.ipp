@@ -11,11 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/cstdint.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/decay.hpp>
-#include <boost/type_traits/remove_cv.hpp>
-#include <boost/math/special_functions/round.hpp>
+#include <cmath>
+#include <type_traits>
 #include <trial/protocol/detail/type_traits.hpp>
 
 namespace trial
@@ -40,7 +37,7 @@ struct basic_reader<CharT>::overloader
 template <typename CharT>
 template <typename ReturnType>
 struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename boost::enable_if_c< boost::is_integral<ReturnType>::value && !boost::is_same<ReturnType, bool>::value >::type>
+                                       typename std::enable_if<std::is_integral<ReturnType>::value && !std::is_same<ReturnType, bool>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -53,7 +50,7 @@ struct basic_reader<CharT>::overloader<ReturnType,
 template <typename CharT>
 template <typename ReturnType>
 struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename boost::enable_if< boost::is_floating_point<ReturnType> >::type>
+                                       typename std::enable_if<std::is_floating_point<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -66,7 +63,7 @@ struct basic_reader<CharT>::overloader<ReturnType,
 template <typename CharT>
 template <typename ReturnType>
 struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename boost::enable_if< boost::is_same<ReturnType, bool> >::type>
+                                       typename std::enable_if<std::is_same<ReturnType, bool>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -79,9 +76,9 @@ struct basic_reader<CharT>::overloader<ReturnType,
 template <typename CharT>
 template <typename ReturnType>
 struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename boost::enable_if< boost::is_same< ReturnType, std::basic_string<CharT> > >::type>
+                                       typename std::enable_if<std::is_same< ReturnType, std::basic_string<CharT> >::value>::type>
 {
-    typedef std::string return_type;
+    using return_type = std::basic_string<CharT>;
 
     inline static return_type value(const basic_reader<CharT>& self)
     {
@@ -134,7 +131,7 @@ token::category::value basic_reader<CharT>::category() const BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-boost::system::error_code basic_reader<CharT>::error() const BOOST_NOEXCEPT
+std::error_code basic_reader<CharT>::error() const BOOST_NOEXCEPT
 {
     return decoder.error();
 }
@@ -213,7 +210,7 @@ template <typename CharT>
 template <typename T>
 T basic_reader<CharT>::value() const
 {
-    typedef typename boost::remove_cv<typename boost::decay<T>::type>::type return_type;
+    using return_type = typename std::remove_cv<typename std::decay<T>::type>::type;
     return basic_reader<CharT>::overloader<return_type>::value(*this);
 }
 
@@ -267,8 +264,8 @@ ReturnType basic_reader<CharT>::integral_value() const
         }
 
     case token::code::floating:
-        typedef typename protocol::detail::make_floating_point<typename boost::make_signed<ReturnType>::type>::type floating_return_type;
-        return ReturnType(boost::math::round(decoder.template value<floating_return_type>()));
+        using floating_return_type = typename protocol::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
+        return ReturnType(std::round(decoder.template value<floating_return_type>()));
 
     default:
         decoder.code(token::code::error_invalid_value);
@@ -283,7 +280,7 @@ ReturnType basic_reader<CharT>::floating_value() const
     switch (decoder.code())
     {
     case token::code::integer:
-        typedef typename protocol::detail::make_integral<ReturnType>::type integer_return_type;
+        using integer_return_type = typename protocol::detail::make_integral<ReturnType>::type;
         return ReturnType(decoder.template value<integer_return_type>());
 
     case token::code::floating:

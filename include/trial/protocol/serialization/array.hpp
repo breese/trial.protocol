@@ -23,7 +23,7 @@ namespace serialization
 template <typename Archive, typename T, std::size_t N>
 struct serialize_overloader<Archive,
                             T[N],
-                            typename boost::enable_if<typename Archive::is_loading>::type>
+                            typename std::enable_if<Archive::is_loading>::type>
 {
     static void serialize(Archive& ar,
                           T (&data)[N], // Prevent decay
@@ -36,7 +36,7 @@ struct serialize_overloader<Archive,
 template <typename Archive, typename T, std::size_t N>
 struct serialize_overloader<Archive,
                             T[N],
-                            typename boost::enable_if<typename Archive::is_saving>::type>
+                            typename std::enable_if<Archive::is_saving>::type>
 {
     static void serialize(Archive& ar,
                           const T (&data)[N],

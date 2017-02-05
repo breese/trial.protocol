@@ -37,8 +37,8 @@ template <>
 class traits<char>
 {
 public:
-    typedef char value_type;
-    typedef std::size_t size_type;
+    using value_type = char;
+    using size_type = std::size_t;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;
@@ -102,8 +102,8 @@ template <>
 class traits<unsigned char>
 {
 public:
-    typedef unsigned char value_type;
-    typedef std::size_t size_type;
+    using value_type = unsigned char;
+    using size_type = std::size_t;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;

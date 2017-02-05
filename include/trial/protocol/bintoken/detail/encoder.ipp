@@ -12,9 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <limits>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 #include <trial/protocol/bintoken/error.hpp>
@@ -37,7 +34,7 @@ encoder::encoder(T& output)
 template <typename T>
 encoder::size_type encoder::value()
 {
-    BOOST_STATIC_ASSERT_MSG(sizeof(T) == 0, "Type not supported");
+    static_assert(sizeof(T) == 0, "Type not supported");
     throw bintoken::error(incompatible_type);
 }
 
@@ -97,7 +94,7 @@ inline encoder::size_type encoder::value(token::int8::type data)
     else
     {
         const value_type token(token::int8::code);
-        const size_type size = sizeof(token) + sizeof(boost::int8_t);
+        const size_type size = sizeof(token) + sizeof(std::int8_t);
         if (buffer->grow(size))
         {
             buffer->write(token);
@@ -111,10 +108,10 @@ inline encoder::size_type encoder::value(token::int8::type data)
 inline encoder::size_type encoder::value(token::int16::type data)
 {
     const value_type token(token::int16::code);
-    const size_type size = sizeof(token) + sizeof(boost::int16_t);
+    const size_type size = sizeof(token) + sizeof(std::int16_t);
     if (buffer->grow(size))
     {
-        const boost::uint16_t endian = UINT16_C(0x0100);
+        const std::uint16_t endian = UINT16_C(0x0100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
@@ -127,10 +124,10 @@ inline encoder::size_type encoder::value(token::int16::type data)
 inline encoder::size_type encoder::value(token::int32::type data)
 {
     const value_type token(token::int32::code);
-    const size_type size = sizeof(token) + sizeof(boost::int32_t);
+    const size_type size = sizeof(token) + sizeof(std::int32_t);
     if (buffer->grow(size))
     {
-        const boost::uint32_t endian = UINT32_C(0x03020100);
+        const std::uint32_t endian = UINT32_C(0x03020100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
@@ -145,10 +142,10 @@ inline encoder::size_type encoder::value(token::int32::type data)
 inline encoder::size_type encoder::value(token::int64::type data)
 {
     const value_type token(token::int64::code);
-    const size_type size = sizeof(token) + sizeof(boost::int64_t);
+    const size_type size = sizeof(token) + sizeof(std::int64_t);
     if (buffer->grow(size))
     {
-        const boost::uint64_t endian = UINT64_C(0x0706050403020100);
+        const std::uint64_t endian = UINT64_C(0x0706050403020100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
@@ -171,7 +168,7 @@ inline encoder::size_type encoder::value(token::float32::type data)
     const size_type size = sizeof(token) + sizeof(token::float32::type);
     if (buffer->grow(size))
     {
-        const boost::uint32_t endian = UINT32_C(0x03020100);
+        const std::uint32_t endian = UINT32_C(0x03020100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
@@ -190,7 +187,7 @@ inline encoder::size_type encoder::value(token::float64::type data)
     const size_type size = sizeof(token) + sizeof(token::float64::type);
     if (buffer->grow(size))
     {
-        const boost::uint64_t endian = UINT64_C(0x0706050403020100);
+        const std::uint64_t endian = UINT64_C(0x0706050403020100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
@@ -211,33 +208,33 @@ inline encoder::size_type encoder::value(const string_view_type& data)
     const std::string::size_type length = data.size();
     size_type size = 0;
 
-    if (length < static_cast<std::string::size_type>(std::numeric_limits<boost::uint8_t>::max()))
+    if (length < static_cast<std::string::size_type>(std::numeric_limits<std::uint8_t>::max()))
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint8_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length))
             return 0;
         buffer->write(token::code::string8);
-        size = write_length(static_cast<boost::uint8_t>(length));
+        size = write_length(static_cast<std::uint8_t>(length));
     }
-    else if (length < static_cast<std::string::size_type>(std::numeric_limits<boost::uint16_t>::max()))
+    else if (length < static_cast<std::string::size_type>(std::numeric_limits<std::uint16_t>::max()))
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint16_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length))
             return 0;
         buffer->write(token::code::string16);
-        size = write_length(static_cast<boost::uint16_t>(length));
+        size = write_length(static_cast<std::uint16_t>(length));
     }
-    else if (length < static_cast<std::string::size_type>(std::numeric_limits<boost::uint32_t>::max()))
+    else if (length < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint32_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length))
             return 0;
         buffer->write(token::code::string32);
-        size = write_length(static_cast<boost::uint32_t>(length));
+        size = write_length(static_cast<std::uint32_t>(length));
     }
     else
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint64_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length))
             return 0;
         buffer->write(token::code::string64);
-        size = write_length(static_cast<boost::uint64_t>(length));
+        size = write_length(static_cast<std::uint64_t>(length));
     }
 
     buffer->write(view_type(reinterpret_cast<const value_type *>(data.data()),
@@ -261,35 +258,35 @@ inline encoder::size_type encoder::binary(const value_type *data,
 {
     size_type size = 0;
 
-    if (length < static_cast<std::string::size_type>(std::numeric_limits<boost::uint8_t>::max()))
+    if (length < static_cast<std::string::size_type>(std::numeric_limits<std::uint8_t>::max()))
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint8_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length))
             return 0;
         buffer->write(token::code::binary8);
-        size = write_length(static_cast<boost::uint8_t>(length));
+        size = write_length(static_cast<std::uint8_t>(length));
         if (length == 0)
             return sizeof(value_type) + size;
     }
-    else if (length < static_cast<std::string::size_type>(std::numeric_limits<boost::uint16_t>::max()))
+    else if (length < static_cast<std::string::size_type>(std::numeric_limits<std::uint16_t>::max()))
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint16_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length))
             return 0;
         buffer->write(token::code::binary16);
-        size = write_length(static_cast<boost::uint16_t>(length));
+        size = write_length(static_cast<std::uint16_t>(length));
     }
-    else if (length < static_cast<std::string::size_type>(std::numeric_limits<boost::uint32_t>::max()))
+    else if (length < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint32_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length))
             return 0;
         buffer->write(token::code::binary32);
-        size = write_length(static_cast<boost::uint32_t>(length));
+        size = write_length(static_cast<std::uint32_t>(length));
     }
     else
     {
-        if (!buffer->grow(sizeof(value_type) + sizeof(boost::uint64_t) + length))
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length))
             return 0;
         buffer->write(token::code::binary64);
-        size = write_length(static_cast<boost::uint64_t>(length));
+        size = write_length(static_cast<std::uint64_t>(length));
     }
 
     buffer->write(view_type(data, length));
@@ -301,17 +298,17 @@ inline encoder::size_type encoder::binary(const view_type& data)
     return binary(data.data(), data.size());
 }
 
-inline encoder::size_type encoder::write_length(boost::uint8_t data)
+inline encoder::size_type encoder::write_length(std::uint8_t data)
 {
     return write(data);
 }
 
-inline encoder::size_type encoder::write_length(boost::uint16_t data)
+inline encoder::size_type encoder::write_length(std::uint16_t data)
 {
-    const size_type size = sizeof(boost::int16_t);
+    const size_type size = sizeof(std::int16_t);
     if (buffer->grow(size))
     {
-        const boost::uint16_t endian = UINT16_C(0x0100);
+        const std::uint16_t endian = UINT16_C(0x0100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
@@ -320,12 +317,12 @@ inline encoder::size_type encoder::write_length(boost::uint16_t data)
     return 0;
 }
 
-inline encoder::size_type encoder::write_length(boost::uint32_t data)
+inline encoder::size_type encoder::write_length(std::uint32_t data)
 {
-    const size_type size = sizeof(boost::int32_t);
+    const size_type size = sizeof(std::int32_t);
     if (buffer->grow(size))
     {
-        const boost::uint32_t endian = UINT32_C(0x03020100);
+        const std::uint32_t endian = UINT32_C(0x03020100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
@@ -336,12 +333,12 @@ inline encoder::size_type encoder::write_length(boost::uint32_t data)
     return 0;
 }
 
-inline encoder::size_type encoder::write_length(boost::uint64_t data)
+inline encoder::size_type encoder::write_length(std::uint64_t data)
 {
-    const size_type size = sizeof(boost::int64_t);
+    const size_type size = sizeof(std::int64_t);
     if (buffer->grow(size))
     {
-        const boost::uint64_t endian = UINT64_C(0x0706050403020100);
+        const std::uint64_t endian = UINT64_C(0x0706050403020100);
         value_type *data_buffer = (value_type *)&data;
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
         buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));

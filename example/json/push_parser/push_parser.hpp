@@ -8,8 +8,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstdint>
 #include <string>
-#include <boost/cstdint.hpp>
 #include <trial/protocol/json/reader.hpp>
 
 namespace example
@@ -41,7 +41,7 @@ public:
                 break;
 
             case json::token::symbol::integer:
-                callbacks.on_integer(reader.value<boost::intmax_t>());
+                callbacks.on_integer(reader.value<std::intmax_t>());
                 break;
 
             case json::token::symbol::floating:

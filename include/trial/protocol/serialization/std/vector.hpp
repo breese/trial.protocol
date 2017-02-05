@@ -40,7 +40,7 @@ struct load_overloader< Archive, typename std::vector<T, Allocator> >
 template <typename Archive, typename T, typename Allocator>
 struct serialize_overloader<Archive,
                             typename std::vector<T, Allocator>,
-                            typename boost::enable_if<typename Archive::is_loading>::type>
+                            typename std::enable_if<Archive::is_loading::value>::type>
 {
     static void serialize(Archive& ar,
                           std::vector<T, Allocator>& data,
@@ -53,7 +53,7 @@ struct serialize_overloader<Archive,
 template <typename Archive, typename T, typename Allocator>
 struct serialize_overloader<Archive,
                             typename std::vector<T, Allocator>,
-                            typename boost::enable_if<typename Archive::is_saving>::type>
+                            typename std::enable_if<Archive::is_saving::value>::type>
 {
     static void serialize(Archive& ar,
                           const std::vector<T, Allocator>& data,

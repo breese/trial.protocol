@@ -25,9 +25,9 @@ template <typename CharT>
 class base
 {
 public:
-    typedef CharT value_type;
-    typedef std::size_t size_type;
-    typedef boost::basic_string_ref<value_type> view_type;
+    using value_type = CharT;
+    using size_type = std::size_t;
+    using view_type = boost::basic_string_ref<value_type>;
 
     virtual ~base() {}
 

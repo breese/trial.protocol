@@ -12,10 +12,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstddef> // std::size_t
+#include <cstdint>
 #include <string>
-#include <boost/cstdint.hpp>
+#include <memory>
 #include <boost/utility/string_ref.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 
 namespace trial
@@ -30,10 +30,10 @@ namespace detail
 class encoder
 {
 public:
-    typedef boost::uint8_t value_type;
-    typedef std::size_t size_type;
-    typedef boost::basic_string_ref<value_type> view_type;
-    typedef boost::basic_string_ref<char> string_view_type;
+    using value_type = std::uint8_t;
+    using size_type = std::size_t;
+    using view_type = boost::basic_string_ref<value_type>;
+    using string_view_type = boost::basic_string_ref<char>;
 
     template <typename T>
     encoder(T&);
@@ -53,16 +53,16 @@ public:
     size_type binary(const view_type&);
 
 private:
-    size_type write_length(boost::uint8_t);
-    size_type write_length(boost::uint16_t);
-    size_type write_length(boost::uint32_t);
-    size_type write_length(boost::uint64_t);
+    size_type write_length(std::uint8_t);
+    size_type write_length(std::uint16_t);
+    size_type write_length(std::uint32_t);
+    size_type write_length(std::uint64_t);
     size_type write(value_type);
     size_type write(const view_type&);
 
 private:
-    typedef buffer::base<value_type> buffer_type;
-    boost::scoped_ptr<buffer_type> buffer;
+    using buffer_type = buffer::base<value_type>;
+    std::unique_ptr<buffer_type> buffer;
 };
 
 } // namespace detail

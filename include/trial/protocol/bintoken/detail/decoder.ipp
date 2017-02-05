@@ -47,7 +47,7 @@ struct decoder::overloader
 template <>
 struct decoder::overloader<token::boolean>
 {
-    typedef token::boolean::type return_type;
+    using return_type = token::boolean::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
@@ -68,7 +68,7 @@ struct decoder::overloader<token::boolean>
 template <>
 struct decoder::overloader<token::int8>
 {
-    typedef token::int8::type return_type;
+    using return_type = token::int8::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
@@ -81,16 +81,16 @@ struct decoder::overloader<token::int8>
 template <>
 struct decoder::overloader<token::int16>
 {
-    typedef token::int16::type return_type;
+    using return_type = token::int16::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
         assert(decoder.code() == token::int16::code);
         assert(decoder.literal().size() == sizeof(return_type));
-        const boost::uint16_t endian = UINT16_C(0x0100);
+        const std::uint16_t endian = UINT16_C(0x0100);
         return_type result = 0;
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[0]] = static_cast<boost::uint8_t>(decoder.literal()[0]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[1]] = static_cast<boost::uint8_t>(decoder.literal()[1]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[0]] = static_cast<std::uint8_t>(decoder.literal()[0]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[1]] = static_cast<std::uint8_t>(decoder.literal()[1]);
         return result;
     }
 };
@@ -98,18 +98,18 @@ struct decoder::overloader<token::int16>
 template <>
 struct decoder::overloader<token::int32>
 {
-    typedef token::int32::type return_type;
+    using return_type = token::int32::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
         assert(decoder.code() == token::int32::code);
         assert(decoder.literal().size() == sizeof(return_type));
-        const boost::uint32_t endian = UINT32_C(0x03020100);
+        const std::uint32_t endian = UINT32_C(0x03020100);
         return_type result = 0;
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[0]] = static_cast<boost::uint8_t>(decoder.literal()[0]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[1]] = static_cast<boost::uint8_t>(decoder.literal()[1]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[2]] = static_cast<boost::uint8_t>(decoder.literal()[2]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[3]] = static_cast<boost::uint8_t>(decoder.literal()[3]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[0]] = static_cast<std::uint8_t>(decoder.literal()[0]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[1]] = static_cast<std::uint8_t>(decoder.literal()[1]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[2]] = static_cast<std::uint8_t>(decoder.literal()[2]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[3]] = static_cast<std::uint8_t>(decoder.literal()[3]);
         return result;
     }
 };
@@ -117,22 +117,22 @@ struct decoder::overloader<token::int32>
 template <>
 struct decoder::overloader<token::int64>
 {
-    typedef token::int64::type return_type;
+    using return_type = token::int64::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
         assert(decoder.code() == token::int64::code);
         assert(decoder.literal().size() == sizeof(return_type));
-        const boost::uint64_t endian = UINT64_C(0x0706050403020100);
+        const std::uint64_t endian = UINT64_C(0x0706050403020100);
         return_type result = 0;
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[0]] = static_cast<boost::uint8_t>(decoder.literal()[0]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[1]] = static_cast<boost::uint8_t>(decoder.literal()[1]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[2]] = static_cast<boost::uint8_t>(decoder.literal()[2]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[3]] = static_cast<boost::uint8_t>(decoder.literal()[3]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[4]] = static_cast<boost::uint8_t>(decoder.literal()[4]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[5]] = static_cast<boost::uint8_t>(decoder.literal()[5]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[6]] = static_cast<boost::uint8_t>(decoder.literal()[6]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[7]] = static_cast<boost::uint8_t>(decoder.literal()[7]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[0]] = static_cast<std::uint8_t>(decoder.literal()[0]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[1]] = static_cast<std::uint8_t>(decoder.literal()[1]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[2]] = static_cast<std::uint8_t>(decoder.literal()[2]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[3]] = static_cast<std::uint8_t>(decoder.literal()[3]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[4]] = static_cast<std::uint8_t>(decoder.literal()[4]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[5]] = static_cast<std::uint8_t>(decoder.literal()[5]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[6]] = static_cast<std::uint8_t>(decoder.literal()[6]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[7]] = static_cast<std::uint8_t>(decoder.literal()[7]);
         return result;
     }
 };
@@ -140,19 +140,19 @@ struct decoder::overloader<token::int64>
 template <>
 struct decoder::overloader<token::float32>
 {
-    typedef token::float32::type return_type;
+    using return_type = token::float32::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
         // IEEE 754 single precision
         assert(decoder.code() == token::float32::code);
         assert(decoder.literal().size() == sizeof(return_type));
-        const boost::uint32_t endian = UINT32_C(0x03020100);
+        const std::uint32_t endian = UINT32_C(0x03020100);
         return_type result = 0;
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[0]] = static_cast<boost::uint8_t>(decoder.literal()[0]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[1]] = static_cast<boost::uint8_t>(decoder.literal()[1]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[2]] = static_cast<boost::uint8_t>(decoder.literal()[2]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[3]] = static_cast<boost::uint8_t>(decoder.literal()[3]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[0]] = static_cast<std::uint8_t>(decoder.literal()[0]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[1]] = static_cast<std::uint8_t>(decoder.literal()[1]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[2]] = static_cast<std::uint8_t>(decoder.literal()[2]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[3]] = static_cast<std::uint8_t>(decoder.literal()[3]);
         return result;
     }
 };
@@ -160,22 +160,22 @@ struct decoder::overloader<token::float32>
 template <>
 struct decoder::overloader<token::float64>
 {
-    typedef token::float64::type return_type;
+    using return_type = token::float64::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
         assert(decoder.code() == token::float64::code);
         assert(decoder.literal().size() == sizeof(return_type));
-        const boost::uint64_t endian = UINT64_C(0x0706050403020100);
+        const std::uint64_t endian = UINT64_C(0x0706050403020100);
         return_type result = 0;
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[0]] = static_cast<boost::uint8_t>(decoder.literal()[0]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[1]] = static_cast<boost::uint8_t>(decoder.literal()[1]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[2]] = static_cast<boost::uint8_t>(decoder.literal()[2]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[3]] = static_cast<boost::uint8_t>(decoder.literal()[3]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[4]] = static_cast<boost::uint8_t>(decoder.literal()[4]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[5]] = static_cast<boost::uint8_t>(decoder.literal()[5]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[6]] = static_cast<boost::uint8_t>(decoder.literal()[6]);
-        ((volatile boost::uint8_t *)&result)[((boost::uint8_t *)&endian)[7]] = static_cast<boost::uint8_t>(decoder.literal()[7]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[0]] = static_cast<std::uint8_t>(decoder.literal()[0]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[1]] = static_cast<std::uint8_t>(decoder.literal()[1]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[2]] = static_cast<std::uint8_t>(decoder.literal()[2]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[3]] = static_cast<std::uint8_t>(decoder.literal()[3]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[4]] = static_cast<std::uint8_t>(decoder.literal()[4]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[5]] = static_cast<std::uint8_t>(decoder.literal()[5]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[6]] = static_cast<std::uint8_t>(decoder.literal()[6]);
+        ((volatile std::uint8_t *)&result)[((std::uint8_t *)&endian)[7]] = static_cast<std::uint8_t>(decoder.literal()[7]);
         return result;
     }
 };
@@ -183,7 +183,7 @@ struct decoder::overloader<token::float64>
 template <>
 struct decoder::overloader<token::string>
 {
-    typedef token::string::type return_type;
+    using return_type = token::string::type;
 
     static return_type decode(const detail::decoder& decoder)
     {
@@ -224,7 +224,7 @@ inline token::category::value decoder::category() const BOOST_NOEXCEPT
     return token::category::convert(current.code);
 }
 
-inline boost::system::error_code decoder::error() const BOOST_NOEXCEPT
+inline std::error_code decoder::error() const BOOST_NOEXCEPT
 {
     return bintoken::make_error_code(to_errc(code()));
 }
@@ -359,21 +359,21 @@ inline token::code::value decoder::next_string(value_type element) BOOST_NOEXCEP
         if (category() == token::category::status)
             return current.code;
         return next(token::code::string8,
-                    static_cast<boost::uint8_t>(value<token::int8>()));
+                    static_cast<std::uint8_t>(value<token::int8>()));
 
     case pattern::len16:
         current.code = advance<token::int16>();
         if (category() == token::category::status)
             return current.code;
         return next(token::code::string16,
-                    static_cast<boost::uint16_t>(value<token::int16>()));
+                    static_cast<std::uint16_t>(value<token::int16>()));
 
     case pattern::len32:
         current.code = advance<token::int32>();
         if (category() == token::category::status)
             return current.code;
         return next(token::code::string32,
-                    static_cast<boost::uint32_t>(value<token::int32>()));
+                    static_cast<std::uint32_t>(value<token::int32>()));
 
     case pattern::len64:
         current.code = advance<token::int64>();
@@ -396,21 +396,21 @@ inline token::code::value decoder::next_binary(value_type element) BOOST_NOEXCEP
         if (category() == token::category::status)
             return current.code;
         return next(token::code::binary8,
-                    static_cast<boost::uint8_t>(value<token::int8>()));
+                    static_cast<std::uint8_t>(value<token::int8>()));
 
     case pattern::len16:
         current.code = advance<token::int16>();
         if (category() == token::category::status)
             return current.code;
         return next(token::code::binary16,
-                    static_cast<boost::uint16_t>(value<token::int16>()));
+                    static_cast<std::uint16_t>(value<token::int16>()));
 
     case pattern::len32:
         current.code = advance<token::int32>();
         if (category() == token::category::status)
             return current.code;
         return next(token::code::binary32,
-                    static_cast<boost::uint32_t>(value<token::int32>()));
+                    static_cast<std::uint32_t>(value<token::int32>()));
 
     case pattern::len64:
         current.code = advance<token::int64>();
@@ -421,12 +421,12 @@ inline token::code::value decoder::next_binary(value_type element) BOOST_NOEXCEP
     return token::code::error_unknown_token;
 }
 
-inline token::code::value decoder::next(value_type element, boost::int64_t size) BOOST_NOEXCEPT
+inline token::code::value decoder::next(value_type element, std::int64_t size) BOOST_NOEXCEPT
 {
     if (size < 0)
         return token::code::error_negative_length;
 
-    if (boost::int64_t(input.size()) < size)
+    if (std::int64_t(input.size()) < size)
         return token::code::end;
 
     current.view = input.substr(0, size);

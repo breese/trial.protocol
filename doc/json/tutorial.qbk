@@ -110,15 +110,15 @@ The `Callbacks` template parameter must be a class that implements a member
 function for each callback function.
 The `Callbacks` class looks something like this:
 ```
+#include <cstdint>
 #include <string>
-#include <boost/cstdint.hpp>
 
 class my_callbacks
 {
 public:
     void on_null();
     void on_boolean(bool);
-    void on_integer(boost::intmax_t);
+    void on_integer(std::intmax_t);
     void on_floating(double);
     void on_string(const std::string&);
     void on_begin_array();
@@ -161,7 +161,7 @@ void push_parser::parse()
             break;
 
         case json::symbol::integer:
-            callbacks.on_integer(reader.value<boost::intmax_t>());
+            callbacks.on_integer(reader.value<std::intmax_t>());
             break;
 
         case json::symbol::floating:

@@ -40,7 +40,7 @@ struct load_overloader< Archive, typename std::pair<T1, T2> >
 template <typename Archive, typename T1, typename T2>
 struct serialize_overloader<Archive,
                             typename std::pair<T1, T2>,
-                            typename boost::enable_if<typename Archive::is_loading>::type>
+                            typename std::enable_if<Archive::is_loading::value>::type>
 {
     static void serialize(Archive& ar,
                           std::pair<T1, T2>& data,
@@ -53,7 +53,7 @@ struct serialize_overloader<Archive,
 template <typename Archive, typename T1, typename T2>
 struct serialize_overloader<Archive,
                             typename std::pair<T1, T2>,
-                            typename boost::enable_if<typename Archive::is_saving>::type>
+                            typename std::enable_if<Archive::is_saving::value>::type>
 {
     static void serialize(Archive& ar,
                           const std::pair<T1, T2>& data,

@@ -14,7 +14,7 @@
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-typedef format::reader::value_type value_type;
+using value_type = format::reader::value_type;
 
 //-----------------------------------------------------------------------------
 // Basic types
@@ -249,7 +249,7 @@ void test_empty()
 {
     const value_type input[] = { token::code::binary8, 0x00 };
     format::iarchive in(input);
-    std::vector<boost::uint8_t> value(4, 0xFF);
+    std::vector<std::uint8_t> value(4, 0xFF);
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 0);
 }
@@ -258,7 +258,7 @@ void test_many()
 {
     const value_type input[] = { token::code::binary8, 0x04, 0x11, 0x22, 0x33, 0x44 };
     format::iarchive in(input);
-    std::vector<boost::uint8_t> value(4, 0xFF);
+    std::vector<std::uint8_t> value(4, 0xFF);
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(value[0], 0x11);

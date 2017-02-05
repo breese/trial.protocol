@@ -26,9 +26,9 @@ namespace bintoken
 class reader
 {
 public:
-    typedef std::size_t size_type;
-    typedef detail::decoder::value_type value_type;
-    typedef detail::decoder::view_type view_type;
+    using size_type = std::size_t;
+    using value_type = detail::decoder::value_type;
+    using view_type = detail::decoder::view_type;
 
     template <typename T>
     reader(const T&);
@@ -47,7 +47,7 @@ public:
     token::category::value category() const BOOST_NOEXCEPT;
 
     //! @brief Returns the last error code.
-    boost::system::error_code error() const BOOST_NOEXCEPT;
+    std::error_code error() const BOOST_NOEXCEPT;
 
     //! @brief Returns the current nesting level.
     size_type level() const BOOST_NOEXCEPT;

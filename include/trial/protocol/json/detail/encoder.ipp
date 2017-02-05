@@ -11,16 +11,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cmath>
 #include <iterator>
-#include <boost/static_assert.hpp>
-#include <boost/array.hpp>
-#include <boost/utility/string_ref.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/type_traits/make_unsigned.hpp>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <array>
+#include <type_traits>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/detail/to_string.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
@@ -50,9 +44,9 @@ struct basic_encoder<CharT>::overloader
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, token::null> >::type>
+                                        typename std::enable_if<std::is_same<T, token::null>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     inline static size_type write(basic_encoder<CharT>& self)
     {
@@ -63,9 +57,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, token::begin_array> >::type>
+                                        typename std::enable_if<std::is_same<T, token::begin_array>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     inline static size_type write(basic_encoder<CharT>& self)
     {
@@ -76,9 +70,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, token::end_array> >::type>
+                                        typename std::enable_if<std::is_same<T, token::end_array>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     inline static size_type write(basic_encoder<CharT>& self)
     {
@@ -89,9 +83,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, token::begin_object> >::type>
+                                        typename std::enable_if<std::is_same<T, token::begin_object>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     inline static size_type write(basic_encoder<CharT>& self)
     {
@@ -102,9 +96,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, token::end_object> >::type>
+                                        typename std::enable_if<std::is_same<T, token::end_object>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     inline static size_type write(basic_encoder<CharT>& self)
     {
@@ -115,9 +109,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, token::value_separator> >::type>
+                                        typename std::enable_if<std::is_same<T, token::value_separator>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     static size_type write(basic_encoder<CharT>& self)
     {
@@ -128,9 +122,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, token::name_separator> >::type>
+                                        typename std::enable_if<std::is_same<T, token::name_separator>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     static size_type write(basic_encoder<CharT>& self)
     {
@@ -143,9 +137,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_integral<T> >::type>
+                                        typename std::enable_if<std::is_integral<T>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     inline static size_type write(basic_encoder<CharT>& self,
                                   const T& data)
@@ -159,9 +153,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_floating_point<T> >::type>
+                                        typename std::enable_if<std::is_floating_point<T>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     inline static size_type write(basic_encoder<CharT>& self,
                                   const T& data)
@@ -175,10 +169,10 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, typename basic_encoder<CharT>::view_type> >::type>
+                                        typename std::enable_if<std::is_same<T, typename basic_encoder<CharT>::view_type>::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
-    typedef typename basic_encoder<CharT>::view_type view_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
+    using view_type = typename basic_encoder<CharT>::view_type;
 
     static size_type write(basic_encoder<CharT>& self,
                            const view_type& data)
@@ -190,9 +184,9 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename boost::enable_if< boost::is_same<T, std::basic_string<CharT> > >::type>
+                                        typename std::enable_if<std::is_same<T, std::basic_string<CharT> >::value>::type>
 {
-    typedef typename basic_encoder<CharT>::size_type size_type;
+    using size_type = typename basic_encoder<CharT>::size_type;
 
     static size_type write(basic_encoder<CharT>& self,
                            const std::basic_string<CharT>& data)
@@ -261,14 +255,13 @@ template <typename T>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::integral_value(const T& data)
 {
-    typedef boost::array<value_type, std::numeric_limits<T>::digits10 + 1> array_type;
-    array_type output;
+    std::array<value_type, std::numeric_limits<T>::digits10 + 1> output;
 
     // Build buffer backwards
-    typename array_type::reverse_iterator where = output.rbegin();
+    typename decltype(output)::reverse_iterator where = output.rbegin();
     const bool is_negative = data < 0;
-    typedef typename boost::make_unsigned<T>::type unsigned_type;
-    unsigned_type number = unsigned_type(std::abs(data));
+    using unsigned_type = typename std::make_unsigned<T>::type;
+    auto number = unsigned_type(std::abs(data));
     if (number == 0)
     {
         *where = traits<CharT>::alpha_0;
@@ -284,7 +277,7 @@ basic_encoder<CharT>::integral_value(const T& data)
             number /= base;
         }
     }
-    typename array_type::const_iterator begin = where.base();
+    typename decltype(output)::const_iterator begin = where.base();
     const size_type size = size_type(std::distance(begin, output.cend()) + (is_negative ? 1 : 0));
 
     if (!buffer->grow(size))
@@ -308,7 +301,7 @@ template <typename T>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::floating_value(const T& data)
 {
-    switch (boost::math::fpclassify(data))
+    switch (std::fpclassify(data))
     {
     case FP_INFINITE:
     case FP_NAN:

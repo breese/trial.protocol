@@ -30,7 +30,7 @@ namespace serialization
 template <typename Value>
 struct save_overloader<bintoken::oarchive,
                        Value,
-                       typename boost::enable_if_c<has_save<bintoken::oarchive, Value>::value>::type>
+                       typename std::enable_if<has_save<bintoken::oarchive, Value>::value>::type>
 {
     static void save(bintoken::oarchive& ar,
                      const Value& data,
@@ -45,7 +45,7 @@ struct save_overloader<bintoken::oarchive,
 template <typename Value>
 struct load_overloader<bintoken::iarchive,
                        Value,
-                       typename boost::enable_if_c<has_load<bintoken::iarchive, Value>::value>::type>
+                       typename std::enable_if<has_load<bintoken::iarchive, Value>::value>::type>
 {
     static void load(bintoken::iarchive& ar,
                      const Value& data,
@@ -60,8 +60,8 @@ struct load_overloader<bintoken::iarchive,
 template <typename Value>
 struct serialize_overloader<bintoken::iarchive,
                             Value,
-                            typename boost::enable_if_c<has_serialize<bintoken::iarchive, Value>::value ||
-                                                        has_load<bintoken::iarchive, Value>::value>::type>
+                            typename std::enable_if<has_serialize<bintoken::iarchive, Value>::value ||
+                                                    has_load<bintoken::iarchive, Value>::value>::type>
 {
     static void serialize(bintoken::iarchive& ar,
                           Value& data,
@@ -76,8 +76,8 @@ struct serialize_overloader<bintoken::iarchive,
 template <typename Value>
 struct serialize_overloader<bintoken::oarchive,
                             Value,
-                            typename boost::enable_if_c<has_serialize<bintoken::oarchive, Value>::value ||
-                                                        has_save<bintoken::oarchive, Value>::value>::type>
+                            typename std::enable_if<has_serialize<bintoken::oarchive, Value>::value ||
+                                                    has_save<bintoken::oarchive, Value>::value>::type>
 {
     static void serialize(bintoken::oarchive& ar,
                           Value& data,

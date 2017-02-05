@@ -11,8 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/system/error_code.hpp>
-#include <boost/system/system_error.hpp>
+#include <system_error>
 #include <trial/protocol/json/token.hpp>
 
 namespace trial
@@ -37,21 +36,24 @@ enum errc
     expected_end_object
 };
 
-const boost::system::error_category& error_category();
+const std::error_category& error_category();
 
 enum errc to_errc(token::code::value);
 
-inline boost::system::error_code make_error_code(json::errc e = no_error)
+inline std::error_code make_error_code(json::errc e = no_error)
 {
-    return boost::system::error_code(static_cast<int>(e),
-                                     json::error_category());
+    return std::error_code(static_cast<int>(e),
+                           json::error_category());
 }
 
-class error : public boost::system::system_error
+class error : public std::system_error
 {
 public:
-    error(boost::system::error_code ec)
-        : system_error(ec)
+    error(std::error_code ec)
+        : system_error(std::move(ec))
+    {}
+    error(enum errc e)
+        : system_error(make_error_code(e))
     {}
 };
 
@@ -59,18 +61,16 @@ public:
 } // namespace protocol
 } // namespace trial
 
-namespace boost
-{
-namespace system
+namespace std
 {
 
-template<> struct is_error_code_enum<trial::protocol::json::errc>
+template <>
+struct is_error_code_enum<trial::protocol::json::errc>
+    : public std::true_type
 {
-  static const bool value = true;
 };
 
-} // namespace system
-} // namespace boost
+} // namespace std
 
 #include <trial/protocol/json/detail/error.ipp>
 

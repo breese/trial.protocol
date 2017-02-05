@@ -15,7 +15,7 @@
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-typedef format::reader::value_type value_type;
+using value_type = format::reader::value_type;
 
 //-----------------------------------------------------------------------------
 // Basic types
@@ -26,7 +26,7 @@ namespace basic_suite
 
 void test_empty()
 {
-    const boost::array<value_type, 0> input = {};
+    const std::array<value_type, 0> input = {};
     format::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::end);
@@ -138,7 +138,7 @@ void test_int8()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float32::type>(), 1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float64::type>(), 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::intmax_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::intmax_t>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
@@ -155,34 +155,34 @@ void test_uint8()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0x00);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x0000);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x00000000);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x0000000000000000));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint8_t>(), 0x00);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint16_t>(), 0x0000);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x00000000);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x0000000000000000));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0x7F);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x007F);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x0000007F);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x000000000000007F));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint8_t>(), 0x7F);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint16_t>(), 0x007F);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x0000007F);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x000000000000007F));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0xD0);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x00D0);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x000000D0);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x00000000000000D0));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint8_t>(), 0xD0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint16_t>(), 0x00D0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x000000D0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x00000000000000D0));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int8);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint8_t>(), 0xFF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x00FF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x000000FF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x00000000000000FF));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint8_t>(), 0xFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint16_t>(), 0x00FF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x000000FF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x00000000000000FF));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
@@ -209,7 +209,7 @@ void test_int16()
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<token::float64>(),
                                     format::error, "incompatible type");
     // With conversion
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::int8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::int8_t>(),
                                     format::error, "overflow");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::int16::type>(), 0x100);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::int32::type>(), 0x100);
@@ -231,27 +231,27 @@ void test_uint16()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x7FFF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x00007FFF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x0000000000007FFF));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint16_t>(), 0x7FFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x00007FFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x0000000000007FFF));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0x8000);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x00008000);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint16_t>(), 0x8000);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x00008000);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint16_t>(), 0xFFFF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x0000FFFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint16_t>(), 0xFFFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x0000FFFF);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
@@ -278,9 +278,9 @@ void test_int32()
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<token::float64>(),
                                     format::error, "incompatible type");
     // With conversion
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::int8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::int8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::int16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::int16_t>(),
                                     format::error, "overflow");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::int32::type>(), 0x10000);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::int64::type>(), UINT64_C(0x10000));
@@ -301,32 +301,32 @@ void test_uint32()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint16_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x7FFFFFFF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x000000007FFFFFFF));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x7FFFFFFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x000000007FFFFFFF));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint16_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0x80000000);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x0000000080000000));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0x80000000);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x0000000080000000));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint16_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint32_t>(), 0xFFFFFFFF);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x00000000FFFFFFFF));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint32_t>(), 0xFFFFFFFF);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x00000000FFFFFFFF));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
@@ -353,11 +353,11 @@ void test_int64()
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<token::float64>(),
                                     format::error, "incompatible type");
     // With conversion
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::int8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::int8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::int16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::int16_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::int32_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::int32_t>(),
                                     format::error, "overflow");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::int64::type>(), UINT64_C(0x100000000));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float32::type>(), 4294967296.0f);
@@ -377,35 +377,35 @@ void test_uint64()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint16_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint32_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint32_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x7FFFFFFFFFFFFFFF));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x7FFFFFFFFFFFFFFF));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint16_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint32_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint32_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0x8000000000000000));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0x8000000000000000));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint8_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint8_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint16_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint16_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<boost::uint32_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(reader.value<std::uint32_t>(),
                                     format::error, "overflow");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::uint64_t>(), UINT64_C(0xFFFFFFFFFFFFFFFF));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::uint64_t>(), UINT64_C(0xFFFFFFFFFFFFFFFF));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
 }
@@ -417,10 +417,10 @@ void test_float32()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::float32);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int8_t>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int16_t>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int32_t>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int64_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int8_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int16_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int32_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int64_t>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float32::type>(), 1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float64::type>(), 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
@@ -434,10 +434,10 @@ void test_float64()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::float64);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::floating);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int8_t>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int16_t>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int32_t>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<boost::int64_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int8_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int16_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int32_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int64_t>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float32::type>(), 1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<token::float64::type>(), 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);

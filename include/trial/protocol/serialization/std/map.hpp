@@ -43,7 +43,7 @@ struct load_overloader< Archive, typename std::map<Key, T, Compare, Allocator> >
 template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
 struct serialize_overloader<Archive,
                             typename std::map<Key, T, Compare, Allocator>,
-                            typename boost::enable_if<typename Archive::is_loading>::type>
+                            typename std::enable_if<Archive::is_loading::value>::type>
 {
     static void serialize(Archive& ar,
                           std::map<Key, T, Compare, Allocator>& data,
@@ -56,7 +56,7 @@ struct serialize_overloader<Archive,
 template <typename Archive, typename Key, typename T, typename Compare, typename Allocator>
 struct serialize_overloader<Archive,
                             typename std::map<Key, T, Compare, Allocator>,
-                            typename boost::enable_if<typename Archive::is_saving>::type>
+                            typename std::enable_if<Archive::is_saving::value>::type>
 {
     static void serialize(Archive& ar,
                           const std::map<Key, T, Compare, Allocator>& data,

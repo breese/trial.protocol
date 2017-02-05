@@ -11,7 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/type_traits.hpp>
+#include <cassert>
+#include <type_traits>
 
 namespace trial
 {
@@ -117,7 +118,7 @@ inline bool traits<char>::is_keyword(value_type value) BOOST_NOEXCEPT
 
 inline traits<char>::size_type traits<char>::extra_bytes(value_type value) BOOST_NOEXCEPT
 {
-    typedef boost::make_unsigned<value_type>::type unsigned_value_type;
+    using unsigned_value_type = std::make_unsigned<value_type>::type;
     const unsigned_value_type v = static_cast<unsigned_value_type>(value);
 
     if (v < 0xC0)

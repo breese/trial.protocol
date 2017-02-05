@@ -11,10 +11,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstdint>
 #include <string>
-#include <boost/cstdint.hpp>
+#include <memory>
 #include <boost/none.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
@@ -31,10 +31,10 @@ template <typename CharT>
 class basic_encoder
 {
 public:
-    typedef CharT value_type;
-    typedef std::size_t size_type;
-    typedef buffer::base<value_type> buffer_type;
-    typedef boost::basic_string_ref<value_type> view_type;
+    using value_type = CharT;
+    using size_type = std::size_t;
+    using buffer_type = buffer::base<value_type>;
+    using view_type = boost::basic_string_ref<value_type>;
 
     template <typename T>
     basic_encoder(T&);
@@ -71,7 +71,7 @@ private:
     size_type write(const view_type&);
 
 private:
-    boost::scoped_ptr<buffer_type> buffer;
+    std::unique_ptr<buffer_type> buffer;
 };
 
 } // namespace detail

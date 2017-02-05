@@ -30,7 +30,7 @@ public:
         std::cout << "bool: " << std::boolalpha << value << std::endl;
     }
 
-    void on_integer(boost::intmax_t value)
+    void on_integer(std::intmax_t value)
     {
         std::cout << "integer: " << value << std::endl;
     }

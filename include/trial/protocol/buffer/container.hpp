@@ -32,10 +32,10 @@ class basic_container< ContainerType<CharT, AllocatorType> >
     : public base<CharT>
 {
 public:
-    typedef typename base<CharT>::value_type value_type;
-    typedef typename base<CharT>::size_type size_type;
-    typedef typename base<CharT>::view_type view_type;
-    typedef ContainerType<CharT, AllocatorType> container_type;
+    using value_type = typename base<CharT>::value_type;
+    using size_type = typename base<CharT>::size_type;
+    using view_type = typename base<CharT>::view_type;
+    using container_type = ContainerType<CharT, AllocatorType>;
 
     basic_container(container_type& data)
         : buffer(data)

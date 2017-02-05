@@ -11,8 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_class.hpp>
+#include <type_traits>
 #include <boost/serialization/split_free.hpp>
 
 // Non-intrusive serialization
@@ -35,7 +34,7 @@ struct has_serialize
 };
 
 template <typename Archive, typename Type>
-struct has_serialize<Archive, Type, typename boost::enable_if_c<boost::is_class<Type>::value>::type>
+struct has_serialize<Archive, Type, typename std::enable_if<std::is_class<Type>::value>::type>
 {
 private:
     template <typename T, T> struct type_check;
@@ -63,7 +62,7 @@ struct has_load
 };
 
 template <typename Archive, typename Type>
-struct has_load<Archive, Type, typename boost::enable_if_c<boost::is_class<Type>::value>::type>
+struct has_load<Archive, Type, typename std::enable_if<std::is_class<Type>::value>::type>
 {
 private:
     template <typename T, T> struct type_check;
@@ -91,7 +90,7 @@ struct has_save
 };
 
 template <typename Archive, typename Type>
-struct has_save<Archive, Type, typename boost::enable_if_c<boost::is_class<Type>::value>::type>
+struct has_save<Archive, Type, typename std::enable_if<std::is_class<Type>::value>::type>
 {
 private:
     template <typename T, T> struct type_check;

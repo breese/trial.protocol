@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstddef> // std::size_t
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include <trial/protocol/detail/cstdfloat.hpp>
 
 namespace trial
@@ -118,7 +118,7 @@ struct category
 
 struct null
 {
-    typedef void type;
+    using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::null;
     static bool same(token::code::value);
@@ -126,7 +126,7 @@ struct null
 
 struct begin_record
 {
-    typedef void type;
+    using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::begin_record;
     static bool same(token::code::value);
@@ -134,7 +134,7 @@ struct begin_record
 
 struct end_record
 {
-    typedef void type;
+    using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::end_record;
     static bool same(token::code::value);
@@ -142,7 +142,7 @@ struct end_record
 
 struct begin_array
 {
-    typedef void type;
+    using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::begin_array;
     static bool same(token::code::value);
@@ -150,7 +150,7 @@ struct begin_array
 
 struct end_array
 {
-    typedef void type;
+    using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::end_array;
     static bool same(token::code::value);
@@ -158,7 +158,7 @@ struct end_array
 
 struct begin_assoc_array
 {
-    typedef void type;
+    using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::begin_assoc_array;
     static bool same(token::code::value);
@@ -166,7 +166,7 @@ struct begin_assoc_array
 
 struct end_assoc_array
 {
-    typedef void type;
+    using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::end_assoc_array;
     static bool same(token::code::value);
@@ -174,7 +174,7 @@ struct end_assoc_array
 
 struct boolean
 {
-    typedef bool type;
+    using type = bool;
     static const std::size_t size = 0;
     static const token::symbol::value symbol = token::symbol::boolean;
     static bool same(token::code::value);
@@ -182,7 +182,7 @@ struct boolean
 
 struct int8
 {
-    typedef boost::int8_t type;
+    using type = std::int8_t;
     static const std::size_t size = sizeof(type);
     static const token::code::value code = token::code::int8;
     static bool same(token::code::value);
@@ -190,7 +190,7 @@ struct int8
 
 struct int16
 {
-    typedef boost::int16_t type;
+    using type = std::int16_t;
     static const std::size_t size = sizeof(type);
     static const token::code::value code = token::code::int16;
     static bool same(token::code::value);
@@ -198,7 +198,7 @@ struct int16
 
 struct int32
 {
-    typedef boost::int32_t type;
+    using type = std::int32_t;
     static const std::size_t size = sizeof(type);
     static const token::code::value code = token::code::int32;
     static bool same(token::code::value);
@@ -206,7 +206,7 @@ struct int32
 
 struct int64
 {
-    typedef boost::int64_t type;
+    using type = std::int64_t;
     static const std::size_t size = sizeof(type);
     static const token::code::value code = token::code::int64;
     static bool same(token::code::value);
@@ -214,7 +214,7 @@ struct int64
 
 struct float32
 {
-    typedef protocol::detail::float32_t type;
+    using type = protocol::detail::float32_t;
     static const std::size_t size = sizeof(type);
     static const token::code::value code = token::code::float32;
     static bool same(token::code::value);
@@ -222,7 +222,7 @@ struct float32
 
 struct float64
 {
-    typedef protocol::detail::float64_t type;
+    using type = protocol::detail::float64_t;
     static const std::size_t size = sizeof(type);
     static const token::code::value code = token::code::float64;
     static bool same(token::code::value);
@@ -230,7 +230,7 @@ struct float64
 
 struct string
 {
-    typedef std::string type;
+    using type = std::string;
     static bool same(token::code::value);
 };
 
@@ -258,7 +258,7 @@ struct is_tag
 template <typename T, typename Enable = void>
 struct type_cast
 {
-    typedef T type;
+    using type = T;
 };
 
 } // namespace token

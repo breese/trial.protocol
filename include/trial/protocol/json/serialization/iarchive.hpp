@@ -30,7 +30,7 @@ class basic_iarchive
     friend class boost::archive::load_access;
 
 public:
-    typedef CharT value_type;
+    using value_type = CharT;
 
     basic_iarchive(const json::reader&);
     basic_iarchive(const json::reader::view_type&);
@@ -81,7 +81,7 @@ private:
 #endif
 };
 
-typedef basic_iarchive<char> iarchive;
+using iarchive = basic_iarchive<char>;
 
 } // namespace json
 } // namespace protocol

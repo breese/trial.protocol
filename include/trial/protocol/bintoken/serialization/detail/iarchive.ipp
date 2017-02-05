@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/static_assert.hpp>
 #include <trial/protocol/bintoken/serialization/detail/array_load.hpp>
 
 namespace trial
@@ -62,14 +61,14 @@ void iarchive::load(T& data)
 template <typename Tag>
 void iarchive::load()
 {
-    BOOST_STATIC_ASSERT_MSG(token::is_tag<Tag>::value, "Cannot use type as tag");
+    static_assert(token::is_tag<Tag>::value, "Cannot use type as tag");
     next(Tag::code);
 }
 
 template <typename Tag>
 bool iarchive::at() const
 {
-    BOOST_STATIC_ASSERT_MSG(token::is_tag<Tag>::value, "Cannot use type as tag");
+    static_assert(token::is_tag<Tag>::value, "Cannot use type as tag");
     return Tag::same(reader.code());
 }
 

@@ -16,7 +16,7 @@
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-typedef format::writer::value_type value_type;
+using value_type = format::writer::value_type;
 
 //-----------------------------------------------------------------------------
 // Basic types
@@ -295,7 +295,7 @@ void test_empty()
 {
     std::vector<value_type> result;
     format::oarchive ar(result);
-    std::vector<boost::uint8_t> value;
+    std::vector<std::uint8_t> value;
     ar << value;
 
     value_type expected[] = { token::code::binary8, 0x00 };
@@ -308,7 +308,7 @@ void test_one()
 {
     std::vector<value_type> result;
     format::oarchive ar(result);
-    std::vector<boost::uint8_t> value(1, 0xFF);
+    std::vector<std::uint8_t> value(1, 0xFF);
     ar << value;
 
     value_type expected[] = { token::code::binary8, 0x01, 0xFF };
@@ -321,7 +321,7 @@ void test_many()
 {
     std::vector<value_type> result;
     format::oarchive ar(result);
-    std::vector<boost::uint8_t> value(4, 0xFF);
+    std::vector<std::uint8_t> value(4, 0xFF);
     ar << value;
 
     value_type expected[] = { token::code::binary8, 0x04, 0xFF, 0xFF, 0xFF, 0xFF };
@@ -334,7 +334,7 @@ void test_big()
 {
     std::vector<value_type> result;
     format::oarchive ar(result);
-    std::vector<boost::uint8_t> value(0x10000, 0xFF);
+    std::vector<std::uint8_t> value(0x10000, 0xFF);
     ar << value;
 
     std::vector<value_type> expected;

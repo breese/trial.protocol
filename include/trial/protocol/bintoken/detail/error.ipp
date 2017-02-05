@@ -23,10 +23,10 @@ namespace bintoken
 namespace detail
 {
 
-class error_category : public boost::system::error_category
+class error_category : public std::error_category
 {
 public:
-    const char *name() const BOOST_SYSTEM_NOEXCEPT
+    const char *name() const BOOST_NOEXCEPT
     {
         return "trial.protocol.bintoken";
     }
@@ -68,7 +68,7 @@ public:
 
 } // namespace detail
 
-inline const boost::system::error_category& error_category()
+inline const std::error_category& error_category()
 {
     static detail::error_category instance;
     return instance;

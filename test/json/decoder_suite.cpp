@@ -14,7 +14,7 @@
 using namespace trial::protocol;
 namespace token = json::token;
 
-typedef json::detail::basic_decoder<char> decoder_type;
+using decoder_type = json::detail::basic_decoder<char>;
 
 //-----------------------------------------------------------------------------
 // Whitespaces
@@ -237,7 +237,7 @@ void test_zero_white()
     const char input[] = "  0  ";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::int64_t>(), 0);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -247,7 +247,7 @@ void test_hundred()
     const char input[] = "100";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), 100);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::int64_t>(), 100);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -257,7 +257,7 @@ void test_minus_hundred()
     const char input[] = "-100";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), -100);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::int64_t>(), -100);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -267,7 +267,7 @@ void test_large()
     const char input[] = "100000000000000000";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), INT64_C(100000000000000000));
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::int64_t>(), INT64_C(100000000000000000));
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -277,7 +277,7 @@ void test_max()
     const char input[] = "9223372036854775807";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::int64_t>(), INT64_C(9223372036854775807));
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::int64_t>(), INT64_C(9223372036854775807));
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -312,7 +312,7 @@ void fail_too_large()
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "10000000000000000000");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<boost::int64_t>(),
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::int64_t>(),
                                     json::error, "invalid value");
 }
 
@@ -371,7 +371,7 @@ void test_intmax()
     const char input[] = "1";
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::intmax_t>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::intmax_t>(), 1);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1233,7 +1233,7 @@ void test_integer_zero()
     decoder_type decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0");
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<boost::intmax_t>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::intmax_t>(), 0);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }

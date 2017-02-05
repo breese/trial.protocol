@@ -18,7 +18,7 @@
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-typedef format::writer::value_type value_type;
+using value_type = format::writer::value_type;
 
 //-----------------------------------------------------------------------------
 // Basic types
@@ -101,10 +101,10 @@ void test_uint8()
 {
     std::vector<value_type> result;
     format::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0x00)), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0x7F)), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0xD0)), 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint8_t(0xFF)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint8_t(0x00)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint8_t(0x7F)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint8_t(0xD0)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint8_t(0xFF)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], 0x00);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x7F);
@@ -128,9 +128,9 @@ void test_uint16()
 {
     std::vector<value_type> result;
     format::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint16_t(0x7FFF)), 3);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint16_t(0x8000)), 3);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint16_t(0xFFFF)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint16_t(0x7FFF)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint16_t(0x8000)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint16_t(0xFFFF)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int16);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0xFF);
@@ -160,9 +160,9 @@ void test_uint32()
 {
     std::vector<value_type> result;
     format::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint32_t(0x7FFFFFFF)), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint32_t(0x80000000)), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint32_t(0xFFFFFFFF)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint32_t(0x7FFFFFFF)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint32_t(0x80000000)), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint32_t(0xFFFFFFFF)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 15);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int32);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0xFF);
@@ -202,9 +202,9 @@ void test_uint64()
 {
     std::vector<value_type> result;
     format::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint64_t(UINT64_C(0x7FFFFFFFFFFFFFFF))), 9);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint64_t(UINT64_C(0x8000000000000000))), 9);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::uint64_t(UINT64_C(0xFFFFFFFFFFFFFFFF))), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint64_t(UINT64_C(0x7FFFFFFFFFFFFFFF))), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint64_t(UINT64_C(0x8000000000000000))), 9);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint64_t(UINT64_C(0xFFFFFFFFFFFFFFFF))), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 27);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::int64);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0xFF);
@@ -351,7 +351,7 @@ void test_empty()
 {
     std::vector<value_type> result;
     format::writer writer(result);
-    boost::array<value_type, 0> data;
+    std::array<value_type, 0> data;
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(data), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::binary8);

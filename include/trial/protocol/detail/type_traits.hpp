@@ -11,8 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/cstdint.hpp>
-#include <boost/type_traits/conditional.hpp>
+#include <cstdint>
+#include <type_traits>
 
 namespace trial
 {
@@ -24,29 +24,29 @@ namespace detail
 template <typename T>
 struct make_floating_point
 {
-    typedef typename boost::conditional<
-        boost::is_same< float, boost::common_type<T, float> >::value,
+    using type = typename std::conditional<
+        std::is_same< float, std::common_type<T, float> >::value,
         float,
-        typename boost::conditional<
-            boost::is_same< double, boost::common_type<T, double> >::value,
+        typename std::conditional<
+            std::is_same< double, std::common_type<T, double> >::value,
             double,
             long double
             >::type
-        >::type type;
+        >::type;
 };
 
 template <typename T>
 struct make_integral
 {
     // This is a crude approximation
-    typedef typename boost::conditional<
-        sizeof(T) <= sizeof(boost::int32_t),
-            boost::int32_t, typename boost::conditional<
-            sizeof(T) <= sizeof(boost::int64_t),
-                boost::int64_t,
-                boost::intmax_t
+    using type = typename std::conditional<
+        sizeof(T) <= sizeof(std::int32_t),
+            std::int32_t, typename std::conditional<
+            sizeof(T) <= sizeof(std::int64_t),
+                std::int64_t,
+                std::intmax_t
                 >::type
-        >::type type;
+        >::type;
 };
 
 } // namespace detail

@@ -108,7 +108,7 @@ void test_intmax_zero()
 {
     std::ostringstream result;
     json::writer writer(result);
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(boost::intmax_t(0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::intmax_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0");
 }
 

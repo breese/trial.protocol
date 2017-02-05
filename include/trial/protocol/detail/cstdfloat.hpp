@@ -29,15 +29,15 @@ namespace detail
 {
 
 #if defined(TRIAL_PROTOCOL_HEADER_BOOST_CSTDFLOAT_HPP)
-typedef boost::float32_t float32_t;
-typedef boost::float64_t float64_t;
+using float32_t = boost::float32_t;
+using float64_t = boost::float64_t;
 #if defined(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE)
-typedef boost::float128_t float128_t;
+using float128_t = boost::float128_t;
 #endif
 #else
-typedef float float32_t;
-typedef double float64_t;
-typedef long double float128_t;
+using float32_t = float;
+using float64_t = double;
+using float128_t = long double;
 #endif
 
 } // namespace detail

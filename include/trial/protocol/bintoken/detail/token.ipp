@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/utility/enable_if.hpp>
+#include <type_traits>
 
 namespace trial
 {
@@ -377,9 +377,9 @@ struct is_tag<token::string>
 
 template <typename T>
 struct type_cast<T,
-                 typename boost::enable_if< is_tag<T> >::type>
+                 typename std::enable_if<is_tag<T>::value>::type>
 {
-    typedef typename T::type type;
+    using type = typename T::type;
 };
 
 } // namespace token

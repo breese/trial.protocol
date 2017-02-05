@@ -15,14 +15,7 @@
 #include <cmath>
 #include <limits>
 #include <vector>
-#include <boost/static_assert.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/common_type.hpp>
-#include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_unsigned.hpp>
-#include <boost/type_traits/make_unsigned.hpp>
-#include <boost/type_traits/remove_const.hpp>
+#include <type_traits>
 #include <trial/protocol/detail/type_traits.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 
@@ -40,16 +33,16 @@ namespace bintoken
 template <typename ReturnType, typename Enable>
 struct reader::overloader
 {
-    BOOST_STATIC_ASSERT_MSG(sizeof(ReturnType) == 0, "Cannot convert type");
+    static_assert(sizeof(ReturnType) == 0, "Cannot convert type");
 };
 
 // Tags
 
 template <typename Tag>
 struct reader::overloader<Tag,
-                          typename boost::enable_if< token::is_tag<Tag> >::type>
+                          typename std::enable_if<token::is_tag<Tag>::value>::type>
 {
-    typedef typename token::type_cast<Tag>::type return_type;
+    using return_type = typename token::type_cast<Tag>::type;
 
     static return_type convert(const reader& self)
     {
@@ -84,9 +77,9 @@ struct reader::overloader<bool>
 
 template <typename ReturnType>
 struct reader::overloader<ReturnType,
-                          typename boost::enable_if_c< boost::is_arithmetic<ReturnType>::value &&
-                                                       !boost::is_unsigned<ReturnType>::value &&
-                                                       !boost::is_same<ReturnType, bool>::value >::type>
+                          typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
+                                                  !std::is_unsigned<ReturnType>::value &&
+                                                  !std::is_same<ReturnType, bool>::value>::type>
 {
     static ReturnType convert(const reader& self)
     {
@@ -95,7 +88,7 @@ struct reader::overloader<ReturnType,
         case token::int8::code:
             {
                 token::int8::type result = self.decoder.value<token::int8>();
-                typedef typename boost::common_type<ReturnType, token::int8::type>::type widest_type;
+                using widest_type = typename std::common_type<ReturnType, token::int8::type>::type;
                 if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
                 return ReturnType(result);
@@ -104,7 +97,7 @@ struct reader::overloader<ReturnType,
         case token::int16::code:
             {
                 token::int16::type result = self.decoder.value<token::int16>();
-                typedef typename boost::common_type<ReturnType, token::int16::type>::type widest_type;
+                using widest_type = typename std::common_type<ReturnType, token::int16::type>::type;
                 if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
                 return ReturnType(result);
@@ -113,7 +106,7 @@ struct reader::overloader<ReturnType,
         case token::int32::code:
             {
                 token::int32::type result = self.decoder.value<token::int32>();
-                typedef typename boost::common_type<ReturnType, token::int32::type>::type widest_type;
+                using widest_type = typename std::common_type<ReturnType, token::int32::type>::type;
                 if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
                 return ReturnType(result);
@@ -122,7 +115,7 @@ struct reader::overloader<ReturnType,
         case token::int64::code:
             {
                 token::int64::type result = self.decoder.value<token::int64>();
-                typedef typename boost::common_type<ReturnType, token::int64::type>::type widest_type;
+                using widest_type = typename std::common_type<ReturnType, token::int64::type>::type;
                 if (widest_type(result) > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
                 return ReturnType(result);
@@ -152,9 +145,9 @@ struct reader::overloader<ReturnType,
 
 template <typename ReturnType>
 struct reader::overloader<ReturnType,
-                          typename boost::enable_if_c< boost::is_arithmetic<ReturnType>::value &&
-                                                       boost::is_unsigned<ReturnType>::value &&
-                                                       !boost::is_same<ReturnType, bool>::value >::type>
+                          typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
+                                                  std::is_unsigned<ReturnType>::value &&
+                                                  !std::is_same<ReturnType, bool>::value>::type>
 {
     static ReturnType convert(const reader& self)
     {
@@ -163,8 +156,8 @@ struct reader::overloader<ReturnType,
         case token::int8::code:
             {
                 token::int8::type result = self.decoder.value<token::int8>();
-                typedef typename boost::make_unsigned<token::int8::type>::type unsigned_type;
-                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                using unsigned_type = typename std::make_unsigned<token::int8::type>::type;
+                using widest_type = typename std::common_type<ReturnType, unsigned_type>::type;
                 const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
                 if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
@@ -174,8 +167,8 @@ struct reader::overloader<ReturnType,
         case token::int16::code:
             {
                 token::int16::type result = self.decoder.value<token::int16>();
-                typedef typename boost::make_unsigned<token::int16::type>::type unsigned_type;
-                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                using unsigned_type = typename std::make_unsigned<token::int16::type>::type;
+                using widest_type = typename std::common_type<ReturnType, unsigned_type>::type;
                 const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
                 if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
@@ -185,8 +178,8 @@ struct reader::overloader<ReturnType,
         case token::int32::code:
             {
                 token::int32::type result = self.decoder.value<token::int32>();
-                typedef typename boost::make_unsigned<token::int32::type>::type unsigned_type;
-                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                using unsigned_type = typename std::make_unsigned<token::int32::type>::type;
+                using widest_type = typename std::common_type<ReturnType, unsigned_type>::type;
                 const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
                 if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
@@ -196,8 +189,8 @@ struct reader::overloader<ReturnType,
         case token::int64::code:
             {
                 token::int64::type result = self.decoder.value<token::int64>();
-                typedef typename boost::make_unsigned<token::int64::type>::type unsigned_type;
-                typedef typename boost::common_type<ReturnType, unsigned_type>::type widest_type;
+                using unsigned_type = typename std::make_unsigned<token::int64::type>::type;
+                using widest_type = typename std::common_type<ReturnType, unsigned_type>::type;
                 const widest_type wide = widest_type(result) & std::numeric_limits<unsigned_type>::max();
                 if (wide > widest_type(std::numeric_limits<ReturnType>::max()))
                     throw bintoken::error(overflow);
@@ -215,7 +208,7 @@ struct reader::overloader<ReturnType,
 template <>
 struct reader::overloader<std::string>
 {
-    typedef std::string return_type;
+    using return_type = std::string;
 
     static return_type convert(const reader& self)
     {
@@ -237,9 +230,9 @@ struct reader::overloader<std::string>
 // Binary
 
 template <>
-struct reader::overloader< std::vector<boost::uint8_t> >
+struct reader::overloader< std::vector<std::uint8_t> >
 {
-    typedef view_type return_type;
+    using return_type = view_type;
 
     static return_type convert(const reader& self)
     {
@@ -284,7 +277,7 @@ inline token::category::value reader::category() const BOOST_NOEXCEPT
     return decoder.category();
 }
 
-inline boost::system::error_code reader::error() const BOOST_NOEXCEPT
+inline std::error_code reader::error() const BOOST_NOEXCEPT
 {
     return decoder.error();
 }
@@ -368,7 +361,7 @@ inline bool reader::next(token::code::value expect) BOOST_NOEXCEPT
 template <typename ReturnType>
 typename token::type_cast<ReturnType>::type reader::value() const
 {
-    typedef typename boost::remove_const<ReturnType>::type return_type;
+    using return_type = typename std::remove_const<ReturnType>::type;
     return overloader<return_type>::convert(*this);
 }
 

@@ -12,10 +12,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstddef> // std::size_t
+#include <cstdint>
 #include <string>
-#include <boost/cstdint.hpp>
 #include <boost/config.hpp>
-#include <boost/system/error_code.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/error.hpp>
@@ -33,9 +32,9 @@ template <typename CharT>
 class basic_decoder
 {
 public:
-    typedef std::size_t size_type;
-    typedef CharT value_type;
-    typedef boost::basic_string_ref<CharT> view_type;
+    using size_type = std::size_t;
+    using value_type = CharT;
+    using view_type = boost::basic_string_ref<CharT>;
 
     basic_decoder(const view_type& input);
 
@@ -45,7 +44,7 @@ public:
     token::code::value code() const BOOST_NOEXCEPT;
     token::symbol::value symbol() const BOOST_NOEXCEPT;
     token::category::value category() const BOOST_NOEXCEPT;
-    boost::system::error_code error() const BOOST_NOEXCEPT;
+    std::error_code error() const BOOST_NOEXCEPT;
     const view_type& literal() const BOOST_NOEXCEPT;
     const view_type& tail() const BOOST_NOEXCEPT;
     template <typename ReturnType> ReturnType value() const;

@@ -102,9 +102,9 @@ template <CharT>
 class deque_wrapper : public buffer::base<CharT>
 {
 public:
-    typedef typename buffer::base<CharT>::value_type value_type;
-    typedef typename buffer::base<CharT>::size_type size_type;
-    typedef typename buffer::base<CharT>::view_type view_type;
+    using value_type = typename buffer::base<CharT>::value_type;
+    using size_type = typename buffer::base<CharT>::size_type;
+    using view_type = typename buffer::base<CharT>::view_type;
 
     deque_wrapper(std::deque<value_type>& buffer)
         : buffer(buffer)
@@ -142,7 +142,7 @@ namespace trial { namespace protocol { namespace buffer {
 template <typename T>
 struct traits< std::deque<T> >
 {
-    typedef my::deque_wrapper<T> buffer_type;
+    using buffer_type = my::deque_wrapper<T>;
 };
 
 }}}

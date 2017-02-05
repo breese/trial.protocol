@@ -30,7 +30,7 @@ class basic_oarchive
     friend class boost::archive::save_access;
 
 public:
-    typedef CharT value_type;
+    using value_type = CharT;
 
     template <typename T>
     basic_oarchive(T&);
@@ -68,7 +68,7 @@ protected:
     json::basic_writer<value_type> writer;
 };
 
-typedef basic_oarchive<char> oarchive;
+using oarchive = basic_oarchive<char>;
 
 } // namespace json
 } // namespace protocol

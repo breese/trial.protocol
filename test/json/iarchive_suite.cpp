@@ -564,7 +564,7 @@ void test_int_bool_empty()
 {
     const char input[] = "[]";
     json::iarchive in(input);
-    std::map<boost::int64_t, bool> value;
+    std::map<std::int64_t, bool> value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 0U);
 }
@@ -573,7 +573,7 @@ void test_int_bool_one()
 {
     const char input[] = "[[2,true]]";
     json::iarchive in(input);
-    std::map<boost::int64_t, bool> value;
+    std::map<std::int64_t, bool> value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 1U);
     TRIAL_PROTOCOL_TEST_EQUAL(value[2], true);
@@ -583,7 +583,7 @@ void test_int_bool_two()
 {
     const char input[] = "[[2,true],[4,false]]";
     json::iarchive in(input);
-    std::map<boost::int64_t, bool> value;
+    std::map<std::int64_t, bool> value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 2U);
     TRIAL_PROTOCOL_TEST_EQUAL(value[2], true);

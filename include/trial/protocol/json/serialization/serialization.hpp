@@ -29,7 +29,7 @@ namespace serialization
 template <typename CharT, typename Value>
 struct save_overloader<json::basic_oarchive<CharT>,
                        Value,
-                       typename boost::enable_if_c<has_save<json::basic_oarchive<CharT>, Value>::value>::type>
+                       typename std::enable_if<has_save<json::basic_oarchive<CharT>, Value>::value>::type>
 {
     static void save(json::basic_oarchive<CharT>& ar,
                      const Value& data,
@@ -44,7 +44,7 @@ struct save_overloader<json::basic_oarchive<CharT>,
 template <typename CharT, typename Value>
 struct load_overloader<json::basic_iarchive<CharT>,
                        Value,
-                       typename boost::enable_if_c<has_load<json::basic_iarchive<CharT>, Value>::value>::type>
+                       typename std::enable_if<has_load<json::basic_iarchive<CharT>, Value>::value>::type>
 {
     static void load(json::basic_iarchive<CharT>& ar,
                      const Value& data,
@@ -59,8 +59,8 @@ struct load_overloader<json::basic_iarchive<CharT>,
 template <typename CharT, typename Value>
 struct serialize_overloader<json::basic_iarchive<CharT>,
                             Value,
-                            typename boost::enable_if_c<has_serialize<json::basic_iarchive<CharT>, Value>::value ||
-                                                        has_load<json::basic_iarchive<CharT>, Value>::value>::type>
+                            typename std::enable_if<has_serialize<json::basic_iarchive<CharT>, Value>::value ||
+                                                    has_load<json::basic_iarchive<CharT>, Value>::value>::type>
 {
     static void serialize(json::basic_iarchive<CharT>& ar,
                           Value& data,
@@ -75,8 +75,8 @@ struct serialize_overloader<json::basic_iarchive<CharT>,
 template <typename CharT, typename Value>
 struct serialize_overloader<json::basic_oarchive<CharT>,
                             Value,
-                            typename boost::enable_if_c<has_serialize<json::basic_oarchive<CharT>, Value>::value ||
-                                                        has_save<json::basic_oarchive<CharT>, Value>::value>::type>
+                            typename std::enable_if<has_serialize<json::basic_oarchive<CharT>, Value>::value ||
+                                                    has_save<json::basic_oarchive<CharT>, Value>::value>::type>
 {
     static void serialize(json::basic_oarchive<CharT>& ar,
                           Value& data,

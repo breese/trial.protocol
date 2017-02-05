@@ -567,7 +567,7 @@ struct person
     }
 
     std::string name;
-    boost::int16_t age;
+    std::int16_t age;
 };
 
 void test_struct()

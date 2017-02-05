@@ -10,40 +10,39 @@
 
 #include <functional>
 #include <vector>
-#include <boost/array.hpp>
+#include <array>
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 
-template <typename CharT>
-class vector_buffer : buffer::vector<CharT>
+template <typename CharT,
+          typename Super = buffer::vector<CharT> >
+class vector_buffer : Super
 {
-    typedef buffer::vector<CharT> super;
-
 public:
-    typedef typename super::value_type value_type;
-    typedef typename super::size_type size_type;
-    typedef typename super::view_type view_type;
+    using value_type = typename Super::value_type;
+    using size_type = typename Super::size_type;
+    using view_type = typename Super::view_type;
 
     vector_buffer(std::vector<CharT>& data)
-        : super(data)
+        : Super(data)
     {
     }
 
     virtual bool grow(size_type size)
     {
-        return super::grow(size);
+        return Super::grow(size);
     }
 
     virtual void write(value_type value)
     {
-        return super::write(value);
+        return Super::write(value);
     }
 
     virtual void write(const view_type& view)
     {
-        return super::write(view);
+        return Super::write(view);
     }
 };
 
@@ -59,7 +58,7 @@ void test_empty()
     std::vector<char> output;
     vector_buffer<char> container(output);
 
-    boost::array<char, 0> expected;
+    std::array<char, 0> expected;
     TRIAL_PROTOCOL_TEST_ALL_WITH(output.begin(), output.end(),
                                  expected.begin(), expected.end(),
                                  std::equal_to<char>());
@@ -112,7 +111,7 @@ void test_empty()
     std::vector<unsigned char> output;
     vector_buffer<unsigned char> container(output);
 
-    boost::array<unsigned char, 0> expected;
+    std::array<unsigned char, 0> expected;
     TRIAL_PROTOCOL_TEST_ALL_WITH(output.begin(), output.end(),
                                  expected.begin(), expected.end(),
                                  std::equal_to<unsigned char>());
@@ -170,7 +169,7 @@ void test_empty()
     std::vector<wchar_t> output;
     vector_buffer<wchar_t> container(output);
 
-    boost::array<wchar_t, 0> expected;
+    std::array<wchar_t, 0> expected;
     TRIAL_PROTOCOL_TEST_ALL_WITH(output.begin(), output.end(),
                                  expected.begin(), expected.end(),
                                  std::equal_to<wchar_t>());

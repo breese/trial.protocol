@@ -36,9 +36,9 @@ template <typename CharT>
 class basic_reader
 {
 public:
-    typedef typename detail::basic_decoder<CharT>::value_type value_type;
-    typedef typename detail::basic_decoder<CharT>::size_type size_type;
-    typedef typename detail::basic_decoder<CharT>::view_type view_type;
+    using value_type = typename detail::basic_decoder<CharT>::value_type;
+    using size_type = typename detail::basic_decoder<CharT>::size_type;
+    using view_type = typename detail::basic_decoder<CharT>::view_type;
 
     //! @brief Construct an incremental JSON reader.
     //!
@@ -97,7 +97,7 @@ public:
     //! in an error, the json::no_error enumerator is used.
     //!
     //! @returns The current error code.
-    boost::system::error_code error() const BOOST_NOEXCEPT;
+    std::error_code error() const BOOST_NOEXCEPT;
 
     //! @brief Converts the current value into ReturnType.
     //!
@@ -129,7 +129,7 @@ private:
     template <typename ReturnType> ReturnType string_value() const;
 
 private:
-    typedef detail::basic_decoder<value_type> decoder_type;
+    using decoder_type = detail::basic_decoder<value_type>;
     mutable decoder_type decoder;
 
     struct frame
@@ -151,21 +151,12 @@ private:
 #endif
 };
 
-typedef basic_reader<char> reader;
+using reader = basic_reader<char>;
 
 } // namespace json
 } // namespace protocol
 } // namespace trial
 
 #include <trial/protocol/json/detail/reader.ipp>
-
-namespace boost
-{
-template<typename ReturnType>
-inline ReturnType get(const trial::protocol::json::reader& reader)
-{
-    return reader.value<ReturnType>();
-}
-} // namespace boost
 
 #endif // TRIAL_PROTOCOL_JSON_READER_HPP

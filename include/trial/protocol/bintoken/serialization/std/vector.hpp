@@ -26,10 +26,10 @@ namespace serialization
 
 template <typename Allocator>
 struct save_overloader< bintoken::oarchive,
-                        typename std::vector<boost::uint8_t, Allocator> >
+                        typename std::vector<std::uint8_t, Allocator> >
 {
     static void save(bintoken::oarchive& ar,
-                     const std::vector<boost::uint8_t, Allocator>& data,
+                     const std::vector<std::uint8_t, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
         ar.save(data);
@@ -38,10 +38,10 @@ struct save_overloader< bintoken::oarchive,
 
 template <typename Allocator>
 struct load_overloader< bintoken::iarchive,
-                        typename std::vector<boost::uint8_t, Allocator> >
+                        typename std::vector<std::uint8_t, Allocator> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::vector<boost::uint8_t, Allocator>& data,
+                     std::vector<std::uint8_t, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.symbol())

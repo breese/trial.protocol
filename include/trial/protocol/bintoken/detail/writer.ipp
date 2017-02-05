@@ -11,13 +11,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstdint>
 #include <limits>
-#include <boost/cstdint.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_signed.hpp>
+#include <type_traits>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -51,64 +47,64 @@ struct writer::overloader<bool>
 
 template <typename T>
 struct writer::overloader<T,
-                          typename boost::enable_if_c<boost::is_integral<T>::value &&
-                                                      boost::is_signed<T>::value &&
-                                                      !boost::is_same<T, bool>::value>::type>
+                          typename std::enable_if<std::is_integral<T>::value &&
+                                                  std::is_signed<T>::value &&
+                                                  !std::is_same<T, bool>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
-        if ((data <= std::numeric_limits<boost::int8_t>::max()) &&
-            (data >= std::numeric_limits<boost::int8_t>::min()))
+        if ((data <= std::numeric_limits<std::int8_t>::max()) &&
+            (data >= std::numeric_limits<std::int8_t>::min()))
         {
-            return self.encoder.value(static_cast<boost::int8_t>(data));
+            return self.encoder.value(static_cast<std::int8_t>(data));
         }
-        else if ((data <= std::numeric_limits<boost::int16_t>::max()) &&
-                 (data >= std::numeric_limits<boost::int16_t>::min()))
+        else if ((data <= std::numeric_limits<std::int16_t>::max()) &&
+                 (data >= std::numeric_limits<std::int16_t>::min()))
         {
-            return self.encoder.value(static_cast<boost::int16_t>(data));
+            return self.encoder.value(static_cast<std::int16_t>(data));
         }
-        else if ((data <= std::numeric_limits<boost::int32_t>::max()) &&
-                 (data >= std::numeric_limits<boost::int32_t>::min()))
+        else if ((data <= std::numeric_limits<std::int32_t>::max()) &&
+                 (data >= std::numeric_limits<std::int32_t>::min()))
         {
-            return self.encoder.value(static_cast<boost::int32_t>(data));
+            return self.encoder.value(static_cast<std::int32_t>(data));
         }
         else
         {
-            return self.encoder.value(static_cast<boost::int64_t>(data));
+            return self.encoder.value(static_cast<std::int64_t>(data));
         }
     }
 };
 
 template <typename T>
 struct writer::overloader<T,
-                          typename boost::enable_if_c<boost::is_integral<T>::value &&
-                                                      !boost::is_signed<T>::value &&
-                                                      !boost::is_same<T, bool>::value>::type>
+                          typename std::enable_if<std::is_integral<T>::value &&
+                                                  !std::is_signed<T>::value &&
+                                                  !std::is_same<T, bool>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
-        if (data <= std::numeric_limits<boost::uint8_t>::max())
+        if (data <= std::numeric_limits<std::uint8_t>::max())
         {
-            return self.encoder.value(boost::int8_t(data));
+            return self.encoder.value(std::int8_t(data));
         }
-        else if (data <= std::numeric_limits<boost::uint16_t>::max())
+        else if (data <= std::numeric_limits<std::uint16_t>::max())
         {
-            return self.encoder.value(boost::int16_t(data));
+            return self.encoder.value(std::int16_t(data));
         }
-        else if (data <= std::numeric_limits<boost::uint32_t>::max())
+        else if (data <= std::numeric_limits<std::uint32_t>::max())
         {
-            return self.encoder.value(boost::int32_t(data));
+            return self.encoder.value(std::int32_t(data));
         }
         else
         {
-            return self.encoder.value(boost::int64_t(data));
+            return self.encoder.value(std::int64_t(data));
         }
     }
 };
 
 template <typename T>
 struct writer::overloader<T,
-                          typename boost::enable_if< boost::is_floating_point<T> >::type>
+                          typename std::enable_if<std::is_floating_point<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
@@ -118,9 +114,10 @@ struct writer::overloader<T,
 
 template <typename CharT, std::size_t N>
 struct writer::overloader<CharT[N],
-                          typename boost::enable_if< buffer::is_text<CharT[N]> >::type>
+                          typename std::enable_if<buffer::is_text<CharT[N]>::value>::type>
 {
-    typedef CharT (type)[N];
+    using type = CharT[N];
+
     static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data, N - 1); // Drop terminating zero
@@ -130,7 +127,7 @@ struct writer::overloader<CharT[N],
 template <>
 struct writer::overloader<writer::string_view_type>
 {
-    typedef string_view_type type;
+    using type = string_view_type;
     static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data);
@@ -140,7 +137,7 @@ struct writer::overloader<writer::string_view_type>
 template <>
 struct writer::overloader<std::string>
 {
-    typedef std::string type;
+    using type = std::string;
     static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data);
@@ -149,7 +146,7 @@ struct writer::overloader<std::string>
 
 template <typename T>
 struct writer::overloader<T,
-                          typename boost::enable_if< buffer::is_binary<T> >::type>
+                          typename std::enable_if<buffer::is_binary<T>::value>::type>
 {
     static size_type value(writer& self, const T& data)
     {
@@ -169,7 +166,7 @@ struct writer::overloader<token::null>
 template <>
 struct writer::overloader<token::begin_record>
 {
-    typedef token::begin_record type;
+    using type = token::begin_record;
 
     static size_type value(writer& self)
     {
@@ -181,7 +178,7 @@ struct writer::overloader<token::begin_record>
 template <>
 struct writer::overloader<token::end_record>
 {
-    typedef token::end_record type;
+    using type = token::end_record;
 
     static size_type value(writer& self)
     {
@@ -195,7 +192,7 @@ struct writer::overloader<token::end_record>
 template <>
 struct writer::overloader<token::begin_array>
 {
-    typedef token::begin_array type;
+    using type = token::begin_array;
 
     static size_type value(writer& self)
     {
@@ -207,7 +204,7 @@ struct writer::overloader<token::begin_array>
 template <>
 struct writer::overloader<token::end_array>
 {
-    typedef token::end_array type;
+    using type = token::end_array;
 
     static size_type value(writer& self)
     {
@@ -221,7 +218,7 @@ struct writer::overloader<token::end_array>
 template <>
 struct writer::overloader<token::begin_assoc_array>
 {
-    typedef token::begin_assoc_array type;
+    using type = token::begin_assoc_array;
 
     static size_type value(writer& self)
     {
@@ -233,7 +230,7 @@ struct writer::overloader<token::begin_assoc_array>
 template <>
 struct writer::overloader<token::end_assoc_array>
 {
-    typedef token::end_assoc_array type;
+    using type = token::end_assoc_array;
 
     static size_type value(writer& self)
     {
