@@ -36,8 +36,10 @@ struct basic_reader<CharT>::overloader
 
 template <typename CharT>
 template <typename ReturnType>
-struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename std::enable_if<std::is_integral<ReturnType>::value && !std::is_same<ReturnType, bool>::value>::type>
+struct basic_reader<CharT>::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_integral<ReturnType>::value &&
+                            !protocol::detail::is_bool<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -49,8 +51,9 @@ struct basic_reader<CharT>::overloader<ReturnType,
 
 template <typename CharT>
 template <typename ReturnType>
-struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename std::enable_if<std::is_floating_point<ReturnType>::value>::type>
+struct basic_reader<CharT>::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_floating_point<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -62,8 +65,9 @@ struct basic_reader<CharT>::overloader<ReturnType,
 
 template <typename CharT>
 template <typename ReturnType>
-struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename std::enable_if<std::is_same<ReturnType, bool>::value>::type>
+struct basic_reader<CharT>::overloader<
+    ReturnType,
+    typename std::enable_if<protocol::detail::is_bool<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -75,8 +79,9 @@ struct basic_reader<CharT>::overloader<ReturnType,
 
 template <typename CharT>
 template <typename ReturnType>
-struct basic_reader<CharT>::overloader<ReturnType,
-                                       typename std::enable_if<std::is_same< ReturnType, std::basic_string<CharT> >::value>::type>
+struct basic_reader<CharT>::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_same< ReturnType, std::basic_string<CharT> >::value>::type>
 {
     using return_type = std::basic_string<CharT>;
 

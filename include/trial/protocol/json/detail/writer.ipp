@@ -33,8 +33,9 @@ struct basic_writer<CharT>::overloader
 
 template <typename CharT>
 template <typename T>
-struct basic_writer<CharT>::overloader<T,
-                                       typename std::enable_if<std::is_same<T, token::null>::value>::type>
+struct basic_writer<CharT>::overloader<
+    T,
+    typename std::enable_if<std::is_same<T, token::null>::value>::type>
 {
     using size_type = typename basic_writer<CharT>::size_type;
 
@@ -46,8 +47,9 @@ struct basic_writer<CharT>::overloader<T,
 
 template <typename CharT>
 template <typename T>
-struct basic_writer<CharT>::overloader<T,
-                                       typename std::enable_if<std::is_same<T, token::begin_array>::value>::type>
+struct basic_writer<CharT>::overloader<
+    T,
+    typename std::enable_if<std::is_same<T, token::begin_array>::value>::type>
 {
     using size_type = typename basic_writer<CharT>::size_type;
 
@@ -59,8 +61,9 @@ struct basic_writer<CharT>::overloader<T,
 
 template <typename CharT>
 template <typename T>
-struct basic_writer<CharT>::overloader<T,
-                                       typename std::enable_if<std::is_same<T, token::end_array>::value>::type>
+struct basic_writer<CharT>::overloader<
+    T,
+    typename std::enable_if<std::is_same<T, token::end_array>::value>::type>
 {
     using size_type = typename basic_writer<CharT>::size_type;
 
@@ -72,8 +75,9 @@ struct basic_writer<CharT>::overloader<T,
 
 template <typename CharT>
 template <typename T>
-struct basic_writer<CharT>::overloader<T,
-                                       typename std::enable_if<std::is_same<T, token::begin_object>::value>::type>
+struct basic_writer<CharT>::overloader<
+    T,
+    typename std::enable_if<std::is_same<T, token::begin_object>::value>::type>
 {
     using size_type = typename basic_writer<CharT>::size_type;
 
@@ -85,8 +89,9 @@ struct basic_writer<CharT>::overloader<T,
 
 template <typename CharT>
 template <typename T>
-struct basic_writer<CharT>::overloader<T,
-                                       typename std::enable_if<std::is_same<T, token::end_object>::value>::type>
+struct basic_writer<CharT>::overloader<
+    T,
+    typename std::enable_if<std::is_same<T, token::end_object>::value>::type>
 {
     using size_type = typename basic_writer<CharT>::size_type;
 

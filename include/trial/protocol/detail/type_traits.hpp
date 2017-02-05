@@ -22,6 +22,9 @@ namespace detail
 {
 
 template <typename T>
+using is_bool = std::is_same<typename std::decay<T>::type, bool>;
+
+template <typename T>
 struct make_floating_point
 {
     using type = typename std::conditional<

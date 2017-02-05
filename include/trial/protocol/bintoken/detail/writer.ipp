@@ -13,7 +13,7 @@
 
 #include <cstdint>
 #include <limits>
-#include <type_traits>
+#include <trial/protocol/detail/type_traits.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -46,10 +46,11 @@ struct writer::overloader<bool>
 };
 
 template <typename T>
-struct writer::overloader<T,
-                          typename std::enable_if<std::is_integral<T>::value &&
-                                                  std::is_signed<T>::value &&
-                                                  !std::is_same<T, bool>::value>::type>
+struct writer::overloader<
+    T,
+    typename std::enable_if<std::is_integral<T>::value &&
+                            std::is_signed<T>::value &&
+                            !protocol::detail::is_bool<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
@@ -76,10 +77,11 @@ struct writer::overloader<T,
 };
 
 template <typename T>
-struct writer::overloader<T,
-                          typename std::enable_if<std::is_integral<T>::value &&
-                                                  !std::is_signed<T>::value &&
-                                                  !std::is_same<T, bool>::value>::type>
+struct writer::overloader<
+    T,
+    typename std::enable_if<std::is_integral<T>::value &&
+                            !std::is_signed<T>::value &&
+                            !protocol::detail::is_bool<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
@@ -103,8 +105,9 @@ struct writer::overloader<T,
 };
 
 template <typename T>
-struct writer::overloader<T,
-                          typename std::enable_if<std::is_floating_point<T>::value>::type>
+struct writer::overloader<
+    T,
+    typename std::enable_if<std::is_floating_point<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
@@ -113,8 +116,9 @@ struct writer::overloader<T,
 };
 
 template <typename CharT, std::size_t N>
-struct writer::overloader<CharT[N],
-                          typename std::enable_if<buffer::is_text<CharT[N]>::value>::type>
+struct writer::overloader<
+    CharT[N],
+    typename std::enable_if<buffer::is_text<CharT[N]>::value>::type>
 {
     using type = CharT[N];
 
@@ -145,8 +149,9 @@ struct writer::overloader<std::string>
 };
 
 template <typename T>
-struct writer::overloader<T,
-                          typename std::enable_if<buffer::is_binary<T>::value>::type>
+struct writer::overloader<
+    T,
+    typename std::enable_if<buffer::is_binary<T>::value>::type>
 {
     static size_type value(writer& self, const T& data)
     {

@@ -15,7 +15,6 @@
 #include <cmath>
 #include <limits>
 #include <vector>
-#include <type_traits>
 #include <trial/protocol/detail/type_traits.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 
@@ -39,8 +38,9 @@ struct reader::overloader
 // Tags
 
 template <typename Tag>
-struct reader::overloader<Tag,
-                          typename std::enable_if<token::is_tag<Tag>::value>::type>
+struct reader::overloader<
+    Tag,
+    typename std::enable_if<token::is_tag<Tag>::value>::type>
 {
     using return_type = typename token::type_cast<Tag>::type;
 
@@ -76,10 +76,11 @@ struct reader::overloader<bool>
 // Numbers
 
 template <typename ReturnType>
-struct reader::overloader<ReturnType,
-                          typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
-                                                  !std::is_unsigned<ReturnType>::value &&
-                                                  !std::is_same<ReturnType, bool>::value>::type>
+struct reader::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
+                            !std::is_unsigned<ReturnType>::value &&
+                            !protocol::detail::is_bool<ReturnType>::value>::type>
 {
     static ReturnType convert(const reader& self)
     {
@@ -144,10 +145,11 @@ struct reader::overloader<ReturnType,
 };
 
 template <typename ReturnType>
-struct reader::overloader<ReturnType,
-                          typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
-                                                  std::is_unsigned<ReturnType>::value &&
-                                                  !std::is_same<ReturnType, bool>::value>::type>
+struct reader::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
+                            std::is_unsigned<ReturnType>::value &&
+                            !protocol::detail::is_bool<ReturnType>::value>::type>
 {
     static ReturnType convert(const reader& self)
     {
