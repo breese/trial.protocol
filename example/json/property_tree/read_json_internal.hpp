@@ -115,7 +115,7 @@ private:
 
         case json::token::symbol::boolean:
         case json::token::symbol::integer:
-        case json::token::symbol::floating:
+        case json::token::symbol::number:
         case json::token::symbol::string:
             parse_value(child);
             break;
@@ -171,7 +171,7 @@ private:
 
         case json::token::symbol::boolean:
         case json::token::symbol::integer:
-        case json::token::symbol::floating:
+        case json::token::symbol::number:
         case json::token::symbol::string:
             parse_value(scope);
             break;
@@ -195,7 +195,7 @@ private:
             break;
 
         case json::token::symbol::integer:
-        case json::token::symbol::floating:
+        case json::token::symbol::number:
             // Read literal value to avoid choosing a concrete number type.
             scope.put_value(string_type(reader.literal().begin(),
                                         reader.literal().end()));

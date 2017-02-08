@@ -44,8 +44,8 @@ public:
                 callbacks.on_integer(reader.value<std::intmax_t>());
                 break;
 
-            case json::token::symbol::floating:
-                callbacks.on_floating(reader.value<double>());
+            case json::token::symbol::number:
+                callbacks.on_number(reader.value<double>());
                 break;
 
             case json::token::symbol::string:

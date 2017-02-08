@@ -119,7 +119,7 @@ public:
     void on_null();
     void on_boolean(bool);
     void on_integer(std::intmax_t);
-    void on_floating(double);
+    void on_number(double);
     void on_string(const std::string&);
     void on_begin_array();
     void on_end_array();
@@ -164,8 +164,8 @@ void push_parser::parse()
             callbacks.on_integer(reader.value<std::intmax_t>());
             break;
 
-        case json::symbol::floating:
-            callbacks.on_floating(reader.value<double>());
+        case json::symbol::number:
+            callbacks.on_number(reader.value<double>());
             break;
 
         case json::symbol::string:

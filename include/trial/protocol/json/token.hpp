@@ -42,7 +42,7 @@ struct code
         true_value,
         false_value,
         integer,
-        floating,
+        number,
         string,
 
         begin_array,
@@ -65,7 +65,7 @@ struct symbol
         null,
         boolean,
         integer,
-        floating,
+        number,
         string,
 
         begin_array,

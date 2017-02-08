@@ -164,7 +164,7 @@ void run()
 // Floating-point numbers
 //-----------------------------------------------------------------------------
 
-namespace floating_suite
+namespace number_suite
 {
 
 void test_float32_one()
@@ -213,7 +213,7 @@ void run()
     test_float64_one();
 }
 
-} // namespace floating_suite
+} // namespace number_suite
 
 //-----------------------------------------------------------------------------
 // Strings
@@ -860,7 +860,7 @@ int main()
 {
     basic_suite::run();
     integer_suite::run();
-    floating_suite::run();
+    number_suite::run();
     string_suite::run();
     binary_suite::run();
     array_suite::run();

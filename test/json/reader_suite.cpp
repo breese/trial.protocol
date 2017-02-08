@@ -91,8 +91,8 @@ void test_float()
 {
     const char input[] = "1.0";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::floating);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::floating);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::number);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<float>(), 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
@@ -104,7 +104,7 @@ void test_double()
 {
     const char input[] = "1.0";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::floating);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<double>(), 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1.0");
@@ -115,7 +115,7 @@ void test_long_double()
 {
     const char input[] = "1.0";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::floating);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1.0");

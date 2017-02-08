@@ -415,7 +415,7 @@ void test_float32()
     const value_type input[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
     format::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::float32);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::floating);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::number);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int8_t>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int16_t>(), 1);
@@ -432,7 +432,7 @@ void test_float64()
     const value_type input[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
     format::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::float64);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::floating);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::number);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int8_t>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::int16_t>(), 1);

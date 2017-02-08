@@ -52,7 +52,7 @@ struct basic_decoder<CharT>::overloader<ReturnType,
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
-        return self.template integral_value<ReturnType>();
+        return self.template integer_value<ReturnType>();
     }
 };
 
@@ -65,7 +65,7 @@ struct basic_decoder<CharT>::overloader<ReturnType,
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
-        return self.template floating_value<ReturnType>();
+        return self.template number_value<ReturnType>();
     }
 };
 
@@ -211,7 +211,7 @@ ReturnType basic_decoder<CharT>::value() const
 
 template <typename CharT>
 template <typename ReturnType>
-ReturnType basic_decoder<CharT>::integral_value() const
+ReturnType basic_decoder<CharT>::integer_value() const
 {
     if (current.code != token::code::integer)
     {
@@ -250,9 +250,9 @@ ReturnType basic_decoder<CharT>::integral_value() const
 
 template <typename CharT>
 template <typename ReturnType>
-ReturnType basic_decoder<CharT>::floating_value() const
+ReturnType basic_decoder<CharT>::number_value() const
 {
-    if (current.code != token::code::floating)
+    if (current.code != token::code::number)
     {
         current.code = token::code::error_incompatible_type;
         throw json::error(error());
@@ -516,7 +516,7 @@ token::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
         {
             if (input.front() == traits<CharT>::alpha_dot)
             {
-                type = token::code::floating;
+                type = token::code::number;
                 input.remove_prefix(1);
                 if (input.empty())
                 {
@@ -537,7 +537,7 @@ token::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
             if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
                                    (input.front() == traits<CharT>::alpha_e)))
             {
-                type = token::code::floating;
+                type = token::code::number;
                 input.remove_prefix(1);
                 if (input.empty())
                 {

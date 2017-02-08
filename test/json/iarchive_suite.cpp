@@ -164,10 +164,10 @@ void run()
 } // namespace integer_suite
 
 //-----------------------------------------------------------------------------
-// Float
+// Number
 //-----------------------------------------------------------------------------
 
-namespace floating_suite
+namespace number_suite
 {
 
 void test_float_half()
@@ -194,7 +194,7 @@ void run()
     test_double_half();
 }
 
-} // namespace floating_suite
+} // namespace number_suite
 
 //-----------------------------------------------------------------------------
 // String
@@ -672,7 +672,7 @@ int main()
 {
     basic_suite::run();
     integer_suite::run();
-    floating_suite::run();
+    number_suite::run();
     string_suite::run();
     array_suite::run();
     pair_suite::run();

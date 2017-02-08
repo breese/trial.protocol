@@ -39,13 +39,13 @@ floating-point numbers.
 C++ does make that distinction, so [link protocol.json.reader `json::reader`]
 will identify numbers either as integers (identified by the
 `json::token::symbol::integer` token) if they consist solely of digits, or as
-floating-point numbers (identified by the `json::token::symbol::floating` token)
+floating-point numbers (identified by the `json::token::symbol::number` token)
 if they contain a decimal-point or an exponent.
 
 Regardless of how a number was identified, it can be converted using `json::reader::value<T>()`
 as either a C++ integer or floating-point number.
 This means that integer numbers that are too big to fit into a C++ integer type
-such as `intmax_t` can be read as a floating-point number.
+such as `std::intmax_t` can be read as a floating-point number.
 
 [/ Limits]
 [/ bigint/multiprecision?]

@@ -43,7 +43,7 @@ struct basic_reader<CharT>::overloader<
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.template integral_value<ReturnType>();
+        return self.template integer_value<ReturnType>();
     }
 };
 
@@ -57,7 +57,7 @@ struct basic_reader<CharT>::overloader<
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.template floating_value<ReturnType>();
+        return self.template number_value<ReturnType>();
     }
 };
 
@@ -253,7 +253,7 @@ ReturnType basic_reader<CharT>::bool_value() const
 
 template <typename CharT>
 template <typename ReturnType>
-ReturnType basic_reader<CharT>::integral_value() const
+ReturnType basic_reader<CharT>::integer_value() const
 {
     switch (decoder.code())
     {
@@ -268,9 +268,9 @@ ReturnType basic_reader<CharT>::integral_value() const
             return result;
         }
 
-    case token::code::floating:
-        using floating_return_type = typename protocol::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
-        return ReturnType(std::round(decoder.template value<floating_return_type>()));
+    case token::code::number:
+        using number_return_type = typename protocol::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
+        return ReturnType(std::round(decoder.template value<number_return_type>()));
 
     default:
         decoder.code(token::code::error_invalid_value);
@@ -280,7 +280,7 @@ ReturnType basic_reader<CharT>::integral_value() const
 
 template <typename CharT>
 template <typename ReturnType>
-ReturnType basic_reader<CharT>::floating_value() const
+ReturnType basic_reader<CharT>::number_value() const
 {
     switch (decoder.code())
     {
@@ -288,7 +288,7 @@ ReturnType basic_reader<CharT>::floating_value() const
         using integer_return_type = typename protocol::detail::make_integral<ReturnType>::type;
         return ReturnType(decoder.template value<integer_return_type>());
 
-    case token::code::floating:
+    case token::code::number:
         return decoder.template value<ReturnType>();
 
     default:

@@ -635,7 +635,7 @@ void test_zero()
     const value_type input[] = { token::code::float32, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float32);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::floating);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::number);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float32>(), 0.0f);
     decoder.next();
@@ -795,7 +795,7 @@ void test_zero()
     const value_type input[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::float64);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::floating);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::number);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<token::float64>(), 0.0);
     decoder.next();

@@ -35,7 +35,7 @@ public:
         std::cout << "integer: " << value << std::endl;
     }
 
-    void on_floating(double value)
+    void on_number(double value)
     {
         std::cout << "float: " << value << std::endl;
     }

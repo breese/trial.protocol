@@ -131,10 +131,10 @@ void run()
 } // namespace integer_suite
 
 //-----------------------------------------------------------------------------
-// Float
+// Number
 //-----------------------------------------------------------------------------
 
-namespace floating_suite
+namespace number_suite
 {
 
 void test_one()
@@ -221,7 +221,7 @@ void run()
     test_nan();
 }
 
-} // namespace floating_suite
+} // namespace number_suite
 
 //-----------------------------------------------------------------------------
 // String
@@ -594,7 +594,7 @@ int main()
 {
     basic_suite::run();
     integer_suite::run();
-    floating_suite::run();
+    number_suite::run();
     string_suite::run();
     array_suite::run();
     pair_suite::run();

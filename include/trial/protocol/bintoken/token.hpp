@@ -83,7 +83,7 @@ struct symbol
         null,
         boolean,
         integer,
-        floating,
+        number,
         string,
         binary,
 

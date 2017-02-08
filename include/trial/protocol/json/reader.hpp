@@ -104,7 +104,7 @@ public:
     //! The following conversions are valid:
     //! -# Convert a symbol::boolean token into bool.
     //! -# Convert a symbol::integer token into an integral C++ type (expect bool.)
-    //! -# Convert a symbol::floating token into a floating-point C++ type.
+    //! -# Convert a symbol::number token into a floating-point C++ type.
     //! -# Convert a symbol::string token into std::string.
     //!
     //! @pre category() returns token::category::data
@@ -124,8 +124,8 @@ private:
     struct overloader;
 
     template <typename ReturnType> ReturnType bool_value() const;
-    template <typename ReturnType> ReturnType integral_value() const;
-    template <typename ReturnType> ReturnType floating_value() const;
+    template <typename ReturnType> ReturnType integer_value() const;
+    template <typename ReturnType> ReturnType number_value() const;
     template <typename ReturnType> ReturnType string_value() const;
 
 private:

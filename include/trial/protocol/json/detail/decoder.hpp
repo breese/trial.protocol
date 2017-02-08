@@ -62,8 +62,8 @@ private:
 
     template <typename ReturnType, typename Enable = void>
     struct overloader;
-    template <typename ReturnType> ReturnType integral_value() const;
-    template <typename ReturnType> ReturnType floating_value() const;
+    template <typename ReturnType> ReturnType integer_value() const;
+    template <typename ReturnType> ReturnType number_value() const;
     std::basic_string<CharT> string_value() const;
 
 private:

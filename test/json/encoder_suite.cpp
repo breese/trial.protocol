@@ -351,10 +351,10 @@ void run()
 } // namespace integer_suite
 
 //-----------------------------------------------------------------------------
-// Floating-point
+// Number
 //-----------------------------------------------------------------------------
 
-namespace floating_suite
+namespace number_suite
 {
 
 void test_float_zero()
@@ -536,7 +536,7 @@ void run()
     test_double_nan();
 }
 
-} // namespace floating_suite
+} // namespace number_suite
 
 //-----------------------------------------------------------------------------
 // String
@@ -834,7 +834,7 @@ int main()
     buffer_suite::run();
     basic_suite::run();
     integer_suite::run();
-    floating_suite::run();
+    number_suite::run();
     string_suite::run();
     container_suite::run();
     literal_suite::run();

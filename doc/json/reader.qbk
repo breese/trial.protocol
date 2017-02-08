@@ -100,7 +100,7 @@ exponent.
 std::string input = "3.1415";
 json::reader reader(input);
 
-assert(reader.symbol() == json::symbol::floating);
+assert(reader.symbol() == json::symbol::number);
 assert(reader.literal() == "3.1415");
 assert(reader.value<double>() == 3.1415);
 ```
@@ -118,7 +118,7 @@ to the nearest integer.
 std::string input = "3.1415";
 json::reader reader(input);
 
-assert(reader.symbol() == json::symbol::floating);
+assert(reader.symbol() == json::symbol::number);
 assert(reader.value<int>() == 3);
 ```
 
