@@ -14,7 +14,6 @@
 #include <string>
 #include <algorithm>
 #include <iterator>
-#include <sstream>
 #include <boost/detail/lightweight_test.hpp>
 
 namespace trial
@@ -24,8 +23,9 @@ namespace protocol
 namespace detail
 {
 
-template<class FwdIt1, class FwdIt2>
-void test_all_eq_impl(char const * file, int line, char const * function,
+template<class FormattedOutputFunction, class FwdIt1, class FwdIt2>
+void test_all_eq_impl(FormattedOutputFunction& output,
+                      char const * file, int line, char const * function,
                       FwdIt1 first_begin, FwdIt1 first_end,
                       FwdIt2 second_begin, FwdIt2 second_end)
 {
@@ -37,7 +37,7 @@ void test_all_eq_impl(char const * file, int line, char const * function,
     {
         FwdIt1 first_it = first_begin;
         FwdIt2 second_it = second_begin;
-        std::ostringstream indices;
+        bool output_header = true;
         do
         {
             while ((first_it != first_end) && (second_it != second_end) && (*first_it == *second_it))
@@ -50,19 +50,23 @@ void test_all_eq_impl(char const * file, int line, char const * function,
                 boost::detail::report_errors_remind();
                 return;
             }
-            indices << " [" << std::distance(first_begin, first_it) << "] '" << *first_it << "' != '" << *second_it << "'";
+            if (output_header)
+            {
+                output_header = false;
+                output << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices";
+            }
+            output << " [" << std::distance(first_begin, first_it) << "] '" << *first_it << "' != '" << *second_it << "'";
             ++first_it;
             ++second_it;
         } while (first_it != first_end);
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices"
-            << indices.str() << std::endl;
+        output << std::endl;
         ++boost::detail::test_errors();
     }
 }
 
 template<class FwdIt1, class FwdIt2, class Predicate>
-void test_all_with_impl(char const * file, int line, char const * function,
+void test_all_with_impl(std::ostream& output,
+                        char const * file, int line, char const * function,
                         FwdIt1 first_begin, FwdIt1 first_end,
                         FwdIt2 second_begin, FwdIt2 second_end,
                         Predicate predicate)
@@ -75,7 +79,7 @@ void test_all_with_impl(char const * file, int line, char const * function,
     {
         FwdIt1 first_it = first_begin;
         FwdIt2 second_it = second_begin;
-        std::ostringstream indices;
+        bool output_header = true;
         do
         {
             while ((first_it != first_end) && (second_it != second_end) && predicate(*first_it, *second_it))
@@ -88,13 +92,16 @@ void test_all_with_impl(char const * file, int line, char const * function,
                 boost::detail::report_errors_remind();
                 return;
             }
-            indices << ' ' << std::distance(first_begin, first_it);
+            if (output_header)
+            {
+                output_header = false;
+                output << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices";
+            }
+            output << ' ' << std::distance(first_begin, first_it);
             ++first_it;
             ++second_it;
         } while (first_it != first_end);
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices"
-            << indices.str() << std::endl;
+        output << std::endl;
         ++boost::detail::test_errors();
     }
 }
@@ -130,7 +137,7 @@ void test_all_with_impl(char const * file, int line, char const * function,
         ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
     }
 
-#define TRIAL_PROTOCOL_TEST_ALL_EQUAL(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END) ::trial::protocol::detail::test_all_eq_impl(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END)
-#define TRIAL_PROTOCOL_TEST_ALL_WITH(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE) ::trial::protocol::detail::test_all_with_impl(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE)
+#define TRIAL_PROTOCOL_TEST_ALL_EQUAL(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END) ::trial::protocol::detail::test_all_eq_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END)
+#define TRIAL_PROTOCOL_TEST_ALL_WITH(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE) ::trial::protocol::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE)
 
 #endif // TRIAL_PROTOCOL_DETAIL_LIGHTWEIGHT_TEST_HPP
