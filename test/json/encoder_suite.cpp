@@ -53,9 +53,8 @@ void test_vector()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(42), 2);
     std::string expected("42");
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected.begin(), expected.end(),
-                                 std::equal_to<char>());
+    TRIAL_PROTOCOL_TEST_ALL_EQUAL(result.begin(), result.end(),
+                                  expected.begin(), expected.end());
 }
 
 void test_string()
@@ -380,9 +379,8 @@ void test_unsigned_double_zero()
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 16);
     unsigned char expect[] = { '0', '.', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' };
     std::basic_string<unsigned char> result = buffer.str();
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expect, expect + sizeof(expect),
-                                 std::equal_to<unsigned char>());
+    TRIAL_PROTOCOL_TEST_ALL_EQUAL(result.begin(), result.end(),
+                                  expect, expect + sizeof(expect));
 }
 
 void test_double_one()

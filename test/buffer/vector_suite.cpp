@@ -85,9 +85,8 @@ void test_view()
     TRIAL_PROTOCOL_TEST_EQUAL(container.grow(input.size()), true);
     TRIAL_PROTOCOL_TEST_NO_THROW(container.write(input));
 
-    TRIAL_PROTOCOL_TEST_ALL_WITH(output.begin(), output.end(),
-                                 input.begin(), input.end(),
-                                 std::equal_to<char>());
+    TRIAL_PROTOCOL_TEST_ALL_EQUAL(output.begin(), output.end(),
+                                  input.begin(), input.end());
 }
 
 void test()
