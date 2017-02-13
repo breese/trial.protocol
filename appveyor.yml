@@ -15,5 +15,5 @@ install:
 
 before_build:
   - mkdir build
-  - cmake -Htrial.protocol -Bbuild -G "Visual Studio 15"
+  - cmake -Bbuild -G "Visual Studio 15"
   - cd build
