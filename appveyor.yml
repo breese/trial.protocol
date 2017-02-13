@@ -16,5 +16,6 @@ install:
 before_build:
   - cd ..
   - mkdir build
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
   - cmake -Htrial-protocol -Bbuild -G "Visual Studio 15"
   - cd build
