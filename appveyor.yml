@@ -10,6 +10,9 @@ branches:
 configuration:
   - Release
 
+environment:
+  BOOST_ROOT: C:\Libraries\boost
+
 install:
   - cmake --version
 
@@ -17,5 +20,5 @@ before_build:
   - cd ..
   - mkdir build
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
-  - cmake -Htrial-protocol -Bbuild -G "Visual Studio 14 2015 Win64"
+  - cmake -Htrial-protocol -Bbuild -G "Visual Studio 14 2015 Win64" -DBOOST_ROOT="%BOOST_ROOT%"
   - cd build
