@@ -1,0 +1,22 @@
+version: 0.1.{build}-{branch}
+
+os:
+  - Visual Studio 2015
+
+branches:
+  only:
+    - develop
+
+configuration:
+  - Release
+
+clone_folder:
+  - c:\trial.protocol
+
+install:
+  - cmake --version
+
+before_build:
+  - mkdir build
+  - cmake -Htrial.protocol -Bbuild -G "Visual Studio 15"
+  - cd build
