@@ -18,6 +18,12 @@ set(EXECUTABLE_OUTPUT_PATH ${TRIAL_PROTOCOL_BUILD_DIR}/bin)
 
 set(CMAKE_CXX_STANDARD 11)
 
+if (MSVC)
+  set(TRIAL_PROTOCOL_WARNING_FLAGS /W4)
+else()
+  set(TRIAL_PROTOCOL_WARNING_FLAGS -Wall -Wextra)
+endif()
+
 ###############################################################################
 # Boost package
 ###############################################################################
@@ -44,7 +50,7 @@ function(trial_add_test name)
   add_executable(${name} ${ARGN})
   target_link_libraries(${name} ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
   add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
-  target_compile_options(${name} PRIVATE -Wall -Wextra)
+  target_compile_options(${name} PRIVATE ${TRIAL_PROTOCOL_WARNING_FLAGS})
 endfunction()
 
 enable_testing()
