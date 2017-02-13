@@ -10,9 +10,6 @@ branches:
 configuration:
   - Release
 
-clone_folder:
-  - c:\trial.protocol
-
 install:
   - cmake --version
 
