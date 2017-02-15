@@ -321,7 +321,7 @@ void test_view()
     std::vector<value_type> result;
     format::writer writer(result);
     std::string data("ABC");
-    boost::string_ref view(data.data());
+    trial::protocol::detail::string_view view(data.data());
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(view), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::string8);
