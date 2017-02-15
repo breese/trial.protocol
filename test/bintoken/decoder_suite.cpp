@@ -1359,10 +1359,7 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary8);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
-    const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1440,10 +1437,7 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary16);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
-    const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1513,10 +1507,7 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary32);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
-    const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
@@ -1602,10 +1593,7 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary64);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
-    const value_type expected[] = {};
-    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
