@@ -32,8 +32,8 @@ public:
     using value_type = typename Super::value_type;
     using size_type = typename Super::size_type;
     using view_type = typename Super::view_type;
-    using iterator = typename std::add_pointer<value_type>::type;
-    using const_iterator = typename std::add_pointer<const value_type>::type;
+    using iterator = typename std::array<value_type, N>::iterator;
+    using const_iterator = typename std::array<value_type, N>::const_iterator;
 
     array(std::array<CharT, N>& output)
         : content(output),
