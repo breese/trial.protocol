@@ -82,6 +82,6 @@ private:
 
 #include <boost/archive/detail/register_archive.hpp>
 
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::bintoken::iarchive);
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::bintoken::iarchive)
 
 #endif // TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_IARCHIVE_HPP

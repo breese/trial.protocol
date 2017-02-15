@@ -204,7 +204,7 @@ template <typename T>
 basic_encoder<CharT>::basic_encoder(T& output)
     : buffer(new typename buffer::traits<T>::buffer_type(output))
 {
-};
+}
 
 template <typename CharT>
 template <typename U>
@@ -226,14 +226,14 @@ basic_encoder<CharT>::value(bool data)
     {
         return write(traits<CharT>::false_text());
     }
-};
+}
 
 template <typename CharT>
 typename basic_encoder<CharT>::size_type
 basic_encoder<CharT>::value(const value_type *data)
 {
     return basic_encoder<CharT>::overloader<view_type>::write(*this, data);
-};
+}
 
 template <typename CharT>
 template <typename U>

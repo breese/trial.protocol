@@ -74,7 +74,7 @@ using oarchive = basic_oarchive<char>;
 } // namespace protocol
 } // namespace trial
 
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::json::oarchive);
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::json::oarchive)
 
 #include <trial/protocol/json/serialization/detail/oarchive.ipp>
 

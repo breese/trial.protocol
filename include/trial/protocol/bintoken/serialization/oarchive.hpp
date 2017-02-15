@@ -65,6 +65,6 @@ protected:
 
 #include <boost/archive/detail/register_archive.hpp>
 
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::bintoken::oarchive);
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::bintoken::oarchive)
 
 #endif // TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_OARCHIVE_HPP

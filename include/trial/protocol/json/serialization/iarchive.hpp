@@ -90,6 +90,6 @@ using iarchive = basic_iarchive<char>;
 #include <trial/protocol/json/serialization/detail/iarchive.ipp>
 #include <boost/archive/detail/register_archive.hpp>
 
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::json::iarchive);
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(trial::protocol::json::iarchive)
 
 #endif // TRIAL_PROTOCOL_JSON_SERIALIZATION_IARCHIVE_HPP
