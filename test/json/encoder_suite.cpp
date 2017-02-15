@@ -36,7 +36,7 @@ void test_std_array()
     std::array<char, 2> result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(42), 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::string(result.begin(), result.size()), "42");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::string(result.begin(), result.end()), "42");
 }
 
 void test_ostringstream()
@@ -87,7 +87,7 @@ void test_comma()
     std::array<char, 1> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.size()), ",");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.end()), ",");
 }
 
 void fail_comma()
@@ -102,7 +102,7 @@ void test_colon()
     std::array<char, 1> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.size()), ":");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.end()), ":");
 }
 
 void fail_colon()
@@ -117,7 +117,7 @@ void test_null()
     std::array<char, 4> buffer;
     encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 4);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.size()), "null");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.end()), "null");
 }
 
 void fail_null()
