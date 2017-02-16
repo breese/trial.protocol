@@ -14,7 +14,7 @@
 #include <string>
 #include <stack>
 #include <boost/config.hpp>
-#include <boost/utility/string_ref.hpp>
+#include <trial/protocol/detail/string_view.hpp>
 #include <trial/protocol/json/error.hpp>
 #include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>

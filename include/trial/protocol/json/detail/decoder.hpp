@@ -15,7 +15,7 @@
 #include <cstdint>
 #include <string>
 #include <boost/config.hpp>
-#include <boost/utility/string_ref.hpp>
+#include <trial/protocol/detail/string_view.hpp>
 #include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/error.hpp>
 
@@ -34,7 +34,7 @@ class basic_decoder
 public:
     using size_type = std::size_t;
     using value_type = CharT;
-    using view_type = boost::basic_string_ref<CharT>;
+    using view_type = trial::protocol::detail::basic_string_view<CharT>;
 
     basic_decoder(const view_type& input);
 

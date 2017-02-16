@@ -15,7 +15,7 @@
 #include <string>
 #include <memory>
 #include <boost/none.hpp>
-#include <boost/utility/string_ref.hpp>
+#include <trial/protocol/detail/string_view.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -34,7 +34,7 @@ public:
     using value_type = CharT;
     using size_type = std::size_t;
     using buffer_type = buffer::base<value_type>;
-    using view_type = boost::basic_string_ref<value_type>;
+    using view_type = trial::protocol::detail::basic_string_view<value_type>;
 
     template <typename T>
     basic_encoder(T&);

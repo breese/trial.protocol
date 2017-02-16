@@ -15,7 +15,7 @@
 #include <cstdint>
 #include <string>
 #include <memory>
-#include <boost/utility/string_ref.hpp>
+#include <trial/protocol/detail/string_view.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 
 namespace trial
@@ -32,8 +32,8 @@ class encoder
 public:
     using value_type = std::uint8_t;
     using size_type = std::size_t;
-    using view_type = boost::basic_string_ref<value_type>;
-    using string_view_type = boost::basic_string_ref<char>;
+    using view_type = trial::protocol::detail::basic_string_view<value_type>;
+    using string_view_type = trial::protocol::detail::basic_string_view<char>;
 
     template <typename T>
     encoder(T&);
