@@ -26,5 +26,9 @@ install:
 before_build:
   - mkdir build
   - cd build
+  - echo "$env:vcvarsall"
+  - echo "%env:vcvarsall%"
+  - echo $env:vcvarsall
+  - echo %env:vcvarsall%
   - call "%env:vcvarsall%" %env:platform%
   - cmake -G "%env:cmake_generator%" -DBOOST_ROOT="%BOOST_ROOT%" ..
