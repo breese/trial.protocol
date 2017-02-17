@@ -18,7 +18,7 @@ environment:
   matrix:
     - platform: x64
       cmake_generator: Visual Studio 14 2015 Win64
-      vcvarsall: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat
+      vcvarsall: "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat"
 
 install:
   - cmake --version
