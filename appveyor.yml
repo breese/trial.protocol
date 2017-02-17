@@ -1,11 +1,9 @@
+# https://ci.appveyor.com/tools/validate-yaml
+
 version: 0.1.{build}-{branch}
 
 os:
-  - Visual Studio 2015
-
-platform:
-  - x86
-  - x64
+  - Visual Studio
 
 branches:
   only:
@@ -17,11 +15,16 @@ configuration:
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_63_0
 
+  matrix:
+    - platform: x64
+      cmake_generator: Visual Studio 14 2015 Win64
+      vcvarsall: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat
+
 install:
   - cmake --version
 
 before_build:
   - mkdir build
   - cd build
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
-  - cmake -G "Visual Studio 14 2015 Win64" -DBOOST_ROOT="%BOOST_ROOT%" ..
+  - call "%env:vcvarsall%" %env:platform%
+  - cmake -G "%env:cmake_generator%" -DBOOST_ROOT="%BOOST_ROOT%" ..
