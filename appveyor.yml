@@ -3,7 +3,7 @@
 version: 0.1.{build}-{branch}
 
 os:
-  - Visual Studio
+  - Visual Studio 2015
 
 branches:
   only:
