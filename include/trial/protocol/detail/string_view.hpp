@@ -16,12 +16,15 @@
 #if BOOST_VERSION < 106100
 #include <boost/utility/string_ref.hpp>
 #else
-#include <trial/protocol/detail/string_view.hpp>
+#include <boost/utility/string_view.hpp>
 #endif
 
-namespace trial {
-namespace protocol {
-namespace detail {
+namespace trial
+{
+namespace protocol
+{
+namespace detail
+{
 
 #if BOOST_VERSION < 106100
 template<class T>
@@ -31,11 +34,11 @@ template<class T>
 using basic_string_view = boost::basic_string_view<T>;
 #endif
 
-typedef basic_string_view<char> string_view;
+using string_view = basic_string_view<char>;
 
-} // namespace detail {
-} // namespace protocol {
-} // namespace trial {
+} // namespace detail
+} // namespace protocol
+} // namespace trial
 
 
 #endif // TRIAL_PROTOCOL_DETAIL_STRING_VIEW_HPP
