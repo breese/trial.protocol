@@ -26,6 +26,5 @@ install:
 before_build:
   - mkdir build
   - cd build
-  - echo "%MY_VCVARSALL%"
-  - call "%MY_VCVARSALL%" "%MY_PLATFORM%"
+  - call "%MY_VCVARSALL%" %MY_PLATFORM%
   - cmake -G "%MY_CMAKE_GENERATOR%" -DBOOST_ROOT="%BOOST_ROOT%" ..
