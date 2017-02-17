@@ -91,43 +91,70 @@ void test_all_eq_impl(FormattedOutputFunction& output,
     }
 }
 
-template<class FwdIt1, class FwdIt2, class Predicate>
-void test_all_with_impl(std::ostream& output,
+template<class FormattedOutputFunction, class InputIterator1, class InputIterator2, typename Predicate>
+void test_all_with_impl(FormattedOutputFunction& output,
                         char const * file, int line, char const * function,
-                        FwdIt1 first_begin, FwdIt1 first_end,
-                        FwdIt2 second_begin, FwdIt2 second_end,
+                        InputIterator1 first_begin, InputIterator1 first_end,
+                        InputIterator2 second_begin, InputIterator2 second_end,
                         Predicate predicate)
 {
-    if (std::distance(first_begin, first_end) != std::distance(second_begin, second_end))
+    InputIterator1 first_it = first_begin;
+    InputIterator2 second_it = second_begin;
+    typename std::iterator_traits<InputIterator1>::difference_type first_index = 0;
+    typename std::iterator_traits<InputIterator2>::difference_type second_index = 0;
+    std::size_t error_count = 0;
+    const std::size_t max_count = 8;
+    do
     {
-        ::boost::detail::error_impl("Container sizes are different", file, line, function);
+        while ((first_it != first_end) && (second_it != second_end) && predicate(*first_it, *second_it))
+        {
+            ++first_it;
+            ++second_it;
+            ++first_index;
+            ++second_index;
+        }
+        if ((first_it == first_end) || (second_it == second_end))
+        {
+            break; // do-while
+        }
+        if (error_count == 0)
+        {
+            output << file << "(" << line << "): Container contents differ in function '" << function << "':";
+        }
+        else if (error_count >= max_count)
+        {
+            output << " ...";
+            break;
+        }
+        output << " [" << first_index << "]";
+        ++first_it;
+        ++second_it;
+        ++first_index;
+        ++second_index;
+        ++error_count;
+    } while (first_it != first_end);
+
+    first_index += std::distance(first_it, first_end);
+    second_index += std::distance(second_it, second_end);
+    if (first_index != second_index)
+    {
+        if (error_count == 0)
+        {
+            output << file << "(" << line << "): Container sizes differ in function '" << function << "': size(" << first_index << ") != size(" << second_index << ")";
+        }
+        else
+        {
+            output << " [*] size(" << first_index << ") != size(" << second_index << ")";
+        }
+        ++error_count;
+    }
+
+    if (error_count == 0)
+    {
+        boost::detail::report_errors_remind();
     }
     else
     {
-        FwdIt1 first_it = first_begin;
-        FwdIt2 second_it = second_begin;
-        bool output_header = true;
-        do
-        {
-            while ((first_it != first_end) && (second_it != second_end) && predicate(*first_it, *second_it))
-            {
-                ++first_it;
-                ++second_it;
-            }
-            if (first_it == first_end)
-            {
-                boost::detail::report_errors_remind();
-                return;
-            }
-            if (output_header)
-            {
-                output_header = false;
-                output << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices";
-            }
-            output << ' ' << std::distance(first_begin, first_it);
-            ++first_it;
-            ++second_it;
-        } while (first_it != first_end);
         output << std::endl;
         ++boost::detail::test_errors();
     }
