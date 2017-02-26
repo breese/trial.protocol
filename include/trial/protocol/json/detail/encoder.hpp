@@ -34,6 +34,7 @@ public:
     using value_type = CharT;
     using size_type = std::size_t;
     using buffer_type = buffer::base<value_type>;
+    using string_type = std::basic_string<value_type>;
     using view_type = trial::protocol::detail::basic_string_view<value_type>;
 
     template <typename T>
@@ -69,6 +70,7 @@ private:
 
     size_type write(value_type);
     size_type write(const view_type&);
+    size_type write(const string_type&);
 
 private:
     std::unique_ptr<buffer_type> buffer;

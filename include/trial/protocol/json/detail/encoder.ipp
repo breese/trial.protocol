@@ -463,6 +463,19 @@ basic_encoder<CharT>::write(const view_type& data)
     return 0;
 }
 
+template <typename CharT>
+typename basic_encoder<CharT>::size_type
+basic_encoder<CharT>::write(const string_type& data)
+{
+    const typename view_type::size_type size = data.size();
+    if (buffer->grow(size))
+    {
+        buffer->write(data);
+        return size;
+    }
+    return 0;
+}
+
 } // namespace detail
 } // namespace json
 } // namespace protocol
