@@ -377,6 +377,7 @@ void test_double_zero()
 
 void test_unsigned_double_zero()
 {
+#if defined(TRIAL_PROTOCOL_JSON_WITH_UNSIGNED_CHAR)
     unsigned_ostringstream buffer;
     unsigned_encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 16);
@@ -384,6 +385,7 @@ void test_unsigned_double_zero()
     unsigned_string result = buffer.str();
     TRIAL_PROTOCOL_TEST_ALL_EQUAL(result.begin(), result.end(),
                                   expect, expect + sizeof(expect));
+#endif
 }
 
 void test_double_one()
