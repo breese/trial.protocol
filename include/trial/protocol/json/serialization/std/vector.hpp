@@ -59,6 +59,28 @@ struct load_overloader< json::basic_iarchive<CharT>,
     }
 };
 
+// Specialization for std::vector<bool>
+
+template <typename CharT, typename Allocator>
+struct save_overloader< json::basic_oarchive<CharT>,
+                        typename std::vector<bool, Allocator> >
+{
+    static void save(json::basic_oarchive<CharT>& archive,
+                     const std::vector<bool, Allocator>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        archive.template save<json::token::begin_array>();
+        for (typename std::vector<bool, Allocator>::const_iterator it = data.begin();
+             it != data.end();
+             ++it)
+        {
+            bool value = *it;
+            archive.save_override(value);
+        }
+        archive.template save<json::token::end_array>();
+    }
+};
+
 } // namespace serialization
 } // namespace protocol
 } // namespace trial

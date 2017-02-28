@@ -402,6 +402,36 @@ void run()
 namespace vector_suite
 {
 
+void test_bool_empty()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    std::vector<bool> value;
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[]");
+}
+
+void test_bool_one()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    std::vector<bool> value;
+    value.push_back(false);
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[false]");
+}
+
+void test_bool_two()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    std::vector<bool> value;
+    value.push_back(false);
+    value.push_back(true);
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[false,true]");
+}
+
 void test_int_empty()
 {
     std::ostringstream result;
@@ -434,6 +464,9 @@ void test_int_two()
 
 void run()
 {
+    test_bool_empty();
+    test_bool_one();
+    test_bool_two();
     test_int_empty();
     test_int_one();
     test_int_two();
