@@ -286,21 +286,21 @@ inline int traits<unsigned char>::to_int(value_type value) BOOST_NOEXCEPT
     return 0;
 }
 
-inline const std::basic_string<unsigned char>& traits<unsigned char>::false_text() BOOST_NOEXCEPT
+inline auto traits<unsigned char>::false_text() BOOST_NOEXCEPT -> const string_type&
 {
-    static std::basic_string<value_type> text(reinterpret_cast<const value_type *>("false"));
+    static string_type text(reinterpret_cast<const value_type *>("false"));
     return text;
 }
 
-inline const std::basic_string<unsigned char>& traits<unsigned char>::true_text() BOOST_NOEXCEPT
+inline auto traits<unsigned char>::true_text() BOOST_NOEXCEPT -> const string_type&
 {
-    static std::basic_string<value_type> text(reinterpret_cast<const value_type *>("true"));
+    static string_type text(reinterpret_cast<const value_type *>("true"));
     return text;
 }
 
-inline const std::basic_string<unsigned char>& traits<unsigned char>::null_text() BOOST_NOEXCEPT
+inline auto traits<unsigned char>::null_text() BOOST_NOEXCEPT -> const string_type&
 {
-    static std::basic_string<value_type> text(reinterpret_cast<const value_type *>("null"));
+    static string_type text(reinterpret_cast<const value_type *>("null"));
     return text;
 }
 

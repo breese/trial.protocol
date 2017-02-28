@@ -22,47 +22,6 @@ namespace protocol
 namespace serialization
 {
 
-// Specialization for binary data
-
-template <typename Allocator>
-struct save_overloader< bintoken::oarchive,
-                        typename std::vector<std::uint8_t, Allocator> >
-{
-    static void save(bintoken::oarchive& ar,
-                     const std::vector<std::uint8_t, Allocator>& data,
-                     const unsigned int /* protocol_version */)
-    {
-        ar.save(data);
-    }
-};
-
-template <typename Allocator>
-struct load_overloader< bintoken::iarchive,
-                        typename std::vector<std::uint8_t, Allocator> >
-{
-    static void load(bintoken::iarchive& ar,
-                     std::vector<std::uint8_t, Allocator>& data,
-                     const unsigned int /* protocol_version */)
-    {
-        switch (ar.symbol())
-        {
-        case bintoken::token::symbol::binary:
-            {
-                bintoken::iarchive::view_type view;
-                ar.load(view);
-                data.clear();
-                data.insert(data.begin(), view.begin(), view.end());
-            }
-            break;
-
-        default:
-            throw bintoken::error(bintoken::incompatible_type);
-        }
-    }
-};
-
-// Specialization for generic vector data
-
 template <typename T, typename Allocator>
 struct save_overloader< bintoken::oarchive,
                         typename std::vector<T, Allocator> >
@@ -107,6 +66,68 @@ struct load_overloader< bintoken::iarchive,
             data.push_back(value);
         }
         ar.load<bintoken::token::end_array>();
+    }
+};
+
+// Specialization for binary data
+
+template <typename Allocator>
+struct save_overloader< bintoken::oarchive,
+                        typename std::vector<std::uint8_t, Allocator> >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::vector<std::uint8_t, Allocator>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save(data);
+    }
+};
+
+template <typename Allocator>
+struct load_overloader< bintoken::iarchive,
+                        typename std::vector<std::uint8_t, Allocator> >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::vector<std::uint8_t, Allocator>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.symbol())
+        {
+        case bintoken::token::symbol::binary:
+            {
+                bintoken::iarchive::view_type view;
+                ar.load(view);
+                data.clear();
+                data.insert(data.begin(), view.begin(), view.end());
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+// Specialization for std::vector<bool>
+
+template <typename Allocator>
+struct save_overloader< bintoken::oarchive,
+                        typename std::vector<bool, Allocator> >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::vector<bool, Allocator>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save<bintoken::token::begin_array>();
+        ar.save<std::size_t>(data.size());
+        for (typename std::vector<bool, Allocator>::const_iterator it = data.begin();
+             it != data.end();
+             ++it)
+        {
+            bool value = *it;
+            ar.save_override(value);
+        }
+        ar.save<bintoken::token::end_array>();
     }
 };
 

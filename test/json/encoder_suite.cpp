@@ -11,6 +11,7 @@
 #include <sstream>
 #include <limits>
 #include <functional>
+#include <trial/protocol/buffer/char_traits.hpp>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/buffer/vector.hpp>
@@ -23,6 +24,8 @@ namespace token = json::token;
 
 using encoder_type = json::detail::basic_encoder<char>;
 using unsigned_encoder_type = json::detail::basic_encoder<unsigned char>;
+using unsigned_string = std::basic_string<unsigned char, buffer::char_traits<unsigned char>>;
+using unsigned_ostringstream = std::basic_ostringstream<unsigned char, buffer::char_traits<unsigned char>>;
 
 //-----------------------------------------------------------------------------
 // Buffer
@@ -374,13 +377,15 @@ void test_double_zero()
 
 void test_unsigned_double_zero()
 {
-    std::basic_ostringstream<unsigned char> buffer;
+#if defined(TRIAL_PROTOCOL_JSON_WITH_UNSIGNED_CHAR)
+    unsigned_ostringstream buffer;
     unsigned_encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 16);
     unsigned char expect[] = { '0', '.', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' };
-    std::basic_string<unsigned char> result = buffer.str();
+    unsigned_string result = buffer.str();
     TRIAL_PROTOCOL_TEST_ALL_EQUAL(result.begin(), result.end(),
                                   expect, expect + sizeof(expect));
+#endif
 }
 
 void test_double_one()

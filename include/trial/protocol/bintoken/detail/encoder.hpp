@@ -16,6 +16,7 @@
 #include <string>
 #include <memory>
 #include <trial/protocol/detail/string_view.hpp>
+#include <trial/protocol/buffer/char_traits.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 
 namespace trial
@@ -32,8 +33,8 @@ class encoder
 public:
     using value_type = std::uint8_t;
     using size_type = std::size_t;
-    using view_type = trial::protocol::detail::basic_string_view<value_type>;
-    using string_view_type = trial::protocol::detail::basic_string_view<char>;
+    using view_type = trial::protocol::detail::basic_string_view<value_type, buffer::char_traits<value_type>>;
+    using string_view_type = trial::protocol::detail::basic_string_view<char, buffer::char_traits<char>>;
 
     template <typename T>
     encoder(T&);

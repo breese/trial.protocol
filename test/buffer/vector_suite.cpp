@@ -105,6 +105,8 @@ void test()
 namespace uvector_suite
 {
 
+using unsigned_string = std::basic_string<unsigned char, buffer::char_traits<unsigned char>>;
+
 void test_empty()
 {
     std::vector<unsigned char> output;
@@ -133,7 +135,7 @@ void test_view()
 {
     std::vector<unsigned char> output;
     vector_buffer<unsigned char> container(output);
-    std::basic_string<unsigned char> input;
+    unsigned_string input;
     input += 'a';
     input += 'l';
     input += 'p';

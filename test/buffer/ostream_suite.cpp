@@ -15,7 +15,7 @@
 using namespace trial::protocol;
 
 template <typename CharT,
-          typename Super = buffer::basic_ostream<CharT> >
+          typename Super = buffer::basic_ostream<CharT, buffer::char_traits<CharT>> >
 class ostream_buffer : Super
 {
 public:
@@ -23,7 +23,8 @@ public:
     using size_type = typename Super::size_type;
     using view_type = typename Super::view_type;
 
-    ostream_buffer(std::basic_ostream<CharT>& data)
+    ostream_buffer() = delete;
+    explicit ostream_buffer(std::basic_ostream<CharT, buffer::char_traits<CharT>>& data)
         : Super(data)
     {
     }
