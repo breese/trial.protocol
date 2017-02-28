@@ -67,10 +67,13 @@ void run()
 namespace ubasic_suite
 {
 
+using unsigned_ostringstream = std::basic_ostringstream<unsigned char, buffer::char_traits<unsigned char>>;
+using unsigned_writer = json::basic_writer<unsigned char>;
+
 void test_empty()
 {
-    std::basic_ostringstream<unsigned char> result;
-    json::basic_writer<unsigned char> writer(result);
+    unsigned_ostringstream result;
+    unsigned_writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str().empty(), true);
 }
 

@@ -13,6 +13,7 @@
 
 #include <ostream>
 #include <type_traits>
+#include <trial/protocol/buffer/char_traits.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -22,7 +23,7 @@ namespace protocol
 namespace buffer
 {
 
-template <typename CharT, typename Super = base<CharT> >
+template <typename CharT, typename Traits = buffer::char_traits<CharT>, typename Super = base<CharT> >
 class basic_ostream : public Super
 {
 public:
@@ -30,7 +31,7 @@ public:
     using size_type = typename Super::size_type;
     using view_type = typename Super::view_type;
 
-    basic_ostream(std::basic_ostream<CharT>& stream) : content(stream) {}
+    basic_ostream(std::basic_ostream<CharT, Traits>& stream) : content(stream) {}
 
 protected:
     virtual bool grow(size_type)
@@ -49,7 +50,7 @@ protected:
     }
 
 private:
-    std::basic_ostream<CharT>& content;
+    std::basic_ostream<CharT, Traits>& content;
 };
 
 // Specialization for basic_ostream
@@ -60,7 +61,7 @@ struct traits<T<CharT, Traits>,
               typename std::enable_if< std::is_base_of<std::basic_ostream<CharT, Traits>,
                                                        T<CharT, Traits> >::value >::type>
 {
-    using buffer_type = buffer::basic_ostream<CharT>;
+    using buffer_type = buffer::basic_ostream<CharT, Traits>;
 };
 
 // Specialization for C++11 basic_ostringstream with allocator
@@ -72,7 +73,7 @@ struct traits<T<CharT, Traits, Allocator>,
               typename std::enable_if< std::is_base_of<std::basic_ostream<CharT, Traits>,
                                                        T<CharT, Traits, Allocator> >::value >::type>
 {
-    using buffer_type = buffer::basic_ostream<CharT>;
+    using buffer_type = buffer::basic_ostream<CharT, Traits>;
 };
 
 } // namespace buffer

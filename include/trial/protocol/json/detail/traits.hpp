@@ -14,6 +14,7 @@
 #include <cstddef> // std::size_t
 #include <string>
 #include <boost/config.hpp>
+#include <trial/protocol/buffer/char_traits.hpp>
 
 namespace trial
 {
@@ -39,6 +40,7 @@ class traits<char>
 public:
     using value_type = char;
     using size_type = std::size_t;
+    using string_type = std::basic_string<value_type, buffer::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;
@@ -47,9 +49,9 @@ public:
     static size_type extra_bytes(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
 
-    static const std::basic_string<value_type>& false_text() BOOST_NOEXCEPT;
-    static const std::basic_string<value_type>& true_text() BOOST_NOEXCEPT;
-    static const std::basic_string<value_type>& null_text() BOOST_NOEXCEPT;
+    static const string_type& false_text() BOOST_NOEXCEPT;
+    static const string_type& true_text() BOOST_NOEXCEPT;
+    static const string_type& null_text() BOOST_NOEXCEPT;
 
     BOOST_STATIC_CONSTANT(value_type, alpha_backspace = '\b');
     BOOST_STATIC_CONSTANT(value_type, alpha_formfeed = '\f');
@@ -104,6 +106,7 @@ class traits<unsigned char>
 public:
     using value_type = unsigned char;
     using size_type = std::size_t;
+    using string_type = std::basic_string<value_type, buffer::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;
@@ -112,9 +115,9 @@ public:
     static size_type extra_bytes(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
 
-    static const std::basic_string<value_type>& false_text() BOOST_NOEXCEPT;
-    static const std::basic_string<value_type>& true_text() BOOST_NOEXCEPT;
-    static const std::basic_string<value_type>& null_text() BOOST_NOEXCEPT;
+    static const string_type& false_text() BOOST_NOEXCEPT;
+    static const string_type& true_text() BOOST_NOEXCEPT;
+    static const string_type& null_text() BOOST_NOEXCEPT;
 
     BOOST_STATIC_CONSTANT(value_type, alpha_backspace = '\b');
     BOOST_STATIC_CONSTANT(value_type, alpha_formfeed = '\f');

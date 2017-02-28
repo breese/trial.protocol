@@ -27,11 +27,11 @@ namespace detail
 {
 
 #if BOOST_VERSION < 106100
-template<class T>
-using basic_string_view = boost::basic_string_ref<T>;
+template<class CharT, typename Traits = std::char_traits<CharT>>
+using basic_string_view = boost::basic_string_ref<CharT, Traits>;
 #else
-template<class T>
-using basic_string_view = boost::basic_string_view<T>;
+template<class CharT, typename Traits = std::char_traits<CharT>>
+using basic_string_view = boost::basic_string_view<CharT, Traits>;
 #endif
 
 using string_view = basic_string_view<char>;

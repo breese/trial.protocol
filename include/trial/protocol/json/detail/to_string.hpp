@@ -16,6 +16,7 @@
 #include <sstream>
 #include <iomanip>
 #include <locale>
+#include <trial/protocol/buffer/char_traits.hpp>
 
 namespace trial
 {
@@ -27,25 +28,25 @@ namespace detail
 {
 
 template <typename CharT>
-std::basic_string<CharT> to_string(double value)
+std::basic_string<CharT, buffer::char_traits<CharT>> to_string(double value)
 {
     // Workaround for CharT = unsigned char, which std::locale does not support
     std::ostringstream stream;
     stream.imbue(std::locale::classic());
     stream << std::showpoint << std::setprecision(std::numeric_limits<double>::digits10) << value;
     std::string work = stream.str();
-    return std::basic_string<CharT>(work.begin(), work.end());
+    return {work.begin(), work.end()};
 }
 
 template <typename CharT>
-std::basic_string<CharT> to_string(float value)
+std::basic_string<CharT, buffer::char_traits<CharT>> to_string(float value)
 {
     // Workaround for CharT = unsigned char, which std::locale does not support
     std::ostringstream stream;
     stream.imbue(std::locale::classic());
     stream << std::showpoint << std::setprecision(std::numeric_limits<float>::digits10) << value;
     std::string work = stream.str();
-    return std::basic_string<CharT>(work.begin(), work.end());
+    return {work.begin(), work.end()};
 }
 
 } // namespace detail
