@@ -49,10 +49,12 @@ public:
     {
     public:
         using iterator_category = std::forward_iterator_tag;
+        using key_type = std::add_const<map_type::key_type>::type;
         using value_type = T;
         using difference_type = std::ptrdiff_t;
         using pointer = typename std::add_pointer<value_type>::type;
         using reference = typename std::add_lvalue_reference<value_type>::type;
+        using key_reference = typename std::add_lvalue_reference<key_type>::type;
 
         iterator_type() = delete;
         iterator_type(const iterator_type&);
@@ -65,8 +67,11 @@ public:
         iterator_type operator++ ();
         iterator_type operator++ (int);
 
-        reference operator* () const;
+        reference operator* ();
         pointer operator-> ();
+
+        key_reference key() const;
+        reference value();
 
         bool operator== (const iterator_type<T>&);
         bool operator!= (const iterator_type<T>&);

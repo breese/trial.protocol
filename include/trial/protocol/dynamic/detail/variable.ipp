@@ -739,7 +739,26 @@ auto variable::iterator_type<T>::operator++ (int) -> iterator_type
 }
 
 template <typename T>
-auto variable::iterator_type<T>::operator* () const -> reference
+auto variable::iterator_type<T>::operator* () -> reference
+{
+    return value();
+}
+
+template <typename T>
+auto variable::iterator_type<T>::key() const -> key_reference
+{
+    switch (scope->storage.which())
+    {
+    case traits<map_type>::value:
+        return current.template get<map_iterator>()->first;
+
+    default:
+        throw dynamic::error(incompatible_type);
+    }
+}
+
+template <typename T>
+auto variable::iterator_type<T>::value() -> reference
 {
     switch (scope->storage.which())
     {
@@ -754,8 +773,7 @@ auto variable::iterator_type<T>::operator* () const -> reference
         return *current.template get<array_iterator>();
 
     case traits<map_type>::value:
-        // Return value part
-        return (*current.template get<map_iterator>()).second;
+        return current.template get<map_iterator>()->second;
     }
     assert(false);
     throw dynamic::error(incompatible_type);
@@ -774,10 +792,10 @@ auto variable::iterator_type<T>::operator-> () -> pointer
         return current.template get<pointer>();
 
     case traits<array_type>::value:
-        return *current.template get<array_iterator>();
+        return &*current.template get<array_iterator>();
 
     case traits<map_type>::value:
-        return (*current.template get<map_iterator>()).second;
+        return &current.template get<map_iterator>()->second;
     }
 }
 
