@@ -12,6 +12,7 @@
 #include <trial/protocol/bintoken/serialization.hpp>
 #include <trial/protocol/detail/lightweight_test.hpp>
 
+using namespace trial::protocol;
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
 using value_type = format::reader::value_type;
@@ -1272,6 +1273,154 @@ void run()
 } // namespace container_suite
 
 //-----------------------------------------------------------------------------
+// dynamic::variable
+//-----------------------------------------------------------------------------
+
+namespace dynamic_suite
+{
+
+void test_null()
+{
+    const value_type input[] = { token::code::null };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::null_type>(), true);
+}
+
+void test_boolean()
+{
+    const value_type input[] = { token::code::true_value };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::boolean_type>(), true);
+}
+
+void test_integer_small()
+{
+    const value_type input[] = { 0x02 };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::integer_type>(), 2);
+}
+
+void test_integer()
+{
+    const value_type input[] = { token::code::int16, 0x02, 0x00 };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::integer_type>(), 2);
+}
+
+void test_number()
+{
+    const value_type input[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::number_type>(), 1.0f);
+}
+
+void test_string()
+{
+    const value_type input[] = { token::code::string8, 0x03, 0x41, 0x42, 0x43 };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::string_type>(), "ABC");
+}
+
+void test_array_empty()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x00,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::array_type>(), true);
+    dynamic::variable expect = dynamic::variable::array();
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<dynamic::variable>());
+}
+
+void test_array()
+{
+    const value_type input[] = { token::code::begin_array,
+                                 0x02,
+                                 token::code::true_value,
+                                 0x02,
+                                 token::code::end_array };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::array_type>(), true);
+    dynamic::variable expect = dynamic::variable::array({ true, 2 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<dynamic::variable>());
+}
+
+void test_map_empty()
+{
+    const value_type input[] = { token::code::begin_assoc_array,
+                                 token::code::null,
+                                 token::code::end_assoc_array };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::map_type>(), true);
+    dynamic::variable expect = dynamic::variable::map();
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<dynamic::variable>());
+}
+
+void test_map()
+{
+    const value_type input[] = { token::code::begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x03, 0x41, 0x42, 0x43,
+                                 token::code::true_value,
+                                 token::code::end_record,
+                                 token::code::end_assoc_array };
+    format::iarchive in(input);
+    dynamic::variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::map_type>(), true);
+    dynamic::variable expect = dynamic::variable::map({{ "ABC", true }});
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<dynamic::variable>());
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer_small();
+    test_integer();
+    test_number();
+    test_string();
+    test_array_empty();
+    test_array();
+    test_map_empty();
+    test_map();
+}
+
+} // namespace dynamic_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -1291,6 +1440,7 @@ int main()
     struct_suite::run();
     split_struct_suite::run();
     container_suite::run();
+    dynamic_suite::run();
 
     return boost::report_errors();
 }

@@ -18,5 +18,6 @@
 #include <trial/protocol/bintoken/serialization/std/string.hpp>
 #include <trial/protocol/bintoken/serialization/std/vector.hpp>
 #include <trial/protocol/bintoken/serialization/boost/optional.hpp>
+#include <trial/protocol/bintoken/serialization/dynamic/variable.hpp>
 
 #endif // TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_HPP
