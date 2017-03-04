@@ -118,7 +118,11 @@ public:
     variable& operator= (null_type);
     variable& operator= (const string_type::value_type *);
 
-    // Value getter
+    variable& operator+= (const variable&);
+    variable& operator+= (std::initializer_list<array_type::value_type>);
+    variable& operator+= (std::initializer_list<map_type::value_type>);
+
+    // Accessor
 
     template <typename R> R value() const;
     template <typename R> R value(std::error_code&) const noexcept;

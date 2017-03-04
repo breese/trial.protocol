@@ -112,6 +112,11 @@ struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value
             return true;
         }
     }
+
+    static void append(variable&, const T&)
+    {
+        // Appending null is a no-op
+    }
 };
 
 // Boolean
@@ -176,6 +181,35 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
 
         default:
             return false;
+        }
+    }
+
+    static void append(variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            self.storage = other; // Overwrite null
+            break;
+
+        case traits<variable::boolean_type>::value:
+            self.storage.get<boolean_type>() += other;
+            break;
+
+        case traits<variable::integer_type>::value:
+            self.storage.get<integer_type>() += other;
+            break;
+
+        case traits<variable::number_type>::value:
+            self.storage.get<number_type>() += other;
+            break;
+
+        case traits<variable::array_type>::value:
+            self.storage.get<array_type>().push_back(other);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
         }
     }
 };
@@ -244,6 +278,35 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
             return false;
         }
     }
+
+    static void append(variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            self.storage = other; // Overwrite null
+            break;
+
+        case traits<variable::boolean_type>::value:
+            self.storage.get<boolean_type>() += other;
+            break;
+
+        case traits<variable::integer_type>::value:
+            self.storage.get<integer_type>() += other;
+            break;
+
+        case traits<variable::number_type>::value:
+            self.storage.get<number_type>() += other;
+            break;
+
+        case traits<variable::array_type>::value:
+            self.storage.get<array_type>().push_back(other);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
 };
 
 // Floating-point
@@ -310,6 +373,35 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
             return false;
         }
     }
+
+    static void append(variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            self.storage = other; // Overwrite null
+            break;
+
+        case traits<variable::boolean_type>::value:
+            self.storage.get<boolean_type>() += other;
+            break;
+
+        case traits<variable::integer_type>::value:
+            self.storage.get<integer_type>() += other;
+            break;
+
+        case traits<variable::number_type>::value:
+            self.storage.get<number_type>() += other;
+            break;
+
+        case traits<variable::array_type>::value:
+            self.storage.get<array_type>().push_back(other);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
 };
 
 // String
@@ -359,6 +451,27 @@ struct variable::overloader<T, typename std::enable_if<detail::is_string<T>::val
 
         default:
             return false;
+        }
+    }
+
+    static void append(variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            self.storage = other; // Overwrite null
+            break;
+
+        case traits<variable::string_type>::value:
+            self.storage.get<string_type>() += other;
+            break;
+
+        case traits<variable::array_type>::value:
+            self.storage.get<array_type>().push_back(other);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
         }
     }
 };
@@ -421,6 +534,26 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
             return false;
         }
     }
+
+    static void append(variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            self.storage = other; // Overwrite null
+            break;
+
+        case traits<variable::array_type>::value:
+            {
+                auto& array = self.storage.get<array_type>();
+                array.insert(array.end(), other.begin(), other.end());
+            }
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
 };
 
 // Map
@@ -479,6 +612,26 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
             }
         default:
             return false;
+        }
+    }
+
+    static void append(variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            self.storage = other; // Overwrite null
+            break;
+
+        case traits<variable::map_type>::value:
+            {
+                auto& map = self.storage.get<map_type>();
+                map.insert(other.begin(), other.end());
+            }
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
         }
     }
 };
@@ -863,6 +1016,66 @@ inline variable& variable::operator= (null_type)
 inline variable& variable::operator= (const string_type::value_type *value)
 {
     storage = string_type{value};
+    return *this;
+}
+
+inline variable& variable::operator+= (const variable& other)
+{
+    switch (other.storage.which())
+    {
+    case traits<null_type>::value:
+        overloader<null_type>::append(*this, other.storage.get<null_type>());
+        break;
+    case traits<boolean_type>::value:
+        overloader<boolean_type>::append(*this, other.storage.get<boolean_type>());
+        break;
+    case traits<integer_type>::value:
+        overloader<integer_type>::append(*this, other.storage.get<integer_type>());
+        break;
+    case traits<number_type>::value:
+        overloader<number_type>::append(*this, other.storage.get<number_type>());
+        break;
+    case traits<string_type>::value:
+        overloader<string_type>::append(*this, other.storage.get<string_type>());
+        break;
+    case traits<array_type>::value:
+        overloader<array_type>::append(*this, other.storage.get<array_type>());
+        break;
+    case traits<map_type>::value:
+        overloader<map_type>::append(*this, other.storage.get<map_type>());
+        break;
+    }
+    return *this;
+}
+
+inline variable& variable::operator+= (std::initializer_list<array_type::value_type> init)
+{
+    switch (storage.which())
+    {
+    case traits<array_type>::value:
+        {
+            auto& array = storage.get<array_type>();
+            array.insert(array.end(), init.begin(), init.end());
+        }
+        break;
+
+    default:
+        throw dynamic::error(incompatible_type);
+    }
+    return *this;
+}
+
+inline variable& variable::operator+= (std::initializer_list<map_type::value_type> init)
+{
+    switch (storage.which())
+    {
+    case traits<map_type>::value:
+        storage.get<map_type>().insert(init);
+        break;
+
+    default:
+        throw dynamic::error(incompatible_type);
+    }
     return *this;
 }
 
