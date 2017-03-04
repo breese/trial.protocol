@@ -620,6 +620,89 @@ void run()
 } // namespace record_suite
 
 //-----------------------------------------------------------------------------
+// dynamic::variable
+//-----------------------------------------------------------------------------
+
+namespace dynamic_suite
+{
+
+void test_null()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    dynamic::variable value;
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
+}
+
+void test_boolean()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    dynamic::variable value(true);
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "true");
+}
+
+void test_integer()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    dynamic::variable value(2);
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "2");
+}
+
+void test_number()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    dynamic::variable value(3.0);
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "3.00000000000000");
+}
+
+void test_string()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    dynamic::variable value("alpha");
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"alpha\"");
+}
+
+void test_array()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    dynamic::variable value = dynamic::variable::array({ true, 2, 3.0, "alpha" });;
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[true,2,3.00000000000000,\"alpha\"]");
+}
+
+void test_map()
+{
+    std::ostringstream result;
+    json::oarchive ar(result);
+    dynamic::variable value = dynamic::variable::map({{ "alpha", "hydrogen" }});
+    ar << value;
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"alpha\":\"hydrogen\"}");
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array();
+    test_map();
+}
+
+} // namespace dynamic_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -636,6 +719,7 @@ int main()
     map_suite::run();
     set_suite::run();
     record_suite::run();
+    dynamic_suite::run();
 
     return boost::report_errors();
 }

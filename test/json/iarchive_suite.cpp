@@ -665,6 +665,109 @@ void run()
 } // namespace map_suite
 
 //-----------------------------------------------------------------------------
+// dynamic::variable
+//-----------------------------------------------------------------------------
+
+namespace dynamic_suite
+{
+
+using namespace trial::protocol::dynamic;
+
+void test_null()
+{
+    const char input[] = "null";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value == variable::null);
+}
+
+void test_boolean()
+{
+    const char input[] = "true";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<variable::boolean_type>());
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<variable::boolean_type>(), true);
+}
+
+void test_integer()
+{
+    const char input[] = "2";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<variable::integer_type>());
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<variable::integer_type>(), 2);
+}
+
+void test_number()
+{
+    const char input[] = "3.0";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<variable::number_type>());
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<variable::number_type>(), 3.0);
+}
+
+void test_string()
+{
+    const char input[] = "\"alpha\"";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<variable::string_type>());
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<variable::string_type>(), "alpha");
+}
+
+void test_array()
+{
+    const char input[] = "[true, 2, 3.0, \"alpha\"]";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<variable::array_type>());
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_map()
+{
+    const char input[] = "{\"alpha\":true,\"bravo\":2,\"charlie\":3.0,\"delta\":\"beryllium\"}";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<variable::map_type>());
+    variable expect = variable::map(
+        {
+            {"alpha", true},
+            {"bravo", 2},
+            {"charlie", 3.0},
+            {"delta", "beryllium"}
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array();
+    test_map();
+}
+
+} // namespace dynamic_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -679,6 +782,7 @@ int main()
     optional_suite::run();
     vector_suite::run();
     map_suite::run();
+    dynamic_suite::run();
 
     return boost::report_errors();
 }

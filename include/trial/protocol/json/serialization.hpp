@@ -19,5 +19,6 @@
 #include <trial/protocol/json/serialization/std/string.hpp>
 #include <trial/protocol/json/serialization/std/vector.hpp>
 #include <trial/protocol/json/serialization/boost/optional.hpp>
+#include <trial/protocol/json/serialization/dynamic/variable.hpp>
 
 #endif // TRIAL_PROTOCOL_JSON_SERIALIZATION_HPP
