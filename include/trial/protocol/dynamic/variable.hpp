@@ -90,22 +90,24 @@ public:
     static constexpr null_type null{};
 
     // Constructor
-    variable();
     variable(const variable&);
     variable(variable&&);
     template <typename T> variable(T);
+    // Null constructor
+    variable();
+    variable(null_type);
+    // String constructor
+    variable(const string_type::value_type *);
     // Array constructor
     template <typename ForwardIterator> variable(ForwardIterator begin, ForwardIterator end);
-    // Map constructor
-    template <typename T> variable(const string_type&, T);
-    template <typename T> variable(const string_type::value_type *, T);
-    // Specialized constructor
-    variable(null_type);
-    variable(const string_type::value_type *);
-    // Named constructor
+    static variable array();
     static variable array(std::initializer_list<array_type::value_type>);
     template <typename T>
     static variable array(size_type, const T&);
+    // Map constructor
+    template <typename T> variable(const string_type&, T);
+    template <typename T> variable(const string_type::value_type *, T);
+    static variable map();
     static variable map(std::initializer_list<map_type::value_type>);
  
     // Assignment

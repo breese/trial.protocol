@@ -762,6 +762,11 @@ inline variable::variable(const string_type::value_type *value)
 {
 }
 
+variable variable::array()
+{
+    return array_type{};
+}
+
 variable variable::array(std::initializer_list<array_type::value_type> init)
 {
     return array_type(init.begin(), init.end());
@@ -771,6 +776,11 @@ template <typename T>
 variable variable::array(size_type size, const T& value)
 {
     return array_type(size, variable(value));
+}
+
+variable variable::map()
+{
+    return map_type{};
 }
 
 variable variable::map(std::initializer_list<map_type::value_type> init)
