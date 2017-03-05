@@ -1947,8 +1947,7 @@ void test_map()
     TRIAL_PROTOCOL_TEST(data["bravo"] == 2);
     TRIAL_PROTOCOL_TEST(data["charlie"] == 3.0);
     TRIAL_PROTOCOL_TEST(data["delta"] == "beryllium");
-    TRIAL_PROTOCOL_TEST_THROWS(data["unknown"],
-                               std::out_of_range);
+    TRIAL_PROTOCOL_TEST(data["unknown"] == variable::null);
 }
 
 void test_map_const()
