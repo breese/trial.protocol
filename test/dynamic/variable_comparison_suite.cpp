@@ -731,40 +731,17 @@ void test_string()
 
 void test_array_less_array()
 {
-    variable::array_type data_param = { 0, 1 };
-    variable data(data_param);
-    variable::array_type array_param = { 1, 2 };
-    variable array(array_param);
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, true);
-
-    array_param.assign({0, 1});
-    array = array_param;
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, false);
-
-    array_param.assign({0, 2});
-    array = array_param;
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, false);
-
-    array_param.assign({1, 1});
-    array = array_param;
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, false);
-
-    array_param.assign({1, 0});
-    array = array_param;
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 2}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 1}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 2}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 1}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 0}), false);
 
     // Different sizes
-    array_param.assign({1, 2, 3});
-    array = array_param;
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, true);
-
-    array_param.assign({0, 2, 3});
-    array = array_param;
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, false);
-
-    array_param.assign({1});
-    array = array_param;
-    TRIAL_PROTOCOL_TEST_EQUAL(data < array, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 1, 2}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 2, 3}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 2, 3}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1}), false);
 }
 
 void run()

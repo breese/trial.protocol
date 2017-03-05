@@ -31,7 +31,7 @@ struct small_traits
     template <typename... Args>
     static void construct(void *ptr, Args... args)
     {
-        ::new (ptr) type{std::forward<Args...>(args...)};
+        ::new (ptr) type(std::forward<Args...>(args...));
     }
 
     static void destroy(void *ptr)
@@ -63,7 +63,7 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
     template <typename... Args>
     static void construct(void *ptr, Args... args)
     {
-        ::new (ptr) pointer{new type{std::forward<Args...>(args...)}};
+        ::new (ptr) pointer{new type(std::forward<Args...>(args...))};
     }
 
     static void destroy(void *ptr)
@@ -199,7 +199,7 @@ void small_union<N, Types...>::call()
 {
     assert(current < sizeof...(Types));
 
-    using signature = decltype(&Visitor::template call<void>);
+    using signature = decltype(&Visitor::template call<int>);
     static constexpr signature table[] = { &Visitor::template call<Types>... };
     table[current](*this);
 }
@@ -210,7 +210,7 @@ void small_union<N, Types...>::call(Args&&... args)
 {
     assert(current < sizeof...(Types));
 
-    using signature = decltype(&Visitor::template call<void>);
+    using signature = decltype(&Visitor::template call<int>);
     static constexpr signature table[] = { &Visitor::template call<Types>... };
     table[current](*this, std::forward<Args...>(args...));
 }

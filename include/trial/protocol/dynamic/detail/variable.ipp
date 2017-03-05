@@ -56,7 +56,7 @@ using is_map = std::is_same<T, variable::map_type>;
 template <typename T>
 struct variable::traits
 {
-    static const std::size_t value = decltype(variable::storage)::index<T>::value;
+    static const std::size_t value = decltype(variable::storage)::template index<T>::value;
 };
 
 //-----------------------------------------------------------------------------
@@ -503,11 +503,11 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
         case traits<variable::array_type>::value:
             {
                 const auto& array = self.storage.get<variable::array_type>();
-                if (array.size() != other.size())
+                if (array.size() == other.size())
                 {
-                    return false;
+                    return std::equal(array.begin(), array.end(), other.begin());
                 }
-                return std::equal(array.begin(), array.end(), other.begin());
+                return false;
             }
         default:
             return false;
@@ -521,14 +521,17 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
         case traits<variable::array_type>::value:
             {
                 const auto& array = self.storage.get<variable::array_type>();
-                if (array.size() <= other.size())
+                auto less_than = std::less<decltype(*array.begin())>();
+                auto array_it = array.begin();
+                auto other_it = other.begin();
+                while ((array_it != array.end()) && (other_it != other.end()))
                 {
-                    return std::mismatch(array.begin(), array.end(),
-                                         other.begin(),
-                                         std::less<decltype(*array.begin())>()
-                                         ).first == array.end();
+                    if (!less_than(*array_it, *other_it))
+                        return false;
+                    ++array_it;
+                    ++other_it;
                 }
-                return false;
+                return (array_it == array.end());
             }
         default:
             return false;
@@ -583,11 +586,11 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
         case traits<variable::map_type>::value:
             {
                 const auto& map = self.storage.get<variable::map_type>();
-                if (map.size() != other.size())
+                if (map.size() == other.size())
                 {
-                    return false;
+                    return std::equal(map.begin(), map.end(), other.begin());
                 }
-                return std::equal(map.begin(), map.end(), other.begin());
+                return false;
             }
         default:
             return false;
@@ -601,14 +604,17 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
         case traits<variable::map_type>::value:
             {
                 const auto& map = self.storage.get<variable::map_type>();
-                if (map.size() <= other.size())
+                auto less_than = std::less<decltype(*map.begin())>();
+                auto map_it = map.begin();
+                auto other_it = other.begin();
+                while ((map_it != map.end()) && (other_it != other.end()))
                 {
-                    return std::mismatch(map.begin(), map.end(),
-                                         other.begin(),
-                                         std::less<decltype(*map.begin())>()
-                                         ).first == map.end();
+                    if (!less_than(*map_it, *other_it))
+                        return false;
+                    ++map_it;
+                    ++other_it;
                 }
-                return false;
+                return (map_it == map.end());
             }
         default:
             return false;
@@ -901,7 +907,7 @@ inline variable::variable(variable&& other)
 
 template <typename T>
 variable::variable(T value)
-    : storage(typename overloader<T>::type{std::move(value)})
+    : storage(typename overloader<typename std::decay<T>::type>::type(std::move(value)))
 {
 }
 
