@@ -1880,10 +1880,10 @@ void run()
 } // namespace value_suite
 
 //-----------------------------------------------------------------------------
-// Indexing
+// Subscripting
 //-----------------------------------------------------------------------------
 
-namespace index_suite
+namespace subscript_suite
 {
 
 void test_null()
@@ -1951,6 +1951,23 @@ void test_map()
                                std::out_of_range);
 }
 
+void test_map_const()
+{
+    const variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST(data["alpha"] == true);
+    TRIAL_PROTOCOL_TEST(data["bravo"] == 2);
+    TRIAL_PROTOCOL_TEST(data["charlie"] == 3.0);
+    TRIAL_PROTOCOL_TEST(data["delta"] == "beryllium");
+    TRIAL_PROTOCOL_TEST_THROWS(data["unknown"],
+                               std::out_of_range);
+}
+
 void run()
 {
     test_null();
@@ -1960,9 +1977,10 @@ void run()
     test_string();
     test_array();
     test_map();
+    test_map_const();
 }
 
-} // namespace index_suite
+} // namespace subscript_suite
 
 //-----------------------------------------------------------------------------
 // Clear
@@ -2204,7 +2222,7 @@ int main()
     append_suite::run();
 
     value_suite::run();
-    index_suite::run();
+    subscript_suite::run();
 
     clear_suite::run();
     empty_suite::run();
