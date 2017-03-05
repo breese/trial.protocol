@@ -166,6 +166,7 @@ void test_all_with_impl(FormattedOutputFunction& output,
 
 #define TRIAL_PROTOCOL_TEST BOOST_TEST
 #define TRIAL_PROTOCOL_TEST_EQUAL BOOST_TEST_EQ
+#define TRIAL_PROTOCOL_TEST_THROWS BOOST_TEST_THROWS
 
 #define TRIAL_PROTOCOL_TEST_THROW_EQUAL(EXPR, EXCEP, MSG)               \
         try {                                                           \

@@ -1880,6 +1880,91 @@ void run()
 } // namespace value_suite
 
 //-----------------------------------------------------------------------------
+// Indexing
+//-----------------------------------------------------------------------------
+
+namespace index_suite
+{
+
+void test_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
+                                    error,
+                                    "incompatible type");
+}
+
+void test_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
+                                    error,
+                                    "incompatible type");
+}
+
+void test_integer()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
+                                    error,
+                                    "incompatible type");
+}
+
+void test_number()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
+                                    error,
+                                    "incompatible type");
+}
+
+void test_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
+                                    error,
+                                    "incompatible type");
+}
+
+void test_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
+                                    error,
+                                    "incompatible type");
+}
+
+void test_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST(data["alpha"] == true);
+    TRIAL_PROTOCOL_TEST(data["bravo"] == 2);
+    TRIAL_PROTOCOL_TEST(data["charlie"] == 3.0);
+    TRIAL_PROTOCOL_TEST(data["delta"] == "beryllium");
+    TRIAL_PROTOCOL_TEST_THROWS(data["unknown"],
+                               std::out_of_range);
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array();
+    test_map();
+}
+
+} // namespace index_suite
+
+//-----------------------------------------------------------------------------
 // Clear
 //-----------------------------------------------------------------------------
 
@@ -2119,6 +2204,8 @@ int main()
     append_suite::run();
 
     value_suite::run();
+    index_suite::run();
+
     clear_suite::run();
     empty_suite::run();
     size_suite::run();

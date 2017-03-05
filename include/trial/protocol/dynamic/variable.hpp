@@ -135,6 +135,8 @@ public:
 
     explicit operator bool() const;
 
+    variable& operator[] (const map_type::key_type&);
+
     // Type checker
 
     template <typename T> bool is() const;

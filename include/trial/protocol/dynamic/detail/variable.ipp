@@ -1150,6 +1150,18 @@ inline variable::operator bool() const
     return false;
 }
 
+inline variable& variable::operator[] (const map_type::key_type& key)
+{
+    switch (storage.which())
+    {
+    case traits<map_type>::value:
+        return storage.get<map_type>().at(key);
+
+    default:
+        throw dynamic::error(incompatible_type);
+    }
+}
+
 template <typename T>
 bool variable::is() const
 {
