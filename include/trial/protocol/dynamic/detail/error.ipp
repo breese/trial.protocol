@@ -24,7 +24,7 @@ namespace detail
 class error_category : public std::error_category
 {
 public:
-    const char *name() const BOOST_NOEXCEPT
+    const char *name() const noexcept
     {
         return "trial.protocol.dynamic";
     }
