@@ -140,6 +140,9 @@ public:
 
     explicit operator bool() const;
 
+    variable& operator[] (array_type::size_type);
+    const variable& operator[] (array_type::size_type) const;
+
     variable& operator[] (const map_type::key_type&);
     const variable& operator[] (const map_type::key_type&) const;
 

@@ -1158,6 +1158,30 @@ inline variable::operator bool() const
     return false;
 }
 
+inline variable& variable::operator[] (array_type::size_type position)
+{
+    switch (storage.which())
+    {
+    case traits<array_type>::value:
+        return storage.get<array_type>()[position];
+
+    default:
+        throw dynamic::error(incompatible_type);
+    }
+}
+
+inline const variable& variable::operator[] (array_type::size_type position) const
+{
+    switch (storage.which())
+    {
+    case traits<array_type>::value:
+        return storage.get<array_type>().at(position);
+
+    default:
+        throw dynamic::error(incompatible_type);
+    }
+}
+
 inline variable& variable::operator[] (const map_type::key_type& key)
 {
     switch (storage.which())

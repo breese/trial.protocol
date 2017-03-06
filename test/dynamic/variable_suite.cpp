@@ -2371,7 +2371,79 @@ void run()
 namespace subscript_suite
 {
 
-void test_null()
+void index_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                    error,
+                                    "incompatible type");
+}
+
+void index_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                    error,
+                                    "incompatible type");
+}
+
+void index_integer()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                    error,
+                                    "incompatible type");
+}
+
+void index_number()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                    error,
+                                    "incompatible type");
+}
+
+void index_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                    error,
+                                    "incompatible type");
+}
+
+void index_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST(data[0] == true);
+    TRIAL_PROTOCOL_TEST(data[1] == 2);
+    TRIAL_PROTOCOL_TEST(data[2] == 3.0);
+    TRIAL_PROTOCOL_TEST(data[3] == "alpha");
+}
+
+void index_array_const()
+{
+    const variable data = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST(data[0] == true);
+    TRIAL_PROTOCOL_TEST(data[1] == 2);
+    TRIAL_PROTOCOL_TEST(data[2] == 3.0);
+    TRIAL_PROTOCOL_TEST(data[3] == "alpha");
+}
+
+void index_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                    error,
+                                    "incompatible type");
+}
+
+void key_null()
 {
     variable data;
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
@@ -2379,7 +2451,7 @@ void test_null()
                                     "incompatible type");
 }
 
-void test_boolean()
+void key_boolean()
 {
     variable data(true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
@@ -2387,7 +2459,7 @@ void test_boolean()
                                     "incompatible type");
 }
 
-void test_integer()
+void key_integer()
 {
     variable data(2);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
@@ -2395,7 +2467,7 @@ void test_integer()
                                     "incompatible type");
 }
 
-void test_number()
+void key_number()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
@@ -2403,7 +2475,7 @@ void test_number()
                                     "incompatible type");
 }
 
-void test_string()
+void key_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
@@ -2411,7 +2483,7 @@ void test_string()
                                     "incompatible type");
 }
 
-void test_array()
+void key_array()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
@@ -2419,7 +2491,7 @@ void test_array()
                                     "incompatible type");
 }
 
-void test_map()
+void key_map()
 {
     variable data = variable::map(
         {
@@ -2435,7 +2507,7 @@ void test_map()
     TRIAL_PROTOCOL_TEST(data["unknown"] == variable::null);
 }
 
-void test_map_const()
+void key_map_const()
 {
     const variable data = variable::map(
         {
@@ -2454,14 +2526,23 @@ void test_map_const()
 
 void run()
 {
-    test_null();
-    test_boolean();
-    test_integer();
-    test_number();
-    test_string();
-    test_array();
-    test_map();
-    test_map_const();
+    index_null();
+    index_boolean();
+    index_integer();
+    index_number();
+    index_string();
+    index_array();
+    index_array_const();
+    index_map();
+
+    key_null();
+    key_boolean();
+    key_integer();
+    key_number();
+    key_string();
+    key_array();
+    key_map();
+    key_map_const();
 }
 
 } // namespace subscript_suite
