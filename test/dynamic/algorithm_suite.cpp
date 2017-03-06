@@ -972,6 +972,80 @@ void run()
 } // namespace iota_suite
 
 //-----------------------------------------------------------------------------
+// std::is_sorted
+//-----------------------------------------------------------------------------
+
+namespace is_sorted_suite
+{
+
+void test_array_null()
+{
+    variable sorted = variable::array({ variable::null, variable::null, variable::null });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+}
+
+void test_array_boolean()
+{
+    variable sorted = variable::array({ false, true, true, true });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+    variable unsorted = variable::array({ true, false, true, true });
+    TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
+}
+
+void test_array_boolean_integer()
+{
+    variable sorted = variable::array({ true, 2 });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+    variable unsorted = variable::array({ 2, true });
+    TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
+}
+
+void test_array_integer()
+{
+    variable sorted = variable::array({ 1, 2, 3, 4 });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+    variable unsorted = variable::array({ 1, 2, 4, 3 });
+    TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
+}
+
+void test_array_integer_number()
+{
+    variable sorted = variable::array({ 1, 2.0, 3, 4.0 });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+    variable unsorted = variable::array({ 1, 2.0, 4.0, 3 });
+    TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
+}
+
+void test_array_number()
+{
+    variable sorted = variable::array({ 1.0, 2.0, 3.0, 4.0 });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+    variable unsorted = variable::array({ 1.0, 2.0, 4.0, 3.0 });
+    TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
+}
+
+void test_array_string()
+{
+    variable sorted = variable::array({ "alpha", "bravo", "charlie" });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+    variable unsorted = variable::array({ "alpha", "charlie", "bravo" });
+    TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
+}
+
+void run()
+{
+    test_array_null();
+    test_array_boolean();
+    test_array_boolean_integer();
+    test_array_integer();
+    test_array_integer_number();
+    test_array_number();
+    test_array_string();
+}
+
+} // namespace is_sorted_suite
+
+//-----------------------------------------------------------------------------
 // std::max_element
 //-----------------------------------------------------------------------------
 
@@ -1087,6 +1161,7 @@ int main()
     find_suite::run();
     find_if_suite::run();
     iota_suite::run();
+    is_sorted_suite::run();
     max_element_suite::run();
     search_suite::run();
 
