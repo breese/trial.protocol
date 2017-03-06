@@ -584,6 +584,46 @@ void test_boolean()
                               false);
 }
 
+void test_integer()
+{
+    variable alpha(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo(0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+}
+
+void test_number()
+{
+    variable alpha(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo(0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+}
+
+void test_string()
+{
+    variable alpha("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo("bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+}
+
+void test_array_null()
+{
+    variable alpha = variable::array({ variable::null, variable::null });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo = variable::array({ variable::null, variable::null, variable::null });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              true);
+}
+
 void test_array_boolean()
 {
     variable alpha = variable::array({ true, true, true });
@@ -597,11 +637,58 @@ void test_array_boolean()
                               false);
 }
 
+void test_array_integer()
+{
+    variable alpha = variable::array({ 2, 2, 2 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo = variable::array({ 0, 2, 2 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+    variable charlie = variable::array({ 0, 0, 0 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), charlie.begin()),
+                              false);
+}
+
+void test_array_number()
+{
+    variable alpha = variable::array({ 3.0, 3.0, 3.0 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo = variable::array({ 0, 3.0, 3.0 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+    variable charlie = variable::array({ 0, 0, 0 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), charlie.begin()),
+                              false);
+}
+
+void test_array_string()
+{
+    variable alpha = variable::array({ "alpha", "alpha", "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo = variable::array({ "bravo", "alpha", "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+    variable charlie = variable::array({ "bravo", "bravo", "bravo" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), charlie.begin()),
+                              false);
+}
+
 void run()
 {
     test_null();
     test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+
+    test_array_null();
     test_array_boolean();
+    test_array_integer();
+    test_array_number();
+    test_array_string();
 }
 
 } // namespace equal_suite
