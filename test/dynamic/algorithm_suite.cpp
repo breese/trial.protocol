@@ -187,14 +187,65 @@ void run()
 namespace adjacent_find_suite
 {
 
-void test_null()
+void find_null()
 {
     variable data;
     auto where = std::adjacent_find(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
-void test_array_integer()
+void find_boolean()
+{
+    variable data(true);
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_integer()
+{
+    variable data(2);
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_number()
+{
+    variable data(3.0);
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_string()
+{
+    variable data("alpha");
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_array_null()
+{
+    variable data = variable::array({ variable::null, variable::null, variable::null });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_array_boolean()
+{
+    variable data = variable::array({ false, true, true });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_array_integer()
 {
     variable data = variable::array({ 0, 1, 2, 3, 40, 40, 41, 41, 5 });
     auto where = std::adjacent_find(data.begin(), data.end());
@@ -207,10 +258,177 @@ void test_array_integer()
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
+void find_array_number()
+{
+    variable data = variable::array({ 0.0, 1.0, 2.0, 3.0, 40.0, 40.0, 41.0, 41.0, 5.0 });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 6);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_array_string()
+{
+    variable data = variable::array({ "alpha", "bravo", "bravo" });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_array_mixed()
+{
+    variable data = variable::array({ true, true, 2, 2, 3.0, 3.0, "alpha", "alpha" });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 6);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_map_null()
+{
+    // Only searches values
+    variable data = variable::map(
+        {
+            { "alpha", variable::null },
+            { "bravo", variable::null },
+            { "charlie", variable::null }
+        });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_map_boolean()
+{
+    variable data = variable::map(
+        {
+            { "alpha", false },
+            { "bravo", true },
+            { "charlie", true }
+        });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_map_integer()
+{
+    variable data = variable::map(
+        {
+            { "alpha", 0 },
+            { "bravo", 2 },
+            { "charlie", 2 }
+        });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_map_number()
+{
+    variable data = variable::map(
+        {
+            { "alpha", 3.0 },
+            { "bravo", 3.0 },
+            { "charlie", 0.0 }
+        });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_map_string()
+{
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" },
+            { "charlie", "helium" }
+        });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_map_mixed()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", true },
+            { "charlie", 2 },
+            { "delta", 2 },
+            { "echo", 3.0 },
+            { "foxtrot", 3.0 },
+            { "golf", "hydrogen" },
+            { "hotel", "hydrogen" }
+        });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 6);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
 void run()
 {
-    test_null();
-    test_array_integer();
+    find_null();
+    find_boolean();
+    find_integer();
+    find_number();
+    find_string();
+
+    find_array_null();
+    find_array_boolean();
+    find_array_integer();
+    find_array_number();
+    find_array_string();
+    find_array_mixed();
+
+    find_map_null();
+    find_map_boolean();
+    find_map_integer();
+    find_map_number();
+    find_map_string();
+    find_map_mixed();
 }
 
 } // namespace adjacent_find_suite
