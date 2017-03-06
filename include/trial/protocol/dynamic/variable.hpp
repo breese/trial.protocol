@@ -123,9 +123,14 @@ public:
     variable& operator= (null_type);
     variable& operator= (const string_type::value_type *);
 
+    // Addition / concatenation
+
     variable& operator+= (const variable&);
     variable& operator+= (std::initializer_list<array_type::value_type>);
     variable& operator+= (std::initializer_list<map_type::value_type>);
+
+    template <typename T>
+    friend variable operator+ (const variable&, const T&);
 
     // Accessor
 

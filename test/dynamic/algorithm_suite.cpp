@@ -15,6 +15,172 @@
 using namespace trial::protocol::dynamic;
 
 //-----------------------------------------------------------------------------
+// std::accumulate
+//-----------------------------------------------------------------------------
+
+namespace accumulate_suite
+{
+
+void accumulate_null()
+{
+    variable data;
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::null_type>(), true);
+}
+
+void accumulate_null_with_boolean()
+{
+    variable data;
+    variable result = std::accumulate(data.begin(), data.end(), variable(true));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+}
+
+void accumulate_boolean()
+{
+    variable data(true);
+    variable result = std::accumulate(data.begin(), data.end(), variable(false));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+}
+
+void accumulate_integer()
+{
+    variable data(2);
+    variable result = std::accumulate(data.begin(), data.end(), variable(0));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::integer_type>(), 2);
+}
+
+void accumulate_number()
+{
+    variable data(3.0);
+    variable result = std::accumulate(data.begin(), data.end(), variable(0.0));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::number_type>(), 3.0);
+}
+
+void accumulate_string()
+{
+    variable data("alpha");
+    variable result = std::accumulate(data.begin(), data.end(), variable("prefix"));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::string_type>(), "prefixalpha");
+}
+
+void accumulate_array_null()
+{
+    variable data = variable::array({ variable::null, variable::null });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::null_type>(), true);
+}
+
+void accumulate_array_null_with_boolean()
+{
+    variable data = variable::array({ variable::null, variable::null });
+    variable result = std::accumulate(data.begin(), data.end(), variable(true));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+}
+
+void accumulate_array_boolean()
+{
+    variable data = variable::array({ false, false, true, true });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+}
+
+void accumulate_array_integer()
+{
+    variable data = variable::array({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::integer_type>(), 55);
+}
+
+void accumulate_array_integer_with_number()
+{
+    variable data = variable::array({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    variable result = std::accumulate(data.begin(), data.end(), variable(0.0));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::number_type>(), 55.0);
+}
+
+void accumulate_array_number()
+{
+    variable data = variable::array({ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::number_type>(), 55.0);
+}
+
+void accumulate_array_number_with_integer()
+{
+    variable data = variable::array({ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 });
+    variable result = std::accumulate(data.begin(), data.end(), variable(0));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::integer_type>(), 55);
+}
+
+void accumulate_array_string()
+{
+    variable data = variable::array({ "alpha", "bravo", "charlie" });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::string_type>(), "alphabravocharlie");
+}
+
+void accumulate_array_array()
+{
+    // Array flattening
+    variable data = variable::array({ variable::array({ "alpha", "bravo" }), variable::array({ "charlie", "delta" }) });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::array_type>(), true);
+    variable expect = variable::array({ "alpha", "bravo", "charlie", "delta" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void accumulate_map()
+{
+    // Iterates over values
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" }
+        });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::string_type>(), "hydrogenhelium");
+}
+
+void run()
+{
+    accumulate_null();
+    accumulate_null_with_boolean();
+    accumulate_boolean();
+    accumulate_integer();
+    accumulate_number();
+    accumulate_string();
+
+    accumulate_array_null();
+    accumulate_array_null_with_boolean();
+    accumulate_array_boolean();
+    accumulate_array_integer();
+    accumulate_array_integer_with_number();
+    accumulate_array_number();
+    accumulate_array_number_with_integer();
+    accumulate_array_string();
+    accumulate_array_array();
+
+    accumulate_map();
+}
+
+} // namespace accumulate_suite
+
+//-----------------------------------------------------------------------------
 // std::adjacent_find
 //-----------------------------------------------------------------------------
 
@@ -458,6 +624,7 @@ void run()
 
 int main()
 {
+    accumulate_suite::run();
     adjacent_find_suite::run();
     all_of_suite::run();
     count_suite::run();

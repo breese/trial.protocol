@@ -1103,6 +1103,14 @@ inline variable& variable::operator+= (std::initializer_list<map_type::value_typ
     return *this;
 }
 
+template <typename T>
+variable operator+ (const variable& lhs, const T& rhs)
+{
+    variable result(lhs);
+    result += rhs;
+    return result;
+}
+
 template <typename R>
 variable::operator R() const
 {

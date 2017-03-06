@@ -1465,7 +1465,492 @@ void run()
 } // namespace append_suite
 
 //-----------------------------------------------------------------------------
-// Getter
+// Addition
+//-----------------------------------------------------------------------------
+
+namespace addition_suite
+{
+
+void add_null_with_null()
+{
+    auto data = variable::null + variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+}
+
+void add_null_with_boolean()
+{
+    auto data = variable::null + variable(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+}
+
+void add_null_with_integer()
+{
+    auto data = variable::null + variable(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
+}
+
+void add_null_with_number()
+{
+    auto data = variable::null + variable(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 3.0);
+}
+
+void add_null_with_string()
+{
+    auto data = variable::null + variable("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha");
+}
+
+void add_null_with_array()
+{
+    auto data = variable::null + variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_null_with_map()
+{
+    auto data = variable::null + variable::map({{ "alpha", "hydrogen" }});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    variable expect = variable::map({{ "alpha", "hydrogen" }});
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_boolean_with_null()
+{
+    auto data = variable(true) + variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+}
+
+void add_boolean_with_boolean()
+{
+    auto data = variable(true) + true;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+}
+
+void add_boolean_with_integer()
+{
+    auto data = variable(true) + 2;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+}
+
+void add_boolean_with_number()
+{
+    auto data = variable(true) + 3.0;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+}
+
+void add_boolean_with_string()
+{
+    variable data(false);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable("alpha")),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_boolean_with_array()
+{
+    variable data(false);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::array({ true, "alpha" })),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_boolean_with_map()
+{
+    variable data(false);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::map({{ "alpha", "hydrogen" }})),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_integer_with_null()
+{
+    auto data = variable(2) + variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
+}
+
+void add_integer_with_boolean()
+{
+    auto data = variable(2) + true;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 3);
+}
+
+void add_integer_with_integer()
+{
+    auto data = variable(2) + 2;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 4);
+}
+
+void add_integer_with_number()
+{
+    auto data = variable(2) + 3.0;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+}
+
+void add_integer_with_string()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable("alpha")),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_integer_with_array()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::array({ true, "alpha" })),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_integer_with_map()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::map({{ "alpha", "hydrogen" }})),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_number_with_null()
+{
+    auto data = variable(3.0) + variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 3.0);
+}
+
+void add_number_with_boolean()
+{
+    auto data = variable(3.0) + true;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 4.0);
+}
+
+void add_number_with_integer()
+{
+    auto data = variable(3.0) + 2;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 5.0);
+}
+
+void add_number_with_number()
+{
+    auto data = variable(3.0) + 3.0;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 6.0);
+}
+
+void add_number_with_string()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable("alpha")),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_number_with_array()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::array({ true, "alpha" })),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_number_with_map()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::map({{ "alpha", "hydrogen" }})),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_string_with_null()
+{
+    auto data = variable("alpha") + variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha");
+}
+
+void add_string_with_boolean()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable(true)),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_string_with_integer()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable(2)),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_string_with_number()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable(3.0)),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_string_with_string()
+{
+    auto data = variable("alpha") + variable("-bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha-bravo");
+}
+
+void add_string_with_array()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::array({ true, "alpha" })),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_string_with_map()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::map({{ "alpha", "hydrogen" }})),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_array_with_null()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" }) + variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_array_with_boolean()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" }) + true;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    variable expect = variable::array({ true, 2, 3.0, "alpha", true });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_array_with_integer()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" }) + 4;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    variable expect = variable::array({ true, 2, 3.0, "alpha", 4 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_array_with_number()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" }) + 6.0;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    variable expect = variable::array({ true, 2, 3.0, "alpha", 6.0 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_array_with_string()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" }) + "bravo";
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    variable expect = variable::array({ true, 2, 3.0, "alpha", "bravo" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_array_with_array()
+{
+    variable data = variable::array({ true, 2 }) + variable::array({ 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void add_array_with_map()
+{
+    variable data = variable::array({ true, 2 });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::map({{ "alpha", "hydrogen" }})),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_map_with_null()
+{
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" }
+        }) + variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+}
+
+void add_map_with_boolean()
+{
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" }
+        });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable(true)),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_map_with_integer()
+{
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" }
+        });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable(2)),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_map_with_number()
+{
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" }
+        });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable(3.0)),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_map_with_string()
+{
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" }
+        });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable("alpha")),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_map_with_array()
+{
+    variable data = variable::map(
+        {
+            { "alpha", "hydrogen" },
+            { "bravo", "helium" }
+        });
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(operator+(data, variable::array({ true, 2 })),
+                                    error,
+                                    "incompatible type");
+}
+
+void add_map_with_map()
+{
+    variable data = operator+
+        (variable::map(
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            }),
+         variable::map(
+             {
+                 {"charlie", "lithium"}
+             }));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+}
+
+void run()
+{
+    add_null_with_null();
+    add_null_with_boolean();
+    add_null_with_integer();
+    add_null_with_number();
+    add_null_with_string();
+    add_null_with_array();
+    add_null_with_map();
+
+    add_boolean_with_null();
+    add_boolean_with_boolean();
+    add_boolean_with_integer();
+    add_boolean_with_number();
+    add_boolean_with_string();
+    add_boolean_with_array();
+    add_boolean_with_map();
+
+    add_integer_with_null();
+    add_integer_with_boolean();
+    add_integer_with_integer();
+    add_integer_with_number();
+    add_integer_with_string();
+    add_integer_with_array();
+    add_integer_with_map();
+
+    add_number_with_null();
+    add_number_with_boolean();
+    add_number_with_integer();
+    add_number_with_number();
+    add_number_with_string();
+    add_number_with_array();
+    add_number_with_map();
+
+    add_string_with_null();
+    add_string_with_boolean();
+    add_string_with_integer();
+    add_string_with_number();
+    add_string_with_string();
+    add_string_with_array();
+    add_string_with_map();
+
+    add_array_with_null();
+    add_array_with_boolean();
+    add_array_with_integer();
+    add_array_with_number();
+    add_array_with_string();
+    add_array_with_array();
+    add_array_with_map();
+
+    add_map_with_null();
+    add_map_with_boolean();
+    add_map_with_integer();
+    add_map_with_number();
+    add_map_with_string();
+    add_map_with_array();
+    add_map_with_map();
+}
+
+} // namespace addition_suite
+
+//-----------------------------------------------------------------------------
+// Accessor
 //-----------------------------------------------------------------------------
 
 namespace value_suite
@@ -2219,6 +2704,7 @@ int main()
     move_suite::run();
     assign_suite::run();
     append_suite::run();
+    addition_suite::run();
 
     value_suite::run();
     subscript_suite::run();
