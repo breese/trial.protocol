@@ -932,11 +932,31 @@ void run()
 namespace iota_suite
 {
 
-void test_array()
+void test_array_boolean()
 {
-    variable data = variable::array(4, 0);
+    variable data = variable::array(4, variable::null);
+    std::iota(data.begin(), data.end(), false);
+    variable result = variable::array({ false, true, true, true });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 result.begin(), result.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_array_integer()
+{
+    variable data = variable::array(4, variable::null);
     std::iota(data.begin(), data.end(), 1);
-    variable result = variable::array({1, 2, 3, 4});
+    variable result = variable::array({ 1, 2, 3, 4 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 result.begin(), result.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_array_number()
+{
+    variable data = variable::array(4, variable::null);
+    std::iota(data.begin(), data.end(), 1.0);
+    variable result = variable::array({ 1.0, 2.0, 3.0, 4.0 });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  result.begin(), result.end(),
                                  std::equal_to<variable>());
@@ -944,7 +964,9 @@ void test_array()
 
 void run()
 {
-    test_array();
+    test_array_boolean();
+    test_array_integer();
+    test_array_number();
 }
 
 } // namespace iota_suite
