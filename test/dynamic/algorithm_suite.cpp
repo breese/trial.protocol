@@ -798,6 +798,134 @@ void run()
 } // namespace find_suite
 
 //-----------------------------------------------------------------------------
+// std::find_if
+//-----------------------------------------------------------------------------
+
+namespace find_if_suite
+{
+
+void test_null()
+{
+    variable data;
+    // Cannot iterate over null, so nothing is found
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == variable::null; }) == data.end());
+}
+
+void test_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == false; }) == data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == true; }) != data.end());
+}
+
+void test_integer()
+{
+    variable data(1);
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 0; }) == data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 1; }) != data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 2; }) == data.end());
+}
+
+void test_number()
+{
+    variable data(1.0);
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 0.0; }) == data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 1.0; }) != data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 2.0; }) == data.end());
+}
+
+void test_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == ""; }) == data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == "alpha"; }) != data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == "bravo"; }) == data.end());
+}
+
+void test_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == false; }) == data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == true; })),
+                              0);
+
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 42; }) == data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == 2; })),
+                              1);
+
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == 43.0; }) == data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == 3.0; })),
+                              2);
+
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == ""; }) == data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == "alpha"; })),
+                              3);
+}
+
+void test_map()
+{
+    variable data = variable::map(
+        {
+            {"alpha", "hydrogen"},
+            {"bravo", "helium"},
+            {"charlie", "lithium"}
+        });
+    // Iterator dereferences value, not key
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == "alpha"; }) == data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == "hydrogen"; })),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == "helium"; })),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == "lithium"; })),
+                              2);
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array();
+    test_map();
+}
+
+} // namespace find_if_suite
+
+//-----------------------------------------------------------------------------
 // std::iota
 //-----------------------------------------------------------------------------
 
@@ -935,6 +1063,7 @@ int main()
     count_suite::run();
     equal_suite::run();
     find_suite::run();
+    find_if_suite::run();
     iota_suite::run();
     max_element_suite::run();
     search_suite::run();
