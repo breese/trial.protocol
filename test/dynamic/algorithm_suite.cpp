@@ -1148,6 +1148,125 @@ void run()
 } // namespace search_suite
 
 //-----------------------------------------------------------------------------
+// std::unique
+//-----------------------------------------------------------------------------
+
+namespace unique_suite
+{
+
+void test_null()
+{
+    variable data;
+    auto end = std::unique(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 0);
+}
+
+void test_boolean()
+{
+    variable data(true);
+    auto end = std::unique(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 1);
+}
+
+void test_integer()
+{
+    variable data(2);
+    auto end = std::unique(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 1);
+}
+
+void test_number()
+{
+    variable data(3.0);
+    auto end = std::unique(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 1);
+}
+
+void test_string()
+{
+    variable data("alpha");
+    auto end = std::unique(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 1);
+}
+
+void test_array_null()
+{
+    variable data = variable::array({ variable::null, variable::null, variable::null });
+    auto end = std::unique(data.begin(), data.end());
+    variable expect = variable::array({ variable::null });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_array_boolean()
+{
+    variable data = variable::array({ false, true, false, false, true });
+    auto end = std::unique(data.begin(), data.end());
+    variable expect = variable::array({ false, true, false, true });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_array_integer()
+{
+    variable data = variable::array({ 0, 0, 2, 1, 1 });
+    auto end = std::unique(data.begin(), data.end());
+    variable expect = variable::array({ 0, 2, 1 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_array_number()
+{
+    variable data = variable::array({ 0.0, 0.0, 2.0, 1.0, 1.0 });
+    auto end = std::unique(data.begin(), data.end());
+    variable expect = variable::array({ 0.0, 2.0, 1.0 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_array_arithmetic()
+{
+    variable data = variable::array({ false, 0, 0.0, 2, 1.0, 1 });
+    auto end = std::unique(data.begin(), data.end());
+    variable expect = variable::array({ false, 2, 1.0 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void test_array_string()
+{
+    variable data = variable::array({ "alpha", "alpha", "bravo", "bravo" });
+    auto end = std::unique(data.begin(), data.end());
+    variable expect = variable::array({ "alpha", "bravo" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array_null();
+    test_array_boolean();
+    test_array_integer();
+    test_array_number();
+    test_array_arithmetic();
+    test_array_string();
+}
+
+} // namespace unique_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -1164,6 +1283,7 @@ int main()
     is_sorted_suite::run();
     max_element_suite::run();
     search_suite::run();
+    unique_suite::run();
 
     return boost::report_errors();
 }
