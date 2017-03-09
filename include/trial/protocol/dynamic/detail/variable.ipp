@@ -839,8 +839,6 @@ bool variable::iterator_type<T>::operator!= (const iterator_type<T>& other)
 // variable
 //-----------------------------------------------------------------------------
 
-constexpr variable::null_type variable::null;
-
 inline variable::variable()
     : storage(null)
 {
@@ -1109,6 +1107,12 @@ variable operator+ (const variable& lhs, const T& rhs)
     variable result(lhs);
     result += rhs;
     return result;
+}
+
+template <typename T>
+variable operator+ (variable::null_type, const T& rhs)
+{
+    return variable() + rhs;
 }
 
 template <typename R>

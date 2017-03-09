@@ -36,7 +36,7 @@ public:
     using const_reference = std::add_const<reference>::type;
     using size_type = std::size_t;
 
-    struct null_type {};
+    enum null_type { null };
     using boolean_type = bool;
     using integer_type = std::intmax_t;
     using number_type = double;
@@ -92,8 +92,6 @@ public:
     using iterator = iterator_type<variable>;
     using const_iterator = iterator_type<const variable>;
 
-    static constexpr null_type null{};
-
     // Constructor
     variable(const variable&);
     variable(variable&&);
@@ -131,6 +129,8 @@ public:
 
     template <typename T>
     friend variable operator+ (const variable&, const T&);
+    template <typename T>
+    friend variable operator+ (null_type, const T&);
 
     // Accessor
 
