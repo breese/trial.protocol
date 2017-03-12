@@ -961,12 +961,16 @@ variable variable::array(size_type size, const T& value)
 
 inline variable variable::map()
 {
-    return map_type{};
+    variable result;
+    result = map_type{};
+    return result;
 }
 
 inline variable variable::map(std::initializer_list<map_type::value_type> init)
 {
-    return map_type(init.begin(), init.end());
+    variable result;
+    result = map_type(init.begin(), init.end());
+    return result;
 }
 
 inline variable& variable::operator= (const variable& other)

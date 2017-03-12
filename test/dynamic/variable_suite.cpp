@@ -220,19 +220,6 @@ void test_array_with_size()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
-void test_map_with_map()
-{
-    std::map<std::string, variable> map{ {"alpha", 1} };
-    variable data(map);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
-}
-
 void test_map_with_string()
 {
     variable data(std::string("alpha"), 1);
@@ -322,7 +309,6 @@ void run()
     test_array_by_name_empty();
     test_array_with_size();
 
-    test_map_with_map();
     test_map_with_string();
     test_map_with_literal();
     test_map_by_name();
@@ -2611,8 +2597,7 @@ void test_array()
 
 void test_map()
 {
-    variable::map_type map{ {"alpha", 1} };
-    variable data(map);
+    variable data = variable::map({ {"alpha", 1} });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
     TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
@@ -2675,14 +2660,17 @@ void test_string()
 
 void test_array()
 {
-    variable data = variable::array({ 1, 2 });
+    variable data = variable::array();
+    TRIAL_PROTOCOL_TEST(data.empty());
+    data = variable::array({ 1, 2 });
     TRIAL_PROTOCOL_TEST(!data.empty());
 }
 
 void test_map()
 {
-    variable::map_type map{ {"alpha", 1} };
-    variable data(map);
+    variable data = variable::map();
+    TRIAL_PROTOCOL_TEST(data.empty());
+    data = variable::map({ {"alpha", 1} });
     TRIAL_PROTOCOL_TEST(!data.empty());
 }
 
@@ -2753,8 +2741,7 @@ void test_array_with_size()
 
 void test_map()
 {
-    variable::map_type map{ {"alpha", 1} };
-    variable data(map);
+    variable data = variable::map({ {"alpha", 1} });
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
 }
 
