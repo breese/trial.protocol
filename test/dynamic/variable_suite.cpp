@@ -160,8 +160,8 @@ void test_string_with_literal()
 
 void test_array_with_vector()
 {
-    std::vector<variable> array = { 1, 2 };
-    variable data(array);
+    std::vector<int> input = { 1, 2 };
+    variable data(input.begin(), input.end());
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
@@ -2601,8 +2601,7 @@ void test_string()
 
 void test_array()
 {
-    variable::array_type array = { 1, 2 };
-    variable data(array);
+    variable data = variable::array({ 1, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
     TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
@@ -2676,8 +2675,7 @@ void test_string()
 
 void test_array()
 {
-    variable::array_type array = { 1, 2 };
-    variable data(array);
+    variable data = variable::array({ 1, 2 });
     TRIAL_PROTOCOL_TEST(!data.empty());
 }
 

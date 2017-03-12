@@ -83,15 +83,13 @@ void test_const_string()
 
 void test_array()
 {
-    variable::array_type array = { true, 1, 2.0, "alpha" };
-    variable data(array);
+    variable data = variable::array({ true, 1, 2.0, "alpha" });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
 }
 
 void test_const_array()
 {
-    variable::array_type array = { true, 1, 2.0, "alpha" };
-    const variable data(array);
+    const variable data = variable::array({ true, 1, 2.0, "alpha" });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
 }
 
@@ -142,8 +140,7 @@ namespace pre_increment_suite
 
 void test_array()
 {
-    variable::array_type array = { true, 1, 2.0, "alpha" };
-    variable data(array);
+    variable data = variable::array({ true, 1, 2.0, "alpha" });
     variable::iterator where = data.begin();
     TRIAL_PROTOCOL_TEST(*where == variable(true));
     ++where;
@@ -175,8 +172,7 @@ namespace post_increment_suite
 
 void test_array()
 {
-    variable::array_type array = { true, 1, 2.0, "alpha" };
-    variable data(array);
+    variable data = variable::array({ true, 1, 2.0, "alpha" });
     variable::iterator where = data.begin();
     TRIAL_PROTOCOL_TEST(*where == variable(true));
     variable::iterator result = where++;
@@ -242,15 +238,13 @@ void test_string()
 
 void test_array()
 {
-    variable::array_type array = { true, 1, 2.0, "alpha" };
-    variable data(array);
+    variable data = variable::array({ true, 1, 2.0, "alpha" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 4);
 }
 
 void test_array_nulls()
 {
-    variable::array_type array = { variable::null, variable::null, variable::null };
-    variable data(array);
+    variable data = variable::array({ variable::null, variable::null, variable::null });
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 3);
 }
 
@@ -343,8 +337,7 @@ void test_string()
 
 void test_array()
 {
-    variable::array_type array = { true, 1, 2.0, "alpha" };
-    variable data(array);
+    variable data = variable::array({ true, 1, 2.0, "alpha" });
     variable::size_type size = 0;
     for (const auto& value : data)
     {
@@ -355,8 +348,7 @@ void test_array()
 
 void test_array_nulls()
 {
-    variable::array_type array = { variable::null, variable::null, variable::null };
-    variable data(array);
+    variable data = variable::array({ variable::null, variable::null, variable::null });
     variable::size_type size = 0;
     for (const auto& value : data)
     {
