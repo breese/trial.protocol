@@ -109,8 +109,6 @@ public:
     template <typename T> static variable array(size_type, const T&);
     // Map constructor
     variable(variable::map_type) = delete;
-    template <typename T> variable(const string_type&, T);
-    template <typename T> variable(const string_type::value_type *, T);
     static variable map();
     static variable map(std::initializer_list<map_type::value_type>);
  

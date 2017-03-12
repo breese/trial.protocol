@@ -865,7 +865,7 @@ void test_map_equal_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::map(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::map(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::array({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::map({ {"alpha", 1} }), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable::map(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::map(), true);

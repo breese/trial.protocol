@@ -220,30 +220,6 @@ void test_array_with_size()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
-void test_map_with_string()
-{
-    variable data(std::string("alpha"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
-}
-
-void test_map_with_literal()
-{
-    variable data("alpha", 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
-}
-
 void test_map_by_name()
 {
     variable data = variable::map(
@@ -309,8 +285,6 @@ void run()
     test_array_by_name_empty();
     test_array_with_size();
 
-    test_map_with_string();
-    test_map_with_literal();
     test_map_by_name();
     test_map_by_name_empty();
 

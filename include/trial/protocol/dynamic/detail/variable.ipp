@@ -915,18 +915,6 @@ variable::variable(ForwardIterator begin, ForwardIterator end)
 {
 }
 
-template <typename T>
-variable::variable(const string_type& key, T value)
-    : storage(map_type{std::make_pair(key, std::move(value))})
-{
-}
-
-template <typename T>
-variable::variable(const string_type::value_type *key, T value)
-    : storage(map_type{std::make_pair(key, std::move(value))})
-{
-}
-
 inline variable::variable(null_type)
     : storage(null)
 {
