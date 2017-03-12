@@ -909,12 +909,6 @@ variable::variable(T value)
 {
 }
 
-template <typename ForwardIterator>
-variable::variable(ForwardIterator begin, ForwardIterator end)
-    : storage(array_type(begin, end))
-{
-}
-
 inline variable::variable(null_type)
     : storage(null)
 {
@@ -929,6 +923,14 @@ inline variable variable::array()
 {
     variable result;
     result = array_type{};
+    return result;
+}
+
+template <typename ForwardIterator>
+variable variable::array(ForwardIterator begin, ForwardIterator end)
+{
+    variable result;
+    result = array_type(begin, end);
     return result;
 }
 

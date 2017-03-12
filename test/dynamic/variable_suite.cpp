@@ -161,7 +161,7 @@ void test_string_with_literal()
 void test_array_with_vector()
 {
     std::vector<int> input = { 1, 2 };
-    variable data(input.begin(), input.end());
+    variable data = variable::array(input.begin(), input.end());
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
@@ -174,7 +174,7 @@ void test_array_with_vector()
 void test_array_with_iterator()
 {
     variable::array_type array = { 1, 2 };
-    variable data(array.begin(), array.end());
+    variable data = variable::array(array.begin(), array.end());
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);

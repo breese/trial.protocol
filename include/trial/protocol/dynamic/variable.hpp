@@ -103,7 +103,7 @@ public:
     variable(const string_type::value_type *);
     // Array constructor
     variable(variable::array_type) = delete;
-    template <typename ForwardIterator> variable(ForwardIterator begin, ForwardIterator end);
+    template <typename ForwardIterator> static variable array(ForwardIterator begin, ForwardIterator end);
     static variable array();
     static variable array(std::initializer_list<array_type::value_type>);
     template <typename T> static variable array(size_type, const T&);
