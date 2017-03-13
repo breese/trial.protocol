@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <algorithm>
+#include <iterator>
 #include <trial/protocol/detail/lightweight_test.hpp>
 #include <trial/protocol/dynamic/variable.hpp>
 
@@ -461,6 +462,140 @@ void run()
 }
 
 } // namespace all_of_suite
+
+//-----------------------------------------------------------------------------
+// std::copy
+//-----------------------------------------------------------------------------
+
+namespace copy_suite
+{
+
+void copy_null_to_array()
+{
+    variable data;
+    variable result = variable::array(0, variable::null);
+    std::copy(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 0);
+}
+
+void copy_boolean_to_array()
+{
+    variable data(true);
+    variable result = variable::array(1, variable::null);
+    std::copy(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == true);
+}
+
+void copy_integer_to_array()
+{
+    variable data(2);
+    variable result = variable::array(1, variable::null);
+    std::copy(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == 2);
+}
+
+void copy_number_to_array()
+{
+    variable data(3.0);
+    variable result = variable::array(1, variable::null);
+    std::copy(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == 3.0);
+}
+
+void copy_string_to_array()
+{
+    variable data("alpha");
+    variable result = variable::array(1, variable::null);
+    std::copy(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == "alpha");
+}
+
+void copy_array_to_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable result = variable::array(data.size(), variable::null);
+    std::copy(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 result.begin(), result.end(),
+                                 std::equal_to<variable>());
+}
+
+void copy_null_to_vector()
+{
+    variable data;
+    std::vector<variable> result;
+    std::copy(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 0);
+}
+
+void copy_boolean_to_vector()
+{
+    variable data(true);
+    std::vector<variable> result;
+    std::copy(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == true);
+}
+
+void copy_integer_to_vector()
+{
+    variable data(2);
+    std::vector<variable> result;
+    std::copy(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == 2);
+}
+
+void copy_number_to_vector()
+{
+    variable data(3.0);
+    std::vector<variable> result;
+    std::copy(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == 3.0);
+}
+
+void copy_string_to_vector()
+{
+    variable data("alpha");
+    std::vector<variable> result;
+    std::copy(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == "alpha");
+}
+
+void copy_array_to_vector()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    std::vector<variable> result;
+    std::copy(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 result.begin(), result.end(),
+                                 std::equal_to<variable>());
+}
+
+void run()
+{
+    copy_null_to_array();
+    copy_boolean_to_array();
+    copy_integer_to_array();
+    copy_number_to_array();
+    copy_string_to_array();
+    copy_array_to_array();
+
+    copy_null_to_vector();
+    copy_boolean_to_vector();
+    copy_integer_to_vector();
+    copy_number_to_vector();
+    copy_string_to_vector();
+    copy_array_to_vector();
+}
+
+} // namespace copy_suite
 
 //-----------------------------------------------------------------------------
 // std::count
@@ -1275,6 +1410,7 @@ int main()
     accumulate_suite::run();
     adjacent_find_suite::run();
     all_of_suite::run();
+    copy_suite::run();
     count_suite::run();
     equal_suite::run();
     find_suite::run();
