@@ -11,4 +11,5 @@
 trial_add_test(dynamic_variable_suite variable_suite.cpp)
 trial_add_test(dynamic_variable_comparison_suite variable_comparison_suite.cpp)
 trial_add_test(dynamic_variable_iterator_suite variable_iterator_suite.cpp)
+trial_add_test(dynamic_variable_io_suite variable_io_suite.cpp)
 trial_add_test(dynamic_algorithm_suite algorithm_suite.cpp)
