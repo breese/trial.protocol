@@ -922,7 +922,7 @@ inline variable::variable(const string_type::value_type *value)
 inline variable variable::array()
 {
     variable result;
-    result = array_type{};
+    result.storage = array_type{};
     return result;
 }
 
@@ -930,14 +930,14 @@ template <typename ForwardIterator>
 variable variable::array(ForwardIterator begin, ForwardIterator end)
 {
     variable result;
-    result = array_type(begin, end);
+    result.storage = array_type(begin, end);
     return result;
 }
 
 inline variable variable::array(std::initializer_list<array_type::value_type> init)
 {
     variable result;
-    result = array_type(init.begin(), init.end());
+    result.storage = array_type(init.begin(), init.end());
     return result;
 }
 
@@ -945,21 +945,21 @@ template <typename T>
 variable variable::array(size_type size, const T& value)
 {
     variable result;
-    result = array_type(size, variable(value));
+    result.storage = array_type(size, variable(value));
     return result;
 }
 
 inline variable variable::map()
 {
     variable result;
-    result = map_type{};
+    result.storage = map_type{};
     return result;
 }
 
 inline variable variable::map(std::initializer_list<map_type::value_type> init)
 {
     variable result;
-    result = map_type(init.begin(), init.end());
+    result.storage = map_type(init.begin(), init.end());
     return result;
 }
 
