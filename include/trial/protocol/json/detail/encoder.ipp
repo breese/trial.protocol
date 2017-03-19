@@ -328,9 +328,8 @@ basic_encoder<CharT>::string_value(const T& data)
     }
 
     buffer->write(traits<CharT>::alpha_quote);
-    for (typename T::const_iterator it = data.begin();
-         it != data.end();
-         ++it)
+    typename T::const_iterator it = data.begin();
+    while (it != data.end())
     {
         switch (*it)
         {
@@ -379,9 +378,69 @@ basic_encoder<CharT>::string_value(const T& data)
             break;
 
         default:
-            buffer->write(*it);
+            // Replace illegal UTF-8 sequences with question mark
+
+            // The Unicode Standard, Version 7.0 - Core Specification, Table 3-6.
+
+            if ((*it & 0x80) == 0x00)
+            {
+                // 0xxxxxxx
+                buffer->write(*it);
+                break;
+            }
+            else if ((*it & 0xE0) == 0xC0)
+            {
+                // 110xxxxx
+                typename T::value_type first = *it;
+                if (++it == data.end())
+                {
+                    if (write(traits<CharT>::alpha_question_mark) == 0)
+                        return 0;
+                    continue;
+                }
+                if ((*it & 0xC0) == 0x80)
+                {
+                    // 110xxxxx 10xxxxxx
+                    buffer->write(first);
+                    buffer->write(*it);
+                    break;
+                 }
+            }
+            else if ((*it & 0xF0) == 0xE0)
+            {
+                // 1110xxxx
+                typename T::value_type first = *it;
+                if (++it == data.end())
+                {
+                    if (write(traits<CharT>::alpha_question_mark) == 0)
+                        return 0;
+                    continue;
+                }
+                if ((*it & 0xC0) == 0x80)
+                {
+                    // 1110xxxx 10xxxxxx
+                    typename T::value_type second = *it;
+                    if (++it == data.end())
+                    {
+                        if (write(traits<CharT>::alpha_question_mark) == 0)
+                            return 0;
+                        continue;
+                    }
+                    if ((*it & 0xC0) == 0x80)
+                    {
+                        // 1110xxxx 10xxxxxx 10xxxxxx
+                        buffer->write(first);
+                        buffer->write(second);
+                        buffer->write(*it);
+                        break;
+                    }
+                }
+            }
+            if (write(traits<CharT>::alpha_question_mark) == 0)
+                return 0;
             break;
         }
+        ++it;
     }
     buffer->write(traits<CharT>::alpha_quote);
 

@@ -75,6 +75,7 @@ public:
     BOOST_STATIC_CONSTANT(value_type, alpha_8 = '8');
     BOOST_STATIC_CONSTANT(value_type, alpha_9 = '9');
     BOOST_STATIC_CONSTANT(value_type, alpha_colon = ':');
+    BOOST_STATIC_CONSTANT(value_type, alpha_question_mark = '?');
     BOOST_STATIC_CONSTANT(value_type, alpha_A = 'A');
     BOOST_STATIC_CONSTANT(value_type, alpha_E = 'E');
     BOOST_STATIC_CONSTANT(value_type, alpha_a = 'a');
@@ -141,6 +142,7 @@ public:
     BOOST_STATIC_CONSTANT(value_type, alpha_8 = '8');
     BOOST_STATIC_CONSTANT(value_type, alpha_9 = '9');
     BOOST_STATIC_CONSTANT(value_type, alpha_colon = ':');
+    BOOST_STATIC_CONSTANT(value_type, alpha_question_mark = '?');
     BOOST_STATIC_CONSTANT(value_type, alpha_A = 'A');
     BOOST_STATIC_CONSTANT(value_type, alpha_E = 'E');
     BOOST_STATIC_CONSTANT(value_type, alpha_a = 'a');

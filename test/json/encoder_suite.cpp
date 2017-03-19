@@ -654,6 +654,170 @@ void test_escape_tab()
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\\t\"");
 }
 
+void sanitize_01111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\x7F"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\x7F\"");
+}
+
+void sanitize_10000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\x80"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_10111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xBF"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000()
+{
+    // Missing one character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000_01111111()
+{
+    // Invalid second character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\x7F"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000_10000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\x80"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xC0\x80\"");
+}
+
+void sanitize_11000000_10111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\xBF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xC0\xBF\"");
+}
+
+void sanitize_11000000_11000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\xC0"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000_11111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\xFF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_01111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x7F"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000()
+{
+    // Missing third character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10111111()
+{
+    // Missing third character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\xBF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_11000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\xC0"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_11111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\xFF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000_01111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\x7F"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000_10000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\x80"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xE0\x80\x80\"");
+}
+
+void sanitize_11100000_10000000_10111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\xBF"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xE0\x80\xBF\"");
+}
+
+void sanitize_11100000_10000000_11000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\xC0"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000_11111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\xFF"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
 void run()
 {
     test_literal_empty();
@@ -661,6 +825,7 @@ void run()
     test_space();
     test_alpha();
     test_alpha_bravo();
+
     test_escape_quote();
     test_escape_reverse_solidus();
     test_escape_solidus();
@@ -669,6 +834,27 @@ void run()
     test_escape_newline();
     test_escape_carriage_return();
     test_escape_tab();
+
+    sanitize_01111111();
+    sanitize_10000000();
+    sanitize_10111111();
+    sanitize_11000000();
+    sanitize_11000000_01111111();
+    sanitize_11000000_10000000();
+    sanitize_11000000_10111111();
+    sanitize_11000000_11000000();
+    sanitize_11000000_11111111();
+    sanitize_11100000();
+    sanitize_11100000_01111111();
+    sanitize_11100000_10000000();
+    sanitize_11100000_10111111();
+    sanitize_11100000_11000000();
+    sanitize_11100000_11111111();
+    sanitize_11100000_10000000_01111111();
+    sanitize_11100000_10000000_10000000();
+    sanitize_11100000_10000000_10111111();
+    sanitize_11100000_10000000_11000000();
+    sanitize_11100000_10000000_11111111();
 }
 
 } // namespace string_suite
