@@ -13,7 +13,13 @@
 
 #include <boost/version.hpp>
 
-#if BOOST_VERSION < 106100
+#if !defined(TRIAL_PROTOCOL_USE_BOOST_STRING_REF)
+# if BOOST_VERSION < 106100
+#  define TRIAL_PROTOCOL_USE_BOOST_STRING_REF 1
+# endif
+#endif
+
+#if TRIAL_PROTOCOL_USE_BOOST_STRING_REF
 #include <boost/utility/string_ref.hpp>
 #else
 #include <boost/utility/string_view.hpp>
@@ -26,7 +32,7 @@ namespace protocol
 namespace detail
 {
 
-#if BOOST_VERSION < 106100
+#if TRIAL_PROTOCOL_USE_BOOST_STRING_REF
 template<class CharT, typename Traits = std::char_traits<CharT>>
 using basic_string_view = boost::basic_string_ref<CharT, Traits>;
 #else
