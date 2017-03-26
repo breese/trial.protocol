@@ -67,6 +67,8 @@ public:
         iterator_type operator++ ();
         iterator_type operator++ (int);
 
+        iterator_type operator+ (difference_type) const;
+
         reference operator* ();
         pointer operator-> ();
 
@@ -77,6 +79,8 @@ public:
         bool operator!= (const iterator_type<T>&);
 
     private:
+        friend class variable;
+
         pointer scope;
 
         using array_iterator = typename std::conditional<std::is_const<T>::value,
@@ -127,7 +131,7 @@ public:
     variable& operator+= (std::initializer_list<map_type::value_type>);
 
     template <typename T>
-    friend variable operator+ (const variable&, const T&);
+    variable operator+ (const T&);
     template <typename T>
     friend variable operator+ (null_type, const T&);
 
@@ -149,9 +153,11 @@ public:
 
     template <typename T> bool is() const;
 
-    void clear();
     bool empty() const;
     size_type size() const;
+
+    void clear();
+    iterator erase(iterator);
 
     // Iteration
 

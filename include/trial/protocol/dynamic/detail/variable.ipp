@@ -745,6 +745,32 @@ auto variable::iterator_type<T>::operator++ (int) -> iterator_type
 }
 
 template <typename T>
+auto variable::iterator_type<T>::operator+ (difference_type n) const -> iterator_type
+{
+    iterator_type result(*this);
+
+    switch (scope->storage.which())
+    {
+    case traits<null_type>::value:
+    case traits<boolean_type>::value:
+    case traits<integer_type>::value:
+    case traits<number_type>::value:
+    case traits<string_type>::value:
+        result.current += n;
+        break;
+
+    case traits<array_type>::value:
+        result.current.template get<array_iterator>() += n;
+        break;
+
+    case traits<map_type>::value:
+        result.current.template get<map_iterator>() += n;
+        break;
+    }
+    return result;
+}
+
+template <typename T>
 auto variable::iterator_type<T>::operator* () -> reference
 {
     return value();
@@ -1102,9 +1128,9 @@ inline variable& variable::operator+= (std::initializer_list<map_type::value_typ
 }
 
 template <typename T>
-variable operator+ (const variable& lhs, const T& rhs)
+variable variable::operator+ (const T& rhs)
 {
-    variable result(lhs);
+    variable result(*this);
     result += rhs;
     return result;
 }
@@ -1216,34 +1242,6 @@ bool variable::is() const
     return storage.which() == traits<typename overloader<T>::type>::value;
 }
 
-inline void variable::clear()
-{
-    switch (storage.which())
-    {
-    case traits<null_type>::value:
-        storage = null;
-        break;
-    case traits<boolean_type>::value:
-        storage = boolean_type{};
-        break;
-    case traits<integer_type>::value:
-        storage = integer_type{};
-        break;
-    case traits<number_type>::value:
-        storage = number_type{};
-        break;
-    case traits<string_type>::value:
-        storage.get<string_type>().clear();
-        break;
-    case traits<array_type>::value:
-        storage.get<array_type>().clear();
-        break;
-    case traits<map_type>::value:
-        storage.get<map_type>().clear();
-        break;
-    }
-}
-
 inline bool variable::empty() const
 {
     switch (storage.which())
@@ -1284,6 +1282,52 @@ inline auto variable::size() const -> size_type
     }
     assert(false);
     throw dynamic::error(incompatible_type);
+}
+
+inline void variable::clear()
+{
+    switch (storage.which())
+    {
+    case traits<null_type>::value:
+        storage = null;
+        break;
+    case traits<boolean_type>::value:
+        storage = boolean_type{};
+        break;
+    case traits<integer_type>::value:
+        storage = integer_type{};
+        break;
+    case traits<number_type>::value:
+        storage = number_type{};
+        break;
+    case traits<string_type>::value:
+        storage.get<string_type>().clear();
+        break;
+    case traits<array_type>::value:
+        storage.get<array_type>().clear();
+        break;
+    case traits<map_type>::value:
+        storage.get<map_type>().clear();
+        break;
+    }
+}
+
+inline auto variable::erase(iterator where) -> iterator
+{
+    switch (storage.which())
+    {
+    case traits<array_type>::value:
+        where.current =
+            storage.get<array_type>().erase(where.current.template get<iterator::array_iterator>());
+        break;
+
+    case traits<map_type>::value:
+        where.current =
+            storage.get<map_type>().erase(where.current.template get<iterator::map_iterator>());
+        break;
+    }
+    // The other types are unerasable
+    return where;
 }
 
 inline auto variable::begin() & -> iterator
