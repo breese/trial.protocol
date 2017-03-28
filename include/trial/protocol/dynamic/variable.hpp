@@ -60,6 +60,10 @@ public:
         iterator_type(const iterator_type&);
         iterator_type(iterator_type&&);
         iterator_type(pointer, bool = true);
+        // iterator is convertible to const_iterator
+        template <typename U = T>
+        iterator_type(const iterator_type<typename std::remove_const<U>::type>& other,
+                      typename std::enable_if<std::is_const<U>::value, pointer>::type = 0);
 
         iterator_type& operator= (const iterator_type&);
         iterator_type& operator= (iterator_type&&);
@@ -81,16 +85,19 @@ public:
     private:
         friend class variable;
 
-        pointer scope;
-
         using array_iterator = typename std::conditional<std::is_const<T>::value,
                                                          array_type::const_iterator,
                                                          array_type::iterator>::type;
         using map_iterator = typename std::conditional<std::is_const<T>::value,
                                                        map_type::const_iterator,
                                                        map_type::iterator>::type;
+        using small_union = protocol::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator>;
 
-        protocol::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator> current;
+        iterator_type(pointer p, const small_union& su)
+            : scope(p), current(su) {}
+
+        pointer scope;
+        small_union current;
     };
 
     using iterator = iterator_type<variable>;

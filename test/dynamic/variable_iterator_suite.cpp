@@ -111,6 +111,16 @@ void test_const_map()
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
 }
 
+void convert_to_const()
+{
+    variable data = variable::array({ true, 1, 2.0, "alpha" });
+    // Conversion from iterator to const_iterator
+    variable::const_iterator begin = data.begin();
+    variable::const_iterator end = data.end();
+    TRIAL_PROTOCOL_TEST(begin != end);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(begin, end), 4);
+}
+
 void run()
 {
     test_null();
@@ -127,6 +137,7 @@ void run()
     test_const_array();
     test_map();
     test_const_map();
+    convert_to_const();
 }
 
 } // namespace begin_suite

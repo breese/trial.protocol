@@ -697,6 +697,27 @@ variable::iterator_type<T>::iterator_type(pointer p,
 }
 
 template <typename T>
+template <typename U>
+variable::iterator_type<T>::iterator_type(const iterator_type<typename std::remove_const<U>::type>& other,
+                                          typename std::enable_if<std::is_const<U>::value, pointer>::type)
+    : scope(other.scope),
+      current(pointer(nullptr))
+{
+    switch (other.current.which())
+    {
+    case small_union::template index<pointer>::value:
+        current = other.current.template get<pointer>();
+        break;
+    case small_union::template index<array_iterator>::value:
+        current = other.current.template get<array_iterator>();
+        break;
+    case small_union::template index<map_iterator>::value:
+        current = other.current.template get<map_iterator>();
+        break;
+    }
+}
+
+template <typename T>
 auto variable::iterator_type<T>::operator= (const iterator_type& other) -> iterator_type&
 {
     scope = other.scope;
