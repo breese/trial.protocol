@@ -93,8 +93,10 @@ public:
                                                        map_type::iterator>::type;
         using small_union = protocol::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator>;
 
-        iterator_type(pointer p, const small_union& su)
-            : scope(p), current(su) {}
+        // Conversion from const_iterator to iterator is kept private
+        template <typename U = T>
+        iterator_type(const iterator_type<typename std::add_const<U>::type>& other,
+                      typename std::enable_if<!std::is_const<U>::value, pointer>::type = 0);
 
         pointer scope;
         small_union current;
@@ -164,7 +166,7 @@ public:
     size_type size() const;
 
     void clear();
-    iterator erase(iterator);
+    iterator erase(const_iterator);
 
     // Iteration
 

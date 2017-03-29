@@ -699,9 +699,30 @@ variable::iterator_type<T>::iterator_type(pointer p,
 template <typename T>
 template <typename U>
 variable::iterator_type<T>::iterator_type(const iterator_type<typename std::remove_const<U>::type>& other,
-                                          typename std::enable_if<std::is_const<U>::value, pointer>::type)
+                                          typename std::enable_if<std::is_const<U>::value, pointer>::type nil)
     : scope(other.scope),
-      current(pointer(nullptr))
+      current(nil)
+{
+    switch (other.current.which())
+    {
+    case small_union::template index<pointer>::value:
+        current = other.current.template get<pointer>();
+        break;
+    case small_union::template index<array_iterator>::value:
+        current = other.current.template get<array_iterator>();
+        break;
+    case small_union::template index<map_iterator>::value:
+        current = other.current.template get<map_iterator>();
+        break;
+    }
+}
+
+template <typename T>
+template <typename U>
+variable::iterator_type<T>::iterator_type(const iterator_type<typename std::add_const<U>::type>& other,
+                                          typename std::enable_if<!std::is_const<U>::value, pointer>::type nil)
+    : scope(const_cast<pointer>(other.scope)),
+      current(nil)
 {
     switch (other.current.which())
     {
@@ -1333,22 +1354,24 @@ inline void variable::clear()
     }
 }
 
-inline auto variable::erase(iterator where) -> iterator
+inline auto variable::erase(const_iterator where) -> iterator
 {
+    iterator result = where;
+
     switch (storage.which())
     {
     case traits<array_type>::value:
-        where.current =
+        result.current =
             storage.get<array_type>().erase(where.current.template get<iterator::array_iterator>());
         break;
 
     case traits<map_type>::value:
-        where.current =
+        result.current =
             storage.get<map_type>().erase(where.current.template get<iterator::map_iterator>());
         break;
     }
     // The other types are unerasable
-    return where;
+    return result;
 }
 
 inline auto variable::begin() & -> iterator
