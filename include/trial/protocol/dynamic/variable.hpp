@@ -71,8 +71,6 @@ public:
         iterator_type operator++ ();
         iterator_type operator++ (int);
 
-        iterator_type operator+ (difference_type) const;
-
         reference operator* ();
         pointer operator-> ();
 

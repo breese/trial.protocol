@@ -787,32 +787,6 @@ auto variable::iterator_type<T>::operator++ (int) -> iterator_type
 }
 
 template <typename T>
-auto variable::iterator_type<T>::operator+ (difference_type n) const -> iterator_type
-{
-    iterator_type result(*this);
-
-    switch (scope->storage.which())
-    {
-    case traits<null_type>::value:
-    case traits<boolean_type>::value:
-    case traits<integer_type>::value:
-    case traits<number_type>::value:
-    case traits<string_type>::value:
-        result.current += n;
-        break;
-
-    case traits<array_type>::value:
-        result.current.template get<array_iterator>() += n;
-        break;
-
-    case traits<map_type>::value:
-        result.current.template get<map_iterator>() += n;
-        break;
-    }
-    return result;
-}
-
-template <typename T>
 auto variable::iterator_type<T>::operator* () -> reference
 {
     return value();
