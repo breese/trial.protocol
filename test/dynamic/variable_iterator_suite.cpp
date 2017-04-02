@@ -15,6 +15,152 @@
 using namespace trial::protocol::dynamic;
 
 //-----------------------------------------------------------------------------
+// ForwardIterator concept
+//-----------------------------------------------------------------------------
+
+namespace concept_suite
+{
+
+void iterator_move_constructible()
+{
+    static_assert(std::is_move_constructible<variable::iterator>::value, "is_move_constructible");
+}
+
+void iterator_copy_constructible()
+{
+    static_assert(std::is_copy_constructible<variable::iterator>::value, "is_copy_constructible");
+}
+
+void iterator_copy_assignable()
+{
+    static_assert(std::is_copy_assignable<variable::iterator>::value, "is_copy_assignable");
+}
+
+void iterator_destructible()
+{
+    static_assert(std::is_destructible<variable::iterator>::value, "is_destructible");
+}
+
+void iterator_swappable()
+{
+    using std::swap;
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    variable::iterator b = data.end();
+    swap(a, b);
+    TRIAL_PROTOCOL_TEST(a == data.end());
+    TRIAL_PROTOCOL_TEST(b == data.begin());
+}
+
+void iterator_traits()
+{
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::value_type, variable::iterator::value_type>::value, "value_type");
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::difference_type, variable::iterator::difference_type>::value, "difference_type");
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::reference, variable::iterator::reference>::value, "reference");
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::pointer, variable::iterator::pointer>::value, "pointer");
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::iterator_category, variable::iterator::iterator_category>::value, "iterator_category");
+}
+
+void iterator_dereferenceable()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    variable result = *a;
+    TRIAL_PROTOCOL_TEST(result == true);
+}
+
+void iterator_incrementable()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    variable::iterator& b = ++a;
+    TRIAL_PROTOCOL_TEST(b == a);
+    TRIAL_PROTOCOL_TEST(b != data.begin());
+}
+
+void input_iterator_equality_comparable()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    variable::iterator b = data.begin();
+    variable::iterator c = data.begin();
+    TRIAL_PROTOCOL_TEST(a == a);
+    TRIAL_PROTOCOL_TEST(a == b);
+    TRIAL_PROTOCOL_TEST(b == a);
+    TRIAL_PROTOCOL_TEST(b == c);
+    TRIAL_PROTOCOL_TEST(a == c);
+
+    variable::iterator d = data.end();
+    TRIAL_PROTOCOL_TEST(a != d);
+}
+
+void input_iterator_dereferenceable()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    TRIAL_PROTOCOL_TEST_EQUAL((*a).size(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(a->size(), 1);
+}
+
+void input_iterator_post_incrementable()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    variable::iterator b = a++;
+    TRIAL_PROTOCOL_TEST(a != data.begin());
+    TRIAL_PROTOCOL_TEST(b == data.begin());
+}
+
+void forward_iterator_default_constructible()
+{
+    static_assert(std::is_default_constructible<variable::iterator>::value, "default constructible");
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    variable::iterator b;
+    TRIAL_PROTOCOL_TEST(a != b);
+    TRIAL_PROTOCOL_TEST(b != a);
+    b = a;
+    TRIAL_PROTOCOL_TEST(a == b);
+    TRIAL_PROTOCOL_TEST(b == a);
+}
+
+void forward_iterator_multipass()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable::iterator a = data.begin();
+    variable::iterator b = a;
+    TRIAL_PROTOCOL_TEST(a == b);
+    ++a;
+    ++b;
+    TRIAL_PROTOCOL_TEST(a == b);
+    TRIAL_PROTOCOL_TEST(*a == *b);
+}
+
+void run()
+{
+    // [iterator.iterators]
+    iterator_move_constructible();
+    iterator_copy_constructible();
+    iterator_copy_assignable();
+    iterator_destructible();
+    iterator_swappable();
+    iterator_traits();
+    iterator_dereferenceable();
+    iterator_incrementable();
+
+    // [input.iterators]
+    input_iterator_equality_comparable();
+    input_iterator_dereferenceable();
+    input_iterator_post_incrementable();
+
+    // [forward.iterators]
+    forward_iterator_default_constructible();
+    forward_iterator_multipass();
+}
+
+} // namespace concept_suite
+
+//-----------------------------------------------------------------------------
 // std::begin
 //-----------------------------------------------------------------------------
 
@@ -403,6 +549,7 @@ void run()
 
 int main()
 {
+    concept_suite::run();
     begin_suite::run();
     pre_increment_suite::run();
     post_increment_suite::run();

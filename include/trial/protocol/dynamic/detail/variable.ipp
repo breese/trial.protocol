@@ -647,6 +647,13 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
 //-----------------------------------------------------------------------------
 
 template <typename T>
+variable::iterator_type<T>::iterator_type()
+    : scope(nullptr),
+      current(pointer(nullptr))
+{
+}
+
+template <typename T>
 variable::iterator_type<T>::iterator_type(const iterator_type& other)
     : scope(other.scope),
       current(other.current)
@@ -755,8 +762,10 @@ auto variable::iterator_type<T>::operator= (iterator_type&& other) -> iterator_t
 }
 
 template <typename T>
-auto variable::iterator_type<T>::operator++ () -> iterator_type
+auto variable::iterator_type<T>::operator++ () -> iterator_type&
 {
+    assert(scope);
+
     switch (scope->storage.which())
     {
     case traits<null_type>::value:
@@ -781,6 +790,8 @@ auto variable::iterator_type<T>::operator++ () -> iterator_type
 template <typename T>
 auto variable::iterator_type<T>::operator++ (int) -> iterator_type
 {
+    assert(scope);
+
     iterator_type result = *this;
     ++(*this);
     return result;
@@ -789,12 +800,16 @@ auto variable::iterator_type<T>::operator++ (int) -> iterator_type
 template <typename T>
 auto variable::iterator_type<T>::operator* () -> reference
 {
+    assert(scope);
+
     return value();
 }
 
 template <typename T>
 auto variable::iterator_type<T>::key() const -> key_reference
 {
+    assert(scope);
+
     switch (scope->storage.which())
     {
     case traits<map_type>::value:
@@ -808,6 +823,8 @@ auto variable::iterator_type<T>::key() const -> key_reference
 template <typename T>
 auto variable::iterator_type<T>::value() -> reference
 {
+    assert(scope);
+
     switch (scope->storage.which())
     {
     case traits<null_type>::value:
@@ -830,6 +847,8 @@ auto variable::iterator_type<T>::value() -> reference
 template <typename T>
 auto variable::iterator_type<T>::operator-> () -> pointer
 {
+    assert(scope);
+
     switch (scope->storage.which())
     {
     case traits<null_type>::value:
@@ -845,11 +864,18 @@ auto variable::iterator_type<T>::operator-> () -> pointer
     case traits<map_type>::value:
         return &current.template get<map_iterator>()->second;
     }
+    assert(false);
+    throw dynamic::error(incompatible_type);
 }
 
 template <typename T>
 bool variable::iterator_type<T>::operator== (const iterator_type<T>& other)
 {
+    if (!scope)
+        return !other.scope;
+    if (!other.scope)
+        return false;
+
     assert(scope->storage.which() == other.scope->storage.which());
 
     switch (scope->storage.which())

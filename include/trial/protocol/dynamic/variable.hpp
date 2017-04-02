@@ -56,7 +56,7 @@ public:
         using reference = typename std::add_lvalue_reference<value_type>::type;
         using key_reference = typename std::add_lvalue_reference<key_type>::type;
 
-        iterator_type() = delete;
+        iterator_type();
         iterator_type(const iterator_type&);
         iterator_type(iterator_type&&);
         iterator_type(pointer, bool = true);
@@ -68,7 +68,7 @@ public:
         iterator_type& operator= (const iterator_type&);
         iterator_type& operator= (iterator_type&&);
 
-        iterator_type operator++ ();
+        iterator_type& operator++ ();
         iterator_type operator++ (int);
 
         reference operator* ();
