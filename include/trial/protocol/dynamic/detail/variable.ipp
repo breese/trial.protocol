@@ -1369,8 +1369,36 @@ inline auto variable::erase(const_iterator where) -> iterator
         result.current =
             storage.get<map_type>().erase(where.current.template get<iterator::map_iterator>());
         break;
+
+    default:
+        // Non-container types are unerasable
+        break;
     }
-    // The other types are unerasable
+    return result;
+}
+
+inline auto variable::erase(const_iterator first, const_iterator last) -> iterator
+{
+    iterator result = first;
+
+    switch (storage.which())
+    {
+    case traits<array_type>::value:
+        result.current =
+            storage.get<array_type>().erase(first.current.template get<iterator::array_iterator>(),
+                                            last.current.template get<iterator::array_iterator>());
+        break;
+
+    case traits<map_type>::value:
+        result.current =
+            storage.get<map_type>().erase(first.current.template get<iterator::map_iterator>(),
+                                          last.current.template get<iterator::map_iterator>());
+        break;
+
+    default:
+        // Non-container types are unerasable
+        break;
+    }
     return result;
 }
 
@@ -1397,9 +1425,9 @@ inline auto variable::end() const & -> const_iterator
 // Comparison
 
 template <typename T>
-bool operator== (const variable& lhs, const T& rhs)
+bool variable::operator== (const T& rhs) const
 {
-    return variable::overloader<T>::equal(lhs, rhs);
+    return variable::overloader<T>::equal(*this, rhs);
 }
 
 inline bool operator== (const variable& lhs, const variable& rhs)
@@ -1443,9 +1471,9 @@ inline bool operator== (const variable& lhs, const variable::string_type::value_
 }
 
 template <typename T>
-inline bool operator< (const variable& lhs, const T& rhs)
+bool variable::operator< (const T& rhs) const
 {
-    return variable::overloader<T>::less(lhs, rhs);
+    return variable::overloader<T>::less(*this, rhs);
 }
 
 inline bool operator< (const variable& lhs, const variable& rhs)
@@ -1489,33 +1517,33 @@ inline bool operator< (const variable& lhs, const variable::string_type::value_t
 }
 
 template <typename T>
-bool operator!= (const variable& lhs, const T& rhs)
+bool variable::operator!= (const T& rhs) const
 {
-    return !(lhs == rhs);
+    return !(*this == rhs);
 }
 
 template <typename T>
-bool operator<= (const variable& lhs, const T& rhs)
+bool variable::operator<= (const T& rhs) const
 {
-    if (lhs.is<variable::null_type>())
+    if (is<variable::null_type>())
         return true;
 
-    return !(rhs < lhs);
+    return !(rhs < *this);
 }
 
 template <typename T>
-bool operator> (const variable& lhs, const T& rhs)
+bool variable::operator> (const T& rhs) const
 {
-    if (lhs.is<variable::null_type>())
+    if (is<variable::null_type>())
         return false;
 
-    return rhs < lhs;
+    return rhs < *this;
 }
 
 template <typename T>
-bool operator>= (const variable& lhs, const T& rhs)
+bool variable::operator>= (const T& rhs) const
 {
-    return !(lhs < rhs);
+    return !(*this < rhs);
 }
 
 } // namespace dynamic

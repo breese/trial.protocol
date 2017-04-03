@@ -2773,7 +2773,7 @@ void erase_string()
     TRIAL_PROTOCOL_TEST(data == "alpha");
 }
 
-void erase_array_boolean()
+void erase_array_first()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
     auto where = data.erase(data.begin());
@@ -2783,7 +2783,7 @@ void erase_array_boolean()
                                  std::equal_to<variable>());
 }
 
-void erase_array_integer()
+void erase_array_second()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
     auto where = data.erase(std::next(data.begin()));
@@ -2793,7 +2793,7 @@ void erase_array_integer()
                                  std::equal_to<variable>());
 }
 
-void erase_array_number()
+void erase_array_third()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
     auto where = data.erase(std::next(data.begin(), 2));
@@ -2803,7 +2803,7 @@ void erase_array_number()
                                  std::equal_to<variable>());
 }
 
-void erase_array_string()
+void erase_array_fourth()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
     auto where = data.erase(std::next(data.begin(), 3));
@@ -2888,6 +2888,230 @@ void erase_map_all()
                                  std::equal_to<variable>());
 }
 
+void erase_range_null()
+{
+    variable data;
+    auto where = data.erase(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+    TRIAL_PROTOCOL_TEST(data == variable::null);
+}
+
+void erase_range_boolean()
+{
+    variable data(true);
+    auto where = data.erase(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+    TRIAL_PROTOCOL_TEST(data == true);
+}
+
+void erase_range_integer()
+{
+    variable data(2);
+    auto where = data.erase(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+    TRIAL_PROTOCOL_TEST(data == 2);
+}
+
+void erase_range_number()
+{
+    variable data(3.0);
+    auto where = data.erase(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+    TRIAL_PROTOCOL_TEST(data == 3.0);
+}
+
+void erase_range_string()
+{
+    variable data("alpha");
+    auto where = data.erase(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+    TRIAL_PROTOCOL_TEST(data == "alpha");
+}
+
+void erase_range_array_first_first()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = data.erase(data.begin(), data.begin());
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_array_first_second()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = data.erase(data.begin(), ++data.begin());
+    variable expect = variable::array({ 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_array_first_third()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = data.erase(data.begin(), ++(++data.begin()));
+    variable expect = variable::array({ 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_array_first_fourth()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = data.erase(data.begin(), ++(++(++data.begin())));
+    variable expect = variable::array({ "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_array_first_last()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = data.erase(data.begin(), data.end());
+    variable expect = variable::array();
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_array_second_fourth()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = data.erase(++data.begin(), ++(++(++data.begin())));
+    variable expect = variable::array({ true, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_map_first_first()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+
+    data.erase(data.begin(), data.begin());
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_map_first_second()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+
+    data.erase(data.begin(), ++data.begin());
+    variable expect = variable::map(
+        {
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_map_first_third()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+
+    data.erase(data.begin(), ++(++data.begin()));
+    variable expect = variable::map(
+        {
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_map_first_fourth()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+
+    data.erase(data.begin(), ++(++(++data.begin())));
+    variable expect = variable::map(
+        {
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_map_first_last()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+
+    data.erase(data.begin(), data.end());
+    variable expect = variable::map();
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_range_map_second_fourth()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+
+    data.erase(++data.begin(), ++(++(++data.begin())));
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "delta", "beryllium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void run()
 {
     erase_null();
@@ -2895,12 +3119,30 @@ void run()
     erase_integer();
     erase_number();
     erase_string();
-    erase_array_boolean();
-    erase_array_integer();
-    erase_array_number();
-    erase_array_string();
+    erase_array_first();
+    erase_array_second();
+    erase_array_third();
+    erase_array_fourth();
     erase_array_all();
     erase_map_all();
+
+    erase_range_null();
+    erase_range_boolean();
+    erase_range_integer();
+    erase_range_number();
+    erase_range_string();
+    erase_range_array_first_first();
+    erase_range_array_first_second();
+    erase_range_array_first_third();
+    erase_range_array_first_fourth();
+    erase_range_array_first_last();
+    erase_range_array_second_fourth();
+    erase_range_map_first_first();
+    erase_range_map_first_second();
+    erase_range_map_first_third();
+    erase_range_map_first_fourth();
+    erase_range_map_first_last();
+    erase_range_map_second_fourth();
 }
 
 } // namespace erase_suite

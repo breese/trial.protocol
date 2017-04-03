@@ -165,6 +165,7 @@ public:
 
     void clear();
     iterator erase(const_iterator);
+    iterator erase(const_iterator, const_iterator);
 
     // Iteration
 
@@ -176,26 +177,26 @@ public:
     // Comparison
 
     template <typename T>
-    friend bool operator== (const variable&, const T&);
+    bool operator== (const T&) const;
     friend bool operator== (const variable&, const variable&);
     friend bool operator== (const variable&, const variable::string_type::value_type *);
 
     template <typename T>
-    friend bool operator< (const variable&, const T&);
+    bool operator< (const T&) const;
     friend bool operator< (const variable&, const variable&);
     friend bool operator< (const variable&, const variable::string_type::value_type *);
 
     template <typename T>
-    friend bool operator!= (const variable&, const T&);
+    bool operator!= (const T&) const;
 
     template <typename T>
-    friend bool operator<= (const variable&, const T&);
+    bool operator<= (const T&) const;
 
     template <typename T>
-    friend bool operator> (const variable&, const T&);
+    bool operator> (const T&) const;
 
     template <typename T>
-    friend bool operator>= (const variable&, const T&);
+    bool operator>= (const T&) const;
 
 private:
     template <typename T> struct traits;
