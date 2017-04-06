@@ -40,22 +40,20 @@ public:
 
     void next() BOOST_NOEXCEPT;
 
-    void code(token::code::value) BOOST_NOEXCEPT;
-    token::code::value code() const BOOST_NOEXCEPT;
-    token::symbol::value symbol() const BOOST_NOEXCEPT;
-    token::category::value category() const BOOST_NOEXCEPT;
+    void code(token::detail::code::value) BOOST_NOEXCEPT;
+    token::detail::code::value code() const BOOST_NOEXCEPT;
     std::error_code error() const BOOST_NOEXCEPT;
     const view_type& literal() const BOOST_NOEXCEPT;
     const view_type& tail() const BOOST_NOEXCEPT;
     template <typename ReturnType> ReturnType value() const;
 
 private:
-    token::code::value next_token(token::code::value) BOOST_NOEXCEPT;
-    token::code::value next_f_keyword() BOOST_NOEXCEPT;
-    token::code::value next_n_keyword() BOOST_NOEXCEPT;
-    token::code::value next_t_keyword() BOOST_NOEXCEPT;
-    token::code::value next_number() BOOST_NOEXCEPT;
-    token::code::value next_string() BOOST_NOEXCEPT;
+    token::detail::code::value next_token(token::detail::code::value) BOOST_NOEXCEPT;
+    token::detail::code::value next_f_keyword() BOOST_NOEXCEPT;
+    token::detail::code::value next_n_keyword() BOOST_NOEXCEPT;
+    token::detail::code::value next_t_keyword() BOOST_NOEXCEPT;
+    token::detail::code::value next_number() BOOST_NOEXCEPT;
+    token::detail::code::value next_string() BOOST_NOEXCEPT;
 
     void skip_whitespaces() BOOST_NOEXCEPT;
     bool at_keyword_end() const BOOST_NOEXCEPT;
@@ -70,7 +68,7 @@ private:
     view_type input;
     struct
     {
-        mutable token::code::value code;
+        mutable token::detail::code::value code;
         view_type view;
     } current;
 };

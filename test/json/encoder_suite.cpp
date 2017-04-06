@@ -89,7 +89,7 @@ void test_comma()
 {
     std::array<char, 1> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.end()), ",");
 }
 
@@ -97,14 +97,14 @@ void fail_comma()
 {
     std::array<char, 0> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 0);
 }
 
 void test_colon()
 {
     std::array<char, 1> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.end()), ":");
 }
 
@@ -112,7 +112,7 @@ void fail_colon()
 {
     std::array<char, 0> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 0);
 }
 
 void test_null()
@@ -135,7 +135,7 @@ void test_null_null()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 4);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null,null");
 }
@@ -153,7 +153,7 @@ void test_true_true()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "true,true");
 }
@@ -171,7 +171,7 @@ void test_false_false()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "false,false");
 }
@@ -213,7 +213,7 @@ void test_zero_zero()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0,0");
 }
@@ -907,7 +907,7 @@ void test_array_bool_two()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[false,true]");
@@ -944,7 +944,7 @@ void test_object_bool_one()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("false"), 7);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"false\":false}");
@@ -956,11 +956,11 @@ void test_object_bool_two()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("false"), 7);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("true"), 6);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"false\":false,\"true\":true}");

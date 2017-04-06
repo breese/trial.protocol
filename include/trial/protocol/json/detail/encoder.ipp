@@ -109,7 +109,7 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename std::enable_if<std::is_same<T, token::value_separator>::value>::type>
+                                        typename std::enable_if<std::is_same<T, token::detail::value_separator>::value>::type>
 {
     using size_type = typename basic_encoder<CharT>::size_type;
 
@@ -122,7 +122,7 @@ struct basic_encoder<CharT>::overloader<T,
 template <typename CharT>
 template <typename T>
 struct basic_encoder<CharT>::overloader<T,
-                                        typename std::enable_if<std::is_same<T, token::name_separator>::value>::type>
+                                        typename std::enable_if<std::is_same<T, token::detail::name_separator>::value>::type>
 {
     using size_type = typename basic_encoder<CharT>::size_type;
 
