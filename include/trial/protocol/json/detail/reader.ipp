@@ -259,7 +259,6 @@ ReturnType basic_reader<CharT>::integer_value() const
     {
     case token::detail::code::integer:
         {
-            // FIXME: Raise error if value is too large
             ReturnType result = decoder.template value<ReturnType>();
             if (symbol() == token::symbol::error)
             {
