@@ -107,7 +107,6 @@ public:
     //! -# Convert a symbol::number token into a floating-point C++ type.
     //! -# Convert a symbol::string token into std::string.
     //!
-    //! @pre category() returns token::category::data
     //! @returns The converted value.
     //! @throws json::error If requested type is incompatible with the current token.
     template <typename ReturnType> ReturnType value() const;

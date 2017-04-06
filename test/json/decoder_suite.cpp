@@ -395,6 +395,42 @@ void fail_unsigned_negative()
                                     json::error, "invalid value");
 }
 
+void fail_on_begin_array()
+{
+    const char input[] = "[";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::begin_array);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
+                                    json::error, "incompatible type");
+}
+
+void fail_on_end_array()
+{
+    const char input[] = "]";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end_array);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
+                                    json::error, "incompatible type");
+}
+
+void fail_on_begin_object()
+{
+    const char input[] = "{";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::begin_object);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
+                                    json::error, "incompatible type");
+}
+
+void fail_on_end_object()
+{
+    const char input[] = "}";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end_object);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
+                                    json::error, "incompatible type");
+}
+
 void run()
 {
     test_zero();
@@ -416,6 +452,11 @@ void run()
     test_intmax();
     test_unsigned();
     fail_unsigned_negative();
+
+    fail_on_begin_array();
+    fail_on_end_array();
+    fail_on_begin_object();
+    fail_on_end_object();
 }
 
 } // namespace integer_suite
