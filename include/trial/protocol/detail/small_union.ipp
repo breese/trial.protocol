@@ -124,21 +124,21 @@ template <std::size_t N, typename... Types>
 small_union<N, Types...>::small_union(const small_union& other)
     : current(other.current)
 {
-    call<copier>(other);
+    call<copier, void>(other);
 }
 
 template <std::size_t N, typename... Types>
 small_union<N, Types...>::small_union(small_union&& other)
     : current(other.current)
 {
-    call<mover>(std::move(other));
+    call<mover, void>(std::move(other));
 }
 
 template <std::size_t N, typename... Types>
 auto small_union<N, Types...>::operator= (const small_union& other) -> small_union&
 {
     assert(other.current < sizeof...(Types));
-    call<copier>(other);
+    call<copier, void>(other);
     current = other.current;
     return *this;
 }
@@ -147,7 +147,7 @@ template <std::size_t N, typename... Types>
 auto small_union<N, Types...>::operator= (small_union&& other) -> small_union&
 {
     assert(other.current < sizeof...(Types));
-    call<mover>(std::move(other));
+    call<mover, void>(std::move(other));
     current = other.current;
     return *this;
 }
@@ -155,7 +155,7 @@ auto small_union<N, Types...>::operator= (small_union&& other) -> small_union&
 template <std::size_t N, typename... Types>
 small_union<N, Types...>::~small_union()
 {
-    call<destructor>();
+    call<destructor, void>();
 }
 
 template <std::size_t N, typename... Types>
@@ -180,7 +180,7 @@ void small_union<N, Types...>::operator= (const T& value)
 {
     using type = typename std::decay<T>::type;
 
-    call<destructor>();
+    call<destructor, void>();
     small_traits<N, type>::construct(std::addressof(storage), value);
     current = index<type>::value;
 }
@@ -191,31 +191,53 @@ void small_union<N, Types...>::operator= (T&& value)
 {
     using type = typename std::decay<T>::type;
 
-    call<destructor>();
+    call<destructor, void>();
     small_traits<N, type>::construct(std::addressof(storage), std::move(value));
     current = index<type>::value;
 }
 
 template <std::size_t N, typename... Types>
-template <typename Visitor>
-void small_union<N, Types...>::call()
+template <typename Visitor, typename R>
+R small_union<N, Types...>::call()
 {
     assert(current < sizeof...(Types));
 
     using signature = decltype(&Visitor::template call<int>);
     static constexpr signature table[] = { &Visitor::template call<Types>... };
-    table[current](*this);
+    return table[current](*this);
 }
 
 template <std::size_t N, typename... Types>
-template <typename Visitor, typename... Args>
-void small_union<N, Types...>::call(Args&&... args)
+template <typename Visitor, typename R>
+R small_union<N, Types...>::call() const
 {
     assert(current < sizeof...(Types));
 
     using signature = decltype(&Visitor::template call<int>);
     static constexpr signature table[] = { &Visitor::template call<Types>... };
-    table[current](*this, std::forward<Args...>(args...));
+    return table[current](*this);
+}
+
+template <std::size_t N, typename... Types>
+template <typename Visitor, typename R, typename... Args>
+R small_union<N, Types...>::call(Args&&... args)
+{
+    assert(current < sizeof...(Types));
+
+    using signature = decltype(&Visitor::template call<int>);
+    static constexpr signature table[] = { &Visitor::template call<Types>... };
+    return table[current](*this, std::forward<Args...>(args...));
+}
+
+template <std::size_t N, typename... Types>
+template <typename Visitor, typename R, typename... Args>
+R small_union<N, Types...>::call(Args&&... args) const
+{
+    assert(current < sizeof...(Types));
+
+    using signature = decltype(&Visitor::template call<int>);
+    static constexpr signature table[] = { &Visitor::template call<Types>... };
+    return table[current](*this, std::forward<Args...>(args...));
 }
 
 template <std::size_t N, typename... Types>

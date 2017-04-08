@@ -52,8 +52,10 @@ public:
     template <typename T> void operator= (const T& value);
     template <typename T> void operator= (T&& value);
 
-    template <typename Visitor> void call();
-    template <typename Visitor, typename... Args> void call(Args&&...);
+    template <typename Visitor, typename R> R call();
+    template <typename Visitor, typename R> R call() const;
+    template <typename Visitor, typename R, typename... Args> R call(Args&&...);
+    template <typename Visitor, typename R, typename... Args> R call(Args&&...) const;
 
 private:
     template <std::size_t M, typename T, typename Enable> friend struct small_traits;
