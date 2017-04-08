@@ -100,8 +100,11 @@ template <std::size_t N, typename... Types>
 template <typename T>
 struct small_union<N, Types...>::index
 {
+private:
     using small_type = typename make_small<T>::type;
     static_assert(meta::contains<typelist, small_type>::value, "T is not valid");
+
+public:
     using type = typename meta::to_index<typelist, small_type>::type;
     static const std::size_t value = type::value;
 };
