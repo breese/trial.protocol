@@ -1257,6 +1257,226 @@ void run()
 } // namespace max_element_suite
 
 //-----------------------------------------------------------------------------
+// std::remove
+//-----------------------------------------------------------------------------
+
+namespace remove_suite
+{
+
+void remove_null()
+{
+    variable data;
+    auto where = std::remove(data.begin(), data.end(), variable::null);
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+}
+
+void remove_boolean()
+{
+    variable data(true);
+    auto where = std::remove(data.begin(), data.end(), false);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+    where = std::remove(data.begin(), data.end(), true);
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+}
+
+void remove_integer()
+{
+    variable data(2);
+    auto where = std::remove(data.begin(), data.end(), 0);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+    where = std::remove(data.begin(), data.end(), 2);
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+}
+
+void remove_number()
+{
+    variable data(3.0);
+    auto where = std::remove(data.begin(), data.end(), 0.0);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+    where = std::remove(data.begin(), data.end(), 3.0);
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+}
+
+void remove_string()
+{
+    variable data("alpha");
+    auto where = std::remove(data.begin(), data.end(), "bravo");
+    TRIAL_PROTOCOL_TEST(where == data.end());
+    where = std::remove(data.begin(), data.end(), "alpha");
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+}
+
+void remove_array_null()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = std::remove(data.begin(), data.end(), variable::null);
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_array_boolean()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = std::remove(data.begin(), data.end(), true);
+    variable expect = variable::array({ 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_array_integer()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = std::remove(data.begin(), data.end(), 2);
+    variable expect = variable::array({ true, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_array_number()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = std::remove(data.begin(), data.end(), 3.0);
+    variable expect = variable::array({ true, 2, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_array_string()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = std::remove(data.begin(), data.end(), "alpha");
+    variable expect = variable::array({ true, 2, 3.0 });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_map_boolean()
+{
+    // Remove by value but keep key order
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    auto where = std::remove(data.begin(), data.end(), false);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+
+    where = std::remove(data.begin(), data.end(), true);
+    variable expect = variable::map(
+        {
+            { "alpha", 2 },
+            { "bravo", 3.0 },
+            { "charlie", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_map_integer()
+{
+    // Remove by value but keep key order
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    auto where = std::remove(data.begin(), data.end(), 0);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+
+    where = std::remove(data.begin(), data.end(), 2);
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 3.0 },
+            { "charlie", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_map_number()
+{
+    // Remove by value but keep key order
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    auto where = std::remove(data.begin(), data.end(), 0.0);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+
+    where = std::remove(data.begin(), data.end(), 3.0);
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_map_string()
+{
+    // Remove by value but keep key order
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    auto where = std::remove(data.begin(), data.end(), "alpha");
+    TRIAL_PROTOCOL_TEST(where == data.end());
+
+    where = std::remove(data.begin(), data.end(), "hydrogen");
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void run()
+{
+    remove_null();
+    remove_boolean();
+    remove_integer();
+    remove_number();
+    remove_string();
+    remove_array_null();
+    remove_array_boolean();
+    remove_array_integer();
+    remove_array_number();
+    remove_array_string();
+    remove_map_boolean();
+    remove_map_integer();
+    remove_map_number();
+    remove_map_string();
+}
+
+} // namespace remove_suite
+
+//-----------------------------------------------------------------------------
 // std::search
 //-----------------------------------------------------------------------------
 
@@ -1418,6 +1638,7 @@ int main()
     iota_suite::run();
     is_sorted_suite::run();
     max_element_suite::run();
+    remove_suite::run();
     search_suite::run();
     unique_suite::run();
 
