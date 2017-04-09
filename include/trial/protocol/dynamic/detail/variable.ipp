@@ -102,16 +102,10 @@ struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value
         }
     }
 
-    static bool less(const variable& self, const T&)
+    static bool less(const variable&, const T&)
     {
-        switch (self.storage.which())
-        {
-        case traits<variable::null_type>::value:
-            return false;
-
-        default:
-            return true;
-        }
+        // Null is smaller than anything
+        return false;
     }
 
     static void append(variable&, const T&)
@@ -138,8 +132,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         case traits<variable::integer_type>::value:
             return self.storage.get<variable::integer_type>();
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<variable::number_type>();
+        case traits<float>::value:
+            return self.storage.get<float>();
+
+        case traits<double>::value:
+            return self.storage.get<double>();
+
+        case traits<long double>::value:
+            return self.storage.get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -157,8 +157,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         case traits<variable::integer_type>::value:
             return self.storage.get<integer_type>() == other;
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<number_type>() == other;
+        case traits<float>::value:
+            return self.storage.get<float>() == other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() == other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() == other;
 
         default:
             return false;
@@ -178,8 +184,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         case traits<variable::integer_type>::value:
             return self.storage.get<integer_type>() < other;
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<number_type>() < other;
+        case traits<float>::value:
+            return self.storage.get<float>() < other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() < other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() < other;
 
         default:
             return false;
@@ -202,8 +214,16 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
             self.storage.get<integer_type>() += other;
             break;
 
-        case traits<variable::number_type>::value:
-            self.storage.get<number_type>() += other;
+        case traits<float>::value:
+            self.storage.get<float>() += other;
+            break;
+
+        case traits<double>::value:
+            self.storage.get<double>() += other;
+            break;
+
+        case traits<long double>::value:
+            self.storage.get<long double>() += other;
             break;
 
         case traits<variable::array_type>::value:
@@ -234,8 +254,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::integer_type>::value:
             return self.storage.get<variable::integer_type>();
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<variable::number_type>();
+        case traits<float>::value:
+            return self.storage.get<float>();
+
+        case traits<double>::value:
+            return self.storage.get<double>();
+
+        case traits<long double>::value:
+            return self.storage.get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -253,8 +279,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::integer_type>::value:
             return self.storage.get<integer_type>() == other;
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<number_type>() == other;
+        case traits<float>::value:
+            return self.storage.get<float>() == other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() == other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() == other;
 
         default:
             return false;
@@ -274,8 +306,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::integer_type>::value:
             return self.storage.get<integer_type>() < other;
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<number_type>() < other;
+        case traits<float>::value:
+            return self.storage.get<float>() < other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() < other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() < other;
 
         default:
             return false;
@@ -298,8 +336,16 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
             self.storage.get<integer_type>() += other;
             break;
 
-        case traits<variable::number_type>::value:
-            self.storage.get<number_type>() += other;
+        case traits<float>::value:
+            self.storage.get<float>() += other;
+            break;
+
+        case traits<double>::value:
+            self.storage.get<double>() += other;
+            break;
+
+        case traits<long double>::value:
+            self.storage.get<long double>() += other;
             break;
 
         case traits<variable::array_type>::value:
@@ -330,8 +376,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         case traits<variable::integer_type>::value:
             return self.storage.get<variable::integer_type>();
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<variable::number_type>();
+        case traits<float>::value:
+            return self.storage.get<float>();
+
+        case traits<double>::value:
+            return self.storage.get<double>();
+
+        case traits<long double>::value:
+            return self.storage.get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -349,8 +401,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         case traits<variable::integer_type>::value:
             return self.storage.get<integer_type>() == other;
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<number_type>() == other;
+        case traits<float>::value:
+            return self.storage.get<float>() == other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() == other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() == other;
 
         default:
             return false;
@@ -370,8 +428,14 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         case traits<variable::integer_type>::value:
             return self.storage.get<integer_type>() < other;
 
-        case traits<variable::number_type>::value:
-            return self.storage.get<number_type>() < other;
+        case traits<float>::value:
+            return self.storage.get<float>() < other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() < other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() < other;
 
         default:
             return false;
@@ -394,8 +458,16 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
             self.storage.get<integer_type>() += other;
             break;
 
-        case traits<variable::number_type>::value:
-            self.storage.get<number_type>() += other;
+        case traits<float>::value:
+            self.storage.get<float>() += other;
+            break;
+
+        case traits<double>::value:
+            self.storage.get<double>() += other;
+            break;
+
+        case traits<long double>::value:
+            self.storage.get<long double>() += other;
             break;
 
         case traits<variable::array_type>::value:
@@ -984,8 +1056,14 @@ inline variable::variable(const variable& other)
     case traits<integer_type>::value:
         storage = other.storage.get<integer_type>();
         break;
-    case traits<number_type>::value:
-        storage = other.storage.get<number_type>();
+    case traits<float>::value:
+        storage = other.storage.get<float>();
+        break;
+    case traits<double>::value:
+        storage = other.storage.get<double>();
+        break;
+    case traits<long double>::value:
+        storage = other.storage.get<long double>();
         break;
     case traits<string_type>::value:
         storage = other.storage.get<string_type>();
@@ -995,6 +1073,9 @@ inline variable::variable(const variable& other)
         break;
     case traits<map_type>::value:
         storage = other.storage.get<map_type>();
+        break;
+    default:
+        assert(false);
         break;
     }
 }
@@ -1013,8 +1094,14 @@ inline variable::variable(variable&& other)
     case traits<integer_type>::value:
         storage = std::move(other.storage.get<integer_type>());
         break;
-    case traits<number_type>::value:
-        storage = std::move(other.storage.get<number_type>());
+    case traits<float>::value:
+        storage = std::move(other.storage.get<float>());
+        break;
+    case traits<double>::value:
+        storage = std::move(other.storage.get<double>());
+        break;
+    case traits<long double>::value:
+        storage = std::move(other.storage.get<long double>());
         break;
     case traits<string_type>::value:
         storage = std::move(other.storage.get<string_type>());
@@ -1024,6 +1111,9 @@ inline variable::variable(variable&& other)
         break;
     case traits<map_type>::value:
         storage = std::move(other.storage.get<map_type>());
+        break;
+    default:
+        assert(false);
         break;
     }
 }
@@ -1102,8 +1192,14 @@ inline variable& variable::operator= (const variable& other)
     case traits<integer_type>::value:
         storage = other.storage.get<integer_type>();
         break;
-    case traits<number_type>::value:
-        storage = other.storage.get<number_type>();
+    case traits<float>::value:
+        storage = other.storage.get<float>();
+        break;
+    case traits<double>::value:
+        storage = other.storage.get<double>();
+        break;
+    case traits<long double>::value:
+        storage = other.storage.get<long double>();
         break;
     case traits<string_type>::value:
         storage = other.storage.get<string_type>();
@@ -1113,6 +1209,9 @@ inline variable& variable::operator= (const variable& other)
         break;
     case traits<map_type>::value:
         storage = other.storage.get<map_type>();
+        break;
+    default:
+        assert(false);
         break;
     }
     return *this;
@@ -1131,8 +1230,14 @@ inline variable& variable::operator= (variable&& other)
     case traits<integer_type>::value:
         storage = std::move(other.storage.get<integer_type>());
         break;
-    case traits<number_type>::value:
-        storage = std::move(other.storage.get<number_type>());
+    case traits<float>::value:
+        storage = std::move(other.storage.get<float>());
+        break;
+    case traits<double>::value:
+        storage = std::move(other.storage.get<double>());
+        break;
+    case traits<long double>::value:
+        storage = std::move(other.storage.get<long double>());
         break;
     case traits<string_type>::value:
         storage = std::move(other.storage.get<string_type>());
@@ -1179,8 +1284,14 @@ inline variable& variable::operator+= (const variable& other)
     case traits<integer_type>::value:
         overloader<integer_type>::append(*this, other.storage.get<integer_type>());
         break;
-    case traits<number_type>::value:
-        overloader<number_type>::append(*this, other.storage.get<number_type>());
+    case traits<float>::value:
+        overloader<float>::append(*this, other.storage.get<float>());
+        break;
+    case traits<double>::value:
+        overloader<double>::append(*this, other.storage.get<double>());
+        break;
+    case traits<long double>::value:
+        overloader<long double>::append(*this, other.storage.get<long double>());
         break;
     case traits<string_type>::value:
         overloader<string_type>::append(*this, other.storage.get<string_type>());
@@ -1268,12 +1379,22 @@ inline variable::operator bool() const
     {
     case traits<null_type>::value:
         return false;
+
     case traits<boolean_type>::value:
         return bool(storage.get<boolean_type>());
+
     case traits<integer_type>::value:
         return bool(storage.get<integer_type>());
-    case traits<number_type>::value:
-        return bool(storage.get<number_type>());
+
+    case traits<float>::value:
+        return bool(storage.get<float>());
+
+    case traits<double>::value:
+        return bool(storage.get<double>());
+
+    case traits<long double>::value:
+        return bool(storage.get<long double>());
+
     case traits<string_type>::value:
     case traits<array_type>::value:
     case traits<map_type>::value:
@@ -1355,7 +1476,9 @@ inline bool variable::empty() const
         return true;
     case traits<boolean_type>::value:
     case traits<integer_type>::value:
-    case traits<number_type>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
         return false;
     case traits<string_type>::value:
         return storage.get<string_type>().empty();
@@ -1376,7 +1499,9 @@ inline auto variable::size() const -> size_type
         return 0;
     case traits<boolean_type>::value:
     case traits<integer_type>::value:
-    case traits<number_type>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
         return 1;
     case traits<string_type>::value:
         return storage.get<string_type>().size();
@@ -1402,8 +1527,14 @@ inline void variable::clear()
     case traits<integer_type>::value:
         storage = integer_type{};
         break;
-    case traits<number_type>::value:
-        storage = number_type{};
+    case traits<float>::value:
+        storage = 0.0f;
+        break;
+    case traits<double>::value:
+        storage = 0.0;
+        break;
+    case traits<long double>::value:
+        storage = 0.0L;
         break;
     case traits<string_type>::value:
         storage.get<string_type>().clear();
@@ -1509,9 +1640,14 @@ inline bool operator== (const variable& lhs, const variable& rhs)
         return variable::overloader<variable::integer_type>::
             equal(lhs, rhs.storage.get<variable::integer_type>());
 
-    case variable::traits<variable::number_type>::value:
-        return variable::overloader<variable::number_type>::
-            equal(lhs, rhs.storage.get<variable::number_type>());
+    case variable::traits<float>::value:
+        return variable::overloader<float>::equal(lhs, rhs.storage.get<float>());
+
+    case variable::traits<double>::value:
+        return variable::overloader<double>::equal(lhs, rhs.storage.get<double>());
+
+    case variable::traits<long double>::value:
+        return variable::overloader<long double>::equal(lhs, rhs.storage.get<long double>());
 
     case variable::traits<variable::string_type>::value:
         return variable::overloader<variable::string_type>::
@@ -1555,9 +1691,14 @@ inline bool operator< (const variable& lhs, const variable& rhs)
         return variable::overloader<variable::integer_type>::
             less(lhs, rhs.storage.get<variable::integer_type>());
 
-    case variable::traits<variable::number_type>::value:
-        return variable::overloader<variable::number_type>::
-            less(lhs, rhs.storage.get<variable::number_type>());
+    case variable::traits<float>::value:
+        return variable::overloader<float>::less(lhs, rhs.storage.get<float>());
+
+    case variable::traits<double>::value:
+        return variable::overloader<double>::less(lhs, rhs.storage.get<double>());
+
+    case variable::traits<long double>::value:
+        return variable::overloader<long double>::less(lhs, rhs.storage.get<long double>());
 
     case variable::traits<variable::string_type>::value:
         return variable::overloader<variable::string_type>::

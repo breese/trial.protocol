@@ -417,11 +417,25 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
 }
 
-void test_number()
+void test_float()
+{
+    variable number(0.0f);
+    variable data(number);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+}
+
+void test_double()
 {
     variable number(0.0);
     variable data(number);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+}
+
+void test_long_double()
+{
+    variable number(0.0L);
+    variable data(number);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
 }
 
 void test_string()
@@ -435,7 +449,9 @@ void run()
 {
     test_boolean();
     test_integer();
-    test_number();
+    test_float();
+    test_double();
+    test_long_double();
     test_string();
 }
 
@@ -464,12 +480,28 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 1);
 }
 
-void test_number()
+void test_float()
+{
+    variable number(1.0f);
+    variable data(std::move(number));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 1.0f);
+}
+
+void test_double()
 {
     variable number(1.0);
     variable data(std::move(number));
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 1.0);
+}
+
+void test_long_double()
+{
+    variable number(1.0L);
+    variable data(std::move(number));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 1.0L);
 }
 
 void test_string()
@@ -484,7 +516,9 @@ void run()
 {
     test_boolean();
     test_integer();
-    test_number();
+    test_float();
+    test_double();
+    test_long_double();
     test_string();
 }
 
@@ -523,10 +557,66 @@ void assign_null_with_integer()
 
 void assign_null_with_number()
 {
-    variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
 }
 
 void assign_null_with_string()
@@ -587,10 +677,66 @@ void assign_boolean_with_integer()
 
 void assign_boolean_with_number()
 {
-    variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
 }
 
 void assign_boolean_with_string()
@@ -643,10 +789,66 @@ void assign_integer_with_integer()
 
 void assign_integer_with_number()
 {
-    variable data(2);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
 }
 
 void assign_integer_with_string()
@@ -673,58 +875,278 @@ void assign_integer_with_map()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
 
-void assign_number_with_null()
+void assign_float_with_null()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = variable::null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
 }
 
-void assign_number_with_boolean()
+void assign_float_with_boolean()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = false;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
 }
 
-void assign_number_with_integer()
+void assign_float_with_integer()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = 1;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
 }
 
-void assign_number_with_number()
+void assign_float_with_number()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
 }
 
-void assign_number_with_string()
+void assign_float_with_string()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = variable::string_type("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
 }
 
-void assign_number_with_array()
+void assign_float_with_array()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = variable::array({ true, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
 }
 
-void assign_number_with_map()
+void assign_float_with_map()
+{
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    data = variable::map({{ "alpha", "hydrogen" }});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+}
+
+void assign_double_with_null()
 {
     variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data = variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+}
+
+void assign_double_with_boolean()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data = false;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+}
+
+void assign_double_with_integer()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data = 1;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+}
+
+void assign_double_with_number()
+{
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+}
+
+void assign_double_with_string()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data = variable::string_type("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+}
+
+void assign_double_with_array()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data = variable::array({ true, 2 });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+}
+
+void assign_double_with_map()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data = variable::map({{ "alpha", "hydrogen" }});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+}
+
+void assign_long_double_with_null()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data = variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+}
+
+void assign_long_double_with_boolean()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data = false;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+}
+
+void assign_long_double_with_integer()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data = 1;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+}
+
+void assign_long_double_with_number()
+{
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+}
+
+void assign_long_double_with_string()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data = variable::string_type("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+}
+
+void assign_long_double_with_array()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data = variable::array({ true, 2 });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+}
+
+void assign_long_double_with_map()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
@@ -755,10 +1177,66 @@ void assign_string_with_integer()
 
 void assign_string_with_number()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
 }
 
 void assign_string_with_string()
@@ -811,10 +1289,66 @@ void assign_array_with_integer()
 
 void assign_array_with_number()
 {
-    variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data = variable::array({ true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
 }
 
 void assign_array_with_string()
@@ -867,10 +1401,66 @@ void assign_map_with_integer()
 
 void assign_map_with_number()
 {
-    variable data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        data = 1.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        variable number(1.0f);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        variable number(1.0f);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        data = 1.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        variable number(1.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        variable number(1.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        data = 1.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        variable number(1.0L);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
+    {
+        variable data = variable::map({{ "alpha", "hydrogen" }});
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        variable number(1.0L);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    }
 }
 
 void assign_map_with_string()
@@ -924,13 +1514,29 @@ void run()
     assign_integer_with_array();
     assign_integer_with_map();
 
-    assign_number_with_null();
-    assign_number_with_boolean();
-    assign_number_with_integer();
-    assign_number_with_number();
-    assign_number_with_string();
-    assign_number_with_array();
-    assign_number_with_map();
+    assign_float_with_null();
+    assign_float_with_boolean();
+    assign_float_with_integer();
+    assign_float_with_number();
+    assign_float_with_string();
+    assign_float_with_array();
+    assign_float_with_map();
+
+    assign_double_with_null();
+    assign_double_with_boolean();
+    assign_double_with_integer();
+    assign_double_with_number();
+    assign_double_with_string();
+    assign_double_with_array();
+    assign_double_with_map();
+
+    assign_long_double_with_null();
+    assign_long_double_with_boolean();
+    assign_long_double_with_integer();
+    assign_long_double_with_number();
+    assign_long_double_with_string();
+    assign_long_double_with_array();
+    assign_long_double_with_map();
 
     assign_string_with_null();
     assign_string_with_boolean();
@@ -994,11 +1600,27 @@ void append_null_with_integer()
 
 void append_null_with_number()
 {
-    variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
-    data += variable(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 3.0);
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        data += variable(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 3.0f);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        data += variable(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 3.0);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+        data += variable(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 3.0L);
+    }
 }
 
 void append_null_with_string()
@@ -1064,12 +1686,30 @@ void append_boolean_with_integer()
 
 void append_boolean_with_number()
 {
-    variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
-    data += variable(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        data += variable(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    }
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        data += variable(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    }
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        data += variable(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    }
 }
 
 void append_boolean_with_string()
@@ -1128,11 +1768,27 @@ void append_integer_with_integer()
 
 void append_integer_with_number()
 {
-    variable data(2);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    data += variable(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        data += variable(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        data += variable(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        data += variable(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+    }
 }
 
 void append_integer_with_string()
@@ -1162,64 +1818,238 @@ void append_integer_with_map()
                                     "incompatible type");
 }
 
-void append_number_with_null()
+void append_float_with_null()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data += variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 3.0f);
 }
 
-void append_number_with_boolean()
+void append_float_with_boolean()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data += variable(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 4.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 4.0f);
 }
 
-void append_number_with_integer()
+void append_float_with_integer()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data += variable(2);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 5.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 5.0f);
 }
 
-void append_number_with_number()
+void append_float_with_number()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    data += variable(2.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 5.0);
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        data += variable(2.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 5.0f);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        data += variable(2.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 5.0f);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        data += variable(2.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 5.0f);
+    }
 }
 
-void append_number_with_string()
+void append_float_with_string()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
                                     error,
                                     "incompatible type");
 }
 
-void append_number_with_array()
+void append_float_with_array()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::array({ true, "alpha" })),
                                     error,
                                     "incompatible type");
 }
 
-void append_number_with_map()
+void append_float_with_map()
+{
+    variable data(3.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
+                                    error,
+                                    "incompatible type");
+}
+
+void append_double_with_null()
 {
     variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data += variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 3.0);
+}
+
+void append_double_with_boolean()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data += variable(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 4.0);
+}
+
+void append_double_with_integer()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    data += variable(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 5.0);
+}
+
+void append_double_with_number()
+{
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        data += variable(2.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 5.0);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        data += variable(2.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 5.0);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        data += variable(2.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 5.0);
+    }
+}
+
+void append_double_with_string()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                    error,
+                                    "incompatible type");
+}
+
+void append_double_with_array()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::array({ true, "alpha" })),
+                                    error,
+                                    "incompatible type");
+}
+
+void append_double_with_map()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
+                                    error,
+                                    "incompatible type");
+}
+
+void append_long_double_with_null()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data += variable::null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 3.0L);
+}
+
+void append_long_double_with_boolean()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data += variable(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 4.0L);
+}
+
+void append_long_double_with_integer()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    data += variable(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 5.0L);
+}
+
+void append_long_double_with_number()
+{
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        data += variable(2.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 5.0L);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        data += variable(2.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 5.0L);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        data += variable(2.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 5.0L);
+    }
+}
+
+void append_long_double_with_string()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                    error,
+                                    "incompatible type");
+}
+
+void append_long_double_with_array()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::array({ true, "alpha" })),
+                                    error,
+                                    "incompatible type");
+}
+
+void append_long_double_with_map()
+{
+    variable data(3.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
                                     error,
                                     "incompatible type");
@@ -1254,11 +2084,27 @@ void append_string_with_integer()
 
 void append_string_with_number()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0)),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0f)),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0)),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0L)),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_string_with_string()
@@ -1326,14 +2172,36 @@ void append_array_with_integer()
 
 void append_array_with_number()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
-    data += 6.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
-    variable expect = variable::array({ true, 2, 3.0, "alpha", 6.0 });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = variable::array({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+        data += 6.0f;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable expect = variable::array({ true, 2, 3.0, "alpha", 6.0f });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = variable::array({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+        data += 6.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable expect = variable::array({ true, 2, 3.0, "alpha", 6.0 });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = variable::array({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+        data += 6.0L;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable expect = variable::array({ true, 2, 3.0, "alpha", 6.0L });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void append_array_with_string()
@@ -1419,14 +2287,36 @@ void append_map_with_integer()
 
 void append_map_with_number()
 {
-    variable data = variable::map(
-        {
-            { "alpha", "hydrogen" },
-            { "bravo", "helium" }
-        });
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0)),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data = variable::map(
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            });
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0f)),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data = variable::map(
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            });
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0)),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data = variable::map(
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            });
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0L)),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_map_with_string()
@@ -1491,13 +2381,29 @@ void run()
     append_integer_with_array();
     append_integer_with_map();
 
-    append_number_with_null();
-    append_number_with_boolean();
-    append_number_with_integer();
-    append_number_with_number();
-    append_number_with_string();
-    append_number_with_array();
-    append_number_with_map();
+    append_float_with_null();
+    append_float_with_boolean();
+    append_float_with_integer();
+    append_float_with_number();
+    append_float_with_string();
+    append_float_with_array();
+    append_float_with_map();
+
+    append_double_with_null();
+    append_double_with_boolean();
+    append_double_with_integer();
+    append_double_with_number();
+    append_double_with_string();
+    append_double_with_array();
+    append_double_with_map();
+
+    append_long_double_with_null();
+    append_long_double_with_boolean();
+    append_long_double_with_integer();
+    append_long_double_with_number();
+    append_long_double_with_string();
+    append_long_double_with_array();
+    append_long_double_with_map();
 
     append_string_with_null();
     append_string_with_boolean();
@@ -2040,7 +2946,13 @@ void fail_null_as_number()
 {
     variable data;
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(error), variable::number_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    error = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    error = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -2102,12 +3014,14 @@ void test_boolean_as_integer()
 void test_boolean_as_number()
 {
     variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 0.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), variable::number_type(data));
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 0.0L);
 
     data = true;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 1.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 1.0L);
 }
 
 void fail_boolean_as_string()
@@ -2176,14 +3090,21 @@ void test_integer_as_integer()
 void test_integer_as_number()
 {
     variable data(0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 0.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), variable::number_type(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 0.0L);
 
     data = 1;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 1.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 1.0L);
 
     data = std::numeric_limits<variable::integer_type>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(),
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(),
+                              std::numeric_limits<variable::integer_type>::max());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(),
+                              std::numeric_limits<variable::integer_type>::max());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(),
                               std::numeric_limits<variable::integer_type>::max());
 }
 
@@ -2213,17 +3134,100 @@ void fail_integer_as_map()
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
-void fail_number_as_null()
+void fail_float_as_null()
 {
-    variable data(0.0);
+    variable data(0.0f);
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(error), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0);
     TRIAL_PROTOCOL_TEST(!error);
     data.value<variable::null_type>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
-void test_number_as_boolean()
+void test_float_as_boolean()
+{
+    variable data(0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type(data));
+
+    data = 1.0;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+
+    data = std::numeric_limits<float>::max();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+}
+
+void test_float_as_integer()
+{
+    variable data(0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), variable::integer_type(data));
+
+    data = 1.0f;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 1);
+
+    data = 2.0f;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
+}
+
+void test_float_as_number()
+{
+    variable data(0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), float(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), double(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 0.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), (long double)(data));
+
+    data = std::numeric_limits<float>::min();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), std::numeric_limits<float>::min());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), std::numeric_limits<float>::min());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), std::numeric_limits<float>::min());
+
+    data = std::numeric_limits<float>::max();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), std::numeric_limits<float>::max());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), std::numeric_limits<float>::max());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), std::numeric_limits<float>::max());
+}
+
+void fail_float_as_string()
+{
+    variable data(0.0f);
+    std::error_code error;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
+    TRIAL_PROTOCOL_TEST(!error);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void fail_float_as_array()
+{
+    variable data(0.0f);
+    std::error_code error;
+    data.value<variable::array_type>(error);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void fail_float_as_map()
+{
+    variable data(0.0f);
+    std::error_code error;
+    data.value<variable::map_type>(error);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void fail_double_as_null()
+{
+    variable data(0.0);
+    std::error_code error;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
+    TRIAL_PROTOCOL_TEST(!error);
+    data.value<variable::null_type>(error);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void test_double_as_boolean()
 {
     variable data(0.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
@@ -2232,11 +3236,11 @@ void test_number_as_boolean()
     data = 1.0;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
 
-    data = std::numeric_limits<variable::number_type>::max();
+    data = std::numeric_limits<double>::max();
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
 }
 
-void test_number_as_integer()
+void test_double_as_integer()
 {
     variable data(0.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 0);
@@ -2249,31 +3253,38 @@ void test_number_as_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
 }
 
-void test_number_as_number()
+void test_double_as_number()
 {
     variable data(0.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), variable::number_type(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), float(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), double(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 0.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), (long double)(data));
 
-    data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 1.0);
+    data = std::numeric_limits<double>::min();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f); // Underflow
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), std::numeric_limits<double>::min());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), std::numeric_limits<double>::min());
 
-    data = std::numeric_limits<variable::number_type>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(),
-                              std::numeric_limits<variable::number_type>::max());
+    data = std::numeric_limits<double>::max();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), std::numeric_limits<float>::infinity()); // Overflow
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), std::numeric_limits<double>::max());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), std::numeric_limits<double>::max());
 }
 
-void fail_number_as_string()
+void fail_double_as_string()
 {
     variable data(0.0);
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(error), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
     TRIAL_PROTOCOL_TEST(!error);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
-void fail_number_as_array()
+void fail_double_as_array()
 {
     variable data(0.0);
     std::error_code error;
@@ -2281,9 +3292,92 @@ void fail_number_as_array()
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
-void fail_number_as_map()
+void fail_double_as_map()
 {
     variable data(0.0);
+    std::error_code error;
+    data.value<variable::map_type>(error);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void fail_long_double_as_null()
+{
+    variable data(0.0L);
+    std::error_code error;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0);
+    TRIAL_PROTOCOL_TEST(!error);
+    data.value<variable::null_type>(error);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void test_long_double_as_boolean()
+{
+    variable data(0.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type(data));
+
+    data = 1.0L;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+
+    data = std::numeric_limits<long double>::max();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+}
+
+void test_long_double_as_integer()
+{
+    variable data(0.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), variable::integer_type(data));
+
+    data = 1.0L;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 1);
+
+    data = 2.0L;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
+}
+
+void test_long_double_as_number()
+{
+    variable data(0.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), float(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), double(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 0.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), (long double)(data));
+
+    data = std::numeric_limits<long double>::min();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f); // Underflow
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 0.0); // Underflow
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), std::numeric_limits<long double>::min());
+
+    data = std::numeric_limits<long double>::max();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), std::numeric_limits<float>::infinity()); // Overflow
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), std::numeric_limits<double>::infinity()); // Overflow
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), std::numeric_limits<long double>::max());
+}
+
+void fail_long_double_as_string()
+{
+    variable data(0.0L);
+    std::error_code error;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0);
+    TRIAL_PROTOCOL_TEST(!error);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void fail_long_double_as_array()
+{
+    variable data(0.0L);
+    std::error_code error;
+    data.value<variable::array_type>(error);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+}
+
+void fail_long_double_as_map()
+{
+    variable data(0.0L);
     std::error_code error;
     data.value<variable::map_type>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -2325,7 +3419,13 @@ void fail_string_as_number()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(error), variable::number_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    error = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    error = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -2398,13 +3498,29 @@ void run()
     fail_integer_as_array();
     fail_integer_as_map();
 
-    fail_number_as_null();
-    test_number_as_boolean();
-    test_number_as_integer();
-    test_number_as_number();
-    fail_number_as_string();
-    fail_number_as_array();
-    fail_number_as_map();
+    fail_float_as_null();
+    test_float_as_boolean();
+    test_float_as_integer();
+    test_float_as_number();
+    fail_float_as_string();
+    fail_float_as_array();
+    fail_float_as_map();
+
+    fail_double_as_null();
+    test_double_as_boolean();
+    test_double_as_integer();
+    test_double_as_number();
+    fail_double_as_string();
+    fail_double_as_array();
+    fail_double_as_map();
+
+    fail_long_double_as_null();
+    test_long_double_as_boolean();
+    test_long_double_as_integer();
+    test_long_double_as_number();
+    fail_long_double_as_string();
+    fail_long_double_as_array();
+    fail_long_double_as_map();
 
     fail_string_as_null();
     fail_string_as_boolean();
@@ -2630,8 +3746,18 @@ void test_integer()
 
 void test_number()
 {
-    variable data(1.0);
-    TRIAL_PROTOCOL_TEST(!data.empty());
+    {
+        variable data(1.0f);
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
+        variable data(1.0);
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
+        variable data(1.0L);
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
 }
 
 void test_string()
@@ -2699,8 +3825,18 @@ void test_integer()
 
 void test_number()
 {
-    variable data(1.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    {
+        variable data(1.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    }
+    {
+        variable data(1.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    }
+    {
+        variable data(1.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    }
 }
 
 void test_string()
@@ -2779,11 +3915,27 @@ void test_integer()
 
 void test_number()
 {
-    variable data(1.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    data.clear();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), variable::integer_type{});
+    {
+        variable data(1.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        data.clear();
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
+    }
+    {
+        variable data(1.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        data.clear();
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 0.0);
+    }
+    {
+        variable data(1.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        data.clear();
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 0.0L);
+    }
 }
 
 void test_string()
