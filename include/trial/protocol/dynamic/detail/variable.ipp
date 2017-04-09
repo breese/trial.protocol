@@ -75,6 +75,7 @@ template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value>::type>
 {
     using type = variable::null_type;
+    using category_type = variable::null_type;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -125,6 +126,7 @@ template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::value>::type>
 {
     using type = variable::boolean_type;
+    using category_type = variable::boolean_type;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -220,6 +222,7 @@ template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::value>::type>
 {
     using type = variable::integer_type;
+    using category_type = variable::integer_type;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -314,7 +317,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
 template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::value>::type>
 {
-    using type = variable::number_type;
+    using type = T;
+    using category_type = variable::number_type;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -410,6 +414,7 @@ template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_string<T>::value>::type>
 {
     using type = variable::string_type;
+    using category_type = variable::string_type;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -482,6 +487,7 @@ template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::value>::type>
 {
     using type = variable::array_type;
+    using category_type = variable::array_type;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -565,6 +571,7 @@ template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>::type>
 {
     using type = variable::map_type;
+    using category_type = variable::map_type;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -639,6 +646,41 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
         default:
             throw dynamic::error(incompatible_type);
         }
+    }
+};
+
+//-----------------------------------------------------------------------------
+// variable::same_overloader
+//-----------------------------------------------------------------------------
+
+// The specialized template capture qualifications removed during template
+// argument deduction to ensure that only the exact type is matched in the
+// general case.
+//
+// For example:
+//   variable data(0.0f);
+//   assert(data.same<float>(), true);
+//   assert(data.same<float&>(), false);
+//   assert(data.same<const float>(), false);
+
+template <typename T, typename Enable>
+struct variable::same_overloader
+{
+    static bool same(std::size_t which)
+    {
+        return which == traits<T>::value;
+    }
+};
+
+template <typename T>
+struct variable::same_overloader<T,
+                                 typename std::enable_if<std::is_const<T>::value ||
+                                                         std::is_volatile<T>::value ||
+                                                         std::is_reference<T>::value>::type>
+{
+    static bool same(std::size_t)
+    {
+        return false;
     }
 };
 
@@ -902,6 +944,21 @@ bool variable::iterator_type<T>::operator!= (const iterator_type<T>& other)
 {
     return !(*this == other);
 }
+
+//-----------------------------------------------------------------------------
+// visitors
+//-----------------------------------------------------------------------------
+
+template <typename T>
+struct variable::similar_visitor
+{
+    template <typename Which>
+    static bool call(const storage_type&)
+    {
+        return std::is_same<typename variable::overloader<T>::category_type,
+                            typename variable::overloader<Which>::category_type>::value;
+    }
+};
 
 //-----------------------------------------------------------------------------
 // variable
@@ -1281,7 +1338,13 @@ inline const variable& variable::operator[] (const map_type::key_type& key) cons
 template <typename T>
 bool variable::is() const
 {
-    return storage.which() == traits<typename overloader<T>::type>::value;
+    return storage.call<similar_visitor<typename std::decay<T>::type>, bool>();
+}
+
+template <typename T>
+bool variable::same() const
+{
+    return same_overloader<T>::same(storage.which());
 }
 
 inline bool variable::empty() const

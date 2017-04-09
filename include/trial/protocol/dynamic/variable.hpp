@@ -159,6 +159,7 @@ public:
     // Type checker
 
     template <typename T> bool is() const;
+    template <typename T> bool same() const;
 
     bool empty() const;
     size_type size() const;
@@ -201,8 +202,11 @@ public:
 private:
     template <typename T> struct traits;
     template <typename T, typename Enable = void> struct overloader;
+    template <typename T, typename Enable = void> struct same_overloader;
+    template <typename T> struct similar_visitor;
 
-    protocol::detail::small_union<sizeof(number_type), null_type, boolean_type, integer_type, number_type, string_type, array_type, map_type> storage;
+    using storage_type = protocol::detail::small_union<sizeof(number_type), null_type, boolean_type, integer_type, float, double, long double, string_type, array_type, map_type>;
+    storage_type storage;
 };
 
 } // namespace dynamic

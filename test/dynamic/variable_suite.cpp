@@ -106,7 +106,7 @@ void test_integer_with_long_long()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<long long>(), true);
 }
 
-void test_number_with_float()
+void construct_float()
 {
     variable data(1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
@@ -116,11 +116,9 @@ void test_number_with_float()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<double>(), true);
 }
 
-void test_number_with_double()
+void construct_double()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
@@ -130,8 +128,18 @@ void test_number_with_double()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<double>(), true);
+}
+
+void construct_long_double()
+{
+    variable data(1.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void test_string_with_string()
@@ -273,8 +281,9 @@ void run()
     test_integer_with_long();
     test_integer_with_long_long();
 
-    test_number_with_float();
-    test_number_with_double();
+    construct_float();
+    construct_double();
+    construct_long_double();
 
     test_string_with_string();
     test_string_with_literal();
@@ -292,6 +301,100 @@ void run()
 }
 
 } // namespace ctor_suite
+
+//-----------------------------------------------------------------------------
+// variable::is<T>
+//-----------------------------------------------------------------------------
+
+namespace is_suite
+{
+
+void is_number_with_float()
+{
+    variable data(1.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const float&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile float&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const double&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const long double&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const float>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const float&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile float>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile float&>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), false);
+}
+
+void is_number_with_double()
+{
+    variable data(1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<double&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const double&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile double&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const float&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const long double&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const double>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const double&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile double>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile double&>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), false);
+}
+
+void is_number_with_long_double()
+{
+    variable data(1.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const long double&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile long double&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const float&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const double&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const long double>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const long double&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile long double>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile long double&>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), false);
+}
+
+void run()
+{
+    is_number_with_float();
+    is_number_with_double();
+    is_number_with_long_double();
+}
+
+} // namespace is_suite
 
 //-----------------------------------------------------------------------------
 // Copy
@@ -3154,6 +3257,8 @@ void run()
 int main()
 {
     ctor_suite::run();
+    is_suite::run();
+
     copy_suite::run();
     move_suite::run();
     assign_suite::run();
