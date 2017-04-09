@@ -795,7 +795,9 @@ variable::iterator_type<T>::iterator_type(pointer p,
 
     case traits<boolean_type>::value:
     case traits<integer_type>::value:
-    case traits<number_type>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
     case traits<string_type>::value:
         if (initialize)
             current = p;
@@ -814,6 +816,10 @@ variable::iterator_type<T>::iterator_type(pointer p,
         else
             current = p->storage.template get<map_type>().end();
         break;
+
+    default:
+        assert(false);
+        throw dynamic::error(incompatible_type);
     }
 }
 
@@ -885,7 +891,9 @@ auto variable::iterator_type<T>::operator++ () -> iterator_type&
     case traits<null_type>::value:
     case traits<boolean_type>::value:
     case traits<integer_type>::value:
-    case traits<number_type>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
     case traits<string_type>::value:
         current = pointer(nullptr);
         break;
@@ -896,6 +904,10 @@ auto variable::iterator_type<T>::operator++ () -> iterator_type&
 
     case traits<map_type>::value:
         ++current.template get<map_iterator>();
+        break;
+
+    default:
+        assert(false);
         break;
     }
     return *this;
@@ -944,7 +956,9 @@ auto variable::iterator_type<T>::value() -> reference
     case traits<null_type>::value:
     case traits<boolean_type>::value:
     case traits<integer_type>::value:
-    case traits<number_type>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
     case traits<string_type>::value:
         return *current.template get<pointer>();
 
@@ -968,7 +982,9 @@ auto variable::iterator_type<T>::operator-> () -> pointer
     case traits<null_type>::value:
     case traits<boolean_type>::value:
     case traits<integer_type>::value:
-    case traits<number_type>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
     case traits<string_type>::value:
         return current.template get<pointer>();
 
@@ -997,7 +1013,9 @@ bool variable::iterator_type<T>::operator== (const iterator_type<T>& other)
     case traits<null_type>::value:
     case traits<boolean_type>::value:
     case traits<integer_type>::value:
-    case traits<number_type>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
     case traits<string_type>::value:
         return current.template get<pointer>() == other.current.template get<pointer>();
 
@@ -1006,9 +1024,11 @@ bool variable::iterator_type<T>::operator== (const iterator_type<T>& other)
 
     case traits<map_type>::value:
         return current.template get<map_iterator>() == other.current.template get<map_iterator>();
+
+    default:
+        assert(false);
+        throw dynamic::error(incompatible_type);
     }
-    assert(false);
-    throw dynamic::error(incompatible_type);
 }
 
 template <typename T>
