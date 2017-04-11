@@ -22,8 +22,8 @@
 using namespace trial::protocol;
 namespace token = json::token;
 
-using encoder_type = json::detail::basic_encoder<char>;
-using unsigned_encoder_type = json::detail::basic_encoder<unsigned char>;
+using encoder_type = json::detail::basic_encoder<char, sizeof(buffer::array<char, 1>)>;
+using unsigned_encoder_type = json::detail::basic_encoder<unsigned char, sizeof(buffer::array<char, 1>)>;
 using unsigned_string = std::basic_string<unsigned char, buffer::char_traits<unsigned char>>;
 using unsigned_ostringstream = std::basic_ostringstream<unsigned char, buffer::char_traits<unsigned char>>;
 

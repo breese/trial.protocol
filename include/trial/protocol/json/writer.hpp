@@ -27,13 +27,13 @@ namespace json
 //! @brief Incremental JSON writer.
 //!
 //! Generate JSON output incrementally by appending C++ data.
-template <typename CharT>
+template <typename CharT, std::size_t N = 2 * sizeof(void *)>
 class basic_writer
 {
 public:
     using value_type = CharT;
     using size_type = std::size_t;
-    using view_type = typename detail::basic_encoder<value_type>::view_type;
+    using view_type = typename detail::basic_encoder<value_type, N>::view_type;
 
     //! @brief Construct an incremental JSON writer.
     //!
@@ -71,7 +71,7 @@ private:
     size_type end_object_value();
 
 private:
-    using encoder_type = detail::basic_encoder<value_type>;
+    using encoder_type = detail::basic_encoder<value_type, N>;
     encoder_type encoder;
     mutable enum json::errc last_error;
 

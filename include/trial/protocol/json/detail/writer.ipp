@@ -25,77 +25,77 @@ namespace json
 // writer::overloader
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T, typename Enable>
-struct basic_writer<CharT>::overloader
+struct basic_writer<CharT, N>::overloader
 {
 };
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-struct basic_writer<CharT>::overloader<
+struct basic_writer<CharT, N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::null>::value>::type>
 {
-    using size_type = typename basic_writer<CharT>::size_type;
+    using size_type = typename basic_writer<CharT, N>::size_type;
 
-    inline static size_type value(basic_writer<CharT>& self)
+    inline static size_type value(basic_writer<CharT, N>& self)
     {
         return self.null_value();
     }
 };
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-struct basic_writer<CharT>::overloader<
+struct basic_writer<CharT, N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::begin_array>::value>::type>
 {
-    using size_type = typename basic_writer<CharT>::size_type;
+    using size_type = typename basic_writer<CharT, N>::size_type;
 
-    inline static size_type value(basic_writer<CharT>& self)
+    inline static size_type value(basic_writer<CharT, N>& self)
     {
         return self.begin_array_value();
     }
 };
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-struct basic_writer<CharT>::overloader<
+struct basic_writer<CharT, N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::end_array>::value>::type>
 {
-    using size_type = typename basic_writer<CharT>::size_type;
+    using size_type = typename basic_writer<CharT, N>::size_type;
 
-    inline static size_type value(basic_writer<CharT>& self)
+    inline static size_type value(basic_writer<CharT, N>& self)
     {
         return self.end_array_value();
     }
 };
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-struct basic_writer<CharT>::overloader<
+struct basic_writer<CharT, N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::begin_object>::value>::type>
 {
-    using size_type = typename basic_writer<CharT>::size_type;
+    using size_type = typename basic_writer<CharT, N>::size_type;
 
-    inline static size_type value(basic_writer<CharT>& self)
+    inline static size_type value(basic_writer<CharT, N>& self)
     {
         return self.begin_object_value();
     }
 };
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-struct basic_writer<CharT>::overloader<
+struct basic_writer<CharT, N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::end_object>::value>::type>
 {
-    using size_type = typename basic_writer<CharT>::size_type;
+    using size_type = typename basic_writer<CharT, N>::size_type;
 
-    inline static size_type value(basic_writer<CharT>& self)
+    inline static size_type value(basic_writer<CharT, N>& self)
     {
         return self.end_object_value();
     }
@@ -105,40 +105,40 @@ struct basic_writer<CharT>::overloader<
 // writer
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-basic_writer<CharT>::basic_writer(T& buffer)
+basic_writer<CharT, N>::basic_writer(T& buffer)
     : encoder(buffer)
 {
     // Push outermost scope
     stack.push(frame(encoder, token::code::end_array));
 }
 
-template <typename CharT>
-std::error_code basic_writer<CharT>::error() const BOOST_NOEXCEPT
+template <typename CharT, std::size_t N>
+std::error_code basic_writer<CharT, N>::error() const BOOST_NOEXCEPT
 {
     return make_error_code(last_error);
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::level() const BOOST_NOEXCEPT
+template <typename CharT, std::size_t N>
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::level() const BOOST_NOEXCEPT
 {
     return stack.size() - 1;
 }
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value()
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::value()
 {
-    return basic_writer<CharT>::overloader<T>::value(*this);
+    return basic_writer<CharT, N>::overloader<T>::value(*this);
 }
 
-template <typename CharT>
+template <typename CharT, std::size_t N>
 template <typename T>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::value(T&& data)
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::value(T&& data)
 {
     validate_scope();
 
@@ -146,15 +146,15 @@ basic_writer<CharT>::value(T&& data)
     return encoder.value(std::forward<T>(data));
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::literal(const view_type& data) BOOST_NOEXCEPT
+template <typename CharT, std::size_t N>
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::literal(const view_type& data) BOOST_NOEXCEPT
 {
     return encoder.literal(data);
 }
 
-template <typename CharT>
-void basic_writer<CharT>::validate_scope()
+template <typename CharT, std::size_t N>
+void basic_writer<CharT, N>::validate_scope()
 {
     if (stack.empty())
     {
@@ -163,8 +163,8 @@ void basic_writer<CharT>::validate_scope()
     }
 }
 
-template <typename CharT>
-void basic_writer<CharT>::validate_scope(token::code::value code,
+template <typename CharT, std::size_t N>
+void basic_writer<CharT, N>::validate_scope(token::code::value code,
                                          enum json::errc e)
 {
     if ((stack.size() < 2) || (stack.top().code != code))
@@ -174,9 +174,9 @@ void basic_writer<CharT>::validate_scope(token::code::value code,
     }
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::null_value()
+template <typename CharT, std::size_t N>
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::null_value()
 {
     validate_scope();
 
@@ -184,9 +184,9 @@ basic_writer<CharT>::null_value()
     return encoder.template value<token::null>();
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::begin_array_value()
+template <typename CharT, std::size_t N>
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::begin_array_value()
 {
     validate_scope();
 
@@ -195,9 +195,9 @@ basic_writer<CharT>::begin_array_value()
     return encoder.template value<token::begin_array>();
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::end_array_value()
+template <typename CharT, std::size_t N>
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::end_array_value()
 {
     validate_scope(token::code::end_array, json::unexpected_token);
 
@@ -206,9 +206,9 @@ basic_writer<CharT>::end_array_value()
     return result;
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::begin_object_value()
+template <typename CharT, std::size_t N>
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::begin_object_value()
 {
     validate_scope();
 
@@ -217,9 +217,9 @@ basic_writer<CharT>::begin_object_value()
     return encoder.template value<token::begin_object>();
 }
 
-template <typename CharT>
-typename basic_writer<CharT>::size_type
-basic_writer<CharT>::end_object_value()
+template <typename CharT, std::size_t N>
+typename basic_writer<CharT, N>::size_type
+basic_writer<CharT, N>::end_object_value()
 {
     validate_scope(token::code::end_object, json::unexpected_token);
 
@@ -232,17 +232,17 @@ basic_writer<CharT>::end_object_value()
 // frame
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-basic_writer<CharT>::frame::frame(encoder_type& encoder,
-                                  token::code::value code)
+template <typename CharT, std::size_t N>
+basic_writer<CharT, N>::frame::frame(encoder_type& encoder,
+                                     token::code::value code)
     : encoder(encoder),
       code(code),
       counter(0)
 {
 }
 
-template <typename CharT>
-void basic_writer<CharT>::frame::write_separator()
+template <typename CharT, std::size_t N>
+void basic_writer<CharT, N>::frame::write_separator()
 {
     if (counter != 0)
     {
