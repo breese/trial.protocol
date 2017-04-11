@@ -228,15 +228,13 @@ basic_encoder<CharT, N>::~basic_encoder()
 
 template <typename CharT, std::size_t N>
 template <typename U>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::value(const U& data)
+auto basic_encoder<CharT, N>::value(const U& data) -> size_type
 {
     return basic_encoder<CharT, N>::overloader<U>::write(*this, data);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::value(bool data)
+auto basic_encoder<CharT, N>::value(bool data) -> size_type
 {
     if (data)
     {
@@ -249,31 +247,27 @@ basic_encoder<CharT, N>::value(bool data)
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::value(const value_type *data)
+auto basic_encoder<CharT, N>::value(const value_type *data) -> size_type
 {
     return basic_encoder<CharT, N>::overloader<view_type>::write(*this, data);
 }
 
 template <typename CharT, std::size_t N>
 template <typename U>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::value()
+auto basic_encoder<CharT, N>::value() -> size_type
 {
     return basic_encoder<CharT, N>::overloader<U>::write(*this);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::literal(const view_type& data)
+auto basic_encoder<CharT, N>::literal(const view_type& data) -> size_type
 {
     return write(data);
 }
 
 template <typename CharT, std::size_t N>
 template <typename T>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::integral_value(const T& data)
+auto basic_encoder<CharT, N>::integral_value(const T& data) -> size_type
 {
     std::array<value_type, std::numeric_limits<T>::digits10 + 1> output;
 
@@ -318,8 +312,7 @@ basic_encoder<CharT, N>::integral_value(const T& data)
 
 template <typename CharT, std::size_t N>
 template <typename T>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::floating_value(const T& data)
+auto basic_encoder<CharT, N>::floating_value(const T& data) -> size_type
 {
     switch (std::fpclassify(data))
     {
@@ -334,8 +327,7 @@ basic_encoder<CharT, N>::floating_value(const T& data)
 
 template <typename CharT, std::size_t N>
 template <typename T>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::string_value(const T& data)
+auto basic_encoder<CharT, N>::string_value(const T& data) -> size_type
 {
     // This is an approximation of the size. Further characters may be
     // added by escaped characters, in which case we grow the buffer
@@ -468,57 +460,49 @@ basic_encoder<CharT, N>::string_value(const T& data)
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::null_value()
+auto basic_encoder<CharT, N>::null_value() -> size_type
 {
     return write(traits<CharT>::null_text());
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::begin_array_value()
+auto basic_encoder<CharT, N>::begin_array_value() -> size_type
 {
     return write(traits<CharT>::alpha_bracket_open);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::end_array_value()
+auto basic_encoder<CharT, N>::end_array_value() -> size_type
 {
     return write(traits<CharT>::alpha_bracket_close);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::begin_object_value()
+auto basic_encoder<CharT, N>::begin_object_value() -> size_type
 {
     return write(traits<CharT>::alpha_brace_open);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::end_object_value()
+auto basic_encoder<CharT, N>::end_object_value() -> size_type
 {
     return write(traits<CharT>::alpha_brace_close);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::value_separator_value()
+auto basic_encoder<CharT, N>::value_separator_value() -> size_type
 {
     return write(traits<CharT>::alpha_comma);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::name_separator_value()
+auto basic_encoder<CharT, N>::name_separator_value() -> size_type
 {
     return write(traits<CharT>::alpha_colon);
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::write(value_type character)
+auto basic_encoder<CharT, N>::write(value_type character) -> size_type
 {
     const size_type size = sizeof(character);
     if (buffer().grow(size))
@@ -530,8 +514,7 @@ basic_encoder<CharT, N>::write(value_type character)
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::write(const view_type& data)
+auto basic_encoder<CharT, N>::write(const view_type& data) -> size_type
 {
     const typename view_type::size_type size = data.size();
     if (buffer().grow(size))
@@ -543,8 +526,7 @@ basic_encoder<CharT, N>::write(const view_type& data)
 }
 
 template <typename CharT, std::size_t N>
-typename basic_encoder<CharT, N>::size_type
-basic_encoder<CharT, N>::write(const string_type& data)
+auto basic_encoder<CharT, N>::write(const string_type& data) -> size_type
 {
     const typename view_type::size_type size = data.size();
     if (buffer().grow(size))

@@ -367,15 +367,13 @@ std::basic_string<CharT> basic_decoder<CharT>::string_value() const
 }
 
 template <typename CharT>
-const typename basic_decoder<CharT>::view_type&
-basic_decoder<CharT>::literal() const BOOST_NOEXCEPT
+auto basic_decoder<CharT>::literal() const BOOST_NOEXCEPT -> const view_type&
 {
     return current.view;
 }
 
 template <typename CharT>
-const typename basic_decoder<CharT>::view_type&
-basic_decoder<CharT>::tail() const BOOST_NOEXCEPT
+auto basic_decoder<CharT>::tail() const BOOST_NOEXCEPT -> const view_type&
 {
     return input;
 }

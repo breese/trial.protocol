@@ -110,8 +110,7 @@ basic_reader<CharT>::basic_reader(const basic_reader<CharT>& other)
 }
 
 template <typename CharT>
-typename basic_reader<CharT>::size_type
-basic_reader<CharT>::level() const BOOST_NOEXCEPT
+auto basic_reader<CharT>::level() const BOOST_NOEXCEPT -> size_type
 {
     assert(stack.size() > 0);
     return stack.size() - 1;
@@ -220,15 +219,13 @@ T basic_reader<CharT>::value() const
 }
 
 template <typename CharT>
-const typename basic_reader<CharT>::view_type&
-basic_reader<CharT>::literal() const BOOST_NOEXCEPT
+auto basic_reader<CharT>::literal() const BOOST_NOEXCEPT -> const view_type&
 {
     return decoder.literal();
 }
 
 template <typename CharT>
-const typename basic_reader<CharT>::view_type&
-basic_reader<CharT>::tail() const BOOST_NOEXCEPT
+auto basic_reader<CharT>::tail() const BOOST_NOEXCEPT -> const view_type&
 {
     return decoder.tail();
 }

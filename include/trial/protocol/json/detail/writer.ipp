@@ -121,24 +121,21 @@ std::error_code basic_writer<CharT, N>::error() const BOOST_NOEXCEPT
 }
 
 template <typename CharT, std::size_t N>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::level() const BOOST_NOEXCEPT
+auto basic_writer<CharT, N>::level() const BOOST_NOEXCEPT -> size_type
 {
     return stack.size() - 1;
 }
 
 template <typename CharT, std::size_t N>
 template <typename T>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::value()
+auto basic_writer<CharT, N>::value() -> size_type
 {
     return basic_writer<CharT, N>::overloader<T>::value(*this);
 }
 
 template <typename CharT, std::size_t N>
 template <typename T>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::value(T&& data)
+auto basic_writer<CharT, N>::value(T&& data) -> size_type
 {
     validate_scope();
 
@@ -147,8 +144,7 @@ basic_writer<CharT, N>::value(T&& data)
 }
 
 template <typename CharT, std::size_t N>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::literal(const view_type& data) BOOST_NOEXCEPT
+auto basic_writer<CharT, N>::literal(const view_type& data) BOOST_NOEXCEPT -> size_type
 {
     return encoder.literal(data);
 }
@@ -165,7 +161,7 @@ void basic_writer<CharT, N>::validate_scope()
 
 template <typename CharT, std::size_t N>
 void basic_writer<CharT, N>::validate_scope(token::code::value code,
-                                         enum json::errc e)
+                                            enum json::errc e)
 {
     if ((stack.size() < 2) || (stack.top().code != code))
     {
@@ -175,8 +171,7 @@ void basic_writer<CharT, N>::validate_scope(token::code::value code,
 }
 
 template <typename CharT, std::size_t N>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::null_value()
+auto basic_writer<CharT, N>::null_value() -> size_type
 {
     validate_scope();
 
@@ -185,8 +180,7 @@ basic_writer<CharT, N>::null_value()
 }
 
 template <typename CharT, std::size_t N>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::begin_array_value()
+auto basic_writer<CharT, N>::begin_array_value() -> size_type
 {
     validate_scope();
 
@@ -196,8 +190,7 @@ basic_writer<CharT, N>::begin_array_value()
 }
 
 template <typename CharT, std::size_t N>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::end_array_value()
+auto basic_writer<CharT, N>::end_array_value() -> size_type
 {
     validate_scope(token::code::end_array, json::unexpected_token);
 
@@ -207,8 +200,7 @@ basic_writer<CharT, N>::end_array_value()
 }
 
 template <typename CharT, std::size_t N>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::begin_object_value()
+auto basic_writer<CharT, N>::begin_object_value() -> size_type
 {
     validate_scope();
 
@@ -218,8 +210,7 @@ basic_writer<CharT, N>::begin_object_value()
 }
 
 template <typename CharT, std::size_t N>
-typename basic_writer<CharT, N>::size_type
-basic_writer<CharT, N>::end_object_value()
+auto basic_writer<CharT, N>::end_object_value() -> size_type
 {
     validate_scope(token::code::end_object, json::unexpected_token);
 
