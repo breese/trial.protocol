@@ -21,23 +21,20 @@ using namespace trial::protocol::dynamic;
 namespace equality_suite
 {
 
-void test_null_equal_null()
+void compare_null_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::null, false);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(), false);
 }
 
-void test_null_equal_boolean()
+void compare_null_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::null, false);
+}
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != true, true);
-
+void compare_null_equal_boolean()
+{
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(false), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(false), true);
 
@@ -45,7 +42,31 @@ void test_null_equal_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(true), true);
 }
 
-void test_null_equal_integer()
+void compare_null_equal_boolean_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != false, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != true, true);
+}
+
+void compare_null_equal_integer()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(0), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(1), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(1), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(0U), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(0U), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(1U), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(1U), true);
+}
+
+void compare_null_equal_integer_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0, true);
@@ -53,66 +74,51 @@ void test_null_equal_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(0), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0U, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0U, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(1), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1U, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1U, true);
 }
 
-void test_null_equal_float()
+void compare_null_equal_number()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0.0f, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1.0f, true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(0.0f), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(0.0f), true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(1.0f), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(1.0f), true);
-}
-
-void test_null_equal_double()
-{
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0.0, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1.0, true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(0.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(0.0), true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(1.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(1.0), true);
-}
-
-void test_null_equal_long_double()
-{
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0.0L, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1.0L, true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(0.0L), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(0.0L), true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(1.0L), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(1.0L), true);
 }
 
-void test_null_equal_string()
+void compare_null_equal_number_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != "", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0.0f, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0.0f, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1.0f, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1.0f, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0.0, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0.0, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1.0, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1.0, true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0.0, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0.0, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == 1.0, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1.0, true);
+}
+
+void compare_null_equal_string()
+{
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(""), true);
 
@@ -120,7 +126,16 @@ void test_null_equal_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable("alpha"), true);
 }
 
-void test_null_equal_array()
+void compare_null_equal_string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == "", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != "", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != "alpha", true);
+}
+
+void compare_null_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array(), true);
@@ -132,7 +147,7 @@ void test_null_equal_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array({ 1, 2, 3 }), true);
 }
 
-void test_null_equal_map()
+void compare_null_equal_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::map(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::map(), true);
@@ -141,127 +156,139 @@ void test_null_equal_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::map({ {"alpha", 1} }), true);
 }
 
-void test_boolean_equal_null()
+void compare_boolean_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::null, true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::null, true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(), true);
 }
 
-void test_boolean_equal_boolean()
+void compare_boolean_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::null, true);
+}
 
+void compare_boolean_equal_boolean()
+{
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(false), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(false), false);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != false, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != true, false);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(false), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(false), true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(true), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(true), false);
 }
 
-void test_boolean_equal_integer()
+void compare_boolean_equal_boolean_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != true, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != true, false);
+}
+
+void compare_boolean_equal_integer()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(0), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(0), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(0U), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(0U), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(0U), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(0U), true);
+}
+
+void compare_boolean_equal_integer_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0, false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(0), false);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(0), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0U, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0U, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0U, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0U, true);
 }
 
-void test_boolean_equal_float()
+void compare_boolean_equal_number()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0.0f, false);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(0.0f), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(0.0f), false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0.0f, true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(0.0f), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(0.0f), true);
-}
-
-void test_boolean_equal_double()
-{
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0.0, false);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(0.0), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(0.0), false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0.0, true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(0.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(0.0), true);
-}
-
-void test_boolean_equal_long_double()
-{
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0.0L, false);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(0.0L), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(0.0L), false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0.0L, true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(0.0L), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(0.0L), true);
 }
 
-void test_boolean_equal_string()
+void compare_boolean_equal_number_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != "", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0.0f, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0.0f, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0.0f, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0.0f, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0.0, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0.0, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0.0, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0.0, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0.0L, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0.0L, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == 0.0L, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0.0L, true);
+}
+
+void compare_boolean_equal_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(""), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable("alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable("alpha"), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != "alpha", true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable("alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable("alpha"), true);
 }
 
-void test_boolean_equal_array()
+void compare_boolean_equal_string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == "", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != "", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == "", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != "", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != "alpha", true);
+}
+
+void compare_boolean_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::array(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::array(), true);
@@ -274,7 +301,7 @@ void test_boolean_equal_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::array({ 1, 2, 3 }), true);
 }
 
-void test_boolean_equal_map()
+void compare_boolean_equal_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::map(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::map(), true);
@@ -287,529 +314,1037 @@ void test_boolean_equal_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::map({ {"alpha", 1} }), true);
 }
 
-void test_integer_equal_null()
+void compare_integer_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(), true);
+}
+
+void compare_integer_equal_null_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::null, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::null, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(), true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable::null, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable::null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable::null, true);
 }
 
-void test_integer_equal_boolean()
+void compare_integer_equal_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != false, false);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(true), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(false), false);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(true), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(true), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != false, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != true, false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(false), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(true), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(true), false);
-
-    const variable max(std::numeric_limits<variable::integer_type>::max());
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != false, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != true, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(false), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(true), true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(true), true);
+    }
 }
 
-void test_integer_equal_integer()
+void compare_integer_equal_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0, false);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != true, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != true, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0), false);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != true, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != true, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != true, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1, false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1), false);
-
-    const variable max(std::numeric_limits<variable::integer_type>::max());
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 0, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 1, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(0), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(1), true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != true, true);
+    }
 }
 
-void test_integer_equal_float()
+void compare_integer_equal_integer()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0.0f, false);
+    // signed - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0.0f), false);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1), true);
+    }
+    // signed - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1U), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1U), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0.0f, true);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1U), true);
+    }
+    // unsigned - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(1), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(1), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0.0f), true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1), true);
+    }
+    // unsigned - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(1U), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(1U), false);
 
-    const variable max(std::numeric_limits<variable::integer_type>::max());
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 0.0f, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 1.0f, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(0.0f), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(1.0f), true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1U), true);
+    }
 }
 
-void test_integer_equal_double()
+void compare_integer_equal_integer_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0.0, false);
+    // signed - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0.0), false);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1, true);
+    }
+    // signed - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1U, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1U, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0.0, true);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1U, true);
+    }
+    // unsigned - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 1, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 1, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 1, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 1, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0.0), true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1, true);
+    }
+    // unsigned - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 1U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 1U, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 1U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 1U, false);
 
-    const variable max(std::numeric_limits<variable::integer_type>::max());
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 0.0, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 1.0, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(0.0), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(1.0), true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1U, true);
+    }
 }
 
-void test_integer_equal_long_double()
+void compare_integer_equal_number()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0.0L, false);
+    // signed - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1.0f), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1.0f), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0.0L), false);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1.0f), true);
+    }
+    // signed - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1.0), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1.0), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0.0L, true);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1.0), true);
+    }
+    // signed - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(1.0L), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1.0L), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(0.0L), true);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1.0L), true);
+    }
+    // unsigned - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(1.0f), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(1.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(1.0f), false);
 
-    const variable max(std::numeric_limits<variable::integer_type>::max());
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1.0f), true);
+    }
+    // unsigned - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(1.0), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(1.0), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(max == 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != 1.0L, true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1.0), true);
+    }
+    // unsigned - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(1.0L), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(1.0L), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(max == variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(max != variable(1.0L), true);
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != variable(1.0L), true);
+    }
 }
 
-void test_integer_equal_string()
+void compare_integer_equal_number_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != "", true);
+    // signed - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1.0f, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1.0f, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != "alpha", true);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1.0f, true);
+    }
+    // signed - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1.0, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1.0, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != "", true);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1.0, true);
+    }
+    // signed - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != 1.0L, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == 1.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != 1.0L, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != "alpha", true);
+        const variable big(std::numeric_limits<signed int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1.0L, true);
+    }
+    // unsigned - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 1.0f, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 1.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 1.0f, false);
+
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1.0f, true);
+    }
+    // unsigned - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 1.0, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 1.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 1.0, false);
+
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1.0, true);
+    }
+    // unsigned - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != 1.0L, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == 1.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != 1.0L, false);
+
+        const variable big(std::numeric_limits<unsigned int>::max());
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(big == 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(big != 1.0L, true);
+    }
 }
 
-void test_integer_equal_array()
+void compare_integer_equal_string()
 {
-    const auto max = std::numeric_limits<variable::integer_type>::max();
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable("alpha"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable("alpha"), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable("alpha"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::array({ 1, 2, 3 }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable("alpha"), true);
+    }
 }
 
-void test_integer_equal_map()
+void compare_integer_equal_string_literal()
 {
-    const auto max = std::numeric_limits<variable::integer_type>::max();
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != "", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != "alpha", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != "", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != "alpha", true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != "", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != "alpha", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::map({ {"alpha", 1} }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != "", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != "alpha", true);
+    }
 }
 
-void test_float_equal_null()
+void compare_integer_equal_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(), true);
+    {
+        const auto big = std::numeric_limits<signed int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+    }
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+    }
 }
 
-void test_float_equal_boolean()
+void compare_integer_equal_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(true), true);
+    {
+        const auto big = std::numeric_limits<signed int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+    }
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+    }
 }
 
-void test_float_equal_integer()
+void compare_number_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(), true);
+    }
 }
 
-void test_float_equal_number()
+void compare_number_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1.0L), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::null, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::null, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::null, true);
+    }
 }
 
-void test_double_equal_null()
+void compare_number_equal_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(true), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(true), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(true), true);
+    }
 }
 
-void test_double_equal_boolean()
+void compare_number_equal_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(true), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(true), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(true), false);
-
-    auto big = std::numeric_limits<double>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable(true), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != true, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != true, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != true, true);
+    }
 }
 
-void test_double_equal_integer()
+void compare_number_equal_integer()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(1), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(1), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(1), false);
-
-    auto big = std::numeric_limits<double>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable(1), true);
+    // float - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1), true);
+    }
+    // float - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1U), true);
+    }
+    // double - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(1), true);
+    }
+    // double - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(1U), true);
+    }
+    // long double - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1), true);
+    }
+    // long double - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1U), true);
+    }
 }
 
-void test_double_equal_number()
+void compare_number_equal_integer_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(1.0), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(1.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(1.0), false);
-
-    auto big = std::numeric_limits<double>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable(1.0), true);
+    // float - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 1, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 1, true);
+    }
+    // float - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 1U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 1U, true);
+    }
+    // double - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 1, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 1, true);
+    }
+    // double - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 1U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 1U, true);
+    }
+    // long double - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 1, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 1, true);
+    }
+    // long double - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 1U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 1U, true);
+    }
 }
 
-void test_double_equal_string()
+void compare_number_equal_number()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable("alpha"), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable("alpha"), true);
+    // float - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1.0f), true);
+    }
+    // float - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1.0), true);
+    }
+    // float - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(1.0L), true);
+    }
+    // double - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(1.0f), true);
+    }
+    // double - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(1.0), true);
+    }
+    // double - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(1.0L), true);
+    }
+    // long double - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1.0f), true);
+    }
+    // long double - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1.0), true);
+    }
+    // long double - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1.0L), true);
+    }
 }
 
-void test_double_equal_array()
+void compare_number_equal_number_literal()
 {
-    const auto max = std::numeric_limits<double>::max();
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::array(), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::array({ 1, 2, 3 }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::array({ 1, 2, 3 }), true);
+    // float - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 1.0f, true);
+    }
+    // float - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 1.0, true);
+    }
+    // float - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != 1.0L, true);
+    }
+    // double - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 1.0f, true);
+    }
+    // double - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 1.0, true);
+    }
+    // double - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != 1.0L, true);
+    }
+    // long double - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 0.0f, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 0.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 1.0f, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 1.0f, true);
+    }
+    // long double - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 0.0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 0.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 1.0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 1.0, true);
+    }
+    // long double - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 0.0L, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 0.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 1.0L, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 1.0L, true);
+    }
 }
 
-void test_double_equal_map()
+void compare_number_equal_string()
 {
-    const auto max = std::numeric_limits<variable::number_type>::max();
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::map(), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::map({ {"alpha", 1} }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(max) != variable::map({ {"alpha", 1} }), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable("alpha"), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable("alpha"), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != variable("alpha"), true);
+    }
 }
 
-void test_long_double_equal_null()
+void compare_number_equal_string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != "alpha", true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != "alpha", true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != "alpha", true);
+    }
 }
 
-void test_long_double_equal_boolean()
+void compare_number_equal_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(true), true);
+    {
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+    }
+    {
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+    }
+    {
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+    }
 }
 
-void test_long_double_equal_integer()
+void compare_number_equal_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1), true);
+    {
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+    }
+    {
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+    }
+    {
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+    }
 }
 
-void test_long_double_equal_number()
+void compare_string_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(0.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(1.0L), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(), true);
 }
 
-void test_string_equal_null()
+void compare_string_equal_null_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::null, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::null, true);
@@ -817,74 +1352,203 @@ void test_string_equal_null()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::null, true);
 }
 
-void test_string_equal_boolean()
+void compare_string_equal_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != false, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(false), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != true, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != false, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(false), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != true, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(true), true);
 }
 
-void test_string_equal_integer()
+void compare_string_equal_boolean_literal()
 {
-    const auto max = std::numeric_limits<variable::integer_type>::max();
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != true, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != max, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(max), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(max), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != max, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(max), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(max), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != true, true);
 }
 
-void test_string_equal_number()
+void compare_string_equal_integer()
 {
-    const auto max = std::numeric_limits<variable::number_type>::max();
+    {
+        const auto big = std::numeric_limits<signed int>::max();
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != max, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(max), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(max), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(big), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != max, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(max), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(max), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
+    }
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
+    }
 }
 
-void test_string_equal_string()
+void compare_string_equal_integer_literal()
+{
+    {
+        const auto big = std::numeric_limits<signed int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
+    }
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
+    }
+}
+
+void compare_string_equal_number()
+{
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
+    }
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
+    }
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
+    }
+}
+
+void compare_string_equal_number_literal()
+{
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
+    }
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
+    }
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
+    }
+}
+
+void compare_string_equal_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(""), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("bravo"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("bravo"), false);
+}
+
+void compare_string_equal_string_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") == "alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") != "alpha", true);
@@ -902,7 +1566,7 @@ void test_string_equal_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != "bravo", false);
 }
 
-void test_string_equal_array()
+void compare_string_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::array(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::array(), true);
@@ -915,7 +1579,7 @@ void test_string_equal_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::array({ 1, 2, 3 }), true);
 }
 
-void test_string_equal_map()
+void compare_string_equal_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::map(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::map(), true);
@@ -928,7 +1592,15 @@ void test_string_equal_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::map({ {"alpha", 1} }), true);
 }
 
-void test_array_equal_null()
+void compare_array_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(), true);
+}
+
+void compare_array_equal_null_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable::null, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable::null, true);
@@ -936,7 +1608,20 @@ void test_array_equal_null()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable::null, true);
 }
 
-void test_array_equal_boolean()
+void compare_array_equal_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(true), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(true), true);
+}
+
+void compare_array_equal_boolean_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == false, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != false, true);
@@ -949,37 +1634,176 @@ void test_array_equal_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != true, true);
 }
 
-void test_array_equal_integer()
+void compare_array_equal_integer()
 {
-    const auto max = std::numeric_limits<variable::integer_type>::max();
+    {
+        const auto zero = 0;
+        const auto big = std::numeric_limits<signed int>::max();
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+    }
+    {
+        const auto zero = 0U;
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+    }
 }
 
-void test_array_equal_number()
+void compare_array_equal_integer_literal()
 {
-    const auto max = std::numeric_limits<variable::number_type>::max();
+    {
+        const auto zero = 0;
+        const auto big = std::numeric_limits<signed int>::max();
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+    }
+    {
+        const auto zero = 0U;
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+    }
 }
 
-void test_array_equal_string()
+void compare_array_equal_number()
+{
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+    }
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+    }
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+    }
+}
+
+void compare_array_equal_number_literal()
+{
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+    }
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+    }
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+    }
+}
+
+void compare_array_equal_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable("alpha"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable("alpha"), true);
+}
+
+void compare_array_equal_string_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == "", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != "", true);
@@ -992,7 +1816,7 @@ void test_array_equal_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != "alpha", true);
 }
 
-void test_array_equal_array()
+void compare_array_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable::array(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable::array(), false);
@@ -1008,7 +1832,7 @@ void test_array_equal_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3, 5 }) != variable::array({ 1, 2, 3, 4 }), true);
 }
 
-void test_array_equal_map()
+void compare_array_equal_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable::map(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable::map(), true);
@@ -1021,7 +1845,15 @@ void test_array_equal_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable::map({ {"alpha", 1} }), true);
 }
 
-void test_map_equal_null()
+void compare_map_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(), true);
+}
+
+void compare_map_equal_null_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::null, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::null, true);
@@ -1029,7 +1861,20 @@ void test_map_equal_null()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::null, true);
 }
 
-void test_map_equal_boolean()
+void compare_map_equal_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(true), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(true), true);
+}
+
+void compare_map_equal_boolean_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == false, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != false, true);
@@ -1042,37 +1887,176 @@ void test_map_equal_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != true, true);
 }
 
-void test_map_equal_integer()
+void compare_map_equal_integer()
 {
-    const auto max = std::numeric_limits<variable::integer_type>::max();
+    {
+        const auto zero = 0;
+        const auto big = std::numeric_limits<signed int>::max();
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+    }
+    {
+        const auto zero = 0U;
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+    }
 }
 
-void test_map_equal_number()
+void compare_map_equal_integer_literal()
 {
-    const auto max = std::numeric_limits<variable::number_type>::max();
+    {
+        const auto zero = 0;
+        const auto big = std::numeric_limits<signed int>::max();
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == max, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != max, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+    }
+    {
+        const auto zero = 0U;
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+    }
 }
 
-void test_map_equal_string()
+void compare_map_equal_number()
+{
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+    }
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+    }
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+    }
+}
+
+void compare_map_equal_number_literal()
+{
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+    }
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+    }
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+    }
+}
+
+void compare_map_equal_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable("alpha"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable("alpha"), true);
+}
+
+void compare_map_equal_string_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == "", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != "", true);
@@ -1085,7 +2069,7 @@ void test_map_equal_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != "alpha", true);
 }
 
-void test_map_equal_array()
+void compare_map_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::array(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::array(), true);
@@ -1098,7 +2082,7 @@ void test_map_equal_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::array({ 1, 2, 3 }), true);
 }
 
-void test_map_equal_map()
+void compare_map_equal_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::map(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::map(), false);
@@ -1115,77 +2099,96 @@ void test_map_equal_map()
 
 void run()
 {
-    test_null_equal_null();
-    test_null_equal_boolean();
-    test_null_equal_integer();
-    test_null_equal_float();
-    test_null_equal_double();
-    test_null_equal_long_double();
-    test_null_equal_string();
-    test_null_equal_array();
-    test_null_equal_map();
+    compare_null_equal_null();
+    compare_null_equal_null_literal();
+    compare_null_equal_boolean();
+    compare_null_equal_boolean_literal();
+    compare_null_equal_integer();
+    compare_null_equal_integer_literal();
+    compare_null_equal_number();
+    compare_null_equal_number_literal();
+    compare_null_equal_string();
+    compare_null_equal_string_literal();
+    compare_null_equal_array();
+    compare_null_equal_map();
 
-    test_boolean_equal_null();
-    test_boolean_equal_boolean();
-    test_boolean_equal_integer();
-    test_boolean_equal_float();
-    test_boolean_equal_double();
-    test_boolean_equal_long_double();
-    test_boolean_equal_string();
-    test_boolean_equal_array();
-    test_boolean_equal_map();
+    compare_boolean_equal_null();
+    compare_boolean_equal_null_literal();
+    compare_boolean_equal_boolean();
+    compare_boolean_equal_boolean_literal();
+    compare_boolean_equal_integer();
+    compare_boolean_equal_integer_literal();
+    compare_boolean_equal_number();
+    compare_boolean_equal_number_literal();
+    compare_boolean_equal_string();
+    compare_boolean_equal_string_literal();
+    compare_boolean_equal_array();
+    compare_boolean_equal_map();
 
-    test_integer_equal_null();
-    test_integer_equal_boolean();
-    test_integer_equal_integer();
-    test_integer_equal_float();
-    test_integer_equal_double();
-    test_integer_equal_long_double();
-    test_integer_equal_string();
-    test_integer_equal_array();
-    test_integer_equal_map();
+    compare_integer_equal_null();
+    compare_integer_equal_null_literal();
+    compare_integer_equal_boolean();
+    compare_integer_equal_boolean_literal();
+    compare_integer_equal_integer();
+    compare_integer_equal_integer_literal();
+    compare_integer_equal_number();
+    compare_integer_equal_number_literal();
+    compare_integer_equal_string();
+    compare_integer_equal_string_literal();
+    compare_integer_equal_array();
+    compare_integer_equal_map();
 
-    test_float_equal_null();
-    test_float_equal_boolean();
-    test_float_equal_integer();
-    test_float_equal_number();
+    compare_number_equal_null();
+    compare_number_equal_null_literal();
+    compare_number_equal_boolean();
+    compare_number_equal_boolean_literal();
+    compare_number_equal_integer();
+    compare_number_equal_integer_literal();
+    compare_number_equal_number();
+    compare_number_equal_number_literal();
+    compare_number_equal_string();
+    compare_number_equal_string_literal();
+    compare_number_equal_array();
+    compare_number_equal_map();
 
-    test_double_equal_null();
-    test_double_equal_boolean();
-    test_double_equal_integer();
-    test_double_equal_number();
-    test_double_equal_string();
-    test_double_equal_array();
-    test_double_equal_map();
+    compare_string_equal_null();
+    compare_string_equal_null_literal();
+    compare_string_equal_boolean();
+    compare_string_equal_boolean_literal();
+    compare_string_equal_integer();
+    compare_string_equal_integer_literal();
+    compare_string_equal_number();
+    compare_string_equal_number_literal();
+    compare_string_equal_string();
+    compare_string_equal_string_literal();
+    compare_string_equal_array();
+    compare_string_equal_map();
 
-    test_long_double_equal_null();
-    test_long_double_equal_boolean();
-    test_long_double_equal_integer();
-    test_long_double_equal_number();
+    compare_array_equal_null();
+    compare_array_equal_null_literal();
+    compare_array_equal_boolean();
+    compare_array_equal_boolean_literal();
+    compare_array_equal_integer();
+    compare_array_equal_integer_literal();
+    compare_array_equal_number();
+    compare_array_equal_number_literal();
+    compare_array_equal_string();
+    compare_array_equal_string_literal();
+    compare_array_equal_array();
+    compare_array_equal_map();
 
-    test_string_equal_null();
-    test_string_equal_boolean();
-    test_string_equal_integer();
-    test_string_equal_number();
-    test_string_equal_string();
-    test_string_equal_array();
-    test_string_equal_map();
-
-    test_array_equal_null();
-    test_array_equal_boolean();
-    test_array_equal_integer();
-    test_array_equal_number();
-    test_array_equal_string();
-    test_array_equal_array();
-    test_array_equal_map();
-
-    test_map_equal_null();
-    test_map_equal_boolean();
-    test_map_equal_integer();
-    test_map_equal_number();
-    test_map_equal_string();
-    test_map_equal_array();
-    test_map_equal_map();
+    compare_map_equal_null();
+    compare_map_equal_null_literal();
+    compare_map_equal_boolean();
+    compare_map_equal_boolean_literal();
+    compare_map_equal_integer();
+    compare_map_equal_integer_literal();
+    compare_map_equal_number();
+    compare_map_equal_number_literal();
+    compare_map_equal_string();
+    compare_map_equal_string_literal();
+    compare_map_equal_array();
+    compare_map_equal_map();
 }
 
 } // namespace equality_suite
@@ -1197,141 +2200,278 @@ void run()
 namespace relational_suite
 {
 
-void test_null_less_null()
+void compare_null_with_null()
 {
-    variable null;
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable::null, true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(), true);
 }
 
-void test_null_less_boolean()
+void compare_null_with_null_literal()
 {
-    variable null;
-    TRIAL_PROTOCOL_TEST_EQUAL(null < false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(true), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(true), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null > false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(true), false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable::null, true);
 }
 
-void test_null_less_integer()
+void compare_null_with_boolean()
 {
-    variable null;
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(1), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(false), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(1), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(1), false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(1), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(true), false);
 }
 
-void test_null_less_float()
+void compare_null_with_boolean_literal()
 {
-    variable null;
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(0.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(1.0f), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= false, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(0.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(1.0f), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(1.0f), false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(1.0f), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= true, false);
 }
 
-void test_null_less_double()
+void compare_null_with_integer()
 {
-    variable null;
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(1.0), true);
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(zero), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(one), false);
+    }
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(zero), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(one), false);
+    }
 }
 
-void test_null_less_long_double()
+void compare_null_with_integer_literal()
 {
-    variable null;
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(0.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null < variable(1.0L), true);
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(0.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(null <= variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= zero, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null > variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= one, false);
+    }
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(null >= variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= zero, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= one, false);
+    }
 }
 
-void test_boolean()
+void compare_null_with_number()
+{
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(zero), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(one), false);
+    }
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(zero), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(one), false);
+    }
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(zero), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(one), false);
+    }
+}
+
+void compare_null_with_number_literal()
+{
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= zero, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= one, false);
+    }
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= zero, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= one, false);
+    }
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= zero, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable() >= one, false);
+    }
+}
+
+void compare_null_with_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(""), false);
+}
+
+void compare_null_with_array()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable::array(), false);
+}
+
+void compare_null_with_map()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable::map(), false);
+}
+
+void compare_boolean_with_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(), true);
+}
+
+void compare_boolean_with_null_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable::null, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable::null, true);
+}
+
+void compare_boolean_with_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(false), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(true), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(false), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(true), true);
+}
+
+void compare_boolean_with_boolean_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < false, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= false, true);
@@ -1354,463 +2494,2576 @@ void test_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= true, true);
 }
 
-void test_boolean_less_boolean()
+void compare_boolean_with_integer()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(true), true);
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(one), true);
+    }
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(one), true);
+    }
 }
 
-void test_boolean_less_integer()
+void compare_boolean_with_integer_literal()
 {
-    variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(1), true);
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= one, true);
+    }
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= one, true);
+    }
 }
 
-void test_boolean_less_float()
+void compare_boolean_with_number()
 {
-    variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(1.0f), true);
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(one), true);
+    }
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(one), true);
+    }
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(one), true);
+    }
 }
 
-void test_boolean_less_double()
+void compare_boolean_with_number_literal()
 {
-    variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(1.0), true);
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= one, true);
+    }
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= one, true);
+    }
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= one, true);
+    }
 }
 
-void test_boolean_less_long_double()
+void compare_boolean_with_string()
 {
-    variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(1.0L), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable("alpha"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(1.0L), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable("alpha"), false);
 }
 
-void test_integer_less_boolean()
+void compare_boolean_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(true), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable::array(), false);
 }
 
-void test_integer()
+void compare_boolean_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= 0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(0), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(1), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(1), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > 2, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= 2, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(2), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(2), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(2), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(2), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable::map(), false);
 }
 
-void test_integer_less_integer()
+void compare_integer_with_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(1), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(2), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(2), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(), true);
+    }
 }
 
-void test_integer_less_float()
+void compare_integer_with_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 2.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(1.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(2.0f), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable::null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 2.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(2.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable::null, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable::null, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable::null, true);
+    }
 }
 
-void test_integer_less_double()
-{
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 2.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(1.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(2.0), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 2.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(2.0), true);
+void compare_integer_with_boolean()
+{
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(true), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(true), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(true), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(true), true);
+    }
 }
 
-void test_integer_less_long_double()
+void compare_integer_with_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < 2.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(1.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(2.0L), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= false, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < 2.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(2.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= true, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= true, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= true, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= true, true);
+    }
 }
 
-void test_float_less_null()
+void compare_integer_with_integer()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(), true);
+    // signed - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(two), false);
+    }
+    // signed - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(two), false);
+    }
+    // unsigned - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(two), false);
+    }
+    // unsigned - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(two), false);
+    }
 }
 
-void test_float_less_boolean()
+void compare_integer_with_integer_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(true), true);
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= two, false);
+    }
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= two, false);
+    }
 }
 
-void test_float_less_integer()
+void compare_integer_with_number()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(1), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(2), true);
+    // signed - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(2), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(two), false);
+    }
+    // signed - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(two), false);
+    }
+    // signed - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable(two), false);
+    }
+    // unsigned - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(two), false);
+    }
+    // unsigned - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(two), false);
+    }
+    // unsigned - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable(two), false);
+    }
 }
 
-void test_float_less_float()
+void compare_integer_with_number_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(0.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(0.0f), true);
+    // signed - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(1.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= zero, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 2.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 2.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 2.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 2.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(2.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(2.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(2.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(2.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= two, false);
+    }
+    // signed - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= two, false);
+    }
+    // signed - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= two, false);
+    }
+    // unsigned - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= two, false);
+    }
+    // unsigned - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= two, false);
+    }
+    // unsigned - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= two, false);
+    }
 }
 
-void test_float_less_double()
+void compare_integer_with_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(0.0), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(1.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(1.0), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 2.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 2.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 2.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 2.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(2.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(2.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(2.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(2.0), false);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable("alpha"), false);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable("alpha"), false);
+    }
 }
 
-void test_float_less_long_double()
+void compare_integer_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(0.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(0.0L), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(1.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(1.0L), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < 2.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= 2.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > 2.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= 2.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(2.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(2.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(2.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(2.0L), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) < variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) <= variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) > variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) >= variable::array(), false);
 }
 
-void test_double_less_null()
+void compare_integer_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) < variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) <= variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) > variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) >= variable::map(), false);
 }
 
-void test_double_less_boolean()
+void compare_number_with_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(true), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(true), false);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(), true);
+    }
 }
 
-void test_double_less_integer()
+void compare_number_with_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < 1, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(1), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(2), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 1, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 2, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(1), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(2), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable::null, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable::null, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable::null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable::null, true);
+    }
 }
 
-void test_double_less_float()
+void compare_number_with_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 0.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 0.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(0.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(0.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(0.0f), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(false), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 1.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 1.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(1.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(1.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(true), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 2.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 2.0f, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 2.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 2.0f, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(2.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(2.0f), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(2.0f), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(2.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(true), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(true), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(true), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(true), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(false), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(false), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(false), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(true), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(true), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(true), true);
+    }
 }
 
-void test_double_less_double()
+void compare_number_with_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 0.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 0.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(0.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(0.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(0.0), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= false, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 1.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 1.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(1.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(1.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= true, false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 2.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 2.0, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 2.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 2.0, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(2.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(2.0), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(2.0), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(2.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= true, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= true, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= true, true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= true, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= false, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > false, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= false, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= true, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > true, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= true, true);
+    }
 }
 
-void test_double_less_long_double()
+void compare_number_with_integer()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 0.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 0.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(0.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(0.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(0.0L), true);
+    // float - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 1.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 1.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(1.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(1.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(zero), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < 2.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= 2.0L, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > 2.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= 2.0L, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(2.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(2.0L), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(2.0L), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(2.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(two), false);
+    }
+    // float - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(two), false);
+    }
+    // double - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(two), false);
+    }
+    // double - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(two), false);
+    }
+    // long double - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(two), false);
+    }
+    // long double - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(two), false);
+    }
 }
 
-void test_long_double_less_null()
+void compare_number_with_integer_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(), true);
+    // float - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= two, false);
+    }
+    // float - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= two, false);
+    }
+    // double - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= two, false);
+    }
+    // double - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= two, false);
+    }
+    // long double - signed
+    {
+        const signed int zero = 0;
+        const signed int one = 1;
+        const signed int two = 2;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= two, false);
+    }
+    // long double - unsigned
+    {
+        const unsigned int zero = 0U;
+        const unsigned int one = 1U;
+        const unsigned int two = 2U;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= two, false);
+    }
 }
 
-void test_string()
+void compare_number_with_number()
+{
+    // float - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(two), false);
+    }
+    // float - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(two), false);
+    }
+    // float - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable(two), false);
+    }
+    // double - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(two), false);
+    }
+    // double - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(two), false);
+    }
+    // double - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable(two), false);
+    }
+    // long double - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(two), false);
+    }
+    // long double - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(two), false);
+    }
+    // long double - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(one), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(two), false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(zero), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(one), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(one), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(one), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= variable(two), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > variable(two), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= variable(two), false);
+    }
+}
+
+void compare_number_with_number_literal()
+{
+    // float - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= two, false);
+    }
+    // float - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= two, false);
+    }
+    // float - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= two, false);
+    }
+    // double - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= two, false);
+    }
+    // double - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= two, false);
+    }
+    // double - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= two, false);
+    }
+    // long double - float
+    {
+        const float zero = 0.0f;
+        const float one = 1.0f;
+        const float two = 2.0f;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= two, false);
+    }
+    // long double - double
+    {
+        const double zero = 0.0;
+        const double one = 1.0;
+        const double two = 2.0;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= two, false);
+    }
+    // long double - long double
+    {
+        const long double zero = 0.0L;
+        const long double one = 1.0L;
+        const long double two = 2.0L;
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= one, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= two, false);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= zero, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= one, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > one, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= one, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) < two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) <= two, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) > two, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) >= two, false);
+    }
+}
+
+void compare_number_with_string()
+{
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable("alpha"), false);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable("alpha"), false);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable("alpha"), false);
+    }
+}
+
+void compare_number_with_array()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) > variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) >= variable::array(), false);
+}
+
+void compare_number_with_map()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) > variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) >= variable::map(), false);
+}
+
+void compare_string_with_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") >= variable(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(), true);
+}
+
+void compare_string_with_null_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") < variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") <= variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") > variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") >= variable::null, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable::null, true);
+}
+
+void compare_string_with_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(false), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(true), true);
+}
+
+void compare_string_with_boolean_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= false, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= true, true);
+}
+
+void compare_string_with_integer()
+{
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(0), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(0U), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1U), true);
+    }
+}
+
+void compare_string_with_number()
+{
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(0.0f), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1.0f), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(0.0), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1.0), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(0.0L), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1.0L), true);
+    }
+}
+
+void compare_string_with_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable("alpha"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable("bravo"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= variable("alpha"), true);
+}
+
+void compare_string_with_string_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < "alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= "alpha", true);
@@ -1828,7 +5081,23 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= "alpha", true);
 }
 
-void test_array_less_array()
+void compare_string_with_array()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable::array(), false);
+}
+
+void compare_string_with_map()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable::map(), false);
+}
+
+void compare_array_with_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 2}), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 1}), false);
@@ -1845,49 +5114,68 @@ void test_array_less_array()
 
 void run()
 {
-    // FIXME: Check all relational operators
-    // FIXME: More
-    test_null_less_null();
-    test_null_less_boolean();
-    test_null_less_integer();
-    test_null_less_float();
-    test_null_less_double();
-    test_null_less_long_double();
+    compare_null_with_null();
+    compare_null_with_null_literal();
+    compare_null_with_boolean();
+    compare_null_with_boolean_literal();
+    compare_null_with_integer();
+    compare_null_with_integer_literal();
+    compare_null_with_number();
+    compare_null_with_number_literal();
+    compare_null_with_string();
+    compare_null_with_array();
+    compare_null_with_map();
 
-    test_boolean();
-    test_boolean_less_boolean();
-    test_boolean_less_integer();
-    test_boolean_less_float();
-    test_boolean_less_double();
-    test_boolean_less_long_double();
+    compare_boolean_with_null();
+    compare_boolean_with_null_literal();
+    compare_boolean_with_boolean();
+    compare_boolean_with_boolean_literal();
+    compare_boolean_with_integer();
+    compare_boolean_with_integer_literal();
+    compare_boolean_with_number();
+    compare_boolean_with_number_literal();
+    compare_boolean_with_string();
+    compare_boolean_with_array();
+    compare_boolean_with_map();
 
-    test_integer();
-    test_integer_less_boolean();
-    test_integer_less_integer();
-    test_integer_less_float();
-    test_integer_less_double();
-    test_integer_less_long_double();
+    compare_integer_with_null();
+    compare_integer_with_null_literal();
+    compare_integer_with_boolean();
+    compare_integer_with_boolean_literal();
+    compare_integer_with_integer();
+    compare_integer_with_integer_literal();
+    compare_integer_with_number();
+    compare_integer_with_number_literal();
+    compare_integer_with_string();
+    compare_integer_with_array();
+    compare_integer_with_map();
 
     // FIXME: Number with NaN etc.
-    test_float_less_null();
-    test_float_less_boolean();
-    test_float_less_integer();
-    test_float_less_float();
-    test_float_less_double();
-    test_float_less_long_double();
+    compare_number_with_null();
+    compare_number_with_null_literal();
+    compare_number_with_boolean();
+    compare_number_with_boolean_literal();
+    compare_number_with_integer();
+    compare_number_with_integer_literal();
+    compare_number_with_number();
+    compare_number_with_number_literal();
+    compare_number_with_string();
+    compare_number_with_array();
+    compare_number_with_map();
 
-    test_double_less_null();
-    test_double_less_boolean();
-    test_double_less_integer();
-    test_double_less_float();
-    test_double_less_double();
-    test_double_less_long_double();
+    compare_string_with_null();
+    compare_string_with_null_literal();
+    compare_string_with_boolean();
+    compare_string_with_boolean_literal();
+    compare_string_with_integer();
+    compare_string_with_number();
+    compare_string_with_string();
+    compare_string_with_string_literal();
+    compare_string_with_array();
+    compare_string_with_map();
 
-    test_long_double_less_null();
-
-    test_string();
-
-    test_array_less_array();
+    // FIXME: More
+    compare_array_with_array();
 }
 
 } // namespace relational_suite
@@ -1901,6 +5189,7 @@ namespace operator_bool_suite
 
 void test_null()
 {
+    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable::null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(bool(variable()), false);
 }
 
@@ -1912,16 +5201,35 @@ void test_boolean()
 
 void test_integer()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0)), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(1)), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(std::numeric_limits<variable::integer_type>::max())), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0)), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(1)), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(std::numeric_limits<signed int>::max())), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0U)), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(1U)), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(std::numeric_limits<unsigned int>::max())), true);
+    }
 }
 
 void test_number()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0.0)), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(1.0)), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(std::numeric_limits<variable::number_type>::max())), true);
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0.0f)), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(1.0f)), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(std::numeric_limits<float>::max())), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0.0)), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(1.0)), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(std::numeric_limits<double>::max())), true);
+    }
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0.0L)), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(1.0L)), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(std::numeric_limits<long double>::max())), true);
+    }
 }
 
 void run()
@@ -1942,7 +5250,43 @@ void run()
 namespace equal_to_suite
 {
 
-void test_boolean()
+void compare_null_with_null()
+{
+    TRIAL_PROTOCOL_TEST(std::equal_to<variable>()(variable(), variable::null));
+    TRIAL_PROTOCOL_TEST(std::equal_to<variable>()(variable(), variable()));
+}
+
+void compare_null_with_boolean()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), false));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(false)));
+}
+
+void compare_null_with_integer()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 0));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(0)));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 0U));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(0U)));
+}
+
+void compare_null_with_number()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 0.0f));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(0.0f)));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 0.0));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(0.0)));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 0.0L));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(0.0L)));
+}
+
+void compare_boolean_with_null()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(false), variable::null));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(false), variable()));
+}
+
+void compare_boolean_with_boolean()
 {
     TRIAL_PROTOCOL_TEST(std::equal_to<variable>()(true, true));
     TRIAL_PROTOCOL_TEST(std::equal_to<variable>()(variable(true), variable(true)));
@@ -1952,7 +5296,13 @@ void test_boolean()
 void run()
 {
     // FIXME: More
-    test_boolean();
+    compare_null_with_null();
+    compare_null_with_boolean();
+    compare_null_with_integer();
+    compare_null_with_number();
+
+    compare_boolean_with_null();
+    compare_boolean_with_boolean();
 }
 
 } // namespace equal_to_suite

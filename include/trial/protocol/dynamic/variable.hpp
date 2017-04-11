@@ -205,7 +205,23 @@ private:
     template <typename T, typename Enable = void> struct same_overloader;
     template <typename T> struct similar_visitor;
 
-    using storage_type = protocol::detail::small_union<sizeof(number_type), null_type, boolean_type, integer_type, float, double, long double, string_type, array_type, map_type>;
+    using storage_type = protocol::detail::small_union<sizeof(number_type),
+                                                       null_type,
+                                                       boolean_type,
+                                                       signed short int,
+                                                       unsigned short int,
+                                                       signed int,
+                                                       unsigned int,
+                                                       signed long int,
+                                                       unsigned long int,
+                                                       signed long long int,
+                                                       unsigned long long int,
+                                                       float,
+                                                       double,
+                                                       long double,
+                                                       string_type,
+                                                       array_type,
+                                                       map_type>;
     storage_type storage;
 };
 

@@ -129,8 +129,29 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         case traits<variable::boolean_type>::value:
             return self.storage.get<variable::boolean_type>();
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<variable::integer_type>();
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>();
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>();
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>();
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>();
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>();
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>();
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>();
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>();
 
         case traits<float>::value:
             return self.storage.get<float>();
@@ -154,8 +175,29 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         case traits<variable::boolean_type>::value:
             return self.storage.get<boolean_type>() == other;
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<integer_type>() == other;
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>() == other;
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>() == other;
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>() == other;
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>() == other;
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>() == other;
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>() == other;
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>() == other;
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>() == other;
 
         case traits<float>::value:
             return self.storage.get<float>() == other;
@@ -181,8 +223,29 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         case traits<variable::boolean_type>::value:
             return self.storage.get<boolean_type>() < other;
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<integer_type>() < other;
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>() < other;
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>() < other;
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>() < other;
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>() < other;
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>() < other;
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>() < other;
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>() < other;
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>() < other;
 
         case traits<float>::value:
             return self.storage.get<float>() < other;
@@ -210,8 +273,36 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
             self.storage.get<boolean_type>() += other;
             break;
 
-        case traits<variable::integer_type>::value:
-            self.storage.get<integer_type>() += other;
+        case traits<signed short int>::value:
+            self.storage.get<signed short int>() += other;
+            break;
+
+        case traits<unsigned short int>::value:
+            self.storage.get<unsigned short int>() += other;
+            break;
+
+        case traits<signed int>::value:
+            self.storage.get<signed int>() += other;
+            break;
+
+        case traits<unsigned int>::value:
+            self.storage.get<unsigned int>() += other;
+            break;
+
+        case traits<signed long int>::value:
+            self.storage.get<signed long int>() += other;
+            break;
+
+        case traits<unsigned long int>::value:
+            self.storage.get<unsigned long int>() += other;
+            break;
+
+        case traits<signed long long int>::value:
+            self.storage.get<signed long long int>() += other;
+            break;
+
+        case traits<unsigned long long int>::value:
+            self.storage.get<unsigned long long int>() += other;
             break;
 
         case traits<float>::value:
@@ -236,12 +327,13 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
     }
 };
 
-// Integer
+// Signed integer
 
 template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::value>::type>
+struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::value &&
+                                                       std::is_signed<T>::value>::type>
 {
-    using type = variable::integer_type;
+    using type = T;
     using category_type = variable::integer_type;
 
     static T convert(const variable& self, std::error_code& error)
@@ -251,8 +343,29 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::boolean_type>::value:
             return self.storage.get<variable::boolean_type>();
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<variable::integer_type>();
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>();
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>();
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>();
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>();
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>();
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>();
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>();
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>();
 
         case traits<float>::value:
             return self.storage.get<float>();
@@ -276,8 +389,21 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::boolean_type>::value:
             return self.storage.get<boolean_type>() == other;
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<integer_type>() == other;
+        case traits<signed short int>::value:
+        case traits<unsigned short int>::value:
+            return self.storage.get<signed short int>() == other;
+
+        case traits<signed int>::value:
+        case traits<unsigned int>::value:
+            return self.storage.get<signed int>() == other;
+
+        case traits<signed long int>::value:
+        case traits<unsigned long int>::value:
+            return self.storage.get<signed long int>() == other;
+
+        case traits<signed long long int>::value:
+        case traits<unsigned long long int>::value:
+            return self.storage.get<signed long long int>() == other;
 
         case traits<float>::value:
             return self.storage.get<float>() == other;
@@ -303,8 +429,21 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::boolean_type>::value:
             return self.storage.get<boolean_type>() < other;
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<integer_type>() < other;
+        case traits<signed short int>::value:
+        case traits<unsigned short int>::value:
+            return self.storage.get<signed short int>() < other;
+
+        case traits<signed int>::value:
+        case traits<unsigned int>::value:
+            return self.storage.get<signed int>() < other;
+
+        case traits<signed long int>::value:
+        case traits<unsigned long int>::value:
+            return self.storage.get<signed long int>() < other;
+
+        case traits<signed long long int>::value:
+        case traits<unsigned long long int>::value:
+            return self.storage.get<signed long long int>() < other;
 
         case traits<float>::value:
             return self.storage.get<float>() < other;
@@ -332,8 +471,234 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
             self.storage.get<boolean_type>() += other;
             break;
 
-        case traits<variable::integer_type>::value:
-            self.storage.get<integer_type>() += other;
+        case traits<signed short int>::value:
+            self.storage.get<signed short int>() += other;
+            break;
+
+        case traits<unsigned short int>::value:
+            self.storage.get<unsigned short int>() += other;
+            break;
+
+        case traits<signed int>::value:
+            self.storage.get<signed int>() += other;
+            break;
+
+        case traits<unsigned int>::value:
+            self.storage.get<unsigned int>() += other;
+            break;
+
+        case traits<signed long int>::value:
+            self.storage.get<signed long int>() += other;
+            break;
+
+        case traits<unsigned long int>::value:
+            self.storage.get<unsigned long int>() += other;
+            break;
+
+        case traits<signed long long int>::value:
+            self.storage.get<signed long long int>() += other;
+            break;
+
+        case traits<unsigned long long int>::value:
+            self.storage.get<unsigned long long int>() += other;
+            break;
+
+        case traits<float>::value:
+            self.storage.get<float>() += other;
+            break;
+
+        case traits<double>::value:
+            self.storage.get<double>() += other;
+            break;
+
+        case traits<long double>::value:
+            self.storage.get<long double>() += other;
+            break;
+
+        case traits<variable::array_type>::value:
+            self.storage.get<array_type>().push_back(other);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+};
+
+// Unsigned integer
+
+template <typename T>
+struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::value &&
+                                                       std::is_unsigned<T>::value>::type>
+{
+    using type = T;
+    using category_type = variable::integer_type;
+
+    static T convert(const variable& self, std::error_code& error)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::boolean_type>::value:
+            return self.storage.get<variable::boolean_type>();
+
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>();
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>();
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>();
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>();
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>();
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>();
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>();
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>();
+
+        case traits<float>::value:
+            return self.storage.get<float>();
+
+        case traits<double>::value:
+            return self.storage.get<double>();
+
+        case traits<long double>::value:
+            return self.storage.get<long double>();
+
+        default:
+            error = dynamic::make_error_code(dynamic::incompatible_type);
+            return {};
+        }
+    }
+
+    static bool equal(const variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::boolean_type>::value:
+            return self.storage.get<boolean_type>() == other;
+
+        case traits<signed short int>::value:
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>() == other;
+
+        case traits<signed int>::value:
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>() == other;
+
+        case traits<signed long int>::value:
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>() == other;
+
+        case traits<signed long long int>::value:
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>() == other;
+
+        case traits<float>::value:
+            return self.storage.get<float>() == other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() == other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() == other;
+
+        default:
+            return false;
+        }
+    }
+
+    static bool less(const variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            return true;
+
+        case traits<variable::boolean_type>::value:
+            return self.storage.get<boolean_type>() < other;
+
+        case traits<signed short int>::value:
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>() < other;
+
+        case traits<signed int>::value:
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>() < other;
+
+        case traits<signed long int>::value:
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>() < other;
+
+        case traits<signed long long int>::value:
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>() < other;
+
+        case traits<float>::value:
+            return self.storage.get<float>() < other;
+
+        case traits<double>::value:
+            return self.storage.get<double>() < other;
+
+        case traits<long double>::value:
+            return self.storage.get<long double>() < other;
+
+        default:
+            return false;
+        }
+    }
+
+    static void append(variable& self, const T& other)
+    {
+        switch (self.storage.which())
+        {
+        case traits<variable::null_type>::value:
+            self.storage = other; // Overwrite null
+            break;
+
+        case traits<variable::boolean_type>::value:
+            self.storage.get<boolean_type>() += other;
+            break;
+
+        case traits<signed short int>::value:
+            self.storage.get<signed short int>() += other;
+            break;
+
+        case traits<unsigned short int>::value:
+            self.storage.get<unsigned short int>() += other;
+            break;
+
+        case traits<signed int>::value:
+            self.storage.get<signed int>() += other;
+            break;
+
+        case traits<unsigned int>::value:
+            self.storage.get<unsigned int>() += other;
+            break;
+
+        case traits<signed long int>::value:
+            self.storage.get<signed long int>() += other;
+            break;
+
+        case traits<unsigned long int>::value:
+            self.storage.get<unsigned long int>() += other;
+            break;
+
+        case traits<signed long long int>::value:
+            self.storage.get<signed long long int>() += other;
+            break;
+
+        case traits<unsigned long long int>::value:
+            self.storage.get<unsigned long long int>() += other;
             break;
 
         case traits<float>::value:
@@ -373,8 +738,29 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         case traits<variable::boolean_type>::value:
             return self.storage.get<variable::boolean_type>();
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<variable::integer_type>();
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>();
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>();
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>();
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>();
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>();
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>();
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>();
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>();
 
         case traits<float>::value:
             return self.storage.get<float>();
@@ -398,8 +784,29 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         case traits<variable::boolean_type>::value:
             return self.storage.get<boolean_type>() == other;
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<integer_type>() == other;
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>() == other;
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>() == other;
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>() == other;
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>() == other;
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>() == other;
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>() == other;
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>() == other;
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>() == other;
 
         case traits<float>::value:
             return self.storage.get<float>() == other;
@@ -425,8 +832,29 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         case traits<variable::boolean_type>::value:
             return self.storage.get<boolean_type>() < other;
 
-        case traits<variable::integer_type>::value:
-            return self.storage.get<integer_type>() < other;
+        case traits<signed short int>::value:
+            return self.storage.get<signed short int>() < other;
+
+        case traits<unsigned short int>::value:
+            return self.storage.get<unsigned short int>() < other;
+
+        case traits<signed int>::value:
+            return self.storage.get<signed int>() < other;
+
+        case traits<unsigned int>::value:
+            return self.storage.get<unsigned int>() < other;
+
+        case traits<signed long int>::value:
+            return self.storage.get<signed long int>() < other;
+
+        case traits<unsigned long int>::value:
+            return self.storage.get<unsigned long int>() < other;
+
+        case traits<signed long long int>::value:
+            return self.storage.get<signed long long int>() < other;
+
+        case traits<unsigned long long int>::value:
+            return self.storage.get<unsigned long long int>() < other;
 
         case traits<float>::value:
             return self.storage.get<float>() < other;
@@ -454,8 +882,36 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
             self.storage.get<boolean_type>() += other;
             break;
 
-        case traits<variable::integer_type>::value:
-            self.storage.get<integer_type>() += other;
+        case traits<signed short int>::value:
+            self.storage.get<signed short int>() += other;
+            break;
+
+        case traits<unsigned short int>::value:
+            self.storage.get<unsigned short int>() += other;
+            break;
+
+        case traits<signed int>::value:
+            self.storage.get<signed int>() += other;
+            break;
+
+        case traits<unsigned int>::value:
+            self.storage.get<unsigned int>() += other;
+            break;
+
+        case traits<signed long int>::value:
+            self.storage.get<signed long int>() += other;
+            break;
+
+        case traits<unsigned long int>::value:
+            self.storage.get<unsigned long int>() += other;
+            break;
+
+        case traits<signed long long int>::value:
+            self.storage.get<signed long long int>() += other;
+            break;
+
+        case traits<unsigned long long int>::value:
+            self.storage.get<unsigned long long int>() += other;
             break;
 
         case traits<float>::value:
@@ -521,13 +977,11 @@ struct variable::overloader<T, typename std::enable_if<detail::is_string<T>::val
             return self.storage.get<string_type>() < other;
 
         case traits<variable::array_type>::value:
-            return true;
-
         case traits<variable::map_type>::value:
-            return true;
+            return false;
 
         default:
-            return false;
+            return true;
         }
     }
 
@@ -611,8 +1065,12 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
                 }
                 return (array_it == array.end());
             }
-        default:
+
+        case traits<variable::map_type>::value:
             return false;
+
+        default:
+            return true;
         }
     }
 
@@ -680,6 +1138,9 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
     {
         switch (self.storage.which())
         {
+        case traits<variable::array_type>::value:
+            return false;
+
         case traits<variable::map_type>::value:
             {
                 const auto& map = self.storage.get<variable::map_type>();
@@ -695,8 +1156,9 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
                 }
                 return (map_it == map.end());
             }
+
         default:
-            return false;
+            return true;
         }
     }
 
@@ -794,7 +1256,14 @@ variable::iterator_type<T>::iterator_type(pointer p,
         break;
 
     case traits<boolean_type>::value:
-    case traits<integer_type>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
@@ -890,7 +1359,14 @@ auto variable::iterator_type<T>::operator++ () -> iterator_type&
     {
     case traits<null_type>::value:
     case traits<boolean_type>::value:
-    case traits<integer_type>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
@@ -955,7 +1431,14 @@ auto variable::iterator_type<T>::value() -> reference
     {
     case traits<null_type>::value:
     case traits<boolean_type>::value:
-    case traits<integer_type>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
@@ -981,7 +1464,14 @@ auto variable::iterator_type<T>::operator-> () -> pointer
     {
     case traits<null_type>::value:
     case traits<boolean_type>::value:
-    case traits<integer_type>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
@@ -1012,7 +1502,14 @@ bool variable::iterator_type<T>::operator== (const iterator_type<T>& other)
     {
     case traits<null_type>::value:
     case traits<boolean_type>::value:
-    case traits<integer_type>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
@@ -1073,8 +1570,29 @@ inline variable::variable(const variable& other)
     case traits<boolean_type>::value:
         storage = other.storage.get<boolean_type>();
         break;
-    case traits<integer_type>::value:
-        storage = other.storage.get<integer_type>();
+    case traits<signed short int>::value:
+        storage = other.storage.get<signed short int>();
+        break;
+    case traits<unsigned short int>::value:
+        storage = other.storage.get<unsigned short int>();
+        break;
+    case traits<signed int>::value:
+        storage = other.storage.get<signed int>();
+        break;
+    case traits<unsigned int>::value:
+        storage = other.storage.get<unsigned int>();
+        break;
+    case traits<signed long int>::value:
+        storage = other.storage.get<signed long int>();
+        break;
+    case traits<unsigned long int>::value:
+        storage = other.storage.get<unsigned long int>();
+        break;
+    case traits<signed long long int>::value:
+        storage = other.storage.get<signed long long int>();
+        break;
+    case traits<unsigned long long int>::value:
+        storage = other.storage.get<unsigned long long int>();
         break;
     case traits<float>::value:
         storage = other.storage.get<float>();
@@ -1111,8 +1629,29 @@ inline variable::variable(variable&& other)
     case traits<boolean_type>::value:
         storage = std::move(other.storage.get<boolean_type>());
         break;
-    case traits<integer_type>::value:
-        storage = std::move(other.storage.get<integer_type>());
+    case traits<signed short int>::value:
+        storage = std::move(other.storage.get<signed short int>());
+        break;
+    case traits<unsigned short int>::value:
+        storage = std::move(other.storage.get<unsigned short int>());
+        break;
+    case traits<signed int>::value:
+        storage = std::move(other.storage.get<signed int>());
+        break;
+    case traits<unsigned int>::value:
+        storage = std::move(other.storage.get<unsigned int>());
+        break;
+    case traits<signed long int>::value:
+        storage = std::move(other.storage.get<signed long int>());
+        break;
+    case traits<unsigned long int>::value:
+        storage = std::move(other.storage.get<unsigned long int>());
+        break;
+    case traits<signed long long int>::value:
+        storage = std::move(other.storage.get<signed long long int>());
+        break;
+    case traits<unsigned long long int>::value:
+        storage = std::move(other.storage.get<unsigned long long int>());
         break;
     case traits<float>::value:
         storage = std::move(other.storage.get<float>());
@@ -1209,8 +1748,29 @@ inline variable& variable::operator= (const variable& other)
     case traits<boolean_type>::value:
         storage = other.storage.get<boolean_type>();
         break;
-    case traits<integer_type>::value:
-        storage = other.storage.get<integer_type>();
+    case traits<signed short int>::value:
+        storage = other.storage.get<signed short int>();
+        break;
+    case traits<unsigned short int>::value:
+        storage = other.storage.get<unsigned short int>();
+        break;
+    case traits<signed int>::value:
+        storage = other.storage.get<signed int>();
+        break;
+    case traits<unsigned int>::value:
+        storage = other.storage.get<unsigned int>();
+        break;
+    case traits<signed long int>::value:
+        storage = other.storage.get<signed long int>();
+        break;
+    case traits<unsigned long int>::value:
+        storage = other.storage.get<unsigned long int>();
+        break;
+    case traits<signed long long int>::value:
+        storage = other.storage.get<signed long long int>();
+        break;
+    case traits<unsigned long long int>::value:
+        storage = other.storage.get<unsigned long long int>();
         break;
     case traits<float>::value:
         storage = other.storage.get<float>();
@@ -1247,8 +1807,29 @@ inline variable& variable::operator= (variable&& other)
     case traits<boolean_type>::value:
         storage = std::move(other.storage.get<boolean_type>());
         break;
-    case traits<integer_type>::value:
-        storage = std::move(other.storage.get<integer_type>());
+    case traits<signed short int>::value:
+        storage = std::move(other.storage.get<signed short int>());
+        break;
+    case traits<unsigned short int>::value:
+        storage = std::move(other.storage.get<unsigned short int>());
+        break;
+    case traits<signed int>::value:
+        storage = std::move(other.storage.get<signed int>());
+        break;
+    case traits<unsigned int>::value:
+        storage = std::move(other.storage.get<unsigned int>());
+        break;
+    case traits<signed long int>::value:
+        storage = std::move(other.storage.get<signed long int>());
+        break;
+    case traits<unsigned long int>::value:
+        storage = std::move(other.storage.get<unsigned long int>());
+        break;
+    case traits<signed long long int>::value:
+        storage = std::move(other.storage.get<signed long long int>());
+        break;
+    case traits<unsigned long long int>::value:
+        storage = std::move(other.storage.get<unsigned long long int>());
         break;
     case traits<float>::value:
         storage = std::move(other.storage.get<float>());
@@ -1301,8 +1882,29 @@ inline variable& variable::operator+= (const variable& other)
     case traits<boolean_type>::value:
         overloader<boolean_type>::append(*this, other.storage.get<boolean_type>());
         break;
-    case traits<integer_type>::value:
-        overloader<integer_type>::append(*this, other.storage.get<integer_type>());
+    case traits<signed short int>::value:
+        overloader<signed short int>::append(*this, other.storage.get<signed short int>());
+        break;
+    case traits<unsigned short int>::value:
+        overloader<unsigned short int>::append(*this, other.storage.get<unsigned short int>());
+        break;
+    case traits<signed int>::value:
+        overloader<signed int>::append(*this, other.storage.get<signed int>());
+        break;
+    case traits<unsigned int>::value:
+        overloader<unsigned int>::append(*this, other.storage.get<unsigned int>());
+        break;
+    case traits<signed long int>::value:
+        overloader<signed long int>::append(*this, other.storage.get<signed long int>());
+        break;
+    case traits<unsigned long int>::value:
+        overloader<unsigned long int>::append(*this, other.storage.get<unsigned long int>());
+        break;
+    case traits<signed long long int>::value:
+        overloader<signed long long int>::append(*this, other.storage.get<signed long long int>());
+        break;
+    case traits<unsigned long long int>::value:
+        overloader<unsigned long long int>::append(*this, other.storage.get<unsigned long long int>());
         break;
     case traits<float>::value:
         overloader<float>::append(*this, other.storage.get<float>());
@@ -1403,8 +2005,29 @@ inline variable::operator bool() const
     case traits<boolean_type>::value:
         return bool(storage.get<boolean_type>());
 
-    case traits<integer_type>::value:
-        return bool(storage.get<integer_type>());
+    case traits<signed short int>::value:
+        return bool(storage.get<signed short int>());
+
+    case traits<unsigned short int>::value:
+        return bool(storage.get<unsigned short int>());
+
+    case traits<signed int>::value:
+        return bool(storage.get<signed int>());
+
+    case traits<unsigned int>::value:
+        return bool(storage.get<unsigned int>());
+
+    case traits<signed long int>::value:
+        return bool(storage.get<signed long int>());
+
+    case traits<unsigned long int>::value:
+        return bool(storage.get<unsigned long int>());
+
+    case traits<signed long long int>::value:
+        return bool(storage.get<signed long long int>());
+
+    case traits<unsigned long long int>::value:
+        return bool(storage.get<unsigned long long int>());
 
     case traits<float>::value:
         return bool(storage.get<float>());
@@ -1495,7 +2118,14 @@ inline bool variable::empty() const
     case traits<null_type>::value:
         return true;
     case traits<boolean_type>::value:
-    case traits<integer_type>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
@@ -1518,7 +2148,14 @@ inline auto variable::size() const -> size_type
     case traits<null_type>::value:
         return 0;
     case traits<boolean_type>::value:
-    case traits<integer_type>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
@@ -1544,8 +2181,35 @@ inline void variable::clear()
     case traits<boolean_type>::value:
         storage = boolean_type{};
         break;
-    case traits<integer_type>::value:
-        storage = integer_type{};
+    case traits<signed short int>::value:
+        {
+            signed short int value = 0;
+            storage = value;
+        }
+        break;
+    case traits<unsigned short int>::value:
+        {
+            unsigned short int value = 0U;
+            storage = value;
+        }
+        break;
+    case traits<signed int>::value:
+        storage = 0;
+        break;
+    case traits<unsigned int>::value:
+        storage = 0U;
+        break;
+    case traits<signed long int>::value:
+        storage = 0L;
+        break;
+    case traits<unsigned long int>::value:
+        storage = 0UL;
+        break;
+    case traits<signed long long int>::value:
+        storage = 0LL;
+        break;
+    case traits<unsigned long long int>::value:
+        storage = 0ULL;
         break;
     case traits<float>::value:
         storage = 0.0f;
@@ -1656,18 +2320,49 @@ inline bool operator== (const variable& lhs, const variable& rhs)
         return variable::overloader<variable::boolean_type>::
             equal(lhs, rhs.storage.get<variable::boolean_type>());
 
-    case variable::traits<variable::integer_type>::value:
-        return variable::overloader<variable::integer_type>::
-            equal(lhs, rhs.storage.get<variable::integer_type>());
+    case variable::traits<signed short int>::value:
+        return variable::overloader<signed short int>::
+            equal(lhs, rhs.storage.get<signed short int>());
+
+    case variable::traits<unsigned short int>::value:
+        return variable::overloader<unsigned short int>::
+            equal(lhs, rhs.storage.get<unsigned short int>());
+
+    case variable::traits<signed int>::value:
+        return variable::overloader<signed int>::
+            equal(lhs, rhs.storage.get<signed int>());
+
+    case variable::traits<unsigned int>::value:
+        return variable::overloader<unsigned int>::
+            equal(lhs, rhs.storage.get<unsigned int>());
+
+    case variable::traits<signed long int>::value:
+        return variable::overloader<signed long int>::
+            equal(lhs, rhs.storage.get<signed long int>());
+
+    case variable::traits<unsigned long int>::value:
+        return variable::overloader<unsigned long int>::
+            equal(lhs, rhs.storage.get<unsigned long int>());
+
+    case variable::traits<signed long long int>::value:
+        return variable::overloader<signed long long int>::
+            equal(lhs, rhs.storage.get<signed long long int>());
+
+    case variable::traits<unsigned long long int>::value:
+        return variable::overloader<unsigned long long int>::
+            equal(lhs, rhs.storage.get<unsigned long long int>());
 
     case variable::traits<float>::value:
-        return variable::overloader<float>::equal(lhs, rhs.storage.get<float>());
+        return variable::overloader<float>::
+            equal(lhs, rhs.storage.get<float>());
 
     case variable::traits<double>::value:
-        return variable::overloader<double>::equal(lhs, rhs.storage.get<double>());
+        return variable::overloader<double>::
+            equal(lhs, rhs.storage.get<double>());
 
     case variable::traits<long double>::value:
-        return variable::overloader<long double>::equal(lhs, rhs.storage.get<long double>());
+        return variable::overloader<long double>::
+            equal(lhs, rhs.storage.get<long double>());
 
     case variable::traits<variable::string_type>::value:
         return variable::overloader<variable::string_type>::
@@ -1707,9 +2402,37 @@ inline bool operator< (const variable& lhs, const variable& rhs)
         return variable::overloader<variable::boolean_type>::
             less(lhs, rhs.storage.get<variable::boolean_type>());
 
-    case variable::traits<variable::integer_type>::value:
-        return variable::overloader<variable::integer_type>::
-            less(lhs, rhs.storage.get<variable::integer_type>());
+    case variable::traits<signed short int>::value:
+        return variable::overloader<signed short int>::
+            less(lhs, rhs.storage.get<signed short int>());
+
+    case variable::traits<unsigned short int>::value:
+        return variable::overloader<unsigned short int>::
+            less(lhs, rhs.storage.get<unsigned short int>());
+
+    case variable::traits<signed int>::value:
+        return variable::overloader<signed int>::
+            less(lhs, rhs.storage.get<signed int>());
+
+    case variable::traits<unsigned int>::value:
+        return variable::overloader<unsigned int>::
+            less(lhs, rhs.storage.get<unsigned int>());
+
+    case variable::traits<signed long int>::value:
+        return variable::overloader<signed long int>::
+            less(lhs, rhs.storage.get<signed long int>());
+
+    case variable::traits<unsigned long int>::value:
+        return variable::overloader<unsigned long int>::
+            less(lhs, rhs.storage.get<unsigned long int>());
+
+    case variable::traits<signed long long int>::value:
+        return variable::overloader<signed long long int>::
+            less(lhs, rhs.storage.get<signed long long int>());
+
+    case variable::traits<unsigned long long int>::value:
+        return variable::overloader<unsigned long long int>::
+            less(lhs, rhs.storage.get<unsigned long long int>());
 
     case variable::traits<float>::value:
         return variable::overloader<float>::less(lhs, rhs.storage.get<float>());
