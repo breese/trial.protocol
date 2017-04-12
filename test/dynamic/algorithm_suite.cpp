@@ -464,6 +464,131 @@ void run()
 } // namespace all_of_suite
 
 //-----------------------------------------------------------------------------
+// std::binary_search
+//-----------------------------------------------------------------------------
+
+namespace binary_search_suite
+{
+
+void search_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map()), false);
+}
+
+void search_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map()), false);
+}
+
+void search_integer()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map()), false);
+}
+
+void search_number()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map()), false);
+}
+
+void search_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map()), false);
+}
+
+void search_array()
+{
+    variable data = variable::array({ variable::null, true, 2, 3.0, "alpha", variable::array({ 5 }), variable::map({{ "alice", 6 }}) });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 42), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 43.0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array({ 5 })), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map({{ "alice", 6 }})), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map()), false);
+}
+
+void search_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", variable::null },
+            { "bravo", true },
+            { "charlie", 2 },
+            { "delta", 3.0 },
+            { "echo", "hydrogen" },
+            { "foxtrot", variable::array({ 5 }) },
+            { "golf", variable::map({ {"alice", 6} }) }
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 42), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 43.0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "hydrogen"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "lithium"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array({ 5 })), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::array()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map({{ "alice", 6 }})), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::map()), false);
+}
+
+void run()
+{
+    search_null();
+    search_boolean();
+    search_integer();
+    search_number();
+    search_string();
+    search_array();
+    search_map();
+}
+
+} // namespace binary_search_suite
+
+//-----------------------------------------------------------------------------
 // std::copy
 //-----------------------------------------------------------------------------
 
@@ -1938,6 +2063,7 @@ int main()
     accumulate_suite::run();
     adjacent_find_suite::run();
     all_of_suite::run();
+    binary_search_suite::run();
     copy_suite::run();
     count_suite::run();
     equal_suite::run();
