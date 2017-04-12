@@ -1525,6 +1525,147 @@ void run()
 } // namespace iota_suite
 
 //-----------------------------------------------------------------------------
+// std::is_partitioned
+//-----------------------------------------------------------------------------
+
+namespace is_partitioned_suite
+{
+
+auto is_boolean = [] (const variable& value) { return value.is<bool>(); };
+auto is_integer = [] (const variable& value) { return value.is<int>(); };
+auto is_number = [] (const variable& value) { return value.is<float>(); };
+auto is_string = [] (const variable& value) { return value.is<variable::string_type>(); };
+
+void test_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_integer()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_number()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_array_boolean()
+{
+    variable data = variable::array({ true, false, true });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_array_integer()
+{
+    variable data = variable::array({ 3, 2, 4 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_array_number()
+{
+    variable data = variable::array({ 3.0, 2.0, 4.0 });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_array_string()
+{
+    variable data = variable::array({ "bravo", "alpha", "charlie" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+}
+
+void test_array_arithmetic()
+{
+    {
+        variable data = variable::array({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
+    }
+    {
+        variable data = variable::array({ 2, 3.0, "alpha", true });
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
+    }
+    {
+        variable data = variable::array({ 3.0, "alpha", true, 2 });
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
+    }
+    {
+        variable data = variable::array({ "alpha", true, 2, 3.0 });
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+    }
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array_boolean();
+    test_array_integer();
+    test_array_number();
+    test_array_string();
+    test_array_arithmetic();
+}
+
+} // namespace is_partitioned_suite
+
+//-----------------------------------------------------------------------------
 // std::is_sorted
 //-----------------------------------------------------------------------------
 
@@ -2581,6 +2722,7 @@ int main()
     find_suite::run();
     find_if_suite::run();
     iota_suite::run();
+    is_partitioned_suite::run();
     is_sorted_suite::run();
     lower_bound_suite::run();
     max_element_suite::run();
