@@ -15,6 +15,11 @@
 
 using namespace trial::protocol::dynamic;
 
+auto is_boolean = [] (const variable& value) { return value.is<bool>(); };
+auto is_integer = [] (const variable& value) { return value.is<int>(); };
+auto is_number = [] (const variable& value) { return value.is<float>(); };
+auto is_string = [] (const variable& value) { return value.is<variable::string_type>(); };
+
 //-----------------------------------------------------------------------------
 // std::accumulate
 //-----------------------------------------------------------------------------
@@ -1531,11 +1536,6 @@ void run()
 namespace is_partitioned_suite
 {
 
-auto is_boolean = [] (const variable& value) { return value.is<bool>(); };
-auto is_integer = [] (const variable& value) { return value.is<int>(); };
-auto is_number = [] (const variable& value) { return value.is<float>(); };
-auto is_string = [] (const variable& value) { return value.is<variable::string_type>(); };
-
 void test_null()
 {
     variable data;
@@ -2122,6 +2122,161 @@ void run()
 }
 
 } // namespace max_element_suite
+
+//-----------------------------------------------------------------------------
+// std::partition_point
+//-----------------------------------------------------------------------------
+
+namespace partition_point_suite
+{
+
+void find_null()
+{
+    variable data;
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void find_boolean()
+{
+    variable data(true);
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void find_integer()
+{
+    variable data(2);
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void find_number()
+{
+    variable data(3.0);
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void find_string()
+{
+    variable data("alpha");
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+}
+
+void find_array_boolean()
+{
+    variable data = variable::array({ false, true, variable::null, 2, 3.0, "alpha" });
+    auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+}
+
+void find_array_integer()
+{
+    variable data = variable::array({ 0, 2, variable::null, true, 3.0, "alpha" });
+    auto where = std::partition_point(data.begin(), data.end(), is_integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+}
+
+void find_array_number()
+{
+    variable data = variable::array({ 0.0, 3.0, variable::null, true, 2, "alpha" });
+    auto where = std::partition_point(data.begin(), data.end(), is_number);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+}
+
+void find_array_string()
+{
+    variable data = variable::array({ "", "alpha", variable::null, true, 2, 3.0 });
+    auto where = std::partition_point(data.begin(), data.end(), is_string);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+}
+
+void run()
+{
+    find_null();
+    find_boolean();
+    find_integer();
+    find_number();
+    find_string();
+    find_array_boolean();
+    find_array_integer();
+    find_array_number();
+    find_array_string();
+}
+
+} // namespace partition_point_suite
 
 //-----------------------------------------------------------------------------
 // std::remove
@@ -2726,6 +2881,7 @@ int main()
     is_sorted_suite::run();
     lower_bound_suite::run();
     max_element_suite::run();
+    partition_point_suite::run();
     remove_suite::run();
     search_suite::run();
     unique_suite::run();
