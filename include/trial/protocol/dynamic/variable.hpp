@@ -30,7 +30,6 @@ namespace dynamic
 class variable
 {
 public:
-    // FIXME: From std::iterator_traits?
     using value_type = variable;
     using reference = std::add_lvalue_reference<value_type>::type;
     using const_reference = std::add_const<reference>::type;

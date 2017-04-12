@@ -161,6 +161,64 @@ void run()
 } // namespace concept_suite
 
 //-----------------------------------------------------------------------------
+// std::iterator_traits
+//-----------------------------------------------------------------------------
+
+namespace iterator_traits_suite
+{
+
+void test_difference_type()
+{
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::difference_type, variable::iterator::difference_type>::value,
+                  "variable::iterator::difference_type");
+    static_assert(std::is_same<std::iterator_traits<variable::const_iterator>::difference_type, variable::const_iterator::difference_type>::value,
+                  "variable::const_iterator::difference_type");
+}
+
+void test_value_type()
+{
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::value_type, variable::iterator::value_type>::value,
+                  "variable::iterator::value_type");
+    static_assert(std::is_same<std::iterator_traits<variable::const_iterator>::value_type, variable::const_iterator::value_type>::value,
+                  "variable::const_iterator::value_type");
+}
+
+void test_pointer()
+{
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::pointer, variable::iterator::pointer>::value,
+                  "variable::iterator::pointer");
+    static_assert(std::is_same<std::iterator_traits<variable::const_iterator>::pointer, variable::const_iterator::pointer>::value,
+                  "variable::const_iterator::pointer");
+}
+
+void test_reference()
+{
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::reference, variable::iterator::reference>::value,
+                  "variable::iterator::reference");
+    static_assert(std::is_same<std::iterator_traits<variable::const_iterator>::reference, variable::const_iterator::reference>::value,
+                  "variable::const_iterator::reference");
+}
+
+void test_iterator_category()
+{
+    static_assert(std::is_same<std::iterator_traits<variable::iterator>::iterator_category, variable::iterator::iterator_category>::value,
+                  "variable::iterator::iterator_category");
+    static_assert(std::is_same<std::iterator_traits<variable::const_iterator>::iterator_category, variable::const_iterator::iterator_category>::value,
+                  "variable::const_iterator::iterator_category");
+}
+
+void run()
+{
+    test_difference_type();
+    test_value_type();
+    test_pointer();
+    test_reference();
+    test_iterator_category();
+}
+
+} // namespace iterator_traits_suite
+
+//-----------------------------------------------------------------------------
 // std::begin
 //-----------------------------------------------------------------------------
 
@@ -988,6 +1046,7 @@ void run()
 int main()
 {
     concept_suite::run();
+    iterator_traits_suite::run();
     begin_suite::run();
     pre_increment_suite::run();
     post_increment_suite::run();
