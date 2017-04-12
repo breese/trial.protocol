@@ -1138,9 +1138,6 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
     {
         switch (self.storage.which())
         {
-        case traits<variable::array_type>::value:
-            return false;
-
         case traits<variable::map_type>::value:
             {
                 const auto& map = self.storage.get<variable::map_type>();
