@@ -1181,6 +1181,223 @@ void run()
 } // namespace is_sorted_suite
 
 //-----------------------------------------------------------------------------
+// std::lower_bound
+//-----------------------------------------------------------------------------
+
+namespace lower_bound_suite
+{
+
+void find_null()
+{
+    variable data;
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void find_boolean()
+{
+    variable data(true);
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+}
+
+void find_integer()
+{
+    variable data(2);
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+}
+
+void find_number()
+{
+    variable data(3.0);
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+}
+
+void find_string()
+{
+    variable data("alpha");
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void find_array()
+{
+    variable data = variable::array({true, 2, 3.0, "alpha"});
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 4);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+}
+
+void find_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 4);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "lithium");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+}
+
+void run()
+{
+    find_null();
+    find_boolean();
+    find_integer();
+    find_number();
+    find_string();
+    find_array();
+    find_map();
+}
+
+} // namespace lower_bound_suite
+
+//-----------------------------------------------------------------------------
 // std::max_element
 //-----------------------------------------------------------------------------
 
@@ -1728,6 +1945,7 @@ int main()
     find_if_suite::run();
     iota_suite::run();
     is_sorted_suite::run();
+    lower_bound_suite::run();
     max_element_suite::run();
     remove_suite::run();
     search_suite::run();
