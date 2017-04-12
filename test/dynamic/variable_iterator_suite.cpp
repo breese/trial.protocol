@@ -623,6 +623,131 @@ void run()
 } // namespace post_increment_suite
 
 //-----------------------------------------------------------------------------
+// Dereference
+//-----------------------------------------------------------------------------
+
+namespace dereference_suite
+{
+
+void get_null()
+{
+    variable data;
+    auto where = data.begin();
+    TRIAL_PROTOCOL_TEST(*where == variable::null);
+}
+
+void get_boolean()
+{
+    variable data(true);
+    auto where = data.begin();
+    TRIAL_PROTOCOL_TEST(*where == true);
+}
+
+void get_integer()
+{
+    {
+        const signed int value = 0;
+        variable data(value);
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == value);
+    }
+    {
+        const unsigned int value = 0U;
+        variable data(value);
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == value);
+    }
+}
+
+void get_number()
+{
+    {
+        const float value = 0.0f;
+        variable data(value);
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == value);
+    }
+    {
+        const double value = 0.0;
+        variable data(value);
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == value);
+    }
+    {
+        const long double value = 0.0L;
+        variable data(value);
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == value);
+    }
+}
+
+void get_string()
+{
+    variable data("alpha");
+    auto where = data.begin();
+    TRIAL_PROTOCOL_TEST(*where == "alpha");
+}
+
+void get_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    auto where = data.begin();
+    TRIAL_PROTOCOL_TEST(where->is<bool>());
+    TRIAL_PROTOCOL_TEST(*where == true);
+    ++where;
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<int>());
+    TRIAL_PROTOCOL_TEST(*where == 2);
+    ++where;
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<float>());
+    TRIAL_PROTOCOL_TEST(*where == 3.0);
+    ++where;
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<variable::string_type>());
+    TRIAL_PROTOCOL_TEST(*where == "alpha");
+}
+
+void get_map()
+{
+    variable data = variable::map(
+        {
+            {"alpha", true},
+            {"bravo", 2},
+            {"charlie", 3.0},
+            {"delta", "hydrogen"}
+        });
+    auto where = data.begin();
+    TRIAL_PROTOCOL_TEST(where->is<bool>());
+    TRIAL_PROTOCOL_TEST(*where == true);
+    ++where;
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<int>());
+    TRIAL_PROTOCOL_TEST(*where == 2);
+    ++where;
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<float>());
+    TRIAL_PROTOCOL_TEST(*where == 3.0);
+    ++where;
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<variable::string_type>());
+    TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+}
+
+void run()
+{
+    // get_null(); // FIXME: Crashes
+    get_boolean();
+    get_integer();
+    get_number();
+    get_string();
+    get_array();
+    get_map();
+}
+
+} // namespace dereference_suite
+
+//-----------------------------------------------------------------------------
 // std::distance
 //-----------------------------------------------------------------------------
 
@@ -661,7 +786,7 @@ void test_string()
 
 void test_array()
 {
-    variable data = variable::array({ true, 1, 2.0, "alpha" });
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 4);
 }
 
@@ -760,7 +885,7 @@ void test_string()
 
 void test_array()
 {
-    variable data = variable::array({ true, 1, 2.0, "alpha" });
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
     variable::size_type size = 0;
     for (const auto& value : data)
     {
@@ -819,6 +944,7 @@ int main()
     begin_suite::run();
     pre_increment_suite::run();
     post_increment_suite::run();
+    dereference_suite::run();
     distance_suite::run();
     range_for_suite::run();
 
