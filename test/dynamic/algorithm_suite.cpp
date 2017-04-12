@@ -1187,14 +1187,14 @@ void run()
 namespace max_element_suite
 {
 
-void test_null()
+void max_null()
 {
     variable data;
     auto where = std::max_element(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
-void test_boolean()
+void max_boolean()
 {
     variable data(true);
     auto where = std::max_element(data.begin(), data.end());
@@ -1202,7 +1202,7 @@ void test_boolean()
     TRIAL_PROTOCOL_TEST(*where == true);
 }
 
-void test_integer()
+void max_integer()
 {
     variable data(1);
     auto where = std::max_element(data.begin(), data.end());
@@ -1210,7 +1210,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST(*where == 1);
 }
 
-void test_number()
+void max_number()
 {
     variable data(1.0);
     auto where = std::max_element(data.begin(), data.end());
@@ -1218,7 +1218,7 @@ void test_number()
     TRIAL_PROTOCOL_TEST(*where == 1.0);
 }
 
-void test_string()
+void max_string()
 {
     variable data("alpha");
     auto where = std::max_element(data.begin(), data.end());
@@ -1226,7 +1226,7 @@ void test_string()
     TRIAL_PROTOCOL_TEST(*where == "alpha");
 }
 
-void test_array_arithmetic()
+void max_array_arithmetic()
 {
     variable data = variable::array({false, 2, 3.0});
     auto where = std::max_element(data.begin(), data.end());
@@ -1234,7 +1234,7 @@ void test_array_arithmetic()
     TRIAL_PROTOCOL_TEST(*where == 3.0);
 }
 
-void test_array_string()
+void max_array_string()
 {
     variable data = variable::array({"alpha", "bravo", "charlie"});
     auto where = std::max_element(data.begin(), data.end());
@@ -1242,16 +1242,107 @@ void test_array_string()
     TRIAL_PROTOCOL_TEST(*where == "charlie");
 }
 
+void max_array_value()
+{
+    variable data = variable::array({true, 2, 3.0, "alpha", "bravo", "charlie"});
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(*where == "charlie");
+}
+
+void max_array_array()
+{
+    variable data = variable::array({true, 2, 3.0, variable::array({ 42 }), variable::array({ 41 }), "alpha"});
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<variable::array_type>());
+    TRIAL_PROTOCOL_TEST(*where == variable::array({ 42 }));
+}
+
+void max_array_map()
+{
+    variable data = variable::array({true, 2, 3.0, variable::map({{ "alpha", 117 }}), variable::array({ 42 }), "hydrogen"});
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(where->is<variable::map_type>());
+    TRIAL_PROTOCOL_TEST(*where == variable::map({{ "alpha", 117 }}));
+}
+
+void max_map_arithmetic()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 }
+        });
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(*where == 3.0);
+}
+
+void max_map_value()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+}
+
+void max_map_array()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", variable::array({ 42 }) },
+            { "delta", variable::array({ 41 }) },
+            { "echo", 3.0 },
+            { "foxtrot", "hydrogen" }
+        });
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(*where == variable::array({ 42 }));
+}
+
+void max_map_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", variable::map({{ "alice", 117 }}) },
+            { "delta", variable::array({ 42 }) },
+            { "echo", 3.0 },
+            { "foxtrot", "hydrogen" }
+        });
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(*where == variable::map({{ "alice" , 117 }}));
+}
+
 void run()
 {
-    test_null();
-    test_boolean();
-    test_integer();
-    test_number();
-    test_string();
-    test_array_arithmetic();
-    test_array_string();
-    // FIXME: map
+    max_null();
+    max_boolean();
+    max_integer();
+    max_number();
+    max_string();
+    max_array_arithmetic();
+    max_array_string();
+    max_array_value();
+    max_array_array();
+    max_array_map();
+    max_map_arithmetic();
+    max_map_value();
+    max_map_array();
+    max_map_map();
 }
 
 } // namespace max_element_suite
