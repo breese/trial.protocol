@@ -5452,6 +5452,110 @@ void run()
 } // namespace not_equal_to_suite
 
 //-----------------------------------------------------------------------------
+// std::less
+//-----------------------------------------------------------------------------
+
+namespace less_suite
+{
+
+void compare_null_with_null()
+{
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(), variable::null));
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(), variable()));
+}
+
+void compare_null_with_boolean()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), false));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(false)));
+}
+
+void compare_null_with_integer()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(2)));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(2U)));
+}
+
+void compare_null_with_integer_literal()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 2));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 2U));
+}
+
+void compare_null_with_number()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0f)));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0)));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0L)));
+}
+
+void compare_null_with_number_literal()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 3.0f));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 3.0));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 3.0L));
+}
+
+void compare_boolean_with_null()
+{
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(false), variable::null));
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(false), variable()));
+}
+
+void compare_boolean_with_boolean()
+{
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(true, true));
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(true), variable(true)));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), variable(true)));
+}
+
+void compare_boolean_with_integer()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(2)));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(2U)));
+}
+
+void compare_boolean_with_integer_literal()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 2));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 2U));
+}
+
+void compare_boolean_with_number()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0f)));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0)));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0L)));
+}
+
+void compare_boolean_with_number_literal()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 3.0f));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 3.0));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 3.0L));
+}
+
+void run()
+{
+    // FIXME: More
+    compare_null_with_null();
+    compare_null_with_boolean();
+    compare_null_with_integer();
+    compare_null_with_integer_literal();
+    compare_null_with_number();
+    compare_null_with_number_literal();
+
+    compare_boolean_with_null();
+    compare_boolean_with_boolean();
+    compare_boolean_with_integer();
+    compare_boolean_with_integer_literal();
+    compare_boolean_with_number();
+    compare_boolean_with_number_literal();
+}
+
+} // namespace less_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -5464,7 +5568,7 @@ int main()
 
     equal_to_suite::run();
     not_equal_to_suite::run();
-    // FIXME: Other comparison function objects
+    less_suite::run();
 
     return boost::report_errors();
 }
