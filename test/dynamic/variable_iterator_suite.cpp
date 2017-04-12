@@ -828,7 +828,7 @@ void run()
 namespace range_for_suite
 {
 
-void test_null()
+void sum_null()
 {
     variable data;
     variable::size_type size = 0;
@@ -839,7 +839,7 @@ void test_null()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 0);
 }
 
-void test_boolean()
+void sum_boolean()
 {
     variable data(true);
     variable::size_type size = 0;
@@ -850,7 +850,7 @@ void test_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 1);
 }
 
-void test_integer()
+void sum_integer()
 {
     variable data(0);
     variable::size_type size = 0;
@@ -861,7 +861,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 1);
 }
 
-void test_number()
+void sum_number()
 {
     variable data(0.0);
     variable::size_type size = 0;
@@ -872,7 +872,7 @@ void test_number()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 1);
 }
 
-void test_string()
+void sum_string()
 {
     variable data("alpha");
     variable::size_type size = 0;
@@ -883,7 +883,7 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 5);
 }
 
-void test_array()
+void sum_array()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
     variable::size_type size = 0;
@@ -894,7 +894,7 @@ void test_array()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 1 + 1 + 1 + 5);
 }
 
-void test_array_nulls()
+void sum_array_nulls()
 {
     variable data = variable::array({ variable::null, variable::null, variable::null });
     variable::size_type size = 0;
@@ -905,7 +905,18 @@ void test_array_nulls()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 0 + 0 + 0);
 }
 
-void test_map()
+void sum_array_array()
+{
+    variable data = variable::array({ variable::array({ 1 }), variable::array({ 2, 3 }) });
+    variable::size_type size = 0;
+    for (const auto& value : data)
+    {
+        size += value.size();
+    }
+    TRIAL_PROTOCOL_TEST_EQUAL(size, 1 + 2);
+}
+
+void sum_map()
 {
     variable data = variable::map(
         {
@@ -921,15 +932,51 @@ void test_map()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 8 + 6 + 7);
 }
 
+void sum_map_array()
+{
+    variable data = variable::map(
+        {
+            { "alpha", variable::array({ 1 }) },
+            { "bravo", variable::array({ 2, 3, 4 }) },
+            { "charlie", variable::array() }
+        });
+    variable::size_type size = 0;
+    for (const auto& value : data)
+    {
+        size += value.size();
+    }
+    TRIAL_PROTOCOL_TEST_EQUAL(size, 1 + 3 + 0);
+}
+
+void sum_map_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", variable::map({{ "alice", 1 }}) },
+            { "bravo", variable::map({{ "alice", true }, { "bob", 2 }}) },
+            { "charlie", variable::map() }
+        });
+    variable::size_type size = 0;
+    for (const auto& value : data)
+    {
+        size += value.size();
+    }
+    TRIAL_PROTOCOL_TEST_EQUAL(size, 1 + 2 + 0);
+}
+
 void run()
 {
-    test_null();
-    test_boolean();
-    test_integer();
-    test_number();
-    test_string();
-    test_array();
-    test_array_nulls();
+    sum_null();
+    sum_boolean();
+    sum_integer();
+    sum_number();
+    sum_string();
+    sum_array();
+    sum_array_nulls();
+    sum_array_array();
+    sum_map();
+    sum_map_array();
+    sum_map_map();
 }
 
 } // namespace range_for_suite
