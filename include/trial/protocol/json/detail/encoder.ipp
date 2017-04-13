@@ -29,6 +29,25 @@ namespace json
 namespace detail
 {
 
+template <typename T, typename Enable = void>
+struct absolute
+{
+    static T value(T value)
+    {
+        return std::abs(value);
+    }
+};
+
+template <typename T>
+struct absolute<T,
+                typename std::enable_if<std::is_unsigned<T>::value>::type>
+{
+    static T value(T value)
+    {
+        return value;
+    }
+};
+
 //-----------------------------------------------------------------------------
 // encoder::overloader
 //-----------------------------------------------------------------------------
@@ -261,7 +280,7 @@ basic_encoder<CharT>::integral_value(const T& data)
     typename decltype(output)::reverse_iterator where = output.rbegin();
     const bool is_negative = data < 0;
     using unsigned_type = typename std::make_unsigned<T>::type;
-    auto number = unsigned_type(std::abs(data));
+    auto number = unsigned_type(detail::absolute<T>::value(data));
     if (number == 0)
     {
         *where = traits<CharT>::alpha_0;
