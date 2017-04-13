@@ -36,7 +36,6 @@ public:
     using size_type = std::size_t;
 
     enum null_type { null };
-    using boolean_type = bool;
     using number_type = double;
     using string_type = std::string;
     using array_type = std::vector<value_type>;
@@ -205,7 +204,7 @@ private:
 
     using storage_type = protocol::detail::small_union<sizeof(number_type),
                                                        null_type,
-                                                       boolean_type,
+                                                       bool,
                                                        signed short int,
                                                        unsigned short int,
                                                        signed int,

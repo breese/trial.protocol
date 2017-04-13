@@ -119,15 +119,15 @@ struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value
 template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::value>::type>
 {
-    using type = variable::boolean_type;
-    using category_type = variable::boolean_type;
+    using type = bool;
+    using category_type = type;
 
     static T convert(const variable& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<variable::boolean_type>();
+        case traits<bool>::value:
+            return self.storage.get<bool>();
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>();
@@ -172,8 +172,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() == other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() == other;
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>() == other;
@@ -220,8 +220,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         case traits<variable::null_type>::value:
             return true;
 
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() < other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() < other;
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>() < other;
@@ -269,8 +269,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
             self.storage = other; // Overwrite null
             break;
 
-        case traits<variable::boolean_type>::value:
-            self.storage.get<boolean_type>() += other;
+        case traits<bool>::value:
+            self.storage.get<bool>() += other;
             break;
 
         case traits<signed short int>::value:
@@ -340,8 +340,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<variable::boolean_type>();
+        case traits<bool>::value:
+            return self.storage.get<bool>();
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>();
@@ -386,8 +386,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() == other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() == other;
 
         case traits<signed short int>::value:
         case traits<unsigned short int>::value:
@@ -426,8 +426,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::null_type>::value:
             return true;
 
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() < other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() < other;
 
         case traits<signed short int>::value:
         case traits<unsigned short int>::value:
@@ -467,8 +467,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
             self.storage = other; // Overwrite null
             break;
 
-        case traits<variable::boolean_type>::value:
-            self.storage.get<boolean_type>() += other;
+        case traits<bool>::value:
+            self.storage.get<bool>() += other;
             break;
 
         case traits<signed short int>::value:
@@ -538,8 +538,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<variable::boolean_type>();
+        case traits<bool>::value:
+            return self.storage.get<bool>();
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>();
@@ -584,8 +584,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() == other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() == other;
 
         case traits<signed short int>::value:
         case traits<unsigned short int>::value:
@@ -624,8 +624,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         case traits<variable::null_type>::value:
             return true;
 
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() < other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() < other;
 
         case traits<signed short int>::value:
         case traits<unsigned short int>::value:
@@ -665,8 +665,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
             self.storage = other; // Overwrite null
             break;
 
-        case traits<variable::boolean_type>::value:
-            self.storage.get<boolean_type>() += other;
+        case traits<bool>::value:
+            self.storage.get<bool>() += other;
             break;
 
         case traits<signed short int>::value:
@@ -735,8 +735,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<variable::boolean_type>();
+        case traits<bool>::value:
+            return self.storage.get<bool>();
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>();
@@ -781,8 +781,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
     {
         switch (self.storage.which())
         {
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() == other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() == other;
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>() == other;
@@ -829,8 +829,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         case traits<variable::null_type>::value:
             return true;
 
-        case traits<variable::boolean_type>::value:
-            return self.storage.get<boolean_type>() < other;
+        case traits<bool>::value:
+            return self.storage.get<bool>() < other;
 
         case traits<signed short int>::value:
             return self.storage.get<signed short int>() < other;
@@ -878,8 +878,8 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
             self.storage = other; // Overwrite null
             break;
 
-        case traits<variable::boolean_type>::value:
-            self.storage.get<boolean_type>() += other;
+        case traits<bool>::value:
+            self.storage.get<bool>() += other;
             break;
 
         case traits<signed short int>::value:
@@ -1252,7 +1252,7 @@ variable::iterator_type<T>::iterator_type(pointer p,
         current = pointer(nullptr);
         break;
 
-    case traits<boolean_type>::value:
+    case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -1355,7 +1355,7 @@ auto variable::iterator_type<T>::operator++ () -> iterator_type&
     switch (scope->storage.which())
     {
     case traits<null_type>::value:
-    case traits<boolean_type>::value:
+    case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -1427,7 +1427,7 @@ auto variable::iterator_type<T>::value() -> reference
     switch (scope->storage.which())
     {
     case traits<null_type>::value:
-    case traits<boolean_type>::value:
+    case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -1460,7 +1460,7 @@ auto variable::iterator_type<T>::operator-> () -> pointer
     switch (scope->storage.which())
     {
     case traits<null_type>::value:
-    case traits<boolean_type>::value:
+    case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -1498,7 +1498,7 @@ bool variable::iterator_type<T>::operator== (const iterator_type<T>& other)
     switch (scope->storage.which())
     {
     case traits<null_type>::value:
-    case traits<boolean_type>::value:
+    case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -1564,8 +1564,8 @@ inline variable::variable(const variable& other)
     case traits<null_type>::value:
         storage = null;
         break;
-    case traits<boolean_type>::value:
-        storage = other.storage.get<boolean_type>();
+    case traits<bool>::value:
+        storage = other.storage.get<bool>();
         break;
     case traits<signed short int>::value:
         storage = other.storage.get<signed short int>();
@@ -1623,8 +1623,8 @@ inline variable::variable(variable&& other)
     case traits<null_type>::value:
         storage = null;
         break;
-    case traits<boolean_type>::value:
-        storage = std::move(other.storage.get<boolean_type>());
+    case traits<bool>::value:
+        storage = std::move(other.storage.get<bool>());
         break;
     case traits<signed short int>::value:
         storage = std::move(other.storage.get<signed short int>());
@@ -1742,8 +1742,8 @@ inline variable& variable::operator= (const variable& other)
     case traits<null_type>::value:
         storage = null;
         break;
-    case traits<boolean_type>::value:
-        storage = other.storage.get<boolean_type>();
+    case traits<bool>::value:
+        storage = other.storage.get<bool>();
         break;
     case traits<signed short int>::value:
         storage = other.storage.get<signed short int>();
@@ -1801,8 +1801,8 @@ inline variable& variable::operator= (variable&& other)
     case traits<null_type>::value:
         storage = null;
         break;
-    case traits<boolean_type>::value:
-        storage = std::move(other.storage.get<boolean_type>());
+    case traits<bool>::value:
+        storage = std::move(other.storage.get<bool>());
         break;
     case traits<signed short int>::value:
         storage = std::move(other.storage.get<signed short int>());
@@ -1876,8 +1876,8 @@ inline variable& variable::operator+= (const variable& other)
     case traits<null_type>::value:
         overloader<null_type>::append(*this, other.storage.get<null_type>());
         break;
-    case traits<boolean_type>::value:
-        overloader<boolean_type>::append(*this, other.storage.get<boolean_type>());
+    case traits<bool>::value:
+        overloader<bool>::append(*this, other.storage.get<bool>());
         break;
     case traits<signed short int>::value:
         overloader<signed short int>::append(*this, other.storage.get<signed short int>());
@@ -1999,8 +1999,8 @@ inline variable::operator bool() const
     case traits<null_type>::value:
         return false;
 
-    case traits<boolean_type>::value:
-        return bool(storage.get<boolean_type>());
+    case traits<bool>::value:
+        return bool(storage.get<bool>());
 
     case traits<signed short int>::value:
         return bool(storage.get<signed short int>());
@@ -2114,7 +2114,7 @@ inline bool variable::empty() const
     {
     case traits<null_type>::value:
         return true;
-    case traits<boolean_type>::value:
+    case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -2144,7 +2144,7 @@ inline auto variable::size() const -> size_type
     {
     case traits<null_type>::value:
         return 0;
-    case traits<boolean_type>::value:
+    case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -2175,8 +2175,8 @@ inline void variable::clear()
     case traits<null_type>::value:
         storage = null;
         break;
-    case traits<boolean_type>::value:
-        storage = boolean_type{};
+    case traits<bool>::value:
+        storage = bool{};
         break;
     case traits<signed short int>::value:
         {
@@ -2313,9 +2313,9 @@ inline bool operator== (const variable& lhs, const variable& rhs)
         return variable::overloader<variable::null_type>::
             equal(lhs, rhs.storage.get<variable::null_type>());
 
-    case variable::traits<variable::boolean_type>::value:
-        return variable::overloader<variable::boolean_type>::
-            equal(lhs, rhs.storage.get<variable::boolean_type>());
+    case variable::traits<bool>::value:
+        return variable::overloader<bool>::
+            equal(lhs, rhs.storage.get<bool>());
 
     case variable::traits<signed short int>::value:
         return variable::overloader<signed short int>::
@@ -2395,9 +2395,9 @@ inline bool operator< (const variable& lhs, const variable& rhs)
         return variable::overloader<variable::null_type>::
             less(lhs, rhs.value<variable::null_type>());
 
-    case variable::traits<variable::boolean_type>::value:
-        return variable::overloader<variable::boolean_type>::
-            less(lhs, rhs.storage.get<variable::boolean_type>());
+    case variable::traits<bool>::value:
+        return variable::overloader<bool>::
+            less(lhs, rhs.storage.get<bool>());
 
     case variable::traits<signed short int>::value:
         return variable::overloader<signed short int>::

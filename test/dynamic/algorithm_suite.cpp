@@ -38,16 +38,16 @@ void accumulate_null_with_boolean()
 {
     variable data;
     variable result = std::accumulate(data.begin(), data.end(), variable(true));
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<bool>(), true);
 }
 
 void accumulate_boolean()
 {
     variable data(true);
     variable result = std::accumulate(data.begin(), data.end(), variable(false));
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<bool>(), true);
 }
 
 void accumulate_integer()
@@ -85,16 +85,16 @@ void accumulate_array_null_with_boolean()
 {
     variable data = variable::array({ variable::null, variable::null });
     variable result = std::accumulate(data.begin(), data.end(), variable(true));
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<bool>(), true);
 }
 
 void accumulate_array_boolean()
 {
     variable data = variable::array({ false, false, true, true });
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<bool>(), true);
 }
 
 void accumulate_array_integer()

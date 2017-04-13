@@ -31,7 +31,7 @@ void construct_null()
 void construct_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void construct_signed_short_int()
@@ -669,8 +669,8 @@ void copy_boolean()
 {
     variable data(true);
     variable copy(data);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<bool>(), true);
 }
 
 void copy_integer()
@@ -796,8 +796,8 @@ void move_boolean()
 {
     variable data(true);
     variable copy(std::move(data));
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<bool>(), true);
 }
 
 void move_integer()
@@ -925,7 +925,7 @@ void assign_null_with_boolean()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
     data = true;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_null_with_integer()
@@ -1247,7 +1247,7 @@ void assign_null_with_map()
 void assign_boolean_with_null()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = variable::null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
 }
@@ -1255,9 +1255,9 @@ void assign_boolean_with_null()
 void assign_boolean_with_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_boolean_with_integer()
@@ -1266,7 +1266,7 @@ void assign_boolean_with_integer()
     {
         signed short int value = 2;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed short int>(), value);
@@ -1274,7 +1274,7 @@ void assign_boolean_with_integer()
     {
         signed short int value = 2;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -1283,7 +1283,7 @@ void assign_boolean_with_integer()
     {
         signed short int value = 2;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -1293,7 +1293,7 @@ void assign_boolean_with_integer()
     {
         unsigned short int value = 2U;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned short int>(), value);
@@ -1301,7 +1301,7 @@ void assign_boolean_with_integer()
     {
         unsigned short int value = 2U;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -1310,7 +1310,7 @@ void assign_boolean_with_integer()
     {
         unsigned short int value = 2U;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -1320,7 +1320,7 @@ void assign_boolean_with_integer()
     {
         signed int value = 2;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), value);
@@ -1328,7 +1328,7 @@ void assign_boolean_with_integer()
     {
         signed int value = 2;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -1337,7 +1337,7 @@ void assign_boolean_with_integer()
     {
         signed int value = 2;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -1347,7 +1347,7 @@ void assign_boolean_with_integer()
     {
         unsigned int value = 2U;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), value);
@@ -1355,7 +1355,7 @@ void assign_boolean_with_integer()
     {
         unsigned int value = 2U;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -1364,7 +1364,7 @@ void assign_boolean_with_integer()
     {
         unsigned int value = 2U;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -1374,7 +1374,7 @@ void assign_boolean_with_integer()
     {
         signed long int value = 2L;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long int>(), value);
@@ -1382,7 +1382,7 @@ void assign_boolean_with_integer()
     {
         signed long int value = 2L;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -1391,7 +1391,7 @@ void assign_boolean_with_integer()
     {
         signed long int value = 2L;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -1401,7 +1401,7 @@ void assign_boolean_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long int>(), value);
@@ -1409,7 +1409,7 @@ void assign_boolean_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -1418,7 +1418,7 @@ void assign_boolean_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -1428,7 +1428,7 @@ void assign_boolean_with_integer()
     {
         signed long long int value = 2LL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long long int>(), value);
@@ -1436,7 +1436,7 @@ void assign_boolean_with_integer()
     {
         signed long long int value = 2LL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -1445,7 +1445,7 @@ void assign_boolean_with_integer()
     {
         signed long long int value = 2LL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -1455,7 +1455,7 @@ void assign_boolean_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long long int>(), value);
@@ -1463,7 +1463,7 @@ void assign_boolean_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -1472,7 +1472,7 @@ void assign_boolean_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -1484,60 +1484,60 @@ void assign_boolean_with_number()
 {
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = 3.0f;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(3.0f);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(3.0f);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = 3.0;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(3.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(3.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = 3.0L;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(3.0L);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         variable number(3.0L);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
@@ -1547,7 +1547,7 @@ void assign_boolean_with_number()
 void assign_boolean_with_string()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = variable::string_type("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
 }
@@ -1555,7 +1555,7 @@ void assign_boolean_with_string()
 void assign_boolean_with_array()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = variable::array({ true, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
 }
@@ -1563,7 +1563,7 @@ void assign_boolean_with_array()
 void assign_boolean_with_map()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
@@ -1583,7 +1583,7 @@ void assign_signed_int_with_boolean()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_signed_int_with_integer()
@@ -1915,7 +1915,7 @@ void assign_unsigned_int_with_boolean()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_unsigned_int_with_integer()
@@ -2245,7 +2245,7 @@ void assign_float_with_boolean()
     variable data(3.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_float_with_integer()
@@ -2345,7 +2345,7 @@ void assign_double_with_boolean()
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_double_with_integer()
@@ -2445,7 +2445,7 @@ void assign_long_double_with_boolean()
     variable data(3.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_long_double_with_integer()
@@ -2545,7 +2545,7 @@ void assign_string_with_boolean()
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_string_with_integer()
@@ -2657,7 +2657,7 @@ void assign_array_with_boolean()
     variable data = variable::array({ true, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_array_with_integer()
@@ -2777,7 +2777,7 @@ void assign_map_with_boolean()
     variable data = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
     data = false;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
 
 void assign_map_with_integer()
@@ -2990,8 +2990,8 @@ void append_null_with_boolean()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
     data += variable(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void append_null_with_integer()
@@ -3123,19 +3123,19 @@ void append_null_with_map()
 void append_boolean_with_null()
 {
     variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data += variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
 }
 
 void append_boolean_with_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data += variable(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void append_boolean_with_integer()
@@ -3143,74 +3143,74 @@ void append_boolean_with_integer()
     {
         signed short int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         unsigned short int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         signed int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         unsigned int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         signed long int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         unsigned long int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         signed long long int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         unsigned long long int value = 2;
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
 }
 
@@ -3218,34 +3218,34 @@ void append_boolean_with_number()
 {
     {
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(3.0f);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(3.0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         variable data(false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
         data += variable(3.0L);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
 }
 
 void append_boolean_with_string()
 {
     variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
                                     error,
                                     "incompatible type");
@@ -3254,7 +3254,7 @@ void append_boolean_with_string()
 void append_boolean_with_array()
 {
     variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::array({ true, "alpha" })),
                                     error,
                                     "incompatible type");
@@ -3263,7 +3263,7 @@ void append_boolean_with_array()
 void append_boolean_with_map()
 {
     variable data(false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
                                     error,
                                     "incompatible type");
@@ -4258,8 +4258,8 @@ void add_null_with_null()
 void add_null_with_boolean()
 {
     auto data = variable::null + variable(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void add_null_with_integer()
@@ -4325,28 +4325,28 @@ void add_null_with_map()
 void add_boolean_with_null()
 {
     auto data = variable(true) + variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void add_boolean_with_boolean()
 {
     auto data = variable(true) + true;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void add_boolean_with_integer()
 {
     {
         auto data = variable(true) + 2;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         auto data = variable(true) + 2U;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
 }
 
@@ -4354,18 +4354,18 @@ void add_boolean_with_number()
 {
     {
         auto data = variable(true) + 3.0f;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         auto data = variable(true) + 3.0;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         auto data = variable(true) + 3.0L;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
 }
 
@@ -4899,7 +4899,7 @@ void fail_null_as_boolean()
 {
     variable data;
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(error), variable::boolean_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), bool{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -4969,7 +4969,7 @@ void fail_boolean_as_null()
 {
     variable data(false);
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(error), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), false);
     TRIAL_PROTOCOL_TEST(!error);
     data.value<variable::null_type>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5061,29 +5061,29 @@ void test_integer_as_boolean()
 {
     {
         variable data(0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type(data));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), bool(data));
     }
     {
         variable data(1);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         variable data = std::numeric_limits<signed int>::max();
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         variable data(0U);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type(data));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), bool(data));
     }
     {
         variable data(1U);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
     {
         variable data = std::numeric_limits<unsigned int>::max();
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
     }
 }
 
@@ -5181,14 +5181,14 @@ void fail_float_as_null()
 void test_float_as_boolean()
 {
     variable data(0.0f);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), bool(data));
 
     data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 
     data = std::numeric_limits<float>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void test_float_as_integer()
@@ -5279,14 +5279,14 @@ void fail_double_as_null()
 void test_double_as_boolean()
 {
     variable data(0.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), bool(data));
 
     data = 1.0;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 
     data = std::numeric_limits<double>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void test_double_as_integer()
@@ -5377,14 +5377,14 @@ void fail_long_double_as_null()
 void test_long_double_as_boolean()
 {
     variable data(0.0L);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), bool(data));
 
     data = 1.0L;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 
     data = std::numeric_limits<long double>::max();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
 }
 
 void test_long_double_as_integer()
@@ -5478,7 +5478,7 @@ void fail_string_as_boolean()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(error), variable::boolean_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), bool{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -6053,10 +6053,10 @@ void test_null()
 void test_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data.clear();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::boolean_type>(), variable::boolean_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), bool{});
 }
 
 void test_integer()

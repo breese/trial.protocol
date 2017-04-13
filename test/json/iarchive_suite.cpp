@@ -688,8 +688,8 @@ void test_boolean()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<variable::boolean_type>());
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST(value.is<bool>());
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<bool>(), true);
 }
 
 void test_integer()

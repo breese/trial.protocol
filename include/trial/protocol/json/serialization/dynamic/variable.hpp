@@ -35,9 +35,9 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
         {
             ar.template save<json::token::null>();
         }
-        else if (data.is<dynamic::variable::boolean_type>())
+        else if (data.is<bool>())
         {
-            ar.save(data.value<dynamic::variable::boolean_type>());
+            ar.save(data.value<bool>());
         }
         else if (data.same<signed short int>())
         {
@@ -123,7 +123,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
 
         case token::symbol::boolean:
             {
-                dynamic::variable::boolean_type value = {};
+                bool value = {};
                 ar.load(value);
                 data = value;
             }

@@ -1294,8 +1294,8 @@ void test_boolean()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::boolean_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<bool>(), true);
 }
 
 void test_integer_small()
