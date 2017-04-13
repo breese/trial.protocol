@@ -28,6 +28,17 @@ namespace detail
 {
 
 template <typename CharT>
+std::basic_string<CharT, buffer::char_traits<CharT>> to_string(float value)
+{
+    // Workaround for CharT = unsigned char, which std::locale does not support
+    std::ostringstream stream;
+    stream.imbue(std::locale::classic());
+    stream << std::showpoint << std::setprecision(std::numeric_limits<float>::digits10) << value;
+    std::string work = stream.str();
+    return {work.begin(), work.end()};
+}
+
+template <typename CharT>
 std::basic_string<CharT, buffer::char_traits<CharT>> to_string(double value)
 {
     // Workaround for CharT = unsigned char, which std::locale does not support
@@ -39,12 +50,12 @@ std::basic_string<CharT, buffer::char_traits<CharT>> to_string(double value)
 }
 
 template <typename CharT>
-std::basic_string<CharT, buffer::char_traits<CharT>> to_string(float value)
+std::basic_string<CharT, buffer::char_traits<CharT>> to_string(long double value)
 {
     // Workaround for CharT = unsigned char, which std::locale does not support
     std::ostringstream stream;
     stream.imbue(std::locale::classic());
-    stream << std::showpoint << std::setprecision(std::numeric_limits<float>::digits10) << value;
+    stream << std::showpoint << std::setprecision(std::numeric_limits<long double>::digits10) << value;
     std::string work = stream.str();
     return {work.begin(), work.end()};
 }
