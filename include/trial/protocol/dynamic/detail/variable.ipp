@@ -729,7 +729,7 @@ template <typename T>
 struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::value>::type>
 {
     using type = T;
-    using category_type = variable::number_type;
+    using category_type = float;
 
     static T convert(const variable& self, std::error_code& error)
     {

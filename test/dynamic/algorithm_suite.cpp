@@ -62,8 +62,8 @@ void accumulate_number()
 {
     variable data(3.0);
     variable result = std::accumulate(data.begin(), data.end(), variable(0.0));
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::number_type>(), 3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 3.0);
 }
 
 void accumulate_string()
@@ -109,16 +109,16 @@ void accumulate_array_integer_with_number()
 {
     variable data = variable::array({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
     variable result = std::accumulate(data.begin(), data.end(), variable(0.0));
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::number_type>(), 55.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 55.0);
 }
 
 void accumulate_array_number()
 {
     variable data = variable::array({ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 });
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::number_type>(), 55.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 55.0);
 }
 
 void accumulate_array_number_with_integer()

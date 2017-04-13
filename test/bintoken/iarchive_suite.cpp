@@ -1324,8 +1324,8 @@ void test_number()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::number_type>(), 1.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<float>(), 1.0f);
 }
 
 void test_string()

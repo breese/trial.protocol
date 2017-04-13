@@ -36,7 +36,6 @@ public:
     using size_type = std::size_t;
 
     enum null_type { null };
-    using number_type = double;
     using string_type = std::string;
     using array_type = std::vector<value_type>;
     using map_type = std::map<string_type, value_type>; // FIXME: key = value_type?
@@ -202,7 +201,7 @@ private:
     template <typename T, typename Enable = void> struct same_overloader;
     template <typename T> struct similar_visitor;
 
-    using storage_type = protocol::detail::small_union<sizeof(number_type),
+    using storage_type = protocol::detail::small_union<sizeof(double),
                                                        null_type,
                                                        bool,
                                                        signed short int,

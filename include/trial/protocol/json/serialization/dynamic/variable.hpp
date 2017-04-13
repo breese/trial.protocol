@@ -71,9 +71,17 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
         {
             ar.save(data.value<unsigned long long int>());
         }
-        else if (data.is<dynamic::variable::number_type>())
+        else if (data.same<float>())
         {
-            ar.save(data.value<dynamic::variable::number_type>());
+            ar.save(data.value<float>());
+        }
+        else if (data.same<double>())
+        {
+            ar.save(data.value<double>());
+        }
+        else if (data.same<long double>())
+        {
+            ar.save(data.value<long double>());
         }
         else if (data.is<dynamic::variable::string_type>())
         {
@@ -139,7 +147,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
 
         case token::symbol::number:
             {
-                dynamic::variable::number_type value = {};
+                long double value = {};
                 ar.load(value);
                 data = value;
             }

@@ -4467,15 +4467,15 @@ void add_integer_with_map()
 void add_number_with_null()
 {
     auto data = variable(3.0) + variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 3.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 3.0);
 }
 
 void add_number_with_boolean()
 {
     auto data = variable(3.0) + true;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::number_type>(), 4.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 4.0);
 }
 
 void add_number_with_integer()
