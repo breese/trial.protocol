@@ -31,73 +31,74 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
                      const dynamic::variable& data,
                      const unsigned int protocol_version)
     {
-        if (data.is<dynamic::variable::null_type>())
+        switch (data.code())
         {
+        case dynamic::token::code::null:
             ar.template save<json::token::null>();
-        }
-        else if (data.is<bool>())
-        {
+            break;
+
+        case dynamic::token::code::boolean:
             ar.save(data.value<bool>());
-        }
-        else if (data.same<signed short int>())
-        {
+            break;
+
+        case dynamic::token::code::signed_short_integer:
             ar.save(data.value<signed short int>());
-        }
-        else if (data.same<unsigned short int>())
-        {
+            break;
+
+        case dynamic::token::code::unsigned_short_integer:
             ar.save(data.value<unsigned short int>());
-        }
-        else if (data.same<signed int>())
-        {
+            break;
+
+        case dynamic::token::code::signed_integer:
             ar.save(data.value<signed int>());
-        }
-        else if (data.same<unsigned int>())
-        {
+            break;
+
+        case dynamic::token::code::unsigned_integer:
             ar.save(data.value<unsigned int>());
-        }
-        else if (data.same<signed long int>())
-        {
+            break;
+
+        case dynamic::token::code::signed_long_integer:
             ar.save(data.value<signed long int>());
-        }
-        else if (data.same<unsigned long int>())
-        {
+            break;
+
+        case dynamic::token::code::unsigned_long_integer:
             ar.save(data.value<unsigned long int>());
-        }
-        else if (data.same<signed long long int>())
-        {
+            break;
+
+        case dynamic::token::code::signed_long_long_integer:
             ar.save(data.value<signed long long int>());
-        }
-        else if (data.same<unsigned long long int>())
-        {
+            break;
+
+        case dynamic::token::code::unsigned_long_long_integer:
             ar.save(data.value<unsigned long long int>());
-        }
-        else if (data.same<float>())
-        {
+            break;
+
+        case dynamic::token::code::float_number:
             ar.save(data.value<float>());
-        }
-        else if (data.same<double>())
-        {
+            break;
+
+        case dynamic::token::code::double_number:
             ar.save(data.value<double>());
-        }
-        else if (data.same<long double>())
-        {
+            break;
+
+        case dynamic::token::code::long_double_number:
             ar.save(data.value<long double>());
-        }
-        else if (data.is<dynamic::variable::string_type>())
-        {
+            break;
+
+        case dynamic::token::code::string:
             ar.save(data.value<dynamic::variable::string_type>());
-        }
-        else if (data.is<dynamic::variable::array_type>())
-        {
+            break;
+
+        case dynamic::token::code::array:
             ar.template save<json::token::begin_array>();
             for (const auto& item : data)
             {
                 ar.save_override(item, protocol_version);
             }
             ar.template save<json::token::end_array>();
-        }
-        else if (data.is<dynamic::variable::map_type>())
-        {
+            break;
+
+        case dynamic::token::code::map:
             ar.template save<json::token::begin_object>();
             for (auto it = data.begin(); it != data.end(); ++it)
             {
@@ -105,10 +106,7 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
                 ar.save_override(it.value(), protocol_version);
             }
             ar.template save<json::token::end_object>();
-        }
-        else
-        {
-            assert(false);
+            break;
         }
     }
 };

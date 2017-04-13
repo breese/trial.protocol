@@ -651,6 +651,135 @@ void run()
 } // namespace is_suite
 
 //-----------------------------------------------------------------------------
+// Tokens
+//-----------------------------------------------------------------------------
+
+namespace token_suite
+{
+
+void test_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::null);
+}
+
+void test_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::boolean);
+}
+
+void test_integer()
+{
+    {
+        const signed short int value = 0;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_short_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const unsigned short int value = 0U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_short_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const signed int value = 0;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const unsigned int value = 0U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const signed long int value = 0L;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const unsigned long int value = 0UL;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const signed long long int value = 0LL;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_long_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const unsigned long long int value = 0ULL;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_long_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+}
+
+void test_number()
+{
+    {
+        const float value = 0.0f;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::float_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::number);
+    }
+    {
+        const double value = 0.0;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::number);
+    }
+    {
+        const long double value = 0.0L;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::long_double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::number);
+    }
+}
+
+void test_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::string);
+}
+
+void test_array()
+{
+    variable data = variable::array();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::array);
+}
+
+void test_map()
+{
+    variable data = variable::map();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::map);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::map);
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array();
+    test_map();
+}
+
+} // namespace token_suite
+
+//-----------------------------------------------------------------------------
 // Copy
 //-----------------------------------------------------------------------------
 
@@ -6624,6 +6753,7 @@ int main()
 {
     ctor_suite::run();
     is_suite::run();
+    token_suite::run();
 
     copy_suite::run();
     move_suite::run();

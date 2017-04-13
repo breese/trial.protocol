@@ -2108,6 +2108,53 @@ bool variable::same() const
     return same_overloader<T>::same(storage.which());
 }
 
+inline token::code::value variable::code() const
+{
+    switch (storage.which())
+    {
+    case traits<null_type>::value:
+        return token::code::null;
+    case traits<bool>::value:
+        return token::code::boolean;
+    case traits<signed short int>::value:
+        return token::code::signed_short_integer;
+    case traits<unsigned short int>::value:
+        return token::code::unsigned_short_integer;
+    case traits<signed int>::value:
+        return token::code::signed_integer;
+    case traits<unsigned int>::value:
+        return token::code::unsigned_integer;
+    case traits<signed long int>::value:
+        return token::code::signed_long_integer;
+    case traits<unsigned long int>::value:
+        return token::code::unsigned_long_integer;
+    case traits<signed long long int>::value:
+        return token::code::signed_long_long_integer;
+    case traits<unsigned long long int>::value:
+        return token::code::unsigned_long_long_integer;
+    case traits<float>::value:
+        return token::code::float_number;
+    case traits<double>::value:
+        return token::code::double_number;
+    case traits<long double>::value:
+        return token::code::long_double_number;
+    case traits<string_type>::value:
+        return token::code::string;
+    case traits<array_type>::value:
+        return token::code::array;
+    case traits<map_type>::value:
+        return token::code::map;
+    default:
+        assert(false);
+        throw dynamic::error(incompatible_type);
+    }
+}
+
+inline token::symbol::value variable::symbol() const
+{
+    return token::symbol::convert(code());
+}
+
 inline bool variable::empty() const
 {
     switch (storage.which())

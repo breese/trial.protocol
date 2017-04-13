@@ -19,6 +19,7 @@
 #include <map>
 #include <trial/protocol/detail/small_union.hpp>
 #include <trial/protocol/dynamic/error.hpp>
+#include <trial/protocol/dynamic/token.hpp>
 
 namespace trial
 {
@@ -156,6 +157,9 @@ public:
 
     template <typename T> bool is() const;
     template <typename T> bool same() const;
+
+    token::code::value code() const;
+    token::symbol::value symbol() const;
 
     bool empty() const;
     size_type size() const;
