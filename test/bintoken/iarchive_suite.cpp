@@ -1304,8 +1304,8 @@ void test_integer_small()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::integer_type>(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<signed int>(), 2);
 }
 
 void test_integer()
@@ -1314,8 +1314,8 @@ void test_integer()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::variable::integer_type>(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<int>(), 2);
 }
 
 void test_number()

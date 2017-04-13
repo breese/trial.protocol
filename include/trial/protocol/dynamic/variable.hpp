@@ -37,7 +37,6 @@ public:
 
     enum null_type { null };
     using boolean_type = bool;
-    using integer_type = std::intmax_t;
     using number_type = double;
     using string_type = std::string;
     using array_type = std::vector<value_type>;

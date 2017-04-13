@@ -39,9 +39,37 @@ struct save_overloader< protocol::bintoken::oarchive,
         {
             ar.save(data.value<dynamic::variable::boolean_type>());
         }
-        else if (data.is<dynamic::variable::integer_type>())
+        else if (data.same<signed short int>())
         {
-            ar.save(data.value<dynamic::variable::integer_type>());
+            ar.save(data.value<signed short int>());
+        }
+        else if (data.same<unsigned short int>())
+        {
+            ar.save(data.value<unsigned short int>());
+        }
+        else if (data.same<signed int>())
+        {
+            ar.save(data.value<signed int>());
+        }
+        else if (data.same<unsigned int>())
+        {
+            ar.save(data.value<unsigned int>());
+        }
+        else if (data.same<signed long int>())
+        {
+            ar.save(data.value<signed long int>());
+        }
+        else if (data.same<unsigned long int>())
+        {
+            ar.save(data.value<unsigned long int>());
+        }
+        else if (data.same<signed long long int>())
+        {
+            ar.save(data.value<signed long long int>());
+        }
+        else if (data.same<unsigned long long int>())
+        {
+            ar.save(data.value<unsigned long long int>());
         }
         else if (data.is<dynamic::variable::number_type>())
         {
@@ -105,7 +133,7 @@ struct load_overloader< protocol::bintoken::iarchive,
 
         case token::symbol::integer:
             {
-                dynamic::variable::integer_type value = {};
+                std::intmax_t value = {};
                 ar.load(value);
                 data = value;
             }

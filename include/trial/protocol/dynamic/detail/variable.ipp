@@ -334,7 +334,7 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
                                                        std::is_signed<T>::value>::type>
 {
     using type = T;
-    using category_type = variable::integer_type;
+    using category_type = int;
 
     static T convert(const variable& self, std::error_code& error)
     {
@@ -532,7 +532,7 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
                                                        std::is_unsigned<T>::value>::type>
 {
     using type = T;
-    using category_type = variable::integer_type;
+    using category_type = int;
 
     static T convert(const variable& self, std::error_code& error)
     {

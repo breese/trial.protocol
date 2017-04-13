@@ -26,24 +26,12 @@ void construct_null()
 {
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_signed_short_int()
@@ -51,13 +39,7 @@ void construct_signed_short_int()
     signed short int value = 0;
     variable data(value);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_unsigned_short_int()
@@ -65,216 +47,114 @@ void construct_unsigned_short_int()
     unsigned short int value = 0;
     variable data(value);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_signed_int()
 {
     variable data(0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_unsigned_int()
 {
     variable data(0U);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_signed_long_int()
 {
     variable data(0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_unsigned_long_int()
 {
     variable data(0UL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_signed_long_long_int()
 {
     variable data(0LL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_unsigned_long_long_int()
 {
     variable data(0ULL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void construct_float()
 {
     variable data(1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
 }
 
 void construct_double()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
 }
 
 void construct_long_double()
 {
     variable data(1.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
 }
 
 void construct_string_with_string()
 {
     variable data(std::string("alpha"));
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_string_with_literal()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_array_with_vector()
 {
     std::vector<int> input = { 1, 2 };
     variable data = variable::array(input.begin(), input.end());
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_array_with_iterator()
 {
     variable::array_type array = { 1, 2 };
     variable data = variable::array(array.begin(), array.end());
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_array_by_name()
 {
     variable data = variable::array({false, 1, 2.0, "alpha"});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_array_by_name_empty()
 {
     variable data = variable::array();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_array_with_size()
 {
     variable data = variable::array(4, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), false);
 }
 
 void construct_map_by_name()
@@ -283,24 +163,12 @@ void construct_map_by_name()
         {
             {"alpha", 1}
         });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
 
 void construct_map_by_name_empty()
 {
     variable data = variable::map();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
 
@@ -310,12 +178,6 @@ void construct_mixed_by_name()
         {
             {"alpha", variable::array({1, 2})}
         });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::number_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
 
@@ -1710,7 +1572,7 @@ void assign_signed_int_with_null()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
 }
@@ -1719,7 +1581,7 @@ void assign_signed_int_with_boolean()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = false;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
 }
@@ -1732,7 +1594,7 @@ void assign_signed_int_with_integer()
     {
         signed short int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed short int>(), value);
@@ -1740,7 +1602,7 @@ void assign_signed_int_with_integer()
     {
         signed short int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -1749,7 +1611,7 @@ void assign_signed_int_with_integer()
     {
         signed short int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -1759,7 +1621,7 @@ void assign_signed_int_with_integer()
     {
         unsigned short int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned short int>(), value);
@@ -1767,7 +1629,7 @@ void assign_signed_int_with_integer()
     {
         unsigned short int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -1776,7 +1638,7 @@ void assign_signed_int_with_integer()
     {
         unsigned short int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -1786,7 +1648,7 @@ void assign_signed_int_with_integer()
     {
         signed int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), value);
@@ -1794,7 +1656,7 @@ void assign_signed_int_with_integer()
     {
         signed int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -1803,7 +1665,7 @@ void assign_signed_int_with_integer()
     {
         signed int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -1813,7 +1675,7 @@ void assign_signed_int_with_integer()
     {
         unsigned int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), value);
@@ -1821,7 +1683,7 @@ void assign_signed_int_with_integer()
     {
         unsigned int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -1830,7 +1692,7 @@ void assign_signed_int_with_integer()
     {
         unsigned int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -1840,7 +1702,7 @@ void assign_signed_int_with_integer()
     {
         signed long int value = 2L;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long int>(), value);
@@ -1848,7 +1710,7 @@ void assign_signed_int_with_integer()
     {
         signed long int value = 2L;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -1857,7 +1719,7 @@ void assign_signed_int_with_integer()
     {
         signed long int value = 2L;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -1867,7 +1729,7 @@ void assign_signed_int_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long int>(), value);
@@ -1875,7 +1737,7 @@ void assign_signed_int_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -1884,7 +1746,7 @@ void assign_signed_int_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -1894,7 +1756,7 @@ void assign_signed_int_with_integer()
     {
         signed long long int value = 2LL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long long int>(), value);
@@ -1902,7 +1764,7 @@ void assign_signed_int_with_integer()
     {
         signed long long int value = 2LL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -1911,7 +1773,7 @@ void assign_signed_int_with_integer()
     {
         signed long long int value = 2LL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -1921,7 +1783,7 @@ void assign_signed_int_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long long int>(), value);
@@ -1929,7 +1791,7 @@ void assign_signed_int_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -1938,7 +1800,7 @@ void assign_signed_int_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -1951,60 +1813,60 @@ void assign_signed_int_with_number()
     signed int input = 2;
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = 3.0f;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0f);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0f);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = 3.0;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = 3.0L;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0L);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0L);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
@@ -2015,7 +1877,7 @@ void assign_signed_int_with_string()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::string_type("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
 }
@@ -2024,7 +1886,7 @@ void assign_signed_int_with_array()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::array({ true, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
 }
@@ -2033,7 +1895,7 @@ void assign_signed_int_with_map()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
@@ -2042,7 +1904,7 @@ void assign_unsigned_int_with_null()
 {
     unsigned int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
 }
@@ -2051,7 +1913,7 @@ void assign_unsigned_int_with_boolean()
 {
     unsigned int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = false;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::boolean_type>(), true);
 }
@@ -2064,7 +1926,7 @@ void assign_unsigned_int_with_integer()
     {
         signed short int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed short int>(), value);
@@ -2072,7 +1934,7 @@ void assign_unsigned_int_with_integer()
     {
         signed short int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -2081,7 +1943,7 @@ void assign_unsigned_int_with_integer()
     {
         signed short int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -2091,7 +1953,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned short int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned short int>(), value);
@@ -2099,7 +1961,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned short int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -2108,7 +1970,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned short int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -2118,7 +1980,7 @@ void assign_unsigned_int_with_integer()
     {
         signed int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), value);
@@ -2126,7 +1988,7 @@ void assign_unsigned_int_with_integer()
     {
         signed int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -2135,7 +1997,7 @@ void assign_unsigned_int_with_integer()
     {
         signed int value = 2;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -2145,7 +2007,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), value);
@@ -2153,7 +2015,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -2162,7 +2024,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned int value = 2U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -2172,7 +2034,7 @@ void assign_unsigned_int_with_integer()
     {
         signed long int value = 2L;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long int>(), value);
@@ -2180,7 +2042,7 @@ void assign_unsigned_int_with_integer()
     {
         signed long int value = 2L;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -2189,7 +2051,7 @@ void assign_unsigned_int_with_integer()
     {
         signed long int value = 2L;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -2199,7 +2061,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long int>(), value);
@@ -2207,7 +2069,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -2216,7 +2078,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned long int value = 2UL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -2226,7 +2088,7 @@ void assign_unsigned_int_with_integer()
     {
         signed long long int value = 2LL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long long int>(), value);
@@ -2234,7 +2096,7 @@ void assign_unsigned_int_with_integer()
     {
         signed long long int value = 2LL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -2243,7 +2105,7 @@ void assign_unsigned_int_with_integer()
     {
         signed long long int value = 2LL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -2253,7 +2115,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long long int>(), value);
@@ -2261,7 +2123,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -2270,7 +2132,7 @@ void assign_unsigned_int_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -2283,60 +2145,60 @@ void assign_unsigned_int_with_number()
     unsigned int input = 2;
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = 3.0f;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0f);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0f);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = 3.0;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = 3.0L;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0L);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         variable number(3.0L);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
@@ -2347,7 +2209,7 @@ void assign_unsigned_int_with_string()
 {
     unsigned int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::string_type("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
 }
@@ -2356,7 +2218,7 @@ void assign_unsigned_int_with_array()
 {
     unsigned int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::array({ true, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
 }
@@ -2365,7 +2227,7 @@ void assign_unsigned_int_with_map()
 {
     unsigned int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
 }
@@ -2691,7 +2553,7 @@ void assign_string_with_integer()
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
     data = 1;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
 
 void assign_string_with_number()
@@ -3411,20 +3273,20 @@ void append_signed_int_with_null()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data += variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 2);
 }
 
 void append_signed_int_with_boolean()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data += variable(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 3);
 }
 
 void append_signed_int_with_integer()
@@ -3433,7 +3295,7 @@ void append_signed_int_with_integer()
     {
         signed short int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3441,7 +3303,7 @@ void append_signed_int_with_integer()
     {
         unsigned short int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3449,7 +3311,7 @@ void append_signed_int_with_integer()
     {
         signed int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3457,7 +3319,7 @@ void append_signed_int_with_integer()
     {
         unsigned int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3465,7 +3327,7 @@ void append_signed_int_with_integer()
     {
         signed long int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3473,7 +3335,7 @@ void append_signed_int_with_integer()
     {
         unsigned long int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3481,7 +3343,7 @@ void append_signed_int_with_integer()
     {
         signed long long int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3489,7 +3351,7 @@ void append_signed_int_with_integer()
     {
         unsigned long long int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
@@ -3501,24 +3363,24 @@ void append_signed_int_with_number()
     signed int input = 2;
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(3.0f);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(3.0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(3.0L);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
     }
 }
 
@@ -3526,7 +3388,7 @@ void append_signed_int_with_string()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
                                     error,
                                     "incompatible type");
@@ -3536,7 +3398,7 @@ void append_signed_int_with_array()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::array({ true, "alpha" })),
                                     error,
                                     "incompatible type");
@@ -3546,7 +3408,7 @@ void append_signed_int_with_map()
 {
     signed int input = 2;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
                                     error,
                                     "incompatible type");
@@ -3554,124 +3416,124 @@ void append_signed_int_with_map()
 
 void append_unsigned_int_with_null()
 {
-    unsigned int input = 2;
+    unsigned int input = 2U;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data += variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 2U);
 }
 
 void append_unsigned_int_with_boolean()
 {
-    unsigned int input = 2;
+    unsigned int input = 2U;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data += variable(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 3U);
 }
 
 void append_unsigned_int_with_integer()
 {
-    unsigned int input = 2;
+    unsigned int input = 2U;
     {
         signed short int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         unsigned short int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         signed int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         unsigned int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         signed long int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         unsigned long int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         signed long long int value = 3;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         unsigned long long int value = 3U;
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
 }
 
 void append_unsigned_int_with_number()
 {
-    unsigned int input = 2;
+    unsigned int input = 2U;
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(3.0f);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(3.0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
     {
         variable data(input);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data += variable(3.0L);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
     }
 }
 
 void append_unsigned_int_with_string()
 {
-    unsigned int input = 2;
+    unsigned int input = 2U;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
                                     error,
                                     "incompatible type");
@@ -3679,9 +3541,9 @@ void append_unsigned_int_with_string()
 
 void append_unsigned_int_with_array()
 {
-    unsigned int input = 2;
+    unsigned int input = 2U;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::array({ true, "alpha" })),
                                     error,
                                     "incompatible type");
@@ -3689,9 +3551,9 @@ void append_unsigned_int_with_array()
 
 void append_unsigned_int_with_map()
 {
-    unsigned int input = 2;
+    unsigned int input = 2U;
     variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
                                     error,
                                     "incompatible type");
@@ -4534,15 +4396,15 @@ void add_boolean_with_map()
 void add_integer_with_null()
 {
     auto data = variable(2) + variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 2);
 }
 
 void add_integer_with_boolean()
 {
     auto data = variable(2) + true;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::integer_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 3);
 }
 
 void add_integer_with_integer()
@@ -5189,7 +5051,7 @@ void fail_integer_as_null()
 {
     variable data(0);
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(error), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), 0);
     TRIAL_PROTOCOL_TEST(!error);
     data.value<variable::null_type>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5284,7 +5146,7 @@ void fail_integer_as_string()
 {
     variable data(0);
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(error), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), 0);
     TRIAL_PROTOCOL_TEST(!error);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5626,7 +5488,7 @@ void fail_string_as_integer()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::integer_type>(error), variable::integer_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), int{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 

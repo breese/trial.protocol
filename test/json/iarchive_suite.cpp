@@ -698,8 +698,8 @@ void test_integer()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<variable::integer_type>());
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<variable::integer_type>(), 2);
+    TRIAL_PROTOCOL_TEST(value.is<int>());
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<signed int>(), 2);
 }
 
 void test_number()
