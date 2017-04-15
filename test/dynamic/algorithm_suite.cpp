@@ -2124,6 +2124,370 @@ void run()
 } // namespace max_element_suite
 
 //-----------------------------------------------------------------------------
+// std::mismatch
+//-----------------------------------------------------------------------------
+
+namespace mismatch_suite
+{
+
+void test_null()
+{
+    {
+        variable first;
+        variable second;
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first;
+        variable second(true);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first;
+        variable second(2);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first;
+        variable second(3.0);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first;
+        variable second("alpha");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first;
+        variable second = variable::array({ true, 2, 3.0, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first;
+        variable second = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+}
+
+void test_boolean()
+{
+    {
+        variable first(true);
+        variable second(false);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(true);
+        variable second(true);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first(true);
+        variable second(2);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(true);
+        variable second(3.0);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(true);
+        variable second("alpha");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(true);
+        variable second = variable::array({ false, 2, 3.0, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(true);
+        variable second = variable::array({ true, 2, 3.0, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 1);
+    }
+    {
+        variable first(true);
+        variable second = variable::map(
+        {
+            { "alpha", false },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(true);
+        variable second = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 1);
+    }
+}
+
+void test_integer()
+{
+    {
+        variable first(2);
+        variable second(true);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(2);
+        variable second(1);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(2);
+        variable second(2);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first(2);
+        variable second(3.0);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(2);
+        variable second("alpha");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(2);
+        variable second = variable::array({ true, 2, 3.0, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(2);
+        variable second = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+}
+
+void test_number()
+{
+    {
+        variable first(3.0);
+        variable second(true);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(3.0);
+        variable second(2);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(3.0);
+        variable second(1.0);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(3.0);
+        variable second(3.0);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first(3.0);
+        variable second("alpha");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(3.0);
+        variable second = variable::array({ true, 2, 3.0, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(3.0);
+        variable second = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+}
+
+void test_string()
+{
+    {
+        variable first("alpha");
+        variable second(true);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first("alpha");
+        variable second(2);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first("alpha");
+        variable second(3.0);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first("alpha");
+        variable second("alpha");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first("alpha");
+        variable second("bravo");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first("alpha");
+        variable second = variable::array({ true, 2, 3.0, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first("alpha");
+        variable second = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+}
+
+void test_array()
+{
+    {
+        variable first = variable::array({ true, 2, 3.0, "alpha" });
+        variable second = variable::array({ true, 2, 3.0, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first = variable::array({ true, 2, 3.0, "alpha" });
+        variable second = variable::array({ 1, 2, 3, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first = variable::array({ true, 2, 3.0, "alpha" });
+        variable second = variable::array({ true, 3.0, 2, "alpha" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 1);
+    }
+}
+
+void test_map()
+{
+    {
+        variable first = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        variable second = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    {
+        variable first = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        variable second = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 3.0 },
+                { "charlie", 2 },
+                { "delta", "hydrogen" }
+            });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 1);
+    }
+}
+
+void run()
+{
+    // Illegal to compare larger container with smaller container, so
+    // comparing null with any other type is fine, but comparing any other
+    // type with null is illegal.
+
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array();
+    test_map();
+}
+
+} // namespace mismatch_suite
+
+//-----------------------------------------------------------------------------
 // std::partition_point
 //-----------------------------------------------------------------------------
 
@@ -2881,6 +3245,7 @@ int main()
     is_sorted_suite::run();
     lower_bound_suite::run();
     max_element_suite::run();
+    mismatch_suite::run();
     partition_point_suite::run();
     remove_suite::run();
     search_suite::run();
