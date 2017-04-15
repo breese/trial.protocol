@@ -2869,21 +2869,510 @@ void run()
 namespace search_suite
 {
 
-void test_array()
+void search_null()
 {
-#if 0 // FIXME: Cannot currently construct end iterator with default constructor
-    variable haystack = variable::array({false, 2, 3.0, "alpha"});
+    variable data;
+    {
+        variable subsequence;
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence("alpha");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ true, 2, 3.0, "alpha" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
 
-    variable needle = variable::array({"alpha"});
-    auto where = std::search(haystack.begin(), haystack.end(),
-                             needle.begin(), needle.end());
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(haystack.end(), where), 3);
-#endif
+void search_boolean()
+{
+    variable data(true);
+    {
+        variable subsequence;
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        // Empty subsequence returns the first entry
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence("alpha");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ true, 2, 3.0, "alpha" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void search_integer()
+{
+    variable data(2);
+    {
+        variable subsequence;
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        // Empty subsequence returns the first entry
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence("alpha");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ true, 2, 3.0, "alpha" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void search_number()
+{
+    variable data(3.0);
+    {
+        variable subsequence;
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        // Empty subsequence returns the first entry
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence("alpha");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ true, 2, 3.0, "alpha" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void search_string()
+{
+    variable data("alpha");
+    {
+        variable subsequence;
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        // Empty subsequence returns the first entry
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence("alpha");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence = variable::array({ true, 2, 3.0, "alpha" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void search_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    // array - boolean
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // array - integer
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    // array - number
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    // array - string
+    {
+        variable subsequence("alpha");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    // array - array
+    {
+        variable subsequence = variable::array({ false });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ true });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence = variable::array({ 0 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ 2 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable subsequence = variable::array({ 0.0 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ 3.0 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable subsequence = variable::array({ "" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ "alpha" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable subsequence = variable::array({ true, 3.0 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable subsequence = variable::array({ true, 2, "alpha" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // array - map
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "bravo", 2 }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "charlie", 3.0 }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void search_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    // map - boolean
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // map - integer
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    // map - number
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    // map - string
+    {
+        variable subsequence("hydrogen");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    // map - array
+    {
+        variable subsequence = variable::array({ true });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence = variable::array({ true, 2 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence = variable::array({ 2 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable subsequence = variable::array({ true, 3.0 });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // map - map
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "bravo", 2 }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "bravo", 2 }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable subsequence = variable::map(
+            {
+                { "alpha", true },
+                { "charlie", 3.0 }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
 }
 
 void run()
 {
-    test_array();
+    search_null();
+    search_boolean();
+    search_integer();
+    search_number();
+    search_string();
+    search_array();
+    search_map();
 }
 
 } // namespace search_suite
