@@ -1558,7 +1558,6 @@ inline variable::variable()
 inline variable::variable(const variable& other)
     : storage(null)
 {
-    // FIXME: shallow or deep copy of array/maps?
     switch (other.storage.which())
     {
     case traits<null_type>::value:
@@ -1736,7 +1735,6 @@ inline variable variable::map(std::initializer_list<map_type::value_type> init)
 
 inline variable& variable::operator= (const variable& other)
 {
-    // FIXME: shallow or deep copy of array/maps?
     switch (other.storage.which())
     {
     case traits<null_type>::value:

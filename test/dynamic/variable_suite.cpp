@@ -894,6 +894,112 @@ void copy_string()
     TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::string_type>(), true);
 }
 
+void copy_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+
+    variable copy(data);
+
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void copy_array_nested()
+{
+    variable data = variable::array({ true, variable::array({ 2, 3.0 }), "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+
+    variable copy(data);
+
+    variable expect = variable::array({ true, variable::array({ 2, 3.0 }), "alpha" });
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void copy_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+
+    variable copy(data);
+
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void copy_map_nested()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "nested", variable::map({{ "bravo", 2}, { "charlie", 3.0 }}) },
+            { "delta", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+
+    variable copy(data);
+
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "nested", variable::map({{ "bravo", 2}, { "charlie", 3.0 }}) },
+            { "delta", "hydrogen" }
+        });
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void run()
 {
     copy_null();
@@ -901,7 +1007,10 @@ void run()
     copy_integer();
     copy_number();
     copy_string();
-    // FIXME: array and map
+    copy_array();
+    copy_array_nested();
+    copy_map();
+    copy_map_nested();
 }
 
 } // namespace copy_suite
@@ -1022,6 +1131,92 @@ void move_string()
     TRIAL_PROTOCOL_TEST_EQUAL(copy.value<variable::string_type>(), "alpha");
 }
 
+void move_array()
+{
+    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+
+    variable copy(std::move(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
+
+    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void move_array_nested()
+{
+    variable data = variable::array({ true, variable::array({ 2, 3.0 }), "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+
+    variable copy(std::move(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
+
+    variable expect = variable::array({ true, variable::array({ 2, 3.0 }), "alpha" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void move_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+
+    variable copy(std::move(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
+
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void move_map_nested()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "nested", variable::map({{ "bravo", 2}, { "charlie", 3.0 }}) },
+            { "delta", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+
+    variable copy(std::move(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
+
+    variable expect = variable::map(
+        {
+            { "alpha", true },
+            { "nested", variable::map({{ "bravo", 2}, { "charlie", 3.0 }}) },
+            { "delta", "hydrogen" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void run()
 {
     move_null();
@@ -1029,7 +1224,10 @@ void run()
     move_integer();
     move_number();
     move_string();
-    // FIXME: array and map
+    move_array();
+    move_array_nested();
+    move_map();
+    move_map_nested();
 }
 
 } // namespace move_suite
