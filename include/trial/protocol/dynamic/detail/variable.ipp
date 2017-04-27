@@ -24,8 +24,8 @@ namespace dynamic
 namespace detail
 {
 
-template <typename T>
-using is_null = std::is_same<T, variable::null_type>;
+template <typename CharT, typename T>
+using is_null = std::is_same<T, typename basic_variable<CharT>::null_type>;
 
 template <typename T>
 using is_boolean = protocol::detail::is_bool<T>;
@@ -38,14 +38,14 @@ using is_integer = typename std::conditional<std::is_integral<T>::value && !deta
 template <typename T>
 using is_number = std::is_floating_point<T>;
 
-template <typename T>
-using is_string = std::is_same<T, variable::string_type>;
+template <typename CharT, typename T>
+using is_string = std::is_same<T, typename basic_variable<CharT>::string_type>;
 
-template <typename T>
-using is_array = std::is_same<T, variable::array_type>;
+template <typename CharT, typename T>
+using is_array = std::is_same<T, typename basic_variable<CharT>::array_type>;
 
-template <typename T>
-using is_map = std::is_same<T, variable::map_type>;
+template <typename CharT, typename T>
+using is_map = std::is_same<T, typename basic_variable<CharT>::map_type>;
 
 } // namespace detail
 
@@ -53,35 +53,45 @@ using is_map = std::is_same<T, variable::map_type>;
 // variable::traits
 //-----------------------------------------------------------------------------
 
+template <typename CharT>
 template <typename T>
-struct variable::traits
+struct basic_variable<CharT>::traits
 {
-    static const std::size_t value = decltype(variable::storage)::template index<T>::value;
+    static const std::size_t value = decltype(basic_variable<CharT>::storage)::template index<T>::value;
 };
 
 //-----------------------------------------------------------------------------
-// variable::overloader
+// detail::overloader
 //-----------------------------------------------------------------------------
 
-template <typename T, typename Enable>
-struct variable::overloader
+namespace detail
+{
+
+template <typename T, typename U, typename Enable = void>
+struct overloader
 {
     static_assert(sizeof(T) == 0, "Unsupported type");
 };
 
 // Null
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_null<CharT, U>::value>::type>
 {
-    using type = variable::null_type;
-    using category_type = variable::null_type;
+    using variable_type = basic_variable<CharT>;
+    using type = typename variable_type::null_type;
+    using category_type = type;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+
+    static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             return {};
 
         default:
@@ -90,11 +100,11 @@ struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value
         }
     }
 
-    static bool equal(const variable& self, const T&)
+    static bool equal(const variable_type& self, const U&)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             return true;
 
         default:
@@ -102,13 +112,13 @@ struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value
         }
     }
 
-    static bool less(const variable&, const T&)
+    static bool less(const variable_type&, const U&)
     {
         // Null is smaller than anything
         return false;
     }
 
-    static void append(variable&, const T&)
+    static void append(variable_type&, const U&)
     {
         // Appending null is a no-op
     }
@@ -116,51 +126,58 @@ struct variable::overloader<T, typename std::enable_if<detail::is_null<T>::value
 
 // Boolean
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_boolean<U>::value>::type>
 {
     using type = bool;
     using category_type = type;
+    using variable_type = basic_variable<CharT>;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+    using array_type = typename variable_type::array_type;
+
+    static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>();
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>();
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>();
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>();
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>();
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>();
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>();
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>();
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>();
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>();
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>();
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>();
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>();
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>();
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>();
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>();
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>();
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>();
 
-        case traits<float>::value:
-            return self.storage.get<float>();
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>();
 
-        case traits<double>::value:
-            return self.storage.get<double>();
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>();
 
-        case traits<long double>::value:
-            return self.storage.get<long double>();
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -168,157 +185,157 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
         }
     }
 
-    static bool equal(const variable& self, const T& other)
+    static bool equal(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>() == other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() == other;
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>() == other;
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>() == other;
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>() == other;
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>() == other;
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>() == other;
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>() == other;
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>() == other;
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>() == other;
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>() == other;
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>() == other;
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>() == other;
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>() == other;
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>() == other;
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>() == other;
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>() == other;
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>() == other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() == other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() == other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() == other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() == other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() == other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() == other;
 
         default:
             return false;
         }
     }
 
-    static bool less(const variable& self, const T& other)
+    static bool less(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             return true;
 
-        case traits<bool>::value:
-            return self.storage.get<bool>() < other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() < other;
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>() < other;
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>() < other;
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>() < other;
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>() < other;
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>() < other;
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>() < other;
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>() < other;
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>() < other;
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>() < other;
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>() < other;
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>() < other;
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>() < other;
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>() < other;
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>() < other;
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>() < other;
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>() < other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() < other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() < other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() < other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() < other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() < other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() < other;
 
         default:
             return false;
         }
     }
 
-    static void append(variable& self, const T& other)
+    static void append(variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             self.storage = other; // Overwrite null
             break;
 
-        case traits<bool>::value:
-            self.storage.get<bool>() += other;
+        case variable_type::template traits<bool>::value:
+            self.storage.template get<bool>() += other;
             break;
 
-        case traits<signed short int>::value:
-            self.storage.get<signed short int>() += other;
+        case variable_type::template traits<signed short int>::value:
+            self.storage.template get<signed short int>() += other;
             break;
 
-        case traits<unsigned short int>::value:
-            self.storage.get<unsigned short int>() += other;
+        case variable_type::template traits<unsigned short int>::value:
+            self.storage.template get<unsigned short int>() += other;
             break;
 
-        case traits<signed int>::value:
-            self.storage.get<signed int>() += other;
+        case variable_type::template traits<signed int>::value:
+            self.storage.template get<signed int>() += other;
             break;
 
-        case traits<unsigned int>::value:
-            self.storage.get<unsigned int>() += other;
+        case variable_type::template traits<unsigned int>::value:
+            self.storage.template get<unsigned int>() += other;
             break;
 
-        case traits<signed long int>::value:
-            self.storage.get<signed long int>() += other;
+        case variable_type::template traits<signed long int>::value:
+            self.storage.template get<signed long int>() += other;
             break;
 
-        case traits<unsigned long int>::value:
-            self.storage.get<unsigned long int>() += other;
+        case variable_type::template traits<unsigned long int>::value:
+            self.storage.template get<unsigned long int>() += other;
             break;
 
-        case traits<signed long long int>::value:
-            self.storage.get<signed long long int>() += other;
+        case variable_type::template traits<signed long long int>::value:
+            self.storage.template get<signed long long int>() += other;
             break;
 
-        case traits<unsigned long long int>::value:
-            self.storage.get<unsigned long long int>() += other;
+        case variable_type::template traits<unsigned long long int>::value:
+            self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case traits<float>::value:
-            self.storage.get<float>() += other;
+        case variable_type::template traits<float>::value:
+            self.storage.template get<float>() += other;
             break;
 
-        case traits<double>::value:
-            self.storage.get<double>() += other;
+        case variable_type::template traits<double>::value:
+            self.storage.template get<double>() += other;
             break;
 
-        case traits<long double>::value:
-            self.storage.get<long double>() += other;
+        case variable_type::template traits<long double>::value:
+            self.storage.template get<long double>() += other;
             break;
 
-        case traits<variable::array_type>::value:
-            self.storage.get<array_type>().push_back(other);
+        case variable_type::template traits<array_type>::value:
+            self.storage.template get<array_type>().push_back(other);
             break;
 
         default:
@@ -329,52 +346,59 @@ struct variable::overloader<T, typename std::enable_if<detail::is_boolean<T>::va
 
 // Signed integer
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::value &&
-                                                       std::is_signed<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_integer<U>::value &&
+                            std::is_signed<U>::value>::type>
 {
-    using type = T;
+    using type = U;
     using category_type = int;
+    using variable_type = basic_variable<CharT>;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+    using array_type = typename variable_type::array_type;
+
+    static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>();
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>();
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>();
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>();
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>();
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>();
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>();
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>();
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>();
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>();
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>();
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>();
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>();
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>();
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>();
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>();
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>();
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>();
 
-        case traits<float>::value:
-            return self.storage.get<float>();
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>();
 
-        case traits<double>::value:
-            return self.storage.get<double>();
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>();
 
-        case traits<long double>::value:
-            return self.storage.get<long double>();
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -382,141 +406,141 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         }
     }
 
-    static bool equal(const variable& self, const T& other)
+    static bool equal(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>() == other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() == other;
 
-        case traits<signed short int>::value:
-        case traits<unsigned short int>::value:
-            return self.storage.get<signed short int>() == other;
+        case variable_type::template traits<signed short int>::value:
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<signed short int>() == other;
 
-        case traits<signed int>::value:
-        case traits<unsigned int>::value:
-            return self.storage.get<signed int>() == other;
+        case variable_type::template traits<signed int>::value:
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<signed int>() == other;
 
-        case traits<signed long int>::value:
-        case traits<unsigned long int>::value:
-            return self.storage.get<signed long int>() == other;
+        case variable_type::template traits<signed long int>::value:
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<signed long int>() == other;
 
-        case traits<signed long long int>::value:
-        case traits<unsigned long long int>::value:
-            return self.storage.get<signed long long int>() == other;
+        case variable_type::template traits<signed long long int>::value:
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<signed long long int>() == other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() == other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() == other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() == other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() == other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() == other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() == other;
 
         default:
             return false;
         }
     }
 
-    static bool less(const variable& self, const T& other)
+    static bool less(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             return true;
 
-        case traits<bool>::value:
-            return self.storage.get<bool>() < other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() < other;
 
-        case traits<signed short int>::value:
-        case traits<unsigned short int>::value:
-            return self.storage.get<signed short int>() < other;
+        case variable_type::template traits<signed short int>::value:
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<signed short int>() < other;
 
-        case traits<signed int>::value:
-        case traits<unsigned int>::value:
-            return self.storage.get<signed int>() < other;
+        case variable_type::template traits<signed int>::value:
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<signed int>() < other;
 
-        case traits<signed long int>::value:
-        case traits<unsigned long int>::value:
-            return self.storage.get<signed long int>() < other;
+        case variable_type::template traits<signed long int>::value:
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<signed long int>() < other;
 
-        case traits<signed long long int>::value:
-        case traits<unsigned long long int>::value:
-            return self.storage.get<signed long long int>() < other;
+        case variable_type::template traits<signed long long int>::value:
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<signed long long int>() < other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() < other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() < other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() < other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() < other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() < other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() < other;
 
         default:
             return false;
         }
     }
 
-    static void append(variable& self, const T& other)
+    static void append(variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             self.storage = other; // Overwrite null
             break;
 
-        case traits<bool>::value:
-            self.storage.get<bool>() += other;
+        case variable_type::template traits<bool>::value:
+            self.storage.template get<bool>() += other;
             break;
 
-        case traits<signed short int>::value:
-            self.storage.get<signed short int>() += other;
+        case variable_type::template traits<signed short int>::value:
+            self.storage.template get<signed short int>() += other;
             break;
 
-        case traits<unsigned short int>::value:
-            self.storage.get<unsigned short int>() += other;
+        case variable_type::template traits<unsigned short int>::value:
+            self.storage.template get<unsigned short int>() += other;
             break;
 
-        case traits<signed int>::value:
-            self.storage.get<signed int>() += other;
+        case variable_type::template traits<signed int>::value:
+            self.storage.template get<signed int>() += other;
             break;
 
-        case traits<unsigned int>::value:
-            self.storage.get<unsigned int>() += other;
+        case variable_type::template traits<unsigned int>::value:
+            self.storage.template get<unsigned int>() += other;
             break;
 
-        case traits<signed long int>::value:
-            self.storage.get<signed long int>() += other;
+        case variable_type::template traits<signed long int>::value:
+            self.storage.template get<signed long int>() += other;
             break;
 
-        case traits<unsigned long int>::value:
-            self.storage.get<unsigned long int>() += other;
+        case variable_type::template traits<unsigned long int>::value:
+            self.storage.template get<unsigned long int>() += other;
             break;
 
-        case traits<signed long long int>::value:
-            self.storage.get<signed long long int>() += other;
+        case variable_type::template traits<signed long long int>::value:
+            self.storage.template get<signed long long int>() += other;
             break;
 
-        case traits<unsigned long long int>::value:
-            self.storage.get<unsigned long long int>() += other;
+        case variable_type::template traits<unsigned long long int>::value:
+            self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case traits<float>::value:
-            self.storage.get<float>() += other;
+        case variable_type::template traits<float>::value:
+            self.storage.template get<float>() += other;
             break;
 
-        case traits<double>::value:
-            self.storage.get<double>() += other;
+        case variable_type::template traits<double>::value:
+            self.storage.template get<double>() += other;
             break;
 
-        case traits<long double>::value:
-            self.storage.get<long double>() += other;
+        case variable_type::template traits<long double>::value:
+            self.storage.template get<long double>() += other;
             break;
 
-        case traits<variable::array_type>::value:
-            self.storage.get<array_type>().push_back(other);
+        case variable_type::template traits<array_type>::value:
+            self.storage.template get<array_type>().push_back(other);
             break;
 
         default:
@@ -527,52 +551,59 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
 
 // Unsigned integer
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::value &&
-                                                       std::is_unsigned<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_integer<U>::value &&
+                            std::is_unsigned<U>::value>::type>
 {
-    using type = T;
+    using type = U;
     using category_type = int;
+    using variable_type = basic_variable<CharT>;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+    using array_type = typename variable_type::array_type;
+
+    static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>();
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>();
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>();
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>();
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>();
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>();
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>();
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>();
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>();
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>();
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>();
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>();
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>();
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>();
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>();
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>();
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>();
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>();
 
-        case traits<float>::value:
-            return self.storage.get<float>();
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>();
 
-        case traits<double>::value:
-            return self.storage.get<double>();
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>();
 
-        case traits<long double>::value:
-            return self.storage.get<long double>();
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -580,141 +611,141 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
         }
     }
 
-    static bool equal(const variable& self, const T& other)
+    static bool equal(const variable& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>() == other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() == other;
 
-        case traits<signed short int>::value:
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>() == other;
+        case variable_type::template traits<signed short int>::value:
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>() == other;
 
-        case traits<signed int>::value:
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>() == other;
+        case variable_type::template traits<signed int>::value:
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>() == other;
 
-        case traits<signed long int>::value:
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>() == other;
+        case variable_type::template traits<signed long int>::value:
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>() == other;
 
-        case traits<signed long long int>::value:
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>() == other;
+        case variable_type::template traits<signed long long int>::value:
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>() == other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() == other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() == other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() == other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() == other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() == other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() == other;
 
         default:
             return false;
         }
     }
 
-    static bool less(const variable& self, const T& other)
+    static bool less(const variable& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             return true;
 
-        case traits<bool>::value:
-            return self.storage.get<bool>() < other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() < other;
 
-        case traits<signed short int>::value:
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>() < other;
+        case variable_type::template traits<signed short int>::value:
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>() < other;
 
-        case traits<signed int>::value:
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>() < other;
+        case variable_type::template traits<signed int>::value:
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>() < other;
 
-        case traits<signed long int>::value:
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>() < other;
+        case variable_type::template traits<signed long int>::value:
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>() < other;
 
-        case traits<signed long long int>::value:
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>() < other;
+        case variable_type::template traits<signed long long int>::value:
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>() < other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() < other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() < other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() < other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() < other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() < other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() < other;
 
         default:
             return false;
         }
     }
 
-    static void append(variable& self, const T& other)
+    static void append(variable& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             self.storage = other; // Overwrite null
             break;
 
-        case traits<bool>::value:
-            self.storage.get<bool>() += other;
+        case variable_type::template traits<bool>::value:
+            self.storage.template get<bool>() += other;
             break;
 
-        case traits<signed short int>::value:
-            self.storage.get<signed short int>() += other;
+        case variable_type::template traits<signed short int>::value:
+            self.storage.template get<signed short int>() += other;
             break;
 
-        case traits<unsigned short int>::value:
-            self.storage.get<unsigned short int>() += other;
+        case variable_type::template traits<unsigned short int>::value:
+            self.storage.template get<unsigned short int>() += other;
             break;
 
-        case traits<signed int>::value:
-            self.storage.get<signed int>() += other;
+        case variable_type::template traits<signed int>::value:
+            self.storage.template get<signed int>() += other;
             break;
 
-        case traits<unsigned int>::value:
-            self.storage.get<unsigned int>() += other;
+        case variable_type::template traits<unsigned int>::value:
+            self.storage.template get<unsigned int>() += other;
             break;
 
-        case traits<signed long int>::value:
-            self.storage.get<signed long int>() += other;
+        case variable_type::template traits<signed long int>::value:
+            self.storage.template get<signed long int>() += other;
             break;
 
-        case traits<unsigned long int>::value:
-            self.storage.get<unsigned long int>() += other;
+        case variable_type::template traits<unsigned long int>::value:
+            self.storage.template get<unsigned long int>() += other;
             break;
 
-        case traits<signed long long int>::value:
-            self.storage.get<signed long long int>() += other;
+        case variable_type::template traits<signed long long int>::value:
+            self.storage.template get<signed long long int>() += other;
             break;
 
-        case traits<unsigned long long int>::value:
-            self.storage.get<unsigned long long int>() += other;
+        case variable_type::template traits<unsigned long long int>::value:
+            self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case traits<float>::value:
-            self.storage.get<float>() += other;
+        case variable_type::template traits<float>::value:
+            self.storage.template get<float>() += other;
             break;
 
-        case traits<double>::value:
-            self.storage.get<double>() += other;
+        case variable_type::template traits<double>::value:
+            self.storage.template get<double>() += other;
             break;
 
-        case traits<long double>::value:
-            self.storage.get<long double>() += other;
+        case variable_type::template traits<long double>::value:
+            self.storage.template get<long double>() += other;
             break;
 
-        case traits<variable::array_type>::value:
-            self.storage.get<array_type>().push_back(other);
+        case variable_type::template traits<array_type>::value:
+            self.storage.template get<array_type>().push_back(other);
             break;
 
         default:
@@ -725,51 +756,58 @@ struct variable::overloader<T, typename std::enable_if<detail::is_integer<T>::va
 
 // Floating-point
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_number<U>::value>::type>
 {
-    using type = T;
+    using type = U;
     using category_type = float;
+    using variable_type = basic_variable<CharT>;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+    using array_type = typename variable_type::array_type;
+
+    static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>();
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>();
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>();
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>();
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>();
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>();
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>();
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>();
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>();
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>();
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>();
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>();
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>();
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>();
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>();
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>();
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>();
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>();
 
-        case traits<float>::value:
-            return self.storage.get<float>();
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>();
 
-        case traits<double>::value:
-            return self.storage.get<double>();
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>();
 
-        case traits<long double>::value:
-            return self.storage.get<long double>();
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -777,157 +815,157 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
         }
     }
 
-    static bool equal(const variable& self, const T& other)
+    static bool equal(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<bool>::value:
-            return self.storage.get<bool>() == other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() == other;
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>() == other;
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>() == other;
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>() == other;
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>() == other;
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>() == other;
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>() == other;
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>() == other;
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>() == other;
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>() == other;
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>() == other;
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>() == other;
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>() == other;
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>() == other;
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>() == other;
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>() == other;
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>() == other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() == other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() == other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() == other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() == other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() == other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() == other;
 
         default:
             return false;
         }
     }
 
-    static bool less(const variable& self, const T& other)
+    static bool less(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             return true;
 
-        case traits<bool>::value:
-            return self.storage.get<bool>() < other;
+        case variable_type::template traits<bool>::value:
+            return self.storage.template get<bool>() < other;
 
-        case traits<signed short int>::value:
-            return self.storage.get<signed short int>() < other;
+        case variable_type::template traits<signed short int>::value:
+            return self.storage.template get<signed short int>() < other;
 
-        case traits<unsigned short int>::value:
-            return self.storage.get<unsigned short int>() < other;
+        case variable_type::template traits<unsigned short int>::value:
+            return self.storage.template get<unsigned short int>() < other;
 
-        case traits<signed int>::value:
-            return self.storage.get<signed int>() < other;
+        case variable_type::template traits<signed int>::value:
+            return self.storage.template get<signed int>() < other;
 
-        case traits<unsigned int>::value:
-            return self.storage.get<unsigned int>() < other;
+        case variable_type::template traits<unsigned int>::value:
+            return self.storage.template get<unsigned int>() < other;
 
-        case traits<signed long int>::value:
-            return self.storage.get<signed long int>() < other;
+        case variable_type::template traits<signed long int>::value:
+            return self.storage.template get<signed long int>() < other;
 
-        case traits<unsigned long int>::value:
-            return self.storage.get<unsigned long int>() < other;
+        case variable_type::template traits<unsigned long int>::value:
+            return self.storage.template get<unsigned long int>() < other;
 
-        case traits<signed long long int>::value:
-            return self.storage.get<signed long long int>() < other;
+        case variable_type::template traits<signed long long int>::value:
+            return self.storage.template get<signed long long int>() < other;
 
-        case traits<unsigned long long int>::value:
-            return self.storage.get<unsigned long long int>() < other;
+        case variable_type::template traits<unsigned long long int>::value:
+            return self.storage.template get<unsigned long long int>() < other;
 
-        case traits<float>::value:
-            return self.storage.get<float>() < other;
+        case variable_type::template traits<float>::value:
+            return self.storage.template get<float>() < other;
 
-        case traits<double>::value:
-            return self.storage.get<double>() < other;
+        case variable_type::template traits<double>::value:
+            return self.storage.template get<double>() < other;
 
-        case traits<long double>::value:
-            return self.storage.get<long double>() < other;
+        case variable_type::template traits<long double>::value:
+            return self.storage.template get<long double>() < other;
 
         default:
             return false;
         }
     }
 
-    static void append(variable& self, const T& other)
+    static void append(variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             self.storage = other; // Overwrite null
             break;
 
-        case traits<bool>::value:
-            self.storage.get<bool>() += other;
+        case variable_type::template traits<bool>::value:
+            self.storage.template get<bool>() += other;
             break;
 
-        case traits<signed short int>::value:
-            self.storage.get<signed short int>() += other;
+        case variable_type::template traits<signed short int>::value:
+            self.storage.template get<signed short int>() += other;
             break;
 
-        case traits<unsigned short int>::value:
-            self.storage.get<unsigned short int>() += other;
+        case variable_type::template traits<unsigned short int>::value:
+            self.storage.template get<unsigned short int>() += other;
             break;
 
-        case traits<signed int>::value:
-            self.storage.get<signed int>() += other;
+        case variable_type::template traits<signed int>::value:
+            self.storage.template get<signed int>() += other;
             break;
 
-        case traits<unsigned int>::value:
-            self.storage.get<unsigned int>() += other;
+        case variable_type::template traits<unsigned int>::value:
+            self.storage.template get<unsigned int>() += other;
             break;
 
-        case traits<signed long int>::value:
-            self.storage.get<signed long int>() += other;
+        case variable_type::template traits<signed long int>::value:
+            self.storage.template get<signed long int>() += other;
             break;
 
-        case traits<unsigned long int>::value:
-            self.storage.get<unsigned long int>() += other;
+        case variable_type::template traits<unsigned long int>::value:
+            self.storage.template get<unsigned long int>() += other;
             break;
 
-        case traits<signed long long int>::value:
-            self.storage.get<signed long long int>() += other;
+        case variable_type::template traits<signed long long int>::value:
+            self.storage.template get<signed long long int>() += other;
             break;
 
-        case traits<unsigned long long int>::value:
-            self.storage.get<unsigned long long int>() += other;
+        case variable_type::template traits<unsigned long long int>::value:
+            self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case traits<float>::value:
-            self.storage.get<float>() += other;
+        case variable_type::template traits<float>::value:
+            self.storage.template get<float>() += other;
             break;
 
-        case traits<double>::value:
-            self.storage.get<double>() += other;
+        case variable_type::template traits<double>::value:
+            self.storage.template get<double>() += other;
             break;
 
-        case traits<long double>::value:
-            self.storage.get<long double>() += other;
+        case variable_type::template traits<long double>::value:
+            self.storage.template get<long double>() += other;
             break;
 
-        case traits<variable::array_type>::value:
-            self.storage.get<array_type>().push_back(other);
+        case variable_type::template traits<array_type>::value:
+            self.storage.template get<array_type>().push_back(other);
             break;
 
         default:
@@ -938,18 +976,27 @@ struct variable::overloader<T, typename std::enable_if<detail::is_number<T>::val
 
 // String
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_string<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_string<CharT, U>::value>::type>
 {
-    using type = variable::string_type;
-    using category_type = variable::string_type;
+    using variable_type = basic_variable<CharT>;
+    using type = typename variable_type::string_type;
+    using category_type = type;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+    using string_type = typename variable_type::string_type;
+    using array_type = typename variable_type::array_type;
+    using map_type = typename variable_type::map_type;
+
+    static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<variable::string_type>::value:
-            return self.storage.get<variable::string_type>();
+        case variable_type::template traits<string_type>::value:
+            return self.storage.template get<string_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -957,27 +1004,27 @@ struct variable::overloader<T, typename std::enable_if<detail::is_string<T>::val
         }
     }
 
-    static bool equal(const variable& self, const T& other)
+    static bool equal(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::string_type>::value:
-            return self.storage.get<string_type>() == other;
+        case variable_type::template traits<string_type>::value:
+            return self.storage.template get<string_type>() == other;
 
         default:
             return false;
         }
     }
 
-    static bool less(const variable& self, const T& other)
+    static bool less(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::string_type>::value:
-            return self.storage.get<string_type>() < other;
+        case variable_type::template traits<string_type>::value:
+            return self.storage.template get<string_type>() < other;
 
-        case traits<variable::array_type>::value:
-        case traits<variable::map_type>::value:
+        case variable_type::template traits<array_type>::value:
+        case variable_type::template traits<map_type>::value:
             return false;
 
         default:
@@ -985,20 +1032,20 @@ struct variable::overloader<T, typename std::enable_if<detail::is_string<T>::val
         }
     }
 
-    static void append(variable& self, const T& other)
+    static void append(variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             self.storage = other; // Overwrite null
             break;
 
-        case traits<variable::string_type>::value:
-            self.storage.get<string_type>() += other;
+        case variable_type::template traits<string_type>::value:
+            self.storage.template get<string_type>() += other;
             break;
 
-        case traits<variable::array_type>::value:
-            self.storage.get<array_type>().push_back(other);
+        case variable_type::template traits<array_type>::value:
+            self.storage.template get<array_type>().push_back(other);
             break;
 
         default:
@@ -1009,18 +1056,26 @@ struct variable::overloader<T, typename std::enable_if<detail::is_string<T>::val
 
 // Array
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_array<CharT, U>::value>::type>
 {
-    using type = variable::array_type;
-    using category_type = variable::array_type;
+    using variable_type = basic_variable<CharT>;
+    using type = typename variable_type::array_type;
+    using category_type = type;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+    using array_type = typename variable_type::array_type;
+    using map_type = typename variable_type::map_type;
+
+    static U convert(const variable& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<variable::array_type>::value:
-            return self.storage.get<variable::array_type>();
+        case variable_type::template traits<array_type>::value:
+            return self.storage.template get<array_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1028,13 +1083,13 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
         }
     }
 
-    static bool equal(const variable& self, const T& other)
+    static bool equal(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::array_type>::value:
+        case variable_type::template traits<array_type>::value:
             {
-                const auto& array = self.storage.get<variable::array_type>();
+                const auto& array = self.storage.template get<array_type>();
                 if (array.size() == other.size())
                 {
                     return std::equal(array.begin(), array.end(), other.begin());
@@ -1046,13 +1101,13 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
         }
     }
 
-    static bool less(const variable& self, const T& other)
+    static bool less(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::array_type>::value:
+        case variable_type::template traits<array_type>::value:
             {
-                const auto& array = self.storage.get<variable::array_type>();
+                const auto& array = self.storage.template get<array_type>();
                 auto less_than = std::less<decltype(*array.begin())>();
                 auto array_it = array.begin();
                 auto other_it = other.begin();
@@ -1066,7 +1121,7 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
                 return (array_it == array.end());
             }
 
-        case traits<variable::map_type>::value:
+        case variable_type::template traits<map_type>::value:
             return false;
 
         default:
@@ -1074,17 +1129,17 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
         }
     }
 
-    static void append(variable& self, const T& other)
+    static void append(variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             self.storage = other; // Overwrite null
             break;
 
-        case traits<variable::array_type>::value:
+        case variable_type::template traits<array_type>::value:
             {
-                auto& array = self.storage.get<array_type>();
+                auto& array = self.storage.template get<array_type>();
                 array.insert(array.end(), other.begin(), other.end());
             }
             break;
@@ -1097,18 +1152,25 @@ struct variable::overloader<T, typename std::enable_if<detail::is_array<T>::valu
 
 // Map
 
-template <typename T>
-struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>::type>
+template <typename CharT, typename U>
+struct overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<detail::is_map<CharT, U>::value>::type>
 {
-    using type = variable::map_type;
-    using category_type = variable::map_type;
+    using variable_type = basic_variable<CharT>;
+    using type = typename variable_type::map_type;
+    using category_type = type;
 
-    static T convert(const variable& self, std::error_code& error)
+    using null_type = typename variable_type::null_type;
+    using map_type = typename variable_type::map_type;
+
+    static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case traits<variable::map_type>::value:
-            return self.storage.get<variable::map_type>();
+        case variable_type::template traits<map_type>::value:
+            return self.storage.template get<map_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1116,13 +1178,13 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
         }
     }
 
-    static bool equal(const variable& self, const T& other)
+    static bool equal(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::map_type>::value:
+        case variable_type::template traits<map_type>::value:
             {
-                const auto& map = self.storage.get<variable::map_type>();
+                const auto& map = self.storage.template get<map_type>();
                 if (map.size() == other.size())
                 {
                     return std::equal(map.begin(), map.end(), other.begin());
@@ -1134,13 +1196,13 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
         }
     }
 
-    static bool less(const variable& self, const T& other)
+    static bool less(const variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::map_type>::value:
+        case variable_type::template traits<map_type>::value:
             {
-                const auto& map = self.storage.get<variable::map_type>();
+                const auto& map = self.storage.template get<map_type>();
                 auto less_than = std::less<decltype(*map.begin())>();
                 auto map_it = map.begin();
                 auto other_it = other.begin();
@@ -1159,17 +1221,17 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
         }
     }
 
-    static void append(variable& self, const T& other)
+    static void append(variable_type& self, const U& other)
     {
         switch (self.storage.which())
         {
-        case traits<variable::null_type>::value:
+        case variable_type::template traits<null_type>::value:
             self.storage = other; // Overwrite null
             break;
 
-        case traits<variable::map_type>::value:
+        case variable_type::template traits<map_type>::value:
             {
-                auto& map = self.storage.get<map_type>();
+                auto& map = self.storage.template get<map_type>();
                 map.insert(other.begin(), other.end());
             }
             break;
@@ -1180,9 +1242,270 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
     }
 };
 
+} // namespace detail
+
 //-----------------------------------------------------------------------------
-// variable::same_overloader
+// detail::operator_overloader
 //-----------------------------------------------------------------------------
+
+namespace detail
+{
+
+template <typename T, typename U, typename Enable = void>
+struct operator_overloader
+{
+    static bool equal(const T& lhs, const U& rhs)
+    {
+        // This function is called by dynamic::operator== when none of the
+        // specializations below apply.
+        //
+        // basic_variable<CharT>::iterator_type<T> cannot be matched via
+        // SFINAE below (due to being a non-deduced context), so instead
+        // lhs.operator(rhs) is called in the general case.
+        //
+        // Notice: operator==(lhs, rhs) cannot be used because it uses
+        // argument dependent lookup which will find dynamic::operator==
+        // which got us here in the first place. That would cause an
+        // infinity recursion.
+
+        return lhs.operator==(rhs);
+    }
+
+    static bool less(const T& lhs, const U& rhs)
+    {
+        // See comment for operator_overloader::equal()
+
+        return lhs.operator<(rhs);
+    }
+};
+
+template <typename CharT, typename U>
+struct operator_overloader<
+    basic_variable<CharT>,
+    U,
+    typename std::enable_if<!std::is_same<U, basic_variable<CharT> >::value>::type>
+{
+    using variable_type = basic_variable<CharT>;
+    using string_type = typename variable_type::string_type;
+
+    template <typename T = U>
+    static typename std::enable_if<!std::is_same<typename std::decay<T>::type,
+                                                 const CharT *>::value,
+                                   bool>::type
+    equal(const variable_type& lhs,
+          const T& rhs)
+    {
+        return detail::template overloader<variable_type, T>::equal(lhs, rhs);
+    }
+
+    static bool equal(const variable_type& lhs,
+                      const CharT* rhs)
+    {
+        return detail::template overloader<variable_type, string_type>::equal(lhs, string_type(rhs));
+    }
+
+    template <typename T = U>
+    static typename std::enable_if<!std::is_same<typename std::decay<T>::type,
+                                                 const CharT *>::value,
+                                   bool>::type
+    less(const variable_type& lhs,
+         const T& rhs)
+    {
+        return detail::template overloader<variable_type, T>::less(lhs, rhs);
+    }
+
+    static bool less(const variable_type& lhs,
+                     const CharT* rhs)
+    {
+        return detail::template overloader<variable_type, string_type>::less(lhs, string_type(rhs));
+    }
+};
+
+template <typename T, typename CharT>
+struct operator_overloader<
+    T,
+    basic_variable<CharT>,
+    typename std::enable_if<!std::is_same<T, basic_variable<CharT> >::value>::type>
+{
+    using variable_type = basic_variable<CharT>;
+
+    static bool equal(const T& lhs,
+                      const variable_type& rhs)
+    {
+        return operator_overloader<variable_type, variable_type>::equal(variable_type(lhs), rhs);
+    }
+
+    static bool less(const T& lhs,
+                     const variable_type& rhs)
+    {
+        return operator_overloader<variable_type, variable_type>::less(variable_type(lhs), rhs);
+    }
+};
+
+template <typename CharT>
+struct operator_overloader<
+    basic_variable<CharT>,
+    basic_variable<protocol::detail::meta::identity_t<CharT>>>
+{
+    using variable_type = basic_variable<CharT>;
+    using null_type = typename variable_type::null_type;
+    using string_type = typename variable_type::string_type;
+    using array_type = typename variable_type::array_type;
+    using map_type = typename variable_type::map_type;
+
+    static bool equal(const variable_type& lhs,
+                      const variable_type& rhs)
+    {
+        switch (rhs.storage.which())
+        {
+        case variable_type::template traits<null_type>::value:
+            return detail::template overloader<variable_type, null_type>::
+                equal(lhs, rhs.template value<null_type>());
+
+        case variable_type::template traits<bool>::value:
+            return detail::template overloader<variable_type, bool>::
+                equal(lhs, rhs.storage.template get<bool>());
+
+        case variable_type::template traits<signed short int>::value:
+            return detail::template overloader<variable_type, signed short int>::
+                equal(lhs, rhs.storage.template get<signed short int>());
+
+        case variable_type::template traits<unsigned short int>::value:
+            return detail::template overloader<variable_type, unsigned short int>::
+                equal(lhs, rhs.storage.template get<unsigned short int>());
+
+        case variable_type::template traits<signed int>::value:
+            return detail::template overloader<variable_type, signed int>::
+                equal(lhs, rhs.storage.template get<signed int>());
+
+        case variable_type::template traits<unsigned int>::value:
+            return detail::template overloader<variable_type, unsigned int>::
+                equal(lhs, rhs.storage.template get<unsigned int>());
+
+        case variable_type::template traits<signed long int>::value:
+            return detail::template overloader<variable_type, signed long int>::
+                equal(lhs, rhs.storage.template get<signed long int>());
+
+        case variable_type::template traits<unsigned long int>::value:
+            return detail::template overloader<variable_type, unsigned long int>::
+                equal(lhs, rhs.storage.template get<unsigned long int>());
+
+        case variable_type::template traits<signed long long int>::value:
+            return detail::template overloader<variable_type, signed long long int>::
+                equal(lhs, rhs.storage.template get<signed long long int>());
+
+        case variable_type::template traits<unsigned long long int>::value:
+            return detail::template overloader<variable_type, unsigned long long int>::
+                equal(lhs, rhs.storage.template get<unsigned long long int>());
+
+        case variable_type::template traits<float>::value:
+            return detail::template overloader<variable_type, float>::
+                equal(lhs, rhs.storage.template get<float>());
+
+        case variable_type::template traits<double>::value:
+            return detail::template overloader<variable_type, double>::
+                equal(lhs, rhs.storage.template get<double>());
+
+        case variable_type::template traits<long double>::value:
+            return detail::template overloader<variable_type, long double>::
+                equal(lhs, rhs.storage.template get<long double>());
+
+        case variable_type::template traits<string_type>::value:
+            return detail::template overloader<variable_type, string_type>::
+                equal(lhs, rhs.storage.template get<string_type>());
+
+        case variable_type::template traits<array_type>::value:
+            return detail::template overloader<variable_type, array_type>::
+                equal(lhs, rhs.storage.template get<array_type>());
+
+        case variable_type::template traits<map_type>::value:
+            return detail::template overloader<variable_type, map_type>::
+                equal(lhs, rhs.storage.template get<map_type>());
+        }
+        return false;
+    }
+
+    static bool less(const variable_type& lhs,
+                     const variable_type& rhs)
+    {
+        switch (rhs.storage.which())
+        {
+        case variable_type::template traits<null_type>::value:
+            return detail::template overloader<variable_type, null_type>::
+                less(lhs, rhs.template value<null_type>());
+
+        case variable_type::template traits<bool>::value:
+            return detail::template overloader<variable_type, bool>::
+                less(lhs, rhs.storage.template get<bool>());
+
+        case variable_type::template traits<signed short int>::value:
+            return detail::template overloader<variable_type, signed short int>::
+                less(lhs, rhs.storage.template get<signed short int>());
+
+        case variable_type::template traits<unsigned short int>::value:
+            return detail::template overloader<variable_type, unsigned short int>::
+                less(lhs, rhs.storage.template get<unsigned short int>());
+
+        case variable_type::template traits<signed int>::value:
+            return detail::template overloader<variable_type, signed int>::
+                less(lhs, rhs.storage.template get<signed int>());
+
+        case variable_type::template traits<unsigned int>::value:
+            return detail::template overloader<variable_type, unsigned int>::
+                less(lhs, rhs.storage.template get<unsigned int>());
+
+        case variable_type::template traits<signed long int>::value:
+            return detail::template overloader<variable_type, signed long int>::
+                less(lhs, rhs.storage.template get<signed long int>());
+
+        case variable_type::template traits<unsigned long int>::value:
+            return detail::template overloader<variable_type, unsigned long int>::
+                less(lhs, rhs.storage.template get<unsigned long int>());
+
+        case variable_type::template traits<signed long long int>::value:
+            return detail::template overloader<variable_type, signed long long int>::
+                less(lhs, rhs.storage.template get<signed long long int>());
+
+        case variable_type::template traits<unsigned long long int>::value:
+            return detail::template overloader<variable_type, unsigned long long int>::
+                less(lhs, rhs.storage.template get<unsigned long long int>());
+
+        case variable_type::template traits<float>::value:
+            return detail::template overloader<variable_type, float>::
+                less(lhs, rhs.storage.template get<float>());
+
+        case variable_type::template traits<double>::value:
+            return detail::template overloader<variable_type, double>::
+                less(lhs, rhs.storage.template get<double>());
+
+        case variable_type::template traits<long double>::value:
+            return detail::template overloader<variable_type, long double>::
+                less(lhs, rhs.storage.template get<long double>());
+
+        case variable_type::template traits<string_type>::value:
+            return detail::template overloader<variable_type, string_type>::
+                less(lhs, rhs.storage.template get<string_type>());
+
+        case variable_type::template traits<array_type>::value:
+            return detail::template overloader<variable_type, array_type>::
+                less(lhs, rhs.storage.template get<array_type>());
+
+        case variable_type::template traits<map_type>::value:
+            return detail::template overloader<variable_type, map_type>::
+                less(lhs, rhs.storage.template get<map_type>());
+        }
+        return false;
+    }
+};
+
+} // namespace detail
+    
+//-----------------------------------------------------------------------------
+// detail::same_overloader
+//-----------------------------------------------------------------------------
+
+namespace detail
+{
 
 // The specialized template capture qualifications removed during template
 // argument deduction to ensure that only the exact type is matched in the
@@ -1194,20 +1517,22 @@ struct variable::overloader<T, typename std::enable_if<detail::is_map<T>::value>
 //   assert(data.same<float&>(), false);
 //   assert(data.same<const float>(), false);
 
-template <typename T, typename Enable>
-struct variable::same_overloader
+template <typename C, typename T, typename Enable = void>
+struct same_overloader
 {
     static bool same(std::size_t which)
     {
-        return which == traits<T>::value;
+        return which == basic_variable<C>::template traits<T>::value;
     }
 };
 
-template <typename T>
-struct variable::same_overloader<T,
-                                 typename std::enable_if<std::is_const<T>::value ||
-                                                         std::is_volatile<T>::value ||
-                                                         std::is_reference<T>::value>::type>
+template <typename C, typename T>
+struct same_overloader<
+    C,
+    T,
+    typename std::enable_if<std::is_const<T>::value ||
+                            std::is_volatile<T>::value ||
+                            std::is_reference<T>::value>::type>
 {
     static bool same(std::size_t)
     {
@@ -1215,34 +1540,40 @@ struct variable::same_overloader<T,
     }
 };
 
+} // namespace detail
+
 //-----------------------------------------------------------------------------
 // variable::iterator_type
 //-----------------------------------------------------------------------------
 
+template <typename CharT>
 template <typename T>
-variable::iterator_type<T>::iterator_type()
+basic_variable<CharT>::iterator_type<T>::iterator_type()
     : scope(nullptr),
       current(pointer(nullptr))
 {
 }
 
+template <typename CharT>
 template <typename T>
-variable::iterator_type<T>::iterator_type(const iterator_type& other)
+basic_variable<CharT>::iterator_type<T>::iterator_type(const iterator_type& other)
     : scope(other.scope),
       current(other.current)
 {
 }
 
+template <typename CharT>
 template <typename T>
-variable::iterator_type<T>::iterator_type(iterator_type&& other)
+basic_variable<CharT>::iterator_type<T>::iterator_type(iterator_type&& other)
     : scope(std::move(other.scope)),
       current(std::move(other.current))
 {
 }
 
+template <typename CharT>
 template <typename T>
-variable::iterator_type<T>::iterator_type(pointer p,
-                                          bool initialize)
+basic_variable<CharT>::iterator_type<T>::iterator_type(pointer p,
+                                                       bool initialize)
     : scope(p),
       current(pointer(nullptr))
 {
@@ -1289,10 +1620,11 @@ variable::iterator_type<T>::iterator_type(pointer p,
     }
 }
 
+template <typename CharT>
 template <typename T>
 template <typename U>
-variable::iterator_type<T>::iterator_type(const iterator_type<typename std::remove_const<U>::type>& other,
-                                          typename std::enable_if<std::is_const<U>::value, pointer>::type nil)
+basic_variable<CharT>::iterator_type<T>::iterator_type(const iterator_type<typename std::remove_const<U>::type>& other,
+                                                       typename std::enable_if<std::is_const<U>::value, pointer>::type nil)
     : scope(other.scope),
       current(nil)
 {
@@ -1310,10 +1642,11 @@ variable::iterator_type<T>::iterator_type(const iterator_type<typename std::remo
     }
 }
 
+template <typename CharT>
 template <typename T>
 template <typename U>
-variable::iterator_type<T>::iterator_type(const iterator_type<typename std::add_const<U>::type>& other,
-                                          typename std::enable_if<!std::is_const<U>::value, pointer>::type nil)
+basic_variable<CharT>::iterator_type<T>::iterator_type(const iterator_type<typename std::add_const<U>::type>& other,
+                                                       typename std::enable_if<!std::is_const<U>::value, pointer>::type nil)
     : scope(const_cast<pointer>(other.scope)),
       current(nil)
 {
@@ -1331,24 +1664,27 @@ variable::iterator_type<T>::iterator_type(const iterator_type<typename std::add_
     }
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::operator= (const iterator_type& other) -> iterator_type&
+auto basic_variable<CharT>::iterator_type<T>::operator= (const iterator_type& other) -> iterator_type&
 {
     scope = other.scope;
     current = other.current;
     return *this;
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::operator= (iterator_type&& other) -> iterator_type&
+auto basic_variable<CharT>::iterator_type<T>::operator= (iterator_type&& other) -> iterator_type&
 {
     scope = std::move(other.scope);
     current = std::move(other.current);
     return *this;
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::operator++ () -> iterator_type&
+auto basic_variable<CharT>::iterator_type<T>::operator++ () -> iterator_type&
 {
     assert(scope);
 
@@ -1386,8 +1722,9 @@ auto variable::iterator_type<T>::operator++ () -> iterator_type&
     return *this;
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::operator++ (int) -> iterator_type
+auto basic_variable<CharT>::iterator_type<T>::operator++ (int) -> iterator_type
 {
     assert(scope);
 
@@ -1396,16 +1733,18 @@ auto variable::iterator_type<T>::operator++ (int) -> iterator_type
     return result;
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::operator* () -> reference
+auto basic_variable<CharT>::iterator_type<T>::operator* () -> reference
 {
     assert(scope);
 
     return value();
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::key() const -> key_reference
+auto basic_variable<CharT>::iterator_type<T>::key() const -> key_reference
 {
     assert(scope);
 
@@ -1419,8 +1758,9 @@ auto variable::iterator_type<T>::key() const -> key_reference
     }
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::value() -> reference
+auto basic_variable<CharT>::iterator_type<T>::value() -> reference
 {
     assert(scope);
 
@@ -1452,8 +1792,9 @@ auto variable::iterator_type<T>::value() -> reference
     throw dynamic::error(incompatible_type);
 }
 
+template <typename CharT>
 template <typename T>
-auto variable::iterator_type<T>::operator-> () -> pointer
+auto basic_variable<CharT>::iterator_type<T>::operator-> () -> pointer
 {
     assert(scope);
 
@@ -1485,8 +1826,9 @@ auto variable::iterator_type<T>::operator-> () -> pointer
     throw dynamic::error(incompatible_type);
 }
 
+template <typename CharT>
 template <typename T>
-bool variable::iterator_type<T>::operator== (const iterator_type<T>& other)
+bool basic_variable<CharT>::iterator_type<T>::operator== (const iterator_type<T>& other)
 {
     if (!scope)
         return !other.scope;
@@ -1525,8 +1867,9 @@ bool variable::iterator_type<T>::operator== (const iterator_type<T>& other)
     }
 }
 
+template <typename CharT>
 template <typename T>
-bool variable::iterator_type<T>::operator!= (const iterator_type<T>& other)
+bool basic_variable<CharT>::iterator_type<T>::operator!= (const iterator_type<T>& other)
 {
     return !(*this == other);
 }
@@ -1535,14 +1878,17 @@ bool variable::iterator_type<T>::operator!= (const iterator_type<T>& other)
 // visitors
 //-----------------------------------------------------------------------------
 
+template <typename CharT>
 template <typename T>
-struct variable::similar_visitor
+struct basic_variable<CharT>::similar_visitor
 {
     template <typename Which>
     static bool call(const storage_type&)
     {
-        return std::is_same<typename variable::overloader<T>::category_type,
-                            typename variable::overloader<Which>::category_type>::value;
+        using variable_type = basic_variable<CharT>;
+        using lhs_type = typename detail::overloader<variable_type, T>::category_type;
+        using rhs_type = typename detail::overloader<variable_type, Which>::category_type;
+        return std::is_same<lhs_type, rhs_type>::value;
     }
 };
 
@@ -1550,71 +1896,14 @@ struct variable::similar_visitor
 // variable
 //-----------------------------------------------------------------------------
 
-inline variable::variable()
+template <typename CharT>
+basic_variable<CharT>::basic_variable()
     : storage(null)
 {
 }
 
-inline variable::variable(const variable& other)
-    : storage(null)
-{
-    switch (other.storage.which())
-    {
-    case traits<null_type>::value:
-        storage = null;
-        break;
-    case traits<bool>::value:
-        storage = other.storage.get<bool>();
-        break;
-    case traits<signed short int>::value:
-        storage = other.storage.get<signed short int>();
-        break;
-    case traits<unsigned short int>::value:
-        storage = other.storage.get<unsigned short int>();
-        break;
-    case traits<signed int>::value:
-        storage = other.storage.get<signed int>();
-        break;
-    case traits<unsigned int>::value:
-        storage = other.storage.get<unsigned int>();
-        break;
-    case traits<signed long int>::value:
-        storage = other.storage.get<signed long int>();
-        break;
-    case traits<unsigned long int>::value:
-        storage = other.storage.get<unsigned long int>();
-        break;
-    case traits<signed long long int>::value:
-        storage = other.storage.get<signed long long int>();
-        break;
-    case traits<unsigned long long int>::value:
-        storage = other.storage.get<unsigned long long int>();
-        break;
-    case traits<float>::value:
-        storage = other.storage.get<float>();
-        break;
-    case traits<double>::value:
-        storage = other.storage.get<double>();
-        break;
-    case traits<long double>::value:
-        storage = other.storage.get<long double>();
-        break;
-    case traits<string_type>::value:
-        storage = other.storage.get<string_type>();
-        break;
-    case traits<array_type>::value:
-        storage = other.storage.get<array_type>();
-        break;
-    case traits<map_type>::value:
-        storage = other.storage.get<map_type>();
-        break;
-    default:
-        assert(false);
-        break;
-    }
-}
-
-inline variable::variable(variable&& other)
+template <typename CharT>
+basic_variable<CharT>::basic_variable(const basic_variable& other)
     : storage(null)
 {
     switch (other.storage.which())
@@ -1623,49 +1912,49 @@ inline variable::variable(variable&& other)
         storage = null;
         break;
     case traits<bool>::value:
-        storage = std::move(other.storage.get<bool>());
+        storage = other.storage.template get<bool>();
         break;
     case traits<signed short int>::value:
-        storage = std::move(other.storage.get<signed short int>());
+        storage = other.storage.template get<signed short int>();
         break;
     case traits<unsigned short int>::value:
-        storage = std::move(other.storage.get<unsigned short int>());
+        storage = other.storage.template get<unsigned short int>();
         break;
     case traits<signed int>::value:
-        storage = std::move(other.storage.get<signed int>());
+        storage = other.storage.template get<signed int>();
         break;
     case traits<unsigned int>::value:
-        storage = std::move(other.storage.get<unsigned int>());
+        storage = other.storage.template get<unsigned int>();
         break;
     case traits<signed long int>::value:
-        storage = std::move(other.storage.get<signed long int>());
+        storage = other.storage.template get<signed long int>();
         break;
     case traits<unsigned long int>::value:
-        storage = std::move(other.storage.get<unsigned long int>());
+        storage = other.storage.template get<unsigned long int>();
         break;
     case traits<signed long long int>::value:
-        storage = std::move(other.storage.get<signed long long int>());
+        storage = other.storage.template get<signed long long int>();
         break;
     case traits<unsigned long long int>::value:
-        storage = std::move(other.storage.get<unsigned long long int>());
+        storage = other.storage.template get<unsigned long long int>();
         break;
     case traits<float>::value:
-        storage = std::move(other.storage.get<float>());
+        storage = other.storage.template get<float>();
         break;
     case traits<double>::value:
-        storage = std::move(other.storage.get<double>());
+        storage = other.storage.template get<double>();
         break;
     case traits<long double>::value:
-        storage = std::move(other.storage.get<long double>());
+        storage = other.storage.template get<long double>();
         break;
     case traits<string_type>::value:
-        storage = std::move(other.storage.get<string_type>());
+        storage = other.storage.template get<string_type>();
         break;
     case traits<array_type>::value:
-        storage = std::move(other.storage.get<array_type>());
+        storage = other.storage.template get<array_type>();
         break;
     case traits<map_type>::value:
-        storage = std::move(other.storage.get<map_type>());
+        storage = other.storage.template get<map_type>();
         break;
     default:
         assert(false);
@@ -1673,67 +1962,137 @@ inline variable::variable(variable&& other)
     }
 }
 
+template <typename CharT>
+basic_variable<CharT>::basic_variable(basic_variable&& other)
+    : storage(null)
+{
+    switch (other.storage.which())
+    {
+    case traits<null_type>::value:
+        storage = null;
+        break;
+    case traits<bool>::value:
+        storage = std::move(other.storage.template get<bool>());
+        break;
+    case traits<signed short int>::value:
+        storage = std::move(other.storage.template get<signed short int>());
+        break;
+    case traits<unsigned short int>::value:
+        storage = std::move(other.storage.template get<unsigned short int>());
+        break;
+    case traits<signed int>::value:
+        storage = std::move(other.storage.template get<signed int>());
+        break;
+    case traits<unsigned int>::value:
+        storage = std::move(other.storage.template get<unsigned int>());
+        break;
+    case traits<signed long int>::value:
+        storage = std::move(other.storage.template get<signed long int>());
+        break;
+    case traits<unsigned long int>::value:
+        storage = std::move(other.storage.template get<unsigned long int>());
+        break;
+    case traits<signed long long int>::value:
+        storage = std::move(other.storage.template get<signed long long int>());
+        break;
+    case traits<unsigned long long int>::value:
+        storage = std::move(other.storage.template get<unsigned long long int>());
+        break;
+    case traits<float>::value:
+        storage = std::move(other.storage.template get<float>());
+        break;
+    case traits<double>::value:
+        storage = std::move(other.storage.template get<double>());
+        break;
+    case traits<long double>::value:
+        storage = std::move(other.storage.template get<long double>());
+        break;
+    case traits<string_type>::value:
+        storage = std::move(other.storage.template get<string_type>());
+        break;
+    case traits<array_type>::value:
+        storage = std::move(other.storage.template get<array_type>());
+        break;
+    case traits<map_type>::value:
+        storage = std::move(other.storage.template get<map_type>());
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
+template <typename CharT>
 template <typename T>
-variable::variable(T value)
-    : storage(typename overloader<typename std::decay<T>::type>::type(std::move(value)))
+basic_variable<CharT>::basic_variable(T value)
+    : storage(typename detail::overloader<value_type, typename std::decay<T>::type>::type(std::move(value)))
 {
 }
 
-inline variable::variable(null_type)
+template <typename CharT>
+basic_variable<CharT>::basic_variable(const null_type&)
     : storage(null)
 {
 }
 
-inline variable::variable(const string_type::value_type *value)
+template <typename CharT>
+basic_variable<CharT>::basic_variable(const CharT *value)
     : storage(string_type(value))
 {
 }
 
-inline variable variable::array()
+template <typename CharT>
+auto basic_variable<CharT>::array() -> value_type
 {
     variable result;
     result.storage = array_type{};
     return result;
 }
 
+template <typename CharT>
 template <typename ForwardIterator>
-variable variable::array(ForwardIterator begin, ForwardIterator end)
+auto basic_variable<CharT>::array(ForwardIterator begin, ForwardIterator end) -> value_type
 {
     variable result;
     result.storage = array_type(begin, end);
     return result;
 }
 
-inline variable variable::array(std::initializer_list<array_type::value_type> init)
+template <typename CharT>
+auto basic_variable<CharT>::array(std::initializer_list<typename array_type::value_type> init) -> value_type
 {
     variable result;
     result.storage = array_type(init.begin(), init.end());
     return result;
 }
 
+template <typename CharT>
 template <typename T>
-variable variable::array(size_type size, const T& value)
+auto basic_variable<CharT>::array(size_type size, const T& value) -> value_type
 {
     variable result;
     result.storage = array_type(size, variable(value));
     return result;
 }
 
-inline variable variable::map()
+template <typename CharT>
+auto basic_variable<CharT>::map() -> value_type
 {
     variable result;
     result.storage = map_type{};
     return result;
 }
 
-inline variable variable::map(std::initializer_list<map_type::value_type> init)
+template <typename CharT>
+auto basic_variable<CharT>::map(std::initializer_list<typename map_type::value_type> init) -> value_type
 {
     variable result;
     result.storage = map_type(init.begin(), init.end());
     return result;
 }
 
-inline variable& variable::operator= (const variable& other)
+template <typename CharT>
+auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_variable&
 {
     switch (other.storage.which())
     {
@@ -1741,49 +2100,49 @@ inline variable& variable::operator= (const variable& other)
         storage = null;
         break;
     case traits<bool>::value:
-        storage = other.storage.get<bool>();
+        storage = other.storage.template get<bool>();
         break;
     case traits<signed short int>::value:
-        storage = other.storage.get<signed short int>();
+        storage = other.storage.template get<signed short int>();
         break;
     case traits<unsigned short int>::value:
-        storage = other.storage.get<unsigned short int>();
+        storage = other.storage.template get<unsigned short int>();
         break;
     case traits<signed int>::value:
-        storage = other.storage.get<signed int>();
+        storage = other.storage.template get<signed int>();
         break;
     case traits<unsigned int>::value:
-        storage = other.storage.get<unsigned int>();
+        storage = other.storage.template get<unsigned int>();
         break;
     case traits<signed long int>::value:
-        storage = other.storage.get<signed long int>();
+        storage = other.storage.template get<signed long int>();
         break;
     case traits<unsigned long int>::value:
-        storage = other.storage.get<unsigned long int>();
+        storage = other.storage.template get<unsigned long int>();
         break;
     case traits<signed long long int>::value:
-        storage = other.storage.get<signed long long int>();
+        storage = other.storage.template get<signed long long int>();
         break;
     case traits<unsigned long long int>::value:
-        storage = other.storage.get<unsigned long long int>();
+        storage = other.storage.template get<unsigned long long int>();
         break;
     case traits<float>::value:
-        storage = other.storage.get<float>();
+        storage = other.storage.template get<float>();
         break;
     case traits<double>::value:
-        storage = other.storage.get<double>();
+        storage = other.storage.template get<double>();
         break;
     case traits<long double>::value:
-        storage = other.storage.get<long double>();
+        storage = other.storage.template get<long double>();
         break;
     case traits<string_type>::value:
-        storage = other.storage.get<string_type>();
+        storage = other.storage.template get<string_type>();
         break;
     case traits<array_type>::value:
-        storage = other.storage.get<array_type>();
+        storage = other.storage.template get<array_type>();
         break;
     case traits<map_type>::value:
-        storage = other.storage.get<map_type>();
+        storage = other.storage.template get<map_type>();
         break;
     default:
         assert(false);
@@ -1792,7 +2151,8 @@ inline variable& variable::operator= (const variable& other)
     return *this;
 }
 
-inline variable& variable::operator= (variable&& other)
+template <typename CharT>
+auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable&
 {
     switch (other.storage.which())
     {
@@ -1800,136 +2160,157 @@ inline variable& variable::operator= (variable&& other)
         storage = null;
         break;
     case traits<bool>::value:
-        storage = std::move(other.storage.get<bool>());
+        storage = std::move(other.storage.template get<bool>());
         break;
     case traits<signed short int>::value:
-        storage = std::move(other.storage.get<signed short int>());
+        storage = std::move(other.storage.template get<signed short int>());
         break;
     case traits<unsigned short int>::value:
-        storage = std::move(other.storage.get<unsigned short int>());
+        storage = std::move(other.storage.template get<unsigned short int>());
         break;
     case traits<signed int>::value:
-        storage = std::move(other.storage.get<signed int>());
+        storage = std::move(other.storage.template get<signed int>());
         break;
     case traits<unsigned int>::value:
-        storage = std::move(other.storage.get<unsigned int>());
+        storage = std::move(other.storage.template get<unsigned int>());
         break;
     case traits<signed long int>::value:
-        storage = std::move(other.storage.get<signed long int>());
+        storage = std::move(other.storage.template get<signed long int>());
         break;
     case traits<unsigned long int>::value:
-        storage = std::move(other.storage.get<unsigned long int>());
+        storage = std::move(other.storage.template get<unsigned long int>());
         break;
     case traits<signed long long int>::value:
-        storage = std::move(other.storage.get<signed long long int>());
+        storage = std::move(other.storage.template get<signed long long int>());
         break;
     case traits<unsigned long long int>::value:
-        storage = std::move(other.storage.get<unsigned long long int>());
+        storage = std::move(other.storage.template get<unsigned long long int>());
         break;
     case traits<float>::value:
-        storage = std::move(other.storage.get<float>());
+        storage = std::move(other.storage.template get<float>());
         break;
     case traits<double>::value:
-        storage = std::move(other.storage.get<double>());
+        storage = std::move(other.storage.template get<double>());
         break;
     case traits<long double>::value:
-        storage = std::move(other.storage.get<long double>());
+        storage = std::move(other.storage.template get<long double>());
         break;
     case traits<string_type>::value:
-        storage = std::move(other.storage.get<string_type>());
+        storage = std::move(other.storage.template get<string_type>());
         break;
     case traits<array_type>::value:
-        storage = std::move(other.storage.get<array_type>());
+        storage = std::move(other.storage.template get<array_type>());
         break;
     case traits<map_type>::value:
-        storage = std::move(other.storage.get<map_type>());
+        storage = std::move(other.storage.template get<map_type>());
         break;
     }
     return *this;
 }
 
+template <typename CharT>
 template <typename T>
-variable& variable::operator= (T value)
+auto basic_variable<CharT>::operator= (T value) -> basic_variable&
 {
-    storage = typename overloader<T>::type{std::move(value)};
+    storage = typename detail::overloader<value_type, T>::type{std::move(value)};
     return *this;
 }
 
-inline variable& variable::operator= (null_type)
+template <typename CharT>
+auto basic_variable<CharT>::operator= (null_type) -> basic_variable&
 {
     storage = null;
     return *this;
 }
 
-inline variable& variable::operator= (const string_type::value_type *value)
+template <typename CharT>
+auto basic_variable<CharT>::operator= (const CharT *value) -> basic_variable&
 {
     storage = string_type{value};
     return *this;
 }
 
-inline variable& variable::operator+= (const variable& other)
+template <typename CharT>
+auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_variable&
 {
     switch (other.storage.which())
     {
     case traits<null_type>::value:
-        overloader<null_type>::append(*this, other.storage.get<null_type>());
+        detail::overloader<value_type, null_type>::
+            append(*this, other.storage.template get<null_type>());
         break;
     case traits<bool>::value:
-        overloader<bool>::append(*this, other.storage.get<bool>());
+        detail::overloader<value_type, bool>::
+            append(*this, other.storage.template get<bool>());
         break;
     case traits<signed short int>::value:
-        overloader<signed short int>::append(*this, other.storage.get<signed short int>());
+        detail::overloader<value_type, signed short int>::
+            append(*this, other.storage.template get<signed short int>());
         break;
     case traits<unsigned short int>::value:
-        overloader<unsigned short int>::append(*this, other.storage.get<unsigned short int>());
+        detail::overloader<value_type, unsigned short int>::
+            append(*this, other.storage.template get<unsigned short int>());
         break;
     case traits<signed int>::value:
-        overloader<signed int>::append(*this, other.storage.get<signed int>());
+        detail::overloader<value_type, signed int>::
+            append(*this, other.storage.template get<signed int>());
         break;
     case traits<unsigned int>::value:
-        overloader<unsigned int>::append(*this, other.storage.get<unsigned int>());
+        detail::overloader<value_type, unsigned int>::
+            append(*this, other.storage.template get<unsigned int>());
         break;
     case traits<signed long int>::value:
-        overloader<signed long int>::append(*this, other.storage.get<signed long int>());
+        detail::overloader<value_type, signed long int>::
+            append(*this, other.storage.template get<signed long int>());
         break;
     case traits<unsigned long int>::value:
-        overloader<unsigned long int>::append(*this, other.storage.get<unsigned long int>());
+        detail::overloader<value_type, unsigned long int>::
+            append(*this, other.storage.template get<unsigned long int>());
         break;
     case traits<signed long long int>::value:
-        overloader<signed long long int>::append(*this, other.storage.get<signed long long int>());
+        detail::overloader<value_type, signed long long int>::
+            append(*this, other.storage.template get<signed long long int>());
         break;
     case traits<unsigned long long int>::value:
-        overloader<unsigned long long int>::append(*this, other.storage.get<unsigned long long int>());
+        detail::overloader<value_type, unsigned long long int>::
+            append(*this, other.storage.template get<unsigned long long int>());
         break;
     case traits<float>::value:
-        overloader<float>::append(*this, other.storage.get<float>());
+        detail::overloader<value_type, float>::
+            append(*this, other.storage.template get<float>());
         break;
     case traits<double>::value:
-        overloader<double>::append(*this, other.storage.get<double>());
+        detail::overloader<value_type, double>::
+            append(*this, other.storage.template get<double>());
         break;
     case traits<long double>::value:
-        overloader<long double>::append(*this, other.storage.get<long double>());
+        detail::overloader<value_type, long double>::
+            append(*this, other.storage.template get<long double>());
         break;
     case traits<string_type>::value:
-        overloader<string_type>::append(*this, other.storage.get<string_type>());
+        detail::overloader<value_type, string_type>::
+            append(*this, other.storage.template get<string_type>());
         break;
     case traits<array_type>::value:
-        overloader<array_type>::append(*this, other.storage.get<array_type>());
+        detail::overloader<value_type, array_type>::
+            append(*this, other.storage.template get<array_type>());
         break;
     case traits<map_type>::value:
-        overloader<map_type>::append(*this, other.storage.get<map_type>());
+        detail::overloader<value_type, map_type>::
+            append(*this, other.storage.template get<map_type>());
         break;
     }
     return *this;
 }
 
-inline variable& variable::operator+= (std::initializer_list<array_type::value_type> init)
+template <typename CharT>
+auto basic_variable<CharT>::operator+= (std::initializer_list<typename array_type::value_type> init) -> basic_variable&
 {
     switch (storage.which())
     {
     case traits<array_type>::value:
         {
-            auto& array = storage.get<array_type>();
+            auto& array = storage.template get<array_type>();
             array.insert(array.end(), init.begin(), init.end());
         }
         break;
@@ -1940,12 +2321,13 @@ inline variable& variable::operator+= (std::initializer_list<array_type::value_t
     return *this;
 }
 
-inline variable& variable::operator+= (std::initializer_list<map_type::value_type> init)
+template <typename CharT>
+auto basic_variable<CharT>::operator+= (std::initializer_list<typename map_type::value_type> init) -> basic_variable&
 {
     switch (storage.which())
     {
     case traits<map_type>::value:
-        storage.get<map_type>().insert(init);
+        storage.template get<map_type>().insert(init);
         break;
 
     default:
@@ -1954,34 +2336,40 @@ inline variable& variable::operator+= (std::initializer_list<map_type::value_typ
     return *this;
 }
 
-template <typename T>
-variable variable::operator+ (const T& rhs)
+template <typename T, typename U>
+auto operator+ (const basic_variable<T>& lhs, const U& rhs) -> basic_variable<T>
 {
-    variable result(*this);
+    basic_variable<T> result(lhs);
     result += rhs;
     return result;
 }
 
 template <typename T>
-variable operator+ (variable::null_type, const T& rhs)
+auto operator+ (typename basic_variable<T>::null_type,
+                const basic_variable<T>& rhs) -> basic_variable<T>
 {
-    return variable() + rhs;
+    basic_variable<T> result;
+    result += rhs;
+    return result;
 }
 
+template <typename CharT>
 template <typename R>
-variable::operator R() const
+basic_variable<CharT>::operator R() const
 {
     return value<R>();
 }
 
+template <typename CharT>
 template <typename R>
-R variable::value(std::error_code& error) const noexcept
+R basic_variable<CharT>::value(std::error_code& error) const noexcept
 {
-    return overloader<R>::convert(*this, error);
+    return detail::overloader<value_type, R>::convert(*this, error);
 }
 
+template <typename CharT>
 template <typename R>
-R variable::value() const
+R basic_variable<CharT>::value() const
 {
     std::error_code error;
     auto result = value<R>(error);
@@ -1990,7 +2378,8 @@ R variable::value() const
     return result;
 }
 
-inline variable::operator bool() const
+template <typename CharT>
+basic_variable<CharT>::operator bool() const
 {
     switch (storage.which())
     {
@@ -1998,40 +2387,40 @@ inline variable::operator bool() const
         return false;
 
     case traits<bool>::value:
-        return bool(storage.get<bool>());
+        return bool(storage.template get<bool>());
 
     case traits<signed short int>::value:
-        return bool(storage.get<signed short int>());
+        return bool(storage.template get<signed short int>());
 
     case traits<unsigned short int>::value:
-        return bool(storage.get<unsigned short int>());
+        return bool(storage.template get<unsigned short int>());
 
     case traits<signed int>::value:
-        return bool(storage.get<signed int>());
+        return bool(storage.template get<signed int>());
 
     case traits<unsigned int>::value:
-        return bool(storage.get<unsigned int>());
+        return bool(storage.template get<unsigned int>());
 
     case traits<signed long int>::value:
-        return bool(storage.get<signed long int>());
+        return bool(storage.template get<signed long int>());
 
     case traits<unsigned long int>::value:
-        return bool(storage.get<unsigned long int>());
+        return bool(storage.template get<unsigned long int>());
 
     case traits<signed long long int>::value:
-        return bool(storage.get<signed long long int>());
+        return bool(storage.template get<signed long long int>());
 
     case traits<unsigned long long int>::value:
-        return bool(storage.get<unsigned long long int>());
+        return bool(storage.template get<unsigned long long int>());
 
     case traits<float>::value:
-        return bool(storage.get<float>());
+        return bool(storage.template get<float>());
 
     case traits<double>::value:
-        return bool(storage.get<double>());
+        return bool(storage.template get<double>());
 
     case traits<long double>::value:
-        return bool(storage.get<long double>());
+        return bool(storage.template get<long double>());
 
     case traits<string_type>::value:
     case traits<array_type>::value:
@@ -2046,67 +2435,75 @@ inline variable::operator bool() const
     return false;
 }
 
-inline variable& variable::operator[] (array_type::size_type position)
+template <typename CharT>
+auto basic_variable<CharT>::operator[] (typename array_type::size_type position) -> basic_variable&
 {
     switch (storage.which())
     {
     case traits<array_type>::value:
-        return storage.get<array_type>()[position];
+        return storage.template get<array_type>()[position];
 
     default:
         throw dynamic::error(incompatible_type);
     }
 }
 
-inline const variable& variable::operator[] (array_type::size_type position) const
+template <typename CharT>
+auto basic_variable<CharT>::operator[] (typename array_type::size_type position) const -> const basic_variable&
 {
     switch (storage.which())
     {
     case traits<array_type>::value:
-        return storage.get<array_type>().at(position);
+        return storage.template get<array_type>().at(position);
 
     default:
         throw dynamic::error(incompatible_type);
     }
 }
 
-inline variable& variable::operator[] (const map_type::key_type& key)
+template <typename CharT>
+auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) -> basic_variable&
 {
     switch (storage.which())
     {
     case traits<map_type>::value:
-        return storage.get<map_type>()[key];
+        return storage.template get<map_type>()[key];
 
     default:
         throw dynamic::error(incompatible_type);
     }
 }
 
-inline const variable& variable::operator[] (const map_type::key_type& key) const
+template <typename CharT>
+auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) const -> const basic_variable&
 {
     switch (storage.which())
     {
     case traits<map_type>::value:
-        return storage.get<map_type>().at(key);
+        return storage.template get<map_type>().at(key);
 
     default:
         throw dynamic::error(incompatible_type);
     }
 }
 
+template <typename CharT>
 template <typename T>
-bool variable::is() const
+bool basic_variable<CharT>::is() const
 {
-    return storage.call<similar_visitor<typename std::decay<T>::type>, bool>();
+    using decay_type = typename std::decay<T>::type;
+    return storage.template call<similar_visitor<decay_type>, bool>();
 }
 
+template <typename CharT>
 template <typename T>
-bool variable::same() const
+bool basic_variable<CharT>::same() const
 {
-    return same_overloader<T>::same(storage.which());
+    return detail::same_overloader<CharT, T>::same(storage.which());
 }
 
-inline token::code::value variable::code() const
+template <typename CharT>
+token::code::value basic_variable<CharT>::code() const
 {
     switch (storage.which())
     {
@@ -2148,12 +2545,14 @@ inline token::code::value variable::code() const
     }
 }
 
-inline token::symbol::value variable::symbol() const
+template <typename CharT>
+token::symbol::value basic_variable<CharT>::symbol() const
 {
     return token::symbol::convert(code());
 }
 
-inline bool variable::empty() const
+template <typename CharT>
+bool basic_variable<CharT>::empty() const
 {
     switch (storage.which())
     {
@@ -2173,17 +2572,18 @@ inline bool variable::empty() const
     case traits<long double>::value:
         return false;
     case traits<string_type>::value:
-        return storage.get<string_type>().empty();
+        return storage.template get<string_type>().empty();
     case traits<array_type>::value:
-        return storage.get<array_type>().empty();
+        return storage.template get<array_type>().empty();
     case traits<map_type>::value:
-        return storage.get<map_type>().empty();
+        return storage.template get<map_type>().empty();
     }
     assert(false);
     throw dynamic::error(incompatible_type);
 }
 
-inline auto variable::size() const -> size_type
+template <typename CharT>
+auto basic_variable<CharT>::size() const -> size_type
 {
     switch (storage.which())
     {
@@ -2203,17 +2603,18 @@ inline auto variable::size() const -> size_type
     case traits<long double>::value:
         return 1;
     case traits<string_type>::value:
-        return storage.get<string_type>().size();
+        return storage.template get<string_type>().size();
     case traits<array_type>::value:
-        return storage.get<array_type>().size();
+        return storage.template get<array_type>().size();
     case traits<map_type>::value:
-        return storage.get<map_type>().size();
+        return storage.template get<map_type>().size();
     }
     assert(false);
     throw dynamic::error(incompatible_type);
 }
 
-inline void variable::clear()
+template <typename CharT>
+void basic_variable<CharT>::clear()
 {
     switch (storage.which())
     {
@@ -2263,31 +2664,38 @@ inline void variable::clear()
         storage = 0.0L;
         break;
     case traits<string_type>::value:
-        storage.get<string_type>().clear();
+        storage.template get<string_type>().clear();
         break;
     case traits<array_type>::value:
-        storage.get<array_type>().clear();
+        storage.template get<array_type>().clear();
         break;
     case traits<map_type>::value:
-        storage.get<map_type>().clear();
+        storage.template get<map_type>().clear();
         break;
     }
 }
 
-inline auto variable::erase(const_iterator where) -> iterator
+template <typename CharT>
+auto basic_variable<CharT>::erase(const_iterator where) -> iterator
 {
+    using array_iterator = typename basic_variable<CharT>::const_iterator::array_iterator;
+    using map_iterator = typename basic_variable<CharT>::const_iterator::map_iterator;
+
     iterator result = where;
 
     switch (storage.which())
     {
     case traits<array_type>::value:
-        result.current =
-            storage.get<array_type>().erase(where.current.template get<iterator::array_iterator>());
+        {
+            auto& array = storage.template get<array_type>();
+            auto& array_where = where.current.template get<array_iterator>();
+            result.current = array.erase(array_where);
+        }
         break;
 
     case traits<map_type>::value:
         result.current =
-            storage.get<map_type>().erase(where.current.template get<iterator::map_iterator>());
+            storage.template get<map_type>().erase(where.current.template get<map_iterator>());
         break;
 
     default:
@@ -2297,22 +2705,26 @@ inline auto variable::erase(const_iterator where) -> iterator
     return result;
 }
 
-inline auto variable::erase(const_iterator first, const_iterator last) -> iterator
+template <typename CharT>
+auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> iterator
 {
+    using array_iterator = typename basic_variable<CharT>::const_iterator::array_iterator;
+    using map_iterator = typename basic_variable<CharT>::const_iterator::map_iterator;
+
     iterator result = first;
 
     switch (storage.which())
     {
     case traits<array_type>::value:
         result.current =
-            storage.get<array_type>().erase(first.current.template get<iterator::array_iterator>(),
-                                            last.current.template get<iterator::array_iterator>());
+            storage.template get<array_type>().erase(first.current.template get<array_iterator>(),
+                                                     last.current.template get<array_iterator>());
         break;
 
     case traits<map_type>::value:
         result.current =
-            storage.get<map_type>().erase(first.current.template get<iterator::map_iterator>(),
-                                          last.current.template get<iterator::map_iterator>());
+            storage.template get<map_type>().erase(first.current.template get<map_iterator>(),
+                                                   last.current.template get<map_iterator>());
         break;
 
     default:
@@ -2322,215 +2734,73 @@ inline auto variable::erase(const_iterator first, const_iterator last) -> iterat
     return result;
 }
 
-inline auto variable::begin() & -> iterator
+template <typename CharT>
+auto basic_variable<CharT>::begin() & -> iterator
 {
     return {this};
 }
 
-inline auto variable::begin() const & -> const_iterator
+template <typename CharT>
+auto basic_variable<CharT>::begin() const & -> const_iterator
 {
     return {this};
 }
 
-inline auto variable::end() & -> iterator
+template <typename CharT>
+auto basic_variable<CharT>::end() & -> iterator
 {
     return {this, false};
 }
 
-inline auto variable::end() const & -> const_iterator
+template <typename CharT>
+auto basic_variable<CharT>::end() const & -> const_iterator
 {
     return {this, false};
 }
 
 // Comparison
 
+template <typename T, typename U>
+bool operator== (const T& lhs, const U& rhs)
+{
+    return detail::operator_overloader<T, U>::equal(lhs, rhs);
+}
+
+template <typename T, typename U>
+bool operator!= (const T& lhs, const U& rhs)
+{
+    return !(lhs == rhs);
+}
+
+template <typename T, typename U>
+bool operator< (const T& lhs, const U& rhs)
+{
+    return detail::operator_overloader<T, U>::less(lhs, rhs);
+}
+
+template <typename CharT>
 template <typename T>
-bool variable::operator== (const T& rhs) const
+bool basic_variable<CharT>::operator<= (const T& rhs) const
 {
-    return variable::overloader<T>::equal(*this, rhs);
-}
-
-inline bool operator== (const variable& lhs, const variable& rhs)
-{
-    switch (rhs.storage.which())
-    {
-    case variable::traits<variable::null_type>::value:
-        return variable::overloader<variable::null_type>::
-            equal(lhs, rhs.storage.get<variable::null_type>());
-
-    case variable::traits<bool>::value:
-        return variable::overloader<bool>::
-            equal(lhs, rhs.storage.get<bool>());
-
-    case variable::traits<signed short int>::value:
-        return variable::overloader<signed short int>::
-            equal(lhs, rhs.storage.get<signed short int>());
-
-    case variable::traits<unsigned short int>::value:
-        return variable::overloader<unsigned short int>::
-            equal(lhs, rhs.storage.get<unsigned short int>());
-
-    case variable::traits<signed int>::value:
-        return variable::overloader<signed int>::
-            equal(lhs, rhs.storage.get<signed int>());
-
-    case variable::traits<unsigned int>::value:
-        return variable::overloader<unsigned int>::
-            equal(lhs, rhs.storage.get<unsigned int>());
-
-    case variable::traits<signed long int>::value:
-        return variable::overloader<signed long int>::
-            equal(lhs, rhs.storage.get<signed long int>());
-
-    case variable::traits<unsigned long int>::value:
-        return variable::overloader<unsigned long int>::
-            equal(lhs, rhs.storage.get<unsigned long int>());
-
-    case variable::traits<signed long long int>::value:
-        return variable::overloader<signed long long int>::
-            equal(lhs, rhs.storage.get<signed long long int>());
-
-    case variable::traits<unsigned long long int>::value:
-        return variable::overloader<unsigned long long int>::
-            equal(lhs, rhs.storage.get<unsigned long long int>());
-
-    case variable::traits<float>::value:
-        return variable::overloader<float>::
-            equal(lhs, rhs.storage.get<float>());
-
-    case variable::traits<double>::value:
-        return variable::overloader<double>::
-            equal(lhs, rhs.storage.get<double>());
-
-    case variable::traits<long double>::value:
-        return variable::overloader<long double>::
-            equal(lhs, rhs.storage.get<long double>());
-
-    case variable::traits<variable::string_type>::value:
-        return variable::overloader<variable::string_type>::
-            equal(lhs, rhs.storage.get<variable::string_type>());
-
-    case variable::traits<variable::array_type>::value:
-        return variable::overloader<variable::array_type>::
-            equal(lhs, rhs.storage.get<variable::array_type>());
-
-    case variable::traits<variable::map_type>::value:
-        return variable::overloader<variable::map_type>::
-            equal(lhs, rhs.storage.get<variable::map_type>());
-    }
-    return false;
-}
-
-inline bool operator== (const variable& lhs, const variable::string_type::value_type *rhs)
-{
-    return variable::overloader<variable::string_type>::equal(lhs, rhs);
-}
-
-template <typename T>
-bool variable::operator< (const T& rhs) const
-{
-    return variable::overloader<T>::less(*this, rhs);
-}
-
-inline bool operator< (const variable& lhs, const variable& rhs)
-{
-    switch (rhs.storage.which())
-    {
-    case variable::traits<variable::null_type>::value:
-        return variable::overloader<variable::null_type>::
-            less(lhs, rhs.value<variable::null_type>());
-
-    case variable::traits<bool>::value:
-        return variable::overloader<bool>::
-            less(lhs, rhs.storage.get<bool>());
-
-    case variable::traits<signed short int>::value:
-        return variable::overloader<signed short int>::
-            less(lhs, rhs.storage.get<signed short int>());
-
-    case variable::traits<unsigned short int>::value:
-        return variable::overloader<unsigned short int>::
-            less(lhs, rhs.storage.get<unsigned short int>());
-
-    case variable::traits<signed int>::value:
-        return variable::overloader<signed int>::
-            less(lhs, rhs.storage.get<signed int>());
-
-    case variable::traits<unsigned int>::value:
-        return variable::overloader<unsigned int>::
-            less(lhs, rhs.storage.get<unsigned int>());
-
-    case variable::traits<signed long int>::value:
-        return variable::overloader<signed long int>::
-            less(lhs, rhs.storage.get<signed long int>());
-
-    case variable::traits<unsigned long int>::value:
-        return variable::overloader<unsigned long int>::
-            less(lhs, rhs.storage.get<unsigned long int>());
-
-    case variable::traits<signed long long int>::value:
-        return variable::overloader<signed long long int>::
-            less(lhs, rhs.storage.get<signed long long int>());
-
-    case variable::traits<unsigned long long int>::value:
-        return variable::overloader<unsigned long long int>::
-            less(lhs, rhs.storage.get<unsigned long long int>());
-
-    case variable::traits<float>::value:
-        return variable::overloader<float>::less(lhs, rhs.storage.get<float>());
-
-    case variable::traits<double>::value:
-        return variable::overloader<double>::less(lhs, rhs.storage.get<double>());
-
-    case variable::traits<long double>::value:
-        return variable::overloader<long double>::less(lhs, rhs.storage.get<long double>());
-
-    case variable::traits<variable::string_type>::value:
-        return variable::overloader<variable::string_type>::
-            less(lhs, rhs.storage.get<variable::string_type>());
-
-    case variable::traits<variable::array_type>::value:
-        return variable::overloader<variable::array_type>::
-            less(lhs, rhs.storage.get<variable::array_type>());
-
-    case variable::traits<variable::map_type>::value:
-        return variable::overloader<variable::map_type>::
-            less(lhs, rhs.storage.get<variable::map_type>());
-    }
-    return false;
-}
-
-inline bool operator< (const variable& lhs, const variable::string_type::value_type *rhs)
-{
-    return variable::overloader<variable::string_type>::less(lhs, rhs);
-}
-
-template <typename T>
-bool variable::operator!= (const T& rhs) const
-{
-    return !(*this == rhs);
-}
-
-template <typename T>
-bool variable::operator<= (const T& rhs) const
-{
-    if (is<variable::null_type>())
+    if (same<null_type>())
         return true;
 
     return !(rhs < *this);
 }
 
+template <typename CharT>
 template <typename T>
-bool variable::operator> (const T& rhs) const
+bool basic_variable<CharT>::operator> (const T& rhs) const
 {
-    if (is<variable::null_type>())
+    if (same<null_type>())
         return false;
 
     return rhs < *this;
 }
 
+template <typename CharT>
 template <typename T>
-bool variable::operator>= (const T& rhs) const
+bool basic_variable<CharT>::operator>= (const T& rhs) const
 {
     return !(*this < rhs);
 }

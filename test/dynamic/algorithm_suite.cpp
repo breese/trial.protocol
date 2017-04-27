@@ -833,9 +833,9 @@ void test_null()
 {
     // null has zero length, so std::equal always returns true regardless of the
     // second range.
-    variable null;
+    variable data;
     variable alpha(1);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(null.begin(), null.end(), alpha.begin()),
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(data.begin(), data.end(), alpha.begin()),
                               true);
 }
 

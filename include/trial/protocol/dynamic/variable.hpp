@@ -28,16 +28,28 @@ namespace protocol
 namespace dynamic
 {
 
-class variable
+// Forward declarations
+
+namespace detail
+{
+
+template <typename T, typename U, typename Enable> struct overloader;
+template <typename T, typename U, typename Enable> struct operator_overloader;
+template <typename T, typename C, typename Enable> struct same_overloader;
+
+} // namespace detail
+
+template <typename CharT>
+class basic_variable
 {
 public:
-    using value_type = variable;
-    using reference = std::add_lvalue_reference<value_type>::type;
-    using const_reference = std::add_const<reference>::type;
+    using value_type = basic_variable<CharT>;
+    using reference = typename std::add_lvalue_reference<value_type>::type;
+    using const_reference = typename std::add_const<reference>::type;
     using size_type = std::size_t;
 
     enum null_type { null };
-    using string_type = std::string;
+    using string_type = std::basic_string<CharT>;
     using array_type = std::vector<value_type>;
     using map_type = std::map<string_type, value_type>; // FIXME: key = value_type?
 
@@ -46,7 +58,7 @@ public:
     {
     public:
         using iterator_category = std::forward_iterator_tag;
-        using key_type = std::add_const<map_type::key_type>::type;
+        using key_type = typename std::add_const<typename map_type::key_type>::type;
         using value_type = T;
         using difference_type = std::ptrdiff_t;
         using pointer = typename std::add_pointer<value_type>::type;
@@ -78,14 +90,14 @@ public:
         bool operator!= (const iterator_type<T>&);
 
     private:
-        friend class variable;
+        friend class basic_variable<CharT>;
 
         using array_iterator = typename std::conditional<std::is_const<T>::value,
-                                                         array_type::const_iterator,
-                                                         array_type::iterator>::type;
+                                                         typename array_type::const_iterator,
+                                                         typename array_type::iterator>::type;
         using map_iterator = typename std::conditional<std::is_const<T>::value,
-                                                       map_type::const_iterator,
-                                                       map_type::iterator>::type;
+                                                       typename map_type::const_iterator,
+                                                       typename map_type::iterator>::type;
         using small_union = protocol::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator>;
 
         // Conversion from const_iterator to iterator is kept private
@@ -97,47 +109,49 @@ public:
         small_union current;
     };
 
-    using iterator = iterator_type<variable>;
-    using const_iterator = iterator_type<const variable>;
+    using iterator = iterator_type<value_type>;
+    using const_iterator = iterator_type<const value_type>;
 
     // Constructor
-    variable(const variable&);
-    variable(variable&&);
-    template <typename T> variable(T);
+    basic_variable(const basic_variable<CharT>&);
+    basic_variable(basic_variable<CharT>&&);
+    template <typename T> basic_variable(T);
     // Null constructor
-    variable();
-    variable(null_type);
+    basic_variable();
+    basic_variable(const null_type&);
     // String constructor
-    variable(const string_type::value_type *);
+    basic_variable(const CharT *);
     // Array constructor
-    variable(variable::array_type) = delete;
-    template <typename ForwardIterator> static variable array(ForwardIterator begin, ForwardIterator end);
-    static variable array();
-    static variable array(std::initializer_list<array_type::value_type>);
-    template <typename T> static variable array(size_type, const T&);
+    basic_variable(typename basic_variable::array_type) = delete;
+    template <typename ForwardIterator> static value_type array(ForwardIterator begin, ForwardIterator end);
+    static value_type array();
+    static value_type array(std::initializer_list<typename array_type::value_type>);
+    template <typename T> static value_type array(size_type, const T&);
     // Map constructor
-    variable(variable::map_type) = delete;
-    static variable map();
-    static variable map(std::initializer_list<map_type::value_type>);
+    basic_variable(typename basic_variable::map_type) = delete;
+    static value_type map();
+    static value_type map(std::initializer_list<typename map_type::value_type>);
  
     // Assignment
 
-    variable& operator= (const variable&);
-    variable& operator= (variable&&);
-    template <typename T> variable& operator= (T);
-    variable& operator= (null_type);
-    variable& operator= (const string_type::value_type *);
+    basic_variable& operator= (const basic_variable&);
+    basic_variable& operator= (basic_variable&&);
+    template <typename T> basic_variable& operator= (T);
+    basic_variable& operator= (null_type);
+    basic_variable& operator= (const CharT *);
 
     // Addition / concatenation
 
-    variable& operator+= (const variable&);
-    variable& operator+= (std::initializer_list<array_type::value_type>);
-    variable& operator+= (std::initializer_list<map_type::value_type>);
+    basic_variable& operator+= (const basic_variable&);
+    basic_variable& operator+= (std::initializer_list<typename array_type::value_type>);
+    basic_variable& operator+= (std::initializer_list<typename map_type::value_type>);
 
+    template <typename T, typename U>
+    friend basic_variable<T> operator+ (const basic_variable<T>&,
+                                        const U&);
     template <typename T>
-    variable operator+ (const T&);
-    template <typename T>
-    friend variable operator+ (null_type, const T&);
+    friend basic_variable<T> operator+ (typename basic_variable<T>::null_type,
+                                        const basic_variable<T>&);
 
     // Accessor
 
@@ -147,11 +161,11 @@ public:
 
     explicit operator bool() const;
 
-    variable& operator[] (array_type::size_type);
-    const variable& operator[] (array_type::size_type) const;
+    basic_variable& operator[] (typename array_type::size_type);
+    const basic_variable& operator[] (typename array_type::size_type) const;
 
-    variable& operator[] (const map_type::key_type&);
-    const variable& operator[] (const map_type::key_type&) const;
+    basic_variable& operator[] (const typename map_type::key_type&);
+    const basic_variable& operator[] (const typename map_type::key_type&) const;
 
     // Type checker
 
@@ -177,18 +191,14 @@ public:
 
     // Comparison
 
-    template <typename T>
-    bool operator== (const T&) const;
-    friend bool operator== (const variable&, const variable&);
-    friend bool operator== (const variable&, const variable::string_type::value_type *);
+    template <typename T, typename U>
+    friend bool operator== (const T&, const U&);
 
-    template <typename T>
-    bool operator< (const T&) const;
-    friend bool operator< (const variable&, const variable&);
-    friend bool operator< (const variable&, const variable::string_type::value_type *);
+    template <typename T, typename U>
+    friend bool operator!= (const T&, const U&);
 
-    template <typename T>
-    bool operator!= (const T&) const;
+    template <typename T, typename U>
+    friend bool operator< (const T&, const U&);
 
     template <typename T>
     bool operator<= (const T&) const;
@@ -201,8 +211,9 @@ public:
 
 private:
     template <typename T> struct traits;
-    template <typename T, typename Enable = void> struct overloader;
-    template <typename T, typename Enable = void> struct same_overloader;
+    template <typename T, typename U, typename Enable> friend struct detail::overloader;
+    template <typename T, typename U, typename Enable> friend struct detail::operator_overloader;
+    template <typename C, typename T, typename Enable> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
     using storage_type = protocol::detail::small_union<sizeof(double),
@@ -224,6 +235,8 @@ private:
                                                        map_type>;
     storage_type storage;
 };
+
+using variable = basic_variable<char>;
 
 } // namespace dynamic
 } // namespace protocol

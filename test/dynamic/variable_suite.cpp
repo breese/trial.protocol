@@ -4578,8 +4578,7 @@ namespace addition_suite
 
 void add_null_with_null()
 {
-    auto data = variable::null + variable::null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::null_type>(), true);
+    // Cannot do variable::null + variable::null
 }
 
 void add_null_with_boolean()
