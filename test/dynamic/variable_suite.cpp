@@ -224,10 +224,25 @@ void run()
 namespace is_suite
 {
 
+void is_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+}
+
+void is_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<boolean>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+}
+
 void is_integer_with_signed_short_int()
 {
     signed short int value = 2;
     variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int>(), true);
@@ -270,6 +285,8 @@ void is_integer_with_unsigned_short_int()
 {
     unsigned short int value = 2;
     variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int>(), true);
@@ -311,6 +328,8 @@ void is_integer_with_unsigned_short_int()
 void is_integer_with_signed_int()
 {
     variable data(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int>(), true);
@@ -352,6 +371,8 @@ void is_integer_with_signed_int()
 void is_integer_with_unsigned_int()
 {
     variable data(2U);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int>(), true);
@@ -393,6 +414,8 @@ void is_integer_with_unsigned_int()
 void is_integer_with_signed_long_int()
 {
     variable data(2L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int>(), true);
@@ -434,6 +457,8 @@ void is_integer_with_signed_long_int()
 void is_integer_with_unsigned_long_int()
 {
     variable data(2UL);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int>(), true);
@@ -475,6 +500,8 @@ void is_integer_with_unsigned_long_int()
 void is_integer_with_signed_long_long_int()
 {
     variable data(2LL);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int>(), true);
@@ -516,6 +543,8 @@ void is_integer_with_signed_long_long_int()
 void is_integer_with_unsigned_long_long_int()
 {
     variable data(2ULL);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int>(), true);
@@ -557,6 +586,8 @@ void is_integer_with_unsigned_long_long_int()
 void is_number_with_float()
 {
     variable data(1.0f);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<float&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const float>(), true);
@@ -583,6 +614,8 @@ void is_number_with_float()
 void is_number_with_double()
 {
     variable data(1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<double>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<double&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const double>(), true);
@@ -609,6 +642,8 @@ void is_number_with_double()
 void is_number_with_long_double()
 {
     variable data(1.0L);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const long double>(), true);
@@ -634,6 +669,10 @@ void is_number_with_long_double()
 
 void run()
 {
+    is_null();
+
+    is_boolean();
+
     is_integer_with_signed_short_int();
     is_integer_with_unsigned_short_int();
     is_integer_with_signed_int();

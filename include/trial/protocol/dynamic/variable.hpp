@@ -40,6 +40,9 @@ template <typename C, typename T, typename Enable> struct same_overloader;
 } // namespace detail
 
 enum null_type { null };
+struct boolean {};
+struct integer {};
+struct number {};
 struct string {};
 struct array {};
 struct map {};

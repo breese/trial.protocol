@@ -84,6 +84,33 @@ template <typename CharT>
 template <typename T>
 struct basic_variable<CharT>::tag_traits<
     T,
+    typename std::enable_if<std::is_same<T, typename dynamic::boolean>::value>::type>
+{
+    using type = bool;
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_variable<CharT>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, typename dynamic::integer>::value>::type>
+{
+    using type = int;
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_variable<CharT>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, typename dynamic::number>::value>::type>
+{
+    using type = float;
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_variable<CharT>::tag_traits<
+    T,
     typename std::enable_if<std::is_same<T, typename dynamic::string>::value>::type>
 {
     using type = string_type;
