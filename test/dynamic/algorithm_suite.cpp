@@ -18,7 +18,7 @@ using namespace trial::protocol::dynamic;
 auto is_boolean = [] (const variable& value) { return value.is<bool>(); };
 auto is_integer = [] (const variable& value) { return value.is<int>(); };
 auto is_number = [] (const variable& value) { return value.is<float>(); };
-auto is_string = [] (const variable& value) { return value.is<variable::string_type>(); };
+auto is_string = [] (const variable& value) { return value.is<string>(); };
 
 //-----------------------------------------------------------------------------
 // std::accumulate
@@ -70,8 +70,8 @@ void accumulate_string()
 {
     variable data("alpha");
     variable result = std::accumulate(data.begin(), data.end(), variable("prefix"));
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::string_type>(), "prefixalpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<string>(), "prefixalpha");
 }
 
 void accumulate_array_null()
@@ -133,8 +133,8 @@ void accumulate_array_string()
 {
     variable data = variable::array({ "alpha", "bravo", "charlie" });
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::string_type>(), "alphabravocharlie");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<string>(), "alphabravocharlie");
 }
 
 void accumulate_array_array()
@@ -142,7 +142,7 @@ void accumulate_array_array()
     // Array flattening
     variable data = variable::array({ variable::array({ "alpha", "bravo" }), variable::array({ "charlie", "delta" }) });
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<array>(), true);
     variable expect = variable::array({ "alpha", "bravo", "charlie", "delta" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expect.begin(), expect.end(),
@@ -158,8 +158,8 @@ void accumulate_map()
             { "bravo", "helium" }
         });
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<variable::string_type>(), "hydrogenhelium");
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<string>(), "hydrogenhelium");
 }
 
 void run()
@@ -2031,7 +2031,7 @@ void max_array_array()
     variable data = variable::array({true, 2, 3.0, variable::array({ 42 }), variable::array({ 41 }), "alpha"});
     auto where = std::max_element(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<variable::array_type>());
+    TRIAL_PROTOCOL_TEST(where->is<array>());
     TRIAL_PROTOCOL_TEST(*where == variable::array({ 42 }));
 }
 
@@ -2040,7 +2040,7 @@ void max_array_map()
     variable data = variable::array({true, 2, 3.0, variable::map({{ "alpha", 117 }}), variable::array({ 42 }), "hydrogen"});
     auto where = std::max_element(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<variable::map_type>());
+    TRIAL_PROTOCOL_TEST(where->is<map>());
     TRIAL_PROTOCOL_TEST(*where == variable::map({{ "alpha", 117 }}));
 }
 

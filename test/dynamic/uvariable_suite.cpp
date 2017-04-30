@@ -45,7 +45,7 @@ void test_ctor()
     {
         const unsigned char literal[] = { 'a', 'l', 'p', 'h', 'a', 0 };
         uvariable data(literal);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<uvariable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     }
 }
 

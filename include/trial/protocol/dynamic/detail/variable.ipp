@@ -61,6 +61,53 @@ struct basic_variable<CharT>::traits
 };
 
 //-----------------------------------------------------------------------------
+// variable::tag_traits
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+template <typename T, typename Enable>
+struct basic_variable<CharT>::tag_traits
+{
+    using type = T;
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_variable<CharT>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, null_type>::value>::type>
+{
+    using type = null_type;
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_variable<CharT>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, typename dynamic::string>::value>::type>
+{
+    using type = string_type;
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_variable<CharT>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, typename dynamic::array>::value>::type>
+{
+    using type = array_type;
+};
+
+template <typename CharT>
+template <typename T>
+struct basic_variable<CharT>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, typename dynamic::map>::value>::type>
+{
+    using type = map_type;
+};
+
+//-----------------------------------------------------------------------------
 // detail::overloader
 //-----------------------------------------------------------------------------
 
@@ -2351,18 +2398,19 @@ basic_variable<CharT>::operator R() const
 }
 
 template <typename CharT>
-template <typename R>
-R basic_variable<CharT>::value(std::error_code& error) const noexcept
+template <typename Tag>
+auto basic_variable<CharT>::value(std::error_code& error) const noexcept -> typename tag_traits<typename std::decay<Tag>::type>::type
 {
-    return detail::overloader<value_type, R>::convert(*this, error);
+    using return_type = typename tag_traits<typename std::decay<Tag>::type>::type;
+    return detail::overloader<value_type, return_type>::convert(*this, error);
 }
 
 template <typename CharT>
-template <typename R>
-R basic_variable<CharT>::value() const
+template <typename Tag>
+auto basic_variable<CharT>::value() const -> typename tag_traits<typename std::decay<Tag>::type>::type
 {
     std::error_code error;
-    auto result = value<R>(error);
+    auto result = value<Tag>(error);
     if (error)
         throw std::system_error(error);
     return result;
@@ -2478,11 +2526,11 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
 }
 
 template <typename CharT>
-template <typename T>
+template <typename Tag>
 bool basic_variable<CharT>::is() const
 {
-    using decay_type = typename std::decay<T>::type;
-    return storage.template call<similar_visitor<decay_type>, bool>();
+    using tag_type = typename tag_traits<typename std::decay<Tag>::type>::type;
+    return storage.template call<similar_visitor<tag_type>, bool>();
 }
 
 template <typename CharT>

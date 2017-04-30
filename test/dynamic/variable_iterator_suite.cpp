@@ -762,7 +762,7 @@ void get_array()
     TRIAL_PROTOCOL_TEST(*where == 3.0);
     ++where;
     TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<variable::string_type>());
+    TRIAL_PROTOCOL_TEST(where->is<string>());
     TRIAL_PROTOCOL_TEST(*where == "alpha");
 }
 
@@ -788,7 +788,7 @@ void get_map()
     TRIAL_PROTOCOL_TEST(*where == 3.0);
     ++where;
     TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<variable::string_type>());
+    TRIAL_PROTOCOL_TEST(where->is<string>());
     TRIAL_PROTOCOL_TEST(*where == "hydrogen");
 }
 

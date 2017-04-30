@@ -116,45 +116,45 @@ void construct_long_double()
 void construct_string_with_string()
 {
     variable data(std::string("alpha"));
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void construct_string_with_literal()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void construct_array_with_vector()
 {
     std::vector<int> input = { 1, 2 };
     variable data = variable::array(input.begin(), input.end());
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void construct_array_with_iterator()
 {
-    variable::array_type array = { 1, 2 };
-    variable data = variable::array(array.begin(), array.end());
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    std::vector<variable> input = { 1, 2 };
+    variable data = variable::array(input.begin(), input.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void construct_array_by_name()
 {
     variable data = variable::array({false, 1, 2.0, "alpha"});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void construct_array_by_name_empty()
 {
     variable data = variable::array();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void construct_array_with_size()
 {
     variable data = variable::array(4, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void construct_map_by_name()
@@ -163,13 +163,13 @@ void construct_map_by_name()
         {
             {"alpha", 1}
         });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void construct_map_by_name_empty()
 {
     variable data = variable::map();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void construct_mixed_by_name()
@@ -178,7 +178,7 @@ void construct_mixed_by_name()
         {
             {"alpha", variable::array({1, 2})}
         });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void run()
@@ -891,7 +891,7 @@ void copy_string()
 {
     variable data("alpha");
     variable copy(data);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<string>(), true);
 }
 
 void copy_array()
@@ -908,7 +908,7 @@ void copy_array()
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
 
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<array>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
     TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
                                  expect.begin(), expect.end(),
@@ -929,7 +929,7 @@ void copy_array_nested()
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
 
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<array>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
     TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
                                  expect.begin(), expect.end(),
@@ -962,7 +962,7 @@ void copy_map()
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
 
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<map>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
     TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
                                  expect.begin(), expect.end(),
@@ -993,7 +993,7 @@ void copy_map_nested()
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
 
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<map>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
     TRIAL_PROTOCOL_TEST_ALL_WITH(copy.begin(), copy.end(),
                                  expect.begin(), expect.end(),
@@ -1127,8 +1127,8 @@ void move_string()
 {
     variable data("alpha");
     variable copy(std::move(data));
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<variable::string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<string>(), "alpha");
 }
 
 void move_array()
@@ -1138,7 +1138,7 @@ void move_array()
 
     variable copy(std::move(data));
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<array>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
 
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
@@ -1154,7 +1154,7 @@ void move_array_nested()
 
     variable copy(std::move(data));
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<array>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
 
     variable expect = variable::array({ true, variable::array({ 2, 3.0 }), "alpha" });
@@ -1176,7 +1176,7 @@ void move_map()
 
     variable copy(std::move(data));
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<map>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 4);
 
     variable expect = variable::map(
@@ -1203,7 +1203,7 @@ void move_map_nested()
 
     variable copy(std::move(data));
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<map>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(copy.size(), 3);
 
     variable expect = variable::map(
@@ -1543,8 +1543,8 @@ void assign_null_with_string()
 {
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_null_with_string_literal()
@@ -1552,7 +1552,7 @@ void assign_null_with_string_literal()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
     data = "alpha";
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_null_with_array()
@@ -1560,7 +1560,7 @@ void assign_null_with_array()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_null_with_map()
@@ -1568,7 +1568,7 @@ void assign_null_with_map()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_boolean_with_null()
@@ -1875,8 +1875,8 @@ void assign_boolean_with_string()
 {
     variable data(true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_boolean_with_array()
@@ -1884,7 +1884,7 @@ void assign_boolean_with_array()
     variable data(true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_boolean_with_map()
@@ -1892,7 +1892,7 @@ void assign_boolean_with_map()
     variable data(true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_signed_int_with_null()
@@ -2205,8 +2205,8 @@ void assign_signed_int_with_string()
     signed int input = 2;
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_signed_int_with_array()
@@ -2215,7 +2215,7 @@ void assign_signed_int_with_array()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_signed_int_with_map()
@@ -2224,7 +2224,7 @@ void assign_signed_int_with_map()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_unsigned_int_with_null()
@@ -2537,8 +2537,8 @@ void assign_unsigned_int_with_string()
     unsigned int input = 2;
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_unsigned_int_with_array()
@@ -2547,7 +2547,7 @@ void assign_unsigned_int_with_array()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_unsigned_int_with_map()
@@ -2556,7 +2556,7 @@ void assign_unsigned_int_with_map()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_float_with_null()
@@ -2639,8 +2639,8 @@ void assign_float_with_string()
 {
     variable data(3.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_float_with_array()
@@ -2648,7 +2648,7 @@ void assign_float_with_array()
     variable data(3.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_float_with_map()
@@ -2656,7 +2656,7 @@ void assign_float_with_map()
     variable data(3.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_double_with_null()
@@ -2739,8 +2739,8 @@ void assign_double_with_string()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_double_with_array()
@@ -2748,7 +2748,7 @@ void assign_double_with_array()
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_double_with_map()
@@ -2756,7 +2756,7 @@ void assign_double_with_map()
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_long_double_with_null()
@@ -2839,8 +2839,8 @@ void assign_long_double_with_string()
 {
     variable data(3.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_long_double_with_array()
@@ -2848,7 +2848,7 @@ void assign_long_double_with_array()
     variable data(3.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_long_double_with_map()
@@ -2856,13 +2856,13 @@ void assign_long_double_with_map()
     variable data(3.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_string_with_null()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data = null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
 }
@@ -2870,7 +2870,7 @@ void assign_string_with_null()
 void assign_string_with_boolean()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data = false;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
@@ -2878,7 +2878,7 @@ void assign_string_with_boolean()
 void assign_string_with_integer()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data = 1;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
 }
@@ -2887,60 +2887,60 @@ void assign_string_with_number()
 {
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         data = 1.0f;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         variable number(1.0f);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         variable number(1.0f);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         data = 1.0;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         variable number(1.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         variable number(1.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         data = 1.0L;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         variable number(1.0L);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         variable number(1.0L);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
@@ -2950,31 +2950,31 @@ void assign_string_with_number()
 void assign_string_with_string()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_string_with_array()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_string_with_map()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_array_with_null()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     data = null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
 }
@@ -2982,7 +2982,7 @@ void assign_array_with_null()
 void assign_array_with_boolean()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     data = false;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
@@ -2991,13 +2991,13 @@ void assign_array_with_integer()
 {
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         data = 1;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         data = 1U;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
     }
@@ -3007,60 +3007,60 @@ void assign_array_with_number()
 {
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         data = 1.0f;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         variable number(1.0f);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         variable number(1.0f);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         data = 1.0;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         variable number(1.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         variable number(1.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         data = 1.0L;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         variable number(1.0L);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data = variable::array({ true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         variable number(1.0L);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
@@ -3070,31 +3070,31 @@ void assign_array_with_number()
 void assign_array_with_string()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_array_with_array()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     data = variable::array({ 3.0, "alpha" });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_array_with_map()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void assign_map_with_null()
 {
     variable data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     data = null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
 }
@@ -3102,7 +3102,7 @@ void assign_map_with_null()
 void assign_map_with_boolean()
 {
     variable data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     data = false;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
@@ -3111,13 +3111,13 @@ void assign_map_with_integer()
 {
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         data = 1;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         data = 1U;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
     }
@@ -3127,60 +3127,60 @@ void assign_map_with_number()
 {
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         data = 1.0f;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         variable number(1.0f);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         variable number(1.0f);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         data = 1.0;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         variable number(1.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         variable number(1.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         data = 1.0L;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         variable number(1.0L);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data = variable::map({{ "alpha", "hydrogen" }});
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         variable number(1.0L);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
@@ -3190,25 +3190,25 @@ void assign_map_with_number()
 void assign_map_with_string()
 {
     variable data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
-    data = variable::string_type("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    data = std::string("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
 
 void assign_map_with_array()
 {
     variable data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
 void assign_map_with_map()
 {
     variable data = variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     data = variable::map({{ "bravo", "helium" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
 void run()
@@ -3419,8 +3419,8 @@ void append_null_with_string()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
     data += variable("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
 }
 
 void append_null_with_array()
@@ -3428,7 +3428,7 @@ void append_null_with_array()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
     data += variable::array({ true, 2, 3.0, "alpha" });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -3440,7 +3440,7 @@ void append_null_with_map()
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
     data += variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     variable expect = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -4153,16 +4153,16 @@ void append_long_double_with_map()
 void append_string_with_null()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data += null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
 }
 
 void append_string_with_boolean()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(true)),
                                     error,
                                     "incompatible type");
@@ -4172,14 +4172,14 @@ void append_string_with_integer()
 {
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(2)),
                                         error,
                                         "incompatible type");
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(2U)),
                                         error,
                                         "incompatible type");
@@ -4190,21 +4190,21 @@ void append_string_with_number()
 {
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0f)),
                                         error,
                                         "incompatible type");
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0)),
                                         error,
                                         "incompatible type");
     }
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0L)),
                                         error,
                                         "incompatible type");
@@ -4214,16 +4214,16 @@ void append_string_with_number()
 void append_string_with_string()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data += variable("-bravo");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha-bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha-bravo");
 }
 
 void append_string_with_array()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::array({ true, "alpha" })),
                                     error,
                                     "incompatible type");
@@ -4232,7 +4232,7 @@ void append_string_with_array()
 void append_string_with_map()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
                                     error,
                                     "incompatible type");
@@ -4335,9 +4335,9 @@ void append_array_with_string()
 void append_array_with_array()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     data += { 3.0, "alpha" };
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -4347,9 +4347,9 @@ void append_array_with_array()
 void append_array_with_array_by_name()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     data += variable::array({ 3.0, "alpha" });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -4359,7 +4359,7 @@ void append_array_with_array_by_name()
 void append_array_with_map()
 {
     variable data = variable::array({ true, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable::map({{ "alpha", "hydrogen" }})),
                                     error,
                                     "incompatible type");
@@ -4624,14 +4624,14 @@ void add_null_with_number()
 void add_null_with_string()
 {
     auto data = null + variable("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
 }
 
 void add_null_with_array()
 {
     auto data = null + variable::array({ true, 2, 3.0, "alpha" });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -4641,7 +4641,7 @@ void add_null_with_array()
 void add_null_with_map()
 {
     auto data = null + variable::map({{ "alpha", "hydrogen" }});
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     variable expect = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -4864,8 +4864,8 @@ void add_number_with_map()
 void add_string_with_null()
 {
     auto data = variable("alpha") + null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
 }
 
 void add_string_with_boolean()
@@ -4917,8 +4917,8 @@ void add_string_with_number()
 void add_string_with_string()
 {
     auto data = variable("alpha") + variable("-bravo");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha-bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha-bravo");
 }
 
 void add_string_with_array()
@@ -5018,7 +5018,7 @@ void add_array_with_string()
 void add_array_with_array()
 {
     variable data = variable::array({ true, 2 }) + variable::array({ 3.0, "alpha" });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -5271,7 +5271,7 @@ void fail_null_as_string()
 {
     variable data;
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), std::string{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5279,7 +5279,7 @@ void fail_null_as_array()
 {
     variable data;
     std::error_code error;
-    data.value<variable::array_type>(error);
+    data.value<array>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5287,7 +5287,7 @@ void fail_null_as_map()
 {
     variable data;
     std::error_code error;
-    data.value<variable::map_type>(error);
+    data.value<map>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5353,7 +5353,7 @@ void fail_boolean_as_string()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), false);
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), std::string{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5361,7 +5361,7 @@ void fail_boolean_as_array()
 {
     variable data(false);
     std::error_code error;
-    data.value<variable::array_type>(error);
+    data.value<array>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5369,7 +5369,7 @@ void fail_boolean_as_map()
 {
     variable data(false);
     std::error_code error;
-    data.value<variable::map_type>(error);
+    data.value<map>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5474,7 +5474,7 @@ void fail_integer_as_string()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), 0);
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), std::string{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5482,7 +5482,7 @@ void fail_integer_as_array()
 {
     variable data(0);
     std::error_code error;
-    data.value<variable::array_type>(error);
+    data.value<array>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5490,7 +5490,7 @@ void fail_integer_as_map()
 {
     variable data(0);
     std::error_code error;
-    data.value<variable::map_type>(error);
+    data.value<map>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5572,7 +5572,7 @@ void fail_float_as_string()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), std::string{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5580,7 +5580,7 @@ void fail_float_as_array()
 {
     variable data(0.0f);
     std::error_code error;
-    data.value<variable::array_type>(error);
+    data.value<array>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5588,7 +5588,7 @@ void fail_float_as_map()
 {
     variable data(0.0f);
     std::error_code error;
-    data.value<variable::map_type>(error);
+    data.value<map>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5670,7 +5670,7 @@ void fail_double_as_string()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), std::string{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5678,7 +5678,7 @@ void fail_double_as_array()
 {
     variable data(0.0);
     std::error_code error;
-    data.value<variable::array_type>(error);
+    data.value<array>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5686,7 +5686,7 @@ void fail_double_as_map()
 {
     variable data(0.0);
     std::error_code error;
-    data.value<variable::map_type>(error);
+    data.value<map>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5768,7 +5768,7 @@ void fail_long_double_as_string()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0);
     TRIAL_PROTOCOL_TEST(!error);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), variable::string_type{});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), std::string{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5776,7 +5776,7 @@ void fail_long_double_as_array()
 {
     variable data(0.0L);
     std::error_code error;
-    data.value<variable::array_type>(error);
+    data.value<array>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5784,7 +5784,7 @@ void fail_long_double_as_map()
 {
     variable data(0.0L);
     std::error_code error;
-    data.value<variable::map_type>(error);
+    data.value<map>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5792,7 +5792,7 @@ void fail_string_as_null()
 {
     variable data("alpha");
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
     data.value<null_type>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5802,7 +5802,7 @@ void fail_string_as_boolean()
 {
     variable data("alpha");
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), bool{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5812,7 +5812,7 @@ void fail_string_as_integer()
 {
     variable data("alpha");
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), int{});
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5822,7 +5822,7 @@ void fail_string_as_number()
 {
     variable data("alpha");
     std::error_code error;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(error), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5837,17 +5837,17 @@ void fail_string_as_number()
 void test_string_as_string()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
 
     data = "bravo";
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<variable::string_type>(), "bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "bravo");
 }
 
 void fail_string_as_array()
 {
     variable data("alpha");
     std::error_code error;
-    data.value<variable::array_type>(error);
+    data.value<array>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5855,14 +5855,14 @@ void fail_string_as_map()
 {
     variable data("alpha");
     std::error_code error;
-    data.value<variable::map_type>(error);
+    data.value<map>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
 void test_array_as_array()
 {
     variable data = variable::array({ 1, 2, 3 });
-    auto result = data.value<variable::array_type>();
+    auto result = data.value<array>();
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  data.begin(), data.end(),
                                  std::equal_to<variable>());
@@ -6481,30 +6481,30 @@ void test_number()
 void test_string()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     TRIAL_PROTOCOL_TEST(data.empty());
 }
 
 void test_array()
 {
     variable data = variable::array({ 1, 2 });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     TRIAL_PROTOCOL_TEST(data.empty());
 }
 
 void test_map()
 {
     variable data = variable::map({ {"alpha", 1} });
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     TRIAL_PROTOCOL_TEST(data.empty());
 }
 

@@ -35,25 +35,33 @@ namespace detail
 
 template <typename T, typename U, typename Enable> struct overloader;
 template <typename T, typename U, typename Enable> struct operator_overloader;
-template <typename T, typename C, typename Enable> struct same_overloader;
+template <typename C, typename T, typename Enable> struct same_overloader;
 
 } // namespace detail
 
 enum null_type { null };
+struct string {};
+struct array {};
+struct map {};
 
 template <typename CharT>
 class basic_variable
 {
+    template <typename T> struct traits;
+    template <typename T, typename Enable = void> struct tag_traits;
+
 public:
     using value_type = basic_variable<CharT>;
     using reference = typename std::add_lvalue_reference<value_type>::type;
     using const_reference = typename std::add_const<reference>::type;
     using size_type = std::size_t;
 
+private:
     using string_type = std::basic_string<CharT>;
     using array_type = std::vector<value_type>;
-    using map_type = std::map<string_type, value_type>; // FIXME: key = value_type?
+    using map_type = std::map<string_type, value_type>;
 
+public:
     template <typename T>
     class iterator_type
     {
@@ -156,8 +164,8 @@ public:
 
     // Accessor
 
-    template <typename R> R value() const;
-    template <typename R> R value(std::error_code&) const noexcept;
+    template <typename Tag> typename tag_traits<typename std::decay<Tag>::type>::type value() const;
+    template <typename Tag> typename tag_traits<typename std::decay<Tag>::type>::type value(std::error_code&) const noexcept;
     template <typename R> explicit operator R() const;
 
     explicit operator bool() const;
@@ -211,7 +219,6 @@ public:
     bool operator>= (const T&) const;
 
 private:
-    template <typename T> struct traits;
     template <typename T, typename U, typename Enable> friend struct detail::overloader;
     template <typename T, typename U, typename Enable> friend struct detail::operator_overloader;
     template <typename C, typename T, typename Enable> friend struct detail::same_overloader;

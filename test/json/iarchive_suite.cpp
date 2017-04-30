@@ -718,8 +718,8 @@ void test_string()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<variable::string_type>());
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<variable::string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST(value.is<string>());
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<string>(), "alpha");
 }
 
 void test_array()
@@ -728,7 +728,7 @@ void test_array()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<variable::array_type>());
+    TRIAL_PROTOCOL_TEST(value.is<array>());
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
@@ -741,7 +741,7 @@ void test_map()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<variable::map_type>());
+    TRIAL_PROTOCOL_TEST(value.is<map>());
     variable expect = variable::map(
         {
             {"alpha", true},

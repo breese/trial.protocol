@@ -86,7 +86,7 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
             break;
 
         case dynamic::token::code::string:
-            ar.save(data.value<dynamic::variable::string_type>());
+            ar.save(data.value<dynamic::string>());
             break;
 
         case dynamic::token::code::array:
@@ -153,7 +153,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
 
         case token::symbol::string:
             {
-                dynamic::variable::string_type value = {};
+                std::string value;
                 ar.load(value);
                 data = value;
             }
@@ -179,7 +179,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
                 data = dynamic::variable::map();
                 while (!ar.template at<token::end_object>())
                 {
-                    dynamic::variable::map_type::key_type key;
+                    std::string key;
                     ar.load_override(key);
                     dynamic::variable value;
                     ar.load_override(value);

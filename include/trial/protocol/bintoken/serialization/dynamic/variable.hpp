@@ -87,7 +87,7 @@ struct save_overloader< protocol::bintoken::oarchive,
             break;
 
         case dynamic::token::code::string:
-            ar.save(data.value<dynamic::variable::string_type>());
+            ar.save(data.value<dynamic::string>());
             break;
 
         case dynamic::token::code::array:
@@ -156,7 +156,7 @@ struct load_overloader< protocol::bintoken::iarchive,
 
         case token::symbol::string:
             {
-                dynamic::variable::string_type value = {};
+                std::string value;
                 ar.load(value);
                 data = value;
             }
@@ -190,8 +190,7 @@ struct load_overloader< protocol::bintoken::iarchive,
                 data = dynamic::variable::map();
                 while (!ar.template at<token::end_assoc_array>())
                 {
-                    using map_type = dynamic::variable::map_type;
-                    std::pair<map_type::key_type, map_type::mapped_type> value;
+                    std::pair<std::string, dynamic::variable> value;
                     ar.load_override(value);
                     data += dynamic::variable::map({value});
                 }
