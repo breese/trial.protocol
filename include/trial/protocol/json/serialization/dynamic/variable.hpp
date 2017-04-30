@@ -124,7 +124,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
         {
         case token::symbol::null:
             ar.template load<token::null>();
-            data = dynamic::variable::null;
+            data = dynamic::null;
             break;
 
         case token::symbol::boolean:

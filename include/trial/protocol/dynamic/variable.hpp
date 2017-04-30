@@ -39,6 +39,8 @@ template <typename T, typename C, typename Enable> struct same_overloader;
 
 } // namespace detail
 
+enum null_type { null };
+
 template <typename CharT>
 class basic_variable
 {
@@ -48,7 +50,6 @@ public:
     using const_reference = typename std::add_const<reference>::type;
     using size_type = std::size_t;
 
-    enum null_type { null };
     using string_type = std::basic_string<CharT>;
     using array_type = std::vector<value_type>;
     using map_type = std::map<string_type, value_type>; // FIXME: key = value_type?
@@ -150,7 +151,7 @@ public:
     friend basic_variable<T> operator+ (const basic_variable<T>&,
                                         const U&);
     template <typename T>
-    friend basic_variable<T> operator+ (typename basic_variable<T>::null_type,
+    friend basic_variable<T> operator+ (null_type,
                                         const basic_variable<T>&);
 
     // Accessor

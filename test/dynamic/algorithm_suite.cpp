@@ -31,7 +31,7 @@ void accumulate_null()
 {
     variable data;
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<null_type>(), true);
 }
 
 void accumulate_null_with_boolean()
@@ -76,14 +76,14 @@ void accumulate_string()
 
 void accumulate_array_null()
 {
-    variable data = variable::array({ variable::null, variable::null });
+    variable data = variable::array({ null, null });
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<variable::null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<null_type>(), true);
 }
 
 void accumulate_array_null_with_boolean()
 {
-    variable data = variable::array({ variable::null, variable::null });
+    variable data = variable::array({ null, null });
     variable result = std::accumulate(data.begin(), data.end(), variable(true));
     TRIAL_PROTOCOL_TEST_EQUAL(result.is<bool>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<bool>(), true);
@@ -230,7 +230,7 @@ void find_string()
 
 void find_array_null()
 {
-    variable data = variable::array({ variable::null, variable::null, variable::null });
+    variable data = variable::array({ null, null, null });
     auto where = std::adjacent_find(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where != data.end());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
@@ -311,9 +311,9 @@ void find_map_null()
     // Only searches values
     variable data = variable::map(
         {
-            { "alpha", variable::null },
-            { "bravo", variable::null },
-            { "charlie", variable::null }
+            { "alpha", null },
+            { "bravo", null },
+            { "charlie", null }
         });
     auto where = std::adjacent_find(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where != data.end());
@@ -478,7 +478,7 @@ namespace binary_search_suite
 void search_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
@@ -490,7 +490,7 @@ void search_null()
 void search_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
@@ -502,7 +502,7 @@ void search_boolean()
 void search_integer()
 {
     variable data(2);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
@@ -514,7 +514,7 @@ void search_integer()
 void search_number()
 {
     variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), true);
@@ -526,7 +526,7 @@ void search_number()
 void search_string()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
@@ -537,8 +537,8 @@ void search_string()
 
 void search_array()
 {
-    variable data = variable::array({ variable::null, true, 2, 3.0, "alpha", variable::array({ 5 }), variable::map({{ "alice", 6 }}) });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), true);
+    variable data = variable::array({ null, true, 2, 3.0, "alpha", variable::array({ 5 }), variable::map({{ "alice", 6 }}) });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), false), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), true);
@@ -557,7 +557,7 @@ void search_map()
 {
     variable data = variable::map(
         {
-            { "alpha", variable::null },
+            { "alpha", null },
             { "bravo", true },
             { "charlie", 2 },
             { "delta", 3.0 },
@@ -565,7 +565,7 @@ void search_map()
             { "foxtrot", variable::array({ 5 }) },
             { "golf", variable::map({ {"alice", 6} }) }
         });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), variable::null), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), false), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), true);
@@ -603,7 +603,7 @@ namespace copy_suite
 void copy_null_to_array()
 {
     variable data;
-    variable result = variable::array(0, variable::null);
+    variable result = variable::array(0, null);
     std::copy(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 0);
 }
@@ -611,7 +611,7 @@ void copy_null_to_array()
 void copy_boolean_to_array()
 {
     variable data(true);
-    variable result = variable::array(1, variable::null);
+    variable result = variable::array(1, null);
     std::copy(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
     TRIAL_PROTOCOL_TEST(result[0] == true);
@@ -620,7 +620,7 @@ void copy_boolean_to_array()
 void copy_integer_to_array()
 {
     variable data(2);
-    variable result = variable::array(1, variable::null);
+    variable result = variable::array(1, null);
     std::copy(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
     TRIAL_PROTOCOL_TEST(result[0] == 2);
@@ -629,7 +629,7 @@ void copy_integer_to_array()
 void copy_number_to_array()
 {
     variable data(3.0);
-    variable result = variable::array(1, variable::null);
+    variable result = variable::array(1, null);
     std::copy(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
     TRIAL_PROTOCOL_TEST(result[0] == 3.0);
@@ -638,7 +638,7 @@ void copy_number_to_array()
 void copy_string_to_array()
 {
     variable data("alpha");
-    variable result = variable::array(1, variable::null);
+    variable result = variable::array(1, null);
     std::copy(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
     TRIAL_PROTOCOL_TEST(result[0] == "alpha");
@@ -647,7 +647,7 @@ void copy_string_to_array()
 void copy_array_to_array()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
-    variable result = variable::array(data.size(), variable::null);
+    variable result = variable::array(data.size(), null);
     std::copy(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  result.begin(), result.end(),
@@ -881,10 +881,10 @@ void test_string()
 
 void test_array_null()
 {
-    variable alpha = variable::array({ variable::null, variable::null });
+    variable alpha = variable::array({ null, null });
     TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
                               true);
-    variable bravo = variable::array({ variable::null, variable::null, variable::null });
+    variable bravo = variable::array({ null, null, null });
     TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
                               true);
 }
@@ -969,7 +969,7 @@ void find_null()
 {
     variable data;
     {
-        auto result = std::equal_range(data.begin(), data.end(), variable::null);
+        auto result = std::equal_range(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
     }
@@ -999,7 +999,7 @@ void find_boolean()
 {
     variable data(true);
     {
-        auto result = std::equal_range(data.begin(), data.end(), variable::null);
+        auto result = std::equal_range(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
     }
@@ -1029,7 +1029,7 @@ void find_integer()
 {
     variable data(2);
     {
-        auto result = std::equal_range(data.begin(), data.end(), variable::null);
+        auto result = std::equal_range(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
     }
@@ -1059,7 +1059,7 @@ void find_number()
 {
     variable data(3.0);
     {
-        auto result = std::equal_range(data.begin(), data.end(), variable::null);
+        auto result = std::equal_range(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
     }
@@ -1089,7 +1089,7 @@ void find_string()
 {
     variable data("alpha");
     {
-        auto result = std::equal_range(data.begin(), data.end(), variable::null);
+        auto result = std::equal_range(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
     }
@@ -1212,7 +1212,7 @@ void find_array_string()
 void find_array_value()
 {
     // array must be sorted
-    variable data = variable::array({ variable::null, true, 2, 3.0, "alpha" });
+    variable data = variable::array({ null, true, 2, 3.0, "alpha" });
     {
         auto result = std::equal_range(data.begin(), data.end(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
@@ -1262,7 +1262,7 @@ void test_null()
 {
     variable data;
     // Cannot iterate over null, so nothing is found
-    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), variable::null) == data.end());
+    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), null) == data.end());
 }
 
 void test_boolean()
@@ -1367,7 +1367,7 @@ void test_null()
     variable data;
     // Cannot iterate over null, so nothing is found
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
-                                     [] (const variable& value) { return value == variable::null; }) == data.end());
+                                     [] (const variable& value) { return value == null; }) == data.end());
 }
 
 void test_boolean()
@@ -1492,7 +1492,7 @@ namespace iota_suite
 
 void test_array_boolean()
 {
-    variable data = variable::array(4, variable::null);
+    variable data = variable::array(4, null);
     std::iota(data.begin(), data.end(), false);
     variable result = variable::array({ false, true, true, true });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
@@ -1502,7 +1502,7 @@ void test_array_boolean()
 
 void test_array_integer()
 {
-    variable data = variable::array(4, variable::null);
+    variable data = variable::array(4, null);
     std::iota(data.begin(), data.end(), 1);
     variable result = variable::array({ 1, 2, 3, 4 });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
@@ -1512,7 +1512,7 @@ void test_array_integer()
 
 void test_array_number()
 {
-    variable data = variable::array(4, variable::null);
+    variable data = variable::array(4, null);
     std::iota(data.begin(), data.end(), 1.0);
     variable result = variable::array({ 1.0, 2.0, 3.0, 4.0 });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
@@ -1674,7 +1674,7 @@ namespace is_sorted_suite
 
 void test_array_null()
 {
-    variable sorted = variable::array({ variable::null, variable::null, variable::null });
+    variable sorted = variable::array({ null, null, null });
     TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
 }
 
@@ -1750,7 +1750,7 @@ void find_null()
 {
     variable data;
     {
-        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        auto where = std::lower_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -1775,7 +1775,7 @@ void find_boolean()
 {
     variable data(true);
     {
-        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        auto where = std::lower_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -1800,7 +1800,7 @@ void find_integer()
 {
     variable data(2);
     {
-        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        auto where = std::lower_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -1825,7 +1825,7 @@ void find_number()
 {
     variable data(3.0);
     {
-        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        auto where = std::lower_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -1850,7 +1850,7 @@ void find_string()
 {
     variable data("alpha");
     {
-        auto where = std::lower_bound(data.begin(), data.end(), variable::null);
+        auto where = std::lower_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -2601,28 +2601,28 @@ void find_string()
 
 void find_array_boolean()
 {
-    variable data = variable::array({ false, true, variable::null, 2, 3.0, "alpha" });
+    variable data = variable::array({ false, true, null, 2, 3.0, "alpha" });
     auto where = std::partition_point(data.begin(), data.end(), is_boolean);
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_integer()
 {
-    variable data = variable::array({ 0, 2, variable::null, true, 3.0, "alpha" });
+    variable data = variable::array({ 0, 2, null, true, 3.0, "alpha" });
     auto where = std::partition_point(data.begin(), data.end(), is_integer);
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_number()
 {
-    variable data = variable::array({ 0.0, 3.0, variable::null, true, 2, "alpha" });
+    variable data = variable::array({ 0.0, 3.0, null, true, 2, "alpha" });
     auto where = std::partition_point(data.begin(), data.end(), is_number);
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_string()
 {
-    variable data = variable::array({ "", "alpha", variable::null, true, 2, 3.0 });
+    variable data = variable::array({ "", "alpha", null, true, 2, 3.0 });
     auto where = std::partition_point(data.begin(), data.end(), is_string);
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
@@ -2652,7 +2652,7 @@ namespace remove_suite
 void remove_null()
 {
     variable data;
-    auto where = std::remove(data.begin(), data.end(), variable::null);
+    auto where = std::remove(data.begin(), data.end(), null);
     TRIAL_PROTOCOL_TEST(where == data.begin());
 }
 
@@ -2695,7 +2695,7 @@ void remove_string()
 void remove_array_null()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
-    auto where = std::remove(data.begin(), data.end(), variable::null);
+    auto where = std::remove(data.begin(), data.end(), null);
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
@@ -3421,9 +3421,9 @@ void test_string()
 
 void test_array_null()
 {
-    variable data = variable::array({ variable::null, variable::null, variable::null });
+    variable data = variable::array({ null, null, null });
     auto end = std::unique(data.begin(), data.end());
-    variable expect = variable::array({ variable::null });
+    variable expect = variable::array({ null });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -3507,7 +3507,7 @@ void find_null()
 {
     variable data;
     {
-        auto where = std::upper_bound(data.begin(), data.end(), variable::null);
+        auto where = std::upper_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -3532,7 +3532,7 @@ void find_boolean()
 {
     variable data(true);
     {
-        auto where = std::upper_bound(data.begin(), data.end(), variable::null);
+        auto where = std::upper_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -3557,7 +3557,7 @@ void find_integer()
 {
     variable data(2);
     {
-        auto where = std::upper_bound(data.begin(), data.end(), variable::null);
+        auto where = std::upper_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -3582,7 +3582,7 @@ void find_number()
 {
     variable data(3.0);
     {
-        auto where = std::upper_bound(data.begin(), data.end(), variable::null);
+        auto where = std::upper_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -3607,7 +3607,7 @@ void find_string()
 {
     variable data("alpha");
     {
-        auto where = std::upper_bound(data.begin(), data.end(), variable::null);
+        auto where = std::upper_bound(data.begin(), data.end(), null);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {

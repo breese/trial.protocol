@@ -1285,7 +1285,7 @@ void test_null()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::variable::null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::null_type>(), true);
 }
 
 void test_boolean()

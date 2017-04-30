@@ -24,8 +24,8 @@ namespace dynamic
 namespace detail
 {
 
-template <typename CharT, typename T>
-using is_null = std::is_same<T, typename basic_variable<CharT>::null_type>;
+template <typename T>
+using is_null = std::is_same<T, null_type>;
 
 template <typename T>
 using is_boolean = protocol::detail::is_bool<T>;
@@ -79,13 +79,11 @@ template <typename CharT, typename U>
 struct overloader<
     basic_variable<CharT>,
     U,
-    typename std::enable_if<detail::is_null<CharT, U>::value>::type>
+    typename std::enable_if<detail::is_null<U>::value>::type>
 {
     using variable_type = basic_variable<CharT>;
-    using type = typename variable_type::null_type;
+    using type = null_type;
     using category_type = type;
-
-    using null_type = typename variable_type::null_type;
 
     static U convert(const variable_type& self, std::error_code& error)
     {
@@ -136,7 +134,6 @@ struct overloader<
     using category_type = type;
     using variable_type = basic_variable<CharT>;
 
-    using null_type = typename variable_type::null_type;
     using array_type = typename variable_type::array_type;
 
     static U convert(const variable_type& self, std::error_code& error)
@@ -357,7 +354,6 @@ struct overloader<
     using category_type = int;
     using variable_type = basic_variable<CharT>;
 
-    using null_type = typename variable_type::null_type;
     using array_type = typename variable_type::array_type;
 
     static U convert(const variable_type& self, std::error_code& error)
@@ -562,7 +558,6 @@ struct overloader<
     using category_type = int;
     using variable_type = basic_variable<CharT>;
 
-    using null_type = typename variable_type::null_type;
     using array_type = typename variable_type::array_type;
 
     static U convert(const variable_type& self, std::error_code& error)
@@ -766,7 +761,6 @@ struct overloader<
     using category_type = float;
     using variable_type = basic_variable<CharT>;
 
-    using null_type = typename variable_type::null_type;
     using array_type = typename variable_type::array_type;
 
     static U convert(const variable_type& self, std::error_code& error)
@@ -986,7 +980,6 @@ struct overloader<
     using type = typename variable_type::string_type;
     using category_type = type;
 
-    using null_type = typename variable_type::null_type;
     using string_type = typename variable_type::string_type;
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
@@ -1066,7 +1059,6 @@ struct overloader<
     using type = typename variable_type::array_type;
     using category_type = type;
 
-    using null_type = typename variable_type::null_type;
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
 
@@ -1162,7 +1154,6 @@ struct overloader<
     using type = typename variable_type::map_type;
     using category_type = type;
 
-    using null_type = typename variable_type::null_type;
     using map_type = typename variable_type::map_type;
 
     static U convert(const variable_type& self, std::error_code& error)
@@ -1348,7 +1339,6 @@ struct operator_overloader<
     basic_variable<protocol::detail::meta::identity_t<CharT>>>
 {
     using variable_type = basic_variable<CharT>;
-    using null_type = typename variable_type::null_type;
     using string_type = typename variable_type::string_type;
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
@@ -2345,7 +2335,7 @@ auto operator+ (const basic_variable<T>& lhs, const U& rhs) -> basic_variable<T>
 }
 
 template <typename T>
-auto operator+ (typename basic_variable<T>::null_type,
+auto operator+ (null_type,
                 const basic_variable<T>& rhs) -> basic_variable<T>
 {
     basic_variable<T> result;

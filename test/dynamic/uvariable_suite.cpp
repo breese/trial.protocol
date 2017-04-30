@@ -28,7 +28,7 @@ void test_ctor()
 {
     {
         uvariable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<uvariable::null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
     }
     {
         uvariable data(true);

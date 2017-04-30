@@ -679,7 +679,7 @@ void test_null()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value == variable::null);
+    TRIAL_PROTOCOL_TEST(value == null);
 }
 
 void test_boolean()

@@ -29,8 +29,8 @@ void compare_null_equal_null()
 
 void compare_null_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != null, false);
 }
 
 void compare_null_equal_boolean()
@@ -140,8 +140,8 @@ void compare_null_equal_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array({ variable::null }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array({ variable::null }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array({ null }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array({ null }), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array({ 1, 2, 3 }), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array({ 1, 2, 3 }), true);
@@ -167,11 +167,11 @@ void compare_boolean_equal_null()
 
 void compare_boolean_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != null, true);
 }
 
 void compare_boolean_equal_boolean()
@@ -329,15 +329,15 @@ void compare_integer_equal_null()
 
 void compare_integer_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != null, true);
 }
 
 void compare_integer_equal_boolean()
@@ -923,16 +923,16 @@ void compare_number_equal_null()
 void compare_number_equal_null_literal()
 {
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != null, true);
     }
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != null, true);
     }
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != null, true);
     }
 }
 
@@ -1346,10 +1346,10 @@ void compare_string_equal_null()
 
 void compare_string_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != null, true);
 }
 
 void compare_string_equal_boolean()
@@ -1602,10 +1602,10 @@ void compare_array_equal_null()
 
 void compare_array_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != null, true);
 }
 
 void compare_array_equal_boolean()
@@ -1855,10 +1855,10 @@ void compare_map_equal_null()
 
 void compare_map_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != null, true);
 }
 
 void compare_map_equal_boolean()
@@ -2210,10 +2210,10 @@ void compare_null_with_null()
 
 void compare_null_with_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= null, true);
 }
 
 void compare_null_with_boolean()
@@ -2437,15 +2437,15 @@ void compare_boolean_with_null()
 
 void compare_boolean_with_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= null, true);
 }
 
 void compare_boolean_with_boolean()
@@ -2808,26 +2808,26 @@ void compare_integer_with_null()
 void compare_integer_with_null_literal()
 {
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable::null, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= null, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > variable::null, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) < null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) <= null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) > null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) >= null, true);
     }
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable::null, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= null, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > variable::null, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) < null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) <= null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) > null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) >= null, true);
     }
 }
 
@@ -3643,22 +3643,22 @@ void compare_number_with_null()
 void compare_number_with_null_literal()
 {
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > variable::null, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) <= null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) > null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) >= null, true);
     }
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable::null, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= null, true);
     }
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= variable::null, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > variable::null, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= variable::null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) < null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) <= null, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) > null, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) >= null, true);
     }
 }
 
@@ -4945,15 +4945,15 @@ void compare_string_with_null()
 
 void compare_string_with_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") <= variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") > variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") >= variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") >= null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable::null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable::null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable::null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= null, true);
 }
 
 void compare_string_with_boolean()
@@ -5189,7 +5189,7 @@ namespace operator_bool_suite
 
 void test_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(bool(variable::null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(bool(null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(bool(variable()), false);
 }
 
@@ -5252,7 +5252,7 @@ namespace equal_to_suite
 
 void compare_null_with_null()
 {
-    TRIAL_PROTOCOL_TEST(std::equal_to<variable>()(variable(), variable::null));
+    TRIAL_PROTOCOL_TEST(std::equal_to<variable>()(variable(), null));
     TRIAL_PROTOCOL_TEST(std::equal_to<variable>()(variable(), variable()));
 }
 
@@ -5290,7 +5290,7 @@ void compare_null_with_number_literal()
 
 void compare_boolean_with_null()
 {
-    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(false), variable::null));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(false), null));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(false), variable()));
 }
 
@@ -5356,7 +5356,7 @@ namespace not_equal_to_suite
 
 void compare_null_with_null()
 {
-    TRIAL_PROTOCOL_TEST(!std::not_equal_to<variable>()(variable(), variable::null));
+    TRIAL_PROTOCOL_TEST(!std::not_equal_to<variable>()(variable(), null));
     TRIAL_PROTOCOL_TEST(!std::not_equal_to<variable>()(variable(), variable()));
 }
 
@@ -5394,7 +5394,7 @@ void compare_null_with_number_literal()
 
 void compare_boolean_with_null()
 {
-    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), variable::null));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), null));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), variable()));
 }
 
@@ -5460,7 +5460,7 @@ namespace less_suite
 
 void compare_null_with_null()
 {
-    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(), variable::null));
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(), null));
     TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(), variable()));
 }
 
@@ -5498,7 +5498,7 @@ void compare_null_with_number_literal()
 
 void compare_boolean_with_null()
 {
-    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(false), variable::null));
+    TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(false), null));
     TRIAL_PROTOCOL_TEST(!std::less<variable>()(variable(false), variable()));
 }
 

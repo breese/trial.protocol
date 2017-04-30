@@ -691,7 +691,7 @@ void get_null()
 {
     variable data;
     auto where = data.begin();
-    TRIAL_PROTOCOL_TEST(*where == variable::null);
+    TRIAL_PROTOCOL_TEST(*where == null);
 }
 
 void get_boolean()
@@ -850,7 +850,7 @@ void test_array()
 
 void test_array_nulls()
 {
-    variable data = variable::array({ variable::null, variable::null, variable::null });
+    variable data = variable::array({ null, null, null });
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 3);
 }
 
@@ -954,7 +954,7 @@ void sum_array()
 
 void sum_array_nulls()
 {
-    variable data = variable::array({ variable::null, variable::null, variable::null });
+    variable data = variable::array({ null, null, null });
     variable::size_type size = 0;
     for (const auto& value : data)
     {
