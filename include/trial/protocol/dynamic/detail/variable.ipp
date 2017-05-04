@@ -113,7 +113,7 @@ struct basic_variable<CharT>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::string>::value>::type>
 {
-    using type = string_type;
+    using type = typename basic_variable<CharT>::string_type;
 };
 
 template <typename CharT>
@@ -122,7 +122,7 @@ struct basic_variable<CharT>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::array>::value>::type>
 {
-    using type = array_type;
+    using type = typename basic_variable<CharT>::array_type;
 };
 
 template <typename CharT>
@@ -131,7 +131,7 @@ struct basic_variable<CharT>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::map>::value>::type>
 {
-    using type = map_type;
+    using type = typename basic_variable<CharT>::map_type;
 };
 
 //-----------------------------------------------------------------------------
