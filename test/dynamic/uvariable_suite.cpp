@@ -28,19 +28,19 @@ void test_ctor()
 {
     {
         uvariable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     }
     {
         uvariable data(true);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<boolean>(), true);
     }
     {
         uvariable data(2);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
     }
     {
         uvariable data(3.0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
     }
     {
         const unsigned char literal[] = { 'a', 'l', 'p', 'h', 'a', 0 };

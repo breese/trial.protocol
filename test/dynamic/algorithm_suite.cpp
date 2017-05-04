@@ -15,9 +15,9 @@
 
 using namespace trial::protocol::dynamic;
 
-auto is_boolean = [] (const variable& value) { return value.is<bool>(); };
-auto is_integer = [] (const variable& value) { return value.is<int>(); };
-auto is_number = [] (const variable& value) { return value.is<float>(); };
+auto is_boolean = [] (const variable& value) { return value.is<boolean>(); };
+auto is_integer = [] (const variable& value) { return value.is<integer>(); };
+auto is_number = [] (const variable& value) { return value.is<number>(); };
 auto is_string = [] (const variable& value) { return value.is<string>(); };
 
 //-----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ void accumulate_null()
 {
     variable data;
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<nullable>(), true);
 }
 
 void accumulate_null_with_boolean()
@@ -78,7 +78,7 @@ void accumulate_array_null()
 {
     variable data = variable::array({ null, null });
     variable result = std::accumulate(data.begin(), data.end(), variable());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<nullable>(), true);
 }
 
 void accumulate_array_null_with_boolean()

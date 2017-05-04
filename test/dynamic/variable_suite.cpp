@@ -25,13 +25,13 @@ namespace ctor_suite
 void construct_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void construct_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<boolean>(), true);
 }
 
 void construct_signed_short_int()
@@ -39,7 +39,7 @@ void construct_signed_short_int()
     signed short int value = 0;
     variable data(value);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_unsigned_short_int()
@@ -47,70 +47,70 @@ void construct_unsigned_short_int()
     unsigned short int value = 0;
     variable data(value);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_signed_int()
 {
     variable data(0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_unsigned_int()
 {
     variable data(0U);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_signed_long_int()
 {
     variable data(0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_unsigned_long_int()
 {
     variable data(0UL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_signed_long_long_int()
 {
     variable data(0LL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_unsigned_long_long_int()
 {
     variable data(0ULL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 }
 
 void construct_float()
 {
     variable data(1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
 }
 
 void construct_double()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
 }
 
 void construct_long_double()
 {
     variable data(1.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
 }
 
 void construct_string_with_string()
@@ -227,7 +227,7 @@ namespace is_suite
 void is_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void is_boolean()
@@ -829,8 +829,8 @@ void copy_null()
 {
     variable data;
     variable copy(data);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<null_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<null_type>(), null);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<nullable>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<nullable>(), null);
 }
 
 void copy_boolean()
@@ -1065,8 +1065,8 @@ void move_null()
 {
     variable data;
     variable copy(std::move(data));
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<null_type>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<null_type>(), null);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.is<nullable>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(copy.value<nullable>(), null);
 }
 
 void move_boolean()
@@ -1281,15 +1281,15 @@ namespace assign_suite
 void assign_null_with_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_null_with_boolean()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data = true;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
 }
@@ -1300,7 +1300,7 @@ void assign_null_with_integer()
     {
         signed short int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed short int>(), value);
@@ -1308,7 +1308,7 @@ void assign_null_with_integer()
     {
         signed short int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -1317,7 +1317,7 @@ void assign_null_with_integer()
     {
         signed short int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
@@ -1327,7 +1327,7 @@ void assign_null_with_integer()
     {
         unsigned short int value = 2U;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned short int>(), value);
@@ -1335,7 +1335,7 @@ void assign_null_with_integer()
     {
         unsigned short int value = 2U;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -1344,7 +1344,7 @@ void assign_null_with_integer()
     {
         unsigned short int value = 2U;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
@@ -1354,7 +1354,7 @@ void assign_null_with_integer()
     {
         signed int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), value);
@@ -1362,7 +1362,7 @@ void assign_null_with_integer()
     {
         signed int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -1371,7 +1371,7 @@ void assign_null_with_integer()
     {
         signed int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
@@ -1381,7 +1381,7 @@ void assign_null_with_integer()
     {
         unsigned int value = 2U;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), value);
@@ -1389,7 +1389,7 @@ void assign_null_with_integer()
     {
         unsigned int value = 2U;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -1398,7 +1398,7 @@ void assign_null_with_integer()
     {
         unsigned int value = 2U;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
@@ -1408,7 +1408,7 @@ void assign_null_with_integer()
     {
         signed long int value = 2L;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long int>(), value);
@@ -1416,7 +1416,7 @@ void assign_null_with_integer()
     {
         signed long int value = 2L;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -1425,7 +1425,7 @@ void assign_null_with_integer()
     {
         signed long int value = 2L;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
@@ -1435,7 +1435,7 @@ void assign_null_with_integer()
     {
         unsigned long int value = 2UL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long int>(), value);
@@ -1443,7 +1443,7 @@ void assign_null_with_integer()
     {
         unsigned long int value = 2UL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -1452,7 +1452,7 @@ void assign_null_with_integer()
     {
         unsigned long int value = 2UL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
@@ -1462,7 +1462,7 @@ void assign_null_with_integer()
     {
         signed long long int value = 2LL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long long int>(), value);
@@ -1470,7 +1470,7 @@ void assign_null_with_integer()
     {
         signed long long int value = 2LL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -1479,7 +1479,7 @@ void assign_null_with_integer()
     {
         signed long long int value = 2LL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
@@ -1489,7 +1489,7 @@ void assign_null_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = value;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long long int>(), value);
@@ -1497,7 +1497,7 @@ void assign_null_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -1506,7 +1506,7 @@ void assign_null_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(value);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
@@ -1518,60 +1518,60 @@ void assign_null_with_number()
 {
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = 3.0f;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(3.0f);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(3.0f);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = 3.0;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(3.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(3.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = 3.0L;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(3.0L);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         variable number(3.0L);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
@@ -1581,7 +1581,7 @@ void assign_null_with_number()
 void assign_null_with_string()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data = std::string("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
@@ -1589,7 +1589,7 @@ void assign_null_with_string()
 void assign_null_with_string_literal()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data = "alpha";
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
 }
@@ -1597,7 +1597,7 @@ void assign_null_with_string_literal()
 void assign_null_with_array()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data = variable::array({ true, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
@@ -1605,7 +1605,7 @@ void assign_null_with_array()
 void assign_null_with_map()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
@@ -1615,7 +1615,7 @@ void assign_boolean_with_null()
     variable data(true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_boolean_with_boolean()
@@ -1940,7 +1940,7 @@ void assign_signed_int_with_null()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_signed_int_with_boolean()
@@ -2272,7 +2272,7 @@ void assign_unsigned_int_with_null()
     variable data(input);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_unsigned_int_with_boolean()
@@ -2603,7 +2603,7 @@ void assign_float_with_null()
     variable data(3.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_float_with_boolean()
@@ -2703,7 +2703,7 @@ void assign_double_with_null()
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_double_with_boolean()
@@ -2803,7 +2803,7 @@ void assign_long_double_with_null()
     variable data(3.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_long_double_with_boolean()
@@ -2903,7 +2903,7 @@ void assign_string_with_null()
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_string_with_boolean()
@@ -3015,7 +3015,7 @@ void assign_array_with_null()
     variable data = variable::array({ true, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_array_with_boolean()
@@ -3135,7 +3135,7 @@ void assign_map_with_null()
     variable data = variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     data = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void assign_map_with_boolean()
@@ -3346,15 +3346,15 @@ namespace append_suite
 void append_null_with_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data += null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void append_null_with_boolean()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data += variable(true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
@@ -3365,7 +3365,7 @@ void append_null_with_integer()
     {
         signed short int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed short int>(), value);
@@ -3373,7 +3373,7 @@ void append_null_with_integer()
     {
         unsigned short int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned short int>(), value);
@@ -3381,7 +3381,7 @@ void append_null_with_integer()
     {
         signed int value = 2;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), value);
@@ -3389,7 +3389,7 @@ void append_null_with_integer()
     {
         unsigned int value = 2U;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), value);
@@ -3397,7 +3397,7 @@ void append_null_with_integer()
     {
         signed long int value = 2L;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long int>(), value);
@@ -3405,7 +3405,7 @@ void append_null_with_integer()
     {
         unsigned long int value = 2UL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long int>(), value);
@@ -3413,7 +3413,7 @@ void append_null_with_integer()
     {
         signed long long int value = 2LL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed long long int>(), value);
@@ -3421,7 +3421,7 @@ void append_null_with_integer()
     {
         unsigned long long int value = 2ULL;
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(value);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned long long int>(), value);
@@ -3432,21 +3432,21 @@ void append_null_with_number()
 {
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(3.0f);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 3.0f);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 3.0);
     }
     {
         variable data;
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data += variable(3.0L);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(), 3.0L);
@@ -3456,7 +3456,7 @@ void append_null_with_number()
 void append_null_with_string()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data += variable("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
@@ -3465,7 +3465,7 @@ void append_null_with_string()
 void append_null_with_array()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data += variable::array({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     variable expect = variable::array({ true, 2, 3.0, "alpha" });
@@ -3477,7 +3477,7 @@ void append_null_with_array()
 void append_null_with_map()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data += variable::map({{ "alpha", "hydrogen" }});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     variable expect = variable::map({{ "alpha", "hydrogen" }});
@@ -5256,7 +5256,7 @@ void test_null_as_null()
 {
     variable data;
     std::error_code error;
-    data.value<null_type>(error);
+    data.value<nullable>(error);
     TRIAL_PROTOCOL_TEST(!error);
 }
 
@@ -5336,7 +5336,7 @@ void fail_boolean_as_null()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), false);
     TRIAL_PROTOCOL_TEST(!error);
-    data.value<null_type>(error);
+    data.value<nullable>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5418,7 +5418,7 @@ void fail_integer_as_null()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), 0);
     TRIAL_PROTOCOL_TEST(!error);
-    data.value<null_type>(error);
+    data.value<nullable>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5539,7 +5539,7 @@ void fail_float_as_null()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0);
     TRIAL_PROTOCOL_TEST(!error);
-    data.value<null_type>(error);
+    data.value<nullable>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5637,7 +5637,7 @@ void fail_double_as_null()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
     TRIAL_PROTOCOL_TEST(!error);
-    data.value<null_type>(error);
+    data.value<nullable>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5735,7 +5735,7 @@ void fail_long_double_as_null()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0);
     TRIAL_PROTOCOL_TEST(!error);
-    data.value<null_type>(error);
+    data.value<nullable>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -5833,7 +5833,7 @@ void fail_string_as_null()
     std::error_code error;
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(error), "alpha");
     TRIAL_PROTOCOL_TEST(!error);
-    data.value<null_type>(error);
+    data.value<nullable>(error);
     TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
 }
 
@@ -6410,9 +6410,9 @@ namespace clear_suite
 void test_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     data.clear();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
 void test_boolean()

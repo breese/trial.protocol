@@ -679,6 +679,7 @@ void test_null()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<nullable>());
     TRIAL_PROTOCOL_TEST(value == null);
 }
 
@@ -688,7 +689,7 @@ void test_boolean()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<bool>());
+    TRIAL_PROTOCOL_TEST(value.is<boolean>());
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<bool>(), true);
 }
 
@@ -698,7 +699,7 @@ void test_integer()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<int>());
+    TRIAL_PROTOCOL_TEST(value.is<integer>());
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<signed int>(), 2);
 }
 
@@ -708,7 +709,7 @@ void test_number()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<float>());
+    TRIAL_PROTOCOL_TEST(value.is<number>());
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<double>(), 3.0);
 }
 

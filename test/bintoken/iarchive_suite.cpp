@@ -1285,7 +1285,7 @@ void test_null()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::null_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::nullable>(), true);
 }
 
 void test_boolean()
@@ -1294,7 +1294,7 @@ void test_boolean()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::boolean>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<bool>(), true);
 }
 
@@ -1304,7 +1304,7 @@ void test_integer_small()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::integer>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<signed int>(), 2);
 }
 
@@ -1314,7 +1314,7 @@ void test_integer()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::integer>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<int>(), 2);
 }
 
@@ -1324,7 +1324,7 @@ void test_number()
     format::iarchive in(input);
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<float>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::number>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<float>(), 1.0f);
 }
 

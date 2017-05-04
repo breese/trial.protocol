@@ -39,7 +39,7 @@ template <typename C, typename T, typename Enable> struct same_overloader;
 
 } // namespace detail
 
-enum null_type { null };
+enum nullable { null };
 struct boolean {};
 struct integer {};
 struct number {};
@@ -130,7 +130,7 @@ public:
     template <typename T> basic_variable(T);
     // Null constructor
     basic_variable();
-    basic_variable(const null_type&);
+    basic_variable(const nullable&);
     // String constructor
     basic_variable(const CharT *);
     // Array constructor
@@ -149,7 +149,7 @@ public:
     basic_variable& operator= (const basic_variable&);
     basic_variable& operator= (basic_variable&&);
     template <typename T> basic_variable& operator= (T);
-    basic_variable& operator= (null_type);
+    basic_variable& operator= (nullable);
     basic_variable& operator= (const CharT *);
 
     // Addition / concatenation
@@ -162,7 +162,7 @@ public:
     friend basic_variable<T> operator+ (const basic_variable<T>&,
                                         const U&);
     template <typename T>
-    friend basic_variable<T> operator+ (null_type,
+    friend basic_variable<T> operator+ (nullable,
                                         const basic_variable<T>&);
 
     // Accessor
@@ -228,7 +228,7 @@ private:
     template <typename T> struct similar_visitor;
 
     using storage_type = protocol::detail::small_union<sizeof(double),
-                                                       null_type,
+                                                       nullable,
                                                        bool,
                                                        signed short int,
                                                        unsigned short int,

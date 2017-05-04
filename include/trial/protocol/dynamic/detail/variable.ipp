@@ -25,7 +25,7 @@ namespace detail
 {
 
 template <typename T>
-using is_null = std::is_same<T, null_type>;
+using is_null = std::is_same<T, nullable>;
 
 template <typename T>
 using is_boolean = protocol::detail::is_bool<T>;
@@ -75,9 +75,9 @@ template <typename CharT>
 template <typename T>
 struct basic_variable<CharT>::tag_traits<
     T,
-    typename std::enable_if<std::is_same<T, null_type>::value>::type>
+    typename std::enable_if<std::is_same<T, nullable>::value>::type>
 {
-    using type = null_type;
+    using type = nullable;
 };
 
 template <typename CharT>
@@ -156,14 +156,14 @@ struct overloader<
     typename std::enable_if<detail::is_null<U>::value>::type>
 {
     using variable_type = basic_variable<CharT>;
-    using type = null_type;
+    using type = nullable;
     using category_type = type;
 
     static U convert(const variable_type& self, std::error_code& error)
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             return {};
 
         default:
@@ -176,7 +176,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             return true;
 
         default:
@@ -305,7 +305,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             return true;
 
         case variable_type::template traits<bool>::value:
@@ -353,7 +353,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             self.storage = other; // Overwrite null
             break;
 
@@ -517,7 +517,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             return true;
 
         case variable_type::template traits<bool>::value:
@@ -557,7 +557,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             self.storage = other; // Overwrite null
             break;
 
@@ -721,7 +721,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             return true;
 
         case variable_type::template traits<bool>::value:
@@ -761,7 +761,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             self.storage = other; // Overwrite null
             break;
 
@@ -932,7 +932,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             return true;
 
         case variable_type::template traits<bool>::value:
@@ -980,7 +980,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             self.storage = other; // Overwrite null
             break;
 
@@ -1103,7 +1103,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             self.storage = other; // Overwrite null
             break;
 
@@ -1199,7 +1199,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             self.storage = other; // Overwrite null
             break;
 
@@ -1290,7 +1290,7 @@ struct overloader<
     {
         switch (self.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
+        case variable_type::template traits<nullable>::value:
             self.storage = other; // Overwrite null
             break;
 
@@ -1422,9 +1422,9 @@ struct operator_overloader<
     {
         switch (rhs.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
-            return detail::template overloader<variable_type, null_type>::
-                equal(lhs, rhs.template value<null_type>());
+        case variable_type::template traits<nullable>::value:
+            return detail::template overloader<variable_type, nullable>::
+                equal(lhs, rhs.template value<nullable>());
 
         case variable_type::template traits<bool>::value:
             return detail::template overloader<variable_type, bool>::
@@ -1494,9 +1494,9 @@ struct operator_overloader<
     {
         switch (rhs.storage.which())
         {
-        case variable_type::template traits<null_type>::value:
-            return detail::template overloader<variable_type, null_type>::
-                less(lhs, rhs.template value<null_type>());
+        case variable_type::template traits<nullable>::value:
+            return detail::template overloader<variable_type, nullable>::
+                less(lhs, rhs.template value<nullable>());
 
         case variable_type::template traits<bool>::value:
             return detail::template overloader<variable_type, bool>::
@@ -1643,7 +1643,7 @@ basic_variable<CharT>::iterator_type<T>::iterator_type(pointer p,
 {
     switch (scope->storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         current = pointer(nullptr);
         break;
 
@@ -1754,7 +1754,7 @@ auto basic_variable<CharT>::iterator_type<T>::operator++ () -> iterator_type&
 
     switch (scope->storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
     case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
@@ -1830,7 +1830,7 @@ auto basic_variable<CharT>::iterator_type<T>::value() -> reference
 
     switch (scope->storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
     case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
@@ -1864,7 +1864,7 @@ auto basic_variable<CharT>::iterator_type<T>::operator-> () -> pointer
 
     switch (scope->storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
     case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
@@ -1903,7 +1903,7 @@ bool basic_variable<CharT>::iterator_type<T>::operator== (const iterator_type<T>
 
     switch (scope->storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
     case traits<bool>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
@@ -1972,7 +1972,7 @@ basic_variable<CharT>::basic_variable(const basic_variable& other)
 {
     switch (other.storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         storage = null;
         break;
     case traits<bool>::value:
@@ -2032,7 +2032,7 @@ basic_variable<CharT>::basic_variable(basic_variable&& other)
 {
     switch (other.storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         storage = null;
         break;
     case traits<bool>::value:
@@ -2094,7 +2094,7 @@ basic_variable<CharT>::basic_variable(T value)
 }
 
 template <typename CharT>
-basic_variable<CharT>::basic_variable(const null_type&)
+basic_variable<CharT>::basic_variable(const nullable&)
     : storage(null)
 {
 }
@@ -2160,7 +2160,7 @@ auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_var
 {
     switch (other.storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         storage = null;
         break;
     case traits<bool>::value:
@@ -2220,7 +2220,7 @@ auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable
 {
     switch (other.storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         storage = null;
         break;
     case traits<bool>::value:
@@ -2281,7 +2281,7 @@ auto basic_variable<CharT>::operator= (T value) -> basic_variable&
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator= (null_type) -> basic_variable&
+auto basic_variable<CharT>::operator= (nullable) -> basic_variable&
 {
     storage = null;
     return *this;
@@ -2299,9 +2299,9 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
 {
     switch (other.storage.which())
     {
-    case traits<null_type>::value:
-        detail::overloader<value_type, null_type>::
-            append(*this, other.storage.template get<null_type>());
+    case traits<nullable>::value:
+        detail::overloader<value_type, nullable>::
+            append(*this, other.storage.template get<nullable>());
         break;
     case traits<bool>::value:
         detail::overloader<value_type, bool>::
@@ -2409,7 +2409,7 @@ auto operator+ (const basic_variable<T>& lhs, const U& rhs) -> basic_variable<T>
 }
 
 template <typename T>
-auto operator+ (null_type,
+auto operator+ (nullable,
                 const basic_variable<T>& rhs) -> basic_variable<T>
 {
     basic_variable<T> result;
@@ -2448,7 +2448,7 @@ basic_variable<CharT>::operator bool() const
 {
     switch (storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         return false;
 
     case traits<bool>::value:
@@ -2572,7 +2572,7 @@ token::code::value basic_variable<CharT>::code() const
 {
     switch (storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         return token::code::null;
     case traits<bool>::value:
         return token::code::boolean;
@@ -2621,7 +2621,7 @@ bool basic_variable<CharT>::empty() const
 {
     switch (storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         return true;
     case traits<bool>::value:
     case traits<signed short int>::value:
@@ -2652,7 +2652,7 @@ auto basic_variable<CharT>::size() const -> size_type
 {
     switch (storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         return 0;
     case traits<bool>::value:
     case traits<signed short int>::value:
@@ -2683,7 +2683,7 @@ void basic_variable<CharT>::clear()
 {
     switch (storage.which())
     {
-    case traits<null_type>::value:
+    case traits<nullable>::value:
         storage = null;
         break;
     case traits<bool>::value:
@@ -2847,7 +2847,7 @@ template <typename CharT>
 template <typename T>
 bool basic_variable<CharT>::operator<= (const T& rhs) const
 {
-    if (same<null_type>())
+    if (same<nullable>())
         return true;
 
     return !(rhs < *this);
@@ -2857,7 +2857,7 @@ template <typename CharT>
 template <typename T>
 bool basic_variable<CharT>::operator> (const T& rhs) const
 {
-    if (same<null_type>())
+    if (same<nullable>())
         return false;
 
     return rhs < *this;
