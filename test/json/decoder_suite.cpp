@@ -316,6 +316,16 @@ void fail_too_large()
                                     json::error, "invalid value");
 }
 
+void fail_too_large2()
+{
+    const char input[] = "1000";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "1000");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::uint8_t>(),
+                                    json::error, "invalid value");
+}
+
 void fail_as_float()
 {
     const char input[] = "1";
@@ -443,6 +453,7 @@ void run()
     fail_minus_white();
     fail_minus_alpha();
     fail_too_large();
+    fail_too_large2();
     fail_as_float();
     fail_as_string();
 
