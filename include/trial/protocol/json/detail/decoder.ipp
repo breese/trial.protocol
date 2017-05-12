@@ -230,17 +230,23 @@ ReturnType basic_decoder<CharT>::integer_value() const
         ++it;
     }
     ReturnType result = ReturnType();
+    const ReturnType max = std::numeric_limits<ReturnType>::max();
     while (it != literal().end())
     {
-        const ReturnType old = result;
-        result *= ReturnType(10);
-        result += ReturnType(traits<CharT>::to_int(*it));
-        if (result < old)
-        {
+        if (max / ReturnType(10) < result) {
             // Overflow
             current.code = token::detail::code::error_invalid_value;
             throw json::error(error());
         }
+        result *= ReturnType(10);
+
+        if (max - ReturnType(traits<CharT>::to_int(*it)) < result) {
+            // Overflow
+            current.code = token::detail::code::error_invalid_value;
+            throw json::error(error());
+        }
+        result += ReturnType(traits<CharT>::to_int(*it));
+
         ++it;
     }
     return is_negative ? -result : result;
