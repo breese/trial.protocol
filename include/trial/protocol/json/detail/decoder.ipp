@@ -240,12 +240,13 @@ ReturnType basic_decoder<CharT>::integer_value() const
         }
         result *= ReturnType(10);
 
-        if (max - ReturnType(traits<CharT>::to_int(*it)) < result) {
+        const ReturnType digit = ReturnType(traits<CharT>::to_int(*it));
+        if (max - digit < result) {
             // Overflow
             current.code = token::detail::code::error_invalid_value;
             throw json::error(error());
         }
-        result += ReturnType(traits<CharT>::to_int(*it));
+        result += digit;
 
         ++it;
     }
