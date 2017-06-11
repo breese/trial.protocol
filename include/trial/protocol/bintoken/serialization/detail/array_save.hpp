@@ -39,6 +39,20 @@ struct save_overloader< bintoken::oarchive,
     }
 };
 
+// Specialization for binary data
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::uint8_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::uint8_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_binary(data, N);
+    }
+};
+
 } // namespace serialization
 } // namespace protocol
 } // namespace trial

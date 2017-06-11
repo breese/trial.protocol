@@ -352,7 +352,7 @@ void test_empty()
     std::vector<value_type> result;
     format::writer writer(result);
     std::array<value_type, 0> data;
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(data), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.binary(data.data(), data.size()), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::binary8);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x00);
@@ -363,7 +363,7 @@ void test_many()
     std::vector<value_type> result;
     format::writer writer(result);
     value_type data[] = { 0x41, 0x42, 0x43 };
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.value(data), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.binary(data, sizeof(data)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::binary8);
     TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x03);

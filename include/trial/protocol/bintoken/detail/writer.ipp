@@ -74,6 +74,11 @@ struct writer::overloader<
             return self.encoder.value(static_cast<std::int64_t>(data));
         }
     }
+
+    static size_type binary(writer& self, const T *data, size_type size)
+    {
+        return self.encoder.binary(data, size);
+    }
 };
 
 template <typename T>
@@ -102,6 +107,11 @@ struct writer::overloader<
             return self.encoder.value(std::int64_t(data));
         }
     }
+
+    static size_type binary(writer& self, const T *data, size_type size)
+    {
+        return self.encoder.binary(data, size);
+    }
 };
 
 template <typename T>
@@ -115,10 +125,9 @@ struct writer::overloader<
     }
 };
 
+// String literals
 template <typename CharT, std::size_t N>
-struct writer::overloader<
-    CharT[N],
-    typename std::enable_if<buffer::is_text<CharT[N]>::value>::type>
+struct writer::overloader<CharT[N]>
 {
     using type = CharT[N];
 
@@ -145,17 +154,6 @@ struct writer::overloader<std::string>
     static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data);
-    }
-};
-
-template <typename T>
-struct writer::overloader<
-    T,
-    typename std::enable_if<buffer::is_binary<T>::value>::type>
-{
-    static size_type value(writer& self, const T& data)
-    {
-        return self.encoder.binary(buffer::traits<T>::view_cast(data));
     }
 };
 
@@ -267,6 +265,12 @@ template <typename T>
 writer::size_type writer::value()
 {
     return overloader<T>::value(*this);
+}
+
+template <typename T>
+auto writer::binary(const T *data, size_type size) -> size_type
+{
+    return overloader<T>::binary(*this, data, size);
 }
 
 inline void writer::validate_scope(token::code::value code,

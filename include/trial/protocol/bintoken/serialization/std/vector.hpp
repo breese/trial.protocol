@@ -79,7 +79,7 @@ struct save_overloader< bintoken::oarchive,
                      const std::vector<std::uint8_t, Allocator>& data,
                      const unsigned int /* protocol_version */)
     {
-        ar.save(data);
+        ar.save_binary(data.data(), data.size());
     }
 };
 

@@ -68,22 +68,6 @@ struct traits< std::basic_string<CharT> >
     using buffer_type = buffer::basic_string<CharT>;
 };
 
-template <typename T>
-struct is_text<T,
-               typename std::enable_if< std::is_same<typename std::decay<T>::type,
-                                                     char *>::value >::type>
-{
-    static const bool value = true;
-};
-
-template <typename T>
-struct is_text<T,
-               typename std::enable_if< std::is_same<typename std::decay<T>::type,
-                                                     const char *>::value >::type>
-{
-    static const bool value = true;
-};
-
 } // namespace buffer
 } // namespace protocol
 } // namespace trial

@@ -38,6 +38,9 @@ public:
     template <typename T>
     size_type value(const T&);
 
+    template <typename T>
+    size_type binary(const T *, size_type);
+
 private:
     void validate_scope(token::code::value, enum bintoken::errc);
 

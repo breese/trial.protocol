@@ -57,6 +57,12 @@ void oarchive::save()
     writer.value<T>();
 }
 
+template <typename T>
+void oarchive::save_binary(const T *data, std::size_t size)
+{
+    writer.binary(data, size);
+}
+
 } // namespace bintoken
 } // namespace protocol
 } // namespace trial

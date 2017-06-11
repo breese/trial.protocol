@@ -77,12 +77,6 @@ struct traits< std::vector<CharT, Allocator> >
     }
 };
 
-template <typename CharT, typename Allocator>
-struct is_binary< std::vector<CharT, Allocator> >
-{
-    static const bool value = true;
-};
-
 } // namespace buffer
 } // namespace protocol
 } // namespace trial

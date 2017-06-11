@@ -43,6 +43,9 @@ public:
     template <typename T>
     void save();
 
+    template <typename T>
+    void save_binary(const T *data, std::size_t size);
+
     // Ignore these
     void save_override(const boost::archive::version_type) {}
     void save_override(const boost::archive::object_id_type) {}
