@@ -34,10 +34,10 @@ struct save_overloader<bintoken::oarchive,
 {
     static void save(bintoken::oarchive& ar,
                      const Value& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         ar.save<bintoken::token::begin_record>();
-        data.save(ar);
+        data.save(ar, protocol_version);
         ar.save<bintoken::token::end_record>();
     }
 };
@@ -48,11 +48,11 @@ struct load_overloader<bintoken::iarchive,
                        typename std::enable_if<has_load<bintoken::iarchive, Value>::value>::type>
 {
     static void load(bintoken::iarchive& ar,
-                     const Value& data,
-                     const unsigned int)
+                     Value& data,
+                     const unsigned int protocol_version)
     {
         ar.load<bintoken::token::begin_record>();
-        data.load(ar);
+        data.load(ar, protocol_version);
         ar.load<bintoken::token::end_record>();
     }
 };

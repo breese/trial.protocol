@@ -36,10 +36,6 @@ public:
     iarchive(const T&);
 
     template <typename T>
-    void load_override(T& data);
-    template <typename T, std::size_t N>
-    void load_override(T (&data)[N]);
-    template <typename T>
     void load_override(T& data, long);
 
     void load(view_type&);

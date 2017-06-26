@@ -38,13 +38,7 @@ public:
     basic_iarchive(Iterator begin, Iterator end);
 
     template<typename T>
-    void load_override(T& data);
-
-    template<typename T>
     void load_override(T& data, long);
-
-    template <typename T, std::size_t N>
-    void load_override(T (&data)[N]);
 
     template <typename Tag>
     void load();

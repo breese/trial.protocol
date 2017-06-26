@@ -28,11 +28,11 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
 {
     static void save(protocol::json::basic_oarchive<CharT>& ar,
                      const boost::optional<T>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         if (data)
         {
-            ar.save_override(*data);
+            ar.save_override(*data, protocol_version);
         }
         else
         {
@@ -47,7 +47,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
 {
     static void load(protocol::json::basic_iarchive<CharT>& ar,
                      boost::optional<T>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         if (ar.code() == protocol::json::token::code::null)
         {
@@ -57,7 +57,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
         else
         {
             T value; // FIXME: Replace with InPlaceFactory
-            ar.load_override(value);
+            ar.load_override(value, protocol_version);
             data = value;
         }
     }

@@ -41,24 +41,10 @@ basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
 
 template <typename CharT>
 template<typename T>
-void basic_iarchive<CharT>::load_override(T& data)
+void basic_iarchive<CharT>::load_override(T& data, long protocol_version)
 {
-    boost::archive::load(*this, data);
-}
-
-template <typename CharT>
-template<typename T>
-void basic_iarchive<CharT>::load_override(T& data, long /* PFTO */)
-{
-    load_override(data);
-}
-
-template <typename CharT>
-template <typename T, std::size_t N>
-void basic_iarchive<CharT>::load_override(T (&data)[N])
-{
-    // By-pass Boost.Serialization which has its own array formatting
-    serialization::load_overloader<iarchive, T[N]>::load(*this, data, 0);
+    serialization::load_overloader<basic_iarchive<CharT>, T>::
+        load(*this, data, protocol_version);
 }
 
 template <typename CharT>

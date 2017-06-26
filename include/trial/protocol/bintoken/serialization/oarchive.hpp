@@ -31,10 +31,6 @@ public:
     oarchive(T&);
 
     template <typename T>
-    void save_override(const T& data);
-    template <typename T, std::size_t N>
-    void save_override(const T (&data)[N]);
-    template <typename T>
     void save_override(const T& data, long);
 
     template <typename T>
@@ -47,14 +43,14 @@ public:
     void save_binary(const T *data, std::size_t size);
 
     // Ignore these
-    void save_override(const boost::archive::version_type) {}
-    void save_override(const boost::archive::object_id_type) {}
-    void save_override(const boost::archive::object_reference_type) {}
-    void save_override(const boost::archive::class_id_type) {}
-    void save_override(const boost::archive::class_id_optional_type) {}
-    void save_override(const boost::archive::class_id_reference_type) {}
-    void save_override(const boost::archive::tracking_type) {}
-    void save_override(const boost::archive::class_name_type&) {}
+    void save_override(const boost::archive::version_type, int) {}
+    void save_override(const boost::archive::object_id_type, int) {}
+    void save_override(const boost::archive::object_reference_type, int) {}
+    void save_override(const boost::archive::class_id_type, int) {}
+    void save_override(const boost::archive::class_id_optional_type, int) {}
+    void save_override(const boost::archive::class_id_reference_type, int) {}
+    void save_override(const boost::archive::tracking_type, int) {}
+    void save_override(const boost::archive::class_name_type&, int) {}
 
 protected:
     bintoken::writer writer;

@@ -14,6 +14,42 @@
 #include <trial/protocol/json/serialization/serialization.hpp>
 #include <trial/protocol/serialization/array.hpp>
 
+//-----------------------------------------------------------------------------
+// By-pass Boost.Serialization which has its own array formatting
+//-----------------------------------------------------------------------------
+
+namespace boost
+{
+namespace serialization
+{
+
+template <typename CharT, typename T, std::size_t N>
+void load(trial::protocol::json::basic_iarchive<CharT>& ar,
+          T (&data)[N],
+          const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    load_overloader<trial::protocol::json::basic_iarchive<CharT>, T[N]>::
+        load(ar, data, version);
+}
+
+template <typename CharT, typename T, std::size_t N>
+void serialize(trial::protocol::json::basic_iarchive<CharT>& ar,
+               T (&data)[N],
+               const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    serialize_overloader<trial::protocol::json::basic_iarchive<CharT>, T[N]>::
+        serialize(ar, data, version);
+}
+
+} // namespace serialization
+} // namespace boost
+
+//-----------------------------------------------------------------------------
+// T[N]
+//-----------------------------------------------------------------------------
+
 namespace trial
 {
 namespace protocol
@@ -27,13 +63,13 @@ struct load_overloader< json::basic_iarchive<CharT>,
 {
     static void load(json::basic_iarchive<CharT>& ar,
                      T (&data)[N],
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         ar.template load<json::token::begin_array>();
         for (std::size_t i = 0; i < N; ++i)
         {
             T value;
-            ar.load_override(value);
+            ar.load_override(value, protocol_version);
             data[i] = value;
         }
         if (!ar.template at<json::token::end_array>())

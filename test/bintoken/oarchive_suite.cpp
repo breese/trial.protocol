@@ -373,12 +373,12 @@ void test_one()
 {
     std::vector<value_type> result;
     format::oarchive ar(result);
-    value_type array[] = { 1 };
+    bool array[] = { true };
     ar << array;
 
     value_type expected[] = { token::code::begin_array,
                               0x01,
-                              0x01,
+                              0x81,
                               token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
@@ -389,12 +389,12 @@ void test_four()
 {
     std::vector<value_type> result;
     format::oarchive ar(result);
-    value_type array[] = { 1, 2, 3, 4 };
+    bool array[] = { false, true, false, true };
     ar << array;
 
     value_type expected[] = { token::code::begin_array,
                               0x04,
-                              0x01, 0x02, 0x03, 0x04,
+                              0x80, 0x81, 0x80, 0x81,
                               token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),

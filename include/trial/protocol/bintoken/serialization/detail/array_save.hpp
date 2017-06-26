@@ -14,6 +14,49 @@
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/serialization/array.hpp>
 
+//-----------------------------------------------------------------------------
+// By-pass Boost.Serialization which has its own array formatting
+//-----------------------------------------------------------------------------
+
+namespace boost
+{
+namespace serialization
+{
+
+template <typename T, std::size_t N>
+void save(trial::protocol::bintoken::oarchive& ar,
+          const T (&data)[N],
+          const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    save_overloader<trial::protocol::bintoken::oarchive, T[N]>::save(ar, data, version);
+}
+
+template <typename T, std::size_t N>
+void serialize(trial::protocol::bintoken::oarchive& ar,
+               const T (&data)[N],
+               const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    serialize_overloader<trial::protocol::bintoken::oarchive, T[N]>::serialize(ar, data, version);
+}
+
+template <typename T, std::size_t N>
+void serialize(trial::protocol::bintoken::oarchive& ar,
+               T (&data)[N],
+               const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    serialize_overloader<trial::protocol::bintoken::oarchive, T[N]>::serialize(ar, data, version);
+}
+
+} // namespace serialization
+} // namespace boost
+
+//-----------------------------------------------------------------------------
+// T[N]
+//-----------------------------------------------------------------------------
+
 namespace trial
 {
 namespace protocol
@@ -27,13 +70,13 @@ struct save_overloader< bintoken::oarchive,
 {
     static void save(bintoken::oarchive& ar,
                      const T (&data)[N],
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         ar.save<bintoken::token::begin_array>();
         ar.save<std::size_t>(N);
         for (std::size_t i = 0; i < N; ++i)
         {
-            ar.save_override(data[i]);
+            ar.save_override(data[i], protocol_version);
         }
         ar.save<bintoken::token::end_array>();
     }

@@ -28,7 +28,7 @@ struct save_overloader< protocol::bintoken::oarchive,
 {
     static void save(protocol::bintoken::oarchive& ar,
                      const std::set<Key, Compare, Allocator>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         ar.save<bintoken::token::begin_array>();
         ar.save<bintoken::token::null>();
@@ -36,7 +36,7 @@ struct save_overloader< protocol::bintoken::oarchive,
              it != data.end();
              ++it)
         {
-            ar.save_override(*it);
+            ar.save_override(*it, protocol_version);
         }
         ar.save<bintoken::token::end_array>();
     }
@@ -48,17 +48,17 @@ struct load_overloader< protocol::bintoken::iarchive,
 {
     static void load(protocol::bintoken::iarchive& ar,
                      std::set<Key, Compare, Allocator>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         ar.load<bintoken::token::begin_array>();
 
         boost::optional<std::size_t> count;
-        ar.load_override(count);
+        ar.load_override(count, protocol_version);
 
         while (!ar.at<bintoken::token::end_array>())
         {
             Key value;
-            ar.load_override(value);
+            ar.load_override(value, protocol_version);
             data.insert(value);
         }
         ar.load<bintoken::token::end_array>();

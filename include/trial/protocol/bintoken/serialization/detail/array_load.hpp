@@ -14,6 +14,40 @@
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/serialization/array.hpp>
 
+//-----------------------------------------------------------------------------
+// By-pass Boost.Serialization which has its own array formatting
+//-----------------------------------------------------------------------------
+
+namespace boost
+{
+namespace serialization
+{
+
+template <typename T, std::size_t N>
+void load(trial::protocol::bintoken::iarchive& ar,
+          T (&data)[N],
+          const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    load_overloader<trial::protocol::bintoken::iarchive, T[N]>::load(ar, data, version);
+}
+
+template <typename T, std::size_t N>
+void serialize(trial::protocol::bintoken::iarchive& ar,
+               T (&data)[N],
+               const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    serialize_overloader<trial::protocol::bintoken::iarchive, T[N]>::serialize(ar, data, version);
+}
+
+} // namespace serialization
+} // namespace boost
+
+//-----------------------------------------------------------------------------
+// T[N]
+//-----------------------------------------------------------------------------
+
 namespace trial
 {
 namespace protocol
@@ -27,12 +61,12 @@ struct load_overloader< bintoken::iarchive,
 {
     static void load(bintoken::iarchive& ar,
                      T (&data)[N],
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         ar.load<bintoken::token::begin_array>();
 
         std::size_t count;
-        ar.load_override(count);
+        ar.load_override(count, protocol_version);
         if (count != N)
             throw bintoken::error(bintoken::incompatible_type);
 

@@ -27,22 +27,10 @@ oarchive::oarchive(T& buffer)
 }
 
 template <typename T>
-inline void oarchive::save_override(const T& data)
+inline void oarchive::save_override(const T& data, long protocol_version)
 {
-    boost::archive::save(*this, data);
-}
-
-template <typename T, std::size_t N>
-inline void oarchive::save_override(const T (&data)[N])
-{
-    // By-pass Boost.Serialization which has its own array formatting
-    serialization::save_overloader<oarchive, const T[N]>::save(*this, data, 0);
-}
-
-template <typename T>
-inline void oarchive::save_override(const T& data, long /* PFTO */)
-{
-    save_override(data);
+    serialization::save_overloader<oarchive, T>::
+        save(*this, data, protocol_version);
 }
 
 template <typename T>

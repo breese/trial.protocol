@@ -48,12 +48,12 @@ struct load_overloader< bintoken::iarchive,
 {
     static void load(bintoken::iarchive& ar,
                      std::vector<T, Allocator>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         ar.load<bintoken::token::begin_array>();
 
         boost::optional<std::size_t> count;
-        ar.load_override(count);
+        ar.load_override(count, protocol_version);
         if (count)
         {
             data.reserve(*count);
@@ -116,7 +116,7 @@ struct save_overloader< bintoken::oarchive,
 {
     static void save(bintoken::oarchive& ar,
                      const std::vector<bool, Allocator>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         ar.save<bintoken::token::begin_array>();
         ar.save<std::size_t>(data.size());
@@ -125,7 +125,7 @@ struct save_overloader< bintoken::oarchive,
              ++it)
         {
             bool value = *it;
-            ar.save_override(value);
+            ar.save_override(value, protocol_version);
         }
         ar.save<bintoken::token::end_array>();
     }
