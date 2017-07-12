@@ -28,7 +28,7 @@ struct save_overloader< bintoken::oarchive,
 {
     static void save(bintoken::oarchive& ar,
                      const std::vector<T, Allocator>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         ar.save<bintoken::token::begin_array>();
         ar.save<std::size_t>(data.size());
@@ -36,7 +36,7 @@ struct save_overloader< bintoken::oarchive,
              it != data.end();
              ++it)
         {
-            ar.save_override(*it);
+            ar.save_override(*it, protocol_version);
         }
         ar.save<bintoken::token::end_array>();
     }
