@@ -448,32 +448,32 @@ typename Tag::type decoder::value() const
     return overloader<Tag>::decode(*this);
 }
 
-auto decoder::array(token::int8::type *buffer, size_type size) -> size_type
+inline auto decoder::array(token::int8::type *buffer, size_type size) -> size_type
 {
     return overloader<token::int8>::decode(*this, buffer, size);
 }
 
-auto decoder::array(token::int16::type *buffer, size_type size) -> size_type
+inline auto decoder::array(token::int16::type *buffer, size_type size) -> size_type
 {
     return overloader<token::int16>::decode(*this, buffer, size);
 }
 
-auto decoder::array(token::int32::type *buffer, size_type size) -> size_type
+inline auto decoder::array(token::int32::type *buffer, size_type size) -> size_type
 {
     return overloader<token::int32>::decode(*this, buffer, size);
 }
 
-auto decoder::array(token::int64::type *buffer, size_type size) -> size_type
+inline auto decoder::array(token::int64::type *buffer, size_type size) -> size_type
 {
     return overloader<token::int64>::decode(*this, buffer, size);
 }
 
-auto decoder::array(token::float32::type *buffer, size_type size) -> size_type
+inline auto decoder::array(token::float32::type *buffer, size_type size) -> size_type
 {
     return overloader<token::float32>::decode(*this, buffer, size);
 }
 
-auto decoder::array(token::float64::type *buffer, size_type size) -> size_type
+inline auto decoder::array(token::float64::type *buffer, size_type size) -> size_type
 {
     return overloader<token::float64>::decode(*this, buffer, size);
 }
