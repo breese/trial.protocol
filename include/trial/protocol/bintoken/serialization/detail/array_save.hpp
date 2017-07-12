@@ -82,7 +82,19 @@ struct save_overloader< bintoken::oarchive,
     }
 };
 
-// Specialization for binary data
+// Specialization for compact arrays
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::int8_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::int8_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
 
 template <std::size_t N>
 struct save_overloader< bintoken::oarchive,
@@ -92,7 +104,103 @@ struct save_overloader< bintoken::oarchive,
                      const std::uint8_t (&data)[N],
                      const unsigned int /* protocol_version */)
     {
-        ar.save_binary(data, N);
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::int16_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::int16_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::uint16_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::uint16_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::int32_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::int32_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::uint32_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::uint32_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::int64_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::int64_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        std::uint64_t[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const std::uint64_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        bintoken::token::float32::type[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const bintoken::token::float32::type (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
+    }
+};
+
+template <std::size_t N>
+struct save_overloader< bintoken::oarchive,
+                        bintoken::token::float64::type[N] >
+{
+    static void save(bintoken::oarchive& ar,
+                     const bintoken::token::float64::type (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data, N);
     }
 };
 

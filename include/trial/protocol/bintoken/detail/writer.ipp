@@ -30,9 +30,10 @@ namespace bintoken
 template <typename T, typename Enable>
 struct writer::overloader
 {
-    static size_type value(writer& self, const T& data)
+    static size_type value(writer&, const T&)
     {
-        return self.encoder.value(buffer::traits<T>::view_cast(data));
+        static_assert(sizeof(T) == 0, "No specialization found for T");
+        return 0;
     }
 };
 
@@ -75,9 +76,9 @@ struct writer::overloader<
         }
     }
 
-    static size_type binary(writer& self, const T *data, size_type size)
+    static size_type array(writer& self, const T *data, size_type size)
     {
-        return self.encoder.binary(data, size);
+        return self.encoder.array(data, size);
     }
 };
 
@@ -108,9 +109,12 @@ struct writer::overloader<
         }
     }
 
-    static size_type binary(writer& self, const T *data, size_type size)
+    static size_type array(writer& self, const T *data, size_type size)
     {
-        return self.encoder.binary(data, size);
+        using signed_type = typename std::make_signed<T>::type;
+
+        return self.encoder.array(reinterpret_cast<const signed_type *>(data),
+                                  size);
     }
 };
 
@@ -122,6 +126,11 @@ struct writer::overloader<
     static size_type value(writer& self, T data)
     {
         return self.encoder.value(data);
+    }
+
+    static size_type array(writer& self, const T *data, size_type size)
+    {
+        return self.encoder.array(data, size);
     }
 };
 
@@ -268,9 +277,9 @@ writer::size_type writer::value()
 }
 
 template <typename T>
-auto writer::binary(const T *data, size_type size) -> size_type
+auto writer::array(const T *data, size_type size) -> size_type
 {
-    return overloader<T>::binary(*this, data, size);
+    return overloader<T>::array(*this, data, size);
 }
 
 inline void writer::validate_scope(token::code::value code,

@@ -18,7 +18,7 @@
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-using value_type = format::writer::value_type;
+using output_type = std::uint8_t;
 
 //-----------------------------------------------------------------------------
 // Basic types
@@ -29,14 +29,14 @@ namespace basic_suite
 
 void test_empty()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 0);
 }
 
 void test_null()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::null>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
@@ -45,7 +45,7 @@ void test_null()
 
 void test_false()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
@@ -54,7 +54,7 @@ void test_false()
 
 void test_true()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(true), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
@@ -80,7 +80,7 @@ namespace number_suite
 
 void test_zero()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
@@ -89,7 +89,7 @@ void test_zero()
 
 void test_int8()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(-128), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 2);
@@ -99,7 +99,7 @@ void test_int8()
 
 void test_uint8()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint8_t(0x00)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint8_t(0x7F)), 1);
@@ -115,7 +115,7 @@ void test_uint8()
 
 void test_int16()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0x100), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 3);
@@ -126,7 +126,7 @@ void test_int16()
 
 void test_uint16()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint16_t(0x7FFF)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint16_t(0x8000)), 3);
@@ -145,7 +145,7 @@ void test_uint16()
 
 void test_int32()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0x1000000), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
@@ -158,7 +158,7 @@ void test_int32()
 
 void test_uint32()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint32_t(0x7FFFFFFF)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint32_t(0x80000000)), 5);
@@ -183,7 +183,7 @@ void test_uint32()
 
 void test_int64()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(INT64_C(0x100000000000000)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 9);
@@ -200,7 +200,7 @@ void test_int64()
 
 void test_uint64()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint64_t(UINT64_C(0x7FFFFFFFFFFFFFFF))), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(std::uint64_t(UINT64_C(0x8000000000000000))), 9);
@@ -237,7 +237,7 @@ void test_uint64()
 
 void test_float()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0.0f), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
@@ -250,7 +250,7 @@ void test_float()
 
 void test_double()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(0.0), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 9);
@@ -291,7 +291,7 @@ namespace string_suite
 
 void test_string()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     std::string data("ABC");
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(data), 5);
@@ -305,7 +305,7 @@ void test_string()
 
 void test_literal()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value("ABC"), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
@@ -318,7 +318,7 @@ void test_literal()
 
 void test_view()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     std::string data("ABC");
     trial::protocol::detail::string_view view(data.data());
@@ -341,44 +341,133 @@ void run()
 } // namespace string_suite
 
 //-----------------------------------------------------------------------------
-// Binary data
+// Compact
 //-----------------------------------------------------------------------------
 
-namespace binary_suite
+namespace compact_suite
 {
 
-void test_empty()
+void test_int8_empty()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
-    std::array<value_type, 0> data;
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.binary(data.data(), data.size()), 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::binary8);
-    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x00);
+    std::array<std::int8_t, 0> data;
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.array(data.data(), data.size()), 2);
+
+    output_type expected[] = { token::code::array8_int8, 0 };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
 }
 
-void test_many()
+void test_int8()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
-    value_type data[] = { 0x41, 0x42, 0x43 };
-    TRIAL_PROTOCOL_TEST_EQUAL(writer.binary(data, sizeof(data)), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::binary8);
-    TRIAL_PROTOCOL_TEST_EQUAL(result[1], 0x03);
-    TRIAL_PROTOCOL_TEST_EQUAL(result[2], 0x41);
-    TRIAL_PROTOCOL_TEST_EQUAL(result[3], 0x42);
-    TRIAL_PROTOCOL_TEST_EQUAL(result[4], 0x43);
+    std::int8_t data[] = { 0x41, 0x42, 0x43 };
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.array(data, sizeof(data)), 5);
+
+    output_type expected[] = { token::code::array8_int8, 3 * token::int8::size,
+                               0x41,
+                               0x42,
+                               0x43 };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_int16()
+{
+    std::vector<output_type> result;
+    format::writer writer(result);
+    std::array<std::int16_t, 3> data = {{ 0x1101, 0x1202, 0x1303 }};
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.array(data.data(), data.size()), 8);
+
+    output_type expected[] = { token::code::array8_int16, 3 * token::int16::size,
+                               0x01, 0x11,
+                               0x02, 0x12,
+                               0x03, 0x13 };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_int32()
+{
+    std::vector<output_type> result;
+    format::writer writer(result);
+    std::array<std::int32_t, 3> data = {{ 0x31211101, 0x32221202, 0x33231303 }};
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.array(data.data(), data.size()), 14);
+
+    output_type expected[] = { token::code::array8_int32, 3 * token::int32::size,
+                               0x01, 0x11, 0x21, 0x31,
+                               0x02, 0x12, 0x22, 0x32,
+                               0x03, 0x13, 0x23, 0x33 };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_int64()
+{
+    std::vector<output_type> result;
+    format::writer writer(result);
+    std::array<std::int64_t, 3> data = {{ INT64_C(0x7161514131211101), INT64_C(0x7262524232221202), INT64_C(0x7363534333231303) }};
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.array(data.data(), data.size()), 26);
+
+    output_type expected[] = { token::code::array8_int64, 3 * token::int64::size,
+                               0x01, 0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71,
+                               0x02, 0x12, 0x22, 0x32, 0x42, 0x52, 0x62, 0x72,
+                               0x03, 0x13, 0x23, 0x33, 0x43, 0x53, 0x63, 0x73 };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_float32()
+{
+    std::vector<output_type> result;
+    format::writer writer(result);
+    std::array<token::float32::type, 3> data = {{ 0.0f, -1.0f, 1.0f }};
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.array(data.data(), data.size()), 14);
+
+    output_type expected[] = { token::code::array8_float32, 3 * token::float32::size,
+                               0x00, 0x00, 0x00, 0x00,
+                               0x00, 0x00, 0x80, 0xBF,
+                               0x00, 0x00, 0x80, 0x3F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_float64()
+{
+    std::vector<output_type> result;
+    format::writer writer(result);
+    std::array<token::float64::type, 3> data = {{ 0.0, -1.0, 1.0 }};
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.array(data.data(), data.size()), 26);
+
+    output_type expected[] = { token::code::array8_float64, 3 * token::float64::size,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xBF,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
 }
 
 void run()
 {
-    test_empty();
-    test_many();
+    test_int8_empty();
+    test_int8();
+    test_int16();
+    test_int32();
+    test_int64();
+    test_float32();
+    test_float64();
 }
 
-} // namespace binary_suite
+} // namespace compact_suite
 
 //-----------------------------------------------------------------------------
 // Record
@@ -389,7 +478,7 @@ namespace record_suite
 
 void test_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_record>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 1);
@@ -402,7 +491,7 @@ void test_one()
 
 void fail_missing_begin()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_record>(),
                                     format::error, "unexpected token");
@@ -410,7 +499,7 @@ void fail_missing_begin()
 
 void fail_mismatched_end_array()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_record>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
@@ -419,7 +508,7 @@ void fail_mismatched_end_array()
 
 void fail_mismatched_end_assoc_array()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_record>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_assoc_array>(),
@@ -445,7 +534,7 @@ namespace array_suite
 
 void test_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 1);
@@ -458,7 +547,7 @@ void test_one()
 
 void fail_missing_begin()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
                                     format::error, "unexpected token");
@@ -466,7 +555,7 @@ void fail_missing_begin()
 
 void fail_mismatched_end_record()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_record>(),
@@ -475,7 +564,7 @@ void fail_mismatched_end_record()
 
 void fail_mismatched_end_assoc_array()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_assoc_array>(),
@@ -501,7 +590,7 @@ namespace assoc_array_suite
 
 void test_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_assoc_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(false), 1);
@@ -514,7 +603,7 @@ void test_one()
 
 void fail_missing_begin()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_assoc_array>(),
                                     format::error, "unexpected token");
@@ -522,7 +611,7 @@ void fail_missing_begin()
 
 void fail_mismatched_end_record()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_assoc_array>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_record>(),
@@ -531,7 +620,7 @@ void fail_mismatched_end_record()
 
 void fail_mismatched_end_array()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::writer writer(result);
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_assoc_array>(), 1);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(writer.value<token::end_array>(),
@@ -557,7 +646,7 @@ int main()
     basic_suite::run();
     number_suite::run();
     string_suite::run();
-    binary_suite::run();
+    compact_suite::run();
     record_suite::run();
     array_suite::run();
     assoc_array_suite::run();

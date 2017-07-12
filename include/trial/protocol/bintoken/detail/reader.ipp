@@ -71,6 +71,25 @@ struct reader::overloader<bool>
             throw bintoken::error(incompatible_type);
         }
     }
+
+    static size_type convert(const reader& self,
+                             bool *output,
+                             size_type output_length)
+    {
+        switch (self.code())
+        {
+        case token::code::true_value:
+        case token::code::false_value:
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            *output = convert(self);
+            return size_type(1);
+
+        default:
+            throw bintoken::error(incompatible_type);
+        }
+            
+    }
 };
 
 // Numbers
@@ -142,6 +161,81 @@ struct reader::overloader<
             throw bintoken::error(invalid_value);
         }
     }
+
+    static size_type convert(const reader& self,
+                              ReturnType *output,
+                              size_type output_length)
+    {
+        switch (self.code())
+        {
+        case token::code::int8:
+        case token::code::int16:
+        case token::code::int32:
+        case token::code::int64:
+        case token::code::float32:
+        case token::code::float64:
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(output, output_length);
+
+        case token::code::array8_int8:
+        case token::code::array16_int8:
+        case token::code::array32_int8:
+        case token::code::array64_int8:
+            assert(sizeof(ReturnType) == token::int8::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(output, output_length);
+
+        case token::code::array8_int16:
+        case token::code::array16_int16:
+        case token::code::array32_int16:
+        case token::code::array64_int16:
+            assert(sizeof(ReturnType) == token::int16::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(output, output_length);
+
+        case token::code::array8_int32:
+        case token::code::array16_int32:
+        case token::code::array32_int32:
+        case token::code::array64_int32:
+            assert(sizeof(ReturnType) == token::int32::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(output, output_length);
+
+        case token::code::array8_int64:
+        case token::code::array16_int64:
+        case token::code::array32_int64:
+        case token::code::array64_int64:
+            assert(sizeof(ReturnType) == token::int64::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(output, output_length);
+
+        case token::code::array8_float32:
+        case token::code::array16_float32:
+        case token::code::array32_float32:
+        case token::code::array64_float32:
+            assert(sizeof(ReturnType) == token::float32::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(output, output_length);
+
+        case token::code::array8_float64:
+        case token::code::array16_float64:
+        case token::code::array32_float64:
+        case token::code::array64_float64:
+            assert(sizeof(ReturnType) == token::float64::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(output, output_length);
+
+        default:
+            throw bintoken::error(incompatible_type);
+        }
+    }
 };
 
 template <typename ReturnType>
@@ -203,6 +297,57 @@ struct reader::overloader<
             throw bintoken::error(invalid_value);
         }
     }
+
+    static size_type convert(const reader& self,
+                             ReturnType *output,
+                             size_type output_length)
+    {
+        switch (self.code())
+        {
+        case token::code::array8_int8:
+        case token::code::array16_int8:
+        case token::code::array32_int8:
+        case token::code::array64_int8:
+            assert(sizeof(ReturnType) == token::int8::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
+                                      output_length);
+
+        case token::code::array8_int16:
+        case token::code::array16_int16:
+        case token::code::array32_int16:
+        case token::code::array64_int16:
+            assert(sizeof(ReturnType) == token::int16::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
+                                      output_length);
+
+        case token::code::array8_int32:
+        case token::code::array16_int32:
+        case token::code::array32_int32:
+        case token::code::array64_int32:
+            assert(sizeof(ReturnType) == token::int32::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
+                                      output_length);
+
+        case token::code::array8_int64:
+        case token::code::array16_int64:
+        case token::code::array32_int64:
+        case token::code::array64_int64:
+            assert(sizeof(ReturnType) == token::int64::size);
+            if (self.length() != output_length)
+                throw bintoken::error(overflow);
+            return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
+                                      output_length);
+
+        default:
+            throw bintoken::error(incompatible_type);
+        }
+    }
 };
 
 // Strings
@@ -221,30 +366,6 @@ struct reader::overloader<std::string>
         case token::code::string32:
         case token::code::string64:
             return return_type(self.literal().begin(), self.literal().end());
-            break;
-
-        default:
-            throw bintoken::error(invalid_value);
-        }
-    }
-};
-
-// Binary
-
-template <>
-struct reader::overloader< std::vector<std::uint8_t> >
-{
-    using return_type = view_type;
-
-    static return_type convert(const reader& self)
-    {
-        switch (self.code())
-        {
-        case token::code::binary8:
-        case token::code::binary16:
-        case token::code::binary32:
-        case token::code::binary64:
-            return self.literal();
             break;
 
         default:
@@ -282,6 +403,71 @@ inline token::category::value reader::category() const BOOST_NOEXCEPT
 inline std::error_code reader::error() const BOOST_NOEXCEPT
 {
     return decoder.error();
+}
+
+inline auto reader::length() const -> size_type
+{
+    switch (code())
+    {
+    case token::code::end:
+    case token::code::null:
+        return 0;
+
+    case token::code::true_value:
+    case token::code::false_value:
+    case token::code::int8:
+    case token::code::int16:
+    case token::code::int32:
+    case token::code::int64:
+    case token::code::float32:
+    case token::code::float64:
+        return 1;
+
+    case token::code::array8_int8:
+    case token::code::array16_int8:
+    case token::code::array32_int8:
+    case token::code::array64_int8:
+        return decoder.literal().size();
+
+    case token::code::array8_int16:
+    case token::code::array16_int16:
+    case token::code::array32_int16:
+    case token::code::array64_int16:
+        return decoder.literal().size() / token::int16::size;
+
+    case token::code::array8_int32:
+    case token::code::array16_int32:
+    case token::code::array32_int32:
+    case token::code::array64_int32:
+        return decoder.literal().size() / token::int32::size;
+
+    case token::code::array8_int64:
+    case token::code::array16_int64:
+    case token::code::array32_int64:
+    case token::code::array64_int64:
+        return decoder.literal().size() / token::int64::size;
+
+    case token::code::array8_float32:
+    case token::code::array16_float32:
+    case token::code::array32_float32:
+    case token::code::array64_float32:
+        return decoder.literal().size() / token::float32::size;
+
+    case token::code::array8_float64:
+    case token::code::array16_float64:
+    case token::code::array32_float64:
+    case token::code::array64_float64:
+        return decoder.literal().size() / token::float64::size;
+
+    case token::code::string8:
+    case token::code::string16:
+    case token::code::string32:
+    case token::code::string64:
+        return decoder.literal().size();
+
+    default:
+        throw bintoken::error(unknown_token);
+    }
 }
 
 inline reader::size_type reader::level() const BOOST_NOEXCEPT
@@ -365,6 +551,14 @@ typename token::type_cast<ReturnType>::type reader::value() const
 {
     using return_type = typename std::remove_const<ReturnType>::type;
     return overloader<return_type>::convert(*this);
+}
+
+template <typename T>
+auto reader::array(T* output,
+                   size_type output_length) const -> size_type
+{
+    using type = typename std::remove_const<T>::type;
+    return overloader<type>::convert(*this, output, output_length);
 }
 
 inline const reader::view_type& reader::literal() const BOOST_NOEXCEPT

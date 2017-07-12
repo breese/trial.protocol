@@ -46,6 +46,12 @@ void iarchive::load(T& data)
     next();
 }
 
+template <typename T>
+void iarchive::load_array(T *data, std::size_t size)
+{
+    reader.array(data, size);
+}
+
 template <typename Tag>
 void iarchive::load()
 {
@@ -73,6 +79,11 @@ inline token::symbol::value iarchive::symbol() const
 inline token::category::value iarchive::category() const
 {
     return reader.category();
+}
+
+inline auto iarchive::length() const -> size_type
+{
+    return reader.length();
 }
 
 inline void iarchive::next()

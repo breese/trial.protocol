@@ -1093,6 +1093,8 @@ void run()
 
 } // namespace string8_suite
 
+//-----------------------------------------------------------------------------
+
 namespace string16_suite
 {
 
@@ -1152,6 +1154,8 @@ void run()
 }
 
 } // namespace string16_suite
+
+//-----------------------------------------------------------------------------
 
 namespace string32_suite
 {
@@ -1228,6 +1232,8 @@ void run()
 }
 
 } // namespace string32_suite
+
+//-----------------------------------------------------------------------------
 
 namespace string64_suite
 {
@@ -1346,29 +1352,29 @@ void run()
 } // namespace string64_suite
 
 //-----------------------------------------------------------------------------
-// Binary data
+// int8[N]
 //-----------------------------------------------------------------------------
 
-namespace binary8_suite
+namespace compact_int8_suite
 {
 
-void test_empty()
+void test_array8_int8_empty()
 {
-    const value_type input[] = { token::code::binary8, 0x00 };
+    const value_type input[] = { token::code::array8_int8, 0x00 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary8);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_one()
+void test_array8_int8_one()
 {
-    const value_type input[] = { token::code::binary8, 0x01, 0x12 };
+    const value_type input[] = { token::code::array8_int8, 0x01, 0x12 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary8);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int8);
     const value_type expected[] = {
         0x12
     };
@@ -1379,27 +1385,39 @@ void test_one()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_two()
+void test_array8_int8_two()
 {
-    const value_type input[] = { token::code::binary8, 0x02, 0x12, 0x34 };
+    const value_type input[] = { token::code::array8_int8, 0x02, 0x12, 0x34 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary8);
-    const value_type expected[] = {
-        0x12, 0x34
-    };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int8);
+    {
+        const value_type expected_literal[] = {
+            0x12, 0x34
+        };
+        TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                     expected_literal, expected_literal + sizeof(expected_literal),
+                                     std::equal_to<value_type>());
+    }
+    {
+        std::array<std::int8_t, 2> value = {{ 0, 0 }};
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 2);
+        const std::array<std::int8_t, 2> expected = {{
+                0x12,
+                0x34 }};
+        TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                     expected.begin(), expected.end(),
+                                     std::equal_to<value_type>());
+    }
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_128()
+void test_array8_int8_128()
 {
-    value_type input[2 + 0x80] = { token::code::binary8, 0x80 };
+    value_type input[2 + 0x80] = { token::code::array8_int8, 0x80 };
     std::fill_n(&input[2], sizeof(input) - 2, 0x12);
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary8);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int8);
     value_type expected[0x80];
     std::fill_n(&expected[0], sizeof(expected), 0x12);
     TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
@@ -1409,44 +1427,47 @@ void test_128()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_one()
+void fail_array8_int8_missing_one()
 {
-    const value_type input[] = { token::code::binary8 };
+    const value_type input[] = { token::code::array8_int8, 0x01 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void run()
+void fail_array8_int8_missing_length()
 {
-    test_empty();
-    test_one();
-    test_two();
-    test_128();
-    fail_missing_length_one();
+    const value_type input[] = { token::code::array8_int8 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-} // namespace binary8_suite
-
-namespace binary16_suite
+void fail_array8_int8_overflow()
 {
-
-void test_empty()
-{
-    const value_type input[] = { token::code::binary16, 0x00, 0x00 };
+    const value_type input[] = { token::code::array8_int8, 0x02, 0x12, 0x34 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary16);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
+    std::array<std::int8_t, 1> value = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 1);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array16_int8_empty()
+{
+    const value_type input[] = { token::code::array16_int8, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_one()
+void test_array16_int8_one()
 {
-    const value_type input[] = { token::code::binary16, 0x01, 0x00, 0x12 };
+    const value_type input[] = { token::code::array16_int8, 0x01, 0x00, 0x12 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary16);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int8);
     const value_type expected[] = {
         0x12
     };
@@ -1457,11 +1478,11 @@ void test_one()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_two()
+void test_array16_int8_two()
 {
-    const value_type input[] = { token::code::binary16, 0x02, 0x00, 0x12, 0x34 };
+    const value_type input[] = { token::code::array16_int8, 0x02, 0x00, 0x12, 0x34 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary16);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int8);
     const value_type expected[] = {
         0x12, 0x34
     };
@@ -1472,51 +1493,46 @@ void test_two()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_one()
+void fail_array16_int8_missing_one()
 {
-    const value_type input[] = { token::code::binary16, 0x00 };
+    const value_type input[] = { token::code::array16_int8, 0x01, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_two()
+void fail_array16_int8_missing_length_one()
 {
-    const value_type input[] = { token::code::binary16 };
+    const value_type input[] = { token::code::array16_int8, 0x01 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void run()
+void fail_array16_int8_missing_length_two()
 {
-    test_empty();
-    test_one();
-    test_two();
-    fail_missing_length_one();
-    fail_missing_length_two();
+    const value_type input[] = { token::code::array16_int8 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-} // namespace binary16_suite
+//-----------------------------------------------------------------------------
 
-namespace binary32_suite
+void test_array32_int8_empty()
 {
-
-void test_empty()
-{
-    const value_type input[] = { token::code::binary32, 0x00, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array32_int8, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary32);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_one()
+void test_array32_int8_one()
 {
-    const value_type input[] = { token::code::binary32, 0x01, 0x00, 0x00, 0x00, 0x12 };
+    const value_type input[] = { token::code::array32_int8, 0x01, 0x00, 0x00, 0x00, 0x12 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int8);
     const value_type expected[] = {
         0x12
     };
@@ -1527,11 +1543,11 @@ void test_one()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_two()
+void test_array32_int8_two()
 {
-    const value_type input[] = { token::code::binary32, 0x02, 0x00, 0x00, 0x00, 0x12, 0x34 };
+    const value_type input[] = { token::code::array32_int8, 0x02, 0x00, 0x00, 0x00, 0x12, 0x34 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int8);
     const value_type expected[] = {
         0x12, 0x34
     };
@@ -1542,67 +1558,60 @@ void test_two()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_one()
+void fail_array32_int8_missing_one()
 {
-    const value_type input[] = { token::code::binary32, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array32_int8, 0x01, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_two()
+void fail_array32_int8_missing_length_one()
 {
-    const value_type input[] = { token::code::binary32, 0x00, 0x00 };
+    const value_type input[] = { token::code::array32_int8, 0x01, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_three()
+void fail_array32_int8_missing_length_two()
 {
-    const value_type input[] = { token::code::binary32, 0x00 };
+    const value_type input[] = { token::code::array32_int8, 0x01, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_four()
+void fail_array32_int8_missing_length_three()
 {
-    const value_type input[] = { token::code::binary32 };
+    const value_type input[] = { token::code::array32_int8, 0x01 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void run()
+void fail_array32_int8_missing_length_four()
 {
-    test_empty();
-    test_one();
-    test_two();
-    fail_missing_length_one();
-    fail_missing_length_two();
-    fail_missing_length_three();
-    fail_missing_length_four();
+    const value_type input[] = { token::code::array32_int8 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-} // namespace binary32_suite
+//-----------------------------------------------------------------------------
 
-namespace binary64_suite
+void test_array64_int8_empty()
 {
-
-void test_empty()
-{
-    const value_type input[] = { token::code::binary64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary64);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::binary);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int8);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
     TRIAL_PROTOCOL_TEST(decoder.literal().empty());
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_one()
+void test_array64_int8_one()
 {
-    const value_type input[] = { token::code::binary64, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int8);
     const value_type expected[] = {
         0x12
     };
@@ -1613,11 +1622,11 @@ void test_one()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void test_two()
+void test_array64_int8_two()
 {
-    const value_type input[] = { token::code::binary64, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34 };
+    const value_type input[] = { token::code::array64_int8, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34 };
     format::detail::decoder decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::binary64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int8);
     const value_type expected[] = {
         0x12, 0x34
     };
@@ -1628,78 +1637,2805 @@ void test_two()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_one()
+void fail_array64_int8_missing_one()
 {
-    const value_type input[] = { token::code::binary64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_two()
+void fail_array64_int8_missing_length_one()
 {
-    const value_type input[] = { token::code::binary64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_three()
+void fail_array64_int8_missing_length_two()
 {
-    const value_type input[] = { token::code::binary64, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_four()
+void fail_array64_int8_missing_length_three()
 {
-    const value_type input[] = { token::code::binary64, 0x00, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_five()
+void fail_array64_int8_missing_length_four()
 {
-    const value_type input[] = { token::code::binary64, 0x00, 0x00, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_six()
+void fail_array64_int8_missing_length_five()
 {
-    const value_type input[] = { token::code::binary64, 0x00, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_seven()
+void fail_array64_int8_missing_length_six()
 {
-    const value_type input[] = { token::code::binary64, 0x00 };
+    const value_type input[] = { token::code::array64_int8, 0x01, 0x00 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
-void fail_missing_length_eight()
+void fail_array64_int8_missing_length_seven()
 {
-    const value_type input[] = { token::code::binary64 };
+    const value_type input[] = { token::code::array64_int8, 0x01 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int8_missing_length_eight()
+{
+    const value_type input[] = { token::code::array64_int8 };
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
 }
 
 void run()
 {
-    test_empty();
-    test_one();
-    test_two();
-    fail_missing_length_one();
-    fail_missing_length_two();
-    fail_missing_length_three();
-    fail_missing_length_four();
-    fail_missing_length_five();
-    fail_missing_length_six();
-    fail_missing_length_seven();
-    fail_missing_length_eight();
+    test_array8_int8_empty();
+    test_array8_int8_one();
+    test_array8_int8_two();
+    test_array8_int8_128();
+    fail_array8_int8_missing_one();
+    fail_array8_int8_missing_length();
+    fail_array8_int8_overflow();
+
+    test_array16_int8_empty();
+    test_array16_int8_one();
+    test_array16_int8_two();
+    fail_array16_int8_missing_one();
+    fail_array16_int8_missing_length_one();
+    fail_array16_int8_missing_length_two();
+
+    test_array32_int8_empty();
+    test_array32_int8_one();
+    test_array32_int8_two();
+    fail_array32_int8_missing_one();
+    fail_array32_int8_missing_length_one();
+    fail_array32_int8_missing_length_two();
+    fail_array32_int8_missing_length_three();
+    fail_array32_int8_missing_length_four();
+
+    test_array64_int8_empty();
+    test_array64_int8_one();
+    test_array64_int8_two();
+    fail_array64_int8_missing_one();
+    fail_array64_int8_missing_length_one();
+    fail_array64_int8_missing_length_two();
+    fail_array64_int8_missing_length_three();
+    fail_array64_int8_missing_length_four();
+    fail_array64_int8_missing_length_five();
+    fail_array64_int8_missing_length_six();
+    fail_array64_int8_missing_length_seven();
+    fail_array64_int8_missing_length_eight();
 }
 
-} // namespace binary64_suite
+} // namespace compact_int8_suite
+
+//-----------------------------------------------------------------------------
+// int16[N]
+//-----------------------------------------------------------------------------
+
+namespace compact_int16_suite
+{
+
+void test_array8_int16()
+{
+    const value_type input[] = { token::code::array8_int16, 0x04, 0x12, 0x34, 0x56, 0x78 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    {
+        const value_type expected_literal[] = {
+            0x12, 0x34, 0x56, 0x78
+        };
+        TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                     expected_literal, expected_literal + sizeof(expected_literal),
+                                     std::equal_to<value_type>());
+    }
+    {
+        std::array<std::int16_t, 2> value = {{ 0, 0 }};
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 2);
+        const std::array<std::int16_t, 2> expected = {{
+                0x3412,
+                0x7856 }};
+        TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                     expected.begin(), expected.end(),
+                                     std::equal_to<value_type>());
+    }
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int16_missing_one()
+{
+    const value_type input[] = { token::code::array8_int16, 0x04, 0x12, 0x34, 0x56 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int16_missing_two()
+{
+    const value_type input[] = { token::code::array8_int16, 0x04, 0x12, 0x34 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int16_missing_three()
+{
+    const value_type input[] = { token::code::array8_int16, 0x04, 0x12 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int16_missing_four()
+{
+    const value_type input[] = { token::code::array8_int16, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int16_missing_length()
+{
+    const value_type input[] = { token::code::array8_int16 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int16_invalid_length()
+{
+    const value_type input[] = { token::code::array8_int16, 0x03, 0x12, 0x34, 0x56 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void fail_array8_int16_overflow()
+{
+    const value_type input[] = { token::code::array8_int16, 0x04, 0x12, 0x34, 0x56, 0x78 };
+    format::detail::decoder decoder(input);
+    std::array<std::int16_t, 1> value = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 1);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array16_int16()
+{
+    const value_type input[] = { token::code::array16_int16, 0x04, 0x00, 0x12, 0x34, 0x56, 0x78 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x12, 0x34, 0x56, 0x78
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int16_missing_one()
+{
+    const value_type input[] = { token::code::array16_int16, 0x04, 0x00, 0x12, 0x34, 0x56 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int16_missing_two()
+{
+    const value_type input[] = { token::code::array16_int16, 0x04, 0x00, 0x12, 0x34 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int16_missing_three()
+{
+    const value_type input[] = { token::code::array16_int16, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int16_missing_four()
+{
+    const value_type input[] = { token::code::array16_int16, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int16_missing_length_one()
+{
+    const value_type input[] = { token::code::array16_int16, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int16_missing_length_two()
+{
+    const value_type input[] = { token::code::array16_int16 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int16_invalid_length()
+{
+    const value_type input[] = { token::code::array16_int16, 0x03, 0x00, 0x12, 0x34, 0x56 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array32_int16()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56, 0x78 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x12, 0x34, 0x56, 0x78
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_one()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_two()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04, 0x00, 0x00, 0x00, 0x12, 0x34 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_three()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04, 0x00, 0x00, 0x00, 0x12 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_four()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_length_one()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_length_two()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_length_three()
+{
+    const value_type input[] = { token::code::array32_int16, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_missing_length_four()
+{
+    const value_type input[] = { token::code::array32_int16 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int16_invalid_length()
+{
+    const value_type input[] = { token::code::array32_int16, 0x03, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56, 0x78 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array64_int16()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56, 0x78 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int16);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x12, 0x34, 0x56, 0x78
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_one()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_two()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_three()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_four()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_one()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_two()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_three()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_four()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_five()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_six()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_seven()
+{
+    const value_type input[] = { token::code::array64_int16, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_missing_length_eight()
+{
+    const value_type input[] = { token::code::array64_int16 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int16_invalid_length()
+{
+    const value_type input[] = { token::code::array64_int16, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56, 0x78 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void run()
+{
+    test_array8_int16();
+    fail_array8_int16_missing_one();
+    fail_array8_int16_missing_two();
+    fail_array8_int16_missing_three();
+    fail_array8_int16_missing_four();
+    fail_array8_int16_missing_length();
+    fail_array8_int16_invalid_length();
+    fail_array8_int16_overflow();
+
+    test_array16_int16();
+    fail_array16_int16_missing_one();
+    fail_array16_int16_missing_two();
+    fail_array16_int16_missing_three();
+    fail_array16_int16_missing_four();
+    fail_array16_int16_missing_length_one();
+    fail_array16_int16_missing_length_two();
+    fail_array16_int16_invalid_length();
+
+    test_array32_int16();
+    fail_array32_int16_missing_one();
+    fail_array32_int16_missing_two();
+    fail_array32_int16_missing_three();
+    fail_array32_int16_missing_four();
+    fail_array32_int16_missing_length_one();
+    fail_array32_int16_missing_length_two();
+    fail_array32_int16_missing_length_three();
+    fail_array32_int16_missing_length_four();
+    fail_array32_int16_invalid_length();
+
+    test_array64_int16();
+    fail_array64_int16_missing_one();
+    fail_array64_int16_missing_two();
+    fail_array64_int16_missing_three();
+    fail_array64_int16_missing_four();
+    fail_array64_int16_missing_length_one();
+    fail_array64_int16_missing_length_two();
+    fail_array64_int16_missing_length_three();
+    fail_array64_int16_missing_length_four();
+    fail_array64_int16_missing_length_five();
+    fail_array64_int16_missing_length_six();
+    fail_array64_int16_missing_length_seven();
+    fail_array64_int16_missing_length_eight();
+    fail_array64_int16_invalid_length();
+}
+
+} // namespace compact_int16_suite
+
+//-----------------------------------------------------------------------------
+// int32[N]
+//-----------------------------------------------------------------------------
+
+namespace compact_int32_suite
+{
+
+void test_array8_int32()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44,
+        0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_one()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_two()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_three()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_four()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_five()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_six()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_seven()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_eight()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_missing_length()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int32_invalid_length()
+{
+    const value_type input[] = { token::code::array8_int32, 0x07, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void fail_array8_int32_overflow()
+{
+    const value_type input[] = { token::code::array8_int32, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    std::array<std::int32_t, 1> value = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 1);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array16_int32()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44,
+        0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_one()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_two()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_three()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_four()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_five()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_six()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_seven()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_eight()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_length_one()
+{
+    const value_type input[] = { token::code::array16_int32, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_missing_length_two()
+{
+    const value_type input[] = { token::code::array16_int32 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int32_invalid_length()
+{
+    const value_type input[] = { token::code::array16_int32, 0x07, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array32_int32()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44,
+        0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_one()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_two()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_three()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_four()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_five()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_six()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_seven()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_eight()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_length_one()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_length_two()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_length_three()
+{
+    const value_type input[] = { token::code::array32_int32, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_missing_length_four()
+{
+    const value_type input[] = { token::code::array32_int32 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int32_invalid_length()
+{
+    const value_type input[] = { token::code::array32_int32, 0x07, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array64_int32()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44,
+        0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_one()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_two()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_three()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_four()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_five()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_six()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_seven()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_eight()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_one()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_two()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_three()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_four()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_five()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_six()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_seven()
+{
+    const value_type input[] = { token::code::array64_int32, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_missing_length_eight()
+{
+    const value_type input[] = { token::code::array64_int32 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int32_invalid_length()
+{
+    const value_type input[] = { token::code::array64_int32, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void run()
+{
+    test_array8_int32();
+    fail_array8_int32_missing_one();
+    fail_array8_int32_missing_two();
+    fail_array8_int32_missing_three();
+    fail_array8_int32_missing_four();
+    fail_array8_int32_missing_five();
+    fail_array8_int32_missing_six();
+    fail_array8_int32_missing_seven();
+    fail_array8_int32_missing_eight();
+    fail_array8_int32_missing_length();
+    fail_array8_int32_invalid_length();
+    fail_array8_int32_overflow();
+
+    test_array16_int32();
+    fail_array16_int32_missing_one();
+    fail_array16_int32_missing_two();
+    fail_array16_int32_missing_three();
+    fail_array16_int32_missing_four();
+    fail_array16_int32_missing_five();
+    fail_array16_int32_missing_six();
+    fail_array16_int32_missing_seven();
+    fail_array16_int32_missing_eight();
+    fail_array16_int32_missing_length_one();
+    fail_array16_int32_missing_length_two();
+    fail_array16_int32_invalid_length();
+
+    test_array32_int32();
+    fail_array32_int32_missing_one();
+    fail_array32_int32_missing_two();
+    fail_array32_int32_missing_three();
+    fail_array32_int32_missing_four();
+    fail_array32_int32_missing_five();
+    fail_array32_int32_missing_six();
+    fail_array32_int32_missing_seven();
+    fail_array32_int32_missing_eight();
+    fail_array32_int32_missing_length_one();
+    fail_array32_int32_missing_length_two();
+    fail_array32_int32_missing_length_three();
+    fail_array32_int32_missing_length_four();
+    fail_array32_int32_invalid_length();
+
+    test_array64_int32();
+    fail_array64_int32_missing_one();
+    fail_array64_int32_missing_two();
+    fail_array64_int32_missing_three();
+    fail_array64_int32_missing_four();
+    fail_array64_int32_missing_five();
+    fail_array64_int32_missing_six();
+    fail_array64_int32_missing_seven();
+    fail_array64_int32_missing_eight();
+    fail_array64_int32_missing_length_one();
+    fail_array64_int32_missing_length_two();
+    fail_array64_int32_missing_length_three();
+    fail_array64_int32_missing_length_four();
+    fail_array64_int32_missing_length_five();
+    fail_array64_int32_missing_length_six();
+    fail_array64_int32_missing_length_seven();
+    fail_array64_int32_missing_length_eight();
+    fail_array64_int32_invalid_length();
+}
+
+} // namespace compact_int32_suite
+
+//-----------------------------------------------------------------------------
+// int64[N]
+//-----------------------------------------------------------------------------
+
+namespace compact_int64_suite
+{
+
+void test_array8_int64_empty()
+{
+    const value_type input[] = { token::code::array8_int64, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array8_int64_one()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array8_int64_two()
+{
+    const value_type input[] = { token::code::array8_int64, 0x10, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+        0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_one()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_two()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_three()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_four()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_five()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_six()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_seven()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_eight()
+{
+    const value_type input[] = { token::code::array8_int64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_missing_length_one()
+{
+    const value_type input[] = { token::code::array8_int64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_int64_invalid_length()
+{
+    const value_type input[] = { token::code::array8_int64, 0x07, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void fail_array8_int64_overflow()
+{
+    const value_type input[] = { token::code::array8_int64, 0x10, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00 };
+    format::detail::decoder decoder(input);
+    std::array<std::int64_t, 1> value = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 1);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array16_int64_empty()
+{
+    const value_type input[] = { token::code::array16_int64, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array16_int64_one()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array16_int64_two()
+{
+    const value_type input[] = { token::code::array16_int64, 0x10, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+        0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_one()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_two()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_three()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_four()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_five()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_six()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_seven()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_eight()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_length_one()
+{
+    const value_type input[] = { token::code::array16_int64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_missing_length_two()
+{
+    const value_type input[] = { token::code::array16_int64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_int64_invalid_length()
+{
+    const value_type input[] = { token::code::array16_int64, 0x07, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array32_int64_empty()
+{
+    const value_type input[] = { token::code::array32_int64, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array32_int64_one()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array32_int64_two()
+{
+    const value_type input[] = { token::code::array32_int64, 0x10, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+        0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_one()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_two()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_three()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_four()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_five()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_six()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_seven()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_eight()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_length_one()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_length_two()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_length_three()
+{
+    const value_type input[] = { token::code::array32_int64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_missing_length_four()
+{
+    const value_type input[] = { token::code::array32_int64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_int64_invalid_length()
+{
+    const value_type input[] = { token::code::array32_int64, 0x0F, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array64_int64_empty()
+{
+    const value_type input[] = { token::code::array64_int64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array64_int64_one()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array64_int64_two()
+{
+    const value_type input[] = { token::code::array64_int64, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_int64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+        0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_one()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_two()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_three()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_four()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_five()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_six()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_seven()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_eight()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_one()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_two()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_three()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_four()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_five()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_six()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_seven()
+{
+    const value_type input[] = { token::code::array64_int64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_missing_length_eight()
+{
+    const value_type input[] = { token::code::array64_int64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_int64_invalid_length()
+{
+    const value_type input[] = { token::code::array64_int64, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void run()
+{
+    test_array8_int64_empty();
+    test_array8_int64_one();
+    test_array8_int64_two();
+    fail_array8_int64_missing_one();
+    fail_array8_int64_missing_two();
+    fail_array8_int64_missing_three();
+    fail_array8_int64_missing_four();
+    fail_array8_int64_missing_five();
+    fail_array8_int64_missing_six();
+    fail_array8_int64_missing_seven();
+    fail_array8_int64_missing_eight();
+    fail_array8_int64_missing_length_one();
+    fail_array8_int64_invalid_length();
+    fail_array8_int64_overflow();
+
+    test_array16_int64_empty();
+    test_array16_int64_one();
+    test_array16_int64_two();
+    fail_array16_int64_missing_one();
+    fail_array16_int64_missing_two();
+    fail_array16_int64_missing_three();
+    fail_array16_int64_missing_four();
+    fail_array16_int64_missing_five();
+    fail_array16_int64_missing_six();
+    fail_array16_int64_missing_seven();
+    fail_array16_int64_missing_eight();
+    fail_array16_int64_missing_length_one();
+    fail_array16_int64_missing_length_two();
+    fail_array16_int64_invalid_length();
+
+    test_array32_int64_empty();
+    test_array32_int64_one();
+    test_array32_int64_two();
+    fail_array32_int64_missing_one();
+    fail_array32_int64_missing_two();
+    fail_array32_int64_missing_three();
+    fail_array32_int64_missing_four();
+    fail_array32_int64_missing_five();
+    fail_array32_int64_missing_six();
+    fail_array32_int64_missing_seven();
+    fail_array32_int64_missing_eight();
+    fail_array32_int64_missing_length_one();
+    fail_array32_int64_missing_length_two();
+    fail_array32_int64_missing_length_three();
+    fail_array32_int64_missing_length_four();
+    fail_array32_int64_invalid_length();
+
+    test_array64_int64_empty();
+    test_array64_int64_one();
+    test_array64_int64_two();
+    fail_array64_int64_missing_one();
+    fail_array64_int64_missing_two();
+    fail_array64_int64_missing_three();
+    fail_array64_int64_missing_four();
+    fail_array64_int64_missing_five();
+    fail_array64_int64_missing_six();
+    fail_array64_int64_missing_seven();
+    fail_array64_int64_missing_eight();
+    fail_array64_int64_missing_length_one();
+    fail_array64_int64_missing_length_two();
+    fail_array64_int64_missing_length_three();
+    fail_array64_int64_missing_length_four();
+    fail_array64_int64_missing_length_five();
+    fail_array64_int64_missing_length_six();
+    fail_array64_int64_missing_length_seven();
+    fail_array64_int64_missing_length_eight();
+    fail_array64_int64_invalid_length();
+}
+
+} // namespace compact_int64_suite
+
+//-----------------------------------------------------------------------------
+// float32[N]
+//-----------------------------------------------------------------------------
+
+namespace compact_float32_suite
+{
+
+void test_array8_float32_empty()
+{
+    const value_type input[] = { token::code::array8_float32, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array8_float32_one()
+{
+    const value_type input[] = { token::code::array8_float32, 0x04, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array8_float32_two()
+{
+    const value_type input[] = { token::code::array8_float32, 0x08, 0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float32_missing_one()
+{
+    const value_type input[] = { token::code::array8_float32, 0x04, 0x00, 0x00, 0x80 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float32_missing_two()
+{
+    const value_type input[] = { token::code::array8_float32, 0x04, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float32_missing_three()
+{
+    const value_type input[] = { token::code::array8_float32, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float32_missing_four()
+{
+    const value_type input[] = { token::code::array8_float32, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float32_missing_length_one()
+{
+    const value_type input[] = { token::code::array8_float32 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float32_invalid_length()
+{
+    const value_type input[] = { token::code::array8_float32, 0x03, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void fail_array8_float32_overflow()
+{
+    const value_type input[] = { token::code::array8_float32, 0x08, 0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    std::array<token::float32::type, 1> value = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 1);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array16_float32_empty()
+{
+    const value_type input[] = { token::code::array16_float32, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array16_float32_one()
+{
+    const value_type input[] = { token::code::array16_float32, 0x04, 0x00, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array16_float32_two()
+{
+    const value_type input[] = { token::code::array16_float32, 0x08, 0x00, 0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float32_missing_one()
+{
+    const value_type input[] = { token::code::array16_float32, 0x04, 0x00, 0x00, 0x00, 0x80 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float32_missing_two()
+{
+    const value_type input[] = { token::code::array16_float32, 0x04, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float32_missing_three()
+{
+    const value_type input[] = { token::code::array16_float32, 0x04, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float32_missing_four()
+{
+    const value_type input[] = { token::code::array16_float32, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float32_missing_length_one()
+{
+    const value_type input[] = { token::code::array16_float32, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float32_missing_length_two()
+{
+    const value_type input[] = { token::code::array16_float32 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float32_invalid_length()
+{
+    const value_type input[] = { token::code::array16_float32, 0x03, 0x00, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array32_float32_empty()
+{
+    const value_type input[] = { token::code::array32_float32, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array32_float32_one()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array32_float32_two()
+{
+    const value_type input[] = { token::code::array32_float32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_one()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_two()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_three()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_four()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_length_one()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_length_two()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_length_three()
+{
+    const value_type input[] = { token::code::array32_float32, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_missing_length_four()
+{
+    const value_type input[] = { token::code::array32_float32 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float32_invalid_length()
+{
+    const value_type input[] = { token::code::array32_float32, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array64_float32_empty()
+{
+    const value_type input[] = { token::code::array64_float32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array64_float32_one()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array64_float32_two()
+{
+    const value_type input[] = { token::code::array64_float32, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_float32);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_one()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_two()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_three()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_four()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_one()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_two()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_three()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_four()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_five()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_six()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_seven()
+{
+    const value_type input[] = { token::code::array64_float32, 0x04 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_missing_length_eight()
+{
+    const value_type input[] = { token::code::array64_float32 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float32_invalid_length()
+{
+    const value_type input[] = { token::code::array64_float32, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void run()
+{
+    test_array8_float32_empty();
+    test_array8_float32_one();
+    test_array8_float32_two();
+    fail_array8_float32_missing_one();
+    fail_array8_float32_missing_two();
+    fail_array8_float32_missing_three();
+    fail_array8_float32_missing_four();
+    fail_array8_float32_missing_length_one();
+    fail_array8_float32_invalid_length();
+    fail_array8_float32_overflow();
+
+    test_array16_float32_empty();
+    test_array16_float32_one();
+    test_array16_float32_two();
+    fail_array16_float32_missing_one();
+    fail_array16_float32_missing_two();
+    fail_array16_float32_missing_three();
+    fail_array16_float32_missing_four();
+    fail_array16_float32_missing_length_one();
+    fail_array16_float32_missing_length_two();
+    fail_array16_float32_invalid_length();
+
+    test_array32_float32_empty();
+    test_array32_float32_one();
+    test_array32_float32_two();
+    fail_array32_float32_missing_one();
+    fail_array32_float32_missing_two();
+    fail_array32_float32_missing_three();
+    fail_array32_float32_missing_four();
+    fail_array32_float32_missing_length_one();
+    fail_array32_float32_missing_length_two();
+    fail_array32_float32_missing_length_three();
+    fail_array32_float32_missing_length_four();
+    fail_array32_float32_invalid_length();
+
+    test_array64_float32_empty();
+    test_array64_float32_one();
+    test_array64_float32_two();
+    fail_array64_float32_missing_one();
+    fail_array64_float32_missing_two();
+    fail_array64_float32_missing_three();
+    fail_array64_float32_missing_four();
+    fail_array64_float32_missing_length_one();
+    fail_array64_float32_missing_length_two();
+    fail_array64_float32_missing_length_three();
+    fail_array64_float32_missing_length_four();
+    fail_array64_float32_missing_length_five();
+    fail_array64_float32_missing_length_six();
+    fail_array64_float32_missing_length_seven();
+    fail_array64_float32_missing_length_eight();
+    fail_array64_float32_invalid_length();
+}
+
+} // namespace compact_float32_suite
+
+//-----------------------------------------------------------------------------
+// float64[N]
+//-----------------------------------------------------------------------------
+
+namespace compact_float64_suite
+{
+
+void test_array8_float64_empty()
+{
+    const value_type input[] = { token::code::array8_float64, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array8_float64_one()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array8_float64_two()
+{
+    const value_type input[] = { token::code::array8_float64, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_one()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_two()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_three()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_four()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_five()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_six()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_seven()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_eight()
+{
+    const value_type input[] = { token::code::array8_float64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_missing_length_one()
+{
+    const value_type input[] = { token::code::array8_float64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array8_float64_invalid_length()
+{
+    const value_type input[] = { token::code::array8_float64, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void fail_array8_float64_overflow()
+{
+    const value_type input[] = { token::code::array8_float64, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    std::array<token::float64::type, 1> value = {};
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.array(value.data(), value.size()), 1);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array16_float64_empty()
+{
+    const value_type input[] = { token::code::array16_float64, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array16_float64_one()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array16_float64_two()
+{
+    const value_type input[] = { token::code::array16_float64, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array16_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_one()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_two()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_three()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_four()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_five()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_six()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_seven()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_eight()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_length_one()
+{
+    const value_type input[] = { token::code::array16_float64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_missing_length_two()
+{
+    const value_type input[] = { token::code::array16_float64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array16_float64_invalid_length()
+{
+    const value_type input[] = { token::code::array16_float64, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array32_float64_empty()
+{
+    const value_type input[] = { token::code::array32_float64, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array32_float64_one()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array32_float64_two()
+{
+    const value_type input[] = { token::code::array32_float64, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array32_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_one()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_two()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_three()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_four()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_five()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_six()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_seven()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_eight()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_length_one()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_length_two()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_length_three()
+{
+    const value_type input[] = { token::code::array32_float64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_missing_length_four()
+{
+    const value_type input[] = { token::code::array32_float64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array32_float64_invalid_length()
+{
+    const value_type input[] = { token::code::array32_float64, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+//-----------------------------------------------------------------------------
+
+void test_array64_float64_empty()
+{
+    const value_type input[] = { token::code::array64_float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    TRIAL_PROTOCOL_TEST(decoder.literal().empty());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array64_float64_one()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void test_array64_float64_two()
+{
+    const value_type input[] = { token::code::array64_float64, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array64_float64);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.category(), token::category::data);
+    const value_type expected[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F
+    };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_one()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_two()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_three()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_four()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_five()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_six()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_seven()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_eight()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_one()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_two()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_three()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_four()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_five()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_six()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08, 0x00 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_seven()
+{
+    const value_type input[] = { token::code::array64_float64, 0x08 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_missing_length_eight()
+{
+    const value_type input[] = { token::code::array64_float64 };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
+}
+
+void fail_array64_float64_invalid_length()
+{
+    const value_type input[] = { token::code::array64_float64, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    format::detail::decoder decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::error_invalid_length);
+}
+
+void run()
+{
+    test_array8_float64_empty();
+    test_array8_float64_one();
+    test_array8_float64_two();
+    fail_array8_float64_missing_one();
+    fail_array8_float64_missing_two();
+    fail_array8_float64_missing_three();
+    fail_array8_float64_missing_four();
+    fail_array8_float64_missing_five();
+    fail_array8_float64_missing_six();
+    fail_array8_float64_missing_seven();
+    fail_array8_float64_missing_eight();
+    fail_array8_float64_missing_length_one();
+    fail_array8_float64_invalid_length();
+    fail_array8_float64_overflow();
+
+    test_array16_float64_empty();
+    test_array16_float64_one();
+    test_array16_float64_two();
+    fail_array16_float64_missing_one();
+    fail_array16_float64_missing_two();
+    fail_array16_float64_missing_three();
+    fail_array16_float64_missing_four();
+    fail_array16_float64_missing_five();
+    fail_array16_float64_missing_six();
+    fail_array16_float64_missing_seven();
+    fail_array16_float64_missing_eight();
+    fail_array16_float64_missing_length_one();
+    fail_array16_float64_missing_length_two();
+    fail_array16_float64_invalid_length();
+
+    test_array32_float64_empty();
+    test_array32_float64_one();
+    test_array32_float64_two();
+    fail_array32_float64_missing_one();
+    fail_array32_float64_missing_two();
+    fail_array32_float64_missing_three();
+    fail_array32_float64_missing_four();
+    fail_array32_float64_missing_five();
+    fail_array32_float64_missing_six();
+    fail_array32_float64_missing_seven();
+    fail_array32_float64_missing_eight();
+    fail_array32_float64_missing_length_one();
+    fail_array32_float64_missing_length_two();
+    fail_array32_float64_missing_length_three();
+    fail_array32_float64_missing_length_four();
+    fail_array32_float64_invalid_length();
+
+    test_array64_float64_empty();
+    test_array64_float64_one();
+    test_array64_float64_two();
+    fail_array64_float64_missing_one();
+    fail_array64_float64_missing_two();
+    fail_array64_float64_missing_three();
+    fail_array64_float64_missing_four();
+    fail_array64_float64_missing_five();
+    fail_array64_float64_missing_six();
+    fail_array64_float64_missing_seven();
+    fail_array64_float64_missing_eight();
+    fail_array64_float64_missing_length_one();
+    fail_array64_float64_missing_length_two();
+    fail_array64_float64_missing_length_three();
+    fail_array64_float64_missing_length_four();
+    fail_array64_float64_missing_length_five();
+    fail_array64_float64_missing_length_six();
+    fail_array64_float64_missing_length_seven();
+    fail_array64_float64_missing_length_eight();
+    fail_array64_float64_invalid_length();
+}
+
+} // namespace compact_float64_suite
 
 //-----------------------------------------------------------------------------
 // main
@@ -1720,10 +4456,12 @@ int main()
     string16_suite::run();
     string32_suite::run();
     string64_suite::run();
-    binary8_suite::run();
-    binary16_suite::run();
-    binary32_suite::run();
-    binary64_suite::run();
+    compact_int8_suite::run();
+    compact_int16_suite::run();
+    compact_int32_suite::run();
+    compact_int64_suite::run();
+    compact_float32_suite::run();
+    compact_float64_suite::run();
 
     return boost::report_errors();
 }

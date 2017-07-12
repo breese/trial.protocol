@@ -30,8 +30,8 @@ namespace detail
 
 class encoder
 {
-public:
     using value_type = std::uint8_t;
+public:
     using size_type = std::size_t;
     using view_type = trial::protocol::detail::basic_string_view<value_type, buffer::char_traits<value_type>>;
     using string_view_type = trial::protocol::detail::basic_string_view<char, buffer::char_traits<char>>;
@@ -50,8 +50,13 @@ public:
     size_type value(const string_view_type&);
     size_type value(const char *);
     size_type value(const char *, size_type);
-    size_type binary(const value_type *, size_type);
-    size_type binary(const view_type&);
+
+    size_type array(const token::int8::type *, size_type);
+    size_type array(const token::int16::type *, size_type);
+    size_type array(const token::int32::type *, size_type);
+    size_type array(const token::int64::type *, size_type);
+    size_type array(const token::float32::type *, size_type);
+    size_type array(const token::float64::type *, size_type);
 
 private:
     size_type write_length(std::uint8_t);
@@ -60,6 +65,16 @@ private:
     size_type write_length(std::uint64_t);
     size_type write(value_type);
     size_type write(const view_type&);
+
+    void endian_write(token::int16::type);
+    void endian_write(token::int32::type);
+    void endian_write(token::int64::type);
+    void endian_write(token::float32::type);
+    void endian_write(token::float64::type);
+
+    void endian_write(std::uint16_t);
+    void endian_write(std::uint32_t);
+    void endian_write(std::uint64_t);
 
 private:
     using buffer_type = buffer::base<value_type>;

@@ -31,6 +31,7 @@ class decoder
 {
 public:
     using value_type = std::uint8_t;
+    using size_type = std::size_t;
     using view_type = trial::protocol::detail::basic_string_view<value_type, buffer::char_traits<value_type>>;
 
     template <typename T>
@@ -47,10 +48,16 @@ public:
     const view_type& literal() const BOOST_NOEXCEPT;
     template <typename Tag> typename Tag::type value() const;
 
+    size_type array(token::int8::type *output, size_type output_length);
+    size_type array(token::int16::type *output, size_type output_length);
+    size_type array(token::int32::type *output, size_type output_length);
+    size_type array(token::int64::type *output, size_type output_length);
+    size_type array(token::float32::type *output, size_type output_length);
+    size_type array(token::float64::type *output, size_type output_length);
+
 private:
     token::code::value next(value_type, std::int64_t) BOOST_NOEXCEPT;
-    token::code::value next_string(value_type) BOOST_NOEXCEPT;
-    token::code::value next_binary(value_type) BOOST_NOEXCEPT;
+    token::code::value next_length(value_type, size_type) BOOST_NOEXCEPT;
 
     template <typename Tag>
     token::code::value advance() BOOST_NOEXCEPT;

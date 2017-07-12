@@ -10,13 +10,15 @@
 
 #include <functional>
 #include <vector>
+#include <limits>
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/bintoken/serialization.hpp>
+#include <trial/protocol/bintoken/serialization/array.hpp>
 #include <trial/protocol/detail/lightweight_test.hpp>
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
-using value_type = format::writer::value_type;
+using output_type = std::uint8_t;
 
 //-----------------------------------------------------------------------------
 // Basic types
@@ -27,14 +29,14 @@ namespace basic_suite
 
 void test_empty()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 0);
 }
 
 void test_false()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     bool value = false;
     ar << value;
@@ -44,7 +46,7 @@ void test_false()
 
 void test_const_false()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     const bool value = false;
     ar << value;
@@ -54,7 +56,7 @@ void test_const_false()
 
 void test_true()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     bool value = true;
     ar << value;
@@ -64,7 +66,7 @@ void test_true()
 
 void test_const_true()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     const bool value = true;
     ar << value;
@@ -92,7 +94,7 @@ namespace integer_suite
 
 void test_zero()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     int value = 0;
     ar << value;
@@ -102,7 +104,7 @@ void test_zero()
 
 void test_const_zero()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     const int value = 0;
     ar << value;
@@ -112,7 +114,7 @@ void test_const_zero()
 
 void test_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     int value = 1;
     ar << value;
@@ -122,7 +124,7 @@ void test_one()
 
 void test_minus_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     int value = -1;
     ar << value;
@@ -132,7 +134,7 @@ void test_minus_one()
 
 void test_all_types()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     int alpha = 0x01;
     int bravo = 0x0100;
@@ -140,13 +142,13 @@ void test_all_types()
     long long delta = UINT64_C(0x0100000000);
     ar << alpha << bravo << charlie << delta;
 
-    value_type expected[] = { 0x01,
+    output_type expected[] = { 0x01,
                               token::code::int16, 0x00, 0x01,
                               token::code::int32, 0x00, 0x00, 0x01, 0x00,
                               token::code::int64, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void run()
@@ -169,41 +171,41 @@ namespace number_suite
 
 void test_float32_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     token::float32::type value = 1.0f;
     ar << value;
 
-    value_type expected[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
+    output_type expected[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_const_float32_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     const token::float32::type value = 1.0f;
     ar << value;
 
-    value_type expected[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
+    output_type expected[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_float64_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     token::float64::type value = 1.0;
     ar << value;
 
-    value_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void run()
@@ -224,54 +226,54 @@ namespace string_suite
 
 void test_empty()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     std::string value("");
     ar << value;
 
-    value_type expected[] = { token::code::string8, 0x00 };
+    output_type expected[] = { token::code::string8, 0x00 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_const_empty()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     const std::string value("");
     ar << value;
 
-    value_type expected[] = { token::code::string8, 0x00 };
+    output_type expected[] = { token::code::string8, 0x00 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     std::string value("A");
     ar << value;
 
-    value_type expected[] = { token::code::string8, 0x01, 0x41 };
+    output_type expected[] = { token::code::string8, 0x01, 0x41 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_many()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     std::string value("ABCD");
     ar << value;
 
-    value_type expected[] = { token::code::string8, 0x04, 0x41, 0x42, 0x43, 0x44 };
+    output_type expected[] = { token::code::string8, 0x04, 0x41, 0x42, 0x43, 0x44 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void run()
@@ -285,84 +287,6 @@ void run()
 } // namespace string_suite
 
 //-----------------------------------------------------------------------------
-// Binary
-//-----------------------------------------------------------------------------
-
-namespace binary_suite
-{
-
-void test_empty()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::vector<std::uint8_t> value;
-    ar << value;
-
-    value_type expected[] = { token::code::binary8, 0x00 };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_one()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::vector<std::uint8_t> value(1, 0xFF);
-    ar << value;
-
-    value_type expected[] = { token::code::binary8, 0x01, 0xFF };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_many()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::vector<std::uint8_t> value(4, 0xFF);
-    ar << value;
-
-    value_type expected[] = { token::code::binary8, 0x04, 0xFF, 0xFF, 0xFF, 0xFF };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_big()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::vector<std::uint8_t> value(0x10000, 0xFF);
-    ar << value;
-
-    std::vector<value_type> expected;
-    expected.push_back(token::code::binary32);
-    expected.push_back(0x00);
-    expected.push_back(0x00);
-    expected.push_back(0x01);
-    expected.push_back(0x00);
-    for (std::vector<value_type>::size_type i = 0; i < value.size(); ++i)
-    {
-        expected.push_back(0xFF);
-    }
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected.begin(), expected.end(),
-                                 std::equal_to<value_type>());
-}
-
-void run()
-{
-    test_empty();
-    test_one();
-    test_many();
-    test_big();
-}
-
-} // namespace binary_suite
-
-//-----------------------------------------------------------------------------
 // Array
 //-----------------------------------------------------------------------------
 
@@ -371,34 +295,34 @@ namespace array_suite
 
 void test_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
-    bool array[] = { true };
+    bool array[] = { false };
     ar << array;
 
-    value_type expected[] = { token::code::begin_array,
+    output_type expected[] = { token::code::begin_array,
                               0x01,
-                              0x81,
+                              0x80,
                               token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_four()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     bool array[] = { false, true, false, true };
     ar << array;
 
-    value_type expected[] = { token::code::begin_array,
+    output_type expected[] = { token::code::begin_array,
                               0x04,
                               0x80, 0x81, 0x80, 0x81,
                               token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void run()
@@ -410,342 +334,336 @@ void run()
 } // namespace array_suite
 
 //-----------------------------------------------------------------------------
-// Pair
+// Compact array
 //-----------------------------------------------------------------------------
 
-namespace pair_suite
+namespace compact_array_suite
 {
 
-void test_string_bool()
+void test_int8_one()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
-    std::pair<std::string, bool> value("A", true);
+    std::int8_t value[] = {0x7F};
     ar << value;
 
-    value_type expected[] = { token::code::begin_record,
-                              token::code::string8, 0x01, 0x41,
-                              token::code::true_value,
-                              token::code::end_record };
+    output_type expected[] = { token::code::array8_int8, 0x01, 0x7F };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
-void test_const_string_bool()
+void test_int8_many()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
-    const std::pair<std::string, bool> value("A", true);
+    std::int8_t value[] = {0, -1, std::numeric_limits<std::int8_t>::min(), std::numeric_limits<std::int8_t>::max()};
     ar << value;
 
-    value_type expected[] = { token::code::begin_record,
-                              token::code::string8, 0x01, 0x41,
-                              token::code::true_value,
-                              token::code::end_record };
+    output_type expected[] = { token::code::array8_int8, 0x04, 0x00, 0xFF, 0x80, 0x7F };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
+}
+
+void test_uint8_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint8_t value[] = {0xFF};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int8, 0x01, 0xFF };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_uint8_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint8_t value[] = {0x00, 0x7F, 0x80, 0xFF};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int8, 0x04, 0x00, 0x7F, 0x80, 0xFF };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+//-----------------------------------------------------------------------------
+
+void test_int16_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::int16_t value[] = {0x7FFF};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int16, 0x02, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_int16_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::int16_t value[] = {0, -1, std::numeric_limits<std::int16_t>::min(), std::numeric_limits<std::int16_t>::max()};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int16, 0x08,
+                               0x00, 0x00,
+                               0xFF, 0xFF,
+                               0x00, 0x80,
+                               0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_uint16_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint16_t value[] = {0x7FFF};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int16, 0x02, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_uint16_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint16_t value[] = {0x0000, 0x7FFF, 0x8000, 0xFFFF};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int16, 0x08, 0x00, 0x00, 0xFF, 0x7F, 0x00, 0x80, 0xFF, 0xFF };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+//-----------------------------------------------------------------------------
+
+void test_int32_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::int32_t value[] = {std::numeric_limits<std::int32_t>::max()};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int32, 0x04, 0xFF, 0xFF, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_int32_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::int32_t value[] = {0, -1, std::numeric_limits<std::int32_t>::min(), std::numeric_limits<std::int32_t>::max()};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int32, 0x10,
+                               0x00, 0x00, 0x00, 0x00,
+                               0xFF, 0xFF, 0xFF, 0xFF,
+                               0x00, 0x00, 0x00, 0x80,
+                               0xFF, 0xFF, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_uint32_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint32_t value[] = {0x7FFFFFFF};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int32, 0x04, 0xFF, 0xFF, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_uint32_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint32_t value[] = {0x00000000, 0x7FFFFFFF, 0x80000000, 0xFFFFFFFF};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int32, 0x10,
+                               0x00, 0x00, 0x00, 0x00,
+                               0xFF, 0xFF, 0xFF, 0x7F,
+                               0x00, 0x00, 0x00, 0x80,
+                               0xFF, 0xFF, 0xFF, 0xFF };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+//-----------------------------------------------------------------------------
+
+void test_int64_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::int64_t value[] = {std::numeric_limits<std::int64_t>::max()};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int64, 0x08, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_int64_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::int64_t value[] = {0, -1, std::numeric_limits<std::int64_t>::min(), std::numeric_limits<std::int64_t>::max()};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int64, 0x20,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                               0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
+                               0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_uint64_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint64_t value[] = {UINT64_C(0x7FFFFFFFFFFFFFFF)};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int64, 0x08, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_uint64_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    std::uint64_t value[] = {UINT64_C(0x0000000000000000), UINT64_C(0x7FFFFFFFFFFFFFFF), UINT64_C(0x8000000000000000), UINT64_C(0xFFFFFFFFFFFFFFFF)};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_int64, 0x20,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                               0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
+                               0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+//-----------------------------------------------------------------------------
+
+void test_float32_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    token::float32::type value[] = {1.0f};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_float32, 0x04, 0x00, 0x00, 0x80, 0x3F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_float32_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    token::float32::type value[] = {0.0f, -1.0f, 1.0f};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_float32, 0x0C,
+                               0x00, 0x00, 0x00, 0x00,
+                               0x00, 0x00, 0x80, 0xBF,
+                               0x00, 0x00, 0x80, 0x3F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_float64_one()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    token::float64::type value[] = {1.0};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_float64, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
+}
+
+void test_float64_many()
+{
+    std::vector<output_type> result;
+    format::oarchive ar(result);
+    token::float64::type value[] = {0.0f, -1.0f, 1.0f};
+    ar << value;
+
+    output_type expected[] = { token::code::array8_float64, 0x18,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xBF,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<output_type>());
 }
 
 void run()
 {
-    test_string_bool();
-    test_const_string_bool();
+    test_int8_one();
+    test_int8_many();
+    test_uint8_one();
+    test_uint8_many();
+
+    test_int16_one();
+    test_int16_many();
+    test_uint16_one();
+    test_uint16_many();
+
+    test_int32_one();
+    test_int32_many();
+    test_uint32_one();
+    test_uint32_many();
+
+    test_int64_one();
+    test_int64_many();
+    test_uint64_one();
+    test_uint64_many();
+
+    test_float32_one();
+    test_float32_many();
+
+    test_float64_one();
+    test_float64_many();
 }
 
-} // namespace pair_suite
-
-//-----------------------------------------------------------------------------
-// Optional
-//-----------------------------------------------------------------------------
-
-namespace optional_suite
-{
-
-void test_value()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    boost::optional<std::string> value("A");
-    ar << value;
-
-    value_type expected[] = { token::code::string8, 0x01, 0x41 };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_const_value()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    const boost::optional<std::string> value("A");
-    ar << value;
-
-    value_type expected[] = { token::code::string8, 0x01, 0x41 };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_null()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    boost::optional<std::string> value;
-    ar << value;
-
-    value_type expected[] = { token::code::null };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void run()
-{
-    test_value();
-    test_const_value();
-    test_null();
-}
-
-} // namespace optional_suite
-
-//-----------------------------------------------------------------------------
-// Vector
-//-----------------------------------------------------------------------------
-
-namespace vector_suite
-{
-
-void test_bool_empty()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::vector<bool> value;
-    ar << value;
-
-    value_type expected[] = { token::code::begin_array,
-                              0x00,
-                              token::code::end_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_bool_one()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::vector<bool> value;
-    value.push_back(true);
-    ar << value;
-
-    value_type expected[] = { token::code::begin_array,
-                              0x01,
-                              token::code::true_value,
-                              token::code::end_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_bool_two()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::vector<bool> value;
-    value.push_back(true);
-    value.push_back(false);
-    ar << value;
-
-    value_type expected[] = { token::code::begin_array,
-                              0x02,
-                              token::code::true_value,
-                              token::code::false_value,
-                              token::code::end_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void run()
-{
-    test_bool_empty();
-    test_bool_one();
-    test_bool_two();
-}
-
-} // namespace vector_suite
-
-//-----------------------------------------------------------------------------
-// Set
-//-----------------------------------------------------------------------------
-
-namespace set_suite
-{
-
-void test_int_empty()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::set<int> value;
-    ar << value;
-
-    value_type expected[] = { token::code::begin_array,
-                              token::code::null,
-                              token::code::end_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_int_one()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::set<int> value;
-    value.insert(0x11);
-    ar << value;
-
-    value_type expected[] = { token::code::begin_array,
-                              token::code::null,
-                              0x11,
-                              token::code::end_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_int_two()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::set<int> value;
-    value.insert(0x11);
-    value.insert(0x22);
-    ar << value;
-
-    value_type expected[] = { token::code::begin_array,
-                              token::code::null,
-                              0x11,
-                              0x22,
-                              token::code::end_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void run()
-{
-    test_int_empty();
-    test_int_one();
-    test_int_two();
-}
-
-} // namespace set_suite
-
-//-----------------------------------------------------------------------------
-// Map
-//-----------------------------------------------------------------------------
-
-namespace map_suite
-{
-
-void test_string_bool_empty()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::map<std::string, bool> value;
-    ar << value;
-
-    value_type expected[] = { token::code::begin_assoc_array,
-                              token::code::null,
-                              token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_string_bool_one()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::map<std::string, bool> value;
-    value["A"] = true;
-    ar << value;
-
-    value_type expected[] = { token::code::begin_assoc_array,
-                              token::code::null,
-                              token::code::begin_record,
-                              token::code::string8, 0x01, 0x41,
-                              token::code::true_value,
-                              token::code::end_record,
-                              token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_string_bool_two()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::map<std::string, bool> value;
-    value["A"] = true;
-    value["B"] = false;
-    ar << value;
-
-    value_type expected[] = { token::code::begin_assoc_array,
-                              token::code::null,
-                              token::code::begin_record,
-                              token::code::string8, 0x01, 0x41,
-                              token::code::true_value,
-                              token::code::end_record,
-                              token::code::begin_record,
-                              token::code::string8, 0x01, 0x42,
-                              token::code::false_value,
-                              token::code::end_record,
-                              token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void test_int_string_two()
-{
-    std::vector<value_type> result;
-    format::oarchive ar(result);
-    std::map<int, std::string> value;
-    value[0x11] = "A";
-    value[0x12] = "B";
-    ar << value;
-
-    value_type expected[] = { token::code::begin_assoc_array,
-                              token::code::null,
-                              token::code::begin_record,
-                              0x11,
-                              token::code::string8, 0x01, 0x41,
-                              token::code::end_record,
-                              token::code::begin_record,
-                              0x12,
-                              token::code::string8, 0x01, 0x42,
-                              token::code::end_record,
-                              token::code::end_assoc_array };
-    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
-                                 expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
-}
-
-void run()
-{
-    test_string_bool_empty();
-    test_string_bool_one();
-    test_string_bool_two();
-    test_int_string_two();
-}
-
-} // namespace map_suite
+} // namespace compact_array_suite
 
 //-----------------------------------------------------------------------------
 // Struct
@@ -774,18 +692,18 @@ struct person
 
 void test_person()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     person value("ABC", 127);
     ar << value;
 
-    value_type expected[] = { token::code::begin_record,
+    output_type expected[] = { token::code::begin_record,
                               token::code::string8, 0x03, 0x41, 0x42, 0x43,
                               0x7F,
                               token::code::end_record };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void run()
@@ -831,18 +749,18 @@ struct split_person
 
 void test_split_person()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     split_person value("ABC", 127);
     ar << value;
 
-    value_type expected[] = { token::code::begin_record,
+    output_type expected[] = { token::code::begin_record,
                               token::code::string8, 0x03, 0x41, 0x42, 0x43,
                               0x7F,
                               token::code::end_record };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void run()
@@ -862,13 +780,8 @@ int main()
     integer_suite::run();
     number_suite::run();
     string_suite::run();
-    binary_suite::run();
     array_suite::run();
-    pair_suite::run();
-    optional_suite::run();
-    vector_suite::run();
-    set_suite::run();
-    map_suite::run();
+    compact_array_suite::run();
     struct_suite::run();
     split_struct_suite::run();
 

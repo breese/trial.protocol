@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstring>
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/serialization/array.hpp>
 
@@ -79,6 +80,308 @@ struct load_overloader< bintoken::iarchive,
         if (!ar.at<bintoken::token::end_array>())
             throw bintoken::error(bintoken::expected_end_array);
         ar.load<bintoken::token::end_array>();
+    }
+};
+
+// Specialization for compact arrays
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::int8_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::int8_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int8:
+        case bintoken::token::code::array16_int8:
+        case bintoken::token::code::array32_int8:
+        case bintoken::token::code::array64_int8:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::uint8_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::uint8_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int8:
+        case bintoken::token::code::array16_int8:
+        case bintoken::token::code::array32_int8:
+        case bintoken::token::code::array64_int8:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::int16_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::int16_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int16:
+        case bintoken::token::code::array16_int16:
+        case bintoken::token::code::array32_int16:
+        case bintoken::token::code::array64_int16:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::uint16_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::uint16_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int16:
+        case bintoken::token::code::array16_int16:
+        case bintoken::token::code::array32_int16:
+        case bintoken::token::code::array64_int16:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::int32_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::int32_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int32:
+        case bintoken::token::code::array16_int32:
+        case bintoken::token::code::array32_int32:
+        case bintoken::token::code::array64_int32:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::uint32_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::uint32_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int32:
+        case bintoken::token::code::array16_int32:
+        case bintoken::token::code::array32_int32:
+        case bintoken::token::code::array64_int32:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::int64_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::int64_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int64:
+        case bintoken::token::code::array16_int64:
+        case bintoken::token::code::array32_int64:
+        case bintoken::token::code::array64_int64:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        std::uint64_t[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     std::uint64_t (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_int64:
+        case bintoken::token::code::array16_int64:
+        case bintoken::token::code::array32_int64:
+        case bintoken::token::code::array64_int64:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        bintoken::token::float32::type[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     bintoken::token::float32::type (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_float32:
+        case bintoken::token::code::array16_float32:
+        case bintoken::token::code::array32_float32:
+        case bintoken::token::code::array64_float32:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
+    }
+};
+
+template <std::size_t N>
+struct load_overloader< bintoken::iarchive,
+                        bintoken::token::float64::type[N] >
+{
+    static void load(bintoken::iarchive& ar,
+                     bintoken::token::float64::type (&data)[N],
+                     const unsigned int /* protocol_version */)
+    {
+        switch (ar.code())
+        {
+        case bintoken::token::code::array8_float64:
+        case bintoken::token::code::array16_float64:
+        case bintoken::token::code::array32_float64:
+        case bintoken::token::code::array64_float64:
+            {
+                const auto length = ar.length();
+                if (length > N)
+                {
+                    throw bintoken::error(bintoken::overflow);
+                }
+                ar.load_array(data, length);
+            }
+            break;
+
+        default:
+            throw bintoken::error(bintoken::incompatible_type);
+        }
     }
 };
 

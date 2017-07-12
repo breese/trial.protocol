@@ -46,9 +46,9 @@ void oarchive::save()
 }
 
 template <typename T>
-void oarchive::save_binary(const T *data, std::size_t size)
+void oarchive::save_array(const T *data, std::size_t size)
 {
-    writer.binary(data, size);
+    writer.array(data, size);
 }
 
 } // namespace bintoken

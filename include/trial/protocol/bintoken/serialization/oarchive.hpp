@@ -40,7 +40,7 @@ public:
     void save();
 
     template <typename T>
-    void save_binary(const T *data, std::size_t size);
+    void save_array(const T *data, std::size_t size);
 
     // Ignore these
     void save_override(const boost::archive::version_type, int) {}
