@@ -16,6 +16,7 @@
 #include <iterator>
 #include <limits>
 #include <type_traits>
+#include <trial/protocol/json/detail/string_converter.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 #include <trial/protocol/json/error.hpp>
@@ -263,7 +264,7 @@ ReturnType basic_decoder<CharT>::number_value() const
         throw json::error(error());
     }
     
-    return ReturnType(std::atof(literal().data()));
+    return string_converter<CharT, ReturnType>::decode(current.view);
 }
 
 template <typename CharT>

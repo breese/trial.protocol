@@ -16,7 +16,7 @@
 #include <array>
 #include <type_traits>
 #include <trial/protocol/buffer/base.hpp>
-#include <trial/protocol/json/detail/to_string.hpp>
+#include <trial/protocol/json/detail/string_converter.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
 #include <trial/protocol/json/token.hpp>
 
@@ -321,7 +321,7 @@ auto basic_encoder<CharT, N>::floating_value(const T& data) -> size_type
         // Infinity and NaN must be encoded as null
         return write(traits<CharT>::null_text());
     default:
-        return write(detail::to_string<CharT>(data));
+        return write(detail::string_converter<CharT, T>::encode(data));
     }
 }
 
