@@ -506,9 +506,22 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
 
     {
         typename view_type::const_iterator digit_begin = input.begin();
-        while (!input.empty() && traits<CharT>::is_digit(input.front()))
+        if (input.front() == traits<CharT>::alpha_0)
         {
             input.remove_prefix(1);
+            if (!input.empty() && traits<CharT>::is_digit(input.front()))
+            {
+                // Leading zeros not allowed
+                type = token::detail::code::error_invalid_value;
+                goto end;
+            }
+        }
+        else
+        {
+            while (!input.empty() && traits<CharT>::is_digit(input.front()))
+            {
+                input.remove_prefix(1);
+            }
         }
         if (input.begin() == digit_begin)
         {

@@ -642,6 +642,14 @@ void fail_missing_exponent_minus_white()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0e-");
 }
 
+void fail_zero_followed_by_digits()
+{
+    const char input[] = "01";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_invalid_value);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0");
+}
+
 void fail_as_int()
 {
     const char input[] = "1.0";
@@ -680,6 +688,7 @@ void run()
     fail_missing_exponent_plus_white();
     fail_missing_exponent_minus();
     fail_missing_exponent_minus_white();
+    fail_zero_followed_by_digits();
     fail_as_int();
     fail_as_string();
 }
