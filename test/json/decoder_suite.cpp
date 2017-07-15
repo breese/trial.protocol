@@ -1035,6 +1035,37 @@ void run()
 } // namespace string_suite
 
 //-----------------------------------------------------------------------------
+// UTF-8 characters
+//-----------------------------------------------------------------------------
+
+namespace utf8_suite
+{
+
+void test_utf8_7F()
+{
+    const char input[] = "\"\x7F\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\x7F");
+}
+
+void fail_utf8_80()
+{
+    const char input[] = "\"\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\x80");
+}
+
+void run()
+{
+    test_utf8_7F();
+    fail_utf8_80();
+}
+
+} // namespace utf8_suite
+
+//-----------------------------------------------------------------------------
 // String pangram
 //
 // Adapted from http://www.cl.cam.ac.uk/~mgk25/ucs/examples/quickbrown.txt
@@ -1368,6 +1399,7 @@ int main()
     integer_suite::run();
     number_suite::run();
     string_suite::run();
+    utf8_suite::run();
     pangram_suite::run();
     container_suite::run();
     view_suite::run();

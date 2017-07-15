@@ -631,6 +631,11 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
         else
         {
             const value_type character = *marker++;
+
+            // Check for uncaught 1xxxxxxx patterns
+            if (character & 0x80)
+                goto error;
+
             if (character == traits<CharT>::alpha_reverse_solidus)
             {
                 // Handle escaped character
