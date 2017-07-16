@@ -420,6 +420,48 @@ void fail_outer()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "false");
 }
 
+void fail_missing_begin()
+{
+    const char input[] = "]";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unbalanced_end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
+}
+
+void fail_missing_begin_after_array()
+{
+    const char input[] = "[]]";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unbalanced_end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
+}
+
+void fail_missing_begin_after_comma()
+{
+    const char input[] = "[],]";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), ",");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
+}
+
 void run()
 {
     test_empty();
@@ -432,6 +474,9 @@ void run()
     fail_empty_mismatched();
     fail_integer_one_mismatched();
     fail_outer();
+    fail_missing_begin();
+    fail_missing_begin_after_array();
+    fail_missing_begin_after_comma();
 }
 
 } // namespace array_suite
@@ -698,6 +743,48 @@ void fail_outer()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
 }
 
+void fail_missing_begin()
+{
+    const char input[] = "}";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unbalanced_end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "}");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
+}
+
+void fail_missing_begin_after_object()
+{
+    const char input[] = "{}}";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unbalanced_end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "}");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
+}
+
+void fail_missing_begin_after_comma()
+{
+    const char input[] = "{},}";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), ",");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "}");
+}
+
 void run()
 {
     test_empty();
@@ -714,6 +801,9 @@ void run()
     fail_empty_mismatched();
     fail_one_mismatched();
     fail_outer();
+    fail_missing_begin();
+    fail_missing_begin_after_object();
+    fail_missing_begin_after_comma();
 }
 
 } // namespace object_suite

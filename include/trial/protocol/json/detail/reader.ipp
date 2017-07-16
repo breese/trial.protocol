@@ -100,6 +100,7 @@ basic_reader<CharT>::basic_reader(const view_type& input)
     : decoder(input)
 {
     stack.push(token::detail::code::end);
+    decoder.code(stack.top().check_outer(decoder));
 }
 
 template <typename CharT>
@@ -365,6 +366,12 @@ token::detail::code::value basic_reader<CharT>::frame::check_outer(decoder_type&
     case token::detail::code::name_separator:
         return token::detail::code::error_unexpected_token;
 
+    case token::detail::code::end_array:
+        return token::detail::code::error_unbalanced_end_array;
+        
+    case token::detail::code::end_object:
+        return token::detail::code::error_unbalanced_end_object;
+        
     default:
         return decoder.code();
     }
