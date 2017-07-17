@@ -51,6 +51,15 @@ public:
     void save_override(const char *data);
 
     // Ignore these
+    void save_override(const boost::archive::version_type) {}
+    void save_override(const boost::archive::object_id_type) {}
+    void save_override(const boost::archive::object_reference_type) {}
+    void save_override(const boost::archive::class_id_type) {}
+    void save_override(const boost::archive::class_id_optional_type) {}
+    void save_override(const boost::archive::class_id_reference_type) {}
+    void save_override(const boost::archive::tracking_type) {}
+    void save_override(const boost::archive::class_name_type&) {}
+
     void save_override(const boost::archive::version_type, int) {}
     void save_override(const boost::archive::object_id_type, int) {}
     void save_override(const boost::archive::object_reference_type, int) {}
