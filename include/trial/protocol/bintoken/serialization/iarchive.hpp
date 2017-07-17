@@ -37,6 +37,9 @@ public:
     iarchive(const T&);
 
     template <typename T>
+    void load_override(T& data);
+
+    template <typename T>
     void load_override(T& data, long);
 
     void load(view_type&);

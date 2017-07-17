@@ -27,6 +27,13 @@ oarchive::oarchive(T& buffer)
 }
 
 template <typename T>
+inline void oarchive::save_override(const T& data)
+{
+    serialization::save_overloader<oarchive, T>::
+        save(*this, data, 0);
+}
+
+template <typename T>
 inline void oarchive::save_override(const T& data, long protocol_version)
 {
     serialization::save_overloader<oarchive, T>::

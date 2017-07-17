@@ -43,6 +43,14 @@ void basic_oarchive<CharT>::save(const T& data)
 
 template <typename CharT>
 template<typename T>
+void basic_oarchive<CharT>::save_override(const T& data)
+{
+    serialization::save_overloader<basic_oarchive<CharT>, T>::
+        save(*this, data, 0);
+}
+
+template <typename CharT>
+template<typename T>
 void basic_oarchive<CharT>::save_override(const T& data, long protocol_version)
 {
     serialization::save_overloader<basic_oarchive<CharT>, T>::

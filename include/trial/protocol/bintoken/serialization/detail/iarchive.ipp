@@ -27,6 +27,13 @@ iarchive::iarchive(const T& input)
 }
 
 template <typename T>
+void iarchive::load_override(T& data)
+{
+    serialization::load_overloader<iarchive, T>::
+        load(*this, data, 0);
+}
+
+template <typename T>
 void iarchive::load_override(T& data, long protocol_version)
 {
     serialization::load_overloader<iarchive, T>::

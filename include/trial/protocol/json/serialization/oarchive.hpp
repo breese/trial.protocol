@@ -42,6 +42,9 @@ public:
     void save(const T& data);
 
     template<typename T>
+    void save_override(const T& data);
+
+    template<typename T>
     void save_override(const T& data, long);
 
     // String literal

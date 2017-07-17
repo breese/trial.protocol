@@ -31,6 +31,9 @@ public:
     oarchive(T&);
 
     template <typename T>
+    void save_override(const T& data);
+
+    template <typename T>
     void save_override(const T& data, long);
 
     template <typename T>

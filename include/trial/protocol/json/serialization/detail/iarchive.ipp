@@ -41,6 +41,14 @@ basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
 
 template <typename CharT>
 template<typename T>
+void basic_iarchive<CharT>::load_override(T& data)
+{
+    serialization::load_overloader<basic_iarchive<CharT>, T>::
+        load(*this, data, 0);
+}
+
+template <typename CharT>
+template<typename T>
 void basic_iarchive<CharT>::load_override(T& data, long protocol_version)
 {
     serialization::load_overloader<basic_iarchive<CharT>, T>::
