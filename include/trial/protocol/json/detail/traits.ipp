@@ -210,6 +210,7 @@ inline traits_category traits<char>::to_category(value_type value) BOOST_NOEXCEP
     case 0xFC: case 0xFD: case 0xFE: case 0xFF:
         return traits_category::extra_5;
     }
+    return traits_category::illegal;
 }
 
 inline int traits<char>::to_int(value_type value) BOOST_NOEXCEPT
@@ -426,6 +427,7 @@ inline traits_category traits<unsigned char>::to_category(value_type v) BOOST_NO
     case 0xFC: case 0xFD: case 0xFE: case 0xFF:
         return traits_category::extra_5;
     }
+    return traits_category::illegal;
 }
 
 inline int traits<unsigned char>::to_int(value_type value) BOOST_NOEXCEPT
