@@ -609,34 +609,9 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
     ++marker; // Skip initial '"'
     while (marker != end)
     {
-        const typename view_type::size_type amount = traits<CharT>::extra_bytes(*marker);
-
-        if (amount > 0)
+        switch (traits<CharT>::to_category(*marker++))
         {
-            // Skip UTF-8 characters
-            const typename view_type::size_type distance = std::distance(marker, end);
-            if (amount >= distance)
-                goto error;
-
-            ++marker;
-
-            for (typename view_type::size_type i = 0; i < amount; ++i)
-            {
-                // Check for 10xxxxxx pattern of subsequent bytes
-                if ((*marker & 0xC0) != 0x80)
-                    goto error;
-                ++marker;
-            }
-        }
-        else
-        {
-            const value_type character = *marker++;
-
-            // Check for uncaught 1xxxxxxx patterns
-            if (character & 0x80)
-                goto error;
-
-            if (character == traits<CharT>::alpha_reverse_solidus)
+        case traits_category::escape:
             {
                 // Handle escaped character
                 if (marker == end)
@@ -703,13 +678,57 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
                     goto error;
                 }
             }
-            else if (character == traits<CharT>::alpha_quote)
-            {
-                // Handle end of string
-                current.view = view_type(input.begin(), std::distance(input.begin(), marker)); // Includes terminating '"'
-                input.remove_prefix(std::distance(input.begin(), marker));
-                return token::detail::code::string;
-            }
+            break;
+
+        case traits_category::quote:
+            // Handle end of string
+            current.view = view_type(input.begin(), std::distance(input.begin(), marker)); // Includes terminating '"'
+            input.remove_prefix(std::distance(input.begin(), marker));
+            return token::detail::code::string;
+
+        case traits_category::narrow:
+            break;
+
+        case traits_category::extra_5:
+            // Skip UTF-8 characters
+            // Check for 10xxxxxx pattern of subsequent bytes
+            if (marker == end)
+                goto error;
+            if ((*marker & 0xC0) != 0x80)
+                goto error;
+            ++marker;
+            // FALLTHROUGH
+        case traits_category::extra_4:
+            if (marker == end)
+                goto error;
+            if ((*marker & 0xC0) != 0x80)
+                goto error;
+            ++marker;
+            // FALLTHROUGH
+        case traits_category::extra_3:
+            if (marker == end)
+                goto error;
+            if ((*marker & 0xC0) != 0x80)
+                goto error;
+            ++marker;
+            // FALLTHROUGH
+        case traits_category::extra_2:
+            if (marker == end)
+                goto error;
+            if ((*marker & 0xC0) != 0x80)
+                goto error;
+            ++marker;
+            // FALLTHROUGH
+        case traits_category::extra_1:
+            if (marker == end)
+                goto error;
+            if ((*marker & 0xC0) != 0x80)
+                goto error;
+            ++marker;
+            break;
+
+        case traits_category::illegal:
+            goto error;
         }
     }
  eof:

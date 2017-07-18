@@ -30,6 +30,19 @@ class traits
 {
 };
 
+enum class traits_category
+{
+    narrow,
+    extra_1,
+    extra_2,
+    extra_3,
+    extra_4,
+    extra_5,
+    quote,
+    escape,
+    illegal
+};
+
 //-----------------------------------------------------------------------------
 // char specialization
 //-----------------------------------------------------------------------------
@@ -39,14 +52,13 @@ class traits<char>
 {
 public:
     using value_type = char;
-    using size_type = std::size_t;
     using string_type = std::basic_string<value_type, buffer::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;
     static bool is_hexdigit(value_type value) BOOST_NOEXCEPT;
     static bool is_keyword(value_type value) BOOST_NOEXCEPT;
-    static size_type extra_bytes(value_type value) BOOST_NOEXCEPT;
+    static traits_category to_category(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
 
     static const string_type& false_text() BOOST_NOEXCEPT;
@@ -106,14 +118,13 @@ class traits<unsigned char>
 {
 public:
     using value_type = unsigned char;
-    using size_type = std::size_t;
     using string_type = std::basic_string<value_type, buffer::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;
     static bool is_hexdigit(value_type value) BOOST_NOEXCEPT;
     static bool is_keyword(value_type value) BOOST_NOEXCEPT;
-    static size_type extra_bytes(value_type value) BOOST_NOEXCEPT;
+    static traits_category to_category(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
 
     static const string_type& false_text() BOOST_NOEXCEPT;

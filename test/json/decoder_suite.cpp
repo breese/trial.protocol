@@ -1041,7 +1041,31 @@ void run()
 namespace utf8_suite
 {
 
-void test_utf8_7F()
+void test_00()
+{
+    const char input[] = "\"\x00\"";
+    detail::string_view view(input, sizeof(input)); // Capture nil character
+    decoder_type decoder(view);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+}
+
+void test_1F()
+{
+    const char input[] = "\"\x1F\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\x1F");
+}
+
+void test_20()
+{
+    const char input[] = "\"\x20\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\x20");
+}
+
+void test_7F()
 {
     const char input[] = "\"\x7F\"";
     decoder_type decoder(input);
@@ -1049,7 +1073,7 @@ void test_utf8_7F()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\x7F");
 }
 
-void fail_utf8_80()
+void test_80()
 {
     const char input[] = "\"\x80\"";
     decoder_type decoder(input);
@@ -1057,10 +1081,364 @@ void fail_utf8_80()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\x80");
 }
 
+void test_BF()
+{
+    const char input[] = "\"\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xBF");
+}
+
+void test_C0()
+{
+    const char input[] = "\"\xC0\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xC0");
+}
+
+void test_C0_7F()
+{
+    const char input[] = "\"\xC0\x7F\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xC0");
+}
+
+void test_C0_80()
+{
+    const char input[] = "\"\xC0\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xC0\x80");
+}
+
+void test_C0_BF()
+{
+    const char input[] = "\"\xC0\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xC0\xBF");
+}
+
+void test_C0_C0()
+{
+    const char input[] = "\"\xC0\xC0\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xC0");
+}
+
+void test_DF_80()
+{
+    const char input[] = "\"\xDF\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xDF\x80");
+}
+
+void test_E0()
+{
+    const char input[] = "\"\xE0\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xE0");
+}
+
+void test_E0_80()
+{
+    const char input[] = "\"\xE0\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xE0\x80");
+}
+
+void test_E0_80_7F()
+{
+    const char input[] = "\"\xE0\x80\x7F\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xE0\x80");
+}
+
+void test_E0_80_80()
+{
+    const char input[] = "\"\xE0\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xE0\x80\x80");
+}
+
+void test_E0_BF_BF()
+{
+    const char input[] = "\"\xE0\xBF\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xE0\xBF\xBF");
+}
+
+void test_E0_C0_80()
+{
+    const char input[] = "\"\xE0\xC0\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xE0");
+}
+
+void test_EF_BF_BF()
+{
+    const char input[] = "\"\xEF\xBF\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xEF\xBF\xBF");
+}
+
+void test_F0()
+{
+    const char input[] = "\"\xF0\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF0");
+}
+
+void test_F0_80()
+{
+    const char input[] = "\"\xF0\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF0\x80");
+}
+
+void test_F0_80_80()
+{
+    const char input[] = "\"\xF0\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF0\x80\x80");
+}
+
+void test_F0_80_80_7F()
+{
+    const char input[] = "\"\xF0\x80\x80\x7F\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF0\x80\x80");
+}
+
+void test_F0_80_80_80()
+{
+    const char input[] = "\"\xF0\x80\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xF0\x80\x80\x80");
+}
+
+void test_F0_BF_BF_BF()
+{
+    const char input[] = "\"\xF0\xBF\xBF\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xF0\xBF\xBF\xBF");
+}
+
+void test_F0_C0_80_80()
+{
+    const char input[] = "\"\xF0\xC0\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF0");
+}
+
+void test_F7_BF_BF_BF()
+{
+    const char input[] = "\"\xF7\xBF\xBF\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xF7\xBF\xBF\xBF");
+}
+
+void test_F8()
+{
+    const char input[] = "\"\xF8\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF8");
+}
+
+void test_F8_80()
+{
+    const char input[] = "\"\xF8\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF8\x80");
+}
+
+void test_F8_80_80()
+{
+    const char input[] = "\"\xF8\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF8\x80\x80");
+}
+
+void test_F8_80_80_80()
+{
+    const char input[] = "\"\xF8\x80\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF8\x80\x80\x80");
+}
+
+void test_F8_80_80_80_7F()
+{
+    const char input[] = "\"\xF8\x80\x80\x80\x7F\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xF8\x80\x80\x80");
+}
+
+void test_F8_80_80_80_80()
+{
+    const char input[] = "\"\xF8\x80\x80\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xF8\x80\x80\x80\x80");
+}
+
+void test_FB_BF_BF_BF_BF()
+{
+    const char input[] = "\"\xFB\xBF\xBF\xBF\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xFB\xBF\xBF\xBF\xBF");
+}
+
+void test_FC()
+{
+    const char input[] = "\"\xFC\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFC");
+}
+
+void test_FC_80()
+{
+    const char input[] = "\"\xFC\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFC\x80");
+}
+
+void test_FC_80_80()
+{
+    const char input[] = "\"\xFC\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFC\x80\x80");
+}
+
+void test_FC_80_80_80()
+{
+    const char input[] = "\"\xFC\x80\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFC\x80\x80\x80");
+}
+
+void test_FC_80_80_80_80()
+{
+    const char input[] = "\"\xFC\x80\x80\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFC\x80\x80\x80\x80");
+}
+
+void test_FC_80_80_80_80_7F()
+{
+    const char input[] = "\"\xFC\x80\x80\x80\x80\x7F\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFC\x80\x80\x80\x80");
+}
+
+void test_FC_80_80_80_80_80()
+{
+    const char input[] = "\"\xFC\x80\x80\x80\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xFC\x80\x80\x80\x80\x80");
+}
+
+void test_FF_BF_BF_BF_BF_BF()
+{
+    const char input[] = "\"\xFF\xBF\xBF\xBF\xBF\xBF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "\xFF\xBF\xBF\xBF\xBF\xBF");
+}
+
+void test_FF_C0_80_80_80_80()
+{
+    const char input[] = "\"\xFF\xC0\x80\x80\x80\x80\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFF");
+}
+
+void test_FF_FF_FF_FF_FF_FF()
+{
+    const char input[] = "\"\xFF\xFF\xFF\xFF\xFF\xFF\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\xFF");
+}
+
 void run()
 {
-    test_utf8_7F();
-    fail_utf8_80();
+    test_00();
+    test_1F();
+    test_20();
+    test_7F();
+    test_80();
+    test_BF();
+    test_C0();
+    test_C0_7F();
+    test_C0_80();
+    test_C0_BF();
+    test_C0_C0();
+    test_DF_80();
+    test_E0();
+    test_E0_80();
+    test_E0_80_7F();
+    test_E0_80_80();
+    test_E0_BF_BF();
+    test_E0_C0_80();
+    test_EF_BF_BF();
+    test_F0();
+    test_F0_80();
+    test_F0_80_80();
+    test_F0_80_80_7F();
+    test_F0_80_80_80();
+    test_F0_BF_BF_BF();
+    test_F0_C0_80_80();
+    test_F7_BF_BF_BF();
+    test_F8();
+    test_F8_80();
+    test_F8_80_80();
+    test_F8_80_80_80();
+    test_F8_80_80_80_7F();
+    test_F8_80_80_80_80();
+    test_FB_BF_BF_BF_BF();
+    test_FC();
+    test_FC_80();
+    test_FC_80_80();
+    test_FC_80_80_80();
+    test_FC_80_80_80_80();
+    test_FC_80_80_80_80_7F();
+    test_FC_80_80_80_80_80();
+    test_FF_BF_BF_BF_BF_BF();
+    test_FF_C0_80_80_80_80();
+    test_FF_FF_FF_FF_FF_FF();
 }
 
 } // namespace utf8_suite
