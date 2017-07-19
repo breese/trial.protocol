@@ -403,8 +403,7 @@ token::detail::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
     const std::size_t size = traits<CharT>::false_text().size();
     if (input.size() < size)
     {
-        input.remove_prefix(input.size());
-        type = token::detail::code::end;
+        type = token::detail::code::error_unexpected_token;
         goto end;
     }
     if (traits<CharT>::false_text().compare(0, size, begin, size) != 0)
@@ -434,8 +433,7 @@ token::detail::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
     const std::size_t size = traits<CharT>::null_text().size();
     if (input.size() < size)
     {
-        input.remove_prefix(input.size());
-        type = token::detail::code::end;
+        type = token::detail::code::error_unexpected_token;
         goto end;
     }
     if (traits<CharT>::null_text().compare(0, size, begin, size) != 0)
@@ -465,8 +463,7 @@ token::detail::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
     const std::size_t size = traits<CharT>::true_text().size();
     if (input.size() < size)
     {
-        input.remove_prefix(input.size());
-        type = token::detail::code::end;
+        type = token::detail::code::error_unexpected_token;
         goto end;
     }
     if (traits<CharT>::true_text().compare(0, size, begin, size) != 0)

@@ -113,9 +113,18 @@ void fail_nul()
 {
     const char input[] = "nul";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "nul");
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "nul");
+}
+
+void fail_nil()
+{
+    const char input[] = "nil";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "nil");
 }
 
 void fail_nuller()
@@ -149,8 +158,18 @@ void fail_fals()
 {
     const char input[] = "fals";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "fals");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "fals");
+}
+
+void fail_fils()
+{
+    const char input[] = "fils";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "fils");
 }
 
 void fail_falser()
@@ -183,8 +202,18 @@ void fail_tru()
 {
     const char input[] = "tru";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "tru");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "tru");
+}
+
+void fail_tau()
+{
+    const char input[] = "tau";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "");
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.tail(), "tau");
 }
 
 void fail_truer()
@@ -200,16 +229,19 @@ void run()
     test_null();
     test_null_white();
     fail_nul();
+    fail_nil();
     fail_nuller();
 
     test_false();
     test_false_white();
     fail_fals();
+    fail_fils();
     fail_falser();
 
     test_true();
     test_true_white();
     fail_tru();
+    fail_tau();
     fail_truer();
 }
 
