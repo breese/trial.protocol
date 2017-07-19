@@ -134,7 +134,19 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
 }
 
-void fail_true_true()
+void fail_true_space_true()
+{
+    const char input[] = "true true";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::true_value);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "true");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+}
+
+void fail_true_comma_true()
 {
     const char input[] = "true,true";
     json::reader reader(input);
@@ -158,7 +170,8 @@ void run()
     test_double();
     test_long_double();
     test_string();
-    fail_true_true();
+    fail_true_space_true();
+    fail_true_comma_true();
 }
 
 } // namespace basic_suite
@@ -462,6 +475,40 @@ void fail_missing_begin_after_comma()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
 }
 
+void fail_concatenated_arrays()
+{
+    const char input[] = "[][]";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
+}
+
+void fail_nested_concatenated_arrays()
+{
+    const char input[] = "[[][]]";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]]");
+}
+
 void run()
 {
     test_empty();
@@ -477,6 +524,8 @@ void run()
     fail_missing_begin();
     fail_missing_begin_after_array();
     fail_missing_begin_after_comma();
+    fail_concatenated_arrays();
+    fail_nested_concatenated_arrays();
 }
 
 } // namespace array_suite
@@ -785,6 +834,40 @@ void fail_missing_begin_after_comma()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "}");
 }
 
+void fail_concatenated_objects()
+{
+    const char input[] = "{}{}";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "{");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "}");
+}
+
+void fail_nested_concatenated_objects()
+{
+    const char input[] = "[{}{}]";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "{");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "}]");
+}
+
 void run()
 {
     test_empty();
@@ -804,6 +887,8 @@ void run()
     fail_missing_begin();
     fail_missing_begin_after_object();
     fail_missing_begin_after_comma();
+    fail_concatenated_objects();
+    fail_nested_concatenated_objects();
 }
 
 } // namespace object_suite

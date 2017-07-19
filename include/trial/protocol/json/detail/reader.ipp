@@ -372,7 +372,14 @@ token::detail::code::value basic_reader<CharT>::frame::check_outer(decoder_type&
     case token::detail::code::end_object:
         return token::detail::code::error_unbalanced_end_object;
         
+    case token::detail::code::end:
+        return decoder.code();
+
     default:
+        // Only accept one token in the outer scope
+        ++counter;
+        if (counter > 1)
+            return token::detail::code::error_unexpected_token;
         return decoder.code();
     }
 }
