@@ -957,7 +957,7 @@ void fail_escape_unicode_eof()
 {
     const char input[] = "\"\\u0000";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u0000");
 }
 
@@ -965,7 +965,7 @@ void fail_escape_unicode_eof_one()
 {
     const char input[] = "\"\\u000";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u000");
 }
 
@@ -973,7 +973,7 @@ void fail_escape_unicode_eof_two()
 {
     const char input[] = "\"\\u00";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u00");
 }
 
@@ -981,7 +981,7 @@ void fail_escape_unicode_eof_three()
 {
     const char input[] = "\"\\u0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u0");
 }
 
@@ -989,7 +989,7 @@ void fail_escape_unicode_eof_four()
 {
     const char input[] = "\"\\u";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\u");
 }
 
@@ -997,7 +997,7 @@ void fail_escape()
 {
     const char input[] = "\"\\\"";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"\\\"");
 }
 
@@ -1005,7 +1005,7 @@ void fail_begin()
 {
     const char input[] = "\"";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "\"");
 }
 

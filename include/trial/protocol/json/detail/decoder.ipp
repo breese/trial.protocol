@@ -729,9 +729,6 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
         }
     }
  eof:
-    current.view = view_type(input.begin(), std::distance(input.begin(), marker));
-    return token::detail::code::end;
-
  error:
     current.view = view_type(input.begin(), std::distance(input.begin(), marker));
     return token::detail::code::error_unexpected_token;
