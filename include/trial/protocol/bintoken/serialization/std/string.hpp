@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
-#include <trial/protocol/serialization/std/string.hpp>
+#include <trial/protocol/core/serialization/std/string.hpp>
 
 namespace trial
 {

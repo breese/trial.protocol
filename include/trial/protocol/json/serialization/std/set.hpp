@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/serialization/serialization.hpp>
-#include <trial/protocol/serialization/std/set.hpp>
+#include <trial/protocol/core/serialization/std/set.hpp>
 
 namespace trial
 {

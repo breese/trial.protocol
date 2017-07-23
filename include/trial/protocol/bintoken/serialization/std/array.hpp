@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
-#include <trial/protocol/serialization/std/array.hpp>
+#include <trial/protocol/core/serialization/std/array.hpp>
 
 //-----------------------------------------------------------------------------
 // By-pass Boost.Serialization which has its own std::array specialization

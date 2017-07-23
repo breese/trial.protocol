@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_STD_MAP_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_STD_MAP_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_MAP_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_MAP_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -12,8 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <map>
-#include <trial/protocol/serialization/serialization.hpp>
-#include <trial/protocol/serialization/std/pair.hpp>
+#include <trial/protocol/core/serialization/serialization.hpp>
+#include <trial/protocol/core/serialization/std/pair.hpp>
 
 namespace trial
 {
@@ -70,4 +70,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_STD_MAP_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_MAP_HPP

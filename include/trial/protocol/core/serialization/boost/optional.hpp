@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_STD_STRING_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_STD_STRING_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_BOOST_OPTIONAL_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_BOOST_OPTIONAL_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,8 +11,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <string>
-#include <trial/protocol/serialization/serialization.hpp>
+#include <boost/optional.hpp>
+#include <boost/none.hpp>
+#include <trial/protocol/core/serialization/serialization.hpp>
 
 namespace trial
 {
@@ -21,42 +22,42 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Archive, typename CharT, typename Traits, typename Allocator>
-struct save_overloader< Archive, typename std::basic_string<CharT, Traits, Allocator> >
+template <typename Archive, typename T>
+struct save_overloader< Archive, typename boost::optional<T> >
 {
     static void save(Archive&,
-                     const std::basic_string<CharT, Traits, Allocator>&,
+                     const boost::optional<T>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename CharT, typename Traits, typename Allocator>
-struct load_overloader< Archive, typename std::basic_string<CharT, Traits, Allocator> >
+template <typename Archive, typename T>
+struct load_overloader< Archive, typename boost::optional<T> >
 {
     static void load(Archive&,
-                     std::basic_string<CharT, Traits, Allocator>&,
+                     boost::optional<T>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename CharT, typename Traits, typename Allocator>
+template <typename Archive, typename T>
 struct serialize_overloader<Archive,
-                            typename std::basic_string<CharT, Traits, Allocator>,
+                            typename boost::optional<T>,
                             typename std::enable_if<Archive::is_loading::value>::type>
 {
     static void serialize(Archive& ar,
-                          std::basic_string<CharT, Traits, Allocator>& data,
+                          boost::optional<T>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
 };
 
-template <typename Archive, typename CharT, typename Traits, typename Allocator>
+template <typename Archive, typename T>
 struct serialize_overloader<Archive,
-                            typename std::basic_string<CharT, Traits, Allocator>,
+                            typename boost::optional<T>,
                             typename std::enable_if<Archive::is_saving::value>::type>
 {
     static void serialize(Archive& ar,
-                          const std::basic_string<CharT, Traits, Allocator>& data,
+                          const boost::optional<T>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
@@ -67,4 +68,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_STD_STRING_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_BOOST_OPTIONAL_HPP

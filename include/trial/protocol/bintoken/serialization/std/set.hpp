@@ -13,7 +13,7 @@
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/bintoken/serialization/boost/optional.hpp>
-#include <trial/protocol/serialization/std/set.hpp>
+#include <trial/protocol/core/serialization/std/set.hpp>
 
 namespace trial
 {

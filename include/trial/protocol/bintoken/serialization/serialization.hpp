@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/serialization/serialization.hpp>
+#include <trial/protocol/core/serialization/serialization.hpp>
 #include <trial/protocol/bintoken/serialization/iarchive.hpp>
 #include <trial/protocol/bintoken/serialization/oarchive.hpp>
 #include <trial/protocol/bintoken/token.hpp>

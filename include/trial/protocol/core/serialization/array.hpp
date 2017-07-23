@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_ARRAY_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_ARRAY_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_ARRAY_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_ARRAY_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/serialization/serialization.hpp>
+#include <trial/protocol/core/serialization/serialization.hpp>
 
 namespace trial
 {
@@ -50,4 +50,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_ARRAY_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_ARRAY_HPP

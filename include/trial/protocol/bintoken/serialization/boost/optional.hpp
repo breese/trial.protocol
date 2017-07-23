@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
-#include <trial/protocol/serialization/boost/optional.hpp>
+#include <trial/protocol/core/serialization/boost/optional.hpp>
 
 namespace trial
 {

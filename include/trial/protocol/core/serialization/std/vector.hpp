@@ -1,9 +1,9 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_STD_ARRAY_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_STD_ARRAY_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_VECTOR_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_VECTOR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+// Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -11,8 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <array>
-#include <trial/protocol/serialization/serialization.hpp>
+#include <vector>
+#include <trial/protocol/core/serialization/serialization.hpp>
 
 namespace trial
 {
@@ -21,42 +21,42 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Archive, typename T, std::size_t N>
-struct save_overloader< Archive, typename std::array<T, N> >
+template <typename Archive, typename T, typename Allocator>
+struct save_overloader< Archive, typename std::vector<T, Allocator> >
 {
-    static void save(Archive&,
-                     const std::array<T, N>&,
-                     const unsigned int);
+    static void save (Archive&,
+                      const std::vector<T, Allocator>&,
+                      const unsigned int);
 };
 
-template <typename Archive, typename T, std::size_t N>
-struct load_overloader< Archive, typename std::array<T, N> >
+template <typename Archive, typename T, typename Allocator>
+struct load_overloader< Archive, typename std::vector<T, Allocator> >
 {
     static void load(Archive&,
-                     std::array<T, N>&,
+                     std::vector<T, Allocator>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename T, std::size_t N>
+template <typename Archive, typename T, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename std::array<T, N>,
+                            typename std::vector<T, Allocator>,
                             typename std::enable_if<Archive::is_loading::value>::type>
 {
     static void serialize(Archive& ar,
-                          std::array<T, N>& data,
+                          std::vector<T, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
 };
 
-template <typename Archive, typename T, std::size_t N>
+template <typename Archive, typename T, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename std::array<T, N>,
+                            typename std::vector<T, Allocator>,
                             typename std::enable_if<Archive::is_saving::value>::type>
 {
     static void serialize(Archive& ar,
-                          const std::array<T, N>& data,
+                          const std::vector<T, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
@@ -67,4 +67,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_STD_ARRAY_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_VECTOR_HPP

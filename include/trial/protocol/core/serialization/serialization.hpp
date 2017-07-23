@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_SERIALIZATION_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_SERIALIZATION_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_SERIALIZATION_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_SERIALIZATION_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -155,4 +155,4 @@ struct serialize_overloader
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_SERIALIZATION_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_SERIALIZATION_HPP

@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
-#include <trial/protocol/serialization/array.hpp>
+#include <trial/protocol/core/serialization/array.hpp>
 
 //-----------------------------------------------------------------------------
 // By-pass Boost.Serialization which has its own array formatting

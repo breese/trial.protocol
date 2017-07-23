@@ -14,7 +14,7 @@
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/bintoken/serialization/std/pair.hpp>
 #include <trial/protocol/bintoken/serialization/boost/optional.hpp>
-#include <trial/protocol/serialization/std/map.hpp>
+#include <trial/protocol/core/serialization/std/map.hpp>
 
 namespace trial
 {

@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/serialization/serialization.hpp>
-#include <trial/protocol/serialization/boost/optional.hpp>
+#include <trial/protocol/core/serialization/boost/optional.hpp>
 #include <trial/protocol/json/token.hpp>
 
 namespace trial

@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_STD_SET_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_STD_SET_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_STRING_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_STRING_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,8 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <set>
-#include <trial/protocol/serialization/serialization.hpp>
+#include <string>
+#include <trial/protocol/core/serialization/serialization.hpp>
 
 namespace trial
 {
@@ -21,43 +21,42 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Archive, typename Key, typename Compare, typename Allocator>
-struct save_overloader< Archive, typename std::set<Key, Compare, Allocator> >
+template <typename Archive, typename CharT, typename Traits, typename Allocator>
+struct save_overloader< Archive, typename std::basic_string<CharT, Traits, Allocator> >
 {
     static void save(Archive&,
-                     const std::set<Key, Compare, Allocator>&,
+                     const std::basic_string<CharT, Traits, Allocator>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename Key, typename Compare, typename Allocator>
-struct load_overloader< Archive, typename std::set<Key, Compare, Allocator> >
+template <typename Archive, typename CharT, typename Traits, typename Allocator>
+struct load_overloader< Archive, typename std::basic_string<CharT, Traits, Allocator> >
 {
     static void load(Archive&,
-                     std::set<Key, Compare, Allocator>&,
+                     std::basic_string<CharT, Traits, Allocator>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename Key, typename Compare, typename Allocator>
+template <typename Archive, typename CharT, typename Traits, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename std::set<Key, Compare, Allocator>,
+                            typename std::basic_string<CharT, Traits, Allocator>,
                             typename std::enable_if<Archive::is_loading::value>::type>
 {
     static void serialize(Archive& ar,
-                          std::set<Key, Compare, Allocator>& data,
+                          std::basic_string<CharT, Traits, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
 };
 
-
-template <typename Archive, typename Key, typename Compare, typename Allocator>
+template <typename Archive, typename CharT, typename Traits, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename std::set<Key, Compare, Allocator>,
+                            typename std::basic_string<CharT, Traits, Allocator>,
                             typename std::enable_if<Archive::is_saving::value>::type>
 {
     static void serialize(Archive& ar,
-                          const std::set<Key, Compare, Allocator>& data,
+                          const std::basic_string<CharT, Traits, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
@@ -68,4 +67,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_STD_SET_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_STRING_HPP
