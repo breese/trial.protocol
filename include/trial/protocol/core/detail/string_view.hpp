@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_STRING_VIEW_HPP
-#define TRIAL_PROTOCOL_DETAIL_STRING_VIEW_HPP
+#ifndef TRIAL_PROTOCOL_CORE_DETAIL_STRING_VIEW_HPP
+#define TRIAL_PROTOCOL_CORE_DETAIL_STRING_VIEW_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -29,6 +29,8 @@ namespace trial
 {
 namespace protocol
 {
+namespace core
+{
 namespace detail
 {
 
@@ -42,9 +44,10 @@ using basic_string_view = boost::basic_string_view<CharT, Traits>;
 
 using string_view = basic_string_view<char>;
 
+} // namespace core
 } // namespace detail
 } // namespace protocol
 } // namespace trial
 
 
-#endif // TRIAL_PROTOCOL_DETAIL_STRING_VIEW_HPP
+#endif // TRIAL_PROTOCOL_CORE_DETAIL_STRING_VIEW_HPP

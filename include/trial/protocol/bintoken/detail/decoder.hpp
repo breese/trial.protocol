@@ -13,7 +13,7 @@
 
 #include <cstdint>
 #include <boost/config.hpp>
-#include <trial/protocol/detail/string_view.hpp>
+#include <trial/protocol/core/detail/string_view.hpp>
 #include <trial/protocol/buffer/char_traits.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 #include <trial/protocol/bintoken/error.hpp>
@@ -32,7 +32,7 @@ class decoder
 public:
     using value_type = std::uint8_t;
     using size_type = std::size_t;
-    using view_type = trial::protocol::detail::basic_string_view<value_type, buffer::char_traits<value_type>>;
+    using view_type = core::detail::basic_string_view<value_type, buffer::char_traits<value_type>>;
 
     template <typename T>
     decoder(const T& input);

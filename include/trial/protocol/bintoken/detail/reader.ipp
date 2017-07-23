@@ -15,7 +15,7 @@
 #include <cmath>
 #include <limits>
 #include <vector>
-#include <trial/protocol/detail/type_traits.hpp>
+#include <trial/protocol/core/detail/type_traits.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 
 namespace trial
@@ -99,7 +99,7 @@ struct reader::overloader<
     ReturnType,
     typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
                             !std::is_unsigned<ReturnType>::value &&
-                            !protocol::detail::is_bool<ReturnType>::value>::type>
+                            !core::detail::is_bool<ReturnType>::value>::type>
 {
     static ReturnType convert(const reader& self)
     {
@@ -243,7 +243,7 @@ struct reader::overloader<
     ReturnType,
     typename std::enable_if<std::is_arithmetic<ReturnType>::value &&
                             std::is_unsigned<ReturnType>::value &&
-                            !protocol::detail::is_bool<ReturnType>::value>::type>
+                            !core::detail::is_bool<ReturnType>::value>::type>
 {
     static ReturnType convert(const reader& self)
     {

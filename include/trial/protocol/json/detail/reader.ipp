@@ -13,7 +13,7 @@
 
 #include <cmath>
 #include <type_traits>
-#include <trial/protocol/detail/type_traits.hpp>
+#include <trial/protocol/core/detail/type_traits.hpp>
 
 namespace trial
 {
@@ -39,7 +39,7 @@ template <typename ReturnType>
 struct basic_reader<CharT>::overloader<
     ReturnType,
     typename std::enable_if<std::is_integral<ReturnType>::value &&
-                            !protocol::detail::is_bool<ReturnType>::value>::type>
+                            !core::detail::is_bool<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -67,7 +67,7 @@ template <typename CharT>
 template <typename ReturnType>
 struct basic_reader<CharT>::overloader<
     ReturnType,
-    typename std::enable_if<protocol::detail::is_bool<ReturnType>::value>::type>
+    typename std::enable_if<core::detail::is_bool<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
@@ -266,7 +266,7 @@ ReturnType basic_reader<CharT>::integer_value() const
         }
 
     case token::detail::code::number:
-        using number_return_type = typename protocol::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
+        using number_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
         return ReturnType(std::round(decoder.template value<number_return_type>()));
 
     default:
@@ -282,7 +282,7 @@ ReturnType basic_reader<CharT>::number_value() const
     switch (decoder.code())
     {
     case token::detail::code::integer:
-        using integer_return_type = typename protocol::detail::make_integral<ReturnType>::type;
+        using integer_return_type = typename core::detail::make_integral<ReturnType>::type;
         return ReturnType(decoder.template value<integer_return_type>());
 
     case token::detail::code::number:

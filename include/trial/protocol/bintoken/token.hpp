@@ -13,7 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <cstdint>
-#include <trial/protocol/detail/cstdfloat.hpp>
+#include <trial/protocol/core/detail/cstdfloat.hpp>
 
 namespace trial
 {

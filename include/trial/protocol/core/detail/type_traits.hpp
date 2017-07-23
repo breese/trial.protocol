@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_TYPE_TRAITS_HPP
-#define TRIAL_PROTOCOL_DETAIL_TYPE_TRAITS_HPP
+#ifndef TRIAL_PROTOCOL_CORE_DETAIL_TYPE_TRAITS_HPP
+#define TRIAL_PROTOCOL_CORE_DETAIL_TYPE_TRAITS_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -17,6 +17,8 @@
 namespace trial
 {
 namespace protocol
+{
+namespace core
 {
 namespace detail
 {
@@ -53,7 +55,8 @@ struct make_integral
 };
 
 } // namespace detail
+} // namespace core
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DETAIL_TYPE_TRAITS_HPP
+#endif // TRIAL_PROTOCOL_CORE_DETAIL_TYPE_TRAITS_HPP

@@ -17,7 +17,7 @@
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/buffer/string.hpp>
 #include <trial/protocol/json/detail/encoder.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 namespace token = json::token;

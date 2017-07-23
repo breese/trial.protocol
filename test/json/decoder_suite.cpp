@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/detail/decoder.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 namespace token = json::token;
@@ -1076,7 +1076,7 @@ namespace utf8_suite
 void test_00()
 {
     const char input[] = "\"\x00\"";
-    detail::string_view view(input, sizeof(input)); // Capture nil character
+    core::detail::string_view view(input, sizeof(input)); // Capture nil character
     decoder_type decoder(view);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
 }

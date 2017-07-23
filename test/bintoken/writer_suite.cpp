@@ -14,7 +14,7 @@
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/bintoken/writer.hpp>
 #include <trial/protocol/bintoken/error.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
@@ -321,7 +321,7 @@ void test_view()
     std::vector<output_type> result;
     format::writer writer(result);
     std::string data("ABC");
-    trial::protocol::detail::string_view view(data.data());
+    trial::protocol::core::detail::string_view view(data.data());
     TRIAL_PROTOCOL_TEST_EQUAL(writer.value(view), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result[0], token::code::string8);

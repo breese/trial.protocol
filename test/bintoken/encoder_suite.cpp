@@ -13,7 +13,7 @@
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 #include <trial/protocol/bintoken/detail/encoder.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;

@@ -13,7 +13,7 @@
 
 #include <cstdint>
 #include <limits>
-#include <trial/protocol/detail/type_traits.hpp>
+#include <trial/protocol/core/detail/type_traits.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -51,7 +51,7 @@ struct writer::overloader<
     T,
     typename std::enable_if<std::is_integral<T>::value &&
                             std::is_signed<T>::value &&
-                            !protocol::detail::is_bool<T>::value>::type>
+                            !core::detail::is_bool<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
@@ -87,7 +87,7 @@ struct writer::overloader<
     T,
     typename std::enable_if<std::is_integral<T>::value &&
                             !std::is_signed<T>::value &&
-                            !protocol::detail::is_bool<T>::value>::type>
+                            !core::detail::is_bool<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {

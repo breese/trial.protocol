@@ -10,7 +10,7 @@
 
 #include <limits>
 #include <trial/protocol/json/reader.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 namespace token = json::token;
@@ -195,7 +195,7 @@ void i_string_1st_valid_surrogate_2nd_invalid()
 void i_string_UTF_16LE_with_BOM()
 {
     const char input[] = "\xFF\xFE\x5B\x00\x22\x00\xE9\x00\x22\x00\x5D\x00";
-    detail::string_view view(input, sizeof(input)); // Capture nil character
+    core::detail::string_view view(input, sizeof(input)); // Capture nil character
     json::reader reader(view);
     // BOM not supported
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -882,7 +882,7 @@ namespace n_number_suite
 void n_multidigit_number_then_nil()
 {
     const char input[] = "123\x00";
-    detail::string_view view(input, sizeof(input)); // Capture nil character
+    core::detail::string_view view(input, sizeof(input)); // Capture nil character
     json::reader reader(view);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 123);
@@ -1892,7 +1892,7 @@ void n_string_accentuated_char_no_quotes()
 void n_string_backslash_00()
 {
     const char input[] = "[\\\x00]";
-    detail::string_view view(input, sizeof(input)); // Capture nil character
+    core::detail::string_view view(input, sizeof(input)); // Capture nil character
     json::reader reader(view);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
@@ -1902,7 +1902,7 @@ void n_string_backslash_00()
 void n_string_escape_x()
 {
     const char input[] = "[\"\\x00\"]";
-    detail::string_view view(input, sizeof(input)); // Capture nil character
+    core::detail::string_view view(input, sizeof(input)); // Capture nil character
     json::reader reader(view);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
@@ -2063,7 +2063,7 @@ void n_string_start_escape_unclosed()
 void n_string_unescaped_crtl_char()
 {
     const char input[] = "[\"a\x00\x61\"]";
-    detail::string_view view(input, sizeof(input)); // Capture nil character
+    core::detail::string_view view(input, sizeof(input)); // Capture nil character
     json::reader reader(view);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
@@ -2325,7 +2325,7 @@ void n_structure_no_data()
 void n_structure_null_byte_outside_string()
 {
     const char input[] = "[\x00]";
-    detail::string_view view(input, sizeof(input)); // Capture nil character
+    core::detail::string_view view(input, sizeof(input)); // Capture nil character
     json::reader reader(view);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();

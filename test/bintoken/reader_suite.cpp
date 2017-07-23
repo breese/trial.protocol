@@ -12,7 +12,7 @@
 #include <limits>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/bintoken/reader.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 namespace format = trial::protocol::bintoken;
 namespace token = format::token;
