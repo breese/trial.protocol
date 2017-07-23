@@ -105,7 +105,7 @@ void test()
 namespace uvector_suite
 {
 
-using unsigned_string = std::basic_string<unsigned char, buffer::char_traits<unsigned char>>;
+using unsigned_string = std::basic_string<unsigned char, core::char_traits<unsigned char>>;
 
 void test_empty()
 {

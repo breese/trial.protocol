@@ -13,7 +13,7 @@
 
 #include <ostream>
 #include <type_traits>
-#include <trial/protocol/buffer/char_traits.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -23,7 +23,7 @@ namespace protocol
 namespace buffer
 {
 
-template <typename CharT, typename Traits = buffer::char_traits<CharT>, typename Super = base<CharT> >
+template <typename CharT, typename Traits = core::char_traits<CharT>, typename Super = base<CharT> >
 class basic_ostream : public Super
 {
 public:

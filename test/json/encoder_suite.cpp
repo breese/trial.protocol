@@ -11,7 +11,7 @@
 #include <sstream>
 #include <limits>
 #include <functional>
-#include <trial/protocol/buffer/char_traits.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/buffer/vector.hpp>
@@ -24,8 +24,8 @@ namespace token = json::token;
 
 using encoder_type = json::detail::basic_encoder<char, sizeof(buffer::array<char, 1>)>;
 using unsigned_encoder_type = json::detail::basic_encoder<unsigned char, sizeof(buffer::array<char, 1>)>;
-using unsigned_string = std::basic_string<unsigned char, buffer::char_traits<unsigned char>>;
-using unsigned_ostringstream = std::basic_ostringstream<unsigned char, buffer::char_traits<unsigned char>>;
+using unsigned_string = std::basic_string<unsigned char, core::char_traits<unsigned char>>;
+using unsigned_ostringstream = std::basic_ostringstream<unsigned char, core::char_traits<unsigned char>>;
 
 //-----------------------------------------------------------------------------
 // Buffer

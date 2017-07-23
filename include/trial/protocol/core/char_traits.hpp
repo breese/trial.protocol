@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_BUFFER_CHAR_TRAITS_HPP
-#define TRIAL_PROTOCOL_BUFFER_CHAR_TRAITS_HPP
+#ifndef TRIAL_PROTOCOL_CORE_CHAR_TRAITS_HPP
+#define TRIAL_PROTOCOL_CORE_CHAR_TRAITS_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -17,7 +17,7 @@ namespace trial
 {
 namespace protocol
 {
-namespace buffer
+namespace core
 {
 namespace detail
 {
@@ -145,8 +145,8 @@ struct char_traits_type<unsigned char>
 template <typename CharT>
 using char_traits = typename detail::char_traits_type<CharT>::type;
 
-} // namespace buffer
+} // namespace core
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_BUFFER_CHAR_TRAITS_HPP
+#endif // TRIAL_PROTOCOL_CORE_CHAR_TRAITS_HPP

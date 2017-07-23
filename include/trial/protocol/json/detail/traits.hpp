@@ -14,7 +14,7 @@
 #include <cstddef> // std::size_t
 #include <string>
 #include <boost/config.hpp>
-#include <trial/protocol/buffer/char_traits.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 
 namespace trial
 {
@@ -52,7 +52,7 @@ class traits<char>
 {
 public:
     using value_type = char;
-    using string_type = std::basic_string<value_type, buffer::char_traits<value_type>>;
+    using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;
@@ -118,7 +118,7 @@ class traits<unsigned char>
 {
 public:
     using value_type = unsigned char;
-    using string_type = std::basic_string<value_type, buffer::char_traits<value_type>>;
+    using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
     static bool is_digit(value_type value) BOOST_NOEXCEPT;

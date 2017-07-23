@@ -67,7 +67,7 @@ void run()
 namespace ubasic_suite
 {
 
-using unsigned_ostringstream = std::basic_ostringstream<unsigned char, buffer::char_traits<unsigned char>>;
+using unsigned_ostringstream = std::basic_ostringstream<unsigned char, core::char_traits<unsigned char>>;
 using unsigned_writer = json::basic_writer<unsigned char>;
 
 void test_empty()

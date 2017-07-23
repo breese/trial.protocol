@@ -16,7 +16,7 @@
 #include <type_traits>
 #include <boost/none.hpp>
 #include <trial/protocol/core/detail/string_view.hpp>
-#include <trial/protocol/buffer/char_traits.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -35,8 +35,8 @@ public:
     using value_type = CharT;
     using size_type = std::size_t;
     using buffer_type = buffer::base<value_type>;
-    using string_type = std::basic_string<value_type, buffer::char_traits<value_type>>;
-    using view_type = core::detail::basic_string_view<value_type, buffer::char_traits<value_type>>;
+    using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
+    using view_type = core::detail::basic_string_view<value_type, core::char_traits<value_type>>;
 
     template <typename T>
     basic_encoder(T&);

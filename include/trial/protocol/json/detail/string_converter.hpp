@@ -18,7 +18,7 @@
 #include <iomanip>
 #include <locale>
 #include <trial/protocol/core/detail/string_view.hpp>
-#include <trial/protocol/buffer/char_traits.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 
 namespace trial
 {
@@ -37,8 +37,8 @@ struct string_converter
 template <typename CharT>
 struct string_converter<CharT, float>
 {
-    using string = std::basic_string<CharT, buffer::char_traits<CharT>>;
-    using string_view = core::detail::basic_string_view<CharT, buffer::char_traits<CharT>>;
+    using string = std::basic_string<CharT, core::char_traits<CharT>>;
+    using string_view = core::detail::basic_string_view<CharT, core::char_traits<CharT>>;
 
     static string encode(float value)
     {
@@ -59,8 +59,8 @@ struct string_converter<CharT, float>
 template <typename CharT>
 struct string_converter<CharT, double>
 {
-    using string = std::basic_string<CharT, buffer::char_traits<CharT>>;
-    using string_view = core::detail::basic_string_view<CharT, buffer::char_traits<CharT>>;
+    using string = std::basic_string<CharT, core::char_traits<CharT>>;
+    using string_view = core::detail::basic_string_view<CharT, core::char_traits<CharT>>;
 
     static string encode(double value)
     {
@@ -81,8 +81,8 @@ struct string_converter<CharT, double>
 template <typename CharT>
 struct string_converter<CharT, long double>
 {
-    using string = std::basic_string<CharT, buffer::char_traits<CharT>>;
-    using string_view = core::detail::basic_string_view<CharT, buffer::char_traits<CharT>>;
+    using string = std::basic_string<CharT, core::char_traits<CharT>>;
+    using string_view = core::detail::basic_string_view<CharT, core::char_traits<CharT>>;
 
     static string encode(long double value)
     {
