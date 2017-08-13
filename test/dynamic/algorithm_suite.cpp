@@ -1258,21 +1258,21 @@ void run()
 namespace find_suite
 {
 
-void test_null()
+void find_null()
 {
     variable data;
     // Cannot iterate over null, so nothing is found
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), null) == data.end());
 }
 
-void test_boolean()
+void find_boolean()
 {
     variable data(true);
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), false) == data.end());
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), true) != data.end());
 }
 
-void test_integer()
+void find_integer()
 {
     variable data(1);
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), 0) == data.end());
@@ -1280,7 +1280,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), 2) == data.end());
 }
 
-void test_number()
+void find_number()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), 0.0) == data.end());
@@ -1288,7 +1288,7 @@ void test_number()
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), 2.0) == data.end());
 }
 
-void test_string()
+void find_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), "") == data.end());
@@ -1296,7 +1296,7 @@ void test_string()
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), "bravo") == data.end());
 }
 
-void test_array()
+void find_array()
 {
     variable data = variable::array({ true, 2, 3.0, "alpha" });
 
@@ -1321,7 +1321,7 @@ void test_array()
                               3);
 }
 
-void test_map()
+void find_map()
 {
     variable data = variable::map(
         {
@@ -1342,15 +1342,37 @@ void test_map()
                               2);
 }
 
+void find_key_map()
+{
+    variable data = variable::map(
+        {
+            {"alpha", "hydrogen"},
+            {"bravo", "helium"},
+            {"charlie", "lithium"}
+        });
+    // Iterator dereferences key
+    TRIAL_PROTOCOL_TEST(std::find(data.key_begin(), data.key_end(), "hydrogen") == data.key_end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(),
+                                            std::find(data.key_begin(), data.key_end(), "alpha")),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(),
+                                            std::find(data.key_begin(), data.key_end(), "bravo")),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(),
+                                            std::find(data.key_begin(), data.key_end(), "charlie")),
+                              2);
+}
+
 void run()
 {
-    test_null();
-    test_boolean();
-    test_integer();
-    test_number();
-    test_string();
-    test_array();
-    test_map();
+    find_null();
+    find_boolean();
+    find_integer();
+    find_number();
+    find_string();
+    find_array();
+    find_map();
+    find_key_map();
 }
 
 } // namespace find_suite
@@ -1943,6 +1965,37 @@ void find_map()
     }
 }
 
+void find_key_map()
+{
+    variable data = variable::map(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        });
+    {
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 2);
+    }
+    {
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "delta");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 3);
+    }
+    {
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 4);
+    }
+}
+
 void run()
 {
     find_null();
@@ -1952,6 +2005,7 @@ void run()
     find_string();
     find_array();
     find_map();
+    find_key_map();
 }
 
 } // namespace lower_bound_suite

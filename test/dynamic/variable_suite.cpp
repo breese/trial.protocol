@@ -139,13 +139,13 @@ void construct_array_with_iterator()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
-void construct_array_by_name()
+void construct_array()
 {
     variable data = variable::array({false, 1, 2.0, "alpha"});
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
-void construct_array_by_name_empty()
+void construct_array_empty()
 {
     variable data = variable::array();
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
@@ -157,7 +157,36 @@ void construct_array_with_size()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
-void construct_map_by_name()
+void construct_map_by_null()
+{
+    variable data = variable::map(
+        {
+            {null, 1}
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+}
+
+void construct_map_by_boolean()
+{
+    variable data = variable::map(
+        {
+            {false, 1},
+            {true, 2}
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+}
+
+void construct_map_by_integer()
+{
+    variable data = variable::map(
+        {
+            {1, 1},
+            {2, 2}
+        });
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+}
+
+void construct_map_by_string()
 {
     variable data = variable::map(
         {
@@ -166,13 +195,13 @@ void construct_map_by_name()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
-void construct_map_by_name_empty()
+void construct_map_by_string_empty()
 {
     variable data = variable::map();
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
-void construct_mixed_by_name()
+void construct_mixed_by_string()
 {
     variable data = variable::map(
         {
@@ -205,14 +234,17 @@ void run()
 
     construct_array_with_vector();
     construct_array_with_iterator();
-    construct_array_by_name();
-    construct_array_by_name_empty();
+    construct_array();
+    construct_array_empty();
     construct_array_with_size();
 
-    construct_map_by_name();
-    construct_map_by_name_empty();
+    construct_map_by_null();
+    construct_map_by_boolean();
+    construct_map_by_integer();
+    construct_map_by_string();
+    construct_map_by_string_empty();
 
-    construct_mixed_by_name();
+    construct_mixed_by_string();
 }
 
 } // namespace ctor_suite

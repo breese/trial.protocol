@@ -1861,6 +1861,36 @@ void compare_map_equal_null_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != null, true);
 }
 
+void compare_map_boolean_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {true, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {true, 1} }) != variable(), true);
+}
+
+void compare_map_null_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {null, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {null, 1} }) != variable(), true);
+}
+
+void compare_map_integer_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {2, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {2, 1} }) != variable(), true);
+}
+
+void compare_map_number_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {3.0, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {3.0, 1} }) != variable(), true);
+}
+
+void compare_map_array_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {variable::array(), 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {variable::array(), 1} }) != variable(), true);
+}
+
 void compare_map_equal_boolean()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(false), false);
@@ -2179,6 +2209,11 @@ void run()
 
     compare_map_equal_null();
     compare_map_equal_null_literal();
+    compare_map_null_equal_null();
+    compare_map_boolean_equal_null();
+    compare_map_integer_equal_null();
+    compare_map_number_equal_null();
+    compare_map_array_equal_null();
     compare_map_equal_boolean();
     compare_map_equal_boolean_literal();
     compare_map_equal_integer();
@@ -5112,6 +5147,54 @@ void compare_array_with_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1}), false);
 }
 
+void compare_map_with_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= null, true);
+}
+
+void compare_map_with_map_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{null, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{null, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{null, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{null, 1}}), true);
+}
+
+void compare_map_with_map_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{true, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{true, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{true, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{true, 1}}), true);
+}
+
+void compare_map_with_map_integer()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{2, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{2, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{2, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{2, 1}}), true);
+}
+
+void compare_map_with_map_number()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{3.0, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{3.0, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{3.0, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{3.0, 1}}), true);
+}
+
+void compare_map_with_map_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{"bravo", 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{"alpha", 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{"alpha", 2}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"bravo", 1}}) < variable::map({{"alpha", 1}}), false);
+}
+
 void run()
 {
     compare_null_with_null();
@@ -5176,6 +5259,13 @@ void run()
 
     // FIXME: More
     compare_array_with_array();
+
+    compare_map_with_null();
+    compare_map_with_map_null();
+    compare_map_with_map_boolean();
+    compare_map_with_map_integer();
+    compare_map_with_map_number();
+    compare_map_with_map_string();
 }
 
 } // namespace relational_suite

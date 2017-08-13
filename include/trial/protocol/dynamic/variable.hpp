@@ -62,11 +62,10 @@ public:
 private:
     using string_type = std::basic_string<CharT>;
     using array_type = std::vector<value_type>;
-    using map_type = std::map<string_type, value_type>;
+    using map_type = std::map<value_type, value_type>;
 
-public:
-    template <typename T>
-    class iterator_type
+    template <typename Derived, typename T>
+    class iterator_base
     {
     public:
         using iterator_category = std::forward_iterator_tag;
@@ -75,33 +74,27 @@ public:
         using difference_type = std::ptrdiff_t;
         using pointer = typename std::add_pointer<value_type>::type;
         using reference = typename std::add_lvalue_reference<value_type>::type;
-        using key_reference = typename std::add_lvalue_reference<key_type>::type;
 
-        iterator_type();
-        iterator_type(const iterator_type&);
-        iterator_type(iterator_type&&);
-        iterator_type(pointer, bool = true);
-        // iterator is convertible to const_iterator
-        template <typename U = T>
-        iterator_type(const iterator_type<typename std::remove_const<U>::type>& other,
-                      typename std::enable_if<std::is_const<U>::value, pointer>::type = 0);
+        Derived& operator= (const Derived&);
+        Derived& operator= (Derived&&);
 
-        iterator_type& operator= (const iterator_type&);
-        iterator_type& operator= (iterator_type&&);
+        Derived& operator++ ();
+        Derived operator++ (int);
 
-        iterator_type& operator++ ();
-        iterator_type operator++ (int);
+        reference key() const;
+        reference value() const;
 
-        reference operator* ();
         pointer operator-> ();
 
-        key_reference key() const;
-        reference value();
+        bool operator== (const Derived&) const;
+        bool operator!= (const Derived&) const;
 
-        bool operator== (const iterator_type<T>&);
-        bool operator!= (const iterator_type<T>&);
+    protected:
+        iterator_base();
+        iterator_base(const iterator_base&);
+        iterator_base(iterator_base&&);
+        iterator_base(pointer, bool = true);
 
-    private:
         friend class basic_variable<CharT>;
 
         using array_iterator = typename std::conditional<std::is_const<T>::value,
@@ -112,17 +105,94 @@ public:
                                                        typename map_type::iterator>::type;
         using small_union = protocol::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator>;
 
-        // Conversion from const_iterator to iterator is kept private
-        template <typename U = T>
-        iterator_type(const iterator_type<typename std::add_const<U>::type>& other,
-                      typename std::enable_if<!std::is_const<U>::value, pointer>::type = 0);
-
         pointer scope;
         small_union current;
     };
 
-    using iterator = iterator_type<value_type>;
-    using const_iterator = iterator_type<const value_type>;
+public:
+    class const_iterator;
+
+    class iterator
+        : public iterator_base<iterator, value_type>
+    {
+        using super = iterator_base<iterator, value_type>;
+
+    public:
+        using typename super::iterator_category;
+        using typename super::key_type;
+        using typename super::value_type;
+        using typename super::difference_type;
+        using typename super::pointer;
+        using typename super::reference;
+
+        iterator();
+        iterator(const iterator& other);
+        iterator(iterator&& other);
+        iterator(pointer p, bool e = true);
+
+        iterator& operator= (const iterator& other);
+        iterator& operator= (iterator&& other);
+
+        reference operator* () { return super::value(); }
+
+    private:
+        friend class basic_variable<CharT>;
+        // Conversion from const_iterator to iterator is kept private
+        iterator(const const_iterator& other);
+    };
+
+    class const_iterator
+        : public iterator_base<const_iterator, const value_type>
+    {
+        using super = iterator_base<const_iterator, const value_type>;
+
+    public:
+        using typename super::iterator_category;
+        using typename super::key_type;
+        using typename super::value_type;
+        using typename super::difference_type;
+        using typename super::pointer;
+        using typename super::reference;
+
+        const_iterator();
+        const_iterator(const const_iterator& other);
+        const_iterator(const_iterator&& other);
+        const_iterator(pointer p, bool e = true);
+        // iterator is convertible to const_iterator
+        const_iterator(const iterator& other);
+
+        reference operator* () { return super::value(); }
+    };
+
+    class key_iterator
+        : public iterator_base<key_iterator, const value_type>
+    {
+        using super = iterator_base<key_iterator, const value_type>;
+
+    public:
+        using typename super::iterator_category;
+        using typename super::key_type;
+        using typename super::value_type;
+        using typename super::difference_type;
+        using typename super::pointer;
+        using typename super::reference;
+
+        key_iterator();
+        key_iterator(const key_iterator& other);
+        key_iterator(key_iterator&& other);
+        key_iterator(pointer p, bool e = true);
+
+        key_iterator& operator= (const key_iterator& other);
+        key_iterator& operator= (key_iterator&& other);
+
+        reference key() const;
+        reference operator* () { return key(); }
+
+        key_iterator& operator++();
+
+    private:
+        typename std::remove_const<value_type>::type index;
+    };
 
     // Constructor
     basic_variable(const basic_variable<CharT>&);
@@ -200,6 +270,9 @@ public:
     const_iterator begin() const &;
     iterator end() &;
     const_iterator end() const &;
+
+    key_iterator key_begin() &;
+    key_iterator key_end() &;
 
     // Comparison
 

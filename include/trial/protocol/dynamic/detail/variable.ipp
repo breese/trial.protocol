@@ -1324,14 +1324,14 @@ struct operator_overloader
         // This function is called by dynamic::operator== when none of the
         // specializations below apply.
         //
-        // basic_variable<CharT>::iterator_type<T> cannot be matched via
+        // basic_variable<CharT>::iterator_base<T> cannot be matched via
         // SFINAE below (due to being a non-deduced context), so instead
         // lhs.operator(rhs) is called in the general case.
         //
         // Notice: operator==(lhs, rhs) cannot be used because it uses
         // argument dependent lookup which will find dynamic::operator==
         // which got us here in the first place. That would cause an
-        // infinity recursion.
+        // infinite recursion.
 
         return lhs.operator==(rhs);
     }
@@ -1607,37 +1607,37 @@ struct same_overloader<
 } // namespace detail
 
 //-----------------------------------------------------------------------------
-// variable::iterator_type
+// variable::iterator_base
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
-template <typename T>
-basic_variable<CharT>::iterator_type<T>::iterator_type()
+template <typename Derived, typename T>
+basic_variable<CharT>::iterator_base<Derived, T>::iterator_base()
     : scope(nullptr),
       current(pointer(nullptr))
 {
 }
 
 template <typename CharT>
-template <typename T>
-basic_variable<CharT>::iterator_type<T>::iterator_type(const iterator_type& other)
+template <typename Derived, typename T>
+basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(const iterator_base& other)
     : scope(other.scope),
       current(other.current)
 {
 }
 
 template <typename CharT>
-template <typename T>
-basic_variable<CharT>::iterator_type<T>::iterator_type(iterator_type&& other)
+template <typename Derived, typename T>
+basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(iterator_base&& other)
     : scope(std::move(other.scope)),
       current(std::move(other.current))
 {
 }
 
 template <typename CharT>
-template <typename T>
-basic_variable<CharT>::iterator_type<T>::iterator_type(pointer p,
-                                                       bool initialize)
+template <typename Derived, typename T>
+basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
+                                                                bool initialize)
     : scope(p),
       current(pointer(nullptr))
 {
@@ -1685,70 +1685,26 @@ basic_variable<CharT>::iterator_type<T>::iterator_type(pointer p,
 }
 
 template <typename CharT>
-template <typename T>
-template <typename U>
-basic_variable<CharT>::iterator_type<T>::iterator_type(const iterator_type<typename std::remove_const<U>::type>& other,
-                                                       typename std::enable_if<std::is_const<U>::value, pointer>::type nil)
-    : scope(other.scope),
-      current(nil)
-{
-    switch (other.current.which())
-    {
-    case small_union::template index<pointer>::value:
-        current = other.current.template get<pointer>();
-        break;
-    case small_union::template index<array_iterator>::value:
-        current = other.current.template get<array_iterator>();
-        break;
-    case small_union::template index<map_iterator>::value:
-        current = other.current.template get<map_iterator>();
-        break;
-    }
-}
-
-template <typename CharT>
-template <typename T>
-template <typename U>
-basic_variable<CharT>::iterator_type<T>::iterator_type(const iterator_type<typename std::add_const<U>::type>& other,
-                                                       typename std::enable_if<!std::is_const<U>::value, pointer>::type nil)
-    : scope(const_cast<pointer>(other.scope)),
-      current(nil)
-{
-    switch (other.current.which())
-    {
-    case small_union::template index<pointer>::value:
-        current = other.current.template get<pointer>();
-        break;
-    case small_union::template index<array_iterator>::value:
-        current = other.current.template get<array_iterator>();
-        break;
-    case small_union::template index<map_iterator>::value:
-        current = other.current.template get<map_iterator>();
-        break;
-    }
-}
-
-template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::operator= (const iterator_type& other) -> iterator_type&
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::operator= (const Derived& other) -> Derived&
 {
     scope = other.scope;
     current = other.current;
-    return *this;
+    return *static_cast<Derived*>(this);
 }
 
 template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::operator= (iterator_type&& other) -> iterator_type&
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::operator= (Derived&& other) -> Derived&
 {
     scope = std::move(other.scope);
     current = std::move(other.current);
-    return *this;
+    return *static_cast<Derived*>(this);
 }
 
 template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::operator++ () -> iterator_type&
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ () -> Derived&
 {
     assert(scope);
 
@@ -1783,32 +1739,23 @@ auto basic_variable<CharT>::iterator_type<T>::operator++ () -> iterator_type&
         assert(false);
         break;
     }
-    return *this;
+    return *static_cast<Derived*>(this);
 }
 
 template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::operator++ (int) -> iterator_type
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ (int) -> Derived
 {
     assert(scope);
 
-    iterator_type result = *this;
+    Derived result = *static_cast<Derived*>(this);
     ++(*this);
     return result;
 }
 
 template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::operator* () -> reference
-{
-    assert(scope);
-
-    return value();
-}
-
-template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::key() const -> key_reference
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::key() const -> reference
 {
     assert(scope);
 
@@ -1823,8 +1770,8 @@ auto basic_variable<CharT>::iterator_type<T>::key() const -> key_reference
 }
 
 template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::value() -> reference
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> reference
 {
     assert(scope);
 
@@ -1857,8 +1804,8 @@ auto basic_variable<CharT>::iterator_type<T>::value() -> reference
 }
 
 template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::iterator_type<T>::operator-> () -> pointer
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::operator-> () -> pointer
 {
     assert(scope);
 
@@ -1891,8 +1838,8 @@ auto basic_variable<CharT>::iterator_type<T>::operator-> () -> pointer
 }
 
 template <typename CharT>
-template <typename T>
-bool basic_variable<CharT>::iterator_type<T>::operator== (const iterator_type<T>& other)
+template <typename Derived, typename T>
+bool basic_variable<CharT>::iterator_base<Derived, T>::operator== (const Derived& other) const
 {
     if (!scope)
         return !other.scope;
@@ -1932,10 +1879,204 @@ bool basic_variable<CharT>::iterator_type<T>::operator== (const iterator_type<T>
 }
 
 template <typename CharT>
-template <typename T>
-bool basic_variable<CharT>::iterator_type<T>::operator!= (const iterator_type<T>& other)
+template <typename Derived, typename T>
+bool basic_variable<CharT>::iterator_base<Derived, T>::operator!= (const Derived& other) const
 {
     return !(*this == other);
+}
+
+//-----------------------------------------------------------------------------
+// variable::iterator
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+basic_variable<CharT>::iterator::iterator()
+    : super()
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::iterator::iterator(const iterator& other)
+    : super(other)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::iterator::iterator(iterator&& other)
+    : super(std::move(other))
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::iterator::iterator(pointer p, bool e)
+    : super(p, e)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::iterator::iterator(const const_iterator& other)
+    : super(const_cast<pointer>(other.scope))
+{
+    switch (other.current.which())
+    {
+    case super::small_union::template index<pointer>::value:
+        super::current = other.current.template get<pointer>();
+        break;
+    case super::small_union::template index<typename super::array_iterator>::value:
+        super::current = other.current.template get<typename super::array_iterator>();
+        break;
+    case super::small_union::template index<typename super::map_iterator>::value:
+        super::current = other.current.template get<typename super::map_iterator>();
+        break;
+    }
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::iterator::operator= (const iterator& other) -> iterator&
+{
+    return super::operator=(other);
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::iterator::operator= (iterator&& other) -> iterator&
+{
+    return super::operator=(std::forward<iterator&&>(other));
+}
+
+//-----------------------------------------------------------------------------
+// variable::const_iterator
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+basic_variable<CharT>::const_iterator::const_iterator()
+    : super()
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::const_iterator::const_iterator(const const_iterator& other)
+    : super(other)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::const_iterator::const_iterator(const_iterator&& other)
+    : super(std::move(other))
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::const_iterator::const_iterator(pointer p, bool e)
+    : super(p, e)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
+    : super(other.scope)
+{
+    switch (other.current.which())
+    {
+    case super::small_union::template index<pointer>::value:
+        super::current = other.current.template get<pointer>();
+        break;
+    case super::small_union::template index<typename super::array_iterator>::value:
+        super::current = other.current.template get<typename super::array_iterator>();
+        break;
+    case super::small_union::template index<typename super::map_iterator>::value:
+        super::current = other.current.template get<typename super::map_iterator>();
+        break;
+    }
+}
+
+//-----------------------------------------------------------------------------
+// variable::key_iterator
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator()
+    : super()
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator(const key_iterator& other)
+    : super(other),
+      index(other.index)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator(key_iterator&& other)
+{
+    super::scope = std::move(other.scope);
+    super::current = std::move(other.current);
+    index = std::move(other.index);
+}
+
+template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator(pointer p, bool e)
+    : super(p, e),
+      index(0)
+{
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::operator= (const key_iterator& other) -> key_iterator&
+{
+    return super::operator=(other);
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::operator= (key_iterator&& other) -> key_iterator&
+{
+    return super::operator=(std::forward<key_iterator&&>(other));
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::key() const -> reference
+{
+    assert(super::scope);
+
+    switch (super::scope->storage.which())
+    {
+    case traits<nullable>::value:
+    case traits<bool>::value:
+    case traits<signed short int>::value:
+    case traits<unsigned short int>::value:
+    case traits<signed int>::value:
+    case traits<unsigned int>::value:
+    case traits<signed long int>::value:
+    case traits<unsigned long int>::value:
+    case traits<signed long long int>::value:
+    case traits<unsigned long long int>::value:
+    case traits<float>::value:
+    case traits<double>::value:
+    case traits<long double>::value:
+    case traits<string_type>::value:
+    case traits<array_type>::value:
+        return index;
+
+    default:
+        return super::key();
+    }
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
+{
+    assert(super::scope);
+
+    switch (super::scope->storage.which())
+    {
+    case traits<map_type>::value:
+        break;
+
+    default:
+        index += 1;
+        break;
+    }
+    return super::operator++();
 }
 
 //-----------------------------------------------------------------------------
@@ -2819,6 +2960,18 @@ auto basic_variable<CharT>::end() & -> iterator
 
 template <typename CharT>
 auto basic_variable<CharT>::end() const & -> const_iterator
+{
+    return {this, false};
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_begin() & -> key_iterator
+{
+    return {this};
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_end() & -> key_iterator
 {
     return {this, false};
 }
