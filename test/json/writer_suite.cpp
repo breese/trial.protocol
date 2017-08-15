@@ -11,7 +11,7 @@
 #include <sstream>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/json/writer.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 namespace token = json::token;
@@ -67,7 +67,7 @@ void run()
 namespace ubasic_suite
 {
 
-using unsigned_ostringstream = std::basic_ostringstream<unsigned char, buffer::char_traits<unsigned char>>;
+using unsigned_ostringstream = std::basic_ostringstream<unsigned char, core::char_traits<unsigned char>>;
 using unsigned_writer = json::basic_writer<unsigned char>;
 
 void test_empty()

@@ -35,6 +35,7 @@ inline symbol::value symbol::convert(code::value value)
 
     case code::error_unknown_token:
     case code::error_unexpected_token:
+    case code::error_invalid_length:
     case code::error_negative_length:
     case code::error_overflow:
     case code::error_invalid_value:
@@ -66,11 +67,31 @@ inline symbol::value symbol::convert(code::value value)
     case code::string64:
         return symbol::string;
 
-    case code::binary8:
-    case code::binary16:
-    case code::binary32:
-    case code::binary64:
-        return symbol::binary;
+    case code::array8_int8:
+    case code::array16_int8:
+    case code::array32_int8:
+    case code::array64_int8:
+    case code::array8_int16:
+    case code::array16_int16:
+    case code::array32_int16:
+    case code::array64_int16:
+    case code::array8_int32:
+    case code::array16_int32:
+    case code::array32_int32:
+    case code::array64_int32:
+    case code::array8_int64:
+    case code::array16_int64:
+    case code::array32_int64:
+    case code::array64_int64:
+    case code::array8_float32:
+    case code::array16_float32:
+    case code::array32_float32:
+    case code::array64_float32:
+    case code::array8_float64:
+    case code::array16_float64:
+    case code::array32_float64:
+    case code::array64_float64:
+        return symbol::array;
 
     case code::begin_record:
         return symbol::begin_record;
@@ -108,7 +129,7 @@ inline category::value category::convert(symbol::value value)
     case symbol::integer:
     case symbol::number:
     case symbol::string:
-    case symbol::binary:
+    case symbol::array:
         return category::data;
 
     case symbol::begin_record:
@@ -217,21 +238,6 @@ inline bool string::same(token::code::value v)
     case token::code::string16:
     case token::code::string32:
     case token::code::string64:
-        return true;
-
-    default:
-        return false;
-    }
-}
-
-inline bool binary::same(token::code::value v)
-{
-    switch (v)
-    {
-    case token::code::binary8:
-    case token::code::binary16:
-    case token::code::binary32:
-    case token::code::binary64:
         return true;
 
     default:

@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_SERIALIZATION_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_SERIALIZATION_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_SERIALIZATION_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_SERIALIZATION_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -12,6 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <type_traits>
+#include <boost/archive/detail/iserializer.hpp>
+#include <boost/archive/detail/oserializer.hpp>
 #include <boost/serialization/split_free.hpp>
 
 // Non-intrusive serialization
@@ -120,11 +122,23 @@ public:
 template <typename Archive, typename Value, typename Enable = void>
 struct save_overloader
 {
+    static void save(Archive& ar, const Value& data, const unsigned int)
+    {
+        // No specialized template has been matched, so try the normal
+        // Boost.Serialization saving.
+        boost::archive::save(ar, data);
+    }
 };
 
 template <typename Archive, typename Value, typename Enable = void>
 struct load_overloader
 {
+    static void load(Archive& ar, Value& data, const unsigned int)
+    {
+        // No specialized template has been matched, so try the normal
+        // Boost.Serialization loading.
+        boost::archive::load(ar, data);
+    }
 };
 
 template <typename Archive, typename Value, typename Enable = void>
@@ -141,4 +155,4 @@ struct serialize_overloader
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_SERIALIZATION_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_SERIALIZATION_HPP

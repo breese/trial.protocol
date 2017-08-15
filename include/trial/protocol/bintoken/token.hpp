@@ -13,7 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <cstdint>
-#include <trial/protocol/detail/cstdfloat.hpp>
+#include <trial/protocol/core/detail/cstdfloat.hpp>
 
 namespace trial
 {
@@ -35,6 +35,7 @@ struct code
         end = 0,
         error_unknown_token,
         error_unexpected_token,
+        error_invalid_length,
         error_negative_length,
         error_overflow,
         error_invalid_value,
@@ -42,28 +43,57 @@ struct code
         error_expected_end_array,
         error_expected_end_assoc_array,
 
+        // Value types
         null = 0x82,
         true_value = 0x81,
         false_value = 0x80,
 
+        // Fixed-length types
         int8 = 0xA0,
-        int16 = 0xB0,
-        int32 = 0xC0,
-        int64 = 0xD0,
+        int16 = 0xB2,
+        int32= 0xC4,
+        int64 = 0xD6,
 
-        float32 = 0xC2,
-        float64 = 0xD2,
+        float32 = 0xC5,
+        float64 = 0xD7,
+
+        // Variable-length types
+        array8_int8 = 0xA8,
+        array16_int8 = 0xB8,
+        array32_int8 = 0xC8,
+        array64_int8 = 0xD8,
+
+        array8_int16 = 0xAA,
+        array16_int16 = 0xBA,
+        array32_int16 = 0xCA,
+        array64_int16 = 0xDA,
+
+        array8_int32 = 0xAC,
+        array16_int32 = 0xBC,
+        array32_int32 = 0xCC,
+        array64_int32 = 0xDC,
+
+        array8_int64 = 0xAE,
+        array16_int64 = 0xBE,
+        array32_int64 = 0xCE,
+        array64_int64 = 0xDE,
+
+        array8_float32 = 0xAD,
+        array16_float32 = 0xBD,
+        array32_float32 = 0xCD,
+        array64_float32 = 0xDD,
+
+        array8_float64 = 0xAF,
+        array16_float64 = 0xBF,
+        array32_float64 = 0xCF,
+        array64_float64 = 0xDF,
 
         string8 = 0xA9,
         string16 = 0xB9,
         string32 = 0xC9,
         string64 = 0xD9,
 
-        binary8 = 0xAB,
-        binary16 = 0xBB,
-        binary32 = 0xCB,
-        binary64 = 0xDB,
-
+        // Group types
         begin_record = 0x90,
         end_record = 0x91,
         begin_array = 0x92,
@@ -85,7 +115,7 @@ struct symbol
         integer,
         number,
         string,
-        binary,
+        array,
 
         begin_record,
         end_record,
@@ -231,11 +261,6 @@ struct float64
 struct string
 {
     using type = std::string;
-    static bool same(token::code::value);
-};
-
-struct binary
-{
     static bool same(token::code::value);
 };
 

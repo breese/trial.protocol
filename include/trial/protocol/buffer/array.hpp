@@ -105,18 +105,6 @@ struct traits<CharT[N]>
     }
 };
 
-template <typename CharT, std::size_t N>
-struct is_binary< std::array<CharT, N> >
-{
-    static const bool value = true;
-};
-
-template <std::size_t N>
-struct is_binary<std::uint8_t[N]>
-{
-    static const bool value = true;
-};
-
 } // namespace buffer
 } // namespace protocol
 } // namespace trial

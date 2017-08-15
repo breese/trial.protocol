@@ -12,8 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstddef> // std::size_t
-#include <trial/protocol/detail/string_view.hpp>
-#include <trial/protocol/buffer/char_traits.hpp>
+#include <trial/protocol/core/detail/string_view.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 
 namespace trial
 {
@@ -28,7 +28,7 @@ class base
 public:
     using value_type = CharT;
     using size_type = std::size_t;
-    using view_type = trial::protocol::detail::basic_string_view<value_type, buffer::char_traits<value_type>>;
+    using view_type = core::detail::basic_string_view<value_type, core::char_traits<value_type>>;
 
     virtual ~base() {}
 
@@ -40,18 +40,6 @@ public:
 template <typename T, typename Enable = void>
 struct traits
 {
-};
-
-template <typename T, typename Enable = void>
-struct is_text
-{
-    static const bool value = false;
-};
-
-template <typename T>
-struct is_binary
-{
-    static const bool value = false;
 };
 
 } // namespace buffer

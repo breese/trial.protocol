@@ -29,20 +29,15 @@ iarchive::iarchive(const T& input)
 template <typename T>
 void iarchive::load_override(T& data)
 {
-    boost::archive::load(*this, data);
-}
-
-template <typename T, std::size_t N>
-void iarchive::load_override(T (&data)[N])
-{
-    // By-pass Boost.Serialization which has its own array formatting
-    serialization::load_overloader<iarchive, T[N]>::load(*this, data, 0);
+    serialization::load_overloader<iarchive, T>::
+        load(*this, data, 0);
 }
 
 template <typename T>
-void iarchive::load_override(T& data, long /* PFTO */)
+void iarchive::load_override(T& data, long protocol_version)
 {
-    load_override(data);
+    serialization::load_overloader<iarchive, T>::
+        load(*this, data, protocol_version);
 }
 
 inline void iarchive::load(view_type& data)
@@ -56,6 +51,12 @@ void iarchive::load(T& data)
 {
     data = reader.value<T>();
     next();
+}
+
+template <typename T>
+void iarchive::load_array(T *data, std::size_t size)
+{
+    reader.array(data, size);
 }
 
 template <typename Tag>
@@ -85,6 +86,11 @@ inline token::symbol::value iarchive::symbol() const
 inline token::category::value iarchive::category() const
 {
     return reader.category();
+}
+
+inline auto iarchive::length() const -> size_type
+{
+    return reader.length();
 }
 
 inline void iarchive::next()

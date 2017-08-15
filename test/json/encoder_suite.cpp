@@ -11,21 +11,21 @@
 #include <sstream>
 #include <limits>
 #include <functional>
-#include <trial/protocol/buffer/char_traits.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/buffer/string.hpp>
 #include <trial/protocol/json/detail/encoder.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 namespace token = json::token;
 
-using encoder_type = json::detail::basic_encoder<char>;
-using unsigned_encoder_type = json::detail::basic_encoder<unsigned char>;
-using unsigned_string = std::basic_string<unsigned char, buffer::char_traits<unsigned char>>;
-using unsigned_ostringstream = std::basic_ostringstream<unsigned char, buffer::char_traits<unsigned char>>;
+using encoder_type = json::detail::basic_encoder<char, sizeof(buffer::array<char, 1>)>;
+using unsigned_encoder_type = json::detail::basic_encoder<unsigned char, sizeof(buffer::array<char, 1>)>;
+using unsigned_string = std::basic_string<unsigned char, core::char_traits<unsigned char>>;
+using unsigned_ostringstream = std::basic_ostringstream<unsigned char, core::char_traits<unsigned char>>;
 
 //-----------------------------------------------------------------------------
 // Buffer
@@ -89,7 +89,7 @@ void test_comma()
 {
     std::array<char, 1> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.end()), ",");
 }
 
@@ -97,14 +97,14 @@ void fail_comma()
 {
     std::array<char, 0> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 0);
 }
 
 void test_colon()
 {
     std::array<char, 1> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::string(buffer.begin(), buffer.end()), ":");
 }
 
@@ -112,7 +112,7 @@ void fail_colon()
 {
     std::array<char, 0> buffer;
     encoder_type encoder(buffer);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 0);
 }
 
 void test_null()
@@ -135,7 +135,7 @@ void test_null_null()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 4);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null,null");
 }
@@ -153,7 +153,7 @@ void test_true_true()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "true,true");
 }
@@ -171,7 +171,7 @@ void test_false_false()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "false,false");
 }
@@ -213,7 +213,7 @@ void test_zero_zero()
     std::ostringstream result;
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "0,0");
 }
@@ -654,6 +654,170 @@ void test_escape_tab()
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\\t\"");
 }
 
+void sanitize_01111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\x7F"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\x7F\"");
+}
+
+void sanitize_10000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\x80"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_10111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xBF"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000()
+{
+    // Missing one character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000_01111111()
+{
+    // Invalid second character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\x7F"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000_10000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\x80"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xC0\x80\"");
+}
+
+void sanitize_11000000_10111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\xBF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xC0\xBF\"");
+}
+
+void sanitize_11000000_11000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\xC0"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11000000_11111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xC0\xFF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0"), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_01111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x7F"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000()
+{
+    // Missing third character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10111111()
+{
+    // Missing third character
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\xBF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_11000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\xC0"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_11111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\xFF"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000_01111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\x7F"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000_10000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\x80"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xE0\x80\x80\"");
+}
+
+void sanitize_11100000_10000000_10111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\xBF"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"\xE0\x80\xBF\"");
+}
+
+void sanitize_11100000_10000000_11000000()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\xC0"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
+void sanitize_11100000_10000000_11111111()
+{
+    std::ostringstream result;
+    encoder_type encoder(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("\xE0\x80\xFF"), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"?\"");
+}
+
 void run()
 {
     test_literal_empty();
@@ -661,6 +825,7 @@ void run()
     test_space();
     test_alpha();
     test_alpha_bravo();
+
     test_escape_quote();
     test_escape_reverse_solidus();
     test_escape_solidus();
@@ -669,6 +834,27 @@ void run()
     test_escape_newline();
     test_escape_carriage_return();
     test_escape_tab();
+
+    sanitize_01111111();
+    sanitize_10000000();
+    sanitize_10111111();
+    sanitize_11000000();
+    sanitize_11000000_01111111();
+    sanitize_11000000_10000000();
+    sanitize_11000000_10111111();
+    sanitize_11000000_11000000();
+    sanitize_11000000_11111111();
+    sanitize_11100000();
+    sanitize_11100000_01111111();
+    sanitize_11100000_10000000();
+    sanitize_11100000_10111111();
+    sanitize_11100000_11000000();
+    sanitize_11100000_11111111();
+    sanitize_11100000_10000000_01111111();
+    sanitize_11100000_10000000_10000000();
+    sanitize_11100000_10000000_10111111();
+    sanitize_11100000_10000000_11000000();
+    sanitize_11100000_10000000_11111111();
 }
 
 } // namespace string_suite
@@ -721,7 +907,7 @@ void test_array_bool_two()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[false,true]");
@@ -758,7 +944,7 @@ void test_object_bool_one()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("false"), 7);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"false\":false}");
@@ -770,11 +956,11 @@ void test_object_bool_two()
     encoder_type encoder(result);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("false"), 7);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 5);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::value_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::value_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("true"), 6);
-    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::name_separator>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::detail::name_separator>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 4);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_object>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"false\":false,\"true\":true}");

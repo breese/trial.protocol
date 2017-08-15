@@ -111,11 +111,8 @@ inline encoder::size_type encoder::value(token::int16::type data)
     const size_type size = sizeof(token) + sizeof(std::int16_t);
     if (buffer->grow(size))
     {
-        const std::uint16_t endian = UINT16_C(0x0100);
-        value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -127,13 +124,8 @@ inline encoder::size_type encoder::value(token::int32::type data)
     const size_type size = sizeof(token) + sizeof(std::int32_t);
     if (buffer->grow(size))
     {
-        const std::uint32_t endian = UINT32_C(0x03020100);
-        value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -145,17 +137,8 @@ inline encoder::size_type encoder::value(token::int64::type data)
     const size_type size = sizeof(token) + sizeof(std::int64_t);
     if (buffer->grow(size))
     {
-        const std::uint64_t endian = UINT64_C(0x0706050403020100);
-        value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[4]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[5]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[6]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[7]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -168,13 +151,8 @@ inline encoder::size_type encoder::value(token::float32::type data)
     const size_type size = sizeof(token) + sizeof(token::float32::type);
     if (buffer->grow(size))
     {
-        const std::uint32_t endian = UINT32_C(0x03020100);
-        value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -187,17 +165,8 @@ inline encoder::size_type encoder::value(token::float64::type data)
     const size_type size = sizeof(token) + sizeof(token::float64::type);
     if (buffer->grow(size))
     {
-        const std::uint64_t endian = UINT64_C(0x0706050403020100);
-        value_type *data_buffer = (value_type *)&data;
         buffer->write(token);
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[4]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[5]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[6]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[7]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -253,8 +222,8 @@ inline encoder::size_type encoder::value(const char *data)
     return value(string_view_type(data));
 }
 
-inline encoder::size_type encoder::binary(const value_type *data,
-                                          size_type length)
+inline auto encoder::array(const token::int8::type *data,
+                           size_type length) -> size_type
 {
     size_type size = 0;
 
@@ -262,7 +231,7 @@ inline encoder::size_type encoder::binary(const value_type *data,
     {
         if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length))
             return 0;
-        buffer->write(token::code::binary8);
+        buffer->write(token::code::array8_int8);
         size = write_length(static_cast<std::uint8_t>(length));
         if (length == 0)
             return sizeof(value_type) + size;
@@ -271,31 +240,246 @@ inline encoder::size_type encoder::binary(const value_type *data,
     {
         if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length))
             return 0;
-        buffer->write(token::code::binary16);
+        buffer->write(token::code::array16_int8);
         size = write_length(static_cast<std::uint16_t>(length));
     }
     else if (length < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
     {
         if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length))
             return 0;
-        buffer->write(token::code::binary32);
+        buffer->write(token::code::array32_int8);
         size = write_length(static_cast<std::uint32_t>(length));
     }
     else
     {
         if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length))
             return 0;
-        buffer->write(token::code::binary64);
+        buffer->write(token::code::array64_int8);
         size = write_length(static_cast<std::uint64_t>(length));
     }
 
-    buffer->write(view_type(data, length));
+    buffer->write(view_type(reinterpret_cast<const value_type *>(data), length));
     return sizeof(value_type) + size + length;
 }
 
-inline encoder::size_type encoder::binary(const view_type& data)
+inline auto encoder::array(const token::int16::type *data,
+                           size_type length) -> size_type
 {
-    return binary(data.data(), data.size());
+    size_type size = 0;
+    size_type length_size = length * sizeof(*data);
+
+    if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint8_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length_size))
+            return 0;
+        buffer->write(token::code::array8_int16);
+        size = write_length(static_cast<std::uint8_t>(length_size));
+        if (length_size == 0)
+            return sizeof(value_type) + size;
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint16_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length_size))
+            return 0;
+        buffer->write(token::code::array16_int16);
+        size = write_length(static_cast<std::uint16_t>(length_size));
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length_size))
+            return 0;
+        buffer->write(token::code::array32_int16);
+        size = write_length(static_cast<std::uint32_t>(length_size));
+    }
+    else
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length_size))
+            return 0;
+        buffer->write(token::code::array64_int16);
+        size = write_length(static_cast<std::uint64_t>(length_size));
+    }
+
+    for (size_type i = 0; i < length; ++i)
+    {
+        endian_write(data[i]);
+    }
+    return sizeof(value_type) + size + length_size;
+}
+
+inline auto encoder::array(const token::int32::type *data,
+                           size_type length) -> size_type
+{
+    size_type size = 0;
+    size_type length_size = length * sizeof(*data);
+
+    if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint8_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length_size))
+            return 0;
+        buffer->write(token::code::array8_int32);
+        size = write_length(static_cast<std::uint8_t>(length_size));
+        if (length_size == 0)
+            return sizeof(value_type) + size;
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint16_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length_size))
+            return 0;
+        buffer->write(token::code::array16_int32);
+        size = write_length(static_cast<std::uint16_t>(length_size));
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length_size))
+            return 0;
+        buffer->write(token::code::array32_int32);
+        size = write_length(static_cast<std::uint32_t>(length_size));
+    }
+    else
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length_size))
+            return 0;
+        buffer->write(token::code::array64_int32);
+        size = write_length(static_cast<std::uint64_t>(length_size));
+    }
+
+    for (size_type i = 0; i < length; ++i)
+    {
+        endian_write(data[i]);
+    }
+    return sizeof(value_type) + size + length_size;
+}
+
+inline auto encoder::array(const token::int64::type *data,
+                           size_type length) -> size_type
+{
+    size_type size = 0;
+    size_type length_size = length * sizeof(*data);
+
+    if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint8_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length_size))
+            return 0;
+        buffer->write(token::code::array8_int64);
+        size = write_length(static_cast<std::uint8_t>(length_size));
+        if (length_size == 0)
+            return sizeof(value_type) + size;
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint16_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length_size))
+            return 0;
+        buffer->write(token::code::array16_int64);
+        size = write_length(static_cast<std::uint16_t>(length_size));
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length_size))
+            return 0;
+        buffer->write(token::code::array32_int64);
+        size = write_length(static_cast<std::uint32_t>(length_size));
+    }
+    else
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length_size))
+            return 0;
+        buffer->write(token::code::array64_int64);
+        size = write_length(static_cast<std::uint64_t>(length_size));
+    }
+
+    for (size_type i = 0; i < length; ++i)
+    {
+        endian_write(data[i]);
+    }
+    return sizeof(value_type) + size + length_size;
+}
+
+inline auto encoder::array(const token::float32::type *data,
+                           size_type length) -> size_type
+{
+    size_type size = 0;
+    size_type length_size = length * sizeof(*data);
+
+    if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint8_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length_size))
+            return 0;
+        buffer->write(token::code::array8_float32);
+        size = write_length(static_cast<std::uint8_t>(length_size));
+        if (length_size == 0)
+            return sizeof(value_type) + size;
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint16_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length_size))
+            return 0;
+        buffer->write(token::code::array16_float32);
+        size = write_length(static_cast<std::uint16_t>(length_size));
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length_size))
+            return 0;
+        buffer->write(token::code::array32_float32);
+        size = write_length(static_cast<std::uint32_t>(length_size));
+    }
+    else
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length_size))
+            return 0;
+        buffer->write(token::code::array64_float32);
+        size = write_length(static_cast<std::uint64_t>(length_size));
+    }
+
+    for (size_type i = 0; i < length; ++i)
+    {
+        endian_write(data[i]);
+    }
+    return sizeof(value_type) + size + length_size;
+}
+
+inline auto encoder::array(const token::float64::type *data,
+                           size_type length) -> size_type
+{
+    size_type size = 0;
+    size_type length_size = length * sizeof(*data);
+
+    if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint8_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint8_t) + length_size))
+            return 0;
+        buffer->write(token::code::array8_float64);
+        size = write_length(static_cast<std::uint8_t>(length_size));
+        if (length_size == 0)
+            return sizeof(value_type) + size;
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint16_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint16_t) + length_size))
+            return 0;
+        buffer->write(token::code::array16_float64);
+        size = write_length(static_cast<std::uint16_t>(length_size));
+    }
+    else if (length_size < static_cast<std::string::size_type>(std::numeric_limits<std::uint32_t>::max()))
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint32_t) + length_size))
+            return 0;
+        buffer->write(token::code::array32_float64);
+        size = write_length(static_cast<std::uint32_t>(length_size));
+    }
+    else
+    {
+        if (!buffer->grow(sizeof(value_type) + sizeof(std::uint64_t) + length_size))
+            return 0;
+        buffer->write(token::code::array64_float64);
+        size = write_length(static_cast<std::uint64_t>(length_size));
+    }
+
+    for (size_type i = 0; i < length; ++i)
+    {
+        endian_write(data[i]);
+    }
+    return sizeof(value_type) + size + length_size;
 }
 
 inline encoder::size_type encoder::write_length(std::uint8_t data)
@@ -308,10 +492,7 @@ inline encoder::size_type encoder::write_length(std::uint16_t data)
     const size_type size = sizeof(std::int16_t);
     if (buffer->grow(size))
     {
-        const std::uint16_t endian = UINT16_C(0x0100);
-        value_type *data_buffer = (value_type *)&data;
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -322,12 +503,7 @@ inline encoder::size_type encoder::write_length(std::uint32_t data)
     const size_type size = sizeof(std::int32_t);
     if (buffer->grow(size))
     {
-        const std::uint32_t endian = UINT32_C(0x03020100);
-        value_type *data_buffer = (value_type *)&data;
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -338,16 +514,7 @@ inline encoder::size_type encoder::write_length(std::uint64_t data)
     const size_type size = sizeof(std::int64_t);
     if (buffer->grow(size))
     {
-        const std::uint64_t endian = UINT64_C(0x0706050403020100);
-        value_type *data_buffer = (value_type *)&data;
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[4]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[5]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[6]]));
-        buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[7]]));
+        endian_write(data);
         return size;
     }
     return 0;
@@ -373,6 +540,94 @@ inline encoder::size_type encoder::write(const view_type& data)
         return size;
     }
     return 0;
+}
+
+inline void encoder::endian_write(std::int16_t data)
+{
+    const std::uint16_t endian = UINT16_C(0x0100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+}
+
+inline void encoder::endian_write(std::uint16_t data)
+{
+    const std::uint16_t endian = UINT16_C(0x0100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+}
+
+inline void encoder::endian_write(std::int32_t data)
+{
+    const std::uint32_t endian = UINT32_C(0x03020100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+}
+
+inline void encoder::endian_write(std::uint32_t data)
+{
+    const std::uint32_t endian = UINT32_C(0x03020100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+}
+
+inline void encoder::endian_write(std::int64_t data)
+{
+    const std::uint64_t endian = UINT64_C(0x0706050403020100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[4]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[5]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[6]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[7]]));
+}
+
+inline void encoder::endian_write(std::uint64_t data)
+{
+    const std::uint64_t endian = UINT64_C(0x0706050403020100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[4]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[5]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[6]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[7]]));
+}
+
+inline void encoder::endian_write(token::float32::type data)
+{
+    const std::uint32_t endian = UINT32_C(0x03020100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+}
+
+inline void encoder::endian_write(token::float64::type data)
+{
+    const std::uint64_t endian = UINT64_C(0x0706050403020100);
+    value_type *data_buffer = (value_type *)&data;
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[0]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[1]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[2]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[3]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[4]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[5]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[6]]));
+    buffer->write(static_cast<value_type>(data_buffer[((value_type *)&endian)[7]]));
 }
 
 } // namespace detail

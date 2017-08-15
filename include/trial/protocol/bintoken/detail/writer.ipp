@@ -13,7 +13,7 @@
 
 #include <cstdint>
 #include <limits>
-#include <trial/protocol/detail/type_traits.hpp>
+#include <trial/protocol/core/detail/type_traits.hpp>
 #include <trial/protocol/buffer/base.hpp>
 
 namespace trial
@@ -30,9 +30,10 @@ namespace bintoken
 template <typename T, typename Enable>
 struct writer::overloader
 {
-    static size_type value(writer& self, const T& data)
+    static size_type value(writer&, const T&)
     {
-        return self.encoder.value(buffer::traits<T>::view_cast(data));
+        static_assert(sizeof(T) == 0, "No specialization found for T");
+        return 0;
     }
 };
 
@@ -50,7 +51,7 @@ struct writer::overloader<
     T,
     typename std::enable_if<std::is_integral<T>::value &&
                             std::is_signed<T>::value &&
-                            !protocol::detail::is_bool<T>::value>::type>
+                            !core::detail::is_bool<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
@@ -74,6 +75,11 @@ struct writer::overloader<
             return self.encoder.value(static_cast<std::int64_t>(data));
         }
     }
+
+    static size_type array(writer& self, const T *data, size_type size)
+    {
+        return self.encoder.array(data, size);
+    }
 };
 
 template <typename T>
@@ -81,7 +87,7 @@ struct writer::overloader<
     T,
     typename std::enable_if<std::is_integral<T>::value &&
                             !std::is_signed<T>::value &&
-                            !protocol::detail::is_bool<T>::value>::type>
+                            !core::detail::is_bool<T>::value>::type>
 {
     static size_type value(writer& self, T data)
     {
@@ -102,6 +108,14 @@ struct writer::overloader<
             return self.encoder.value(std::int64_t(data));
         }
     }
+
+    static size_type array(writer& self, const T *data, size_type size)
+    {
+        using signed_type = typename std::make_signed<T>::type;
+
+        return self.encoder.array(reinterpret_cast<const signed_type *>(data),
+                                  size);
+    }
 };
 
 template <typename T>
@@ -113,12 +127,16 @@ struct writer::overloader<
     {
         return self.encoder.value(data);
     }
+
+    static size_type array(writer& self, const T *data, size_type size)
+    {
+        return self.encoder.array(data, size);
+    }
 };
 
+// String literals
 template <typename CharT, std::size_t N>
-struct writer::overloader<
-    CharT[N],
-    typename std::enable_if<buffer::is_text<CharT[N]>::value>::type>
+struct writer::overloader<CharT[N]>
 {
     using type = CharT[N];
 
@@ -145,17 +163,6 @@ struct writer::overloader<std::string>
     static size_type value(writer& self, const type& data)
     {
         return self.encoder.value(data);
-    }
-};
-
-template <typename T>
-struct writer::overloader<
-    T,
-    typename std::enable_if<buffer::is_binary<T>::value>::type>
-{
-    static size_type value(writer& self, const T& data)
-    {
-        return self.encoder.binary(buffer::traits<T>::view_cast(data));
     }
 };
 
@@ -267,6 +274,12 @@ template <typename T>
 writer::size_type writer::value()
 {
     return overloader<T>::value(*this);
+}
+
+template <typename T>
+auto writer::array(const T *data, size_type size) -> size_type
+{
+    return overloader<T>::array(*this, data, size);
 }
 
 inline void writer::validate_scope(token::code::value code,

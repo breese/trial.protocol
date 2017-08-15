@@ -45,22 +45,16 @@ template <typename CharT>
 template<typename T>
 void basic_oarchive<CharT>::save_override(const T& data)
 {
-    boost::archive::save(*this, data);
+    serialization::save_overloader<basic_oarchive<CharT>, T>::
+        save(*this, data, 0);
 }
 
 template <typename CharT>
 template<typename T>
-void basic_oarchive<CharT>::save_override(const T& data, long /* PFTO */)
+void basic_oarchive<CharT>::save_override(const T& data, long protocol_version)
 {
-    save_override(data);
-}
-
-template <typename CharT>
-template <typename T, std::size_t N>
-void basic_oarchive<CharT>::save_override(const T (&data)[N])
-{
-    // By-pass Boost.Serialization which has its own array formatting
-    serialization::save_overloader<oarchive, const T[N]>::save(*this, data, 0);
+    serialization::save_overloader<basic_oarchive<CharT>, T>::
+        save(*this, data, protocol_version);
 }
 
 template <typename CharT>

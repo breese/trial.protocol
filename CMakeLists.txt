@@ -46,6 +46,8 @@ set(TRIAL_PROTOCOL_DEPENDENT_LIBRARIES
 
 include_directories(BEFORE include)
 
+install(DIRECTORY ${TRIAL_PROTOCOL_ROOT}/include/ DESTINATION include)
+
 function(trial_add_test name)
   add_executable(${name} ${ARGN})
   target_link_libraries(${name} ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})

@@ -24,6 +24,9 @@ namespace token
 // Token constants
 //-----------------------------------------------------------------------------
 
+namespace detail
+{
+
 struct code
 {
     enum value
@@ -55,6 +58,36 @@ struct code
     };
 };
 
+} // namespace detail
+
+struct code
+{
+    enum value
+    {
+        end = detail::code::end,
+        error_unexpected_token = detail::code::error_unexpected_token,
+        error_invalid_key = detail::code::error_invalid_key,
+        error_invalid_value = detail::code::error_invalid_value,
+        error_incompatible_type = detail::code::error_incompatible_type,
+        error_unbalanced_end_array = detail::code::error_unbalanced_end_array,
+        error_unbalanced_end_object = detail::code::error_unbalanced_end_object,
+        error_expected_end_array = detail::code::error_expected_end_array,
+        error_expected_end_object = detail::code::error_expected_end_object,
+
+        null = detail::code::null,
+        true_value = detail::code::true_value,
+        false_value = detail::code::false_value,
+        integer = detail::code::integer,
+        number = detail::code::number,
+        string = detail::code::string,
+
+        begin_array = detail::code::begin_array,
+        end_array = detail::code::end_array,
+        begin_object = detail::code::begin_object,
+        end_object = detail::code::end_object
+    };
+};
+
 struct symbol
 {
     enum value
@@ -71,9 +104,7 @@ struct symbol
         begin_array,
         end_array,
         begin_object,
-        end_object,
-
-        separator
+        end_object
     };
 
     static value convert(code::value);
@@ -86,7 +117,7 @@ struct category
         status,
         nullable,
         data,
-        structural,
+        structural
     };
 
     static value convert(code::value);
@@ -122,15 +153,22 @@ struct end_object
     static const token::code::value code = token::code::end_object;
 };
 
+namespace detail
+{
+
+static token::code::value convert(token::detail::code::value);
+
 struct value_separator
 {
-    static const token::code::value code = token::code::value_separator;
+    static const token::detail::code::value code = token::detail::code::value_separator;
 };
 
 struct name_separator
 {
-    static const token::code::value code = token::code::name_separator;
+    static const token::detail::code::value code = token::detail::code::name_separator;
 };
+
+} // namespace detail
 
 } // namespace token
 } // namespace json

@@ -29,20 +29,15 @@ oarchive::oarchive(T& buffer)
 template <typename T>
 inline void oarchive::save_override(const T& data)
 {
-    boost::archive::save(*this, data);
-}
-
-template <typename T, std::size_t N>
-inline void oarchive::save_override(const T (&data)[N])
-{
-    // By-pass Boost.Serialization which has its own array formatting
-    serialization::save_overloader<oarchive, const T[N]>::save(*this, data, 0);
+    serialization::save_overloader<oarchive, T>::
+        save(*this, data, 0);
 }
 
 template <typename T>
-inline void oarchive::save_override(const T& data, long /* PFTO */)
+inline void oarchive::save_override(const T& data, long protocol_version)
 {
-    save_override(data);
+    serialization::save_overloader<oarchive, T>::
+        save(*this, data, protocol_version);
 }
 
 template <typename T>
@@ -55,6 +50,12 @@ template <typename T>
 void oarchive::save()
 {
     writer.value<T>();
+}
+
+template <typename T>
+void oarchive::save_array(const T *data, std::size_t size)
+{
+    writer.array(data, size);
 }
 
 } // namespace bintoken

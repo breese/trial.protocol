@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/serialization/serialization.hpp>
-#include <trial/protocol/serialization/std/pair.hpp>
+#include <trial/protocol/core/serialization/std/pair.hpp>
 
 namespace trial
 {
@@ -27,11 +27,11 @@ struct save_overloader< json::basic_oarchive<CharT>,
 {
     static void save(json::basic_oarchive<CharT>& archive,
                      const std::pair<T1, T2>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         archive.template save<json::token::begin_array>();
-        archive.save_override(data.first);
-        archive.save_override(data.second);
+        archive.save_override(data.first, protocol_version);
+        archive.save_override(data.second, protocol_version);
         archive.template save<json::token::end_array>();
     }
 };
@@ -42,11 +42,11 @@ struct load_overloader< json::basic_iarchive<CharT>,
 {
     static void load(json::basic_iarchive<CharT>& archive,
                      std::pair<T1, T2>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         archive.template load<json::token::begin_array>();
-        archive.load_override(data.first);
-        archive.load_override(data.second);
+        archive.load_override(data.first, protocol_version);
+        archive.load_override(data.second, protocol_version);
         archive.template load<json::token::end_array>();
     }
 };

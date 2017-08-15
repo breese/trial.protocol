@@ -10,7 +10,7 @@
 
 #include <sstream>
 #include <trial/protocol/json/serialization.hpp>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 
 using namespace trial::protocol;
 

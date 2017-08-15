@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_STRING_VIEW_HPP
-#define TRIAL_PROTOCOL_DETAIL_STRING_VIEW_HPP
+#ifndef TRIAL_PROTOCOL_CORE_DETAIL_STRING_VIEW_HPP
+#define TRIAL_PROTOCOL_CORE_DETAIL_STRING_VIEW_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,7 +13,13 @@
 
 #include <boost/version.hpp>
 
-#if BOOST_VERSION < 106100
+#if !defined(TRIAL_PROTOCOL_USE_BOOST_STRING_REF)
+# if BOOST_VERSION < 106100
+#  define TRIAL_PROTOCOL_USE_BOOST_STRING_REF 1
+# endif
+#endif
+
+#if TRIAL_PROTOCOL_USE_BOOST_STRING_REF
 #include <boost/utility/string_ref.hpp>
 #else
 #include <boost/utility/string_view.hpp>
@@ -23,10 +29,12 @@ namespace trial
 {
 namespace protocol
 {
+namespace core
+{
 namespace detail
 {
 
-#if BOOST_VERSION < 106100
+#if TRIAL_PROTOCOL_USE_BOOST_STRING_REF
 template<class CharT, typename Traits = std::char_traits<CharT>>
 using basic_string_view = boost::basic_string_ref<CharT, Traits>;
 #else
@@ -36,9 +44,10 @@ using basic_string_view = boost::basic_string_view<CharT, Traits>;
 
 using string_view = basic_string_view<char>;
 
+} // namespace core
 } // namespace detail
 } // namespace protocol
 } // namespace trial
 
 
-#endif // TRIAL_PROTOCOL_DETAIL_STRING_VIEW_HPP
+#endif // TRIAL_PROTOCOL_CORE_DETAIL_STRING_VIEW_HPP

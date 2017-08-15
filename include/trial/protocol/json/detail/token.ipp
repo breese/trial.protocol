@@ -68,10 +68,6 @@ inline symbol::value symbol::convert(code::value value)
 
     case code::end_object:
         return symbol::end_object;
-
-    case code::value_separator:
-    case code::name_separator:
-        return symbol::separator;
     }
     return symbol::error;
 }
@@ -97,7 +93,6 @@ inline category::value category::convert(symbol::value value)
     case symbol::end_array:
     case symbol::begin_object:
     case symbol::end_object:
-    case symbol::separator:
         return category::structural;
     }
 
@@ -108,6 +103,24 @@ inline category::value category::convert(code::value value)
 {
     return category::convert(symbol::convert(value));
 }
+
+namespace detail
+{
+
+inline token::code::value convert(detail::code::value value)
+{
+    switch (value)
+    {
+    case detail::code::value_separator:
+    case detail::code::name_separator:
+        return token::code::error_unexpected_token;
+
+    default:
+        return token::code::value(value);
+    }
+}
+
+} // namespace detail
 
 } // namespace token
 } // namespace json

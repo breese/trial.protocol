@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
-#include <trial/protocol/serialization/boost/optional.hpp>
+#include <trial/protocol/core/serialization/boost/optional.hpp>
 
 namespace trial
 {
@@ -27,11 +27,11 @@ struct save_overloader< protocol::bintoken::oarchive,
 {
     static void save(protocol::bintoken::oarchive& ar,
                      const boost::optional<T>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         if (data)
         {
-            ar.save_override(*data);
+            ar.save_override(*data, protocol_version);
         }
         else
         {
@@ -46,7 +46,7 @@ struct load_overloader< protocol::bintoken::iarchive,
 {
     static void load(protocol::bintoken::iarchive& ar,
                      boost::optional<T>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         if (ar.at<bintoken::token::null>())
         {
@@ -56,7 +56,7 @@ struct load_overloader< protocol::bintoken::iarchive,
         else
         {
             data = T(); // Engage
-            ar.load_override(*data);
+            ar.load_override(*data, protocol_version);
         }
     }
 };

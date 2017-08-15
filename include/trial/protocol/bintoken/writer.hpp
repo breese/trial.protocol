@@ -25,7 +25,6 @@ namespace bintoken
 class writer
 {
 public:
-    using value_type = detail::encoder::value_type;
     using size_type = detail::encoder::size_type;
     using view_type = detail::encoder::view_type;
     using string_view_type = detail::encoder::string_view_type;
@@ -37,6 +36,9 @@ public:
 
     template <typename T>
     size_type value(const T&);
+
+    template <typename T>
+    size_type array(const T *, size_type);
 
 private:
     void validate_scope(token::code::value, enum bintoken::errc);

@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_CSTDFLOAT_HPP
-#define TRIAL_PROTOCOL_DETAIL_CSTDFLOAT_HPP
+#ifndef TRIAL_PROTOCOL_CORE_DETAIL_CSTDFLOAT_HPP
+#define TRIAL_PROTOCOL_CORE_DETAIL_CSTDFLOAT_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -44,4 +44,4 @@ using float128_t = long double;
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DETAIL_CSTDFLOAT_HPP
+#endif // TRIAL_PROTOCOL_CORE_DETAIL_CSTDFLOAT_HPP

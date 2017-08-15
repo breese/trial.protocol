@@ -14,7 +14,6 @@
 #include <string>
 #include <stack>
 #include <boost/config.hpp>
-#include <trial/protocol/detail/string_view.hpp>
 #include <trial/protocol/json/error.hpp>
 #include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
@@ -107,7 +106,6 @@ public:
     //! -# Convert a symbol::number token into a floating-point C++ type.
     //! -# Convert a symbol::string token into std::string.
     //!
-    //! @pre category() returns token::category::data
     //! @returns The converted value.
     //! @throws json::error If requested type is incompatible with the current token.
     template <typename ReturnType> ReturnType value() const;
@@ -134,17 +132,17 @@ private:
 
     struct frame
     {
-        frame(token::code::value);
+        frame(token::detail::code::value);
 
         bool is_array() const;
         bool is_object() const;
 
-        token::code::value next(decoder_type&);
-        token::code::value check_outer(decoder_type&);
-        token::code::value check_array(decoder_type&);
-        token::code::value check_object(decoder_type&);
+        token::detail::code::value next(decoder_type&);
+        token::detail::code::value check_outer(decoder_type&);
+        token::detail::code::value check_array(decoder_type&);
+        token::detail::code::value check_object(decoder_type&);
 
-        token::code::value scope;
+        token::detail::code::value scope;
         size_type counter;
     };
     std::stack<frame> stack;

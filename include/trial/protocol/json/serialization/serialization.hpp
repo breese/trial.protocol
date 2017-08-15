@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/serialization/serialization.hpp>
+#include <trial/protocol/core/serialization/serialization.hpp>
 #include <trial/protocol/json/serialization/iarchive.hpp>
 #include <trial/protocol/json/serialization/oarchive.hpp>
 

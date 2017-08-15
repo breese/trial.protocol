@@ -1,9 +1,9 @@
-#ifndef TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_DETAIL_ARRAY_LOAD_HPP
-#define TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_DETAIL_ARRAY_LOAD_HPP
+#ifndef TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_STD_ARRAY_HPP
+#define TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_STD_ARRAY_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -11,12 +11,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cstring>
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
-#include <trial/protocol/core/serialization/array.hpp>
+#include <trial/protocol/core/serialization/std/array.hpp>
 
 //-----------------------------------------------------------------------------
-// By-pass Boost.Serialization which has its own array formatting
+// By-pass Boost.Serialization which has its own std::array specialization
 //-----------------------------------------------------------------------------
 
 namespace boost
@@ -25,28 +24,60 @@ namespace serialization
 {
 
 template <typename T, std::size_t N>
-void load(trial::protocol::bintoken::iarchive& ar,
-          T (&data)[N],
+void save(trial::protocol::bintoken::oarchive& ar,
+          const std::array<T, N>& data,
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    load_overloader<trial::protocol::bintoken::iarchive, T[N]>::load(ar, data, version);
+    save_overloader<trial::protocol::bintoken::oarchive, std::array<T, N>>::
+        save(ar, data, version);
+}
+
+template <typename T, std::size_t N>
+void serialize(trial::protocol::bintoken::oarchive& ar,
+               const std::array<T, N>& data,
+               const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    serialize_overloader<trial::protocol::bintoken::oarchive, std::array<T, N>>::
+        serialize(ar, data, version);
+}
+
+template <typename T, std::size_t N>
+void serialize(trial::protocol::bintoken::oarchive& ar,
+               std::array<T, N>& data,
+               const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    serialize_overloader<trial::protocol::bintoken::oarchive, std::array<T, N>>::
+        serialize(ar, data, version);
+}
+
+template <typename T, std::size_t N>
+void load(trial::protocol::bintoken::iarchive& ar,
+          std::array<T, N>& data,
+          const unsigned int version)
+{
+    using namespace trial::protocol::serialization;
+    load_overloader<trial::protocol::bintoken::iarchive, std::array<T, N>>::
+        load(ar, data, version);
 }
 
 template <typename T, std::size_t N>
 void serialize(trial::protocol::bintoken::iarchive& ar,
-               T (&data)[N],
+               std::array<T, N>& data,
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<trial::protocol::bintoken::iarchive, T[N]>::serialize(ar, data, version);
+    serialize_overloader<trial::protocol::bintoken::iarchive, std::array<T, N>>::
+        serialize(ar, data, version);
 }
 
 } // namespace serialization
 } // namespace boost
 
 //-----------------------------------------------------------------------------
-// T[N]
+// std::array
 //-----------------------------------------------------------------------------
 
 namespace trial
@@ -57,11 +88,29 @@ namespace serialization
 {
 
 template <typename T, std::size_t N>
-struct load_overloader< bintoken::iarchive,
-                        T[N] >
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<T, N> >
 {
-    static void load(bintoken::iarchive& ar,
-                     T (&data)[N],
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<T, N>& data,
+                     const unsigned int protocol_version)
+    {
+        ar.save<bintoken::token::begin_array>();
+        ar.save<std::size_t>(N);
+        for (std::size_t i = 0; i < N; ++i)
+        {
+            ar.save_override(data[i], protocol_version);
+        }
+        ar.save<bintoken::token::end_array>();
+    }
+};
+
+template <typename T, std::size_t N>
+struct load_overloader< protocol::bintoken::iarchive,
+                        typename std::array<T, N> >
+{
+    static void load(protocol::bintoken::iarchive& ar,
+                     std::array<T, N>& data,
                      const unsigned int protocol_version)
     {
         ar.load<bintoken::token::begin_array>();
@@ -86,11 +135,23 @@ struct load_overloader< bintoken::iarchive,
 // Specialization for compact arrays
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::int8_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::int8_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::int8_t[N] >
+                        std::array<std::int8_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::int8_t (&data)[N],
+                     std::array<std::int8_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -105,7 +166,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -116,11 +177,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::uint8_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::uint8_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::uint8_t[N] >
+                        std::array<std::uint8_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::uint8_t (&data)[N],
+                     std::array<std::uint8_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -135,7 +208,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -146,11 +219,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::int16_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::int16_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::int16_t[N] >
+                        std::array<std::int16_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::int16_t (&data)[N],
+                     std::array<std::int16_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -165,7 +250,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -176,11 +261,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::uint16_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::uint16_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::uint16_t[N] >
+                        std::array<std::uint16_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::uint16_t (&data)[N],
+                     std::array<std::uint16_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -195,7 +292,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -206,11 +303,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::int32_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::int32_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::int32_t[N] >
+                        std::array<std::int32_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::int32_t (&data)[N],
+                     std::array<std::int32_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -225,7 +334,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -236,11 +345,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::uint32_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::uint32_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::uint32_t[N] >
+                        std::array<std::uint32_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::uint32_t (&data)[N],
+                     std::array<std::uint32_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -255,7 +376,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -266,11 +387,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::int64_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::int64_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::int64_t[N] >
+                        std::array<std::int64_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::int64_t (&data)[N],
+                     std::array<std::int64_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -285,7 +418,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -296,11 +429,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<std::uint64_t, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<std::uint64_t, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        std::uint64_t[N] >
+                        std::array<std::uint64_t, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     std::uint64_t (&data)[N],
+                     std::array<std::uint64_t, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -315,7 +460,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -326,11 +471,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<bintoken::token::float32::type, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<bintoken::token::float32::type, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        bintoken::token::float32::type[N] >
+                        std::array<bintoken::token::float32::type, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     bintoken::token::float32::type (&data)[N],
+                     std::array<bintoken::token::float32::type, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -345,7 +502,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -356,11 +513,23 @@ struct load_overloader< bintoken::iarchive,
 };
 
 template <std::size_t N>
+struct save_overloader< protocol::bintoken::oarchive,
+                        typename std::array<bintoken::token::float64::type, N> >
+{
+    static void save(protocol::bintoken::oarchive& ar,
+                     const std::array<bintoken::token::float64::type, N>& data,
+                     const unsigned int /* protocol_version */)
+    {
+        ar.save_array(data.data(), data.size());
+    }
+};
+
+template <std::size_t N>
 struct load_overloader< bintoken::iarchive,
-                        bintoken::token::float64::type[N] >
+                        std::array<bintoken::token::float64::type, N> >
 {
     static void load(bintoken::iarchive& ar,
-                     bintoken::token::float64::type (&data)[N],
+                     std::array<bintoken::token::float64::type, N>& data,
                      const unsigned int /* protocol_version */)
     {
         switch (ar.code())
@@ -375,7 +544,7 @@ struct load_overloader< bintoken::iarchive,
                 {
                     throw bintoken::error(bintoken::overflow);
                 }
-                ar.load_array(data, length);
+                ar.load_array(data.data(), length);
             }
             break;
 
@@ -389,4 +558,4 @@ struct load_overloader< bintoken::iarchive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_DETAIL_ARRAY_LOAD_HPP
+#endif // TRIAL_PROTOCOL_BINTOKEN_SERIALIZATION_STD_ARRAY_HPP

@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/json/serialization/serialization.hpp>
-#include <trial/protocol/serialization/std/map.hpp>
+#include <trial/protocol/core/serialization/std/map.hpp>
 
 namespace trial
 {
@@ -27,14 +27,14 @@ struct save_overloader< json::basic_oarchive<CharT>,
 {
     static void save(json::basic_oarchive<CharT>& archive,
                      const std::map<Key, T, Compare, Allocator>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         archive.template save<json::token::begin_array>();
         for (typename std::map<Key, T, Compare, Allocator>::const_iterator it = data.begin();
              it != data.end();
              ++it)
         {
-            archive.save_override(*it);
+            archive.save_override(*it, protocol_version);
         }
         archive.template save<json::token::end_array>();
     }
@@ -46,14 +46,14 @@ struct load_overloader< json::basic_iarchive<CharT>,
 {
     static void load(json::basic_iarchive<CharT>& archive,
                      std::map<Key, T, Compare, Allocator>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         archive.template load<json::token::begin_array>();
         while (!archive.template at<json::token::end_array>())
         {
             // We cannot use std::map<Key, T>::value_type because it has a const key
             std::pair<Key, T> value;
-            archive.load_override(value);
+            archive.load_override(value, protocol_version);
             data.insert(value);
         }
         archive.template load<json::token::end_array>();
@@ -67,15 +67,15 @@ struct save_overloader< json::basic_oarchive<CharT>,
 {
     static void save(json::basic_oarchive<CharT>& archive,
                      const std::map<std::string, T, Compare, MapAllocator>& data,
-                     const unsigned int /* protocol_version */)
+                     const unsigned int protocol_version)
     {
         archive.template save<json::token::begin_object>();
         for (typename std::map<std::string, T, Compare, MapAllocator>::const_iterator it = data.begin();
              it != data.end();
              ++it)
         {
-            archive.save_override(it->first);
-            archive.save_override(it->second);
+            archive.save_override(it->first, protocol_version);
+            archive.save_override(it->second, protocol_version);
         }
         archive.template save<json::token::end_object>();
     }
@@ -87,15 +87,15 @@ struct load_overloader< json::basic_iarchive<CharT>,
 {
     static void load(json::basic_iarchive<CharT>& archive,
                      std::map<std::string, T, Compare, MapAllocator>& data,
-                     const unsigned int /* protocol_version*/)
+                     const unsigned int protocol_version)
     {
         archive.template load<json::token::begin_object>();
         while (!archive.template at<json::token::end_object>())
         {
             // We cannot use std::map<Key, T>::value_type because it has a const key
             std::pair<std::string, T> value;
-            archive.load_override(value.first);
-            archive.load_override(value.second);
+            archive.load_override(value.first, protocol_version);
+            archive.load_override(value.second, protocol_version);
             data.insert(value);
         }
         archive.template load<json::token::end_object>();

@@ -49,13 +49,28 @@ public:
     //! @brief Returns the last error code.
     std::error_code error() const BOOST_NOEXCEPT;
 
+    //! @brief Returns the length of the current token.
+    //!
+    //! @throws system_error if current token is a group.
+    size_type length() const;
+
     //! @brief Returns the current nesting level.
     size_type level() const BOOST_NOEXCEPT;
 
     //! @brief Return the current value.
+    //!
     //! @throws system_error if requested type is incompatible with the current token.
     template <typename ReturnType>
     typename token::type_cast<ReturnType>::type value() const;
+
+    //! @brief Put current value into output buffer.
+    //!
+    //! @param[out] output Contiguous storage where current values are placed.
+    //! @param[in] output_length Number of items in storage.
+    //!
+    //! @throws system_error if requested type is incompatible with the current token.
+    template <typename T>
+    size_type array(T* output, size_type output_length) const;
 
     //! @brief Return a view of the current value before it is converted into its type.
     const view_type& literal() const BOOST_NOEXCEPT;

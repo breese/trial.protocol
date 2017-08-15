@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_LIGHTWEIGHT_TEST_HPP
-#define TRIAL_PROTOCOL_DETAIL_LIGHTWEIGHT_TEST_HPP
+#ifndef TRIAL_PROTOCOL_CORE_DETAIL_LIGHTWEIGHT_TEST_HPP
+#define TRIAL_PROTOCOL_CORE_DETAIL_LIGHTWEIGHT_TEST_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -19,6 +19,8 @@
 namespace trial
 {
 namespace protocol
+{
+namespace core
 {
 namespace detail
 {
@@ -161,6 +163,7 @@ void test_all_with_impl(FormattedOutputFunction& output,
 }
 
 } // namespace detail
+} // namespace core
 } // namespace protocol
 } // namespace trial
 
@@ -169,7 +172,7 @@ void test_all_with_impl(FormattedOutputFunction& output,
 #define TRIAL_PROTOCOL_TEST_THROWS BOOST_TEST_THROWS
 
 #define TRIAL_PROTOCOL_TEST_THROW_EQUAL(EXPR, EXCEP, MSG)               \
-        try {                                                           \
+    try {                                                               \
         EXPR;                                                           \
         ::boost::detail::throw_failed_impl                              \
               (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);     \
@@ -192,7 +195,7 @@ void test_all_with_impl(FormattedOutputFunction& output,
         ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
     }
 
-#define TRIAL_PROTOCOL_TEST_ALL_EQUAL(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END) ::trial::protocol::detail::test_all_eq_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END)
-#define TRIAL_PROTOCOL_TEST_ALL_WITH(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE) ::trial::protocol::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE)
+#define TRIAL_PROTOCOL_TEST_ALL_EQUAL(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END) ::trial::protocol::core::detail::test_all_eq_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END)
+#define TRIAL_PROTOCOL_TEST_ALL_WITH(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE) ::trial::protocol::core::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE)
 
-#endif // TRIAL_PROTOCOL_DETAIL_LIGHTWEIGHT_TEST_HPP
+#endif // TRIAL_PROTOCOL_CORE_DETAIL_LIGHTWEIGHT_TEST_HPP

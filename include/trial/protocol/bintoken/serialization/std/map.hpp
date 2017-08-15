@@ -14,7 +14,7 @@
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/bintoken/serialization/std/pair.hpp>
 #include <trial/protocol/bintoken/serialization/boost/optional.hpp>
-#include <trial/protocol/serialization/std/map.hpp>
+#include <trial/protocol/core/serialization/std/map.hpp>
 
 namespace trial
 {
@@ -29,7 +29,7 @@ struct save_overloader< protocol::bintoken::oarchive,
 {
     static void save(protocol::bintoken::oarchive& ar,
                      const std::map<Key, T, Compare, Allocator>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         ar.save<bintoken::token::begin_assoc_array>();
         ar.save<bintoken::token::null>();
@@ -37,7 +37,7 @@ struct save_overloader< protocol::bintoken::oarchive,
              it != data.end();
              ++it)
         {
-            ar.save_override(*it);
+            ar.save_override(*it, protocol_version);
         }
         ar.save<bintoken::token::end_assoc_array>();
     }
@@ -49,16 +49,16 @@ struct load_overloader< protocol::bintoken::iarchive,
 {
     static void load(protocol::bintoken::iarchive& ar,
                      std::map<Key, T, Compare, Allocator>& data,
-                     const unsigned int version)
+                     const unsigned int protocol_version)
     {
         ar.load<bintoken::token::begin_assoc_array>();
         boost::optional<std::size_t> count;
-        ar.load_override(count);
+        ar.load_override(count, protocol_version);
         while (!ar.at<bintoken::token::end_assoc_array>())
         {
             // We cannot use std::map<Key, T>::value_type because it has a const key
             std::pair<Key, T> value;
-            ar.load_override(value, version);
+            ar.load_override(value, protocol_version);
             data.insert(value);
         }
         ar.load<bintoken::token::end_assoc_array>();

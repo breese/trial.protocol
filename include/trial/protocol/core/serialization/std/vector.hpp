@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_SERIALIZATION_BOOST_OPTIONAL_HPP
-#define TRIAL_PROTOCOL_SERIALIZATION_BOOST_OPTIONAL_HPP
+#ifndef TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_VECTOR_HPP
+#define TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_VECTOR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,9 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <boost/optional.hpp>
-#include <boost/none.hpp>
-#include <trial/protocol/serialization/serialization.hpp>
+#include <vector>
+#include <trial/protocol/core/serialization/serialization.hpp>
 
 namespace trial
 {
@@ -22,42 +21,42 @@ namespace protocol
 namespace serialization
 {
 
-template <typename Archive, typename T>
-struct save_overloader< Archive, typename boost::optional<T> >
+template <typename Archive, typename T, typename Allocator>
+struct save_overloader< Archive, typename std::vector<T, Allocator> >
 {
-    static void save(Archive&,
-                     const boost::optional<T>&,
-                     const unsigned int);
+    static void save (Archive&,
+                      const std::vector<T, Allocator>&,
+                      const unsigned int);
 };
 
-template <typename Archive, typename T>
-struct load_overloader< Archive, typename boost::optional<T> >
+template <typename Archive, typename T, typename Allocator>
+struct load_overloader< Archive, typename std::vector<T, Allocator> >
 {
     static void load(Archive&,
-                     boost::optional<T>&,
+                     std::vector<T, Allocator>&,
                      const unsigned int);
 };
 
-template <typename Archive, typename T>
+template <typename Archive, typename T, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename boost::optional<T>,
+                            typename std::vector<T, Allocator>,
                             typename std::enable_if<Archive::is_loading::value>::type>
 {
     static void serialize(Archive& ar,
-                          boost::optional<T>& data,
+                          std::vector<T, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
     }
 };
 
-template <typename Archive, typename T>
+template <typename Archive, typename T, typename Allocator>
 struct serialize_overloader<Archive,
-                            typename boost::optional<T>,
+                            typename std::vector<T, Allocator>,
                             typename std::enable_if<Archive::is_saving::value>::type>
 {
     static void serialize(Archive& ar,
-                          const boost::optional<T>& data,
+                          const std::vector<T, Allocator>& data,
                           const unsigned int version)
     {
         boost::serialization::split_free(ar, data, version);
@@ -68,4 +67,4 @@ struct serialize_overloader<Archive,
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_SERIALIZATION_BOOST_OPTIONAL_HPP
+#endif // TRIAL_PROTOCOL_CORE_SERIALIZATION_STD_VECTOR_HPP

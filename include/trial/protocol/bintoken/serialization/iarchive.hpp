@@ -29,6 +29,7 @@ class iarchive
     friend class boost::archive::load_access;
 
 public:
+    using size_type = bintoken::reader::size_type;
     using value_type = bintoken::reader::value_type;
     using view_type = bintoken::reader::view_type;
 
@@ -37,8 +38,7 @@ public:
 
     template <typename T>
     void load_override(T& data);
-    template <typename T, std::size_t N>
-    void load_override(T (&data)[N]);
+
     template <typename T>
     void load_override(T& data, long);
 
@@ -46,6 +46,9 @@ public:
 
     template <typename T>
     void load(T&);
+
+    template <typename T>
+    void load_array(T *data, size_type size);
 
     template <typename Tag>
     void load();
@@ -56,6 +59,7 @@ public:
     token::code::value code() const;
     token::symbol::value symbol() const;
     token::category::value category() const;
+    size_type length() const;
 
     // Ignore these
     void load(boost::archive::version_type&) {}

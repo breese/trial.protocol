@@ -47,10 +47,6 @@ public:
     template<typename T>
     void save_override(const T& data, long);
 
-    // Arrays
-    template <typename T, std::size_t N>
-    void save_override(const T (&data)[N]);
-
     // String literal
     void save_override(const char *data);
 
@@ -63,6 +59,15 @@ public:
     void save_override(const boost::archive::class_id_reference_type) {}
     void save_override(const boost::archive::tracking_type) {}
     void save_override(const boost::archive::class_name_type&) {}
+
+    void save_override(const boost::archive::version_type, int) {}
+    void save_override(const boost::archive::object_id_type, int) {}
+    void save_override(const boost::archive::object_reference_type, int) {}
+    void save_override(const boost::archive::class_id_type, int) {}
+    void save_override(const boost::archive::class_id_optional_type, int) {}
+    void save_override(const boost::archive::class_id_reference_type, int) {}
+    void save_override(const boost::archive::tracking_type, int) {}
+    void save_override(const boost::archive::class_name_type&, int) {}
 
 protected:
     json::basic_writer<value_type> writer;

@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
-#include <trial/protocol/serialization/std/pair.hpp>
+#include <trial/protocol/core/serialization/std/pair.hpp>
 
 namespace trial
 {
@@ -27,11 +27,11 @@ struct save_overloader< protocol::bintoken::oarchive,
 {
     static void save(protocol::bintoken::oarchive& ar,
                      const std::pair<T1, T2>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         ar.save<bintoken::token::begin_record>();
-        ar.save_override(data.first);
-        ar.save_override(data.second);
+        ar.save_override(data.first, protocol_version);
+        ar.save_override(data.second, protocol_version);
         ar.save<bintoken::token::end_record>();
     }
 };
@@ -42,11 +42,11 @@ struct load_overloader< protocol::bintoken::iarchive,
 {
     static void load(protocol::bintoken::iarchive& ar,
                      std::pair<T1, T2>& data,
-                     const unsigned int)
+                     const unsigned int protocol_version)
     {
         ar.load<bintoken::token::begin_record>();
-        ar.load_override(data.first);
-        ar.load_override(data.second);
+        ar.load_override(data.first, protocol_version);
+        ar.load_override(data.second, protocol_version);
         ar.load<bintoken::token::end_record>();
     }
 };

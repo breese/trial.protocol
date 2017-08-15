@@ -13,6 +13,7 @@
 
 #include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/bintoken/serialization/array.hpp>
+#include <trial/protocol/bintoken/serialization/std/array.hpp>
 #include <trial/protocol/bintoken/serialization/std/map.hpp>
 #include <trial/protocol/bintoken/serialization/std/set.hpp>
 #include <trial/protocol/bintoken/serialization/std/string.hpp>
