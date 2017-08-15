@@ -780,124 +780,124 @@ namespace dynamic_suite
 
 void test_null()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value;
     ar << value;
 
-    value_type expected[] = { token::code::null };
+    output_type expected[] = { token::code::null };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_boolean()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value(true);
     ar << value;
 
-    value_type expected[] = { token::code::true_value };
+    output_type expected[] = { token::code::true_value };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_integer()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value(2);
     ar << value;
 
-    value_type expected[] = { 0x02 };
+    output_type expected[] = { 0x02 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_number()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value(1.0);
     ar << value;
 
-    value_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_string()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value("ABC");
     ar << value;
 
-    value_type expected[] = { token::code::string8, 0x03, 0x41, 0x42, 0x43 };
+    output_type expected[] = { token::code::string8, 0x03, 0x41, 0x42, 0x43 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_array_empty()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value = dynamic::variable::array();
     ar << value;
 
-    value_type expected[] = { token::code::begin_array,
+    output_type expected[] = { token::code::begin_array,
                               0x00,
                               token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_array()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value = dynamic::variable::array({ true, 2 });
     ar << value;
 
-    value_type expected[] = { token::code::begin_array,
+    output_type expected[] = { token::code::begin_array,
                               0x02,
                               token::code::true_value,
                               0x02,
                               token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_map_empty()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value = dynamic::variable::map();
     ar << value;
 
-    value_type expected[] = { token::code::begin_assoc_array,
+    output_type expected[] = { token::code::begin_assoc_array,
                               token::code::null,
                               token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void test_map()
 {
-    std::vector<value_type> result;
+    std::vector<output_type> result;
     format::oarchive ar(result);
     dynamic::variable value = dynamic::variable::map({{ "ABC", true }});
     ar << value;
 
-    value_type expected[] = { token::code::begin_assoc_array,
+    output_type expected[] = { token::code::begin_assoc_array,
                               token::code::null,
                               token::code::begin_record,
                               token::code::string8, 0x03, 0x41, 0x42, 0x43,
@@ -906,7 +906,7 @@ void test_map()
                               token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
-                                 std::equal_to<value_type>());
+                                 std::equal_to<output_type>());
 }
 
 void run()

@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <functional>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 #include <trial/protocol/dynamic/variable.hpp>
 
 using namespace trial::protocol::dynamic;

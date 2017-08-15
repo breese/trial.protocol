@@ -9,10 +9,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <algorithm>
-#include <trial/protocol/detail/lightweight_test.hpp>
-#include <trial/protocol/detail/meta.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/meta.hpp>
 
-using namespace trial::protocol::detail;
+using namespace trial::protocol::core::detail;
 
 //-----------------------------------------------------------------------------
 // transform

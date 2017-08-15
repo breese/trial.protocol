@@ -15,6 +15,8 @@ namespace trial
 {
 namespace protocol
 {
+namespace core
+{
 namespace detail
 {
 
@@ -273,6 +275,7 @@ struct small_union<N, Types...>::mover
 };
 
 } // namespace detail
+} // namespace core
 } // namespace protocol
 } // namespace trial
 

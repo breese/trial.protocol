@@ -9,10 +9,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <string>
-#include <trial/protocol/detail/lightweight_test.hpp>
-#include <trial/protocol/detail/small_union.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/small_union.hpp>
 
-using namespace trial::protocol::detail;
+using namespace trial::protocol::core::detail;
 
 //-----------------------------------------------------------------------------
 // Constructor

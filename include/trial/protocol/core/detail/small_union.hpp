@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_SMALL_UNION_HPP
-#define TRIAL_PROTOCOL_DETAIL_SMALL_UNION_HPP
+#ifndef TRIAL_PROTOCOL_CORE_DETAIL_SMALL_UNION_HPP
+#define TRIAL_PROTOCOL_CORE_DETAIL_SMALL_UNION_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -15,11 +15,13 @@
 
 #include <cassert>
 #include <type_traits>
-#include <trial/protocol/detail/meta.hpp>
+#include <trial/protocol/core/detail/meta.hpp>
 
 namespace trial
 {
 namespace protocol
+{
+namespace core
 {
 namespace detail
 {
@@ -69,9 +71,10 @@ private:
 };
 
 } // namespace detail
+} // namespace core
 } // namespace protocol
 } // namespace trial
 
-#include <trial/protocol/detail/small_union.ipp>
+#include <trial/protocol/core/detail/small_union.ipp>
 
-#endif // TRIAL_PROTOCOL_DETAIL_SMALL_UNION_HPP
+#endif // TRIAL_PROTOCOL_CORE_DETAIL_SMALL_UNION_HPP

@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/detail/type_traits.hpp>
+#include <trial/protocol/core/detail/type_traits.hpp>
 #include <trial/protocol/dynamic/error.hpp>
 
 namespace trial
@@ -28,7 +28,7 @@ template <typename T>
 using is_null = std::is_same<T, nullable>;
 
 template <typename T>
-using is_boolean = protocol::detail::is_bool<T>;
+using is_boolean = core::detail::is_bool<T>;
 
 template <typename T>
 using is_integer = typename std::conditional<std::is_integral<T>::value && !detail::is_boolean<T>::value,
@@ -1410,7 +1410,7 @@ struct operator_overloader<
 template <typename CharT>
 struct operator_overloader<
     basic_variable<CharT>,
-    basic_variable<protocol::detail::meta::identity_t<CharT>>>
+    basic_variable<core::detail::meta::identity_t<CharT>>>
 {
     using variable_type = basic_variable<CharT>;
     using string_type = typename variable_type::string_type;

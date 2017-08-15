@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <trial/protocol/detail/small_union.hpp>
+#include <trial/protocol/core/detail/small_union.hpp>
 #include <trial/protocol/dynamic/error.hpp>
 #include <trial/protocol/dynamic/token.hpp>
 
@@ -103,7 +103,7 @@ private:
         using map_iterator = typename std::conditional<std::is_const<T>::value,
                                                        typename map_type::const_iterator,
                                                        typename map_type::iterator>::type;
-        using small_union = protocol::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator>;
+        using small_union = core::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator>;
 
         pointer scope;
         small_union current;
@@ -300,23 +300,23 @@ private:
     template <typename C, typename T, typename Enable> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
-    using storage_type = protocol::detail::small_union<sizeof(double),
-                                                       nullable,
-                                                       bool,
-                                                       signed short int,
-                                                       unsigned short int,
-                                                       signed int,
-                                                       unsigned int,
-                                                       signed long int,
-                                                       unsigned long int,
-                                                       signed long long int,
-                                                       unsigned long long int,
-                                                       float,
-                                                       double,
-                                                       long double,
+    using storage_type = core::detail::small_union<sizeof(double),
+                                                   nullable,
+                                                   bool,
+                                                   signed short int,
+                                                   unsigned short int,
+                                                   signed int,
+                                                   unsigned int,
+                                                   signed long int,
+                                                   unsigned long int,
+                                                   signed long long int,
+                                                   unsigned long long int,
+                                                   float,
+                                                   double,
+                                                   long double,
                                                        string_type,
-                                                       array_type,
-                                                       map_type>;
+                                                   array_type,
+                                                   map_type>;
     storage_type storage;
 };
 

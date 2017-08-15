@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_META_HPP
-#define TRIAL_PROTOCOL_DETAIL_META_HPP
+#ifndef TRIAL_PROTOCOL_CORE_DETAIL_META_HPP
+#define TRIAL_PROTOCOL_CORE_DETAIL_META_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -18,6 +18,8 @@
 namespace trial
 {
 namespace protocol
+{
+namespace core
 {
 namespace detail
 {
@@ -148,7 +150,8 @@ using to_type = typename impl::to_type<List, N>::type;
 
 } // namespace meta
 } // namespace detail
+} // namespace core
 } // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DETAIL_META_HPP
+#endif // TRIAL_PROTOCOL_CORE_DETAIL_META_HPP

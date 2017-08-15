@@ -8,5 +8,5 @@
 #
 ###############################################################################
 
-trial_add_test(detail_meta_suite meta_suite.cpp)
-trial_add_test(detail_small_union_suite small_union_suite.cpp)
+trial_add_test(core_meta_suite detail/meta_suite.cpp)
+trial_add_test(core_small_union_suite detail/small_union_suite.cpp)

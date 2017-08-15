@@ -10,7 +10,7 @@
 
 #include <sstream>
 #include <ios>
-#include <trial/protocol/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/lightweight_test.hpp>
 #include <trial/protocol/dynamic/variable_io.hpp>
 
 using namespace trial::protocol::dynamic;
