@@ -113,9 +113,9 @@ public:
     class const_iterator;
 
     class iterator
-        : public iterator_base<iterator, value_type>
+        : public iterator_base<iterator, typename basic_variable<CharT>::value_type>
     {
-        using super = iterator_base<iterator, value_type>;
+        using super = iterator_base<iterator, typename basic_variable<CharT>::value_type>;
 
     public:
         using typename super::iterator_category;
@@ -142,9 +142,9 @@ public:
     };
 
     class const_iterator
-        : public iterator_base<const_iterator, const value_type>
+        : public iterator_base<const_iterator, const typename basic_variable<CharT>::value_type>
     {
-        using super = iterator_base<const_iterator, const value_type>;
+        using super = iterator_base<const_iterator, const typename basic_variable<CharT>::value_type>;
 
     public:
         using typename super::iterator_category;
@@ -165,9 +165,9 @@ public:
     };
 
     class key_iterator
-        : public iterator_base<key_iterator, const value_type>
+        : public iterator_base<key_iterator, const typename basic_variable<CharT>::value_type>
     {
-        using super = iterator_base<key_iterator, const value_type>;
+        using super = iterator_base<key_iterator, const typename basic_variable<CharT>::value_type>;
 
     public:
         using typename super::iterator_category;
