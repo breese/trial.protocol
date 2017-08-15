@@ -2675,6 +2675,10 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
     case traits<map_type>::value:
         return storage.template get<map_type>()[key];
 
+    case traits<nullable>::value:
+        *this = map();
+        return storage.template get<map_type>()[key];
+
     default:
         throw dynamic::error(incompatible_type);
     }

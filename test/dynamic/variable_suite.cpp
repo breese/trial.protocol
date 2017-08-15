@@ -6094,6 +6094,16 @@ void index_map()
 void key_null()
 {
     variable data;
+    // Special case: transforms null into map
+    const auto& key = data["alpha"];
+    TRIAL_PROTOCOL_TEST_EQUAL(key.is<nullable>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+}
+
+void key_const_null()
+{
+    const variable data;
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
                                     error,
                                     "incompatible type");
@@ -6155,7 +6165,7 @@ void key_map()
     TRIAL_PROTOCOL_TEST(data["unknown"] == null);
 }
 
-void key_map_const()
+void key_const_map()
 {
     const variable data = variable::map(
         {
@@ -6172,6 +6182,19 @@ void key_map_const()
                                std::out_of_range);
 }
 
+void create_map_key()
+{
+    variable data;
+    data["alpha"] = true;
+    TRIAL_PROTOCOL_TEST(data["alpha"] == true);
+    data["bravo"] = 2;
+    TRIAL_PROTOCOL_TEST(data["bravo"] == 2);
+    data["charlie"] = 3.0;
+    TRIAL_PROTOCOL_TEST(data["charlie"] == 3.0);
+    data["delta"] = "beryllium";
+    TRIAL_PROTOCOL_TEST(data["delta"] == "beryllium");
+}
+
 void run()
 {
     index_null();
@@ -6183,6 +6206,7 @@ void run()
     index_array_const();
     index_map();
 
+    key_const_null();
     key_null();
     key_boolean();
     key_integer();
@@ -6190,7 +6214,9 @@ void run()
     key_string();
     key_array();
     key_map();
-    key_map_const();
+    key_const_map();
+
+    create_map_key();
 }
 
 } // namespace subscript_suite
