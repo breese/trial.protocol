@@ -2289,6 +2289,14 @@ auto basic_variable<CharT>::map() -> value_type
 }
 
 template <typename CharT>
+auto basic_variable<CharT>::map(typename map_type::value_type value) -> value_type
+{
+    variable result;
+    result.storage = map_type{value};
+    return result;
+}
+
+template <typename CharT>
 auto basic_variable<CharT>::map(std::initializer_list<typename map_type::value_type> init) -> value_type
 {
     variable result;

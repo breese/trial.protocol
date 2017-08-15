@@ -201,6 +201,24 @@ void construct_map_by_string_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
 }
 
+void construct_map_by_implicit_pair()
+{
+    variable data = variable::map({"alpha", "hydrogen"});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+}
+
+void construct_map_by_explicit_pair()
+{
+    variable data = variable::map(std::pair<std::string, std::string>("alpha", "hydrogen"));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+}
+
+void construct_map_by_make_pair()
+{
+    variable data = variable::map(std::make_pair("alpha", "hydrogen"));
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+}
+
 void construct_mixed_by_string()
 {
     variable data = variable::map(
@@ -243,6 +261,9 @@ void run()
     construct_map_by_integer();
     construct_map_by_string();
     construct_map_by_string_empty();
+    construct_map_by_implicit_pair();
+    construct_map_by_explicit_pair();
+    construct_map_by_make_pair();
 
     construct_mixed_by_string();
 }

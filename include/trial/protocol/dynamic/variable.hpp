@@ -212,6 +212,7 @@ public:
     // Map constructor
     basic_variable(typename basic_variable::map_type) = delete;
     static value_type map();
+    static value_type map(typename map_type::value_type);
     static value_type map(std::initializer_list<typename map_type::value_type>);
  
     // Assignment
