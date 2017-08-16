@@ -937,7 +937,7 @@ void test_array_empty()
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::array>(), true);
-    dynamic::variable expect = dynamic::variable::array();
+    dynamic::variable expect = dynamic::array::make();
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<dynamic::variable>());
@@ -954,7 +954,7 @@ void test_array()
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::array>(), true);
-    dynamic::variable expect = dynamic::variable::array({ true, 2 });
+    dynamic::variable expect = dynamic::array::make({ true, 2 });
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<dynamic::variable>());
@@ -969,7 +969,7 @@ void test_map_empty()
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::map>(), true);
-    dynamic::variable expect = dynamic::variable::map();
+    dynamic::variable expect = dynamic::map::make();
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<dynamic::variable>());
@@ -988,7 +988,7 @@ void test_map()
     dynamic::variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::map>(), true);
-    dynamic::variable expect = dynamic::variable::map({{ "ABC", true }});
+    dynamic::variable expect = dynamic::map::make({{ "ABC", true }});
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<dynamic::variable>());

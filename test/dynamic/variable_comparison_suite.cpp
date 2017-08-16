@@ -137,23 +137,23 @@ void compare_null_equal_string_literal()
 
 void compare_null_equal_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != array::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array({ null }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array({ null }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == array::make({ null }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != array::make({ null }), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::array({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != array::make({ 1, 2, 3 }), true);
 }
 
 void compare_null_equal_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != map::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable::map({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != map::make({ {"alpha", 1} }), true);
 }
 
 void compare_boolean_equal_null()
@@ -290,28 +290,28 @@ void compare_boolean_equal_string_literal()
 
 void compare_boolean_equal_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != array::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::array({ 1, 2, 3 }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::array({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != array::make({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != array::make({ 1, 2, 3 }), true);
 }
 
 void compare_boolean_equal_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != map::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable::map({ {"alpha", 1} }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable::map({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != map::make({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != map::make({ {"alpha", 1} }), true);
 }
 
 void compare_integer_equal_null()
@@ -849,28 +849,28 @@ void compare_integer_equal_array()
     {
         const auto big = std::numeric_limits<signed int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::array(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != array::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::array({ 1, 2, 3 }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != array::make({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make({ 1, 2, 3 }), true);
     }
     {
         const auto big = std::numeric_limits<unsigned int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::array(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != array::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::array({ 1, 2, 3 }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != array::make({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make({ 1, 2, 3 }), true);
     }
 }
 
@@ -879,28 +879,28 @@ void compare_integer_equal_map()
     {
         const auto big = std::numeric_limits<signed int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::map(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != map::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable::map({ {"alpha", 1} }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != map::make({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make({ {"alpha", 1} }), true);
     }
     {
         const auto big = std::numeric_limits<unsigned int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::map(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != map::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable::map({ {"alpha", 1} }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != map::make({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make({ {"alpha", 1} }), true);
     }
 }
 
@@ -1255,41 +1255,41 @@ void compare_number_equal_array()
     {
         const auto big = std::numeric_limits<float>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::array(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != array::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::array({ 1, 2, 3 }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != array::make({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make({ 1, 2, 3 }), true);
     }
     {
         const auto big = std::numeric_limits<double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::array(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != array::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::array({ 1, 2, 3 }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != array::make({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make({ 1, 2, 3 }), true);
     }
     {
         const auto big = std::numeric_limits<long double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::array(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != array::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::array({ 1, 2, 3 }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::array({ 1, 2, 3 }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::array({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != array::make({ 1, 2, 3 }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == array::make({ 1, 2, 3 }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != array::make({ 1, 2, 3 }), true);
     }
 }
 
@@ -1298,41 +1298,41 @@ void compare_number_equal_map()
     {
         const auto big = std::numeric_limits<float>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::map(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != map::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable::map({ {"alpha", 1} }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != map::make({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make({ {"alpha", 1} }), true);
     }
     {
         const auto big = std::numeric_limits<double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::map(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != map::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable::map({ {"alpha", 1} }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != map::make({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make({ {"alpha", 1} }), true);
     }
     {
         const auto big = std::numeric_limits<long double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::map(), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map(), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != map::make(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make(), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make(), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable::map({ {"alpha", 1} }), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == variable::map({ {"alpha", 1} }), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != variable::map({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != map::make({ {"alpha", 1} }), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) == map::make({ {"alpha", 1} }), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(big) != map::make({ {"alpha", 1} }), true);
     }
 }
 
@@ -1568,70 +1568,70 @@ void compare_string_equal_string_literal()
 
 void compare_string_equal_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::array(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != array::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::array({ 1, 2, 3 }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::array({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != array::make({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != array::make({ 1, 2, 3 }), true);
 }
 
 void compare_string_equal_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::map(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != map::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable::map({ {"alpha", 1} }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable::map({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != map::make({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != map::make({ {"alpha", 1} }), true);
 }
 
 void compare_array_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(), true);
 }
 
 void compare_array_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != null, true);
 }
 
 void compare_array_equal_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(true), true);
 }
 
 void compare_array_equal_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != true, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != true, true);
 }
 
 void compare_array_equal_integer()
@@ -1640,29 +1640,29 @@ void compare_array_equal_integer()
         const auto zero = 0;
         const auto big = std::numeric_limits<signed int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(big), true);
     }
     {
         const auto zero = 0U;
         const auto big = std::numeric_limits<unsigned int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(big), true);
     }
 }
 
@@ -1672,29 +1672,29 @@ void compare_array_equal_integer_literal()
         const auto zero = 0;
         const auto big = std::numeric_limits<signed int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != big, true);
     }
     {
         const auto zero = 0U;
         const auto big = std::numeric_limits<unsigned int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != big, true);
     }
 }
 
@@ -1704,43 +1704,43 @@ void compare_array_equal_number()
         const auto zero = 0.0f;
         const auto big = std::numeric_limits<float>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(big), true);
     }
     {
         const auto zero = 0.0;
         const auto big = std::numeric_limits<double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(big), true);
     }
     {
         const auto zero = 0.0L;
         const auto big = std::numeric_limits<long double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(big), true);
     }
 }
 
@@ -1750,171 +1750,171 @@ void compare_array_equal_number_literal()
         const auto zero = 0.0f;
         const auto big = std::numeric_limits<float>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != big, true);
     }
     {
         const auto zero = 0.0;
         const auto big = std::numeric_limits<double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != big, true);
     }
     {
         const auto zero = 0.0L;
         const auto big = std::numeric_limits<long double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != big, true);
     }
 }
 
 void compare_array_equal_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable(""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable(""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable("alpha"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable(""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable(""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable("alpha"), true);
 }
 
 void compare_array_equal_string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != "", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == "", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != "", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != "alpha", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != "", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == "", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != "", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != "alpha", true);
 }
 
 void compare_array_equal_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable::array({ 1, 2, 3 }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable::array({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == array::make({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != array::make({ 1, 2, 3 }), false);
 
     // Different sizes
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable::array({ 1, 2, 3, 4 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable::array({ 1, 2, 3, 4 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == array::make({ 1, 2, 3, 4 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != array::make({ 1, 2, 3, 4 }), true);
 
     // Different content
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3, 5 }) == variable::array({ 1, 2, 3, 4 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3, 5 }) != variable::array({ 1, 2, 3, 4 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3, 5 }) == array::make({ 1, 2, 3, 4 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3, 5 }) != array::make({ 1, 2, 3, 4 }), true);
 }
 
 void compare_array_equal_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array() != variable::map({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != map::make({ {"alpha", 1} }), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({ 1, 2, 3 }) != variable::map({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != map::make({ {"alpha", 1} }), true);
 }
 
 void compare_map_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(), true);
 }
 
 void compare_map_equal_null_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != null, true);
 }
 
 void compare_map_boolean_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {true, 1} }) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {true, 1} }) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {true, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {true, 1} }) != variable(), true);
 }
 
 void compare_map_null_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {null, 1} }) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {null, 1} }) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {null, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {null, 1} }) != variable(), true);
 }
 
 void compare_map_integer_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {2, 1} }) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {2, 1} }) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {2, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {2, 1} }) != variable(), true);
 }
 
 void compare_map_number_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {3.0, 1} }) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {3.0, 1} }) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {3.0, 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {3.0, 1} }) != variable(), true);
 }
 
 void compare_map_array_equal_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {variable::array(), 1} }) == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {variable::array(), 1} }) != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {array::make(), 1} }) == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {array::make(), 1} }) != variable(), true);
 }
 
 void compare_map_equal_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(true), true);
 }
 
 void compare_map_equal_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != true, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != true, true);
 }
 
 void compare_map_equal_integer()
@@ -1923,29 +1923,29 @@ void compare_map_equal_integer()
         const auto zero = 0;
         const auto big = std::numeric_limits<signed int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(big), true);
     }
     {
         const auto zero = 0U;
         const auto big = std::numeric_limits<unsigned int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(big), true);
     }
 }
 
@@ -1955,29 +1955,29 @@ void compare_map_equal_integer_literal()
         const auto zero = 0;
         const auto big = std::numeric_limits<signed int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != big, true);
     }
     {
         const auto zero = 0U;
         const auto big = std::numeric_limits<unsigned int>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != big, true);
     }
 }
 
@@ -1987,43 +1987,43 @@ void compare_map_equal_number()
         const auto zero = 0.0f;
         const auto big = std::numeric_limits<float>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(big), true);
     }
     {
         const auto zero = 0.0;
         const auto big = std::numeric_limits<double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(big), true);
     }
     {
         const auto zero = 0.0L;
         const auto big = std::numeric_limits<long double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(big), true);
     }
 }
 
@@ -2033,98 +2033,98 @@ void compare_map_equal_number_literal()
         const auto zero = 0.0f;
         const auto big = std::numeric_limits<float>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != big, true);
     }
     {
         const auto zero = 0.0;
         const auto big = std::numeric_limits<double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != big, true);
     }
     {
         const auto zero = 0.0L;
         const auto big = std::numeric_limits<long double>::max();
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make() != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != big, true);
     }
 }
 
 void compare_map_equal_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable(""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable(""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable("alpha"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable(""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable(""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable("alpha"), true);
 }
 
 void compare_map_equal_string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != "", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == "", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != "", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != "alpha", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != "", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == "", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != "", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != "alpha", true);
 }
 
 void compare_map_equal_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::array({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != array::make({ 1, 2, 3 }), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable::array({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::array({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != array::make({ 1, 2, 3 }), true);
 }
 
 void compare_map_equal_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() == variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map() != variable::map({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != map::make({ {"alpha", 1} }), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable::map({ {"alpha", 1} }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::map({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) == variable::map({ {"alpha", 1}, {"bravo", 2} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({ {"alpha", 1} }) != variable::map({ {"alpha", 1}, {"bravo", 2} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == map::make({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == map::make({ {"alpha", 1}, {"bravo", 2} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != map::make({ {"alpha", 1}, {"bravo", 2} }), true);
 }
 
 void run()
@@ -2443,18 +2443,18 @@ void compare_null_with_string()
 
 void compare_null_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= array::make(), false);
 }
 
 void compare_null_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= map::make(), false);
 }
 
 void compare_boolean_with_null()
@@ -2800,18 +2800,18 @@ void compare_boolean_with_string()
 
 void compare_boolean_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= array::make(), false);
 }
 
 void compare_boolean_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= map::make(), false);
 }
 
 void compare_integer_with_null()
@@ -3639,18 +3639,18 @@ void compare_integer_with_string()
 
 void compare_integer_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) < variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) <= variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) > variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) >= variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) >= array::make(), false);
 }
 
 void compare_integer_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) < variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) <= variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) > variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) >= variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(2) >= map::make(), false);
 }
 
 void compare_number_with_null()
@@ -4951,18 +4951,18 @@ void compare_number_with_string()
 
 void compare_number_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) > variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) >= variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) >= array::make(), false);
 }
 
 void compare_number_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) > variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) >= variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) >= map::make(), false);
 }
 
 void compare_string_with_null()
@@ -5118,81 +5118,81 @@ void compare_string_with_string_literal()
 
 void compare_string_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable::array(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable::array(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable::array(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= array::make(), false);
 }
 
 void compare_string_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable::map(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable::map(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable::map(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= map::make(), false);
 }
 
 void compare_array_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 2}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 1}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 2}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 1}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 0}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({1, 2}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({0, 1}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({0, 2}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({1, 1}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({1, 0}), false);
 
     // Different sizes
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 1, 2}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({0, 2, 3}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1, 2, 3}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::array({0, 1}) < variable::array({1}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({0, 1, 2}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({0, 2, 3}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({1, 2, 3}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({0, 1}) < array::make({1}), false);
 }
 
 void compare_map_with_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) >= null, true);
 }
 
 void compare_map_with_map_null()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{null, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{null, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{null, 1}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{null, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{null, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) <= map::make({{null, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) > map::make({{null, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) >= map::make({{null, 1}}), true);
 }
 
 void compare_map_with_map_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{true, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{true, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{true, 1}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{true, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{true, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) <= map::make({{true, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) > map::make({{true, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) >= map::make({{true, 1}}), true);
 }
 
 void compare_map_with_map_integer()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{2, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{2, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{2, 1}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{2, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{2, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) <= map::make({{2, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) > map::make({{2, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) >= map::make({{2, 1}}), true);
 }
 
 void compare_map_with_map_number()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{3.0, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) <= variable::map({{3.0, 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) > variable::map({{3.0, 1}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) >= variable::map({{3.0, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{3.0, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) <= map::make({{3.0, 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) > map::make({{3.0, 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) >= map::make({{3.0, 1}}), true);
 }
 
 void compare_map_with_map_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{"bravo", 1}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{"alpha", 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"alpha", 1}}) < variable::map({{"alpha", 2}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable::map({{"bravo", 1}}) < variable::map({{"alpha", 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"bravo", 1}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 1}}), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 2}}), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"bravo", 1}}) < map::make({{"alpha", 1}}), false);
 }
 
 void run()

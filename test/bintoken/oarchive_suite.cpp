@@ -847,7 +847,7 @@ void test_array_empty()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::variable::array();
+    dynamic::variable value = dynamic::array::make();
     ar << value;
 
     output_type expected[] = { token::code::begin_array,
@@ -862,7 +862,7 @@ void test_array()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::variable::array({ true, 2 });
+    dynamic::variable value = dynamic::array::make({ true, 2 });
     ar << value;
 
     output_type expected[] = { token::code::begin_array,
@@ -879,7 +879,7 @@ void test_map_empty()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::variable::map();
+    dynamic::variable value = dynamic::map::make();
     ar << value;
 
     output_type expected[] = { token::code::begin_assoc_array,
@@ -894,7 +894,7 @@ void test_map()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::variable::map({{ "ABC", true }});
+    dynamic::variable value = dynamic::map::make({{ "ABC", true }});
     ar << value;
 
     output_type expected[] = { token::code::begin_assoc_array,

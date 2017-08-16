@@ -730,7 +730,7 @@ void test_array()
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST(value.is<array>());
-    variable expect = variable::array({ true, 2, 3.0, "alpha" });
+    variable expect = array::make({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -743,7 +743,7 @@ void test_map()
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
     TRIAL_PROTOCOL_TEST(value.is<map>());
-    variable expect = variable::map(
+    variable expect = map::make(
         {
             {"alpha", true},
             {"bravo", 2},

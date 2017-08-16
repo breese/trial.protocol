@@ -162,7 +162,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
         case token::symbol::begin_array:
             {
                 ar.template load<token::begin_array>();
-                data = dynamic::variable::array();
+                data = dynamic::array::make();
                 while (!ar.template at<token::end_array>())
                 {
                     dynamic::variable value;
@@ -176,14 +176,14 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
         case token::symbol::begin_object:
             {
                 ar.template load<token::begin_object>();
-                data = dynamic::variable::map();
+                data = dynamic::map::make();
                 while (!ar.template at<token::end_object>())
                 {
                     std::string key;
                     ar.load_override(key);
                     dynamic::variable value;
                     ar.load_override(value);
-                    data += dynamic::variable::map({{ key, value }});
+                    data += dynamic::map::make({{ key, value }});
                 }
                 ar.template load<token::end_object>();
             }

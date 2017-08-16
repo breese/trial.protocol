@@ -44,7 +44,7 @@ void iterator_destructible()
 void iterator_swappable()
 {
     using std::swap;
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     variable::iterator b = data.end();
     swap(a, b);
@@ -63,7 +63,7 @@ void iterator_traits()
 
 void iterator_dereferenceable()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     variable result = *a;
     TRIAL_PROTOCOL_TEST(result == true);
@@ -71,7 +71,7 @@ void iterator_dereferenceable()
 
 void iterator_incrementable()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     variable::iterator& b = ++a;
     TRIAL_PROTOCOL_TEST(b == a);
@@ -80,7 +80,7 @@ void iterator_incrementable()
 
 void input_iterator_equality_comparable()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     variable::iterator b = data.begin();
     variable::iterator c = data.begin();
@@ -96,7 +96,7 @@ void input_iterator_equality_comparable()
 
 void input_iterator_dereferenceable()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     TRIAL_PROTOCOL_TEST_EQUAL((*a).size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(a->size(), 1);
@@ -104,7 +104,7 @@ void input_iterator_dereferenceable()
 
 void input_iterator_post_incrementable()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     variable::iterator b = a++;
     TRIAL_PROTOCOL_TEST(a != data.begin());
@@ -114,7 +114,7 @@ void input_iterator_post_incrementable()
 void forward_iterator_default_constructible()
 {
     static_assert(std::is_default_constructible<variable::iterator>::value, "default constructible");
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     variable::iterator b;
     TRIAL_PROTOCOL_TEST(a != b);
@@ -126,7 +126,7 @@ void forward_iterator_default_constructible()
 
 void forward_iterator_multipass()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator a = data.begin();
     variable::iterator b = a;
     TRIAL_PROTOCOL_TEST(a == b);
@@ -307,19 +307,19 @@ void test_const_string()
 
 void test_array()
 {
-    variable data = variable::array({ true, 1, 2.0, "alpha" });
+    variable data = array::make({ true, 1, 2.0, "alpha" });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
 }
 
 void test_const_array()
 {
-    const variable data = variable::array({ true, 1, 2.0, "alpha" });
+    const variable data = array::make({ true, 1, 2.0, "alpha" });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
 }
 
 void test_map()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
             {"key", "alpha"}
         });
@@ -328,7 +328,7 @@ void test_map()
 
 void test_const_map()
 {
-    const variable data = variable::map(
+    const variable data = map::make(
         {
             {"key", "alpha"}
         });
@@ -337,7 +337,7 @@ void test_const_map()
 
 void convert_to_const()
 {
-    variable data = variable::array({ true, 1, 2.0, "alpha" });
+    variable data = array::make({ true, 1, 2.0, "alpha" });
     // Conversion from iterator to const_iterator
     variable::const_iterator begin = data.begin();
     variable::const_iterator end = data.end();
@@ -512,7 +512,7 @@ void test_string()
 void test_array()
 {
     {
-        variable data = variable::array({ true, 2, 3.0, "alpha" });
+        variable data = array::make({ true, 2, 3.0, "alpha" });
         variable::iterator where = data.begin();
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
         TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -532,7 +532,7 @@ void test_array()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
-        const variable data = variable::array({ true, 2, 3.0, "alpha" });
+        const variable data = array::make({ true, 2, 3.0, "alpha" });
         variable::const_iterator where = data.begin();
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
         TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -556,7 +556,7 @@ void test_array()
 void test_array_number()
 {
     {
-        variable data = variable::array({ 1.0f, 2.0, 3.0L });
+        variable data = array::make({ 1.0f, 2.0, 3.0L });
         variable::iterator where = data.begin();
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
         TRIAL_PROTOCOL_TEST(*where == 1.0f);
@@ -572,7 +572,7 @@ void test_array_number()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
-        const variable data = variable::array({ 1.0f, 2.0, 3.0L });
+        const variable data = array::make({ 1.0f, 2.0, 3.0L });
         variable::const_iterator where = data.begin();
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
         TRIAL_PROTOCOL_TEST(*where == 1.0f);
@@ -592,7 +592,7 @@ void test_array_number()
 void test_map()
 {
     {
-        variable data = variable::map(
+        variable data = map::make(
             {
                 {"alpha", true},
                 {"bravo", 2},
@@ -618,7 +618,7 @@ void test_map()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
-        const variable data = variable::map(
+        const variable data = map::make(
             {
                 {"alpha", true},
                 {"bravo", 2},
@@ -777,7 +777,7 @@ void test_string()
 
 void test_array()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::iterator where = data.begin();
     TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
     TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -803,7 +803,7 @@ void test_array()
 
 void test_map()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
             {"alpha", true},
             {"bravo", 2},
@@ -928,7 +928,7 @@ void get_string()
 
 void get_array()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     auto where = data.begin();
     TRIAL_PROTOCOL_TEST(where->is<bool>());
     TRIAL_PROTOCOL_TEST(*where == true);
@@ -948,7 +948,7 @@ void get_array()
 
 void get_map()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
             {"alpha", true},
             {"bravo", 2},
@@ -1024,19 +1024,19 @@ void test_string()
 
 void test_array()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 4);
 }
 
 void test_array_nulls()
 {
-    variable data = variable::array({ null, null, null });
+    variable data = array::make({ null, null, null });
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 3);
 }
 
 void test_map()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
             {"alpha", "hydrogen"},
             {"bravo", "helium"},
@@ -1123,7 +1123,7 @@ void sum_string()
 
 void sum_array()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     variable::size_type size = 0;
     for (const auto& value : data)
     {
@@ -1134,7 +1134,7 @@ void sum_array()
 
 void sum_array_nulls()
 {
-    variable data = variable::array({ null, null, null });
+    variable data = array::make({ null, null, null });
     variable::size_type size = 0;
     for (const auto& value : data)
     {
@@ -1145,7 +1145,7 @@ void sum_array_nulls()
 
 void sum_array_array()
 {
-    variable data = variable::array({ variable::array({ 1 }), variable::array({ 2, 3 }) });
+    variable data = array::make({ array::make({ 1 }), array::make({ 2, 3 }) });
     variable::size_type size = 0;
     for (const auto& value : data)
     {
@@ -1156,7 +1156,7 @@ void sum_array_array()
 
 void sum_map()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
             {"alpha", "hydrogen"},
             {"bravo", "helium"},
@@ -1172,11 +1172,11 @@ void sum_map()
 
 void sum_map_array()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
-            { "alpha", variable::array({ 1 }) },
-            { "bravo", variable::array({ 2, 3, 4 }) },
-            { "charlie", variable::array() }
+            { "alpha", array::make({ 1 }) },
+            { "bravo", array::make({ 2, 3, 4 }) },
+            { "charlie", array::make() }
         });
     variable::size_type size = 0;
     for (const auto& value : data)
@@ -1188,11 +1188,11 @@ void sum_map_array()
 
 void sum_map_map()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
-            { "alpha", variable::map({{ "alice", 1 }}) },
-            { "bravo", variable::map({{ "alice", true }, { "bob", 2 }}) },
-            { "charlie", variable::map() }
+            { "alpha", map::make({{ "alice", 1 }}) },
+            { "bravo", map::make({{ "alice", true }, { "bob", 2 }}) },
+            { "charlie", map::make() }
         });
     variable::size_type size = 0;
     for (const auto& value : data)
@@ -1293,7 +1293,7 @@ void iterate_string()
 
 void iterate_array()
 {
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     auto where = data.key_begin();
     TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 0);
@@ -1312,7 +1312,7 @@ void iterate_array()
 
 void iterate_map()
 {
-    variable data = variable::map(
+    variable data = map::make(
         {
             {"key", "alpha"}
         });

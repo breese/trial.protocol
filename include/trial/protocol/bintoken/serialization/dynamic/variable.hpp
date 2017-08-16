@@ -169,7 +169,7 @@ struct load_overloader< protocol::bintoken::iarchive,
                 boost::optional<std::size_t> count;
                 ar.load_override(count);
 
-                data = dynamic::variable::array();
+                data = dynamic::array::make();
                 while (!ar.template at<token::end_array>())
                 {
                     dynamic::variable value;
@@ -187,12 +187,12 @@ struct load_overloader< protocol::bintoken::iarchive,
                 boost::optional<std::size_t> count;
                 ar.load_override(count);
 
-                data = dynamic::variable::map();
+                data = dynamic::map::make();
                 while (!ar.template at<token::end_assoc_array>())
                 {
                     std::pair<std::string, dynamic::variable> value;
                     ar.load_override(value);
-                    data += dynamic::variable::map({value});
+                    data += dynamic::map::make({value});
                 }
                 ar.template load<token::end_assoc_array>();
             }

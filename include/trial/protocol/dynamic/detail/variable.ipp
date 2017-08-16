@@ -2247,64 +2247,6 @@ basic_variable<CharT>::basic_variable(const CharT *value)
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::array() -> value_type
-{
-    variable result;
-    result.storage = array_type{};
-    return result;
-}
-
-template <typename CharT>
-template <typename ForwardIterator>
-auto basic_variable<CharT>::array(ForwardIterator begin, ForwardIterator end) -> value_type
-{
-    variable result;
-    result.storage = array_type(begin, end);
-    return result;
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::array(std::initializer_list<typename array_type::value_type> init) -> value_type
-{
-    variable result;
-    result.storage = array_type(init.begin(), init.end());
-    return result;
-}
-
-template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::array(size_type size, const T& value) -> value_type
-{
-    variable result;
-    result.storage = array_type(size, variable(value));
-    return result;
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::map() -> value_type
-{
-    variable result;
-    result.storage = map_type{};
-    return result;
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::map(typename map_type::value_type value) -> value_type
-{
-    variable result;
-    result.storage = map_type{std::move(value)};
-    return result;
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::map(std::initializer_list<typename map_type::value_type> init) -> value_type
-{
-    variable result;
-    result.storage = map_type(init.begin(), init.end());
-    return result;
-}
-
-template <typename CharT>
 auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_variable&
 {
     switch (other.storage.which())
@@ -2684,7 +2626,7 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
         return storage.template get<map_type>()[key];
 
     case traits<nullable>::value:
-        *this = map();
+        *this = basic_map<CharT>::make();
         return storage.template get<map_type>()[key];
 
     default:
@@ -3034,6 +2976,76 @@ bool basic_variable<CharT>::operator>= (const T& rhs) const
 {
     return !(*this < rhs);
 }
+
+//-----------------------------------------------------------------------------
+// Factories
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+struct basic_array
+{
+    static basic_variable<CharT> make()
+    {
+        basic_variable<CharT> result;
+        result.storage = typename basic_variable<CharT>::array_type{};
+        return result;
+    }
+
+    template <typename ForwardIterator>
+    static basic_variable<CharT> make(ForwardIterator begin, ForwardIterator end)
+    {
+        basic_variable<CharT> result;
+        result.storage = typename basic_variable<CharT>::array_type(begin, end);
+        return result;
+    }
+
+    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::array_type::value_type> init)
+    {
+        basic_variable<CharT> result;
+        result.storage = typename basic_variable<CharT>::array_type(init.begin(), init.end());
+        return result;
+    }
+
+    template <typename T>
+    static basic_variable<CharT> repeat(typename basic_variable<CharT>::size_type size,
+                                        const T& value)
+    {
+        basic_variable<CharT> result;
+        result.storage = typename basic_variable<CharT>::array_type(size, basic_variable<CharT>(value));
+        return result;
+    }
+};
+
+template <typename CharT>
+struct basic_map
+{
+    static basic_variable<CharT> make()
+    {
+        basic_variable<CharT> result;
+        result.storage = typename basic_variable<CharT>::map_type{};
+        return result;
+    }
+
+    template <typename T, typename U>
+    static basic_variable<CharT> make(T key, U value)
+    {
+        return make({ std::move(key), std::move(value) });
+    }
+
+    static basic_variable<CharT> make(typename basic_variable<CharT>::map_type::value_type value)
+    {
+        basic_variable<CharT> result;
+        result.storage = typename basic_variable<CharT>::map_type{std::move(value)};
+        return result;
+    }
+
+    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::map_type::value_type> init)
+    {
+        basic_variable<CharT> result;
+        result.storage = typename basic_variable<CharT>::map_type(init.begin(), init.end());
+        return result;
+    }
+};
 
 } // namespace dynamic
 } // namespace protocol

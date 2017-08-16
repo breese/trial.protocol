@@ -44,8 +44,8 @@ struct boolean {};
 struct integer {};
 struct number {};
 struct string {};
-struct array {};
-struct map {};
+template <typename CharT> struct basic_array;
+template <typename CharT> struct basic_map;
 
 template <typename CharT>
 class basic_variable
@@ -60,6 +60,9 @@ public:
     using size_type = std::size_t;
 
 private:
+    friend struct basic_array<CharT>;
+    friend struct basic_map<CharT>;
+
     using string_type = std::basic_string<CharT>;
     using array_type = std::vector<value_type>;
     using map_type = std::map<value_type, value_type>;
@@ -203,17 +206,10 @@ public:
     basic_variable(const nullable&);
     // String constructor
     basic_variable(const CharT *);
-    // Array constructor
+    // Use array factory instead
     basic_variable(typename basic_variable::array_type) = delete;
-    template <typename ForwardIterator> static value_type array(ForwardIterator begin, ForwardIterator end);
-    static value_type array();
-    static value_type array(std::initializer_list<typename array_type::value_type>);
-    template <typename T> static value_type array(size_type, const T&);
-    // Map constructor
+    // Use map factory instead
     basic_variable(typename basic_variable::map_type) = delete;
-    static value_type map();
-    static value_type map(typename map_type::value_type);
-    static value_type map(std::initializer_list<typename map_type::value_type>);
  
     // Assignment
 
@@ -315,13 +311,17 @@ private:
                                                    float,
                                                    double,
                                                    long double,
-                                                       string_type,
+                                                   string_type,
                                                    array_type,
                                                    map_type>;
     storage_type storage;
 };
 
+// Convenience
+
 using variable = basic_variable<char>;
+using map = basic_map<char>;
+using array = basic_array<char>;
 
 } // namespace dynamic
 } // namespace protocol

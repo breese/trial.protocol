@@ -65,7 +65,7 @@ void test_string()
 void test_array()
 {
     std::ostringstream stream;
-    variable data = variable::array({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha" });
     stream << data;
     TRIAL_PROTOCOL_TEST_EQUAL(stream.str(), "[true,2,3.00000000000000,\"alpha\"]");
 }
@@ -73,7 +73,7 @@ void test_array()
 void test_map()
 {
     std::ostringstream stream;
-    variable data = variable::map(
+    variable data = map::make(
         {
             { "alpha", true },
             { "bravo", 2 },

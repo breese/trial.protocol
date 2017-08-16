@@ -675,7 +675,7 @@ void test_array()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value = dynamic::variable::array({ true, 2, 3.0, "alpha" });;
+    dynamic::variable value = dynamic::array::make({ true, 2, 3.0, "alpha" });;
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[true,2,3.00000000000000,\"alpha\"]");
 }
@@ -684,7 +684,7 @@ void test_map()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value = dynamic::variable::map({{ "alpha", "hydrogen" }});
+    dynamic::variable value = dynamic::map::make({{ "alpha", "hydrogen" }});
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"alpha\":\"hydrogen\"}");
 }
