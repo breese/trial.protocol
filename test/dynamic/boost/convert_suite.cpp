@@ -37,18 +37,76 @@ void convert_boolean()
 
 void convert_integer()
 {
-    boost::any any(2);
-    variable result = convert<variable>(any);
-    TRIAL_PROTOCOL_TEST(result.is<int>());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    {
+        boost::any any((signed short int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<signed short int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        boost::any any((unsigned short int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<unsigned short int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        boost::any any((signed int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<signed int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        boost::any any((unsigned int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<unsigned int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        boost::any any((signed long int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<signed int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        boost::any any((unsigned long int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<unsigned int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        boost::any any((signed long long int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<signed int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        boost::any any((unsigned long long int)2);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<unsigned int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
 }
 
 void convert_number()
 {
-    boost::any any(3.0);
-    variable result = convert<variable>(any);
-    TRIAL_PROTOCOL_TEST(result.is<double>());
-    TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 3.0);
+    {
+        boost::any any(3.0f);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<double>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 3.0);
+    }
+    {
+        boost::any any(3.0);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<double>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 3.0);
+    }
+    {
+        boost::any any(3.0L);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<double>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 3.0);
+    }
 }
 
 void convert_string()
