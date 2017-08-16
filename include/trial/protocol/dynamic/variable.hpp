@@ -268,8 +268,8 @@ public:
     iterator end() &;
     const_iterator end() const &;
 
-    key_iterator key_begin() &;
-    key_iterator key_end() &;
+    key_iterator key_begin() const &;
+    key_iterator key_end() const &;
 
     // Comparison
 

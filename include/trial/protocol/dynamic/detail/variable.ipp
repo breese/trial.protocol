@@ -2919,13 +2919,13 @@ auto basic_variable<CharT>::end() const & -> const_iterator
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::key_begin() & -> key_iterator
+auto basic_variable<CharT>::key_begin() const & -> key_iterator
 {
     return {this};
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::key_end() & -> key_iterator
+auto basic_variable<CharT>::key_end() const & -> key_iterator
 {
     return {this, false};
 }
