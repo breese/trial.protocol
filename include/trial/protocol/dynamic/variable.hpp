@@ -240,11 +240,11 @@ public:
 
     explicit operator bool() const;
 
-    basic_variable& operator[] (typename array_type::size_type);
-    const basic_variable& operator[] (typename array_type::size_type) const;
+    basic_variable& operator[] (typename array_type::size_type) &;
+    const basic_variable& operator[] (typename array_type::size_type) const &;
 
-    basic_variable& operator[] (const typename map_type::key_type&);
-    const basic_variable& operator[] (const typename map_type::key_type&) const;
+    basic_variable& operator[] (const typename map_type::key_type&) &;
+    const basic_variable& operator[] (const typename map_type::key_type&) const &;
 
     // Type checker
 

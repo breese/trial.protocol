@@ -2592,7 +2592,7 @@ basic_variable<CharT>::operator bool() const
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator[] (typename array_type::size_type position) -> basic_variable&
+auto basic_variable<CharT>::operator[] (typename array_type::size_type position) & -> basic_variable&
 {
     switch (storage.which())
     {
@@ -2605,7 +2605,7 @@ auto basic_variable<CharT>::operator[] (typename array_type::size_type position)
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator[] (typename array_type::size_type position) const -> const basic_variable&
+auto basic_variable<CharT>::operator[] (typename array_type::size_type position) const & -> const basic_variable&
 {
     switch (storage.which())
     {
@@ -2618,7 +2618,7 @@ auto basic_variable<CharT>::operator[] (typename array_type::size_type position)
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) -> basic_variable&
+auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) & -> basic_variable&
 {
     switch (storage.which())
     {
@@ -2635,7 +2635,7 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) const -> const basic_variable&
+auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) const & -> const basic_variable&
 {
     switch (storage.which())
     {
