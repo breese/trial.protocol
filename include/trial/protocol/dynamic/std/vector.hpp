@@ -12,6 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <vector>
+#include <trial/protocol/dynamic/variable.hpp>
+#include <trial/protocol/dynamic/convert.hpp>
 
 namespace trial
 {
