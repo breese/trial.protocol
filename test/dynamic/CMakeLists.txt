@@ -16,3 +16,6 @@ trial_add_test(dynamic_variable_io_suite variable_io_suite.cpp)
 trial_add_test(dynamic_algorithm_suite algorithm_suite.cpp)
 
 trial_add_test(dynamic_uvariable_suite uvariable_suite.cpp)
+
+trial_add_test(dynamic_convert_std_suite std/convert_suite.cpp)
+trial_add_test(dynamic_convert_boost_suite boost/convert_suite.cpp)
