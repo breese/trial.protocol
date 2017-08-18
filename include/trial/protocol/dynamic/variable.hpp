@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <trial/protocol/core/detail/config.hpp>
 #include <trial/protocol/core/detail/small_union.hpp>
 #include <trial/protocol/dynamic/error.hpp>
 #include <trial/protocol/dynamic/token.hpp>
@@ -253,16 +254,20 @@ public:
 
     // Type checker
 
-    template <typename T> bool is() const;
-    template <typename T> bool same() const;
+    template <typename T> bool is() const noexcept;
+    template <typename T> bool same() const noexcept;
 
-    token::code::value code() const;
-    token::symbol::value symbol() const;
+    token::code::value code() const noexcept;
+    token::symbol::value symbol() const noexcept;
 
-    bool empty() const;
-    size_type size() const;
+    // Capacity
 
-    void clear();
+    bool empty() const noexcept;
+    size_type size() const noexcept;
+
+    // Modifiers
+
+    void clear() noexcept;
     iterator erase(const_iterator);
     iterator erase(const_iterator, const_iterator);
 
@@ -277,24 +282,25 @@ public:
     key_iterator key_end() const &;
 
     // Comparison
+    // Container comparison operators are noexcept from C++14
 
     template <typename T, typename U>
-    friend bool operator== (const T&, const U&);
+    friend bool operator== (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
     template <typename T, typename U>
-    friend bool operator!= (const T&, const U&);
+    friend bool operator!= (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
     template <typename T, typename U>
-    friend bool operator< (const T&, const U&);
+    friend bool operator< (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
     template <typename T>
-    bool operator<= (const T&) const;
+    bool operator<= (const T&) const TRIAL_PROTOCOL_CXX14(noexcept);
 
     template <typename T>
-    bool operator> (const T&) const;
+    bool operator> (const T&) const TRIAL_PROTOCOL_CXX14(noexcept);
 
     template <typename T>
-    bool operator>= (const T&) const;
+    bool operator>= (const T&) const TRIAL_PROTOCOL_CXX14(noexcept);
 
 private:
     template <typename T, typename U, typename Enable> friend struct detail::overloader;

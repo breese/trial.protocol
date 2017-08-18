@@ -163,11 +163,11 @@ struct overloader<
     using type = nullable;
     using category_type = type;
 
-    static U convert(const variable_type& self, std::error_code& error)
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return {};
 
         default:
@@ -176,11 +176,11 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U&)
+    static bool equal(const variable_type& self, const U&) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return true;
 
         default:
@@ -188,7 +188,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type&, const U&)
+    static bool less(const variable_type&, const U&) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         // Null is smaller than anything
         return false;
@@ -214,44 +214,44 @@ struct overloader<
 
     using array_type = typename variable_type::array_type;
 
-    static U convert(const variable_type& self, std::error_code& error)
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>();
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>();
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>();
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>();
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>();
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>();
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>();
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>();
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>();
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>();
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>();
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>();
 
         default:
@@ -260,44 +260,44 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other)
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() == other;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>() == other;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>() == other;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>() == other;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>() == other;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>() == other;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>() == other;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>() == other;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>() == other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() == other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() == other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() == other;
 
         default:
@@ -305,47 +305,47 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other)
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return true;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() < other;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>() < other;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>() < other;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>() < other;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>() < other;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>() < other;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>() < other;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>() < other;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>() < other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() < other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() < other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() < other;
 
         default:
@@ -355,61 +355,61 @@ struct overloader<
 
     static void append(variable_type& self, const U& other)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             self.storage = other; // Overwrite null
             break;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             self.storage.template get<bool>() += other;
             break;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             self.storage.template get<signed short int>() += other;
             break;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             self.storage.template get<unsigned short int>() += other;
             break;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             self.storage.template get<signed int>() += other;
             break;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             self.storage.template get<unsigned int>() += other;
             break;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             self.storage.template get<signed long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             self.storage.template get<unsigned long int>() += other;
             break;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             self.storage.template get<signed long long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             self.storage.template get<float>() += other;
             break;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             self.storage.template get<double>() += other;
             break;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             self.storage.template get<long double>() += other;
             break;
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             self.storage.template get<array_type>().push_back(other);
             break;
 
@@ -434,44 +434,44 @@ struct overloader<
 
     using array_type = typename variable_type::array_type;
 
-    static U convert(const variable_type& self, std::error_code& error)
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>();
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>();
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>();
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>();
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>();
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>();
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>();
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>();
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>();
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>();
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>();
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>();
 
         default:
@@ -480,36 +480,36 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other)
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() == other;
 
-        case variable_type::template traits<signed short int>::value:
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::signed_short_integer:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<signed short int>() == other;
 
-        case variable_type::template traits<signed int>::value:
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::signed_integer:
+        case token::code::unsigned_integer:
             return self.storage.template get<signed int>() == other;
 
-        case variable_type::template traits<signed long int>::value:
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::signed_long_integer:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<signed long int>() == other;
 
-        case variable_type::template traits<signed long long int>::value:
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::signed_long_long_integer:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<signed long long int>() == other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() == other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() == other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() == other;
 
         default:
@@ -517,39 +517,39 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other)
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return true;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() < other;
 
-        case variable_type::template traits<signed short int>::value:
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::signed_short_integer:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<signed short int>() < other;
 
-        case variable_type::template traits<signed int>::value:
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::signed_integer:
+        case token::code::unsigned_integer:
             return self.storage.template get<signed int>() < other;
 
-        case variable_type::template traits<signed long int>::value:
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::signed_long_integer:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<signed long int>() < other;
 
-        case variable_type::template traits<signed long long int>::value:
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::signed_long_long_integer:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<signed long long int>() < other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() < other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() < other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() < other;
 
         default:
@@ -559,61 +559,61 @@ struct overloader<
 
     static void append(variable_type& self, const U& other)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             self.storage = other; // Overwrite null
             break;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             self.storage.template get<bool>() += other;
             break;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             self.storage.template get<signed short int>() += other;
             break;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             self.storage.template get<unsigned short int>() += other;
             break;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             self.storage.template get<signed int>() += other;
             break;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             self.storage.template get<unsigned int>() += other;
             break;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             self.storage.template get<signed long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             self.storage.template get<unsigned long int>() += other;
             break;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             self.storage.template get<signed long long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             self.storage.template get<float>() += other;
             break;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             self.storage.template get<double>() += other;
             break;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             self.storage.template get<long double>() += other;
             break;
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             self.storage.template get<array_type>().push_back(other);
             break;
 
@@ -638,44 +638,44 @@ struct overloader<
 
     using array_type = typename variable_type::array_type;
 
-    static U convert(const variable_type& self, std::error_code& error)
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>();
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>();
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>();
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>();
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>();
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>();
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>();
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>();
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>();
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>();
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>();
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>();
 
         default:
@@ -684,36 +684,36 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable& self, const U& other)
+    static bool equal(const variable& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() == other;
 
-        case variable_type::template traits<signed short int>::value:
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::signed_short_integer:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>() == other;
 
-        case variable_type::template traits<signed int>::value:
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::signed_integer:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>() == other;
 
-        case variable_type::template traits<signed long int>::value:
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::signed_long_integer:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>() == other;
 
-        case variable_type::template traits<signed long long int>::value:
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::signed_long_long_integer:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>() == other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() == other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() == other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() == other;
 
         default:
@@ -721,39 +721,39 @@ struct overloader<
         }
     }
 
-    static bool less(const variable& self, const U& other)
+    static bool less(const variable& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return true;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() < other;
 
-        case variable_type::template traits<signed short int>::value:
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::signed_short_integer:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>() < other;
 
-        case variable_type::template traits<signed int>::value:
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::signed_integer:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>() < other;
 
-        case variable_type::template traits<signed long int>::value:
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::signed_long_integer:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>() < other;
 
-        case variable_type::template traits<signed long long int>::value:
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::signed_long_long_integer:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>() < other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() < other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() < other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() < other;
 
         default:
@@ -763,61 +763,61 @@ struct overloader<
 
     static void append(variable& self, const U& other)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             self.storage = other; // Overwrite null
             break;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             self.storage.template get<bool>() += other;
             break;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             self.storage.template get<signed short int>() += other;
             break;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             self.storage.template get<unsigned short int>() += other;
             break;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             self.storage.template get<signed int>() += other;
             break;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             self.storage.template get<unsigned int>() += other;
             break;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             self.storage.template get<signed long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             self.storage.template get<unsigned long int>() += other;
             break;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             self.storage.template get<signed long long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             self.storage.template get<float>() += other;
             break;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             self.storage.template get<double>() += other;
             break;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             self.storage.template get<long double>() += other;
             break;
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             self.storage.template get<array_type>().push_back(other);
             break;
 
@@ -841,44 +841,44 @@ struct overloader<
 
     using array_type = typename variable_type::array_type;
 
-    static U convert(const variable_type& self, std::error_code& error)
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>();
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>();
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>();
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>();
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>();
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>();
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>();
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>();
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>();
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>();
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>();
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>();
 
         default:
@@ -887,44 +887,44 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other)
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() == other;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>() == other;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>() == other;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>() == other;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>() == other;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>() == other;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>() == other;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>() == other;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>() == other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() == other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() == other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() == other;
 
         default:
@@ -932,47 +932,47 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other)
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return true;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return self.storage.template get<bool>() < other;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return self.storage.template get<signed short int>() < other;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return self.storage.template get<unsigned short int>() < other;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return self.storage.template get<signed int>() < other;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return self.storage.template get<unsigned int>() < other;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return self.storage.template get<signed long int>() < other;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return self.storage.template get<unsigned long int>() < other;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return self.storage.template get<signed long long int>() < other;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return self.storage.template get<unsigned long long int>() < other;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return self.storage.template get<float>() < other;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return self.storage.template get<double>() < other;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return self.storage.template get<long double>() < other;
 
         default:
@@ -982,61 +982,61 @@ struct overloader<
 
     static void append(variable_type& self, const U& other)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             self.storage = other; // Overwrite null
             break;
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             self.storage.template get<bool>() += other;
             break;
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             self.storage.template get<signed short int>() += other;
             break;
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             self.storage.template get<unsigned short int>() += other;
             break;
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             self.storage.template get<signed int>() += other;
             break;
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             self.storage.template get<unsigned int>() += other;
             break;
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             self.storage.template get<signed long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             self.storage.template get<unsigned long int>() += other;
             break;
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             self.storage.template get<signed long long int>() += other;
             break;
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             self.storage.template get<unsigned long long int>() += other;
             break;
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             self.storage.template get<float>() += other;
             break;
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             self.storage.template get<double>() += other;
             break;
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             self.storage.template get<long double>() += other;
             break;
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             self.storage.template get<array_type>().push_back(other);
             break;
 
@@ -1062,11 +1062,11 @@ struct overloader<
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
 
-    static U convert(const variable_type& self, std::error_code& error)
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<string_type>::value:
+        case token::code::string:
             return self.storage.template get<string_type>();
 
         default:
@@ -1075,11 +1075,11 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other)
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<string_type>::value:
+        case token::code::string:
             return self.storage.template get<string_type>() == other;
 
         default:
@@ -1087,15 +1087,15 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other)
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<string_type>::value:
+        case token::code::string:
             return self.storage.template get<string_type>() < other;
 
-        case variable_type::template traits<array_type>::value:
-        case variable_type::template traits<map_type>::value:
+        case token::code::array:
+        case token::code::map:
             return false;
 
         default:
@@ -1105,17 +1105,17 @@ struct overloader<
 
     static void append(variable_type& self, const U& other)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             self.storage = other; // Overwrite null
             break;
 
-        case variable_type::template traits<string_type>::value:
+        case token::code::string:
             self.storage.template get<string_type>() += other;
             break;
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             self.storage.template get<array_type>().push_back(other);
             break;
 
@@ -1140,11 +1140,11 @@ struct overloader<
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
 
-    static U convert(const variable& self, std::error_code& error)
+    static U convert(const variable& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             return self.storage.template get<array_type>();
 
         default:
@@ -1153,11 +1153,11 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other)
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             {
                 const auto& array = self.storage.template get<array_type>();
                 if (array.size() == other.size())
@@ -1171,11 +1171,11 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other)
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             {
                 const auto& array = self.storage.template get<array_type>();
                 auto less_than = std::less<decltype(*array.begin())>();
@@ -1191,7 +1191,7 @@ struct overloader<
                 return (array_it == array.end());
             }
 
-        case variable_type::template traits<map_type>::value:
+        case token::code::map:
             return false;
 
         default:
@@ -1201,13 +1201,13 @@ struct overloader<
 
     static void append(variable_type& self, const U& other)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             self.storage = other; // Overwrite null
             break;
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             {
                 auto& array = self.storage.template get<array_type>();
                 array.insert(array.end(), other.begin(), other.end());
@@ -1234,11 +1234,11 @@ struct overloader<
 
     using map_type = typename variable_type::map_type;
 
-    static U convert(const variable_type& self, std::error_code& error)
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<map_type>::value:
+        case token::code::map:
             return self.storage.template get<map_type>();
 
         default:
@@ -1247,11 +1247,11 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other)
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<map_type>::value:
+        case token::code::map:
             {
                 const auto& map = self.storage.template get<map_type>();
                 if (map.size() == other.size())
@@ -1265,11 +1265,11 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other)
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<map_type>::value:
+        case token::code::map:
             {
                 const auto& map = self.storage.template get<map_type>();
                 auto less_than = std::less<decltype(*map.begin())>();
@@ -1292,13 +1292,13 @@ struct overloader<
 
     static void append(variable_type& self, const U& other)
     {
-        switch (self.storage.which())
+        switch (self.code())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             self.storage = other; // Overwrite null
             break;
 
-        case variable_type::template traits<map_type>::value:
+        case token::code::map:
             {
                 auto& map = self.storage.template get<map_type>();
                 map.insert(other.begin(), other.end());
@@ -1361,14 +1361,12 @@ struct operator_overloader<
     static typename std::enable_if<!std::is_same<typename std::decay<T>::type,
                                                  const CharT *>::value,
                                    bool>::type
-    equal(const variable_type& lhs,
-          const T& rhs)
+    equal(const variable_type& lhs, const T& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, T>::equal(lhs, rhs);
     }
 
-    static bool equal(const variable_type& lhs,
-                      const CharT* rhs)
+    static bool equal(const variable_type& lhs, const CharT* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, string_type>::equal(lhs, string_type(rhs));
     }
@@ -1377,14 +1375,12 @@ struct operator_overloader<
     static typename std::enable_if<!std::is_same<typename std::decay<T>::type,
                                                  const CharT *>::value,
                                    bool>::type
-    less(const variable_type& lhs,
-         const T& rhs)
+    less(const variable_type& lhs, const T& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, T>::less(lhs, rhs);
     }
 
-    static bool less(const variable_type& lhs,
-                     const CharT* rhs)
+    static bool less(const variable_type& lhs, const CharT* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, string_type>::less(lhs, string_type(rhs));
     }
@@ -1398,14 +1394,12 @@ struct operator_overloader<
 {
     using variable_type = basic_variable<CharT>;
 
-    static bool equal(const T& lhs,
-                      const variable_type& rhs)
+    static bool equal(const T& lhs, const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return operator_overloader<variable_type, variable_type>::equal(variable_type(lhs), rhs);
     }
 
-    static bool less(const T& lhs,
-                     const variable_type& rhs)
+    static bool less(const T& lhs, const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return operator_overloader<variable_type, variable_type>::less(variable_type(lhs), rhs);
     }
@@ -1422,71 +1416,71 @@ struct operator_overloader<
     using map_type = typename variable_type::map_type;
 
     static bool equal(const variable_type& lhs,
-                      const variable_type& rhs)
+                      const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         switch (rhs.storage.which())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return detail::template overloader<variable_type, nullable>::
                 equal(lhs, rhs.template value<nullable>());
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return detail::template overloader<variable_type, bool>::
                 equal(lhs, rhs.storage.template get<bool>());
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
                 equal(lhs, rhs.storage.template get<signed short int>());
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return detail::template overloader<variable_type, unsigned short int>::
                 equal(lhs, rhs.storage.template get<unsigned short int>());
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return detail::template overloader<variable_type, signed int>::
                 equal(lhs, rhs.storage.template get<signed int>());
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return detail::template overloader<variable_type, unsigned int>::
                 equal(lhs, rhs.storage.template get<unsigned int>());
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return detail::template overloader<variable_type, signed long int>::
                 equal(lhs, rhs.storage.template get<signed long int>());
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return detail::template overloader<variable_type, unsigned long int>::
                 equal(lhs, rhs.storage.template get<unsigned long int>());
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return detail::template overloader<variable_type, signed long long int>::
                 equal(lhs, rhs.storage.template get<signed long long int>());
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return detail::template overloader<variable_type, unsigned long long int>::
                 equal(lhs, rhs.storage.template get<unsigned long long int>());
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return detail::template overloader<variable_type, float>::
                 equal(lhs, rhs.storage.template get<float>());
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return detail::template overloader<variable_type, double>::
                 equal(lhs, rhs.storage.template get<double>());
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return detail::template overloader<variable_type, long double>::
                 equal(lhs, rhs.storage.template get<long double>());
 
-        case variable_type::template traits<string_type>::value:
+        case token::code::string:
             return detail::template overloader<variable_type, string_type>::
                 equal(lhs, rhs.storage.template get<string_type>());
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             return detail::template overloader<variable_type, array_type>::
                 equal(lhs, rhs.storage.template get<array_type>());
 
-        case variable_type::template traits<map_type>::value:
+        case token::code::map:
             return detail::template overloader<variable_type, map_type>::
                 equal(lhs, rhs.storage.template get<map_type>());
         }
@@ -1494,71 +1488,71 @@ struct operator_overloader<
     }
 
     static bool less(const variable_type& lhs,
-                     const variable_type& rhs)
+                     const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         switch (rhs.storage.which())
         {
-        case variable_type::template traits<nullable>::value:
+        case token::code::null:
             return detail::template overloader<variable_type, nullable>::
                 less(lhs, rhs.template value<nullable>());
 
-        case variable_type::template traits<bool>::value:
+        case token::code::boolean:
             return detail::template overloader<variable_type, bool>::
                 less(lhs, rhs.storage.template get<bool>());
 
-        case variable_type::template traits<signed short int>::value:
+        case token::code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
                 less(lhs, rhs.storage.template get<signed short int>());
 
-        case variable_type::template traits<unsigned short int>::value:
+        case token::code::unsigned_short_integer:
             return detail::template overloader<variable_type, unsigned short int>::
                 less(lhs, rhs.storage.template get<unsigned short int>());
 
-        case variable_type::template traits<signed int>::value:
+        case token::code::signed_integer:
             return detail::template overloader<variable_type, signed int>::
                 less(lhs, rhs.storage.template get<signed int>());
 
-        case variable_type::template traits<unsigned int>::value:
+        case token::code::unsigned_integer:
             return detail::template overloader<variable_type, unsigned int>::
                 less(lhs, rhs.storage.template get<unsigned int>());
 
-        case variable_type::template traits<signed long int>::value:
+        case token::code::signed_long_integer:
             return detail::template overloader<variable_type, signed long int>::
                 less(lhs, rhs.storage.template get<signed long int>());
 
-        case variable_type::template traits<unsigned long int>::value:
+        case token::code::unsigned_long_integer:
             return detail::template overloader<variable_type, unsigned long int>::
                 less(lhs, rhs.storage.template get<unsigned long int>());
 
-        case variable_type::template traits<signed long long int>::value:
+        case token::code::signed_long_long_integer:
             return detail::template overloader<variable_type, signed long long int>::
                 less(lhs, rhs.storage.template get<signed long long int>());
 
-        case variable_type::template traits<unsigned long long int>::value:
+        case token::code::unsigned_long_long_integer:
             return detail::template overloader<variable_type, unsigned long long int>::
                 less(lhs, rhs.storage.template get<unsigned long long int>());
 
-        case variable_type::template traits<float>::value:
+        case token::code::float_number:
             return detail::template overloader<variable_type, float>::
                 less(lhs, rhs.storage.template get<float>());
 
-        case variable_type::template traits<double>::value:
+        case token::code::double_number:
             return detail::template overloader<variable_type, double>::
                 less(lhs, rhs.storage.template get<double>());
 
-        case variable_type::template traits<long double>::value:
+        case token::code::long_double_number:
             return detail::template overloader<variable_type, long double>::
                 less(lhs, rhs.storage.template get<long double>());
 
-        case variable_type::template traits<string_type>::value:
+        case token::code::string:
             return detail::template overloader<variable_type, string_type>::
                 less(lhs, rhs.storage.template get<string_type>());
 
-        case variable_type::template traits<array_type>::value:
+        case token::code::array:
             return detail::template overloader<variable_type, array_type>::
                 less(lhs, rhs.storage.template get<array_type>());
 
-        case variable_type::template traits<map_type>::value:
+        case token::code::map:
             return detail::template overloader<variable_type, map_type>::
                 less(lhs, rhs.storage.template get<map_type>());
         }
@@ -1588,7 +1582,7 @@ namespace detail
 template <typename C, typename T, typename Enable = void>
 struct same_overloader
 {
-    static bool same(std::size_t which)
+    static bool same(std::size_t which) noexcept
     {
         return which == basic_variable<C>::template traits<T>::value;
     }
@@ -1602,7 +1596,7 @@ struct same_overloader<
                             std::is_volatile<T>::value ||
                             std::is_reference<T>::value>::type>
 {
-    static bool same(std::size_t)
+    static bool same(std::size_t) noexcept
     {
         return false;
     }
@@ -1645,46 +1639,33 @@ basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
     : scope(p),
       current(pointer(nullptr))
 {
-    switch (scope->storage.which())
+    switch (scope->symbol())
     {
-    case traits<nullable>::value:
+    case token::symbol::null:
         current = pointer(nullptr);
         break;
 
-    case traits<bool>::value:
-    case traits<signed short int>::value:
-    case traits<unsigned short int>::value:
-    case traits<signed int>::value:
-    case traits<unsigned int>::value:
-    case traits<signed long int>::value:
-    case traits<unsigned long int>::value:
-    case traits<signed long long int>::value:
-    case traits<unsigned long long int>::value:
-    case traits<float>::value:
-    case traits<double>::value:
-    case traits<long double>::value:
-    case traits<string_type>::value:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
         if (initialize)
             current = p;
         break;
 
-    case traits<array_type>::value:
+    case token::symbol::array:
         if (initialize)
             current = p->storage.template get<array_type>().begin();
         else
             current = p->storage.template get<array_type>().end();
         break;
 
-    case traits<map_type>::value:
+    case token::symbol::map:
         if (initialize)
             current = p->storage.template get<map_type>().begin();
         else
             current = p->storage.template get<map_type>().end();
         break;
-
-    default:
-        assert(false);
-        throw dynamic::error(incompatible_type);
     }
 }
 
@@ -1712,35 +1693,22 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ () -> Derived&
 {
     assert(scope);
 
-    switch (scope->storage.which())
+    switch (scope->symbol())
     {
-    case traits<nullable>::value:
-    case traits<bool>::value:
-    case traits<signed short int>::value:
-    case traits<unsigned short int>::value:
-    case traits<signed int>::value:
-    case traits<unsigned int>::value:
-    case traits<signed long int>::value:
-    case traits<unsigned long int>::value:
-    case traits<signed long long int>::value:
-    case traits<unsigned long long int>::value:
-    case traits<float>::value:
-    case traits<double>::value:
-    case traits<long double>::value:
-    case traits<string_type>::value:
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
         current = pointer(nullptr);
         break;
 
-    case traits<array_type>::value:
+    case token::symbol::array:
         ++current.template get<array_iterator>();
         break;
 
-    case traits<map_type>::value:
+    case token::symbol::map:
         ++current.template get<map_iterator>();
-        break;
-
-    default:
-        assert(false);
         break;
     }
     return *static_cast<Derived*>(this);
@@ -1763,9 +1731,9 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::key() const -> reference
 {
     assert(scope);
 
-    switch (scope->storage.which())
+    switch (scope->symbol())
     {
-    case traits<map_type>::value:
+    case token::symbol::map:
         return current.template get<map_iterator>()->first;
 
     default:
@@ -1779,32 +1747,26 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> referenc
 {
     assert(scope);
 
-    switch (scope->storage.which())
+    switch (scope->symbol())
     {
-    case traits<nullable>::value:
-    case traits<bool>::value:
-    case traits<signed short int>::value:
-    case traits<unsigned short int>::value:
-    case traits<signed int>::value:
-    case traits<unsigned int>::value:
-    case traits<signed long int>::value:
-    case traits<unsigned long int>::value:
-    case traits<signed long long int>::value:
-    case traits<unsigned long long int>::value:
-    case traits<float>::value:
-    case traits<double>::value:
-    case traits<long double>::value:
-    case traits<string_type>::value:
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
         return *current.template get<pointer>();
 
-    case traits<array_type>::value:
+    case token::symbol::array:
         return *current.template get<array_iterator>();
 
-    case traits<map_type>::value:
+    case token::symbol::map:
         return current.template get<map_iterator>()->second;
     }
     assert(false);
-    throw dynamic::error(incompatible_type);
+    // Avoid compiler warning about reaching end of non-void function.
+    // This may fail, but we should never get here because the switch
+    // above is exhaustive.
+    return *current.template get<pointer>();
 }
 
 template <typename CharT>
@@ -1813,32 +1775,21 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator-> () -> pointer
 {
     assert(scope);
 
-    switch (scope->storage.which())
+    switch (scope->symbol())
     {
-    case traits<nullable>::value:
-    case traits<bool>::value:
-    case traits<signed short int>::value:
-    case traits<unsigned short int>::value:
-    case traits<signed int>::value:
-    case traits<unsigned int>::value:
-    case traits<signed long int>::value:
-    case traits<unsigned long int>::value:
-    case traits<signed long long int>::value:
-    case traits<unsigned long long int>::value:
-    case traits<float>::value:
-    case traits<double>::value:
-    case traits<long double>::value:
-    case traits<string_type>::value:
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
         return current.template get<pointer>();
 
-    case traits<array_type>::value:
+    case token::symbol::array:
         return &*current.template get<array_iterator>();
 
-    case traits<map_type>::value:
+    case token::symbol::map:
         return &current.template get<map_iterator>()->second;
     }
-    assert(false);
-    throw dynamic::error(incompatible_type);
 }
 
 template <typename CharT>
@@ -1850,36 +1801,25 @@ bool basic_variable<CharT>::iterator_base<Derived, T>::operator== (const Derived
     if (!other.scope)
         return false;
 
-    assert(scope->storage.which() == other.scope->storage.which());
+    assert(scope->code() == other.scope->code());
 
-    switch (scope->storage.which())
+    switch (scope->symbol())
     {
-    case traits<nullable>::value:
-    case traits<bool>::value:
-    case traits<signed short int>::value:
-    case traits<unsigned short int>::value:
-    case traits<signed int>::value:
-    case traits<unsigned int>::value:
-    case traits<signed long int>::value:
-    case traits<unsigned long int>::value:
-    case traits<signed long long int>::value:
-    case traits<unsigned long long int>::value:
-    case traits<float>::value:
-    case traits<double>::value:
-    case traits<long double>::value:
-    case traits<string_type>::value:
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
         return current.template get<pointer>() == other.current.template get<pointer>();
 
-    case traits<array_type>::value:
+    case token::symbol::array:
         return current.template get<array_iterator>() == other.current.template get<array_iterator>();
 
-    case traits<map_type>::value:
+    case token::symbol::map:
         return current.template get<map_iterator>() == other.current.template get<map_iterator>();
-
-    default:
-        assert(false);
-        throw dynamic::error(incompatible_type);
     }
+    assert(false);
+    return false;
 }
 
 template <typename CharT>
@@ -2042,26 +1982,17 @@ auto basic_variable<CharT>::key_iterator::key() const -> reference
 {
     assert(super::scope);
 
-    switch (super::scope->storage.which())
+    switch (super::scope->symbol())
     {
-    case traits<nullable>::value:
-    case traits<bool>::value:
-    case traits<signed short int>::value:
-    case traits<unsigned short int>::value:
-    case traits<signed int>::value:
-    case traits<unsigned int>::value:
-    case traits<signed long int>::value:
-    case traits<unsigned long int>::value:
-    case traits<signed long long int>::value:
-    case traits<unsigned long long int>::value:
-    case traits<float>::value:
-    case traits<double>::value:
-    case traits<long double>::value:
-    case traits<string_type>::value:
-    case traits<array_type>::value:
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+    case token::symbol::array:
         return index;
 
-    default:
+    case token::symbol::map:
         return super::key();
     }
 }
@@ -2071,13 +2002,18 @@ auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
 {
     assert(super::scope);
 
-    switch (super::scope->storage.which())
+    switch (super::scope->symbol())
     {
-    case traits<map_type>::value:
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+    case token::symbol::array:
+        index += 1;
         break;
 
-    default:
-        index += 1;
+    case token::symbol::map:
         break;
     }
     return super::operator++();
@@ -2115,58 +2051,55 @@ template <typename CharT>
 basic_variable<CharT>::basic_variable(const basic_variable& other)
     : storage(null)
 {
-    switch (other.storage.which())
+    switch (other.code())
     {
-    case traits<nullable>::value:
+    case token::code::null:
         storage = null;
         break;
-    case traits<bool>::value:
+    case token::code::boolean:
         storage = other.storage.template get<bool>();
         break;
-    case traits<signed short int>::value:
+    case token::code::signed_short_integer:
         storage = other.storage.template get<signed short int>();
         break;
-    case traits<unsigned short int>::value:
+    case token::code::unsigned_short_integer:
         storage = other.storage.template get<unsigned short int>();
         break;
-    case traits<signed int>::value:
+    case token::code::signed_integer:
         storage = other.storage.template get<signed int>();
         break;
-    case traits<unsigned int>::value:
+    case token::code::unsigned_integer:
         storage = other.storage.template get<unsigned int>();
         break;
-    case traits<signed long int>::value:
+    case token::code::signed_long_integer:
         storage = other.storage.template get<signed long int>();
         break;
-    case traits<unsigned long int>::value:
+    case token::code::unsigned_long_integer:
         storage = other.storage.template get<unsigned long int>();
         break;
-    case traits<signed long long int>::value:
+    case token::code::signed_long_long_integer:
         storage = other.storage.template get<signed long long int>();
         break;
-    case traits<unsigned long long int>::value:
+    case token::code::unsigned_long_long_integer:
         storage = other.storage.template get<unsigned long long int>();
         break;
-    case traits<float>::value:
+    case token::code::float_number:
         storage = other.storage.template get<float>();
         break;
-    case traits<double>::value:
+    case token::code::double_number:
         storage = other.storage.template get<double>();
         break;
-    case traits<long double>::value:
+    case token::code::long_double_number:
         storage = other.storage.template get<long double>();
         break;
-    case traits<string_type>::value:
+    case token::code::string:
         storage = other.storage.template get<string_type>();
         break;
-    case traits<array_type>::value:
+    case token::code::array:
         storage = other.storage.template get<array_type>();
         break;
-    case traits<map_type>::value:
+    case token::code::map:
         storage = other.storage.template get<map_type>();
-        break;
-    default:
-        assert(false);
         break;
     }
 }
@@ -2175,58 +2108,55 @@ template <typename CharT>
 basic_variable<CharT>::basic_variable(basic_variable&& other)
     : storage(null)
 {
-    switch (other.storage.which())
+    switch (other.code())
     {
-    case traits<nullable>::value:
+    case token::code::null:
         storage = null;
         break;
-    case traits<bool>::value:
+    case token::code::boolean:
         storage = std::move(other.storage.template get<bool>());
         break;
-    case traits<signed short int>::value:
+    case token::code::signed_short_integer:
         storage = std::move(other.storage.template get<signed short int>());
         break;
-    case traits<unsigned short int>::value:
+    case token::code::unsigned_short_integer:
         storage = std::move(other.storage.template get<unsigned short int>());
         break;
-    case traits<signed int>::value:
+    case token::code::signed_integer:
         storage = std::move(other.storage.template get<signed int>());
         break;
-    case traits<unsigned int>::value:
+    case token::code::unsigned_integer:
         storage = std::move(other.storage.template get<unsigned int>());
         break;
-    case traits<signed long int>::value:
+    case token::code::signed_long_integer:
         storage = std::move(other.storage.template get<signed long int>());
         break;
-    case traits<unsigned long int>::value:
+    case token::code::unsigned_long_integer:
         storage = std::move(other.storage.template get<unsigned long int>());
         break;
-    case traits<signed long long int>::value:
+    case token::code::signed_long_long_integer:
         storage = std::move(other.storage.template get<signed long long int>());
         break;
-    case traits<unsigned long long int>::value:
+    case token::code::unsigned_long_long_integer:
         storage = std::move(other.storage.template get<unsigned long long int>());
         break;
-    case traits<float>::value:
+    case token::code::float_number:
         storage = std::move(other.storage.template get<float>());
         break;
-    case traits<double>::value:
+    case token::code::double_number:
         storage = std::move(other.storage.template get<double>());
         break;
-    case traits<long double>::value:
+    case token::code::long_double_number:
         storage = std::move(other.storage.template get<long double>());
         break;
-    case traits<string_type>::value:
+    case token::code::string:
         storage = std::move(other.storage.template get<string_type>());
         break;
-    case traits<array_type>::value:
+    case token::code::array:
         storage = std::move(other.storage.template get<array_type>());
         break;
-    case traits<map_type>::value:
+    case token::code::map:
         storage = std::move(other.storage.template get<map_type>());
-        break;
-    default:
-        assert(false);
         break;
     }
 }
@@ -2253,58 +2183,55 @@ basic_variable<CharT>::basic_variable(const CharT *value)
 template <typename CharT>
 auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_variable&
 {
-    switch (other.storage.which())
+    switch (other.code())
     {
-    case traits<nullable>::value:
+    case token::code::null:
         storage = null;
         break;
-    case traits<bool>::value:
+    case token::code::boolean:
         storage = other.storage.template get<bool>();
         break;
-    case traits<signed short int>::value:
+    case token::code::signed_short_integer:
         storage = other.storage.template get<signed short int>();
         break;
-    case traits<unsigned short int>::value:
+    case token::code::unsigned_short_integer:
         storage = other.storage.template get<unsigned short int>();
         break;
-    case traits<signed int>::value:
+    case token::code::signed_integer:
         storage = other.storage.template get<signed int>();
         break;
-    case traits<unsigned int>::value:
+    case token::code::unsigned_integer:
         storage = other.storage.template get<unsigned int>();
         break;
-    case traits<signed long int>::value:
+    case token::code::signed_long_integer:
         storage = other.storage.template get<signed long int>();
         break;
-    case traits<unsigned long int>::value:
+    case token::code::unsigned_long_integer:
         storage = other.storage.template get<unsigned long int>();
         break;
-    case traits<signed long long int>::value:
+    case token::code::signed_long_long_integer:
         storage = other.storage.template get<signed long long int>();
         break;
-    case traits<unsigned long long int>::value:
+    case token::code::unsigned_long_long_integer:
         storage = other.storage.template get<unsigned long long int>();
         break;
-    case traits<float>::value:
+    case token::code::float_number:
         storage = other.storage.template get<float>();
         break;
-    case traits<double>::value:
+    case token::code::double_number:
         storage = other.storage.template get<double>();
         break;
-    case traits<long double>::value:
+    case token::code::long_double_number:
         storage = other.storage.template get<long double>();
         break;
-    case traits<string_type>::value:
+    case token::code::string:
         storage = other.storage.template get<string_type>();
         break;
-    case traits<array_type>::value:
+    case token::code::array:
         storage = other.storage.template get<array_type>();
         break;
-    case traits<map_type>::value:
+    case token::code::map:
         storage = other.storage.template get<map_type>();
-        break;
-    default:
-        assert(false);
         break;
     }
     return *this;
@@ -2313,54 +2240,54 @@ auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_var
 template <typename CharT>
 auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable&
 {
-    switch (other.storage.which())
+    switch (other.code())
     {
-    case traits<nullable>::value:
+    case token::code::null:
         storage = null;
         break;
-    case traits<bool>::value:
+    case token::code::boolean:
         storage = std::move(other.storage.template get<bool>());
         break;
-    case traits<signed short int>::value:
+    case token::code::signed_short_integer:
         storage = std::move(other.storage.template get<signed short int>());
         break;
-    case traits<unsigned short int>::value:
+    case token::code::unsigned_short_integer:
         storage = std::move(other.storage.template get<unsigned short int>());
         break;
-    case traits<signed int>::value:
+    case token::code::signed_integer:
         storage = std::move(other.storage.template get<signed int>());
         break;
-    case traits<unsigned int>::value:
+    case token::code::unsigned_integer:
         storage = std::move(other.storage.template get<unsigned int>());
         break;
-    case traits<signed long int>::value:
+    case token::code::signed_long_integer:
         storage = std::move(other.storage.template get<signed long int>());
         break;
-    case traits<unsigned long int>::value:
+    case token::code::unsigned_long_integer:
         storage = std::move(other.storage.template get<unsigned long int>());
         break;
-    case traits<signed long long int>::value:
+    case token::code::signed_long_long_integer:
         storage = std::move(other.storage.template get<signed long long int>());
         break;
-    case traits<unsigned long long int>::value:
+    case token::code::unsigned_long_long_integer:
         storage = std::move(other.storage.template get<unsigned long long int>());
         break;
-    case traits<float>::value:
+    case token::code::float_number:
         storage = std::move(other.storage.template get<float>());
         break;
-    case traits<double>::value:
+    case token::code::double_number:
         storage = std::move(other.storage.template get<double>());
         break;
-    case traits<long double>::value:
+    case token::code::long_double_number:
         storage = std::move(other.storage.template get<long double>());
         break;
-    case traits<string_type>::value:
+    case token::code::string:
         storage = std::move(other.storage.template get<string_type>());
         break;
-    case traits<array_type>::value:
+    case token::code::array:
         storage = std::move(other.storage.template get<array_type>());
         break;
-    case traits<map_type>::value:
+    case token::code::map:
         storage = std::move(other.storage.template get<map_type>());
         break;
     }
@@ -2394,67 +2321,67 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
 {
     switch (other.storage.which())
     {
-    case traits<nullable>::value:
+    case token::code::null:
         detail::overloader<value_type, nullable>::
             append(*this, other.storage.template get<nullable>());
         break;
-    case traits<bool>::value:
+    case token::code::boolean:
         detail::overloader<value_type, bool>::
             append(*this, other.storage.template get<bool>());
         break;
-    case traits<signed short int>::value:
+    case token::code::signed_short_integer:
         detail::overloader<value_type, signed short int>::
             append(*this, other.storage.template get<signed short int>());
         break;
-    case traits<unsigned short int>::value:
+    case token::code::unsigned_short_integer:
         detail::overloader<value_type, unsigned short int>::
             append(*this, other.storage.template get<unsigned short int>());
         break;
-    case traits<signed int>::value:
+    case token::code::signed_integer:
         detail::overloader<value_type, signed int>::
             append(*this, other.storage.template get<signed int>());
         break;
-    case traits<unsigned int>::value:
+    case token::code::unsigned_integer:
         detail::overloader<value_type, unsigned int>::
             append(*this, other.storage.template get<unsigned int>());
         break;
-    case traits<signed long int>::value:
+    case token::code::signed_long_integer:
         detail::overloader<value_type, signed long int>::
             append(*this, other.storage.template get<signed long int>());
         break;
-    case traits<unsigned long int>::value:
+    case token::code::unsigned_long_integer:
         detail::overloader<value_type, unsigned long int>::
             append(*this, other.storage.template get<unsigned long int>());
         break;
-    case traits<signed long long int>::value:
+    case token::code::signed_long_long_integer:
         detail::overloader<value_type, signed long long int>::
             append(*this, other.storage.template get<signed long long int>());
         break;
-    case traits<unsigned long long int>::value:
+    case token::code::unsigned_long_long_integer:
         detail::overloader<value_type, unsigned long long int>::
             append(*this, other.storage.template get<unsigned long long int>());
         break;
-    case traits<float>::value:
+    case token::code::float_number:
         detail::overloader<value_type, float>::
             append(*this, other.storage.template get<float>());
         break;
-    case traits<double>::value:
+    case token::code::double_number:
         detail::overloader<value_type, double>::
             append(*this, other.storage.template get<double>());
         break;
-    case traits<long double>::value:
+    case token::code::long_double_number:
         detail::overloader<value_type, long double>::
             append(*this, other.storage.template get<long double>());
         break;
-    case traits<string_type>::value:
+    case token::code::string:
         detail::overloader<value_type, string_type>::
             append(*this, other.storage.template get<string_type>());
         break;
-    case traits<array_type>::value:
+    case token::code::array:
         detail::overloader<value_type, array_type>::
             append(*this, other.storage.template get<array_type>());
         break;
-    case traits<map_type>::value:
+    case token::code::map:
         detail::overloader<value_type, map_type>::
             append(*this, other.storage.template get<map_type>());
         break;
@@ -2465,9 +2392,9 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
 template <typename CharT>
 auto basic_variable<CharT>::operator+= (std::initializer_list<typename array_type::value_type> init) -> basic_variable&
 {
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<array_type>::value:
+    case token::symbol::array:
         {
             auto& array = storage.template get<array_type>();
             array.insert(array.end(), init.begin(), init.end());
@@ -2483,9 +2410,9 @@ auto basic_variable<CharT>::operator+= (std::initializer_list<typename array_typ
 template <typename CharT>
 auto basic_variable<CharT>::operator+= (std::initializer_list<typename map_type::value_type> init) -> basic_variable&
 {
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<map_type>::value:
+    case token::symbol::map:
         storage.template get<map_type>().insert(init);
         break;
 
@@ -2543,48 +2470,48 @@ basic_variable<CharT>::operator bool() const
 {
     switch (storage.which())
     {
-    case traits<nullable>::value:
+    case token::code::null:
         return false;
 
-    case traits<bool>::value:
+    case token::code::boolean:
         return bool(storage.template get<bool>());
 
-    case traits<signed short int>::value:
+    case token::code::signed_short_integer:
         return bool(storage.template get<signed short int>());
 
-    case traits<unsigned short int>::value:
+    case token::code::unsigned_short_integer:
         return bool(storage.template get<unsigned short int>());
 
-    case traits<signed int>::value:
+    case token::code::signed_integer:
         return bool(storage.template get<signed int>());
 
-    case traits<unsigned int>::value:
+    case token::code::unsigned_integer:
         return bool(storage.template get<unsigned int>());
 
-    case traits<signed long int>::value:
+    case token::code::signed_long_integer:
         return bool(storage.template get<signed long int>());
 
-    case traits<unsigned long int>::value:
+    case token::code::unsigned_long_integer:
         return bool(storage.template get<unsigned long int>());
 
-    case traits<signed long long int>::value:
+    case token::code::signed_long_long_integer:
         return bool(storage.template get<signed long long int>());
 
-    case traits<unsigned long long int>::value:
+    case token::code::unsigned_long_long_integer:
         return bool(storage.template get<unsigned long long int>());
 
-    case traits<float>::value:
+    case token::code::float_number:
         return bool(storage.template get<float>());
 
-    case traits<double>::value:
+    case token::code::double_number:
         return bool(storage.template get<double>());
 
-    case traits<long double>::value:
+    case token::code::long_double_number:
         return bool(storage.template get<long double>());
 
-    case traits<string_type>::value:
-    case traits<array_type>::value:
-    case traits<map_type>::value:
+    case token::code::string:
+    case token::code::array:
+    case token::code::map:
         // C++ containers are not contextually convertible to bool, but we
         // make them so for variable to let the code compiler for non-container
         // types.
@@ -2598,9 +2525,9 @@ basic_variable<CharT>::operator bool() const
 template <typename CharT>
 auto basic_variable<CharT>::operator[] (typename array_type::size_type position) & -> basic_variable&
 {
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<array_type>::value:
+    case token::symbol::array:
         return storage.template get<array_type>()[position];
 
     default:
@@ -2611,9 +2538,9 @@ auto basic_variable<CharT>::operator[] (typename array_type::size_type position)
 template <typename CharT>
 auto basic_variable<CharT>::operator[] (typename array_type::size_type position) const & -> const basic_variable&
 {
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<array_type>::value:
+    case token::symbol::array:
         return storage.template get<array_type>().at(position);
 
     default:
@@ -2624,12 +2551,12 @@ auto basic_variable<CharT>::operator[] (typename array_type::size_type position)
 template <typename CharT>
 auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) & -> basic_variable&
 {
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<map_type>::value:
+    case token::symbol::map:
         return storage.template get<map_type>()[key];
 
-    case traits<nullable>::value:
+    case token::symbol::null:
         *this = basic_map<CharT>::make();
         return storage.template get<map_type>()[key];
 
@@ -2641,9 +2568,9 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
 template <typename CharT>
 auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) const & -> const basic_variable&
 {
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<map_type>::value:
+    case token::symbol::map:
         return storage.template get<map_type>().at(key);
 
     default:
@@ -2732,7 +2659,7 @@ auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
 
 template <typename CharT>
 template <typename Tag>
-bool basic_variable<CharT>::is() const
+bool basic_variable<CharT>::is() const noexcept
 {
     using tag_type = typename tag_traits<typename std::decay<Tag>::type>::type;
     return storage.template call<similar_visitor<tag_type>, bool>();
@@ -2740,13 +2667,13 @@ bool basic_variable<CharT>::is() const
 
 template <typename CharT>
 template <typename T>
-bool basic_variable<CharT>::same() const
+bool basic_variable<CharT>::same() const noexcept
 {
     return detail::same_overloader<CharT, T>::same(storage.which());
 }
 
 template <typename CharT>
-token::code::value basic_variable<CharT>::code() const
+token::code::value basic_variable<CharT>::code() const noexcept
 {
     switch (storage.which())
     {
@@ -2784,24 +2711,19 @@ token::code::value basic_variable<CharT>::code() const
         return token::code::map;
     default:
         assert(false);
-        throw dynamic::error(incompatible_type);
+        return token::code::null;
     }
 }
 
 template <typename CharT>
-token::symbol::value basic_variable<CharT>::symbol() const
-{
-    return token::symbol::convert(code());
-}
-
-template <typename CharT>
-bool basic_variable<CharT>::empty() const
+token::symbol::value basic_variable<CharT>::symbol() const noexcept
 {
     switch (storage.which())
     {
     case traits<nullable>::value:
-        return true;
+        return token::symbol::null;
     case traits<bool>::value:
+        return token::symbol::boolean;
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -2810,109 +2732,122 @@ bool basic_variable<CharT>::empty() const
     case traits<unsigned long int>::value:
     case traits<signed long long int>::value:
     case traits<unsigned long long int>::value:
+        return token::symbol::integer;
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
-        return false;
+        return token::symbol::number;
     case traits<string_type>::value:
-        return storage.template get<string_type>().empty();
+        return token::symbol::string;
     case traits<array_type>::value:
-        return storage.template get<array_type>().empty();
+        return token::symbol::array;
     case traits<map_type>::value:
+        return token::symbol::map;
+    default:
+        assert(false);
+        return token::symbol::null;
+    }
+}
+
+template <typename CharT>
+bool basic_variable<CharT>::empty() const noexcept
+{
+    switch (symbol())
+    {
+    case token::symbol::null:
+        return true;
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+        return false;
+    case token::symbol::string:
+        return storage.template get<string_type>().empty();
+    case token::symbol::array:
+        return storage.template get<array_type>().empty();
+    case token::symbol::map:
         return storage.template get<map_type>().empty();
     }
     assert(false);
-    throw dynamic::error(incompatible_type);
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::size() const -> size_type
+auto basic_variable<CharT>::size() const noexcept -> size_type
 {
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<nullable>::value:
+    case token::symbol::null:
         return 0;
-    case traits<bool>::value:
-    case traits<signed short int>::value:
-    case traits<unsigned short int>::value:
-    case traits<signed int>::value:
-    case traits<unsigned int>::value:
-    case traits<signed long int>::value:
-    case traits<unsigned long int>::value:
-    case traits<signed long long int>::value:
-    case traits<unsigned long long int>::value:
-    case traits<float>::value:
-    case traits<double>::value:
-    case traits<long double>::value:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
         return 1;
-    case traits<string_type>::value:
+    case token::symbol::string:
         return storage.template get<string_type>().size();
-    case traits<array_type>::value:
+    case token::symbol::array:
         return storage.template get<array_type>().size();
-    case traits<map_type>::value:
+    case token::symbol::map:
         return storage.template get<map_type>().size();
     }
     assert(false);
-    throw dynamic::error(incompatible_type);
 }
 
 template <typename CharT>
-void basic_variable<CharT>::clear()
+void basic_variable<CharT>::clear() noexcept
 {
-    switch (storage.which())
+    switch (code())
     {
-    case traits<nullable>::value:
+    case token::code::null:
         storage = null;
         break;
-    case traits<bool>::value:
+    case token::code::boolean:
         storage = bool{};
         break;
-    case traits<signed short int>::value:
+    case token::code::signed_short_integer:
         {
             signed short int value = 0;
             storage = value;
         }
         break;
-    case traits<unsigned short int>::value:
+    case token::code::unsigned_short_integer:
         {
             unsigned short int value = 0U;
             storage = value;
         }
         break;
-    case traits<signed int>::value:
+    case token::code::signed_integer:
         storage = 0;
         break;
-    case traits<unsigned int>::value:
+    case token::code::unsigned_integer:
         storage = 0U;
         break;
-    case traits<signed long int>::value:
+    case token::code::signed_long_integer:
         storage = 0L;
         break;
-    case traits<unsigned long int>::value:
+    case token::code::unsigned_long_integer:
         storage = 0UL;
         break;
-    case traits<signed long long int>::value:
+    case token::code::signed_long_long_integer:
         storage = 0LL;
         break;
-    case traits<unsigned long long int>::value:
+    case token::code::unsigned_long_long_integer:
         storage = 0ULL;
         break;
-    case traits<float>::value:
+    case token::code::float_number:
         storage = 0.0f;
         break;
-    case traits<double>::value:
+    case token::code::double_number:
         storage = 0.0;
         break;
-    case traits<long double>::value:
+    case token::code::long_double_number:
         storage = 0.0L;
         break;
-    case traits<string_type>::value:
+    case token::code::string:
         storage.template get<string_type>().clear();
         break;
-    case traits<array_type>::value:
+    case token::code::array:
         storage.template get<array_type>().clear();
         break;
-    case traits<map_type>::value:
+    case token::code::map:
         storage.template get<map_type>().clear();
         break;
     }
@@ -2926,9 +2861,9 @@ auto basic_variable<CharT>::erase(const_iterator where) -> iterator
 
     iterator result = where;
 
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<array_type>::value:
+    case token::symbol::array:
         {
             auto& array = storage.template get<array_type>();
             auto& array_where = where.current.template get<array_iterator>();
@@ -2936,7 +2871,7 @@ auto basic_variable<CharT>::erase(const_iterator where) -> iterator
         }
         break;
 
-    case traits<map_type>::value:
+    case token::symbol::map:
         result.current =
             storage.template get<map_type>().erase(where.current.template get<map_iterator>());
         break;
@@ -2956,15 +2891,15 @@ auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> 
 
     iterator result = first;
 
-    switch (storage.which())
+    switch (symbol())
     {
-    case traits<array_type>::value:
+    case token::symbol::array:
         result.current =
             storage.template get<array_type>().erase(first.current.template get<array_iterator>(),
                                                      last.current.template get<array_iterator>());
         break;
 
-    case traits<map_type>::value:
+    case token::symbol::map:
         result.current =
             storage.template get<map_type>().erase(first.current.template get<map_iterator>(),
                                                    last.current.template get<map_iterator>());
@@ -3016,26 +2951,26 @@ auto basic_variable<CharT>::key_end() const & -> key_iterator
 // Comparison
 
 template <typename T, typename U>
-bool operator== (const T& lhs, const U& rhs)
+bool operator== (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
     return detail::operator_overloader<T, U>::equal(lhs, rhs);
 }
 
 template <typename T, typename U>
-bool operator!= (const T& lhs, const U& rhs)
+bool operator!= (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
     return !(lhs == rhs);
 }
 
 template <typename T, typename U>
-bool operator< (const T& lhs, const U& rhs)
+bool operator< (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
     return detail::operator_overloader<T, U>::less(lhs, rhs);
 }
 
 template <typename CharT>
 template <typename T>
-bool basic_variable<CharT>::operator<= (const T& rhs) const
+bool basic_variable<CharT>::operator<= (const T& rhs) const TRIAL_PROTOCOL_CXX14(noexcept)
 {
     if (same<nullable>())
         return true;
@@ -3045,7 +2980,7 @@ bool basic_variable<CharT>::operator<= (const T& rhs) const
 
 template <typename CharT>
 template <typename T>
-bool basic_variable<CharT>::operator> (const T& rhs) const
+bool basic_variable<CharT>::operator> (const T& rhs) const TRIAL_PROTOCOL_CXX14(noexcept)
 {
     if (same<nullable>())
         return false;
@@ -3055,7 +2990,7 @@ bool basic_variable<CharT>::operator> (const T& rhs) const
 
 template <typename CharT>
 template <typename T>
-bool basic_variable<CharT>::operator>= (const T& rhs) const
+bool basic_variable<CharT>::operator>= (const T& rhs) const TRIAL_PROTOCOL_CXX14(noexcept)
 {
     return !(*this < rhs);
 }
