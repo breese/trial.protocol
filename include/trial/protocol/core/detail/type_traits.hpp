@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstdint>
-#include <type_traits>
+#include <trial/protocol/core/detail/meta.hpp>
 
 namespace trial
 {
@@ -25,6 +25,12 @@ namespace detail
 
 template <typename T>
 using is_bool = std::is_same<typename std::decay<T>::type, bool>;
+
+template <typename T, typename = void>
+struct is_iterator : std::false_type {};
+
+template <typename T>
+struct is_iterator<T, meta::void_t<typename T::iterator_category>> : std::true_type {};
 
 template <typename T>
 struct make_floating_point

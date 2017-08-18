@@ -1320,13 +1320,37 @@ struct overloader<
 namespace detail
 {
 
-template <typename T, typename U, typename Enable = void>
+template <typename T, typename U, typename = void>
 struct operator_overloader
 {
     static bool equal(const T& lhs, const U& rhs)
     {
-        // This function is called by dynamic::operator== when none of the
-        // specializations below apply.
+        // This function is called by dynamic::operator== so we must avoid
+        // infinite recursion.
+
+        using std::operator==;
+        return operator==(lhs, rhs);
+    }
+
+    static bool less(const T& lhs, const U& rhs)
+    {
+        // See comment in equal() in this struct.
+
+        using std::operator<;
+        return operator<(lhs, rhs);
+    }
+};
+
+template <typename T, typename U>
+struct operator_overloader<
+    T,
+    U,
+    typename std::enable_if<core::detail::is_iterator<T>::value>::type>
+{
+    static bool equal(const T& lhs, const U& rhs)
+    {
+        // This function is called by dynamic::operator== when T is an
+        // iterator.
         //
         // basic_variable<CharT>::iterator_base<T> cannot be matched via
         // SFINAE below (due to being a non-deduced context), so instead
@@ -1342,7 +1366,7 @@ struct operator_overloader
 
     static bool less(const T& lhs, const U& rhs)
     {
-        // See comment for operator_overloader::equal()
+        // See comment for equal() in this struct.
 
         return lhs.operator<(rhs);
     }
