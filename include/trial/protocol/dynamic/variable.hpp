@@ -246,6 +246,11 @@ public:
     basic_variable& operator[] (const typename map_type::key_type&) &;
     const basic_variable& operator[] (const typename map_type::key_type&) const &;
 
+    iterator find(const basic_variable&) &;
+    const_iterator find(const basic_variable&) const &;
+    template <typename T> iterator find(const T&) &;
+    template <typename T> const_iterator find(const T&) const &;
+
     // Type checker
 
     template <typename T> bool is() const;

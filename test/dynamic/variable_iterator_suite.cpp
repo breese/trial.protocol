@@ -1337,6 +1337,1440 @@ void run()
 } // namespace key_iterator_suite
 
 //-----------------------------------------------------------------------------
+// variable::find()
+//-----------------------------------------------------------------------------
+
+namespace find_suite
+{
+
+void find_null()
+{
+    // Null is a zero-sized container, so find always returns end()
+    variable data;
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_boolean()
+{
+    variable data(true);
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({true}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_const_boolean()
+{
+    const variable data(true);
+    {
+        variable::const_iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(array::make({true}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(map::make("alpha", true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_integer()
+{
+    variable data(2);
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({2}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", 2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_const_integer()
+{
+    const variable data(2);
+    {
+        variable::const_iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(array::make({2}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(map::make("alpha", 2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_number()
+{
+    variable data(3.0);
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({3.0}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", 3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_const_number()
+{
+    const variable data(3.0);
+    {
+        variable::const_iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(array::make({3.0}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(map::make("alpha", 3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_string()
+{
+    variable data("hydrogen");
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(std::string("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_const_string()
+{
+    const variable data("hydrogen");
+    {
+        variable::const_iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::string("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_array()
+{
+    variable data = array::make({ null, true, 2, 3.0, "hydrogen" });
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_const_array()
+{
+    const variable data = array::make({ null, true, 2, 3.0, "hydrogen" });
+    {
+        variable::const_iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::const_iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::const_iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::const_iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::const_iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::const_iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::const_iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::const_iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::const_iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::const_iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_array_with_array()
+{
+    variable data = array::make({ null, true, 2, 3.0, "hydrogen", array::make({ "helium" }) });
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find("helium");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"helium"}));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_array_with_map()
+{
+    variable data = array::make({ null, true, 2, 3.0, "hydrogen", map::make("bravo", "helium") });
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find("helium");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"helium"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("bravo", "helium"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+}
+
+void find_map()
+{
+    variable data = map::make(
+        {
+            {"alpha", null},
+            {"bravo", true},
+            {"charlie", 2},
+            {"delta", 3.0},
+            {"echo", "hydrogen"}
+        });
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_const_map()
+{
+    const variable data = map::make(
+        {
+            {"alpha", null},
+            {"bravo", true},
+            {"charlie", 2},
+            {"delta", 3.0},
+            {"echo", "hydrogen"}
+        });
+    {
+        variable::const_iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::const_iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::const_iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::const_iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::const_iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::const_iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::const_iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::const_iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::const_iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::const_iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_map_with_array()
+{
+    variable data = map::make(
+        {
+            {"alpha", null},
+            {"bravo", true},
+            {"charlie", 2},
+            {"delta", 3.0},
+            {"echo", "hydrogen"},
+            {"golf", array::make({ "helium" })}
+        });
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find("helium");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"helium"}));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_map_with_map()
+{
+    variable data = map::make(
+        {
+            {"alpha", null},
+            {"bravo", true},
+            {"charlie", 2},
+            {"delta", 3.0},
+            {"echo", "hydrogen"},
+            {"golf", map::make("hotel", "helium")}
+        });
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        variable::iterator where = data.find(false);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(false));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
+    {
+        variable::iterator where = data.find(22);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(22));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
+    }
+    {
+        variable::iterator where = data.find(33.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(33.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    {
+        variable::iterator where = data.find("helium");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"helium"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("hotel", "helium"));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+}
+
+void run()
+{
+    find_null();
+    find_boolean();
+    find_const_boolean();
+    find_integer();
+    find_const_integer();
+    find_number();
+    find_const_number();
+    find_string();
+    find_const_string();
+    find_array();
+    find_const_array();
+    find_array_with_array();
+    find_array_with_map();
+    find_map();
+    find_const_map();
+    find_map_with_array();
+    find_map_with_map();
+}
+
+} // namespace find_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -1351,6 +2785,8 @@ int main()
     distance_suite::run();
     range_for_suite::run();
     key_iterator_suite::run();
+
+    find_suite::run();
 
     return boost::report_errors();
 }
