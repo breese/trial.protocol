@@ -1418,7 +1418,7 @@ struct operator_overloader<
     static bool equal(const variable_type& lhs,
                       const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (rhs.storage.which())
+        switch (rhs.code())
         {
         case token::code::null:
             return detail::template overloader<variable_type, nullable>::
@@ -1490,7 +1490,7 @@ struct operator_overloader<
     static bool less(const variable_type& lhs,
                      const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        switch (rhs.storage.which())
+        switch (rhs.code())
         {
         case token::code::null:
             return detail::template overloader<variable_type, nullable>::
@@ -1762,11 +1762,6 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> referenc
     case token::symbol::map:
         return current.template get<map_iterator>()->second;
     }
-    assert(false);
-    // Avoid compiler warning about reaching end of non-void function.
-    // This may fail, but we should never get here because the switch
-    // above is exhaustive.
-    return *current.template get<pointer>();
 }
 
 template <typename CharT>
@@ -2319,7 +2314,7 @@ auto basic_variable<CharT>::operator= (const CharT *value) -> basic_variable&
 template <typename CharT>
 auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_variable&
 {
-    switch (other.storage.which())
+    switch (other.code())
     {
     case token::code::null:
         detail::overloader<value_type, nullable>::
@@ -2468,7 +2463,7 @@ auto basic_variable<CharT>::value() const -> typename tag_traits<typename std::d
 template <typename CharT>
 basic_variable<CharT>::operator bool() const
 {
-    switch (storage.which())
+    switch (code())
     {
     case token::code::null:
         return false;
