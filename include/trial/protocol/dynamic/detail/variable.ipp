@@ -1762,6 +1762,7 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> referenc
     case token::symbol::map:
         return current.template get<map_iterator>()->second;
     }
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -1785,6 +1786,7 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator-> () -> pointer
     case token::symbol::map:
         return &current.template get<map_iterator>()->second;
     }
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -1813,8 +1815,7 @@ bool basic_variable<CharT>::iterator_base<Derived, T>::operator== (const Derived
     case token::symbol::map:
         return current.template get<map_iterator>() == other.current.template get<map_iterator>();
     }
-    assert(false);
-    return false;
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -1990,6 +1991,7 @@ auto basic_variable<CharT>::key_iterator::key() const -> reference
     case token::symbol::map:
         return super::key();
     }
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -2513,8 +2515,7 @@ basic_variable<CharT>::operator bool() const
         // FIXME: Throw an exception instead?
         return false;
     }
-    assert(false);
-    return false;
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -2617,6 +2618,7 @@ auto basic_variable<CharT>::find(const basic_variable<CharT>& other) const & -> 
     case token::code::map:
         return find(other.storage.template get<map_type>());
     }
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -2650,6 +2652,7 @@ auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
         }
         return end();
     }
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -2762,7 +2765,7 @@ bool basic_variable<CharT>::empty() const noexcept
     case token::symbol::map:
         return storage.template get<map_type>().empty();
     }
-    assert(false);
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
@@ -2783,7 +2786,7 @@ auto basic_variable<CharT>::size() const noexcept -> size_type
     case token::symbol::map:
         return storage.template get<map_type>().size();
     }
-    assert(false);
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 template <typename CharT>
