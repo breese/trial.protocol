@@ -1954,93 +1954,6 @@ basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
 }
 
 //-----------------------------------------------------------------------------
-// variable::key_iterator
-//-----------------------------------------------------------------------------
-
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator()
-    : super()
-{
-}
-
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator(const key_iterator& other)
-    : super(other),
-      index(other.index)
-{
-}
-
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator(key_iterator&& other)
-{
-    super::scope = std::move(other.scope);
-    super::current = std::move(other.current);
-    index = std::move(other.index);
-}
-
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator(pointer p, bool e)
-    : super(p, e),
-      index(0)
-{
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::operator= (const key_iterator& other) -> key_iterator&
-{
-    return super::operator=(other);
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::operator= (key_iterator&& other) -> key_iterator&
-{
-    return super::operator=(std::forward<key_iterator&&>(other));
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::key() const -> reference
-{
-    assert(super::scope);
-
-    switch (super::scope->symbol())
-    {
-    case token::symbol::null:
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
-    case token::symbol::array:
-        return index;
-
-    case token::symbol::map:
-        return super::key();
-    }
-    TRIAL_PROTOCOL_UNREACHABLE();
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
-{
-    assert(super::scope);
-
-    switch (super::scope->symbol())
-    {
-    case token::symbol::null:
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
-    case token::symbol::array:
-        index += 1;
-        break;
-
-    case token::symbol::map:
-        break;
-    }
-    return super::operator++();
-}
-
-//-----------------------------------------------------------------------------
 // visitors
 //-----------------------------------------------------------------------------
 
@@ -2064,13 +1977,15 @@ struct basic_variable<CharT>::similar_visitor
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable()
-    : storage(null)
+    : storage(null),
+      key(*this)
 {
 }
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(const basic_variable& other)
-    : storage(null)
+    : storage(null),
+      key(*this)
 {
     switch (other.code())
     {
@@ -2127,7 +2042,8 @@ basic_variable<CharT>::basic_variable(const basic_variable& other)
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(basic_variable&& other)
-    : storage(null)
+    : storage(null),
+      key(*this)
 {
     switch (other.code())
     {
@@ -2185,19 +2101,22 @@ basic_variable<CharT>::basic_variable(basic_variable&& other)
 template <typename CharT>
 template <typename T>
 basic_variable<CharT>::basic_variable(T value)
-    : storage(typename detail::overloader<value_type, typename std::decay<T>::type>::type(std::move(value)))
+    : storage(typename detail::overloader<value_type, typename std::decay<T>::type>::type(std::move(value))),
+      key(*this)
 {
 }
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(const nullable&)
-    : storage(null)
+    : storage(null),
+      key(*this)
 {
 }
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(const CharT *value)
-    : storage(string_type(value))
+    : storage(string_type(value)),
+      key(*this)
 {
 }
 
@@ -3029,18 +2948,6 @@ auto basic_variable<CharT>::end() const & -> const_iterator
     return {this, false};
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::key_begin() const & -> key_iterator
-{
-    return {this};
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key_end() const & -> key_iterator
-{
-    return {this, false};
-}
-
 // Comparison
 
 template <typename T, typename U>
@@ -3086,6 +2993,109 @@ template <typename T>
 bool basic_variable<CharT>::operator>= (const T& rhs) const TRIAL_PROTOCOL_CXX14(noexcept)
 {
     return !(*this < rhs);
+}
+//-----------------------------------------------------------------------------
+// variable::key::const_iterator
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+basic_variable<CharT>::key::const_iterator::const_iterator()
+    : super()
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::key::const_iterator::const_iterator(const key::const_iterator& other)
+    : super(other),
+      index(other.index)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::key::const_iterator::const_iterator(key::const_iterator&& other)
+{
+    super::scope = std::move(other.scope);
+    super::current = std::move(other.current);
+    index = std::move(other.index);
+}
+
+template <typename CharT>
+basic_variable<CharT>::key::const_iterator::const_iterator(pointer p, bool e)
+    : super(p, e),
+      index(0)
+{
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key::const_iterator::operator= (const key::const_iterator& other) -> const_iterator&
+{
+    return super::operator=(other);
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key::const_iterator::operator= (key::const_iterator&& other) -> const_iterator&
+{
+    return super::operator=(std::forward<const_iterator&&>(other));
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key::const_iterator::key() const -> reference
+{
+    assert(super::scope);
+
+    switch (super::scope->symbol())
+    {
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+    case token::symbol::array:
+        return index;
+
+    case token::symbol::map:
+        return super::key();
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key::const_iterator::operator++ () -> const_iterator&
+{
+    assert(super::scope);
+
+    switch (super::scope->symbol())
+    {
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+    case token::symbol::array:
+        index += 1;
+        break;
+
+    case token::symbol::map:
+        break;
+    }
+    return super::operator++();
+}
+
+
+//-----------------------------------------------------------------------------
+// variable::key
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+auto basic_variable<CharT>::key::begin() const & -> const_iterator
+{
+    return {&self};
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key::end() const & -> const_iterator
+{
+    return {&self, false};
 }
 
 //-----------------------------------------------------------------------------

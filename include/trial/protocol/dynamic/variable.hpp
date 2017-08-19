@@ -168,36 +168,6 @@ public:
         reference operator* () { return super::value(); }
     };
 
-    class key_iterator
-        : public iterator_base<key_iterator, const typename basic_variable<CharT>::value_type>
-    {
-        using super = iterator_base<key_iterator, const typename basic_variable<CharT>::value_type>;
-
-    public:
-        using typename super::iterator_category;
-        using typename super::key_type;
-        using typename super::value_type;
-        using typename super::difference_type;
-        using typename super::pointer;
-        using typename super::reference;
-
-        key_iterator();
-        key_iterator(const key_iterator& other);
-        key_iterator(key_iterator&& other);
-        key_iterator(pointer p, bool e = true);
-
-        key_iterator& operator= (const key_iterator& other);
-        key_iterator& operator= (key_iterator&& other);
-
-        reference key() const;
-        reference operator* () { return key(); }
-
-        key_iterator& operator++();
-
-    private:
-        typename std::remove_const<value_type>::type index;
-    };
-
     // Constructor
     basic_variable(const basic_variable<CharT>&);
     basic_variable(basic_variable<CharT>&&);
@@ -281,9 +251,6 @@ public:
     iterator end() &;
     const_iterator end() const &;
 
-    key_iterator key_begin() const &;
-    key_iterator key_end() const &;
-
     // Comparison
     // Container comparison operators are noexcept from C++14
 
@@ -329,6 +296,49 @@ private:
                                                    array_type,
                                                    map_type>;
     storage_type storage;
+
+public:
+    // Key-related functions
+    struct key
+    {
+        class const_iterator
+            : public iterator_base<const_iterator, const typename basic_variable<CharT>::value_type>
+        {
+            using super = iterator_base<const_iterator, const typename basic_variable<CharT>::value_type>;
+
+        public:
+            using typename super::iterator_category;
+            using typename super::key_type;
+            using typename super::value_type;
+            using typename super::difference_type;
+            using typename super::pointer;
+            using typename super::reference;
+
+            const_iterator();
+            const_iterator(const const_iterator& other);
+            const_iterator(const_iterator&& other);
+            const_iterator(pointer p, bool e = true);
+
+            const_iterator& operator= (const const_iterator& other);
+            const_iterator& operator= (const_iterator&& other);
+
+            reference key() const;
+            reference operator* () { return key(); }
+
+            const_iterator& operator++();
+
+        private:
+            typename std::remove_const<value_type>::type index;
+        };
+
+        const_iterator begin() const &;
+        const_iterator end() const &;
+
+    private:
+        friend class basic_variable;
+        key(basic_variable& self) : self(self) {}
+        basic_variable& self;
+    } key;
 };
 
 // Convenience
