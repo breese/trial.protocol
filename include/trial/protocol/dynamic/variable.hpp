@@ -334,6 +334,9 @@ public:
         const_iterator begin() const &;
         const_iterator end() const &;
 
+        template <typename T> const_iterator find(const T&) const &;
+        const_iterator find(const basic_variable&) const &;
+
     private:
         friend class basic_variable;
         key(basic_variable& self) : self(self) {}

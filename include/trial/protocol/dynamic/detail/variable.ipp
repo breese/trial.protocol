@@ -3098,6 +3098,74 @@ auto basic_variable<CharT>::key::end() const & -> const_iterator
     return {&self, false};
 }
 
+template <typename CharT>
+auto basic_variable<CharT>::key::find(const basic_variable<CharT>& other) const & -> const_iterator
+{
+    switch (other.code())
+    {
+    case token::code::null:
+        return find(other.storage.template get<nullable>());
+    case token::code::boolean:
+        return find(other.storage.template get<bool>());
+    case token::code::signed_short_integer:
+        return find(other.storage.template get<signed short int>());
+    case token::code::unsigned_short_integer:
+        return find(other.storage.template get<unsigned short int>());
+    case token::code::signed_integer:
+        return find(other.storage.template get<signed int>());
+    case token::code::unsigned_integer:
+        return find(other.storage.template get<unsigned int>());
+    case token::code::signed_long_integer:
+        return find(other.storage.template get<signed long int>());
+    case token::code::unsigned_long_integer:
+        return find(other.storage.template get<unsigned long int>());
+    case token::code::signed_long_long_integer:
+        return find(other.storage.template get<signed long long int>());
+    case token::code::unsigned_long_long_integer:
+        return find(other.storage.template get<unsigned long long int>());
+    case token::code::float_number:
+        return find(other.storage.template get<float>());
+    case token::code::double_number:
+        return find(other.storage.template get<double>());
+    case token::code::long_double_number:
+        return find(other.storage.template get<long double>());
+    case token::code::string:
+        return find(other.storage.template get<string_type>());
+    case token::code::array:
+        return find(other.storage.template get<array_type>());
+    case token::code::map:
+        return find(other.storage.template get<map_type>());
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+template <typename T>
+auto basic_variable<CharT>::key::find(const T& other) const & -> const_iterator
+{
+    switch (self.symbol())
+    {
+    case token::symbol::null:
+        return end();
+
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+        return (*this == other) ? begin() : end();
+
+    case token::symbol::array:
+    case token::symbol::map:
+        for (auto it = begin(); it != end(); ++it)
+        {
+            if (*it == other)
+                return it;
+        }
+        return end();
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
 //-----------------------------------------------------------------------------
 // Factories
 //-----------------------------------------------------------------------------
