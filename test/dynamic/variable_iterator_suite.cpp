@@ -2542,7 +2542,7 @@ void find_map_with_array()
             {"charlie", 2},
             {"delta", 3.0},
             {"echo", "hydrogen"},
-            {"golf", array::make({ "helium" })}
+            {"foxtrot", array::make({ "helium" })}
         });
     {
         variable::iterator where = data.find(data);
@@ -2647,7 +2647,7 @@ void find_map_with_map()
             {"charlie", 2},
             {"delta", 3.0},
             {"echo", "hydrogen"},
-            {"golf", map::make("hotel", "helium")}
+            {"foxtrot", map::make("golf", "helium")}
         });
     {
         variable::iterator where = data.find(data);
@@ -2742,7 +2742,7 @@ void find_map_with_map()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
-        variable::iterator where = data.find(map::make("hotel", "helium"));
+        variable::iterator where = data.find(map::make("golf", "helium"));
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
     }
 }

@@ -252,6 +252,9 @@ public:
     template <typename T> iterator find(const T&) &;
     template <typename T> const_iterator find(const T&) const &;
 
+    size_type count(const basic_variable&) const;
+    template <typename T> size_type count(const T&) const;
+
     // Type checker
 
     template <typename T> bool is() const noexcept;

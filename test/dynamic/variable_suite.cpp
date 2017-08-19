@@ -6501,6 +6501,202 @@ void run()
 } // namespace size_suite
 
 //-----------------------------------------------------------------------------
+// Count
+//-----------------------------------------------------------------------------
+
+namespace count_suite
+{
+
+void count_null()
+{
+    // Null is always empty
+    variable data;
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+}
+
+void count_boolean()
+{
+    variable data(true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(false), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(false)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+}
+
+void count_integer()
+{
+    variable data(2);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(22), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(22)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+}
+
+void count_number()
+{
+    variable data(3.0);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(33.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(33.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+}
+
+void count_string()
+{
+    variable data("alpha");
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("bravo"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("bravo")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+}
+
+void count_array()
+{
+    variable data = array::make(
+        { null, true, 2, 3.0, "hydrogen",
+          null, true, 2, 3.0,
+          null, true, 2,
+          null, true,
+          null });
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(false), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(false)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(22), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(22)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(33.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(33.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("hydrogen"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("hydrogen")), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make({ null })), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(data), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+}
+
+void count_map()
+{
+    variable data = map::make(
+        {
+            {"alpha", null},
+            {"bravo", true},
+            {"charlie", 2},
+            {"delta", 3.0},
+            {"echo", "hydrogen"},
+            {"foxtrot", null},
+            {"golf", true},
+            {"hotel", 2},
+            {"india", 3.0},
+            {"juliet", null},
+            {"kilo", true},
+            {"lima", 2},
+            {"mike", null},
+            {"november", true},
+            {"oscar", null}
+        });
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(false), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(false)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 3);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(22), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(22)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(33.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(33.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("hydrogen"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("hydrogen")), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(data), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+}
+
+void run()
+{
+    count_null();
+    count_boolean();
+    count_integer();
+    count_number();
+    count_string();
+    count_array();
+    count_map();
+}
+
+} // namespace count_suite
+
+//-----------------------------------------------------------------------------
 // Clear
 //-----------------------------------------------------------------------------
 
@@ -7102,6 +7298,8 @@ int main()
 
     empty_suite::run();
     size_suite::run();
+    count_suite::run();
+    // find_suite is in variable_iterator_suite.cpp
 
     clear_suite::run();
     erase_suite::run();

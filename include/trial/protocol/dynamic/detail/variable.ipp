@@ -2680,6 +2680,77 @@ auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
 }
 
 template <typename CharT>
+auto basic_variable<CharT>::count(const basic_variable<CharT>& other) const -> size_type
+{
+    switch (other.code())
+    {
+    case token::code::null:
+        return count(other.storage.template get<nullable>());
+    case token::code::boolean:
+        return count(other.storage.template get<bool>());
+    case token::code::signed_short_integer:
+        return count(other.storage.template get<signed short int>());
+    case token::code::unsigned_short_integer:
+        return count(other.storage.template get<unsigned short int>());
+    case token::code::signed_integer:
+        return count(other.storage.template get<signed int>());
+    case token::code::unsigned_integer:
+        return count(other.storage.template get<unsigned int>());
+    case token::code::signed_long_integer:
+        return count(other.storage.template get<signed long int>());
+    case token::code::unsigned_long_integer:
+        return count(other.storage.template get<unsigned long int>());
+    case token::code::signed_long_long_integer:
+        return count(other.storage.template get<signed long long int>());
+    case token::code::unsigned_long_long_integer:
+        return count(other.storage.template get<unsigned long long int>());
+    case token::code::float_number:
+        return count(other.storage.template get<float>());
+    case token::code::double_number:
+        return count(other.storage.template get<double>());
+    case token::code::long_double_number:
+        return count(other.storage.template get<long double>());
+    case token::code::string:
+        return count(other.storage.template get<string_type>());
+    case token::code::array:
+        return count(other.storage.template get<array_type>());
+    case token::code::map:
+        return count(other.storage.template get<map_type>());
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+template <typename T>
+auto basic_variable<CharT>::count(const T& other) const -> size_type
+{
+    switch (symbol())
+    {
+    case token::symbol::null:
+        return 0;
+
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+        return (*this == other) ? 1 : 0;
+
+    case token::symbol::array:
+    case token::symbol::map:
+        {
+            size_type result = 0;
+            for (auto it = begin(); it != end(); ++it)
+            {
+                if (*it == other)
+                    ++result;
+            }
+            return result;
+        }
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
 template <typename Tag>
 bool basic_variable<CharT>::is() const noexcept
 {
