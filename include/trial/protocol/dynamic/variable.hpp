@@ -337,6 +337,9 @@ public:
         template <typename T> const_iterator find(const T&) const &;
         const_iterator find(const basic_variable&) const &;
 
+        size_type count(const basic_variable&) const;
+        template <typename T> size_type count(const T&) const;
+
     private:
         friend class basic_variable;
         key(basic_variable& self) : self(self) {}
