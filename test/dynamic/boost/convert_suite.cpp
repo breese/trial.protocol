@@ -125,6 +125,88 @@ void convert_string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<std::string>(), "alpha");
 }
 
+void convert_array_integer()
+{
+    {
+        boost::any any(std::vector<signed short int>{ 2, 22 });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2, 22 }));
+    }
+    {
+        boost::any any(std::vector<unsigned short int>{ 2U, 22U });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2U, 22U }));
+    }
+    {
+        boost::any any(std::vector<signed int>{ 2, 22 });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2, 22 }));
+    }
+    {
+        boost::any any(std::vector<unsigned int>{ 2U, 22U });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2U, 22U }));
+    }
+    {
+        boost::any any(std::vector<signed long int>{ 2L, 22L });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2L, 22L }));
+    }
+    {
+        boost::any any(std::vector<unsigned long int>{ 2UL, 22UL });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2UL, 22UL }));
+    }
+    {
+        boost::any any(std::vector<signed long long int>{ 2LL, 22LL });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2LL, 22LL }));
+    }
+    {
+        boost::any any(std::vector<unsigned long long int>{ 2ULL, 22ULL });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 2ULL, 22ULL }));
+    }
+}
+
+void convert_array_number()
+{
+    {
+        boost::any any(std::vector<float>{ 3.0f, 33.0f, 333.0f });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 3.0f, 33.0f, 333.0f }));
+    }
+    {
+        boost::any any(std::vector<double>{ 3.0, 33.0, 333.0 });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 3.0, 33.0, 333.0 }));
+    }
+    {
+        boost::any any(std::vector<long double>{ 3.0L, 33.0L, 333.0L });
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST(result == array::make({ 3.0L, 33.0L, 333.0L }));
+    }
+}
+
+void convert_array_string()
+{
+    boost::any any(std::vector<std::string>{ "alpha", "bravo", "charlie" });
+    variable result = convert<variable>(any);
+    TRIAL_PROTOCOL_TEST(result.is<array>());
+    TRIAL_PROTOCOL_TEST(result == array::make({ "alpha", "bravo", "charlie" }));
+}
+
 void fail_on_struct()
 {
     struct record {};
@@ -152,6 +234,9 @@ void run()
     convert_number();
     convert_string();
     convert_string_literal();
+    convert_array_integer();
+    convert_array_number();
+    convert_array_string();
     fail_on_struct();
     throw_on_struct();
 }

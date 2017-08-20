@@ -14,6 +14,7 @@
 #include <boost/any.hpp>
 #include <trial/protocol/dynamic/variable.hpp>
 #include <trial/protocol/dynamic/convert.hpp>
+#include <trial/protocol/dynamic/std/vector.hpp>
 
 namespace trial
 {
@@ -74,6 +75,42 @@ struct convert_overloader<basic_variable<CharT>, boost::any>
 
         if (any.type() == typeid(std::basic_string<CharT>))
             return boost::any_cast<std::basic_string<CharT>>(any);
+
+        if (any.type() == typeid(std::vector<signed short int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<signed short int>>(&any));
+
+        if (any.type() == typeid(std::vector<unsigned short int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<unsigned short int>>(&any));
+
+        if (any.type() == typeid(std::vector<signed int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<signed int>>(&any));
+
+        if (any.type() == typeid(std::vector<unsigned int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<unsigned int>>(&any));
+
+        if (any.type() == typeid(std::vector<signed long int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<signed long int>>(&any));
+
+        if (any.type() == typeid(std::vector<unsigned long int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<unsigned long int>>(&any));
+
+        if (any.type() == typeid(std::vector<signed long long int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<signed long long int>>(&any));
+
+        if (any.type() == typeid(std::vector<unsigned long long int>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<unsigned long long int>>(&any));
+
+        if (any.type() == typeid(std::vector<float>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<float>>(&any));
+
+        if (any.type() == typeid(std::vector<double>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<double>>(&any));
+
+        if (any.type() == typeid(std::vector<long double>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<long double>>(&any));
+
+        if (any.type() == typeid(std::vector<std::basic_string<CharT>>))
+            return dynamic::convert<basic_variable<CharT>>(*boost::any_cast<std::vector<std::basic_string<CharT>>>(&any));
 
         error = dynamic::make_error_code(dynamic::incompatible_type);
         return null;
