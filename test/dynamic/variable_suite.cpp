@@ -6714,22 +6714,22 @@ void count_map()
             {"echo", "hydrogen"}
         });
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count("alpha"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(variable("alpha")), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count("bravo"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count("charlie"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count("delta"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count("echo"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(null), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(variable()), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(true), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(variable(true)), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(2), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(variable(2)), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(3.0), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(variable(3.0)), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count("hydrogen"), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key.count(variable("hydrogen")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("alpha"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable("alpha")), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("bravo"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("charlie"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("delta"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("echo"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(null), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable()), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(true), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable(true)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(2), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable(2)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(3.0), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable(3.0)), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("hydrogen"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable("hydrogen")), 0);
 }
 
 void run()

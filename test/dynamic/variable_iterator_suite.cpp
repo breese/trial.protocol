@@ -1229,85 +1229,85 @@ namespace key_iterator_suite
 void iterate_null()
 {
     variable data;
-    auto where = data.key.begin();
-    TRIAL_PROTOCOL_TEST(where == data.key.end());
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
 void iterate_boolean()
 {
     variable data(true);
-    auto where = data.key.begin();
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 0);
     ++where;
-    TRIAL_PROTOCOL_TEST(where == data.key.end());
+    TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
 void iterate_integer()
 {
     variable data(2);
-    auto where = data.key.begin();
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 0);
     ++where;
-    TRIAL_PROTOCOL_TEST(where == data.key.end());
+    TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
 void iterate_number()
 {
     {
         variable data(3.0f);
-        auto where = data.key.begin();
-        TRIAL_PROTOCOL_TEST(where != data.key.end());
+        auto where = data.key_begin();
+        TRIAL_PROTOCOL_TEST(where != data.key_end());
         TRIAL_PROTOCOL_TEST(*where == 0);
         ++where;
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
     {
         variable data(3.0);
-        auto where = data.key.begin();
-        TRIAL_PROTOCOL_TEST(where != data.key.end());
+        auto where = data.key_begin();
+        TRIAL_PROTOCOL_TEST(where != data.key_end());
         TRIAL_PROTOCOL_TEST(*where == 0);
         ++where;
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
     {
         variable data(3.0L);
-        auto where = data.key.begin();
-        TRIAL_PROTOCOL_TEST(where != data.key.end());
+        auto where = data.key_begin();
+        TRIAL_PROTOCOL_TEST(where != data.key_end());
         TRIAL_PROTOCOL_TEST(*where == 0);
         ++where;
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
 }
 
 void iterate_string()
 {
     variable data("alpha");
-    auto where = data.key.begin();
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 0);
     ++where;
-    TRIAL_PROTOCOL_TEST(where == data.key.end());
+    TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
 void iterate_array()
 {
     variable data = array::make({ true, 2, 3.0, "alpha" });
-    auto where = data.key.begin();
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 0);
     ++where;
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 1);
     ++where;
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 2);
     ++where;
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 3);
     ++where;
-    TRIAL_PROTOCOL_TEST(where == data.key.end());
+    TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
 void iterate_map()
@@ -1316,11 +1316,11 @@ void iterate_map()
         {
             {"key", "alpha"}
         });
-    auto where = data.key.begin();
-    TRIAL_PROTOCOL_TEST(where != data.key.end());
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == "key");
     ++where;
-    TRIAL_PROTOCOL_TEST(where == data.key.end());
+    TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
 void run()
@@ -2788,44 +2788,44 @@ void find_map()
             {"echo", "hydrogen"}
         });
     {
-        variable::key::const_iterator where = data.key.find("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 0);
+        variable::key_iterator where = data.key_find("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 0);
     }
     {
-        variable::key::const_iterator where = data.key.find(null);
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        variable::key_iterator where = data.key_find(null);
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
     {
-        variable::key::const_iterator where = data.key.find("bravo");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 1);
+        variable::key_iterator where = data.key_find("bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 1);
     }
     {
-        variable::key::const_iterator where = data.key.find(true);
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        variable::key_iterator where = data.key_find(true);
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
     {
-        variable::key::const_iterator where = data.key.find("charlie");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 2);
+        variable::key_iterator where = data.key_find("charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 2);
     }
     {
-        variable::key::const_iterator where = data.key.find(2);
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        variable::key_iterator where = data.key_find(2);
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
     {
-        variable::key::const_iterator where = data.key.find("delta");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 3);
+        variable::key_iterator where = data.key_find("delta");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 3);
     }
     {
-        variable::key::const_iterator where = data.key.find(3.0);
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        variable::key_iterator where = data.key_find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
     {
-        variable::key::const_iterator where = data.key.find("echo");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 4);
+        variable::key_iterator where = data.key_find("echo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 4);
     }
     {
-        variable::key::const_iterator where = data.key.find("hydrogen");
-        TRIAL_PROTOCOL_TEST(where == data.key.end());
+        variable::key_iterator where = data.key_find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
 }
 

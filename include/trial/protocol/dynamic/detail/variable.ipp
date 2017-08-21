@@ -1954,6 +1954,87 @@ basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
 }
 
 //-----------------------------------------------------------------------------
+// variable::key_iterator
+//-----------------------------------------------------------------------------
+
+template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator(const key_iterator& other)
+    : super(other),
+      index(other.index)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator(key_iterator&& other)
+{
+    super::scope = std::move(other.scope);
+    super::current = std::move(other.current);
+    index = std::move(other.index);
+}
+
+template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator(pointer p, bool e)
+    : super(p, e),
+      index(0)
+{
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::operator= (const key_iterator& other) -> key_iterator&
+{
+    return super::operator=(other);
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::operator= (key_iterator&& other) -> key_iterator&
+{
+    return super::operator=(std::forward<key_iterator>(other));
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::key() const -> reference
+{
+    assert(super::scope);
+
+    switch (super::scope->symbol())
+    {
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+    case token::symbol::array:
+        return index;
+
+    case token::symbol::map:
+        return super::key();
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
+{
+    assert(super::scope);
+
+    switch (super::scope->symbol())
+    {
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+    case token::symbol::array:
+        index += 1;
+        break;
+
+    case token::symbol::map:
+        break;
+    }
+    return super::operator++();
+}
+
+//-----------------------------------------------------------------------------
 // visitors
 //-----------------------------------------------------------------------------
 
@@ -1977,15 +2058,13 @@ struct basic_variable<CharT>::similar_visitor
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable()
-    : storage(null),
-      key(*this)
+    : storage(null)
 {
 }
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(const basic_variable& other)
-    : storage(null),
-      key(*this)
+    : storage(null)
 {
     switch (other.code())
     {
@@ -2042,8 +2121,7 @@ basic_variable<CharT>::basic_variable(const basic_variable& other)
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(basic_variable&& other)
-    : storage(null),
-      key(*this)
+    : storage(null)
 {
     switch (other.code())
     {
@@ -2101,22 +2179,19 @@ basic_variable<CharT>::basic_variable(basic_variable&& other)
 template <typename CharT>
 template <typename T>
 basic_variable<CharT>::basic_variable(T value)
-    : storage(typename detail::overloader<value_type, typename std::decay<T>::type>::type(std::move(value))),
-      key(*this)
+    : storage(typename detail::overloader<value_type, typename std::decay<T>::type>::type(std::move(value)))
 {
 }
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(const nullable&)
-    : storage(null),
-      key(*this)
+    : storage(null)
 {
 }
 
 template <typename CharT>
 basic_variable<CharT>::basic_variable(const CharT *value)
-    : storage(string_type(value)),
-      key(*this)
+    : storage(string_type(value))
 {
 }
 
@@ -2599,6 +2674,74 @@ auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
 }
 
 template <typename CharT>
+auto basic_variable<CharT>::key_find(const basic_variable<CharT>& other) const & -> key_iterator
+{
+    switch (other.code())
+    {
+    case token::code::null:
+        return key_find(other.storage.template get<nullable>());
+    case token::code::boolean:
+        return key_find(other.storage.template get<bool>());
+    case token::code::signed_short_integer:
+        return key_find(other.storage.template get<signed short int>());
+    case token::code::unsigned_short_integer:
+        return key_find(other.storage.template get<unsigned short int>());
+    case token::code::signed_integer:
+        return key_find(other.storage.template get<signed int>());
+    case token::code::unsigned_integer:
+        return key_find(other.storage.template get<unsigned int>());
+    case token::code::signed_long_integer:
+        return key_find(other.storage.template get<signed long int>());
+    case token::code::unsigned_long_integer:
+        return key_find(other.storage.template get<unsigned long int>());
+    case token::code::signed_long_long_integer:
+        return key_find(other.storage.template get<signed long long int>());
+    case token::code::unsigned_long_long_integer:
+        return key_find(other.storage.template get<unsigned long long int>());
+    case token::code::float_number:
+        return key_find(other.storage.template get<float>());
+    case token::code::double_number:
+        return key_find(other.storage.template get<double>());
+    case token::code::long_double_number:
+        return key_find(other.storage.template get<long double>());
+    case token::code::string:
+        return key_find(other.storage.template get<string_type>());
+    case token::code::array:
+        return key_find(other.storage.template get<array_type>());
+    case token::code::map:
+        return key_find(other.storage.template get<map_type>());
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+template <typename T>
+auto basic_variable<CharT>::key_find(const T& other) const & -> key_iterator
+{
+    switch (symbol())
+    {
+    case token::symbol::null:
+        return key_end();
+
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+        return (*this == other) ? key_begin() : key_end();
+
+    case token::symbol::array:
+    case token::symbol::map:
+        for (auto it = key_begin(); it != key_end(); ++it)
+        {
+            if (*it == other)
+                return it;
+        }
+        return key_end();
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
 auto basic_variable<CharT>::count(const basic_variable<CharT>& other) const -> size_type
 {
     switch (other.code())
@@ -2659,6 +2802,77 @@ auto basic_variable<CharT>::count(const T& other) const -> size_type
         {
             size_type result = 0;
             for (auto it = begin(); it != end(); ++it)
+            {
+                if (*it == other)
+                    ++result;
+            }
+            return result;
+        }
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_count(const basic_variable<CharT>& other) const -> size_type
+{
+    switch (other.code())
+    {
+    case token::code::null:
+        return key_count(other.storage.template get<nullable>());
+    case token::code::boolean:
+        return key_count(other.storage.template get<bool>());
+    case token::code::signed_short_integer:
+        return key_count(other.storage.template get<signed short int>());
+    case token::code::unsigned_short_integer:
+        return key_count(other.storage.template get<unsigned short int>());
+    case token::code::signed_integer:
+        return key_count(other.storage.template get<signed int>());
+    case token::code::unsigned_integer:
+        return key_count(other.storage.template get<unsigned int>());
+    case token::code::signed_long_integer:
+        return key_count(other.storage.template get<signed long int>());
+    case token::code::unsigned_long_integer:
+        return key_count(other.storage.template get<unsigned long int>());
+    case token::code::signed_long_long_integer:
+        return key_count(other.storage.template get<signed long long int>());
+    case token::code::unsigned_long_long_integer:
+        return key_count(other.storage.template get<unsigned long long int>());
+    case token::code::float_number:
+        return key_count(other.storage.template get<float>());
+    case token::code::double_number:
+        return key_count(other.storage.template get<double>());
+    case token::code::long_double_number:
+        return key_count(other.storage.template get<long double>());
+    case token::code::string:
+        return key_count(other.storage.template get<string_type>());
+    case token::code::array:
+        return key_count(other.storage.template get<array_type>());
+    case token::code::map:
+        return key_count(other.storage.template get<map_type>());
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+template <typename T>
+auto basic_variable<CharT>::key_count(const T& other) const -> size_type
+{
+    switch (symbol())
+    {
+    case token::symbol::null:
+        return 0;
+
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+        return (*this == other) ? 1 : 0;
+
+    case token::symbol::array:
+    case token::symbol::map:
+        {
+            size_type result = 0;
+            for (auto it = key_begin(); it != key_end(); ++it)
             {
                 if (*it == other)
                     ++result;
@@ -2948,6 +3162,18 @@ auto basic_variable<CharT>::end() const & -> const_iterator
     return {this, false};
 }
 
+template <typename CharT>
+auto basic_variable<CharT>::key_begin() const & -> key_iterator
+{
+    return {this};
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::key_end() const & -> key_iterator
+{
+    return {this, false};
+}
+
 // Comparison
 
 template <typename T, typename U>
@@ -2994,247 +3220,10 @@ bool basic_variable<CharT>::operator>= (const T& rhs) const TRIAL_PROTOCOL_CXX14
 {
     return !(*this < rhs);
 }
-//-----------------------------------------------------------------------------
-// variable::key::const_iterator
-//-----------------------------------------------------------------------------
-
 template <typename CharT>
-basic_variable<CharT>::key::const_iterator::const_iterator()
+basic_variable<CharT>::key_iterator::key_iterator()
     : super()
 {
-}
-
-template <typename CharT>
-basic_variable<CharT>::key::const_iterator::const_iterator(const key::const_iterator& other)
-    : super(other),
-      index(other.index)
-{
-}
-
-template <typename CharT>
-basic_variable<CharT>::key::const_iterator::const_iterator(key::const_iterator&& other)
-{
-    super::scope = std::move(other.scope);
-    super::current = std::move(other.current);
-    index = std::move(other.index);
-}
-
-template <typename CharT>
-basic_variable<CharT>::key::const_iterator::const_iterator(pointer p, bool e)
-    : super(p, e),
-      index(0)
-{
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key::const_iterator::operator= (const key::const_iterator& other) -> const_iterator&
-{
-    return super::operator=(other);
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key::const_iterator::operator= (key::const_iterator&& other) -> const_iterator&
-{
-    return super::operator=(std::forward<const_iterator&&>(other));
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key::const_iterator::key() const -> reference
-{
-    assert(super::scope);
-
-    switch (super::scope->symbol())
-    {
-    case token::symbol::null:
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
-    case token::symbol::array:
-        return index;
-
-    case token::symbol::map:
-        return super::key();
-    }
-    TRIAL_PROTOCOL_UNREACHABLE();
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key::const_iterator::operator++ () -> const_iterator&
-{
-    assert(super::scope);
-
-    switch (super::scope->symbol())
-    {
-    case token::symbol::null:
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
-    case token::symbol::array:
-        index += 1;
-        break;
-
-    case token::symbol::map:
-        break;
-    }
-    return super::operator++();
-}
-
-
-//-----------------------------------------------------------------------------
-// variable::key
-//-----------------------------------------------------------------------------
-
-template <typename CharT>
-auto basic_variable<CharT>::key::begin() const & -> const_iterator
-{
-    return {&self};
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key::end() const & -> const_iterator
-{
-    return {&self, false};
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key::find(const basic_variable<CharT>& other) const & -> const_iterator
-{
-    switch (other.code())
-    {
-    case token::code::null:
-        return find(other.storage.template get<nullable>());
-    case token::code::boolean:
-        return find(other.storage.template get<bool>());
-    case token::code::signed_short_integer:
-        return find(other.storage.template get<signed short int>());
-    case token::code::unsigned_short_integer:
-        return find(other.storage.template get<unsigned short int>());
-    case token::code::signed_integer:
-        return find(other.storage.template get<signed int>());
-    case token::code::unsigned_integer:
-        return find(other.storage.template get<unsigned int>());
-    case token::code::signed_long_integer:
-        return find(other.storage.template get<signed long int>());
-    case token::code::unsigned_long_integer:
-        return find(other.storage.template get<unsigned long int>());
-    case token::code::signed_long_long_integer:
-        return find(other.storage.template get<signed long long int>());
-    case token::code::unsigned_long_long_integer:
-        return find(other.storage.template get<unsigned long long int>());
-    case token::code::float_number:
-        return find(other.storage.template get<float>());
-    case token::code::double_number:
-        return find(other.storage.template get<double>());
-    case token::code::long_double_number:
-        return find(other.storage.template get<long double>());
-    case token::code::string:
-        return find(other.storage.template get<string_type>());
-    case token::code::array:
-        return find(other.storage.template get<array_type>());
-    case token::code::map:
-        return find(other.storage.template get<map_type>());
-    }
-    TRIAL_PROTOCOL_UNREACHABLE();
-}
-
-template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::key::find(const T& other) const & -> const_iterator
-{
-    switch (self.symbol())
-    {
-    case token::symbol::null:
-        return end();
-
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
-        return (*this == other) ? begin() : end();
-
-    case token::symbol::array:
-    case token::symbol::map:
-        for (auto it = begin(); it != end(); ++it)
-        {
-            if (*it == other)
-                return it;
-        }
-        return end();
-    }
-    TRIAL_PROTOCOL_UNREACHABLE();
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::key::count(const basic_variable<CharT>& other) const -> size_type
-{
-    switch (other.code())
-    {
-    case token::code::null:
-        return count(other.storage.template get<nullable>());
-    case token::code::boolean:
-        return count(other.storage.template get<bool>());
-    case token::code::signed_short_integer:
-        return count(other.storage.template get<signed short int>());
-    case token::code::unsigned_short_integer:
-        return count(other.storage.template get<unsigned short int>());
-    case token::code::signed_integer:
-        return count(other.storage.template get<signed int>());
-    case token::code::unsigned_integer:
-        return count(other.storage.template get<unsigned int>());
-    case token::code::signed_long_integer:
-        return count(other.storage.template get<signed long int>());
-    case token::code::unsigned_long_integer:
-        return count(other.storage.template get<unsigned long int>());
-    case token::code::signed_long_long_integer:
-        return count(other.storage.template get<signed long long int>());
-    case token::code::unsigned_long_long_integer:
-        return count(other.storage.template get<unsigned long long int>());
-    case token::code::float_number:
-        return count(other.storage.template get<float>());
-    case token::code::double_number:
-        return count(other.storage.template get<double>());
-    case token::code::long_double_number:
-        return count(other.storage.template get<long double>());
-    case token::code::string:
-        return count(other.storage.template get<string_type>());
-    case token::code::array:
-        return count(other.storage.template get<array_type>());
-    case token::code::map:
-        return count(other.storage.template get<map_type>());
-    }
-    TRIAL_PROTOCOL_UNREACHABLE();
-}
-
-template <typename CharT>
-template <typename T>
-auto basic_variable<CharT>::key::count(const T& other) const -> size_type
-{
-    switch (self.symbol())
-    {
-    case token::symbol::null:
-        return 0;
-
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
-        return (*this == other) ? 1 : 0;
-
-    case token::symbol::array:
-    case token::symbol::map:
-        {
-            size_type result = 0;
-            for (auto it = begin(); it != end(); ++it)
-            {
-                if (*it == other)
-                    ++result;
-            }
-            return result;
-        }
-    }
-    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 //-----------------------------------------------------------------------------

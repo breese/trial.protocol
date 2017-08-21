@@ -1351,15 +1351,15 @@ void find_key_map()
             {"charlie", "lithium"}
         });
     // Iterator dereferences key
-    TRIAL_PROTOCOL_TEST(std::find(data.key.begin(), data.key.end(), "hydrogen") == data.key.end());
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(),
-                                            std::find(data.key.begin(), data.key.end(), "alpha")),
+    TRIAL_PROTOCOL_TEST(std::find(data.key_begin(), data.key_end(), "hydrogen") == data.key_end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(),
+                                            std::find(data.key_begin(), data.key_end(), "alpha")),
                               0);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(),
-                                            std::find(data.key.begin(), data.key.end(), "bravo")),
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(),
+                                            std::find(data.key_begin(), data.key_end(), "bravo")),
                               1);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(),
-                                            std::find(data.key.begin(), data.key.end(), "charlie")),
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(),
+                                            std::find(data.key_begin(), data.key_end(), "charlie")),
                               2);
 }
 
@@ -1961,7 +1961,7 @@ void find_map()
     }
     {
         auto where = std::lower_bound(data.begin(), data.end(), "lithium");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+        TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
 
@@ -1975,24 +1975,24 @@ void find_key_map()
             { "delta", "hydrogen" }
         });
     {
-        auto where = std::lower_bound(data.key.begin(), data.key.end(), "alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 0);
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 0);
     }
     {
-        auto where = std::lower_bound(data.key.begin(), data.key.end(), "bravo");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 1);
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 1);
     }
     {
-        auto where = std::lower_bound(data.key.begin(), data.key.end(), "charlie");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 2);
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 2);
     }
     {
-        auto where = std::lower_bound(data.key.begin(), data.key.end(), "delta");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 3);
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "delta");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 3);
     }
     {
-        auto where = std::lower_bound(data.key.begin(), data.key.end(), "hydrogen");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key.begin(), where), 4);
+        auto where = std::lower_bound(data.key_begin(), data.key_end(), "hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
 }
 
