@@ -69,7 +69,7 @@ struct basic_variable<CharT>::traits
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
-template <typename T, typename Enable>
+template <typename T, typename>
 struct basic_variable<CharT>::tag_traits
 {
     using type = T;
@@ -145,7 +145,7 @@ struct basic_variable<CharT>::tag_traits<
 namespace detail
 {
 
-template <typename T, typename U, typename Enable = void>
+template <typename T, typename U, typename = void>
 struct overloader
 {
     static_assert(sizeof(T) == 0, "Unsupported type");
@@ -1603,7 +1603,7 @@ namespace detail
 //   assert(data.same<float&>(), false);
 //   assert(data.same<const float>(), false);
 
-template <typename C, typename T, typename Enable = void>
+template <typename C, typename T, typename = void>
 struct same_overloader
 {
     static bool same(std::size_t which) noexcept

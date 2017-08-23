@@ -34,9 +34,9 @@ namespace dynamic
 namespace detail
 {
 
-template <typename T, typename U, typename Enable> struct overloader;
-template <typename T, typename U, typename Enable> struct operator_overloader;
-template <typename C, typename T, typename Enable> struct same_overloader;
+template <typename T, typename U, typename> struct overloader;
+template <typename T, typename U, typename> struct operator_overloader;
+template <typename C, typename T, typename> struct same_overloader;
 
 } // namespace detail
 
@@ -52,7 +52,7 @@ template <typename CharT>
 class basic_variable
 {
     template <typename T> struct traits;
-    template <typename T, typename Enable = void> struct tag_traits;
+    template <typename T, typename = void> struct tag_traits;
 
 public:
     using value_type = basic_variable<CharT>;
@@ -315,9 +315,9 @@ public:
     bool operator>= (const T&) const TRIAL_PROTOCOL_CXX14(noexcept);
 
 private:
-    template <typename T, typename U, typename Enable> friend struct detail::overloader;
-    template <typename T, typename U, typename Enable> friend struct detail::operator_overloader;
-    template <typename C, typename T, typename Enable> friend struct detail::same_overloader;
+    template <typename T, typename U, typename> friend struct detail::overloader;
+    template <typename T, typename U, typename> friend struct detail::operator_overloader;
+    template <typename C, typename T, typename> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
     using storage_type = core::detail::small_union<sizeof(double),
