@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cassert>
+#include <trial/protocol/core/detail/config.hpp>
 
 namespace trial
 {
@@ -30,6 +31,8 @@ inline symbol::value symbol::convert(code::value value)
         return symbol::null;
     case code::boolean:
         return symbol::boolean;
+    case code::signed_char:
+    case code::unsigned_char:
     case code::signed_short_integer:
     case code::unsigned_short_integer:
     case code::signed_integer:
@@ -50,8 +53,7 @@ inline symbol::value symbol::convert(code::value value)
     case code::map:
         return symbol::map;
     }
-    assert(false);
-    return symbol::null;
+    TRIAL_PROTOCOL_UNREACHABLE();
 }
 
 } // namespace token

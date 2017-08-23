@@ -62,6 +62,10 @@ auto count(const basic_variable<CharT>& self,
         return count(self, other.template unsafe_get<nullable>());
     case token::code::boolean:
         return count(self, other.template unsafe_get<bool>());
+    case token::code::signed_char:
+        return count(self, other.template unsafe_get<signed char>());
+    case token::code::unsigned_char:
+        return count(self, other.template unsafe_get<unsigned char>());
     case token::code::signed_short_integer:
         return count(self, other.template unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:
@@ -131,6 +135,10 @@ auto find(const basic_variable<CharT>& self,
         return find(self, other.template unsafe_get<nullable>());
     case token::code::boolean:
         return find(self, other.template unsafe_get<bool>());
+    case token::code::signed_char:
+        return find(self, other.template unsafe_get<signed char>());
+    case token::code::unsigned_char:
+        return find(self, other.template unsafe_get<unsigned char>());
     case token::code::signed_short_integer:
         return find(self, other.template unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:

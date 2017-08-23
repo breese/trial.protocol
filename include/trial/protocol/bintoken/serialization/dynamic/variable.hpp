@@ -41,6 +41,14 @@ struct save_overloader< protocol::bintoken::oarchive,
             ar.save(data.value<bool>());
             break;
 
+        case dynamic::token::code::signed_char:
+            ar.save(data.value<signed char>());
+            break;
+
+        case dynamic::token::code::unsigned_char:
+            ar.save(data.value<unsigned char>());
+            break;
+
         case dynamic::token::code::signed_short_integer:
             ar.save(data.value<signed short int>());
             break;

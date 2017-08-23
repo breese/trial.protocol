@@ -319,6 +319,8 @@ private:
     using storage_type = core::detail::small_union<sizeof(double),
                                                    nullable,
                                                    bool,
+                                                   signed char,
+                                                   unsigned char,
                                                    signed short int,
                                                    unsigned short int,
                                                    signed int,

@@ -34,6 +34,22 @@ void construct_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<boolean>(), true);
 }
 
+void construct_signed_char()
+{
+    signed char value = 0;
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+}
+
+void construct_unsigned_char()
+{
+    unsigned char value = 0;
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+}
+
 void construct_signed_short_int()
 {
     signed short int value = 0;
@@ -252,6 +268,8 @@ void run()
 
     construct_boolean();
 
+    construct_signed_char();
+    construct_unsigned_char();
     construct_signed_short_int();
     construct_unsigned_short_int();
     construct_signed_int();
@@ -302,6 +320,7 @@ void is_null()
 {
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<nullable>(), true);
 }
 
 void is_boolean()
@@ -309,6 +328,116 @@ void is_boolean()
     variable data(true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<boolean>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const bool&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile bool&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<bool>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<bool&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const bool>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const bool&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile bool>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile bool&>(), false);
+}
+
+void is_integer_with_signed_char()
+{
+    signed char value = 2;
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed char&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed char&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed char&>(), false);
+}
+
+void is_integer_with_unsigned_char()
+{
+    unsigned char value = 2U;
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned char&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned char&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned char&>(), false);
 }
 
 void is_integer_with_signed_short_int()
@@ -317,17 +446,14 @@ void is_integer_with_signed_short_int()
     variable data(value);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed short int&>(), true);
-
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
@@ -339,13 +465,15 @@ void is_integer_with_signed_short_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed short int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed short int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed short int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed short int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed short int&>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
@@ -353,6 +481,12 @@ void is_integer_with_signed_short_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed short int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed short int&>(), false);
 }
 
 void is_integer_with_unsigned_short_int()
@@ -361,17 +495,14 @@ void is_integer_with_unsigned_short_int()
     variable data(value);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned short int&>(), true);
-
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
@@ -383,20 +514,28 @@ void is_integer_with_unsigned_short_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed short int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed short int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed short int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed short int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned short int&>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned short int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned short int&>(), false);
 }
 
 void is_integer_with_signed_int()
@@ -404,13 +543,10 @@ void is_integer_with_signed_int()
     variable data(2);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed int&>(), true);
-
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
@@ -426,20 +562,28 @@ void is_integer_with_signed_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed int&>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed int&>(), false);
 }
 
 void is_integer_with_unsigned_int()
@@ -447,19 +591,16 @@ void is_integer_with_unsigned_int()
     variable data(2U);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned int&>(), true);
-
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int>(), true);
@@ -469,20 +610,28 @@ void is_integer_with_unsigned_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned int&>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned int&>(), false);
 }
 
 void is_integer_with_signed_long_int()
@@ -490,21 +639,18 @@ void is_integer_with_signed_long_int()
     variable data(2L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long int&>(), true);
-
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
@@ -512,20 +658,28 @@ void is_integer_with_signed_long_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long int&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int&>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long int&>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long int&>(), false);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
 }
 
 void is_integer_with_unsigned_long_int()
@@ -533,42 +687,47 @@ void is_integer_with_unsigned_long_int()
     variable data(2UL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned long int&>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
-
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long int&>(), false);
-
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned long int&>(), false);
 }
 
 void is_integer_with_signed_long_long_int()
@@ -576,42 +735,47 @@ void is_integer_with_signed_long_long_int()
     variable data(2LL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long long int&>(), true);
-
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long long int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile signed long long int&>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long long int&>(), false);
 }
 
 void is_integer_with_unsigned_long_long_int()
@@ -619,19 +783,14 @@ void is_integer_with_unsigned_long_long_int()
     variable data(2ULL);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<integer>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned long long int&>(), true);
-
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed char&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned char>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned char&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed short int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned short int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned short int&>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long int>(), true);
@@ -640,14 +799,17 @@ void is_integer_with_unsigned_long_long_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long int&>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<signed long long int>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<const signed long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const signed long long int&>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long long int>(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile signed long long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<unsigned long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const unsigned long long int&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned long long int>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile unsigned long long int&>(), true);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned short int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), false);
@@ -655,6 +817,13 @@ void is_integer_with_unsigned_long_long_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long int>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned long long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const unsigned long long int&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned long long int>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned long long int&>(), false);
 }
 
 void is_number_with_float()
@@ -741,12 +910,71 @@ void is_number_with_long_double()
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), false);
 }
 
+void is_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::string_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::string_type&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::string_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::string_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::string_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::string_type&>(), false);
+}
+
+void is_array()
+{
+    variable data = array::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::array_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::array_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::array_type&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::array_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::array_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::array_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::array_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::array_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::array_type&>(), false);
+}
+
+void is_map()
+{
+    variable data = map::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::map_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::map_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::map_type&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::map_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::map_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::map_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::map_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::map_type&>(), false);
+}
+
 void run()
 {
     is_null();
 
     is_boolean();
 
+    is_integer_with_signed_char();
+    is_integer_with_unsigned_char();
     is_integer_with_signed_short_int();
     is_integer_with_unsigned_short_int();
     is_integer_with_signed_int();
@@ -759,6 +987,10 @@ void run()
     is_number_with_float();
     is_number_with_double();
     is_number_with_long_double();
+
+    is_string();
+    is_array();
+    is_map();
 }
 
 } // namespace is_suite
@@ -786,6 +1018,18 @@ void test_boolean()
 
 void test_integer()
 {
+    {
+        const signed char value = 0;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_char);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
+    {
+        const unsigned char value = 0U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_char);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+    }
     {
         const signed short int value = 0;
         variable data(value);
@@ -917,6 +1161,20 @@ void copy_boolean()
 
 void copy_integer()
 {
+    {
+        signed char value = 2;
+        variable data(value);
+        variable copy(data);
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.value<signed char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(value);
+        variable copy(data);
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.value<unsigned char>(), value);
+    }
     {
         signed short int value = 2;
         variable data(value);
@@ -1154,6 +1412,20 @@ void move_boolean()
 void move_integer()
 {
     {
+        signed char value = 2;
+        variable data(value);
+        variable copy(std::move(data));
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.is<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.value<signed char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(value);
+        variable copy(std::move(data));
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.is<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.value<unsigned char>(), value);
+    }
+    {
         signed short int value = 2;
         variable data(value);
         variable copy(std::move(data));
@@ -1370,6 +1642,60 @@ void assign_null_with_boolean()
 
 void assign_null_with_integer()
 {
+    // signed char
+    {
+        signed char value = 2;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    // unsigned char
+    {
+        unsigned char value = 2U;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
     // signed short int
     {
         signed short int value = 2;
@@ -1702,6 +2028,60 @@ void assign_boolean_with_boolean()
 
 void assign_boolean_with_integer()
 {
+    // signed char
+    {
+        signed char value = 2;
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    // unsigned char
+    {
+        unsigned char value = 2U;
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
     // signed short int
     {
         signed short int value = 2;
@@ -2030,6 +2410,60 @@ void assign_signed_int_with_integer()
 {
     signed int input = 2;
 
+    // signed char
+    {
+        signed char value = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    // unsigned char
+    {
+        unsigned char value = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
     // signed short int
     {
         signed short int value = 2;
@@ -2362,6 +2796,60 @@ void assign_unsigned_int_with_integer()
 {
     unsigned int input = 2;
 
+    // signed char
+    {
+        signed char value = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        signed char value = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    // unsigned char
+    {
+        unsigned char value = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data = value;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
+        unsigned char value = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        variable number(value);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
     // signed short int
     {
         signed short int value = 2;
@@ -3437,6 +3925,22 @@ void append_null_with_boolean()
 void append_null_with_integer()
 {
     {
+        signed char value = 2;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), value);
+    }
+    {
+        unsigned char value = 2;
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), value);
+    }
+    {
         signed short int value = 2;
         variable data;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
@@ -3580,6 +4084,24 @@ void append_boolean_with_boolean()
 
 void append_boolean_with_integer()
 {
+    {
+        signed char value = 2;
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
+    }
+    {
+        unsigned char value = 2;
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), false);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), true);
+    }
     {
         signed short int value = 2;
         variable data(false);
@@ -3733,6 +4255,22 @@ void append_signed_int_with_integer()
 {
     signed int input = 2;
     {
+        signed char value = 3;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
+    }
+    {
+        unsigned char value = 3U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed int>(), 5);
+    }
+    {
         signed short int value = 3;
         variable data(input);
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
@@ -3877,6 +4415,22 @@ void append_unsigned_int_with_boolean()
 void append_unsigned_int_with_integer()
 {
     unsigned int input = 2U;
+    {
+        signed char value = 3;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
+    }
+    {
+        unsigned char value = 3U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data += variable(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned int>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned int>(), 5U);
+    }
     {
         signed short int value = 3;
         variable data(input);
@@ -5353,6 +5907,16 @@ void get_const_boolean()
 void get_integer()
 {
     {
+        const signed char value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed char>() == value);
+    }
+    {
+        const unsigned char value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned char>() == value);
+    }
+    {
         const signed short int value{2};
         variable data(value);
         TRIAL_PROTOCOL_TEST(data.unsafe_get<signed short int>() == value);
@@ -5396,6 +5960,16 @@ void get_integer()
 
 void get_const_integer()
 {
+    {
+        const signed char value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed char>() == value);
+    }
+    {
+        const unsigned char value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned char>() == value);
+    }
     {
         const signed short int value{2};
         const variable data(value);
@@ -6544,6 +7118,16 @@ void test_boolean()
 void test_integer()
 {
     {
+        signed char value = 1;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
+        unsigned char value = 1U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
         signed short int value = 1;
         variable data(value);
         TRIAL_PROTOCOL_TEST(!data.empty());
@@ -6660,6 +7244,16 @@ void test_boolean()
 
 void test_integer()
 {
+    {
+        signed char value = 1;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    }
+    {
+        unsigned char value = 1U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    }
     {
         signed short int value = 1;
         variable data(value);
@@ -6981,6 +7575,22 @@ void test_boolean()
 
 void test_integer()
 {
+    {
+        signed char value = 1;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        data.clear();
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<signed char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<signed char>(), 0);
+    }
+    {
+        unsigned char value = 1;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        data.clear();
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<unsigned char>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<unsigned char>(), 0U);
+    }
     {
         signed short int value = 1;
         variable data(value);

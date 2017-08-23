@@ -28,6 +28,8 @@ struct code
     {
         null,
         boolean,
+        signed_char,
+        unsigned_char,
         signed_short_integer,
         unsigned_short_integer,
         signed_integer,

@@ -221,6 +221,12 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>();
 
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>();
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>();
+
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>();
 
@@ -266,6 +272,12 @@ struct overloader<
         {
         case token::code::boolean:
             return self.template unsafe_get<bool>() == other;
+
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>() == other;
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>() == other;
 
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>() == other;
@@ -315,6 +327,12 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>() < other;
 
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>() < other;
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>() < other;
+
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>() < other;
 
@@ -363,6 +381,14 @@ struct overloader<
 
         case token::code::boolean:
             self.template unsafe_get<bool>() += other;
+            break;
+
+        case token::code::signed_char:
+            self.template unsafe_get<signed char>() += other;
+            break;
+
+        case token::code::unsigned_char:
+            self.template unsafe_get<unsigned char>() += other;
             break;
 
         case token::code::signed_short_integer:
@@ -441,6 +467,12 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>();
 
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>();
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>();
+
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>();
 
@@ -487,6 +519,10 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>() == other;
 
+        case token::code::signed_char:
+        case token::code::unsigned_char:
+            return self.template unsafe_get<signed char>() == other;
+
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
             return self.template unsafe_get<signed short int>() == other;
@@ -526,6 +562,10 @@ struct overloader<
 
         case token::code::boolean:
             return self.template unsafe_get<bool>() < other;
+
+        case token::code::signed_char:
+        case token::code::unsigned_char:
+            return self.template unsafe_get<signed char>() < other;
 
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
@@ -567,6 +607,14 @@ struct overloader<
 
         case token::code::boolean:
             self.template unsafe_get<bool>() += other;
+            break;
+
+        case token::code::signed_char:
+            self.template unsafe_get<signed char>() += other;
+            break;
+
+        case token::code::unsigned_char:
+            self.template unsafe_get<unsigned char>() += other;
             break;
 
         case token::code::signed_short_integer:
@@ -645,6 +693,12 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>();
 
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>();
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>();
+
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>();
 
@@ -691,6 +745,10 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>() == other;
 
+        case token::code::signed_char:
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>() == other;
+
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
             return self.template unsafe_get<unsigned short int>() == other;
@@ -730,6 +788,10 @@ struct overloader<
 
         case token::code::boolean:
             return self.template unsafe_get<bool>() < other;
+
+        case token::code::signed_char:
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>() < other;
 
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
@@ -771,6 +833,14 @@ struct overloader<
 
         case token::code::boolean:
             self.template unsafe_get<bool>() += other;
+            break;
+
+        case token::code::signed_char:
+            self.template unsafe_get<signed char>() += other;
+            break;
+
+        case token::code::unsigned_char:
+            self.template unsafe_get<unsigned char>() += other;
             break;
 
         case token::code::signed_short_integer:
@@ -848,6 +918,12 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>();
 
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>();
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>();
+
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>();
 
@@ -893,6 +969,12 @@ struct overloader<
         {
         case token::code::boolean:
             return self.template unsafe_get<bool>() == other;
+
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>() == other;
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>() == other;
 
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>() == other;
@@ -942,6 +1024,12 @@ struct overloader<
         case token::code::boolean:
             return self.template unsafe_get<bool>() < other;
 
+        case token::code::signed_char:
+            return self.template unsafe_get<signed char>() < other;
+
+        case token::code::unsigned_char:
+            return self.template unsafe_get<unsigned char>() < other;
+
         case token::code::signed_short_integer:
             return self.template unsafe_get<signed short int>() < other;
 
@@ -990,6 +1078,14 @@ struct overloader<
 
         case token::code::boolean:
             self.template unsafe_get<bool>() += other;
+            break;
+
+        case token::code::signed_char:
+            self.template unsafe_get<signed char>() += other;
+            break;
+
+        case token::code::unsigned_char:
+            self.template unsafe_get<unsigned char>() += other;
             break;
 
         case token::code::signed_short_integer:
@@ -1452,6 +1548,14 @@ struct operator_overloader<
             return detail::template overloader<variable_type, bool>::
                 equal(lhs, rhs.template unsafe_get<bool>());
 
+        case token::code::signed_char:
+            return detail::template overloader<variable_type, signed char>::
+                equal(lhs, rhs.template unsafe_get<signed char>());
+
+        case token::code::unsigned_char:
+            return detail::template overloader<variable_type, unsigned char>::
+                equal(lhs, rhs.template unsafe_get<unsigned char>());
+
         case token::code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
                 equal(lhs, rhs.template unsafe_get<signed short int>());
@@ -1523,6 +1627,14 @@ struct operator_overloader<
         case token::code::boolean:
             return detail::template overloader<variable_type, bool>::
                 less(lhs, rhs.template unsafe_get<bool>());
+
+        case token::code::signed_char:
+            return detail::template overloader<variable_type, signed char>::
+                less(lhs, rhs.template unsafe_get<signed char>());
+
+        case token::code::unsigned_char:
+            return detail::template overloader<variable_type, unsigned char>::
+                less(lhs, rhs.template unsafe_get<unsigned char>());
 
         case token::code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
@@ -2074,6 +2186,12 @@ basic_variable<CharT>::basic_variable(const basic_variable& other)
     case token::code::boolean:
         storage = other.unsafe_get<bool>();
         break;
+    case token::code::signed_char:
+        storage = other.unsafe_get<signed char>();
+        break;
+    case token::code::unsigned_char:
+        storage = other.unsafe_get<unsigned char>();
+        break;
     case token::code::signed_short_integer:
         storage = other.unsafe_get<signed short int>();
         break;
@@ -2130,6 +2248,12 @@ basic_variable<CharT>::basic_variable(basic_variable&& other)
         break;
     case token::code::boolean:
         storage = std::move(other.unsafe_get<bool>());
+        break;
+    case token::code::signed_char:
+        storage = std::move(other.unsafe_get<signed char>());
+        break;
+    case token::code::unsigned_char:
+        storage = std::move(other.unsafe_get<unsigned char>());
         break;
     case token::code::signed_short_integer:
         storage = std::move(other.unsafe_get<signed short int>());
@@ -2206,6 +2330,12 @@ auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_var
     case token::code::boolean:
         storage = other.unsafe_get<bool>();
         break;
+    case token::code::signed_char:
+        storage = other.unsafe_get<signed char>();
+        break;
+    case token::code::unsigned_char:
+        storage = other.unsafe_get<unsigned char>();
+        break;
     case token::code::signed_short_integer:
         storage = other.unsafe_get<signed short int>();
         break;
@@ -2262,6 +2392,12 @@ auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable
         break;
     case token::code::boolean:
         storage = std::move(other.unsafe_get<bool>());
+        break;
+    case token::code::signed_char:
+        storage = std::move(other.unsafe_get<signed char>());
+        break;
+    case token::code::unsigned_char:
+        storage = std::move(other.unsafe_get<unsigned char>());
         break;
     case token::code::signed_short_integer:
         storage = std::move(other.unsafe_get<signed short int>());
@@ -2343,6 +2479,14 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
     case token::code::boolean:
         detail::overloader<value_type, bool>::
             append(*this, other.unsafe_get<bool>());
+        break;
+    case token::code::signed_char:
+        detail::overloader<value_type, signed char>::
+            append(*this, other.unsafe_get<signed char>());
+        break;
+    case token::code::unsigned_char:
+        detail::overloader<value_type, unsigned char>::
+            append(*this, other.unsafe_get<unsigned char>());
         break;
     case token::code::signed_short_integer:
         detail::overloader<value_type, signed short int>::
@@ -2503,43 +2647,34 @@ basic_variable<CharT>::operator bool() const
     {
     case token::code::null:
         return false;
-
     case token::code::boolean:
         return bool(unsafe_get<bool>());
-
+    case token::code::signed_char:
+        return bool(unsafe_get<signed char>());
+    case token::code::unsigned_char:
+        return bool(unsafe_get<unsigned char>());
     case token::code::signed_short_integer:
         return bool(unsafe_get<signed short int>());
-
     case token::code::unsigned_short_integer:
         return bool(unsafe_get<unsigned short int>());
-
     case token::code::signed_integer:
         return bool(unsafe_get<signed int>());
-
     case token::code::unsigned_integer:
         return bool(unsafe_get<unsigned int>());
-
     case token::code::signed_long_integer:
         return bool(unsafe_get<signed long int>());
-
     case token::code::unsigned_long_integer:
         return bool(unsafe_get<unsigned long int>());
-
     case token::code::signed_long_long_integer:
         return bool(unsafe_get<signed long long int>());
-
     case token::code::unsigned_long_long_integer:
         return bool(unsafe_get<unsigned long long int>());
-
     case token::code::float_number:
         return bool(unsafe_get<float>());
-
     case token::code::double_number:
         return bool(unsafe_get<double>());
-
     case token::code::long_double_number:
         return bool(unsafe_get<long double>());
-
     case token::code::string:
     case token::code::array:
     case token::code::map:
@@ -2623,6 +2758,10 @@ auto basic_variable<CharT>::find(const basic_variable<CharT>& other) const & -> 
         return find(other.unsafe_get<nullable>());
     case token::code::boolean:
         return find(other.unsafe_get<bool>());
+    case token::code::signed_char:
+        return find(other.unsafe_get<signed char>());
+    case token::code::unsigned_char:
+        return find(other.unsafe_get<unsigned char>());
     case token::code::signed_short_integer:
         return find(other.unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:
@@ -2698,6 +2837,10 @@ auto basic_variable<CharT>::count(const basic_variable<CharT>& other) const -> s
         return count(other.unsafe_get<nullable>());
     case token::code::boolean:
         return count(other.unsafe_get<bool>());
+    case token::code::signed_char:
+        return count(other.unsafe_get<signed char>());
+    case token::code::unsigned_char:
+        return count(other.unsafe_get<unsigned char>());
     case token::code::signed_short_integer:
         return count(other.unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:
@@ -2784,6 +2927,10 @@ token::code::value basic_variable<CharT>::code() const noexcept
         return token::code::null;
     case traits<bool>::value:
         return token::code::boolean;
+    case traits<signed char>::value:
+        return token::code::signed_char;
+    case traits<unsigned char>::value:
+        return token::code::unsigned_char;
     case traits<signed short int>::value:
         return token::code::signed_short_integer;
     case traits<unsigned short int>::value:
@@ -2827,6 +2974,8 @@ token::symbol::value basic_variable<CharT>::symbol() const noexcept
         return token::symbol::null;
     case traits<bool>::value:
         return token::symbol::boolean;
+    case traits<signed char>::value:
+    case traits<unsigned char>::value:
     case traits<signed short int>::value:
     case traits<unsigned short int>::value:
     case traits<signed int>::value:
@@ -2905,15 +3054,27 @@ void basic_variable<CharT>::clear() noexcept
     case token::code::boolean:
         storage = bool{};
         break;
+    case token::code::signed_char:
+        {
+            const signed char value = 0;
+            storage = value;
+        }
+        break;
+    case token::code::unsigned_char:
+        {
+            const unsigned char value = 0U;
+            storage = value;
+        }
+        break;
     case token::code::signed_short_integer:
         {
-            signed short int value = 0;
+            const signed short int value = 0;
             storage = value;
         }
         break;
     case token::code::unsigned_short_integer:
         {
-            unsigned short int value = 0U;
+            const unsigned short int value = 0U;
             storage = value;
         }
         break;
