@@ -256,13 +256,9 @@ public:
     const_iterator find(const basic_variable&) const &;
     template <typename T> iterator find(const T&) &;
     template <typename T> const_iterator find(const T&) const &;
-    template <typename T> key_iterator key_find(const T&) const &;
-    key_iterator key_find(const basic_variable&) const &;
 
     size_type count(const basic_variable&) const;
     template <typename T> size_type count(const T&) const;
-    size_type key_count(const basic_variable&) const;
-    template <typename T> size_type key_count(const T&) const;
 
     // Type checker
 

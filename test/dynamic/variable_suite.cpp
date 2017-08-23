@@ -6956,49 +6956,6 @@ void run()
 } // namespace count_suite
 
 //-----------------------------------------------------------------------------
-// Key count
-//-----------------------------------------------------------------------------
-
-namespace key_count_suite
-{
-
-void count_map()
-{
-    variable data = map::make(
-        {
-            {"alpha", null},
-            {"bravo", true},
-            {"charlie", 2},
-            {"delta", 3.0},
-            {"echo", "hydrogen"}
-        });
-
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("alpha"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable("alpha")), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("bravo"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("charlie"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("delta"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("echo"), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(null), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable()), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(true), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable(true)), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(2), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable(2)), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(3.0), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable(3.0)), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count("hydrogen"), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.key_count(variable("hydrogen")), 0);
-}
-
-void run()
-{
-    count_map();
-}
-
-} // namespace key_count_suite
-
-//-----------------------------------------------------------------------------
 // Clear
 //-----------------------------------------------------------------------------
 
@@ -7602,7 +7559,6 @@ int main()
     empty_suite::run();
     size_suite::run();
     count_suite::run();
-    key_count_suite::run();
 
     clear_suite::run();
     erase_suite::run();

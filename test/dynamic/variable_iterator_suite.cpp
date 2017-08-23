@@ -2771,72 +2771,6 @@ void run()
 } // namespace find_suite
 
 //-----------------------------------------------------------------------------
-// variable::key::find()
-//-----------------------------------------------------------------------------
-
-namespace key_find_suite
-{
-
-void find_map()
-{
-    variable data = map::make(
-        {
-            {"alpha", null},
-            {"bravo", true},
-            {"charlie", 2},
-            {"delta", 3.0},
-            {"echo", "hydrogen"}
-        });
-    {
-        variable::key_iterator where = data.key_find("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 0);
-    }
-    {
-        variable::key_iterator where = data.key_find(null);
-        TRIAL_PROTOCOL_TEST(where == data.key_end());
-    }
-    {
-        variable::key_iterator where = data.key_find("bravo");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 1);
-    }
-    {
-        variable::key_iterator where = data.key_find(true);
-        TRIAL_PROTOCOL_TEST(where == data.key_end());
-    }
-    {
-        variable::key_iterator where = data.key_find("charlie");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 2);
-    }
-    {
-        variable::key_iterator where = data.key_find(2);
-        TRIAL_PROTOCOL_TEST(where == data.key_end());
-    }
-    {
-        variable::key_iterator where = data.key_find("delta");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 3);
-    }
-    {
-        variable::key_iterator where = data.key_find(3.0);
-        TRIAL_PROTOCOL_TEST(where == data.key_end());
-    }
-    {
-        variable::key_iterator where = data.key_find("echo");
-        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 4);
-    }
-    {
-        variable::key_iterator where = data.key_find("hydrogen");
-        TRIAL_PROTOCOL_TEST(where == data.key_end());
-    }
-}
-
-void run()
-{
-    find_map();
-}
-
-} // namespace key_find_suite
-
-//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -2853,7 +2787,6 @@ int main()
     key_iterator_suite::run();
 
     find_suite::run();
-    key_find_suite::run();
 
     return boost::report_errors();
 }
