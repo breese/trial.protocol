@@ -5320,7 +5320,266 @@ void run()
 } // namespace addition_suite
 
 //-----------------------------------------------------------------------------
-// Accessor
+// variable::unsafe_get
+//-----------------------------------------------------------------------------
+
+namespace unsafe_get_suite
+{
+
+void get_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST(data.unsafe_get<nullable>() == null);
+}
+
+void get_const_null()
+{
+    const variable data;
+    TRIAL_PROTOCOL_TEST(data.unsafe_get<nullable>() == null);
+}
+
+void get_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST(data.unsafe_get<bool>() == true);
+}
+
+void get_const_boolean()
+{
+    const variable data(true);
+    TRIAL_PROTOCOL_TEST(data.unsafe_get<bool>() == true);
+}
+
+void get_integer()
+{
+    {
+        const signed short int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed short int>() == value);
+    }
+    {
+        const unsigned short int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned short int>() == value);
+    }
+    {
+        const signed int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed int>() == value);
+    }
+    {
+        const unsigned int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned int>() == value);
+    }
+    {
+        const signed long int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long int>() == value);
+    }
+    {
+        const unsigned long int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long int>() == value);
+    }
+    {
+        const signed long long int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long long int>() == value);
+    }
+    {
+        const unsigned long long int value{2};
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long long int>() == value);
+    }
+}
+
+void get_const_integer()
+{
+    {
+        const signed short int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed short int>() == value);
+    }
+    {
+        const unsigned short int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned short int>() == value);
+    }
+    {
+        const signed int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed int>() == value);
+    }
+    {
+        const unsigned int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned int>() == value);
+    }
+    {
+        const signed long int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long int>() == value);
+    }
+    {
+        const unsigned long int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long int>() == value);
+    }
+    {
+        const signed long long int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long long int>() == value);
+    }
+    {
+        const unsigned long long int value{2};
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long long int>() == value);
+    }
+}
+
+void get_number()
+{
+    {
+        const float value = 3.0f;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<float>() == value);
+    }
+    {
+        const double value = 3.0;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<double>() == value);
+    }
+    {
+        const long double value = 3.0L;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<long double>() == value);
+    }
+}
+
+void get_const_number()
+{
+    {
+        const float value = 3.0f;
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<float>() == value);
+    }
+    {
+        const double value = 3.0;
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<double>() == value);
+    }
+    {
+        const long double value = 3.0L;
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<long double>() == value);
+    }
+}
+
+void get_string()
+{
+    // String
+    {
+        std::string value = "alpha";
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+    }
+    // String literal
+    {
+        const char *value = "alpha";
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+    }
+}
+
+void get_const_string()
+{
+    // String
+    {
+        std::string value = "alpha";
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+    }
+    // String literal
+    {
+        const char *value = "alpha";
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+    }
+}
+
+void get_array()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha" });
+    auto& result = data.unsafe_get<variable::array_type>();
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 data.begin(), data.end(),
+                                 std::equal_to<variable>());
+}
+
+void get_const_array()
+{
+    const variable data = array::make({ true, 2, 3.0, "alpha" });
+    const auto& result = data.unsafe_get<variable::array_type>();
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 data.begin(), data.end(),
+                                 std::equal_to<variable>());
+}
+
+void get_map()
+{
+    variable data = map::make(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    auto& result = data.unsafe_get<variable::map_type>();
+    TRIAL_PROTOCOL_TEST(data["alpha"] == result.at("alpha"));
+    TRIAL_PROTOCOL_TEST(data["bravo"] == result.at("bravo"));
+    TRIAL_PROTOCOL_TEST(data["charlie"] == result.at("charlie"));
+    TRIAL_PROTOCOL_TEST(data["delta"] == result.at("delta"));
+}
+
+void get_const_map()
+{
+    const variable data = map::make(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "beryllium" }
+        });
+    const auto& result = data.unsafe_get<variable::map_type>();
+    TRIAL_PROTOCOL_TEST(data["alpha"] == result.at("alpha"));
+    TRIAL_PROTOCOL_TEST(data["bravo"] == result.at("bravo"));
+    TRIAL_PROTOCOL_TEST(data["charlie"] == result.at("charlie"));
+    TRIAL_PROTOCOL_TEST(data["delta"] == result.at("delta"));
+}
+
+void run()
+{
+    get_null();
+    get_const_null();
+    get_boolean();
+    get_const_boolean();
+    get_integer();
+    get_const_integer();
+    get_number();
+    get_const_number();
+    get_string();
+    get_const_string();
+    get_array();
+    get_const_array();
+    get_map();
+    get_const_map();
+}
+
+} // namespace unsafe_get_suite
+
+//-----------------------------------------------------------------------------
+// variable::value
 //-----------------------------------------------------------------------------
 
 namespace value_suite
@@ -7336,6 +7595,7 @@ int main()
     append_suite::run();
     addition_suite::run();
 
+    unsafe_get_suite::run();
     value_suite::run();
     subscript_suite::run();
 

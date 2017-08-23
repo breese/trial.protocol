@@ -219,40 +219,40 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>();
+            return self.template unsafe_get<bool>();
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>();
+            return self.template unsafe_get<signed short int>();
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>();
+            return self.template unsafe_get<unsigned short int>();
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>();
+            return self.template unsafe_get<signed int>();
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>();
+            return self.template unsafe_get<unsigned int>();
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>();
+            return self.template unsafe_get<signed long int>();
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>();
+            return self.template unsafe_get<unsigned long int>();
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>();
+            return self.template unsafe_get<signed long long int>();
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>();
+            return self.template unsafe_get<unsigned long long int>();
 
         case token::code::float_number:
-            return self.storage.template get<float>();
+            return self.template unsafe_get<float>();
 
         case token::code::double_number:
-            return self.storage.template get<double>();
+            return self.template unsafe_get<double>();
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>();
+            return self.template unsafe_get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -265,40 +265,40 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>() == other;
+            return self.template unsafe_get<bool>() == other;
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>() == other;
+            return self.template unsafe_get<signed short int>() == other;
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>() == other;
+            return self.template unsafe_get<unsigned short int>() == other;
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>() == other;
+            return self.template unsafe_get<signed int>() == other;
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>() == other;
+            return self.template unsafe_get<unsigned int>() == other;
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>() == other;
+            return self.template unsafe_get<signed long int>() == other;
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>() == other;
+            return self.template unsafe_get<unsigned long int>() == other;
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>() == other;
+            return self.template unsafe_get<signed long long int>() == other;
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>() == other;
+            return self.template unsafe_get<unsigned long long int>() == other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() == other;
+            return self.template unsafe_get<float>() == other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() == other;
+            return self.template unsafe_get<double>() == other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() == other;
+            return self.template unsafe_get<long double>() == other;
 
         default:
             return false;
@@ -313,40 +313,40 @@ struct overloader<
             return true;
 
         case token::code::boolean:
-            return self.storage.template get<bool>() < other;
+            return self.template unsafe_get<bool>() < other;
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>() < other;
+            return self.template unsafe_get<signed short int>() < other;
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>() < other;
+            return self.template unsafe_get<unsigned short int>() < other;
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>() < other;
+            return self.template unsafe_get<signed int>() < other;
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>() < other;
+            return self.template unsafe_get<unsigned int>() < other;
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>() < other;
+            return self.template unsafe_get<signed long int>() < other;
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>() < other;
+            return self.template unsafe_get<unsigned long int>() < other;
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>() < other;
+            return self.template unsafe_get<signed long long int>() < other;
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>() < other;
+            return self.template unsafe_get<unsigned long long int>() < other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() < other;
+            return self.template unsafe_get<float>() < other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() < other;
+            return self.template unsafe_get<double>() < other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() < other;
+            return self.template unsafe_get<long double>() < other;
 
         default:
             return false;
@@ -362,55 +362,55 @@ struct overloader<
             break;
 
         case token::code::boolean:
-            self.storage.template get<bool>() += other;
+            self.template unsafe_get<bool>() += other;
             break;
 
         case token::code::signed_short_integer:
-            self.storage.template get<signed short int>() += other;
+            self.template unsafe_get<signed short int>() += other;
             break;
 
         case token::code::unsigned_short_integer:
-            self.storage.template get<unsigned short int>() += other;
+            self.template unsafe_get<unsigned short int>() += other;
             break;
 
         case token::code::signed_integer:
-            self.storage.template get<signed int>() += other;
+            self.template unsafe_get<signed int>() += other;
             break;
 
         case token::code::unsigned_integer:
-            self.storage.template get<unsigned int>() += other;
+            self.template unsafe_get<unsigned int>() += other;
             break;
 
         case token::code::signed_long_integer:
-            self.storage.template get<signed long int>() += other;
+            self.template unsafe_get<signed long int>() += other;
             break;
 
         case token::code::unsigned_long_integer:
-            self.storage.template get<unsigned long int>() += other;
+            self.template unsafe_get<unsigned long int>() += other;
             break;
 
         case token::code::signed_long_long_integer:
-            self.storage.template get<signed long long int>() += other;
+            self.template unsafe_get<signed long long int>() += other;
             break;
 
         case token::code::unsigned_long_long_integer:
-            self.storage.template get<unsigned long long int>() += other;
+            self.template unsafe_get<unsigned long long int>() += other;
             break;
 
         case token::code::float_number:
-            self.storage.template get<float>() += other;
+            self.template unsafe_get<float>() += other;
             break;
 
         case token::code::double_number:
-            self.storage.template get<double>() += other;
+            self.template unsafe_get<double>() += other;
             break;
 
         case token::code::long_double_number:
-            self.storage.template get<long double>() += other;
+            self.template unsafe_get<long double>() += other;
             break;
 
         case token::code::array:
-            self.storage.template get<array_type>().push_back(other);
+            self.template unsafe_get<array_type>().push_back(other);
             break;
 
         default:
@@ -439,40 +439,40 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>();
+            return self.template unsafe_get<bool>();
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>();
+            return self.template unsafe_get<signed short int>();
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>();
+            return self.template unsafe_get<unsigned short int>();
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>();
+            return self.template unsafe_get<signed int>();
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>();
+            return self.template unsafe_get<unsigned int>();
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>();
+            return self.template unsafe_get<signed long int>();
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>();
+            return self.template unsafe_get<unsigned long int>();
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>();
+            return self.template unsafe_get<signed long long int>();
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>();
+            return self.template unsafe_get<unsigned long long int>();
 
         case token::code::float_number:
-            return self.storage.template get<float>();
+            return self.template unsafe_get<float>();
 
         case token::code::double_number:
-            return self.storage.template get<double>();
+            return self.template unsafe_get<double>();
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>();
+            return self.template unsafe_get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -485,32 +485,32 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>() == other;
+            return self.template unsafe_get<bool>() == other;
 
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
-            return self.storage.template get<signed short int>() == other;
+            return self.template unsafe_get<signed short int>() == other;
 
         case token::code::signed_integer:
         case token::code::unsigned_integer:
-            return self.storage.template get<signed int>() == other;
+            return self.template unsafe_get<signed int>() == other;
 
         case token::code::signed_long_integer:
         case token::code::unsigned_long_integer:
-            return self.storage.template get<signed long int>() == other;
+            return self.template unsafe_get<signed long int>() == other;
 
         case token::code::signed_long_long_integer:
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<signed long long int>() == other;
+            return self.template unsafe_get<signed long long int>() == other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() == other;
+            return self.template unsafe_get<float>() == other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() == other;
+            return self.template unsafe_get<double>() == other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() == other;
+            return self.template unsafe_get<long double>() == other;
 
         default:
             return false;
@@ -525,32 +525,32 @@ struct overloader<
             return true;
 
         case token::code::boolean:
-            return self.storage.template get<bool>() < other;
+            return self.template unsafe_get<bool>() < other;
 
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
-            return self.storage.template get<signed short int>() < other;
+            return self.template unsafe_get<signed short int>() < other;
 
         case token::code::signed_integer:
         case token::code::unsigned_integer:
-            return self.storage.template get<signed int>() < other;
+            return self.template unsafe_get<signed int>() < other;
 
         case token::code::signed_long_integer:
         case token::code::unsigned_long_integer:
-            return self.storage.template get<signed long int>() < other;
+            return self.template unsafe_get<signed long int>() < other;
 
         case token::code::signed_long_long_integer:
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<signed long long int>() < other;
+            return self.template unsafe_get<signed long long int>() < other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() < other;
+            return self.template unsafe_get<float>() < other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() < other;
+            return self.template unsafe_get<double>() < other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() < other;
+            return self.template unsafe_get<long double>() < other;
 
         default:
             return false;
@@ -566,55 +566,55 @@ struct overloader<
             break;
 
         case token::code::boolean:
-            self.storage.template get<bool>() += other;
+            self.template unsafe_get<bool>() += other;
             break;
 
         case token::code::signed_short_integer:
-            self.storage.template get<signed short int>() += other;
+            self.template unsafe_get<signed short int>() += other;
             break;
 
         case token::code::unsigned_short_integer:
-            self.storage.template get<unsigned short int>() += other;
+            self.template unsafe_get<unsigned short int>() += other;
             break;
 
         case token::code::signed_integer:
-            self.storage.template get<signed int>() += other;
+            self.template unsafe_get<signed int>() += other;
             break;
 
         case token::code::unsigned_integer:
-            self.storage.template get<unsigned int>() += other;
+            self.template unsafe_get<unsigned int>() += other;
             break;
 
         case token::code::signed_long_integer:
-            self.storage.template get<signed long int>() += other;
+            self.template unsafe_get<signed long int>() += other;
             break;
 
         case token::code::unsigned_long_integer:
-            self.storage.template get<unsigned long int>() += other;
+            self.template unsafe_get<unsigned long int>() += other;
             break;
 
         case token::code::signed_long_long_integer:
-            self.storage.template get<signed long long int>() += other;
+            self.template unsafe_get<signed long long int>() += other;
             break;
 
         case token::code::unsigned_long_long_integer:
-            self.storage.template get<unsigned long long int>() += other;
+            self.template unsafe_get<unsigned long long int>() += other;
             break;
 
         case token::code::float_number:
-            self.storage.template get<float>() += other;
+            self.template unsafe_get<float>() += other;
             break;
 
         case token::code::double_number:
-            self.storage.template get<double>() += other;
+            self.template unsafe_get<double>() += other;
             break;
 
         case token::code::long_double_number:
-            self.storage.template get<long double>() += other;
+            self.template unsafe_get<long double>() += other;
             break;
 
         case token::code::array:
-            self.storage.template get<array_type>().push_back(other);
+            self.template unsafe_get<array_type>().push_back(other);
             break;
 
         default:
@@ -643,40 +643,40 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>();
+            return self.template unsafe_get<bool>();
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>();
+            return self.template unsafe_get<signed short int>();
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>();
+            return self.template unsafe_get<unsigned short int>();
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>();
+            return self.template unsafe_get<signed int>();
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>();
+            return self.template unsafe_get<unsigned int>();
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>();
+            return self.template unsafe_get<signed long int>();
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>();
+            return self.template unsafe_get<unsigned long int>();
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>();
+            return self.template unsafe_get<signed long long int>();
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>();
+            return self.template unsafe_get<unsigned long long int>();
 
         case token::code::float_number:
-            return self.storage.template get<float>();
+            return self.template unsafe_get<float>();
 
         case token::code::double_number:
-            return self.storage.template get<double>();
+            return self.template unsafe_get<double>();
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>();
+            return self.template unsafe_get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -689,32 +689,32 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>() == other;
+            return self.template unsafe_get<bool>() == other;
 
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>() == other;
+            return self.template unsafe_get<unsigned short int>() == other;
 
         case token::code::signed_integer:
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>() == other;
+            return self.template unsafe_get<unsigned int>() == other;
 
         case token::code::signed_long_integer:
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>() == other;
+            return self.template unsafe_get<unsigned long int>() == other;
 
         case token::code::signed_long_long_integer:
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>() == other;
+            return self.template unsafe_get<unsigned long long int>() == other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() == other;
+            return self.template unsafe_get<float>() == other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() == other;
+            return self.template unsafe_get<double>() == other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() == other;
+            return self.template unsafe_get<long double>() == other;
 
         default:
             return false;
@@ -729,32 +729,32 @@ struct overloader<
             return true;
 
         case token::code::boolean:
-            return self.storage.template get<bool>() < other;
+            return self.template unsafe_get<bool>() < other;
 
         case token::code::signed_short_integer:
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>() < other;
+            return self.template unsafe_get<unsigned short int>() < other;
 
         case token::code::signed_integer:
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>() < other;
+            return self.template unsafe_get<unsigned int>() < other;
 
         case token::code::signed_long_integer:
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>() < other;
+            return self.template unsafe_get<unsigned long int>() < other;
 
         case token::code::signed_long_long_integer:
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>() < other;
+            return self.template unsafe_get<unsigned long long int>() < other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() < other;
+            return self.template unsafe_get<float>() < other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() < other;
+            return self.template unsafe_get<double>() < other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() < other;
+            return self.template unsafe_get<long double>() < other;
 
         default:
             return false;
@@ -770,55 +770,55 @@ struct overloader<
             break;
 
         case token::code::boolean:
-            self.storage.template get<bool>() += other;
+            self.template unsafe_get<bool>() += other;
             break;
 
         case token::code::signed_short_integer:
-            self.storage.template get<signed short int>() += other;
+            self.template unsafe_get<signed short int>() += other;
             break;
 
         case token::code::unsigned_short_integer:
-            self.storage.template get<unsigned short int>() += other;
+            self.template unsafe_get<unsigned short int>() += other;
             break;
 
         case token::code::signed_integer:
-            self.storage.template get<signed int>() += other;
+            self.template unsafe_get<signed int>() += other;
             break;
 
         case token::code::unsigned_integer:
-            self.storage.template get<unsigned int>() += other;
+            self.template unsafe_get<unsigned int>() += other;
             break;
 
         case token::code::signed_long_integer:
-            self.storage.template get<signed long int>() += other;
+            self.template unsafe_get<signed long int>() += other;
             break;
 
         case token::code::unsigned_long_integer:
-            self.storage.template get<unsigned long int>() += other;
+            self.template unsafe_get<unsigned long int>() += other;
             break;
 
         case token::code::signed_long_long_integer:
-            self.storage.template get<signed long long int>() += other;
+            self.template unsafe_get<signed long long int>() += other;
             break;
 
         case token::code::unsigned_long_long_integer:
-            self.storage.template get<unsigned long long int>() += other;
+            self.template unsafe_get<unsigned long long int>() += other;
             break;
 
         case token::code::float_number:
-            self.storage.template get<float>() += other;
+            self.template unsafe_get<float>() += other;
             break;
 
         case token::code::double_number:
-            self.storage.template get<double>() += other;
+            self.template unsafe_get<double>() += other;
             break;
 
         case token::code::long_double_number:
-            self.storage.template get<long double>() += other;
+            self.template unsafe_get<long double>() += other;
             break;
 
         case token::code::array:
-            self.storage.template get<array_type>().push_back(other);
+            self.template unsafe_get<array_type>().push_back(other);
             break;
 
         default:
@@ -846,40 +846,40 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>();
+            return self.template unsafe_get<bool>();
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>();
+            return self.template unsafe_get<signed short int>();
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>();
+            return self.template unsafe_get<unsigned short int>();
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>();
+            return self.template unsafe_get<signed int>();
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>();
+            return self.template unsafe_get<unsigned int>();
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>();
+            return self.template unsafe_get<signed long int>();
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>();
+            return self.template unsafe_get<unsigned long int>();
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>();
+            return self.template unsafe_get<signed long long int>();
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>();
+            return self.template unsafe_get<unsigned long long int>();
 
         case token::code::float_number:
-            return self.storage.template get<float>();
+            return self.template unsafe_get<float>();
 
         case token::code::double_number:
-            return self.storage.template get<double>();
+            return self.template unsafe_get<double>();
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>();
+            return self.template unsafe_get<long double>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -892,40 +892,40 @@ struct overloader<
         switch (self.code())
         {
         case token::code::boolean:
-            return self.storage.template get<bool>() == other;
+            return self.template unsafe_get<bool>() == other;
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>() == other;
+            return self.template unsafe_get<signed short int>() == other;
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>() == other;
+            return self.template unsafe_get<unsigned short int>() == other;
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>() == other;
+            return self.template unsafe_get<signed int>() == other;
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>() == other;
+            return self.template unsafe_get<unsigned int>() == other;
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>() == other;
+            return self.template unsafe_get<signed long int>() == other;
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>() == other;
+            return self.template unsafe_get<unsigned long int>() == other;
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>() == other;
+            return self.template unsafe_get<signed long long int>() == other;
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>() == other;
+            return self.template unsafe_get<unsigned long long int>() == other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() == other;
+            return self.template unsafe_get<float>() == other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() == other;
+            return self.template unsafe_get<double>() == other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() == other;
+            return self.template unsafe_get<long double>() == other;
 
         default:
             return false;
@@ -940,40 +940,40 @@ struct overloader<
             return true;
 
         case token::code::boolean:
-            return self.storage.template get<bool>() < other;
+            return self.template unsafe_get<bool>() < other;
 
         case token::code::signed_short_integer:
-            return self.storage.template get<signed short int>() < other;
+            return self.template unsafe_get<signed short int>() < other;
 
         case token::code::unsigned_short_integer:
-            return self.storage.template get<unsigned short int>() < other;
+            return self.template unsafe_get<unsigned short int>() < other;
 
         case token::code::signed_integer:
-            return self.storage.template get<signed int>() < other;
+            return self.template unsafe_get<signed int>() < other;
 
         case token::code::unsigned_integer:
-            return self.storage.template get<unsigned int>() < other;
+            return self.template unsafe_get<unsigned int>() < other;
 
         case token::code::signed_long_integer:
-            return self.storage.template get<signed long int>() < other;
+            return self.template unsafe_get<signed long int>() < other;
 
         case token::code::unsigned_long_integer:
-            return self.storage.template get<unsigned long int>() < other;
+            return self.template unsafe_get<unsigned long int>() < other;
 
         case token::code::signed_long_long_integer:
-            return self.storage.template get<signed long long int>() < other;
+            return self.template unsafe_get<signed long long int>() < other;
 
         case token::code::unsigned_long_long_integer:
-            return self.storage.template get<unsigned long long int>() < other;
+            return self.template unsafe_get<unsigned long long int>() < other;
 
         case token::code::float_number:
-            return self.storage.template get<float>() < other;
+            return self.template unsafe_get<float>() < other;
 
         case token::code::double_number:
-            return self.storage.template get<double>() < other;
+            return self.template unsafe_get<double>() < other;
 
         case token::code::long_double_number:
-            return self.storage.template get<long double>() < other;
+            return self.template unsafe_get<long double>() < other;
 
         default:
             return false;
@@ -989,55 +989,55 @@ struct overloader<
             break;
 
         case token::code::boolean:
-            self.storage.template get<bool>() += other;
+            self.template unsafe_get<bool>() += other;
             break;
 
         case token::code::signed_short_integer:
-            self.storage.template get<signed short int>() += other;
+            self.template unsafe_get<signed short int>() += other;
             break;
 
         case token::code::unsigned_short_integer:
-            self.storage.template get<unsigned short int>() += other;
+            self.template unsafe_get<unsigned short int>() += other;
             break;
 
         case token::code::signed_integer:
-            self.storage.template get<signed int>() += other;
+            self.template unsafe_get<signed int>() += other;
             break;
 
         case token::code::unsigned_integer:
-            self.storage.template get<unsigned int>() += other;
+            self.template unsafe_get<unsigned int>() += other;
             break;
 
         case token::code::signed_long_integer:
-            self.storage.template get<signed long int>() += other;
+            self.template unsafe_get<signed long int>() += other;
             break;
 
         case token::code::unsigned_long_integer:
-            self.storage.template get<unsigned long int>() += other;
+            self.template unsafe_get<unsigned long int>() += other;
             break;
 
         case token::code::signed_long_long_integer:
-            self.storage.template get<signed long long int>() += other;
+            self.template unsafe_get<signed long long int>() += other;
             break;
 
         case token::code::unsigned_long_long_integer:
-            self.storage.template get<unsigned long long int>() += other;
+            self.template unsafe_get<unsigned long long int>() += other;
             break;
 
         case token::code::float_number:
-            self.storage.template get<float>() += other;
+            self.template unsafe_get<float>() += other;
             break;
 
         case token::code::double_number:
-            self.storage.template get<double>() += other;
+            self.template unsafe_get<double>() += other;
             break;
 
         case token::code::long_double_number:
-            self.storage.template get<long double>() += other;
+            self.template unsafe_get<long double>() += other;
             break;
 
         case token::code::array:
-            self.storage.template get<array_type>().push_back(other);
+            self.template unsafe_get<array_type>().push_back(other);
             break;
 
         default:
@@ -1067,7 +1067,7 @@ struct overloader<
         switch (self.code())
         {
         case token::code::string:
-            return self.storage.template get<string_type>();
+            return self.template unsafe_get<string_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1080,7 +1080,7 @@ struct overloader<
         switch (self.code())
         {
         case token::code::string:
-            return self.storage.template get<string_type>() == other;
+            return self.template unsafe_get<string_type>() == other;
 
         default:
             return false;
@@ -1092,7 +1092,7 @@ struct overloader<
         switch (self.code())
         {
         case token::code::string:
-            return self.storage.template get<string_type>() < other;
+            return self.template unsafe_get<string_type>() < other;
 
         case token::code::array:
         case token::code::map:
@@ -1112,11 +1112,11 @@ struct overloader<
             break;
 
         case token::code::string:
-            self.storage.template get<string_type>() += other;
+            self.template unsafe_get<string_type>() += other;
             break;
 
         case token::code::array:
-            self.storage.template get<array_type>().push_back(other);
+            self.template unsafe_get<array_type>().push_back(other);
             break;
 
         default:
@@ -1145,7 +1145,7 @@ struct overloader<
         switch (self.code())
         {
         case token::code::array:
-            return self.storage.template get<array_type>();
+            return self.template unsafe_get<array_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1159,7 +1159,7 @@ struct overloader<
         {
         case token::code::array:
             {
-                const auto& array = self.storage.template get<array_type>();
+                const auto& array = self.template unsafe_get<array_type>();
                 if (array.size() == other.size())
                 {
                     return std::equal(array.begin(), array.end(), other.begin());
@@ -1177,7 +1177,7 @@ struct overloader<
         {
         case token::code::array:
             {
-                const auto& array = self.storage.template get<array_type>();
+                const auto& array = self.template unsafe_get<array_type>();
                 auto less_than = std::less<decltype(*array.begin())>();
                 auto array_it = array.begin();
                 auto other_it = other.begin();
@@ -1209,7 +1209,7 @@ struct overloader<
 
         case token::code::array:
             {
-                auto& array = self.storage.template get<array_type>();
+                auto& array = self.template unsafe_get<array_type>();
                 array.insert(array.end(), other.begin(), other.end());
             }
             break;
@@ -1239,7 +1239,7 @@ struct overloader<
         switch (self.code())
         {
         case token::code::map:
-            return self.storage.template get<map_type>();
+            return self.template unsafe_get<map_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1253,7 +1253,7 @@ struct overloader<
         {
         case token::code::map:
             {
-                const auto& map = self.storage.template get<map_type>();
+                const auto& map = self.template unsafe_get<map_type>();
                 if (map.size() == other.size())
                 {
                     return std::equal(map.begin(), map.end(), other.begin());
@@ -1271,7 +1271,7 @@ struct overloader<
         {
         case token::code::map:
             {
-                const auto& map = self.storage.template get<map_type>();
+                const auto& map = self.template unsafe_get<map_type>();
                 auto less_than = std::less<decltype(*map.begin())>();
                 auto map_it = map.begin();
                 auto other_it = other.begin();
@@ -1300,7 +1300,7 @@ struct overloader<
 
         case token::code::map:
             {
-                auto& map = self.storage.template get<map_type>();
+                auto& map = self.template unsafe_get<map_type>();
                 map.insert(other.begin(), other.end());
             }
             break;
@@ -1450,63 +1450,63 @@ struct operator_overloader<
 
         case token::code::boolean:
             return detail::template overloader<variable_type, bool>::
-                equal(lhs, rhs.storage.template get<bool>());
+                equal(lhs, rhs.template unsafe_get<bool>());
 
         case token::code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
-                equal(lhs, rhs.storage.template get<signed short int>());
+                equal(lhs, rhs.template unsafe_get<signed short int>());
 
         case token::code::unsigned_short_integer:
             return detail::template overloader<variable_type, unsigned short int>::
-                equal(lhs, rhs.storage.template get<unsigned short int>());
+                equal(lhs, rhs.template unsafe_get<unsigned short int>());
 
         case token::code::signed_integer:
             return detail::template overloader<variable_type, signed int>::
-                equal(lhs, rhs.storage.template get<signed int>());
+                equal(lhs, rhs.template unsafe_get<signed int>());
 
         case token::code::unsigned_integer:
             return detail::template overloader<variable_type, unsigned int>::
-                equal(lhs, rhs.storage.template get<unsigned int>());
+                equal(lhs, rhs.template unsafe_get<unsigned int>());
 
         case token::code::signed_long_integer:
             return detail::template overloader<variable_type, signed long int>::
-                equal(lhs, rhs.storage.template get<signed long int>());
+                equal(lhs, rhs.template unsafe_get<signed long int>());
 
         case token::code::unsigned_long_integer:
             return detail::template overloader<variable_type, unsigned long int>::
-                equal(lhs, rhs.storage.template get<unsigned long int>());
+                equal(lhs, rhs.template unsafe_get<unsigned long int>());
 
         case token::code::signed_long_long_integer:
             return detail::template overloader<variable_type, signed long long int>::
-                equal(lhs, rhs.storage.template get<signed long long int>());
+                equal(lhs, rhs.template unsafe_get<signed long long int>());
 
         case token::code::unsigned_long_long_integer:
             return detail::template overloader<variable_type, unsigned long long int>::
-                equal(lhs, rhs.storage.template get<unsigned long long int>());
+                equal(lhs, rhs.template unsafe_get<unsigned long long int>());
 
         case token::code::float_number:
             return detail::template overloader<variable_type, float>::
-                equal(lhs, rhs.storage.template get<float>());
+                equal(lhs, rhs.template unsafe_get<float>());
 
         case token::code::double_number:
             return detail::template overloader<variable_type, double>::
-                equal(lhs, rhs.storage.template get<double>());
+                equal(lhs, rhs.template unsafe_get<double>());
 
         case token::code::long_double_number:
             return detail::template overloader<variable_type, long double>::
-                equal(lhs, rhs.storage.template get<long double>());
+                equal(lhs, rhs.template unsafe_get<long double>());
 
         case token::code::string:
             return detail::template overloader<variable_type, string_type>::
-                equal(lhs, rhs.storage.template get<string_type>());
+                equal(lhs, rhs.template unsafe_get<string_type>());
 
         case token::code::array:
             return detail::template overloader<variable_type, array_type>::
-                equal(lhs, rhs.storage.template get<array_type>());
+                equal(lhs, rhs.template unsafe_get<array_type>());
 
         case token::code::map:
             return detail::template overloader<variable_type, map_type>::
-                equal(lhs, rhs.storage.template get<map_type>());
+                equal(lhs, rhs.template unsafe_get<map_type>());
         }
         return false;
     }
@@ -1522,63 +1522,63 @@ struct operator_overloader<
 
         case token::code::boolean:
             return detail::template overloader<variable_type, bool>::
-                less(lhs, rhs.storage.template get<bool>());
+                less(lhs, rhs.template unsafe_get<bool>());
 
         case token::code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
-                less(lhs, rhs.storage.template get<signed short int>());
+                less(lhs, rhs.template unsafe_get<signed short int>());
 
         case token::code::unsigned_short_integer:
             return detail::template overloader<variable_type, unsigned short int>::
-                less(lhs, rhs.storage.template get<unsigned short int>());
+                less(lhs, rhs.template unsafe_get<unsigned short int>());
 
         case token::code::signed_integer:
             return detail::template overloader<variable_type, signed int>::
-                less(lhs, rhs.storage.template get<signed int>());
+                less(lhs, rhs.template unsafe_get<signed int>());
 
         case token::code::unsigned_integer:
             return detail::template overloader<variable_type, unsigned int>::
-                less(lhs, rhs.storage.template get<unsigned int>());
+                less(lhs, rhs.template unsafe_get<unsigned int>());
 
         case token::code::signed_long_integer:
             return detail::template overloader<variable_type, signed long int>::
-                less(lhs, rhs.storage.template get<signed long int>());
+                less(lhs, rhs.template unsafe_get<signed long int>());
 
         case token::code::unsigned_long_integer:
             return detail::template overloader<variable_type, unsigned long int>::
-                less(lhs, rhs.storage.template get<unsigned long int>());
+                less(lhs, rhs.template unsafe_get<unsigned long int>());
 
         case token::code::signed_long_long_integer:
             return detail::template overloader<variable_type, signed long long int>::
-                less(lhs, rhs.storage.template get<signed long long int>());
+                less(lhs, rhs.template unsafe_get<signed long long int>());
 
         case token::code::unsigned_long_long_integer:
             return detail::template overloader<variable_type, unsigned long long int>::
-                less(lhs, rhs.storage.template get<unsigned long long int>());
+                less(lhs, rhs.template unsafe_get<unsigned long long int>());
 
         case token::code::float_number:
             return detail::template overloader<variable_type, float>::
-                less(lhs, rhs.storage.template get<float>());
+                less(lhs, rhs.template unsafe_get<float>());
 
         case token::code::double_number:
             return detail::template overloader<variable_type, double>::
-                less(lhs, rhs.storage.template get<double>());
+                less(lhs, rhs.template unsafe_get<double>());
 
         case token::code::long_double_number:
             return detail::template overloader<variable_type, long double>::
-                less(lhs, rhs.storage.template get<long double>());
+                less(lhs, rhs.template unsafe_get<long double>());
 
         case token::code::string:
             return detail::template overloader<variable_type, string_type>::
-                less(lhs, rhs.storage.template get<string_type>());
+                less(lhs, rhs.template unsafe_get<string_type>());
 
         case token::code::array:
             return detail::template overloader<variable_type, array_type>::
-                less(lhs, rhs.storage.template get<array_type>());
+                less(lhs, rhs.template unsafe_get<array_type>());
 
         case token::code::map:
             return detail::template overloader<variable_type, map_type>::
-                less(lhs, rhs.storage.template get<map_type>());
+                less(lhs, rhs.template unsafe_get<map_type>());
         }
         return false;
     }
@@ -1679,16 +1679,16 @@ basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
 
     case token::symbol::array:
         if (initialize)
-            current = p->storage.template get<array_type>().begin();
+            current = p->template unsafe_get<array_type>().begin();
         else
-            current = p->storage.template get<array_type>().end();
+            current = p->template unsafe_get<array_type>().end();
         break;
 
     case token::symbol::map:
         if (initialize)
-            current = p->storage.template get<map_type>().begin();
+            current = p->template unsafe_get<map_type>().begin();
         else
-            current = p->storage.template get<map_type>().end();
+            current = p->template unsafe_get<map_type>().end();
         break;
     }
 }
@@ -2035,7 +2035,7 @@ auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
 }
 
 //-----------------------------------------------------------------------------
-// visitors
+// storage visitors
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
@@ -2072,49 +2072,49 @@ basic_variable<CharT>::basic_variable(const basic_variable& other)
         storage = null;
         break;
     case token::code::boolean:
-        storage = other.storage.template get<bool>();
+        storage = other.unsafe_get<bool>();
         break;
     case token::code::signed_short_integer:
-        storage = other.storage.template get<signed short int>();
+        storage = other.unsafe_get<signed short int>();
         break;
     case token::code::unsigned_short_integer:
-        storage = other.storage.template get<unsigned short int>();
+        storage = other.unsafe_get<unsigned short int>();
         break;
     case token::code::signed_integer:
-        storage = other.storage.template get<signed int>();
+        storage = other.unsafe_get<signed int>();
         break;
     case token::code::unsigned_integer:
-        storage = other.storage.template get<unsigned int>();
+        storage = other.unsafe_get<unsigned int>();
         break;
     case token::code::signed_long_integer:
-        storage = other.storage.template get<signed long int>();
+        storage = other.unsafe_get<signed long int>();
         break;
     case token::code::unsigned_long_integer:
-        storage = other.storage.template get<unsigned long int>();
+        storage = other.unsafe_get<unsigned long int>();
         break;
     case token::code::signed_long_long_integer:
-        storage = other.storage.template get<signed long long int>();
+        storage = other.unsafe_get<signed long long int>();
         break;
     case token::code::unsigned_long_long_integer:
-        storage = other.storage.template get<unsigned long long int>();
+        storage = other.unsafe_get<unsigned long long int>();
         break;
     case token::code::float_number:
-        storage = other.storage.template get<float>();
+        storage = other.unsafe_get<float>();
         break;
     case token::code::double_number:
-        storage = other.storage.template get<double>();
+        storage = other.unsafe_get<double>();
         break;
     case token::code::long_double_number:
-        storage = other.storage.template get<long double>();
+        storage = other.unsafe_get<long double>();
         break;
     case token::code::string:
-        storage = other.storage.template get<string_type>();
+        storage = other.unsafe_get<string_type>();
         break;
     case token::code::array:
-        storage = other.storage.template get<array_type>();
+        storage = other.unsafe_get<array_type>();
         break;
     case token::code::map:
-        storage = other.storage.template get<map_type>();
+        storage = other.unsafe_get<map_type>();
         break;
     }
 }
@@ -2129,49 +2129,49 @@ basic_variable<CharT>::basic_variable(basic_variable&& other)
         storage = null;
         break;
     case token::code::boolean:
-        storage = std::move(other.storage.template get<bool>());
+        storage = std::move(other.unsafe_get<bool>());
         break;
     case token::code::signed_short_integer:
-        storage = std::move(other.storage.template get<signed short int>());
+        storage = std::move(other.unsafe_get<signed short int>());
         break;
     case token::code::unsigned_short_integer:
-        storage = std::move(other.storage.template get<unsigned short int>());
+        storage = std::move(other.unsafe_get<unsigned short int>());
         break;
     case token::code::signed_integer:
-        storage = std::move(other.storage.template get<signed int>());
+        storage = std::move(other.unsafe_get<signed int>());
         break;
     case token::code::unsigned_integer:
-        storage = std::move(other.storage.template get<unsigned int>());
+        storage = std::move(other.unsafe_get<unsigned int>());
         break;
     case token::code::signed_long_integer:
-        storage = std::move(other.storage.template get<signed long int>());
+        storage = std::move(other.unsafe_get<signed long int>());
         break;
     case token::code::unsigned_long_integer:
-        storage = std::move(other.storage.template get<unsigned long int>());
+        storage = std::move(other.unsafe_get<unsigned long int>());
         break;
     case token::code::signed_long_long_integer:
-        storage = std::move(other.storage.template get<signed long long int>());
+        storage = std::move(other.unsafe_get<signed long long int>());
         break;
     case token::code::unsigned_long_long_integer:
-        storage = std::move(other.storage.template get<unsigned long long int>());
+        storage = std::move(other.unsafe_get<unsigned long long int>());
         break;
     case token::code::float_number:
-        storage = std::move(other.storage.template get<float>());
+        storage = std::move(other.unsafe_get<float>());
         break;
     case token::code::double_number:
-        storage = std::move(other.storage.template get<double>());
+        storage = std::move(other.unsafe_get<double>());
         break;
     case token::code::long_double_number:
-        storage = std::move(other.storage.template get<long double>());
+        storage = std::move(other.unsafe_get<long double>());
         break;
     case token::code::string:
-        storage = std::move(other.storage.template get<string_type>());
+        storage = std::move(other.unsafe_get<string_type>());
         break;
     case token::code::array:
-        storage = std::move(other.storage.template get<array_type>());
+        storage = std::move(other.unsafe_get<array_type>());
         break;
     case token::code::map:
-        storage = std::move(other.storage.template get<map_type>());
+        storage = std::move(other.unsafe_get<map_type>());
         break;
     }
 }
@@ -2204,49 +2204,49 @@ auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_var
         storage = null;
         break;
     case token::code::boolean:
-        storage = other.storage.template get<bool>();
+        storage = other.unsafe_get<bool>();
         break;
     case token::code::signed_short_integer:
-        storage = other.storage.template get<signed short int>();
+        storage = other.unsafe_get<signed short int>();
         break;
     case token::code::unsigned_short_integer:
-        storage = other.storage.template get<unsigned short int>();
+        storage = other.unsafe_get<unsigned short int>();
         break;
     case token::code::signed_integer:
-        storage = other.storage.template get<signed int>();
+        storage = other.unsafe_get<signed int>();
         break;
     case token::code::unsigned_integer:
-        storage = other.storage.template get<unsigned int>();
+        storage = other.unsafe_get<unsigned int>();
         break;
     case token::code::signed_long_integer:
-        storage = other.storage.template get<signed long int>();
+        storage = other.unsafe_get<signed long int>();
         break;
     case token::code::unsigned_long_integer:
-        storage = other.storage.template get<unsigned long int>();
+        storage = other.unsafe_get<unsigned long int>();
         break;
     case token::code::signed_long_long_integer:
-        storage = other.storage.template get<signed long long int>();
+        storage = other.unsafe_get<signed long long int>();
         break;
     case token::code::unsigned_long_long_integer:
-        storage = other.storage.template get<unsigned long long int>();
+        storage = other.unsafe_get<unsigned long long int>();
         break;
     case token::code::float_number:
-        storage = other.storage.template get<float>();
+        storage = other.unsafe_get<float>();
         break;
     case token::code::double_number:
-        storage = other.storage.template get<double>();
+        storage = other.unsafe_get<double>();
         break;
     case token::code::long_double_number:
-        storage = other.storage.template get<long double>();
+        storage = other.unsafe_get<long double>();
         break;
     case token::code::string:
-        storage = other.storage.template get<string_type>();
+        storage = other.unsafe_get<string_type>();
         break;
     case token::code::array:
-        storage = other.storage.template get<array_type>();
+        storage = other.unsafe_get<array_type>();
         break;
     case token::code::map:
-        storage = other.storage.template get<map_type>();
+        storage = other.unsafe_get<map_type>();
         break;
     }
     return *this;
@@ -2261,49 +2261,49 @@ auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable
         storage = null;
         break;
     case token::code::boolean:
-        storage = std::move(other.storage.template get<bool>());
+        storage = std::move(other.unsafe_get<bool>());
         break;
     case token::code::signed_short_integer:
-        storage = std::move(other.storage.template get<signed short int>());
+        storage = std::move(other.unsafe_get<signed short int>());
         break;
     case token::code::unsigned_short_integer:
-        storage = std::move(other.storage.template get<unsigned short int>());
+        storage = std::move(other.unsafe_get<unsigned short int>());
         break;
     case token::code::signed_integer:
-        storage = std::move(other.storage.template get<signed int>());
+        storage = std::move(other.unsafe_get<signed int>());
         break;
     case token::code::unsigned_integer:
-        storage = std::move(other.storage.template get<unsigned int>());
+        storage = std::move(other.unsafe_get<unsigned int>());
         break;
     case token::code::signed_long_integer:
-        storage = std::move(other.storage.template get<signed long int>());
+        storage = std::move(other.unsafe_get<signed long int>());
         break;
     case token::code::unsigned_long_integer:
-        storage = std::move(other.storage.template get<unsigned long int>());
+        storage = std::move(other.unsafe_get<unsigned long int>());
         break;
     case token::code::signed_long_long_integer:
-        storage = std::move(other.storage.template get<signed long long int>());
+        storage = std::move(other.unsafe_get<signed long long int>());
         break;
     case token::code::unsigned_long_long_integer:
-        storage = std::move(other.storage.template get<unsigned long long int>());
+        storage = std::move(other.unsafe_get<unsigned long long int>());
         break;
     case token::code::float_number:
-        storage = std::move(other.storage.template get<float>());
+        storage = std::move(other.unsafe_get<float>());
         break;
     case token::code::double_number:
-        storage = std::move(other.storage.template get<double>());
+        storage = std::move(other.unsafe_get<double>());
         break;
     case token::code::long_double_number:
-        storage = std::move(other.storage.template get<long double>());
+        storage = std::move(other.unsafe_get<long double>());
         break;
     case token::code::string:
-        storage = std::move(other.storage.template get<string_type>());
+        storage = std::move(other.unsafe_get<string_type>());
         break;
     case token::code::array:
-        storage = std::move(other.storage.template get<array_type>());
+        storage = std::move(other.unsafe_get<array_type>());
         break;
     case token::code::map:
-        storage = std::move(other.storage.template get<map_type>());
+        storage = std::move(other.unsafe_get<map_type>());
         break;
     }
     return *this;
@@ -2338,67 +2338,67 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
     {
     case token::code::null:
         detail::overloader<value_type, nullable>::
-            append(*this, other.storage.template get<nullable>());
+            append(*this, other.unsafe_get<nullable>());
         break;
     case token::code::boolean:
         detail::overloader<value_type, bool>::
-            append(*this, other.storage.template get<bool>());
+            append(*this, other.unsafe_get<bool>());
         break;
     case token::code::signed_short_integer:
         detail::overloader<value_type, signed short int>::
-            append(*this, other.storage.template get<signed short int>());
+            append(*this, other.unsafe_get<signed short int>());
         break;
     case token::code::unsigned_short_integer:
         detail::overloader<value_type, unsigned short int>::
-            append(*this, other.storage.template get<unsigned short int>());
+            append(*this, other.unsafe_get<unsigned short int>());
         break;
     case token::code::signed_integer:
         detail::overloader<value_type, signed int>::
-            append(*this, other.storage.template get<signed int>());
+            append(*this, other.unsafe_get<signed int>());
         break;
     case token::code::unsigned_integer:
         detail::overloader<value_type, unsigned int>::
-            append(*this, other.storage.template get<unsigned int>());
+            append(*this, other.unsafe_get<unsigned int>());
         break;
     case token::code::signed_long_integer:
         detail::overloader<value_type, signed long int>::
-            append(*this, other.storage.template get<signed long int>());
+            append(*this, other.unsafe_get<signed long int>());
         break;
     case token::code::unsigned_long_integer:
         detail::overloader<value_type, unsigned long int>::
-            append(*this, other.storage.template get<unsigned long int>());
+            append(*this, other.unsafe_get<unsigned long int>());
         break;
     case token::code::signed_long_long_integer:
         detail::overloader<value_type, signed long long int>::
-            append(*this, other.storage.template get<signed long long int>());
+            append(*this, other.unsafe_get<signed long long int>());
         break;
     case token::code::unsigned_long_long_integer:
         detail::overloader<value_type, unsigned long long int>::
-            append(*this, other.storage.template get<unsigned long long int>());
+            append(*this, other.unsafe_get<unsigned long long int>());
         break;
     case token::code::float_number:
         detail::overloader<value_type, float>::
-            append(*this, other.storage.template get<float>());
+            append(*this, other.unsafe_get<float>());
         break;
     case token::code::double_number:
         detail::overloader<value_type, double>::
-            append(*this, other.storage.template get<double>());
+            append(*this, other.unsafe_get<double>());
         break;
     case token::code::long_double_number:
         detail::overloader<value_type, long double>::
-            append(*this, other.storage.template get<long double>());
+            append(*this, other.unsafe_get<long double>());
         break;
     case token::code::string:
         detail::overloader<value_type, string_type>::
-            append(*this, other.storage.template get<string_type>());
+            append(*this, other.unsafe_get<string_type>());
         break;
     case token::code::array:
         detail::overloader<value_type, array_type>::
-            append(*this, other.storage.template get<array_type>());
+            append(*this, other.unsafe_get<array_type>());
         break;
     case token::code::map:
         detail::overloader<value_type, map_type>::
-            append(*this, other.storage.template get<map_type>());
+            append(*this, other.unsafe_get<map_type>());
         break;
     }
     return *this;
@@ -2411,7 +2411,7 @@ auto basic_variable<CharT>::operator+= (std::initializer_list<typename array_typ
     {
     case token::symbol::array:
         {
-            auto& array = storage.template get<array_type>();
+            auto& array = unsafe_get<array_type>();
             array.insert(array.end(), init.begin(), init.end());
         }
         break;
@@ -2428,7 +2428,7 @@ auto basic_variable<CharT>::operator+= (std::initializer_list<typename map_type:
     switch (symbol())
     {
     case token::symbol::map:
-        storage.template get<map_type>().insert(init);
+        unsafe_get<map_type>().insert(init);
         break;
 
     default:
@@ -2481,6 +2481,22 @@ auto basic_variable<CharT>::value() const -> typename tag_traits<typename std::d
 }
 
 template <typename CharT>
+template <typename R>
+auto basic_variable<CharT>::unsafe_get() & noexcept -> R&
+{
+    assert(is<R>());
+    return storage.template get<typename std::decay<R>::type>();
+}
+
+template <typename CharT>
+template <typename R>
+auto basic_variable<CharT>::unsafe_get() const & noexcept -> const R&
+{
+    assert(is<R>());
+    return storage.template get<typename std::decay<R>::type>();
+}
+
+template <typename CharT>
 basic_variable<CharT>::operator bool() const
 {
     switch (code())
@@ -2489,40 +2505,40 @@ basic_variable<CharT>::operator bool() const
         return false;
 
     case token::code::boolean:
-        return bool(storage.template get<bool>());
+        return bool(unsafe_get<bool>());
 
     case token::code::signed_short_integer:
-        return bool(storage.template get<signed short int>());
+        return bool(unsafe_get<signed short int>());
 
     case token::code::unsigned_short_integer:
-        return bool(storage.template get<unsigned short int>());
+        return bool(unsafe_get<unsigned short int>());
 
     case token::code::signed_integer:
-        return bool(storage.template get<signed int>());
+        return bool(unsafe_get<signed int>());
 
     case token::code::unsigned_integer:
-        return bool(storage.template get<unsigned int>());
+        return bool(unsafe_get<unsigned int>());
 
     case token::code::signed_long_integer:
-        return bool(storage.template get<signed long int>());
+        return bool(unsafe_get<signed long int>());
 
     case token::code::unsigned_long_integer:
-        return bool(storage.template get<unsigned long int>());
+        return bool(unsafe_get<unsigned long int>());
 
     case token::code::signed_long_long_integer:
-        return bool(storage.template get<signed long long int>());
+        return bool(unsafe_get<signed long long int>());
 
     case token::code::unsigned_long_long_integer:
-        return bool(storage.template get<unsigned long long int>());
+        return bool(unsafe_get<unsigned long long int>());
 
     case token::code::float_number:
-        return bool(storage.template get<float>());
+        return bool(unsafe_get<float>());
 
     case token::code::double_number:
-        return bool(storage.template get<double>());
+        return bool(unsafe_get<double>());
 
     case token::code::long_double_number:
-        return bool(storage.template get<long double>());
+        return bool(unsafe_get<long double>());
 
     case token::code::string:
     case token::code::array:
@@ -2542,7 +2558,7 @@ auto basic_variable<CharT>::operator[] (typename array_type::size_type position)
     switch (symbol())
     {
     case token::symbol::array:
-        return storage.template get<array_type>()[position];
+        return unsafe_get<array_type>()[position];
 
     default:
         throw dynamic::error(incompatible_type);
@@ -2555,7 +2571,7 @@ auto basic_variable<CharT>::operator[] (typename array_type::size_type position)
     switch (symbol())
     {
     case token::symbol::array:
-        return storage.template get<array_type>().at(position);
+        return unsafe_get<array_type>().at(position);
 
     default:
         throw dynamic::error(incompatible_type);
@@ -2568,11 +2584,11 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
     switch (symbol())
     {
     case token::symbol::map:
-        return storage.template get<map_type>()[key];
+        return unsafe_get<map_type>()[key];
 
     case token::symbol::null:
         *this = basic_map<CharT>::make();
-        return storage.template get<map_type>()[key];
+        return unsafe_get<map_type>()[key];
 
     default:
         throw dynamic::error(incompatible_type);
@@ -2585,7 +2601,7 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
     switch (symbol())
     {
     case token::symbol::map:
-        return storage.template get<map_type>().at(key);
+        return unsafe_get<map_type>().at(key);
 
     default:
         throw dynamic::error(incompatible_type);
@@ -2604,37 +2620,37 @@ auto basic_variable<CharT>::find(const basic_variable<CharT>& other) const & -> 
     switch (other.code())
     {
     case token::code::null:
-        return find(other.storage.template get<nullable>());
+        return find(other.unsafe_get<nullable>());
     case token::code::boolean:
-        return find(other.storage.template get<bool>());
+        return find(other.unsafe_get<bool>());
     case token::code::signed_short_integer:
-        return find(other.storage.template get<signed short int>());
+        return find(other.unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:
-        return find(other.storage.template get<unsigned short int>());
+        return find(other.unsafe_get<unsigned short int>());
     case token::code::signed_integer:
-        return find(other.storage.template get<signed int>());
+        return find(other.unsafe_get<signed int>());
     case token::code::unsigned_integer:
-        return find(other.storage.template get<unsigned int>());
+        return find(other.unsafe_get<unsigned int>());
     case token::code::signed_long_integer:
-        return find(other.storage.template get<signed long int>());
+        return find(other.unsafe_get<signed long int>());
     case token::code::unsigned_long_integer:
-        return find(other.storage.template get<unsigned long int>());
+        return find(other.unsafe_get<unsigned long int>());
     case token::code::signed_long_long_integer:
-        return find(other.storage.template get<signed long long int>());
+        return find(other.unsafe_get<signed long long int>());
     case token::code::unsigned_long_long_integer:
-        return find(other.storage.template get<unsigned long long int>());
+        return find(other.unsafe_get<unsigned long long int>());
     case token::code::float_number:
-        return find(other.storage.template get<float>());
+        return find(other.unsafe_get<float>());
     case token::code::double_number:
-        return find(other.storage.template get<double>());
+        return find(other.unsafe_get<double>());
     case token::code::long_double_number:
-        return find(other.storage.template get<long double>());
+        return find(other.unsafe_get<long double>());
     case token::code::string:
-        return find(other.storage.template get<string_type>());
+        return find(other.unsafe_get<string_type>());
     case token::code::array:
-        return find(other.storage.template get<array_type>());
+        return find(other.unsafe_get<array_type>());
     case token::code::map:
-        return find(other.storage.template get<map_type>());
+        return find(other.unsafe_get<map_type>());
     }
     TRIAL_PROTOCOL_UNREACHABLE();
 }
@@ -2679,37 +2695,37 @@ auto basic_variable<CharT>::key_find(const basic_variable<CharT>& other) const &
     switch (other.code())
     {
     case token::code::null:
-        return key_find(other.storage.template get<nullable>());
+        return key_find(other.unsafe_get<nullable>());
     case token::code::boolean:
-        return key_find(other.storage.template get<bool>());
+        return key_find(other.unsafe_get<bool>());
     case token::code::signed_short_integer:
-        return key_find(other.storage.template get<signed short int>());
+        return key_find(other.unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:
-        return key_find(other.storage.template get<unsigned short int>());
+        return key_find(other.unsafe_get<unsigned short int>());
     case token::code::signed_integer:
-        return key_find(other.storage.template get<signed int>());
+        return key_find(other.unsafe_get<signed int>());
     case token::code::unsigned_integer:
-        return key_find(other.storage.template get<unsigned int>());
+        return key_find(other.unsafe_get<unsigned int>());
     case token::code::signed_long_integer:
-        return key_find(other.storage.template get<signed long int>());
+        return key_find(other.unsafe_get<signed long int>());
     case token::code::unsigned_long_integer:
-        return key_find(other.storage.template get<unsigned long int>());
+        return key_find(other.unsafe_get<unsigned long int>());
     case token::code::signed_long_long_integer:
-        return key_find(other.storage.template get<signed long long int>());
+        return key_find(other.unsafe_get<signed long long int>());
     case token::code::unsigned_long_long_integer:
-        return key_find(other.storage.template get<unsigned long long int>());
+        return key_find(other.unsafe_get<unsigned long long int>());
     case token::code::float_number:
-        return key_find(other.storage.template get<float>());
+        return key_find(other.unsafe_get<float>());
     case token::code::double_number:
-        return key_find(other.storage.template get<double>());
+        return key_find(other.unsafe_get<double>());
     case token::code::long_double_number:
-        return key_find(other.storage.template get<long double>());
+        return key_find(other.unsafe_get<long double>());
     case token::code::string:
-        return key_find(other.storage.template get<string_type>());
+        return key_find(other.unsafe_get<string_type>());
     case token::code::array:
-        return key_find(other.storage.template get<array_type>());
+        return key_find(other.unsafe_get<array_type>());
     case token::code::map:
-        return key_find(other.storage.template get<map_type>());
+        return key_find(other.unsafe_get<map_type>());
     }
     TRIAL_PROTOCOL_UNREACHABLE();
 }
@@ -2747,37 +2763,37 @@ auto basic_variable<CharT>::count(const basic_variable<CharT>& other) const -> s
     switch (other.code())
     {
     case token::code::null:
-        return count(other.storage.template get<nullable>());
+        return count(other.unsafe_get<nullable>());
     case token::code::boolean:
-        return count(other.storage.template get<bool>());
+        return count(other.unsafe_get<bool>());
     case token::code::signed_short_integer:
-        return count(other.storage.template get<signed short int>());
+        return count(other.unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:
-        return count(other.storage.template get<unsigned short int>());
+        return count(other.unsafe_get<unsigned short int>());
     case token::code::signed_integer:
-        return count(other.storage.template get<signed int>());
+        return count(other.unsafe_get<signed int>());
     case token::code::unsigned_integer:
-        return count(other.storage.template get<unsigned int>());
+        return count(other.unsafe_get<unsigned int>());
     case token::code::signed_long_integer:
-        return count(other.storage.template get<signed long int>());
+        return count(other.unsafe_get<signed long int>());
     case token::code::unsigned_long_integer:
-        return count(other.storage.template get<unsigned long int>());
+        return count(other.unsafe_get<unsigned long int>());
     case token::code::signed_long_long_integer:
-        return count(other.storage.template get<signed long long int>());
+        return count(other.unsafe_get<signed long long int>());
     case token::code::unsigned_long_long_integer:
-        return count(other.storage.template get<unsigned long long int>());
+        return count(other.unsafe_get<unsigned long long int>());
     case token::code::float_number:
-        return count(other.storage.template get<float>());
+        return count(other.unsafe_get<float>());
     case token::code::double_number:
-        return count(other.storage.template get<double>());
+        return count(other.unsafe_get<double>());
     case token::code::long_double_number:
-        return count(other.storage.template get<long double>());
+        return count(other.unsafe_get<long double>());
     case token::code::string:
-        return count(other.storage.template get<string_type>());
+        return count(other.unsafe_get<string_type>());
     case token::code::array:
-        return count(other.storage.template get<array_type>());
+        return count(other.unsafe_get<array_type>());
     case token::code::map:
-        return count(other.storage.template get<map_type>());
+        return count(other.unsafe_get<map_type>());
     }
     TRIAL_PROTOCOL_UNREACHABLE();
 }
@@ -2818,37 +2834,37 @@ auto basic_variable<CharT>::key_count(const basic_variable<CharT>& other) const 
     switch (other.code())
     {
     case token::code::null:
-        return key_count(other.storage.template get<nullable>());
+        return key_count(other.unsafe_get<nullable>());
     case token::code::boolean:
-        return key_count(other.storage.template get<bool>());
+        return key_count(other.unsafe_get<bool>());
     case token::code::signed_short_integer:
-        return key_count(other.storage.template get<signed short int>());
+        return key_count(other.unsafe_get<signed short int>());
     case token::code::unsigned_short_integer:
-        return key_count(other.storage.template get<unsigned short int>());
+        return key_count(other.unsafe_get<unsigned short int>());
     case token::code::signed_integer:
-        return key_count(other.storage.template get<signed int>());
+        return key_count(other.unsafe_get<signed int>());
     case token::code::unsigned_integer:
-        return key_count(other.storage.template get<unsigned int>());
+        return key_count(other.unsafe_get<unsigned int>());
     case token::code::signed_long_integer:
-        return key_count(other.storage.template get<signed long int>());
+        return key_count(other.unsafe_get<signed long int>());
     case token::code::unsigned_long_integer:
-        return key_count(other.storage.template get<unsigned long int>());
+        return key_count(other.unsafe_get<unsigned long int>());
     case token::code::signed_long_long_integer:
-        return key_count(other.storage.template get<signed long long int>());
+        return key_count(other.unsafe_get<signed long long int>());
     case token::code::unsigned_long_long_integer:
-        return key_count(other.storage.template get<unsigned long long int>());
+        return key_count(other.unsafe_get<unsigned long long int>());
     case token::code::float_number:
-        return key_count(other.storage.template get<float>());
+        return key_count(other.unsafe_get<float>());
     case token::code::double_number:
-        return key_count(other.storage.template get<double>());
+        return key_count(other.unsafe_get<double>());
     case token::code::long_double_number:
-        return key_count(other.storage.template get<long double>());
+        return key_count(other.unsafe_get<long double>());
     case token::code::string:
-        return key_count(other.storage.template get<string_type>());
+        return key_count(other.unsafe_get<string_type>());
     case token::code::array:
-        return key_count(other.storage.template get<array_type>());
+        return key_count(other.unsafe_get<array_type>());
     case token::code::map:
-        return key_count(other.storage.template get<map_type>());
+        return key_count(other.unsafe_get<map_type>());
     }
     TRIAL_PROTOCOL_UNREACHABLE();
 }
@@ -2987,11 +3003,11 @@ bool basic_variable<CharT>::empty() const noexcept
     case token::symbol::number:
         return false;
     case token::symbol::string:
-        return storage.template get<string_type>().empty();
+        return unsafe_get<string_type>().empty();
     case token::symbol::array:
-        return storage.template get<array_type>().empty();
+        return unsafe_get<array_type>().empty();
     case token::symbol::map:
-        return storage.template get<map_type>().empty();
+        return unsafe_get<map_type>().empty();
     }
     TRIAL_PROTOCOL_UNREACHABLE();
 }
@@ -3008,11 +3024,11 @@ auto basic_variable<CharT>::size() const noexcept -> size_type
     case token::symbol::number:
         return 1;
     case token::symbol::string:
-        return storage.template get<string_type>().size();
+        return unsafe_get<string_type>().size();
     case token::symbol::array:
-        return storage.template get<array_type>().size();
+        return unsafe_get<array_type>().size();
     case token::symbol::map:
-        return storage.template get<map_type>().size();
+        return unsafe_get<map_type>().size();
     }
     TRIAL_PROTOCOL_UNREACHABLE();
 }
@@ -3068,13 +3084,13 @@ void basic_variable<CharT>::clear() noexcept
         storage = 0.0L;
         break;
     case token::code::string:
-        storage.template get<string_type>().clear();
+        unsafe_get<string_type>().clear();
         break;
     case token::code::array:
-        storage.template get<array_type>().clear();
+        unsafe_get<array_type>().clear();
         break;
     case token::code::map:
-        storage.template get<map_type>().clear();
+        unsafe_get<map_type>().clear();
         break;
     }
 }
@@ -3091,7 +3107,7 @@ auto basic_variable<CharT>::erase(const_iterator where) -> iterator
     {
     case token::symbol::array:
         {
-            auto& array = storage.template get<array_type>();
+            auto& array = unsafe_get<array_type>();
             auto& array_where = where.current.template get<array_iterator>();
             result.current = array.erase(array_where);
         }
@@ -3099,7 +3115,7 @@ auto basic_variable<CharT>::erase(const_iterator where) -> iterator
 
     case token::symbol::map:
         result.current =
-            storage.template get<map_type>().erase(where.current.template get<map_iterator>());
+            unsafe_get<map_type>().erase(where.current.template get<map_iterator>());
         break;
 
     default:
@@ -3121,14 +3137,14 @@ auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> 
     {
     case token::symbol::array:
         result.current =
-            storage.template get<array_type>().erase(first.current.template get<array_iterator>(),
-                                                     last.current.template get<array_iterator>());
+            unsafe_get<array_type>().erase(first.current.template get<array_iterator>(),
+                                           last.current.template get<array_iterator>());
         break;
 
     case token::symbol::map:
         result.current =
-            storage.template get<map_type>().erase(first.current.template get<map_iterator>(),
-                                                   last.current.template get<map_iterator>());
+            unsafe_get<map_type>().erase(first.current.template get<map_iterator>(),
+                                         last.current.template get<map_iterator>());
         break;
 
     default:

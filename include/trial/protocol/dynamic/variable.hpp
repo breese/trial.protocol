@@ -59,14 +59,13 @@ public:
     using reference = typename std::add_lvalue_reference<value_type>::type;
     using const_reference = typename std::add_const<reference>::type;
     using size_type = std::size_t;
+    using string_type = std::basic_string<CharT>;
+    using array_type = std::vector<value_type>;
+    using map_type = std::map<value_type, value_type>;
 
 private:
     friend struct basic_array<CharT>;
     friend struct basic_map<CharT>;
-
-    using string_type = std::basic_string<CharT>;
-    using array_type = std::vector<value_type>;
-    using map_type = std::map<value_type, value_type>;
 
     template <typename Derived, typename T>
     class iterator_base
@@ -238,6 +237,12 @@ public:
     template <typename Tag> typename tag_traits<typename std::decay<Tag>::type>::type value() const;
     template <typename Tag> typename tag_traits<typename std::decay<Tag>::type>::type value(std::error_code&) const noexcept;
     template <typename R> explicit operator R() const;
+
+    // Get stored value as type R.
+    //
+    // Precondition: is<R>() is true.
+    template <typename R> R& unsafe_get() & noexcept;
+    template <typename R> const R& unsafe_get() const & noexcept;
 
     explicit operator bool() const;
 
