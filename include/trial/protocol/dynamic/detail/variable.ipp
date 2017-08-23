@@ -2640,7 +2640,7 @@ auto basic_variable<CharT>::value() const -> typename tag_traits<typename std::d
     std::error_code error;
     auto result = value<Tag>(error);
     if (error)
-        throw std::system_error(error);
+        throw dynamic::error(error);
     return result;
 }
 
@@ -2701,8 +2701,7 @@ basic_variable<CharT>::operator bool() const
         // C++ containers are not contextually convertible to bool, but we
         // make them so for variable to let the code compiler for non-container
         // types.
-        // FIXME: Throw an exception instead?
-        return false;
+        throw dynamic::error(incompatible_type);
     }
     TRIAL_PROTOCOL_UNREACHABLE();
 }

@@ -7097,6 +7097,180 @@ void run()
 } // namespace subscript_suite
 
 //-----------------------------------------------------------------------------
+// operator R()
+//-----------------------------------------------------------------------------
+
+namespace conversion_operator_suite
+{
+
+void get_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST(nullable(data) == null);
+    TRIAL_PROTOCOL_TEST(bool(data) == false);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator int(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator float(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::map_type(),
+                                    error,
+                                    "incompatible type");
+}
+
+void get_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST(bool(data) == true);
+    TRIAL_PROTOCOL_TEST(int(data) == 1);
+    TRIAL_PROTOCOL_TEST(float(data) == 1.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::map_type(),
+                                    error,
+                                    "incompatible type");
+}
+
+void get_integer()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST(bool(data) == true);
+    TRIAL_PROTOCOL_TEST(int(data) == 2);
+    TRIAL_PROTOCOL_TEST(float(data) == 2.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::map_type(),
+                                    error,
+                                    "incompatible type");
+}
+
+void get_number()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST(bool(data) == true);
+    TRIAL_PROTOCOL_TEST(int(data) == 3);
+    TRIAL_PROTOCOL_TEST(float(data) == 3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::map_type(),
+                                    error,
+                                    "incompatible type");
+}
+
+void get_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator bool(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator int(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator float(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST(variable::string_type(data) == "alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::map_type(),
+                                    error,
+                                    "incompatible type");
+}
+
+void get_array()
+{
+    variable data = array::make();
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator bool(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator int(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator float(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST(variable::array_type(data).empty());
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::map_type(),
+                                    error,
+                                    "incompatible type");
+}
+
+void get_map()
+{
+    variable data = map::make();
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator bool(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator int(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator float(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST(variable::map_type(data).empty());
+}
+
+void run()
+{
+    get_null();
+    get_boolean();
+    get_integer();
+    get_number();
+    get_string();
+    get_array();
+    get_map();
+}
+
+} // namespace conversion_operator_suite
+
+//-----------------------------------------------------------------------------
 // Empty
 //-----------------------------------------------------------------------------
 
@@ -8165,6 +8339,7 @@ int main()
     unsafe_get_suite::run();
     value_suite::run();
     subscript_suite::run();
+    conversion_operator_suite::run();
 
     empty_suite::run();
     size_suite::run();
