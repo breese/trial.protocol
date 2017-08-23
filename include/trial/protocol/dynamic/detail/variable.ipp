@@ -520,24 +520,29 @@ struct overloader<
             return self.template unsafe_get<bool>() == other;
 
         case token::code::signed_char:
-        case token::code::unsigned_char:
             return self.template unsafe_get<signed char>() == other;
+        case token::code::unsigned_char:
+            return static_cast<signed char>(self.template unsafe_get<unsigned char>()) == other;
 
         case token::code::signed_short_integer:
-        case token::code::unsigned_short_integer:
             return self.template unsafe_get<signed short int>() == other;
+        case token::code::unsigned_short_integer:
+            return static_cast<signed short int>(self.template unsafe_get<unsigned short int>()) == other;
 
         case token::code::signed_integer:
-        case token::code::unsigned_integer:
             return self.template unsafe_get<signed int>() == other;
+        case token::code::unsigned_integer:
+            return static_cast<signed int>(self.template unsafe_get<unsigned int>()) == other;
 
         case token::code::signed_long_integer:
-        case token::code::unsigned_long_integer:
             return self.template unsafe_get<signed long int>() == other;
+        case token::code::unsigned_long_integer:
+            return static_cast<signed long int>(self.template unsafe_get<unsigned long int>()) == other;
 
         case token::code::signed_long_long_integer:
-        case token::code::unsigned_long_long_integer:
             return self.template unsafe_get<signed long long int>() == other;
+        case token::code::unsigned_long_long_integer:
+            return static_cast<signed long long int>(self.template unsafe_get<unsigned long long int>()) == other;
 
         case token::code::float_number:
             return self.template unsafe_get<float>() == other;
@@ -564,24 +569,29 @@ struct overloader<
             return self.template unsafe_get<bool>() < other;
 
         case token::code::signed_char:
-        case token::code::unsigned_char:
             return self.template unsafe_get<signed char>() < other;
+        case token::code::unsigned_char:
+            return static_cast<signed char>(self.template unsafe_get<unsigned char>()) < other;
 
         case token::code::signed_short_integer:
-        case token::code::unsigned_short_integer:
             return self.template unsafe_get<signed short int>() < other;
+        case token::code::unsigned_short_integer:
+            return static_cast<signed short int>(self.template unsafe_get<unsigned short int>()) < other;
 
         case token::code::signed_integer:
-        case token::code::unsigned_integer:
             return self.template unsafe_get<signed int>() < other;
+        case token::code::unsigned_integer:
+            return static_cast<signed int>(self.template unsafe_get<unsigned int>()) < other;
 
         case token::code::signed_long_integer:
-        case token::code::unsigned_long_integer:
             return self.template unsafe_get<signed long int>() < other;
+        case token::code::unsigned_long_integer:
+            return static_cast<signed long int>(self.template unsafe_get<unsigned long int>()) < other;
 
         case token::code::signed_long_long_integer:
-        case token::code::unsigned_long_long_integer:
             return self.template unsafe_get<signed long long int>() < other;
+        case token::code::unsigned_long_long_integer:
+            return static_cast<signed long long int>(self.template unsafe_get<unsigned long long int>()) < other;
 
         case token::code::float_number:
             return self.template unsafe_get<float>() < other;
@@ -746,22 +756,27 @@ struct overloader<
             return self.template unsafe_get<bool>() == other;
 
         case token::code::signed_char:
+            return static_cast<unsigned char>(self.template unsafe_get<signed char>()) == other;
         case token::code::unsigned_char:
             return self.template unsafe_get<unsigned char>() == other;
 
         case token::code::signed_short_integer:
+            return static_cast<unsigned short int>(self.template unsafe_get<signed short int>()) == other;
         case token::code::unsigned_short_integer:
             return self.template unsafe_get<unsigned short int>() == other;
 
         case token::code::signed_integer:
+            return static_cast<unsigned int>(self.template unsafe_get<signed int>()) == other;
         case token::code::unsigned_integer:
             return self.template unsafe_get<unsigned int>() == other;
 
         case token::code::signed_long_integer:
+            return static_cast<unsigned long int>(self.template unsafe_get<signed long int>()) == other;
         case token::code::unsigned_long_integer:
             return self.template unsafe_get<unsigned long int>() == other;
 
         case token::code::signed_long_long_integer:
+            return static_cast<unsigned long long int>(self.template unsafe_get<signed long long int>()) == other;
         case token::code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() == other;
 
@@ -790,22 +805,27 @@ struct overloader<
             return self.template unsafe_get<bool>() < other;
 
         case token::code::signed_char:
+            return static_cast<unsigned char>(self.template unsafe_get<signed char>()) < other;
         case token::code::unsigned_char:
             return self.template unsafe_get<unsigned char>() < other;
 
         case token::code::signed_short_integer:
+            return static_cast<unsigned short int>(self.template unsafe_get<signed short int>()) < other;
         case token::code::unsigned_short_integer:
             return self.template unsafe_get<unsigned short int>() < other;
 
         case token::code::signed_integer:
+            return static_cast<unsigned int>(self.template unsafe_get<signed int>()) < other;
         case token::code::unsigned_integer:
             return self.template unsafe_get<unsigned int>() < other;
 
         case token::code::signed_long_integer:
+            return static_cast<unsigned long int>(self.template unsafe_get<signed long int>()) < other;
         case token::code::unsigned_long_integer:
             return self.template unsafe_get<unsigned long int>() < other;
 
         case token::code::signed_long_long_integer:
+            return static_cast<unsigned long long int>(self.template unsafe_get<signed long long int>()) < other;
         case token::code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() < other;
 
@@ -2628,7 +2648,7 @@ template <typename CharT>
 template <typename R>
 auto basic_variable<CharT>::unsafe_get() & noexcept -> R&
 {
-    assert(is<R>());
+    assert(same<R>());
     return storage.template get<typename std::decay<R>::type>();
 }
 
@@ -2636,7 +2656,7 @@ template <typename CharT>
 template <typename R>
 auto basic_variable<CharT>::unsafe_get() const & noexcept -> const R&
 {
-    assert(is<R>());
+    assert(same<R>());
     return storage.template get<typename std::decay<R>::type>();
 }
 

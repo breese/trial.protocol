@@ -240,7 +240,7 @@ public:
 
     // Get stored value as type R.
     //
-    // Precondition: is<R>() is true.
+    // Precondition: same<R>() is true.
     template <typename R> R& unsafe_get() & noexcept;
     template <typename R> const R& unsafe_get() const & noexcept;
 
