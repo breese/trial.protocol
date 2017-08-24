@@ -2569,7 +2569,7 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator+= (std::initializer_list<typename array_type::value_type> init) -> basic_variable&
+auto basic_variable<CharT>::operator+= (std::initializer_list<value_type> init) -> basic_variable&
 {
     switch (symbol())
     {
@@ -2587,7 +2587,7 @@ auto basic_variable<CharT>::operator+= (std::initializer_list<typename array_typ
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator+= (std::initializer_list<typename map_type::value_type> init) -> basic_variable&
+auto basic_variable<CharT>::operator+= (std::initializer_list<pair_type> init) -> basic_variable&
 {
     switch (symbol())
     {
@@ -2707,7 +2707,7 @@ basic_variable<CharT>::operator bool() const
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator[] (typename array_type::size_type position) & -> basic_variable&
+auto basic_variable<CharT>::operator[] (size_type position) & -> basic_variable&
 {
     switch (symbol())
     {
@@ -2720,7 +2720,7 @@ auto basic_variable<CharT>::operator[] (typename array_type::size_type position)
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator[] (typename array_type::size_type position) const & -> const basic_variable&
+auto basic_variable<CharT>::operator[] (size_type position) const & -> const basic_variable&
 {
     switch (symbol())
     {
@@ -3305,7 +3305,7 @@ struct basic_array
         return result;
     }
 
-    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::array_type::value_type> init)
+    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::value_type> init)
     {
         basic_variable<CharT> result;
         result.storage = typename basic_variable<CharT>::array_type(init.begin(), init.end());
@@ -3338,14 +3338,14 @@ struct basic_map
         return make({ std::move(key), std::move(value) });
     }
 
-    static basic_variable<CharT> make(typename basic_variable<CharT>::map_type::value_type value)
+    static basic_variable<CharT> make(typename basic_variable<CharT>::pair_type value)
     {
         basic_variable<CharT> result;
         result.storage = typename basic_variable<CharT>::map_type{std::move(value)};
         return result;
     }
 
-    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::map_type::value_type> init)
+    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::pair_type> init)
     {
         basic_variable<CharT> result;
         result.storage = typename basic_variable<CharT>::map_type(init.begin(), init.end());

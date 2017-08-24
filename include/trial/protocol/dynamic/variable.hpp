@@ -62,6 +62,7 @@ public:
     using string_type = std::basic_string<CharT>;
     using array_type = std::vector<value_type>;
     using map_type = std::map<value_type, value_type>;
+    using pair_type = typename map_type::value_type;
 
 private:
     friend struct basic_array<CharT>;
@@ -206,10 +207,10 @@ public:
     basic_variable(const nullable&);
     // String constructor
     basic_variable(const CharT *);
-    // Use array factory instead
+    // Use factory instead
     basic_variable(typename basic_variable::array_type) = delete;
-    // Use map factory instead
     basic_variable(typename basic_variable::map_type) = delete;
+    basic_variable(typename basic_variable::pair_type) = delete;
  
     // Assignment
 
@@ -222,8 +223,8 @@ public:
     // Addition / concatenation
 
     basic_variable& operator+= (const basic_variable&);
-    basic_variable& operator+= (std::initializer_list<typename array_type::value_type>);
-    basic_variable& operator+= (std::initializer_list<typename map_type::value_type>);
+    basic_variable& operator+= (std::initializer_list<value_type>);
+    basic_variable& operator+= (std::initializer_list<pair_type>);
 
     template <typename T, typename U>
     friend basic_variable<T> operator+ (const basic_variable<T>&,
@@ -246,8 +247,8 @@ public:
 
     explicit operator bool() const;
 
-    basic_variable& operator[] (typename array_type::size_type) &;
-    const basic_variable& operator[] (typename array_type::size_type) const &;
+    basic_variable& operator[] (size_type) &;
+    const basic_variable& operator[] (size_type) const &;
 
     basic_variable& operator[] (const typename map_type::key_type&) &;
     const basic_variable& operator[] (const typename map_type::key_type&) const &;
