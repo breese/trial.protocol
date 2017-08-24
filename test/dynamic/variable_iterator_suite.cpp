@@ -858,12 +858,12 @@ void get_null()
     {
         variable data;
         auto where = data.begin();
-        TRIAL_PROTOCOL_TEST(*where == null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         const variable data;
         auto where = data.begin();
-        TRIAL_PROTOCOL_TEST(*where == null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
 
@@ -974,7 +974,7 @@ void get_map()
 
 void run()
 {
-    // get_null(); // FIXME: Crashes
+    get_null();
     get_boolean();
     get_integer();
     get_number();
