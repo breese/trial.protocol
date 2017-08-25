@@ -1883,14 +1883,14 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ (int) -> Deriv
 
 template <typename CharT>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::key() const -> reference
+auto basic_variable<CharT>::iterator_base<Derived, T>::key() const -> const_reference
 {
     assert(scope);
 
     switch (scope->symbol())
     {
     case token::symbol::map:
-        return current.template get<map_iterator>()->first;
+        return const_cast<const_reference>(current.template get<map_iterator>()->first);
 
     default:
         throw dynamic::error(incompatible_type);
@@ -1899,7 +1899,31 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::key() const -> reference
 
 template <typename CharT>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> reference
+auto basic_variable<CharT>::iterator_base<Derived, T>::value() -> reference
+{
+    assert(scope);
+
+    switch (scope->symbol())
+    {
+    case token::symbol::null:
+    case token::symbol::boolean:
+    case token::symbol::integer:
+    case token::symbol::number:
+    case token::symbol::string:
+        return *current.template get<pointer>();
+
+    case token::symbol::array:
+        return *current.template get<array_iterator>();
+
+    case token::symbol::map:
+        return current.template get<map_iterator>()->second;
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
+template <typename Derived, typename T>
+auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> const_reference
 {
     assert(scope);
 
@@ -2124,7 +2148,7 @@ auto basic_variable<CharT>::key_iterator::operator= (key_iterator&& other) -> ke
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::key_iterator::key() const -> reference
+auto basic_variable<CharT>::key_iterator::key() const -> const_reference
 {
     assert(super::scope);
 

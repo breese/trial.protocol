@@ -78,15 +78,13 @@ private:
         using difference_type = std::ptrdiff_t;
         using pointer = typename std::add_pointer<value_type>::type;
         using reference = typename std::add_lvalue_reference<value_type>::type;
+        using const_reference = typename std::add_const<reference>::type;
 
         Derived& operator= (const Derived&);
         Derived& operator= (Derived&&);
 
         Derived& operator++ ();
         Derived operator++ (int);
-
-        reference key() const;
-        reference value() const;
 
         pointer operator-> ();
 
@@ -99,6 +97,10 @@ private:
         iterator_base(iterator_base&&);
         iterator_base(pointer, bool = true);
 
+        const_reference key() const;
+        reference value();
+        const_reference value() const;
+
         friend class basic_variable<CharT>;
 
         using array_iterator = typename std::conditional<std::is_const<T>::value,
@@ -107,7 +109,10 @@ private:
         using map_iterator = typename std::conditional<std::is_const<T>::value,
                                                        typename map_type::const_iterator,
                                                        typename map_type::iterator>::type;
-        using small_union = core::detail::small_union<sizeof(pointer), pointer, array_iterator, map_iterator>;
+        using small_union = core::detail::small_union<sizeof(pointer),
+                                                      pointer,
+                                                      array_iterator,
+                                                      map_iterator>;
 
         pointer scope;
         small_union current;
@@ -128,6 +133,7 @@ public:
         using typename super::difference_type;
         using typename super::pointer;
         using typename super::reference;
+        using typename super::const_reference;
 
         iterator();
         iterator(const iterator& other);
@@ -137,7 +143,11 @@ public:
         iterator& operator= (const iterator& other);
         iterator& operator= (iterator&& other);
 
+        const_reference key() const { return super::key(); }
+        reference value() { return super::value(); }
+        const_reference value() const { return super::value(); }
         reference operator* () { return super::value(); }
+        const_reference operator* () const { return super::value(); }
 
     private:
         friend class basic_variable<CharT>;
@@ -157,6 +167,7 @@ public:
         using typename super::difference_type;
         using typename super::pointer;
         using typename super::reference;
+        using typename super::const_reference;
 
         const_iterator();
         const_iterator(const const_iterator& other);
@@ -165,7 +176,9 @@ public:
         // iterator is convertible to const_iterator
         const_iterator(const iterator& other);
 
-        reference operator* () { return super::value(); }
+        const_reference key() const { return super::key(); }
+        const_reference value() const { return super::value(); }
+        const_reference operator* () const { return super::value(); }
     };
 
     class key_iterator
@@ -180,6 +193,7 @@ public:
         using typename super::difference_type;
         using typename super::pointer;
         using typename super::reference;
+        using typename super::const_reference;
 
         key_iterator();
         key_iterator(const key_iterator& other);
@@ -189,8 +203,9 @@ public:
         key_iterator& operator= (const key_iterator& other);
         key_iterator& operator= (key_iterator&& other);
 
-        reference key() const;
-        reference operator* () { return key(); }
+        const_reference key() const;
+        const_reference value() const { return super::value(); }
+        const_reference operator* () { return key(); }
 
         key_iterator& operator++();
 

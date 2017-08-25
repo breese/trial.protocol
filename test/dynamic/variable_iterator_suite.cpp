@@ -857,12 +857,12 @@ void get_null()
 {
     {
         variable data;
-        auto where = data.begin();
+        variable::iterator where = data.begin();
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         const variable data;
-        auto where = data.begin();
+        variable::const_iterator where = data.begin();
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
@@ -871,12 +871,14 @@ void get_boolean()
 {
     {
         variable data(true);
-        auto where = data.begin();
+        variable::iterator where = data.begin();
+        TRIAL_PROTOCOL_TEST(where.value() == true);
         TRIAL_PROTOCOL_TEST(*where == true);
     }
     {
         const variable data(true);
-        auto where = data.begin();
+        variable::const_iterator where = data.begin();
+        TRIAL_PROTOCOL_TEST(where.value() == true);
         TRIAL_PROTOCOL_TEST(*where == true);
     }
 }
@@ -921,55 +923,195 @@ void get_number()
 
 void get_string()
 {
-    variable data("alpha");
-    auto where = data.begin();
-    TRIAL_PROTOCOL_TEST(*where == "alpha");
+    {
+        variable data("alpha");
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+    }
+    {
+        const variable data("alpha");
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+    }
 }
 
 void get_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha" });
-    auto where = data.begin();
-    TRIAL_PROTOCOL_TEST(where->is<bool>());
-    TRIAL_PROTOCOL_TEST(*where == true);
-    ++where;
-    TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<int>());
-    TRIAL_PROTOCOL_TEST(*where == 2);
-    ++where;
-    TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<float>());
-    TRIAL_PROTOCOL_TEST(*where == 3.0);
-    ++where;
-    TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<string>());
-    TRIAL_PROTOCOL_TEST(*where == "alpha");
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha" });
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(where->is<bool>());
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(where.key(),
+                                        error,
+                                        "incompatible type");
+        TRIAL_PROTOCOL_TEST(where.value() == true);
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<int>());
+        TRIAL_PROTOCOL_TEST(where.value() == 2);
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<float>());
+        TRIAL_PROTOCOL_TEST(where.value() == 3.0);
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(where.value() == "alpha");
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+    }
+    {
+        const variable data = array::make({ true, 2, 3.0, "alpha" });
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(where->is<bool>());
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(where.key(),
+                                        error,
+                                        "incompatible type");
+        TRIAL_PROTOCOL_TEST(where.value() == true);
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<int>());
+        TRIAL_PROTOCOL_TEST(where.value() == 2);
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<float>());
+        TRIAL_PROTOCOL_TEST(where.value() == 3.0);
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(where.value() == "alpha");
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+    }
 }
 
 void get_map()
 {
+    {
+        variable data = map::make(
+            {
+                {"alpha", true},
+                {"bravo", 2},
+                {"charlie", 3.0},
+                {"delta", "hydrogen"}
+            });
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(where->is<bool>());
+        TRIAL_PROTOCOL_TEST(where.key() == "alpha");
+        TRIAL_PROTOCOL_TEST(where.value() == true);
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<int>());
+        TRIAL_PROTOCOL_TEST(where.key() == "bravo");
+        TRIAL_PROTOCOL_TEST(where.value() == 2);
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<float>());
+        TRIAL_PROTOCOL_TEST(where.key() == "charlie");
+        TRIAL_PROTOCOL_TEST(where.value() == 3.0);
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(where.key() == "delta");
+        TRIAL_PROTOCOL_TEST(where.value() == "hydrogen");
+        TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+    }
+    {
+        const variable data = map::make(
+            {
+                {"alpha", true},
+                {"bravo", 2},
+                {"charlie", 3.0},
+                {"delta", "hydrogen"}
+            });
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(where->is<bool>());
+        TRIAL_PROTOCOL_TEST(where.key() == "alpha");
+        TRIAL_PROTOCOL_TEST(where.value() == true);
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<int>());
+        TRIAL_PROTOCOL_TEST(where.key() == "bravo");
+        TRIAL_PROTOCOL_TEST(where.value() == 2);
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<float>());
+        TRIAL_PROTOCOL_TEST(where.key() == "charlie");
+        TRIAL_PROTOCOL_TEST(where.value() == 3.0);
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(where.key() == "delta");
+        TRIAL_PROTOCOL_TEST(where.value() == "hydrogen");
+        TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+    }
+}
+
+void overwrite_boolean()
+{
+    variable data(true);
+    auto where = data.begin();
+    *where = null;
+    TRIAL_PROTOCOL_TEST(data == null);
+}
+
+void overwrite_integer()
+{
+    variable data(2);
+    auto where = data.begin();
+    *where = null;
+    TRIAL_PROTOCOL_TEST(data == null);
+}
+
+void overwrite_number()
+{
+    variable data(3.0);
+    auto where = data.begin();
+    *where = null;
+    TRIAL_PROTOCOL_TEST(data == null);
+}
+
+void overwrite_string()
+{
+    variable data("alpha");
+    auto where = data.begin();
+    *where = null;
+    TRIAL_PROTOCOL_TEST(data == null);
+}
+
+void overwrite_array()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha" });
+    auto where = data.begin();
+    *where = null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+}
+
+void overwrite_map()
+{
     variable data = map::make(
         {
-            {"alpha", true},
-            {"bravo", 2},
-            {"charlie", 3.0},
-            {"delta", "hydrogen"}
+            {"alpha", null},
+            {"bravo", true},
+            {"charlie", 2},
+            {"delta", 3.0},
+            {"echo", "hydrogen"}
         });
     auto where = data.begin();
-    TRIAL_PROTOCOL_TEST(where->is<bool>());
-    TRIAL_PROTOCOL_TEST(*where == true);
-    ++where;
-    TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<int>());
-    TRIAL_PROTOCOL_TEST(*where == 2);
-    ++where;
-    TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<float>());
-    TRIAL_PROTOCOL_TEST(*where == 3.0);
-    ++where;
-    TRIAL_PROTOCOL_TEST(where != data.end());
-    TRIAL_PROTOCOL_TEST(where->is<string>());
-    TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+    *where = 42;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    TRIAL_PROTOCOL_TEST(data["alpha"] == 42);
 }
 
 void run()
@@ -981,6 +1123,13 @@ void run()
     get_string();
     get_array();
     get_map();
+
+    overwrite_boolean();
+    overwrite_integer();
+    overwrite_number();
+    overwrite_string();
+    overwrite_array();
+    overwrite_map();
 }
 
 } // namespace dereference_suite
