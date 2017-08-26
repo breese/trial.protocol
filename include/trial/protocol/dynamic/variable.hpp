@@ -217,6 +217,8 @@ public:
     basic_variable(const basic_variable<CharT>&);
     basic_variable(basic_variable<CharT>&&);
     template <typename T> basic_variable(T);
+    // Initializer
+    basic_variable(const std::initializer_list<value_type>&);
     // Null constructor
     basic_variable();
     basic_variable(const nullable&);
@@ -237,9 +239,9 @@ public:
 
     // Addition / concatenation
 
+    template <typename T> basic_variable& operator+= (const T&);
     basic_variable& operator+= (const basic_variable&);
-    basic_variable& operator+= (std::initializer_list<value_type>);
-    basic_variable& operator+= (std::initializer_list<pair_type>);
+    basic_variable& operator+= (const CharT *);
 
     template <typename T, typename U>
     friend basic_variable<T> operator+ (const basic_variable<T>&,

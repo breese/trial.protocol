@@ -2352,6 +2352,34 @@ basic_variable<CharT>::basic_variable(T value)
 }
 
 template <typename CharT>
+basic_variable<CharT>::basic_variable(const std::initializer_list<value_type>& init)
+    : storage(null)
+{
+    if (init.size() == 0)
+    {
+        storage = array_type{};
+        return;
+    }
+
+    for (const auto& i : init)
+    {
+        if (i.is<array>() && (i.size() == 2))
+            continue;
+
+        storage = array_type(init);
+        return;
+    }
+
+    storage = map_type{};
+    auto& map = unsafe_get<map_type>();
+    for (const auto& i : init)
+    {
+        auto& array = i.unsafe_get<array_type>();
+        map[array[0]] = array[1];
+    }
+}
+
+template <typename CharT>
 basic_variable<CharT>::basic_variable(const nullable&)
     : storage(null)
 {
@@ -2512,6 +2540,14 @@ auto basic_variable<CharT>::operator= (const CharT *value) -> basic_variable&
 }
 
 template <typename CharT>
+template <typename T>
+auto basic_variable<CharT>::operator+= (const T& other) -> basic_variable&
+{
+    detail::overloader<value_type, T>::append(*this, other);
+    return *this;
+}
+
+template <typename CharT>
 auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_variable&
 {
     switch (other.code())
@@ -2593,35 +2629,9 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::operator+= (std::initializer_list<value_type> init) -> basic_variable&
+auto basic_variable<CharT>::operator+= (const CharT *other) -> basic_variable&
 {
-    switch (symbol())
-    {
-    case token::symbol::array:
-        {
-            auto& array = unsafe_get<array_type>();
-            array.insert(array.end(), init.begin(), init.end());
-        }
-        break;
-
-    default:
-        throw dynamic::error(incompatible_type);
-    }
-    return *this;
-}
-
-template <typename CharT>
-auto basic_variable<CharT>::operator+= (std::initializer_list<pair_type> init) -> basic_variable&
-{
-    switch (symbol())
-    {
-    case token::symbol::map:
-        unsafe_get<map_type>().insert(init);
-        break;
-
-    default:
-        throw dynamic::error(incompatible_type);
-    }
+    detail::overloader<value_type, string_type>::append(*this, other);
     return *this;
 }
 
