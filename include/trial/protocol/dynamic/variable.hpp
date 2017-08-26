@@ -243,13 +243,6 @@ public:
     basic_variable& operator+= (const basic_variable&);
     basic_variable& operator+= (const CharT *);
 
-    template <typename T, typename U>
-    friend basic_variable<T> operator+ (const basic_variable<T>&,
-                                        const U&);
-    template <typename T>
-    friend basic_variable<T> operator+ (nullable,
-                                        const basic_variable<T>&);
-
     // Accessor
 
     template <typename Tag> typename tag_traits<typename std::decay<Tag>::type>::type value() const;
@@ -307,27 +300,6 @@ public:
     key_iterator key_begin() const &;
     key_iterator key_end() const &;
 
-    // Comparison
-    // Container comparison operators are noexcept from C++14
-
-    template <typename T, typename U>
-    friend bool operator== (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
-
-    template <typename T, typename U>
-    friend bool operator!= (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
-
-    template <typename T, typename U>
-    friend bool operator< (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
-
-    template <typename T>
-    bool operator<= (const T&) const TRIAL_PROTOCOL_CXX14(noexcept);
-
-    template <typename T>
-    bool operator> (const T&) const TRIAL_PROTOCOL_CXX14(noexcept);
-
-    template <typename T>
-    bool operator>= (const T&) const TRIAL_PROTOCOL_CXX14(noexcept);
-
 private:
     template <typename T, typename U, typename> friend struct detail::overloader;
     template <typename T, typename U, typename> friend struct detail::operator_overloader;
@@ -355,6 +327,32 @@ private:
                                                    map_type>;
     storage_type storage;
 };
+
+template <typename T, typename U>
+basic_variable<T> operator+ (const basic_variable<T>&, const U&);
+
+template <typename T>
+basic_variable<T> operator+ (nullable, const basic_variable<T>&);
+
+// Container comparison operators are noexcept from C++14
+
+template <typename T, typename U>
+bool operator== (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+
+template <typename T, typename U>
+bool operator!= (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+
+template <typename T, typename U>
+bool operator< (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+
+template <typename CharT, typename U>
+bool operator<= (const basic_variable<CharT>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+
+template <typename CharT, typename U>
+bool operator> (const basic_variable<CharT>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+
+template <typename CharT, typename U>
+bool operator>= (const basic_variable<CharT>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
 // Convenience
 

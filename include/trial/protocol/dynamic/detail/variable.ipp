@@ -2114,6 +2114,12 @@ basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
+basic_variable<CharT>::key_iterator::key_iterator()
+    : super()
+{
+}
+
+template <typename CharT>
 basic_variable<CharT>::key_iterator::key_iterator(const key_iterator& other)
     : super(other),
       index(other.index)
@@ -3285,36 +3291,28 @@ bool operator< (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     return detail::operator_overloader<T, U>::less(lhs, rhs);
 }
 
-template <typename CharT>
-template <typename T>
-bool basic_variable<CharT>::operator<= (const T& rhs) const TRIAL_PROTOCOL_CXX14(noexcept)
+template <typename CharT, typename U>
+bool operator<= (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
-    if (same<nullable>())
+    if (lhs.template same<nullable>())
         return true;
 
-    return !(rhs < *this);
+    return !(rhs < lhs);
 }
 
-template <typename CharT>
-template <typename T>
-bool basic_variable<CharT>::operator> (const T& rhs) const TRIAL_PROTOCOL_CXX14(noexcept)
+template <typename CharT, typename U>
+bool operator> (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
-    if (same<nullable>())
+    if (lhs.template same<nullable>())
         return false;
 
-    return rhs < *this;
+    return rhs < lhs;
 }
 
-template <typename CharT>
-template <typename T>
-bool basic_variable<CharT>::operator>= (const T& rhs) const TRIAL_PROTOCOL_CXX14(noexcept)
+template <typename CharT, typename U>
+bool operator>= (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
-    return !(*this < rhs);
-}
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator()
-    : super()
-{
+    return !(lhs < rhs);
 }
 
 //-----------------------------------------------------------------------------
