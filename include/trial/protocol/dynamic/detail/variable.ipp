@@ -2809,11 +2809,10 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
 {
     switch (symbol())
     {
-    case token::symbol::map:
-        return unsafe_get<map_type>()[key];
-
     case token::symbol::null:
         *this = basic_map<CharT>::make();
+        // FALLTHROUGH
+    case token::symbol::map:
         return unsafe_get<map_type>()[key];
 
     default:
@@ -3213,6 +3212,9 @@ auto basic_variable<CharT>::insert(const basic_variable& value) -> iterator
 {
     switch (symbol())
     {
+    case token::symbol::null:
+        *this = basic_array<CharT>::make();
+        // FALLTHROUGH
     case token::symbol::array:
         {
             // Insert at end

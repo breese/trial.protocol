@@ -8079,6 +8079,16 @@ void run()
 namespace insert_suite
 {
 
+void insert_null()
+{
+    variable data;
+    auto where = data.insert(null);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+}
+
 void fail_null()
 {
     variable data;
@@ -8090,6 +8100,9 @@ void fail_null()
 void fail_boolean()
 {
     variable data(true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(true),
+                                    error,
+                                    "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
                                     error,
                                     "incompatible type");
@@ -8098,6 +8111,9 @@ void fail_boolean()
 void fail_integer()
 {
     variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(true),
+                                    error,
+                                    "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
                                     error,
                                     "incompatible type");
@@ -8106,6 +8122,9 @@ void fail_integer()
 void fail_number()
 {
     variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(true),
+                                    error,
+                                    "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
                                     error,
                                     "incompatible type");
@@ -8114,6 +8133,9 @@ void fail_number()
 void fail_string()
 {
     variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(true),
+                                    error,
+                                    "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
                                     error,
                                     "incompatible type");
@@ -8239,6 +8261,7 @@ void fail_map_iterator()
 
 void run()
 {
+    insert_null();
     fail_null();
     fail_boolean();
     fail_integer();
