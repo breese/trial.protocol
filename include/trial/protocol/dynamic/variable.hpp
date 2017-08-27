@@ -92,15 +92,6 @@ private:
         bool operator!= (const Derived&) const;
 
     protected:
-        iterator_base();
-        iterator_base(const iterator_base&);
-        iterator_base(iterator_base&&);
-        iterator_base(pointer, bool = true);
-
-        const_reference key() const;
-        reference value();
-        const_reference value() const;
-
         friend class basic_variable<CharT>;
 
         using array_iterator = typename std::conditional<std::is_const<T>::value,
@@ -109,6 +100,19 @@ private:
         using map_iterator = typename std::conditional<std::is_const<T>::value,
                                                        typename map_type::const_iterator,
                                                        typename map_type::iterator>::type;
+
+        iterator_base();
+        iterator_base(const iterator_base&);
+        iterator_base(iterator_base&&);
+        iterator_base(pointer, bool = true);
+        iterator_base(pointer, array_iterator);
+        iterator_base(pointer, map_iterator);
+
+        const_reference key() const;
+        reference value();
+        const_reference value() const;
+
+    protected:
         using small_union = core::detail::small_union<sizeof(pointer),
                                                       pointer,
                                                       array_iterator,
@@ -138,7 +142,6 @@ public:
         iterator();
         iterator(const iterator& other);
         iterator(iterator&& other);
-        iterator(pointer p, bool e = true);
 
         iterator& operator= (const iterator& other);
         iterator& operator= (iterator&& other);
@@ -151,8 +154,12 @@ public:
 
     private:
         friend class basic_variable<CharT>;
+
         // Conversion from const_iterator to iterator is kept private
         iterator(const const_iterator& other);
+        iterator(pointer p, bool e = true);
+        iterator(pointer p, typename super::array_iterator);
+        iterator(pointer p, typename super::map_iterator);
     };
 
     class const_iterator
@@ -172,13 +179,17 @@ public:
         const_iterator();
         const_iterator(const const_iterator& other);
         const_iterator(const_iterator&& other);
-        const_iterator(pointer p, bool e = true);
         // iterator is convertible to const_iterator
         const_iterator(const iterator& other);
 
         const_reference key() const { return super::key(); }
         const_reference value() const { return super::value(); }
         const_reference operator* () const { return super::value(); }
+
+    private:
+        friend class basic_variable<CharT>;
+
+        const_iterator(pointer p, bool e = true);
     };
 
     class key_iterator
@@ -198,7 +209,6 @@ public:
         key_iterator();
         key_iterator(const key_iterator& other);
         key_iterator(key_iterator&& other);
-        key_iterator(pointer p, bool e = true);
 
         key_iterator& operator= (const key_iterator& other);
         key_iterator& operator= (key_iterator&& other);
@@ -208,6 +218,11 @@ public:
         const_reference operator* () { return key(); }
 
         key_iterator& operator++();
+
+    private:
+        friend class basic_variable<CharT>;
+
+        key_iterator(pointer p, bool e = true);
 
     private:
         typename std::remove_const<value_type>::type index;
@@ -287,6 +302,8 @@ public:
     // Modifiers
 
     void clear() noexcept;
+    iterator insert(const basic_variable&);
+    iterator insert(const_iterator, const basic_variable&);
     iterator erase(const_iterator);
     iterator erase(const_iterator, const_iterator);
 
@@ -299,6 +316,9 @@ public:
 
     key_iterator key_begin() const &;
     key_iterator key_end() const &;
+
+private:
+    bool is_pair() const;
 
 private:
     template <typename T, typename U, typename> friend struct detail::overloader;

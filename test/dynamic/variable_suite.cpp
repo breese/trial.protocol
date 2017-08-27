@@ -8073,6 +8073,189 @@ void run()
 } // namespace clear_suite
 
 //-----------------------------------------------------------------------------
+// Insert
+//-----------------------------------------------------------------------------
+
+namespace insert_suite
+{
+
+void fail_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+}
+
+void fail_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+}
+
+void fail_integer()
+{
+    variable data(2);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+}
+
+void fail_number()
+{
+    variable data(3.0);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+}
+
+void fail_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+}
+
+void insert_array()
+{
+    variable data = array::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    auto where = data.insert(null);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = data.insert(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST(data[1] == true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = data.insert(2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST(data[1] == true);
+    TRIAL_PROTOCOL_TEST(data[2] == 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+}
+
+void insert_array_iterator_begin()
+{
+    // Inserts at end
+    variable data = array::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    auto where = data.insert(data.begin(), null);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = data.insert(data.begin(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+    TRIAL_PROTOCOL_TEST(data[0] == true);
+    TRIAL_PROTOCOL_TEST(data[1] == null);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = data.insert(data.begin(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+    TRIAL_PROTOCOL_TEST(data[0] == 2);
+    TRIAL_PROTOCOL_TEST(data[1] == true);
+    TRIAL_PROTOCOL_TEST(data[2] == null);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+}
+
+void insert_array_iterator_end()
+{
+    variable data = array::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    auto where = data.insert(data.end(), null);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    where = data.insert(data.end(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST(data[1] == true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = data.insert(data.end(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+    TRIAL_PROTOCOL_TEST(data[0] == null);
+    TRIAL_PROTOCOL_TEST(data[1] == true);
+    TRIAL_PROTOCOL_TEST(data[2] == 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+}
+
+void insert_map()
+{
+    variable data = map::make();
+    auto where = data.insert({"alpha", "hydrogen"});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    TRIAL_PROTOCOL_TEST(data["alpha"] == "hydrogen");
+    TRIAL_PROTOCOL_TEST(where.key() == "alpha");
+    where = data.insert({"bravo", "helium"});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+    TRIAL_PROTOCOL_TEST(data["bravo"] == "helium");
+    TRIAL_PROTOCOL_TEST(where.key() == "bravo");
+}
+
+void fail_map()
+{
+    variable data = map::make();
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert("alpha"),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert({ "alpha" }),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert({ "alpha", "bravo", "charlie" }),
+                                    error,
+                                    "incompatible type");
+}
+
+void insert_map_iterator()
+{
+    variable data = map::make();
+    auto where = data.insert(data.end(), {"alpha", "hydrogen"});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    TRIAL_PROTOCOL_TEST(data["alpha"] == "hydrogen");
+    TRIAL_PROTOCOL_TEST(where.key() == "alpha");
+    where = data.insert(data.end(), {"bravo", "helium"});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+    TRIAL_PROTOCOL_TEST(data["bravo"] == "helium");
+    TRIAL_PROTOCOL_TEST(where.key() == "bravo");
+}
+
+void fail_map_iterator()
+{
+    variable data = map::make();
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), "alpha"),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), { "alpha" }),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), { "alpha", "bravo", "charlie" }),
+                                    error,
+                                    "incompatible type");
+}
+
+void run()
+{
+    fail_null();
+    fail_boolean();
+    fail_integer();
+    fail_number();
+    fail_string();
+    insert_array();
+    insert_array_iterator_begin();
+    insert_array_iterator_end();
+    insert_map();
+    fail_map();
+    insert_map_iterator();
+    fail_map_iterator();
+}
+
+} // namespace insert_suite
+
+//-----------------------------------------------------------------------------
 // Erase
 //-----------------------------------------------------------------------------
 
@@ -8519,6 +8702,7 @@ int main()
     count_suite::run();
 
     clear_suite::run();
+    insert_suite::run();
     erase_suite::run();
 
     return boost::report_errors();

@@ -1827,6 +1827,24 @@ basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
 
 template <typename CharT>
 template <typename Derived, typename T>
+basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
+                                                                array_iterator where)
+    : scope(p),
+      current(where)
+{
+}
+
+template <typename CharT>
+template <typename Derived, typename T>
+basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
+                                                                map_iterator where)
+    : scope(p),
+      current(where)
+{
+}
+
+template <typename CharT>
+template <typename Derived, typename T>
 auto basic_variable<CharT>::iterator_base<Derived, T>::operator= (const Derived& other) -> Derived&
 {
     scope = other.scope;
@@ -2030,6 +2048,20 @@ basic_variable<CharT>::iterator::iterator(iterator&& other)
 template <typename CharT>
 basic_variable<CharT>::iterator::iterator(pointer p, bool e)
     : super(p, e)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::iterator::iterator(pointer p,
+                                          typename super::array_iterator where)
+    : super(p, where)
+{
+}
+
+template <typename CharT>
+basic_variable<CharT>::iterator::iterator(pointer p,
+                                          typename super::map_iterator where)
+    : super(p, where)
 {
 }
 
@@ -2369,7 +2401,7 @@ basic_variable<CharT>::basic_variable(const std::initializer_list<value_type>& i
 
     for (const auto& i : init)
     {
-        if (i.is<array>() && (i.size() == 2))
+        if (i.is_pair())
             continue;
 
         storage = array_type(init);
@@ -3177,6 +3209,65 @@ void basic_variable<CharT>::clear() noexcept
 }
 
 template <typename CharT>
+auto basic_variable<CharT>::insert(const basic_variable& value) -> iterator
+{
+    switch (symbol())
+    {
+    case token::symbol::array:
+        {
+            // Insert at end
+            auto& array = unsafe_get<array_type>();
+            array.push_back(value);
+            return {this, --array.end()};
+        }
+
+    case token::symbol::map:
+        if (value.is_pair())
+        {
+            auto result = unsafe_get<map_type>().insert(pair_type{value[0], value[1]});
+            return {this, std::move(result.first)};
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    throw dynamic::error(incompatible_type);
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::insert(const_iterator where, const basic_variable& value) -> iterator
+{
+    switch (symbol())
+    {
+    case token::symbol::array:
+        {
+            auto result = unsafe_get<array_type>()
+                .insert(where.current.template get<typename const_iterator::array_iterator>(),
+                        value);
+            return {this, result};
+        }
+
+    case token::symbol::map:
+        if (value.is_pair())
+        {
+            // Use iterator as hint
+            auto result = unsafe_get<map_type>()
+                .insert(where.current.template get<typename const_iterator::map_iterator>(),
+                        pair_type{value[0], value[1]});
+            return {this, std::move(result)};
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    throw dynamic::error(incompatible_type);
+}
+
+template <typename CharT>
 auto basic_variable<CharT>::erase(const_iterator where) -> iterator
 {
     using array_iterator = typename basic_variable<CharT>::const_iterator::array_iterator;
@@ -3269,6 +3360,12 @@ template <typename CharT>
 auto basic_variable<CharT>::key_end() const & -> key_iterator
 {
     return {this, false};
+}
+
+template <typename CharT>
+bool basic_variable<CharT>::is_pair() const
+{
+    return is<array>() && (size() == 2);
 }
 
 // Comparison
