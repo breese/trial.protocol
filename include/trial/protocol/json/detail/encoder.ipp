@@ -48,6 +48,17 @@ struct absolute<T,
     }
 };
 
+template <typename T>
+struct absolute<T,
+                typename std::enable_if<std::is_same<T, signed char>::value ||
+                                        std::is_same<T, signed short>::value>::type>
+{
+    static T value(T value)
+    {
+        return value < 0 ? -value : value;
+    }
+};
+
 //-----------------------------------------------------------------------------
 // encoder::overloader
 //-----------------------------------------------------------------------------
