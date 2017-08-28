@@ -117,12 +117,12 @@ public:
 
     static constexpr char_type to_char_type(int_type value) noexcept
     {
-        return value;
+        return char_type(value);
     }
 
     static constexpr int_type to_int_type(char_type value) noexcept
     {
-        return value;
+        return int_type(value);
     }
 };
 
