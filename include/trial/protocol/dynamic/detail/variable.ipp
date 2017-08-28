@@ -2412,7 +2412,7 @@ basic_variable<CharT>::basic_variable(const std::initializer_list<value_type>& i
     auto& map = unsafe_get<map_type>();
     for (const auto& i : init)
     {
-        auto& array = i.unsafe_get<array_type>();
+        auto& array = i.template unsafe_get<array_type>();
         map[array[0]] = array[1];
     }
 }
