@@ -66,8 +66,8 @@ private:
     struct copier;
     struct mover;
 
-    typename std::aligned_union<0, typelist>::type storage;
-    std::size_t current;
+    typename std::aligned_storage<N, alignof(void *)>::type storage;
+    unsigned short current;
 };
 
 } // namespace detail

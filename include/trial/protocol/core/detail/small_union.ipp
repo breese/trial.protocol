@@ -62,6 +62,8 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
     using pointer = typename std::add_pointer<type>::type;
     using small_type = pointer;
 
+    static_assert(M >= sizeof(pointer), "N must be larger than a pointer");
+
     template <typename... Args>
     static void construct(void *ptr, Args... args)
     {

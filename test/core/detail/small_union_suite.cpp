@@ -27,23 +27,23 @@ void test_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
 }
 
-void test_int_with_longlong()
+void test_ptr_with_long_double()
 {
-    small_union<sizeof(int), bool, int, long long> data{3LL};
-    TRIAL_PROTOCOL_TEST_EQUAL(data.get<long long>(), 3LL);
+    small_union<sizeof(void *), bool, int, long double> data{3.0L};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.get<long double>(), 3.0L);
 }
 
-void test_int_with_string()
+void test_ptr_with_string()
 {
-    small_union<sizeof(int), bool, int, std::string> data{std::string("alpha")};
+    small_union<sizeof(void *), bool, int, std::string> data{std::string("alpha")};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<std::string>(), std::string("alpha"));
 }
 
 void run()
 {
     test_int();
-    test_int_with_longlong();
-    test_int_with_string();
+    test_ptr_with_long_double();
+    test_ptr_with_string();
 }
 
 } // namespace ctor_suite
