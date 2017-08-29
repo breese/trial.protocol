@@ -40,8 +40,23 @@ using identity_t = T;
 // void
 //-----------------------------------------------------------------------------
 
+#if defined(__GNUC__) && (__GNUC__ < 5)
+
+// Workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64395
+
+namespace impl
+{
+template <typename...> struct void_t { using type = void; };
+} // namespace impl
+
+template <typename... T> using void_t = typename impl::void_t<T...>::type;
+
+#else
+
 template <typename...>
 using void_t = void;
+
+#endif
 
 //-----------------------------------------------------------------------------
 // contains
