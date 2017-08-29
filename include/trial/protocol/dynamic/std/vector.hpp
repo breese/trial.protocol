@@ -41,6 +41,50 @@ struct convert_overloader<
     }
 };
 
+template <typename CharT, typename T>
+struct convert_overloader<
+    std::vector<T>,
+    basic_variable<CharT>>
+{
+    static std::vector<T> convert(const basic_variable<CharT>& array,
+                                  std::error_code& error)
+    {
+        std::vector<T> result;
+        result.reserve(array.size());
+        for (auto it = array.begin(); it != array.end(); ++it)
+        {
+            if (it->template is<T>())
+                result.push_back(it->template value<T>(error));
+            else
+                error = dynamic::make_error_code(incompatible_type);
+
+            if (error)
+                return {};
+        }
+        return result;
+    }
+};
+
+// Special case for std::vector<variable>
+
+template <typename CharT>
+struct convert_overloader<
+    std::vector<basic_variable<CharT>>,
+    basic_variable<CharT>>
+{
+    static std::vector<basic_variable<CharT>> convert(const basic_variable<CharT>& array,
+                                                      std::error_code&)
+    {
+        std::vector<basic_variable<CharT>> result;
+        result.reserve(array.size());
+        for (auto it = array.begin(); it != array.end(); ++it)
+        {
+            result.push_back(*it);
+        }
+        return result;
+    }
+};
+
 } // namespace detail
 } // namespace dynamic
 } // namespace protocol

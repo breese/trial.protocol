@@ -41,6 +41,52 @@ struct convert_overloader<
     }
 };
 
+template <typename CharT, typename Key, typename Value>
+struct convert_overloader<
+    std::map<Key, Value>,
+    basic_variable<CharT>>
+{
+    static std::map<Key, Value> convert(const basic_variable<CharT>& map,
+                                        std::error_code& error)
+    {
+        std::map<Key, Value> result;
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            if (it->template is<Value>())
+                result.emplace(it.key().template value<Key>(error),
+                               it->template value<Value>(error));
+            else
+                error = dynamic::make_error_code(incompatible_type);
+
+            if (error)
+                return {};
+        }
+        return result;
+    }
+};
+
+// Special case for std::map<T, variable>
+
+template <typename CharT, typename Key>
+struct convert_overloader<
+    std::map<Key, basic_variable<CharT>>,
+    basic_variable<CharT>>
+{
+    static std::map<Key, basic_variable<CharT>> convert(const basic_variable<CharT>& map,
+                                                        std::error_code& error)
+    {
+        std::map<Key, basic_variable<CharT>> result;
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            result.emplace(it.key().template value<Key>(error), it.value());
+
+            if (error)
+                return {};
+        }
+        return result;
+    }
+};
+
 } // namespace detail
 } // namespace dynamic
 } // namespace protocol
