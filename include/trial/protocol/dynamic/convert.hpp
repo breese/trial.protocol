@@ -32,7 +32,7 @@ struct convert_overloader
 } // namespace detail
 
 template <typename T, typename U>
-T convert(const U& u, std::error_code& error)
+T convert(const U& u, std::error_code& error) noexcept
 {
     // A compiler error here indicates that the appropriate header file of the
     // type to be converted has not been included.
