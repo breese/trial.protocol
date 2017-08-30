@@ -8106,6 +8106,28 @@ void fail_boolean()
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
                                     error,
                                     "incompatible type");
+
+    variable array = { true, 2, 3.0, "alpha" };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+
+    variable map =
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
 }
 
 void fail_integer()
@@ -8115,6 +8137,28 @@ void fail_integer()
                                     error,
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+
+    variable array = { true, 2, 3.0, "alpha" };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+
+    variable map =
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), map.begin(), map.end()),
                                     error,
                                     "incompatible type");
 }
@@ -8128,6 +8172,28 @@ void fail_number()
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
                                     error,
                                     "incompatible type");
+
+    variable array = { true, 2, 3.0, "alpha" };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+
+    variable map =
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
 }
 
 void fail_string()
@@ -8137,6 +8203,28 @@ void fail_string()
                                     error,
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+
+    variable array = { true, 2, 3.0, "alpha" };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+
+    variable map =
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), map.begin(), map.end()),
                                     error,
                                     "incompatible type");
 }
@@ -8208,6 +8296,58 @@ void insert_array_iterator()
 
 void insert_array_range()
 {
+    // null variable
+    {
+        variable data = array::make();
+        variable input = null;
+        data.insert(input.begin(), input.end());
+        TRIAL_PROTOCOL_TEST(data.empty());
+    }
+    // boolean variable
+    {
+        variable data = array::make();
+        variable input = true;
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ true });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // integer variable
+    {
+        variable data = array::make();
+        variable input = 2;
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ 2 });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // number variable
+    {
+        variable data = array::make();
+        variable input = 3.0;
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ 3.0 });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // string variable
+    {
+        variable data = array::make();
+        variable input = "alpha";
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // array variable
     {
         variable data = array::make();
         variable input = { null, true, 2, 3.0, "alpha" };
@@ -8218,6 +8358,7 @@ void insert_array_range()
                                      expect.begin(), expect.end(),
                                      std::equal_to<variable>());
     }
+    // vector<variable>
     {
         variable data = array::make();
         std::vector<variable> input = { null, true, 2, 3.0, "alpha" };
@@ -8228,6 +8369,7 @@ void insert_array_range()
                                      expect.begin(), expect.end(),
                                      std::equal_to<variable>());
     }
+    // vector<int>
     {
         variable data = array::make();
         std::vector<int> input = { 0, 1, 2, 3, 4 };
@@ -8343,11 +8485,62 @@ void insert_map_range()
 
 void fail_map_range()
 {
-    variable data = map::make();
-    std::vector<int> input = { 0, 1, 2, 3, 4 };
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
-                                    error,
-                                    "incompatible type");
+    // null variable
+    {
+        variable data = map::make();
+        variable input;
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
+    // boolean variable
+    {
+        variable data = map::make();
+        variable input = true;
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
+    // integer variable
+    {
+        variable data = map::make();
+        variable input = 2;
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
+    // number variable
+    {
+        variable data = map::make();
+        variable input = 3.0;
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
+    // string variable
+    {
+        variable data = map::make();
+        variable input = "alpha";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
+    // array variable
+    {
+        variable data = map::make();
+        variable input = { null, true, 2, 3.0, "alpha" };
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
+    // vector<int>
+    {
+        variable data = map::make();
+        std::vector<int> input = { 0, 1, 2, 3, 4 };
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void insert_map_range_iterator()
