@@ -26,11 +26,17 @@ namespace detail
 template <typename T>
 using is_bool = std::is_same<typename std::decay<T>::type, bool>;
 
-template <typename T, typename = void>
+template <typename, typename = void>
 struct is_iterator : std::false_type {};
 
 template <typename T>
 struct is_iterator<T, meta::void_t<typename T::iterator_category>> : std::true_type {};
+
+template <typename>
+struct is_pair : std::false_type {};
+
+template <typename T, typename U>
+struct is_pair<std::pair<T, U>> : std::true_type {};
 
 template <typename T>
 struct make_floating_point

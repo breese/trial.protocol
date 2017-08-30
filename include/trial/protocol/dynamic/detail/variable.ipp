@@ -1430,6 +1430,107 @@ struct overloader<
 } // namespace detail
 
 //-----------------------------------------------------------------------------
+// detail::iterator_overloader
+//-----------------------------------------------------------------------------
+
+namespace detail
+{
+
+template <typename CharT, typename Iterator, typename = void>
+struct iterator_overloader
+{
+    using variable_type = basic_variable<CharT>;
+
+    static void insert(variable_type& self,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case token::symbol::null:
+            self = basic_array<CharT>::make();
+            // FALLTHROUGH
+        case token::symbol::array:
+            {
+                // Insert at end
+                auto& array = self.template unsafe_get<typename variable_type::array_type>();
+                array.insert(array.end(), begin, end);
+            }
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+
+    static void insert(variable_type& self,
+                       typename variable_type::const_iterator where,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case token::symbol::array:
+            self.template unsafe_get<typename variable_type::array_type>()
+                .insert(where.current.template get<typename variable_type::const_iterator::array_iterator>(),
+                        begin,
+                        end);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+};
+
+template <typename CharT, typename Iterator>
+struct iterator_overloader<
+    CharT,
+    Iterator,
+    typename std::enable_if<core::detail::is_iterator<Iterator>::value &&
+                            core::detail::is_pair<typename Iterator::value_type>::value>::type>
+{
+    using variable_type = basic_variable<CharT>;
+
+    static void insert(variable_type& self,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case token::symbol::map:
+            self.template unsafe_get<typename variable_type::map_type>()
+                .insert(begin, end);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+
+    static void insert(basic_variable<CharT>& self,
+                       typename variable_type::const_iterator,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case token::symbol::map:
+            // Ignore hint
+            self.template unsafe_get<typename variable_type::map_type>()
+                .insert(begin,
+                        end);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+};
+
+} // namespace detail
+
+//-----------------------------------------------------------------------------
 // detail::operator_overloader
 //-----------------------------------------------------------------------------
 
@@ -3239,6 +3340,15 @@ auto basic_variable<CharT>::insert(const basic_variable& value) -> iterator
 }
 
 template <typename CharT>
+template <typename InputIterator>
+void basic_variable<CharT>::insert(InputIterator begin,
+                                   InputIterator end)
+{
+    return detail::iterator_overloader<CharT, InputIterator>
+        ::insert(*this, std::move(begin), std::move(end));
+}
+
+template <typename CharT>
 auto basic_variable<CharT>::insert(const_iterator where, const basic_variable& value) -> iterator
 {
     switch (symbol())
@@ -3267,6 +3377,16 @@ auto basic_variable<CharT>::insert(const_iterator where, const basic_variable& v
     }
 
     throw dynamic::error(incompatible_type);
+}
+
+template <typename CharT>
+template <typename InputIterator>
+void basic_variable<CharT>::insert(const_iterator where,
+                                   InputIterator begin,
+                                   InputIterator end)
+{
+    return detail::iterator_overloader<CharT, InputIterator>
+        ::insert(*this, std::move(where), std::move(begin), std::move(end));
 }
 
 template <typename CharT>

@@ -35,6 +35,7 @@ namespace detail
 {
 
 template <typename T, typename U, typename> struct overloader;
+template <typename T, typename U, typename> struct iterator_overloader;
 template <typename T, typename U, typename> struct operator_overloader;
 template <typename C, typename T, typename> struct same_overloader;
 
@@ -188,6 +189,7 @@ public:
 
     private:
         friend class basic_variable<CharT>;
+        template <typename T, typename U, typename> friend struct detail::iterator_overloader;
 
         const_iterator(pointer p, bool e = true);
     };
@@ -302,8 +304,15 @@ public:
     // Modifiers
 
     void clear() noexcept;
+
     iterator insert(const basic_variable&);
+    template <typename InputIterator>
+    void insert(InputIterator begin, InputIterator end);
+
     iterator insert(const_iterator, const basic_variable&);
+    template <typename InputIterator>
+    void insert(const_iterator, InputIterator begin, InputIterator end);
+
     iterator erase(const_iterator);
     iterator erase(const_iterator, const_iterator);
 
@@ -322,6 +331,7 @@ private:
 
 private:
     template <typename T, typename U, typename> friend struct detail::overloader;
+    template <typename T, typename U, typename> friend struct detail::iterator_overloader;
     template <typename T, typename U, typename> friend struct detail::operator_overloader;
     template <typename C, typename T, typename> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;

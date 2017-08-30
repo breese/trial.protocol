@@ -8162,47 +8162,117 @@ void insert_array()
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
-void insert_array_iterator_begin()
+void insert_array_iterator()
 {
-    // Inserts at end
-    variable data = array::make();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
-    auto where = data.insert(data.begin(), null);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
-    TRIAL_PROTOCOL_TEST(data[0] == null);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
-    where = data.insert(data.begin(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
-    TRIAL_PROTOCOL_TEST(data[0] == true);
-    TRIAL_PROTOCOL_TEST(data[1] == null);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
-    where = data.insert(data.begin(), 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
-    TRIAL_PROTOCOL_TEST(data[0] == 2);
-    TRIAL_PROTOCOL_TEST(data[1] == true);
-    TRIAL_PROTOCOL_TEST(data[2] == null);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    {
+        // Inserts at beginning
+        variable data = array::make();
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+        auto where = data.insert(data.begin(), null);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+        where = data.insert(data.begin(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+        TRIAL_PROTOCOL_TEST(data[0] == true);
+        TRIAL_PROTOCOL_TEST(data[1] == null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+        where = data.insert(data.begin(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+        TRIAL_PROTOCOL_TEST(data[0] == 2);
+        TRIAL_PROTOCOL_TEST(data[1] == true);
+        TRIAL_PROTOCOL_TEST(data[2] == null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        // Inserts at end
+        variable data = array::make();
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+        auto where = data.insert(data.end(), null);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+        where = data.insert(data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
+        TRIAL_PROTOCOL_TEST(data[0] == null);
+        TRIAL_PROTOCOL_TEST(data[1] == true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        where = data.insert(data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+        TRIAL_PROTOCOL_TEST(data[0] == null);
+        TRIAL_PROTOCOL_TEST(data[1] == true);
+        TRIAL_PROTOCOL_TEST(data[2] == 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    }
 }
 
-void insert_array_iterator_end()
+void insert_array_range()
+{
+    {
+        variable data = array::make();
+        variable input = { null, true, 2, 3.0, "alpha" };
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ null, true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make();
+        std::vector<variable> input = { null, true, 2, 3.0, "alpha" };
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ null, true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make();
+        std::vector<int> input = { 0, 1, 2, 3, 4 };
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ 0, 1, 2, 3, 4 });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void fail_array_range()
 {
     variable data = array::make();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
-    auto where = data.insert(data.end(), null);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
-    TRIAL_PROTOCOL_TEST(data[0] == null);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
-    where = data.insert(data.end(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 2);
-    TRIAL_PROTOCOL_TEST(data[0] == null);
-    TRIAL_PROTOCOL_TEST(data[1] == true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
-    where = data.insert(data.end(), 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
-    TRIAL_PROTOCOL_TEST(data[0] == null);
-    TRIAL_PROTOCOL_TEST(data[1] == true);
-    TRIAL_PROTOCOL_TEST(data[2] == 2);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+    std::map<std::string, int> input = { { "alpha", 1 }, { "bravo", 2 } };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                    error,
+                                    "incompatible type");
+}
+
+void insert_array_range_iterator()
+{
+    // Inserts at beginning
+    {
+        variable data = array::make({ null });
+        variable input = { true, 2, 3.0, "alpha" };
+        data.insert(data.begin(), input.begin(), input.end());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha", null });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // Inserts at end
+    {
+        variable data = array::make({ null });
+        variable input = { true, 2, 3.0, "alpha" };
+        data.insert(data.end(), input.begin(), input.end());
+
+        variable expect = array::make({ null, true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void insert_map()
@@ -8259,6 +8329,53 @@ void fail_map_iterator()
                                     "incompatible type");
 }
 
+void insert_map_range()
+{
+    variable data = map::make();
+    std::map<std::string, int> input = {{ "alpha", 1 }, { "bravo", 2 }};
+    data.insert(input.begin(), input.end());
+
+    variable expect = map::make({ { "alpha", 1 }, { "bravo", 2 } });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void fail_map_range()
+{
+    variable data = map::make();
+    std::vector<int> input = { 0, 1, 2, 3, 4 };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                    error,
+                                    "incompatible type");
+}
+
+void insert_map_range_iterator()
+{
+    // Inserts at beginning
+    {
+        variable data = map::make();
+        std::map<std::string, int> input = {{ "alpha", 1 }, { "bravo", 2 }};
+        data.insert(data.begin(), input.begin(), input.end());
+
+        variable expect = map::make({ { "alpha", 1 }, { "bravo", 2 } });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // Inserts at end
+    {
+        variable data = map::make();
+        std::map<std::string, int> input = {{ "alpha", 1 }, { "bravo", 2 }};
+        data.insert(data.end(), input.begin(), input.end());
+
+        variable expect = map::make({ { "alpha", 1 }, { "bravo", 2 } });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
 void run()
 {
     insert_null();
@@ -8267,13 +8384,20 @@ void run()
     fail_integer();
     fail_number();
     fail_string();
+
     insert_array();
-    insert_array_iterator_begin();
-    insert_array_iterator_end();
+    insert_array_iterator();
+    insert_array_range();
+    fail_array_range();
+    insert_array_range_iterator();
+
     insert_map();
     fail_map();
     insert_map_iterator();
     fail_map_iterator();
+    insert_map_range();
+    fail_map_range();
+    insert_map_range_iterator();
 }
 
 } // namespace insert_suite
