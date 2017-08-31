@@ -93,7 +93,7 @@ private:
         bool operator!= (const Derived&) const;
 
     protected:
-        friend class basic_variable<CharT>;
+        friend class basic_variable;
 
         using array_iterator = typename std::conditional<std::is_const<T>::value,
                                                          typename array_type::const_iterator,
@@ -127,9 +127,9 @@ public:
     class const_iterator;
 
     class iterator
-        : public iterator_base<iterator, typename basic_variable<CharT>::value_type>
+        : public iterator_base<iterator, typename basic_variable::value_type>
     {
-        using super = iterator_base<iterator, typename basic_variable<CharT>::value_type>;
+        using super = iterator_base<iterator, typename basic_variable::value_type>;
 
     public:
         using typename super::iterator_category;
@@ -154,7 +154,7 @@ public:
         const_reference operator* () const { return super::value(); }
 
     private:
-        friend class basic_variable<CharT>;
+        friend class basic_variable;
 
         // Conversion from const_iterator to iterator is kept private
         iterator(const const_iterator& other);
@@ -164,9 +164,9 @@ public:
     };
 
     class const_iterator
-        : public iterator_base<const_iterator, const typename basic_variable<CharT>::value_type>
+        : public iterator_base<const_iterator, const typename basic_variable::value_type>
     {
-        using super = iterator_base<const_iterator, const typename basic_variable<CharT>::value_type>;
+        using super = iterator_base<const_iterator, const typename basic_variable::value_type>;
 
     public:
         using typename super::iterator_category;
@@ -188,16 +188,16 @@ public:
         const_reference operator* () const { return super::value(); }
 
     private:
-        friend class basic_variable<CharT>;
+        friend class basic_variable;
         template <typename T, typename U, typename> friend struct detail::iterator_overloader;
 
         const_iterator(pointer p, bool e = true);
     };
 
     class key_iterator
-        : public iterator_base<key_iterator, const typename basic_variable<CharT>::value_type>
+        : public iterator_base<key_iterator, const typename basic_variable::value_type>
     {
-        using super = iterator_base<key_iterator, const typename basic_variable<CharT>::value_type>;
+        using super = iterator_base<key_iterator, const typename basic_variable::value_type>;
 
     public:
         using typename super::iterator_category;
@@ -222,7 +222,7 @@ public:
         key_iterator& operator++();
 
     private:
-        friend class basic_variable<CharT>;
+        friend class basic_variable;
 
         key_iterator(pointer p, bool e = true);
 
@@ -231,8 +231,8 @@ public:
     };
 
     // Constructor
-    basic_variable(const basic_variable<CharT>&);
-    basic_variable(basic_variable<CharT>&&);
+    basic_variable(const basic_variable&);
+    basic_variable(basic_variable&&);
     template <typename T> basic_variable(T);
     // Initializer
     basic_variable(const std::initializer_list<value_type>&);

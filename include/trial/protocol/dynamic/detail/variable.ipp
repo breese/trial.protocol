@@ -2935,13 +2935,13 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::find(const basic_variable<CharT>& other) & -> iterator
+auto basic_variable<CharT>::find(const basic_variable& other) & -> iterator
 {
     return const_cast<const basic_variable&>(*this).find(other);
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::find(const basic_variable<CharT>& other) const & -> const_iterator
+auto basic_variable<CharT>::find(const basic_variable& other) const & -> const_iterator
 {
     switch (other.code())
     {
@@ -3020,7 +3020,7 @@ auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
 }
 
 template <typename CharT>
-auto basic_variable<CharT>::count(const basic_variable<CharT>& other) const -> size_type
+auto basic_variable<CharT>::count(const basic_variable& other) const -> size_type
 {
     switch (other.code())
     {
@@ -3392,8 +3392,8 @@ void basic_variable<CharT>::insert(const_iterator where,
 template <typename CharT>
 auto basic_variable<CharT>::erase(const_iterator where) -> iterator
 {
-    using array_iterator = typename basic_variable<CharT>::const_iterator::array_iterator;
-    using map_iterator = typename basic_variable<CharT>::const_iterator::map_iterator;
+    using array_iterator = typename basic_variable::const_iterator::array_iterator;
+    using map_iterator = typename basic_variable::const_iterator::map_iterator;
 
     iterator result = where;
 
@@ -3422,8 +3422,8 @@ auto basic_variable<CharT>::erase(const_iterator where) -> iterator
 template <typename CharT>
 auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> iterator
 {
-    using array_iterator = typename basic_variable<CharT>::const_iterator::array_iterator;
-    using map_iterator = typename basic_variable<CharT>::const_iterator::map_iterator;
+    using array_iterator = typename basic_variable::const_iterator::array_iterator;
+    using map_iterator = typename basic_variable::const_iterator::map_iterator;
 
     iterator result = first;
 
