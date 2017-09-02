@@ -59,15 +59,11 @@ struct symbol
         array,
         map
     };
-
-    static symbol::value convert(code::value);
 };
 
 } // namespace token
 } // namespace dynamic
 } // namespace protocol
 } // namespace trial
-
-#include <trial/protocol/dynamic/detail/token.ipp>
 
 #endif // TRIAL_PROTOCOL_DYNAMIC_TOKEN_HPP
