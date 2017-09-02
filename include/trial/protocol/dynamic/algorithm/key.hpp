@@ -28,17 +28,17 @@ auto count(const basic_variable<CharT>& self,
 {
     switch (self.symbol())
     {
-    case token::symbol::null:
+    case symbol::null:
         return 0;
 
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
+    case symbol::boolean:
+    case symbol::integer:
+    case symbol::number:
+    case symbol::string:
         return (self == other) ? 1 : 0;
 
-    case token::symbol::array:
-    case token::symbol::map:
+    case symbol::array:
+    case symbol::map:
         {
             typename basic_variable<CharT>::size_type result = 0;
             for (auto it = self.key_begin(); it != self.key_end(); ++it)
@@ -58,41 +58,41 @@ auto count(const basic_variable<CharT>& self,
 {
     switch (other.code())
     {
-    case token::code::null:
+    case code::null:
         return count(self, other.template unsafe_get<nullable>());
-    case token::code::boolean:
+    case code::boolean:
         return count(self, other.template unsafe_get<bool>());
-    case token::code::signed_char:
+    case code::signed_char:
         return count(self, other.template unsafe_get<signed char>());
-    case token::code::unsigned_char:
+    case code::unsigned_char:
         return count(self, other.template unsafe_get<unsigned char>());
-    case token::code::signed_short_integer:
+    case code::signed_short_integer:
         return count(self, other.template unsafe_get<signed short int>());
-    case token::code::unsigned_short_integer:
+    case code::unsigned_short_integer:
         return count(self, other.template unsafe_get<unsigned short int>());
-    case token::code::signed_integer:
+    case code::signed_integer:
         return count(self, other.template unsafe_get<signed int>());
-    case token::code::unsigned_integer:
+    case code::unsigned_integer:
         return count(self, other.template unsafe_get<unsigned int>());
-    case token::code::signed_long_integer:
+    case code::signed_long_integer:
         return count(self, other.template unsafe_get<signed long int>());
-    case token::code::unsigned_long_integer:
+    case code::unsigned_long_integer:
         return count(self, other.template unsafe_get<unsigned long int>());
-    case token::code::signed_long_long_integer:
+    case code::signed_long_long_integer:
         return count(self, other.template unsafe_get<signed long long int>());
-    case token::code::unsigned_long_long_integer:
+    case code::unsigned_long_long_integer:
         return count(self, other.template unsafe_get<unsigned long long int>());
-    case token::code::float_number:
+    case code::float_number:
         return count(self, other.template unsafe_get<float>());
-    case token::code::double_number:
+    case code::double_number:
         return count(self, other.template unsafe_get<double>());
-    case token::code::long_double_number:
+    case code::long_double_number:
         return count(self, other.template unsafe_get<long double>());
-    case token::code::string:
+    case code::string:
         return count(self, other.template unsafe_get<typename basic_variable<CharT>::string_type>());
-    case token::code::array:
+    case code::array:
         return count(self, other.template unsafe_get<typename basic_variable<CharT>::array_type>());
-    case token::code::map:
+    case code::map:
         return count(self, other.template unsafe_get<typename basic_variable<CharT>::map_type>());
     }
     TRIAL_PROTOCOL_UNREACHABLE();
@@ -104,17 +104,17 @@ auto find(const basic_variable<CharT>& self,
 {
     switch (self.symbol())
     {
-    case token::symbol::null:
+    case symbol::null:
         return self.key_end();
 
-    case token::symbol::boolean:
-    case token::symbol::integer:
-    case token::symbol::number:
-    case token::symbol::string:
+    case symbol::boolean:
+    case symbol::integer:
+    case symbol::number:
+    case symbol::string:
         return (self == other) ? self.key_begin() : self.key_end();
 
-    case token::symbol::array:
-    case token::symbol::map:
+    case symbol::array:
+    case symbol::map:
         for (auto it = self.key_begin(); it != self.key_end(); ++it)
         {
             if (*it == other)
@@ -131,41 +131,41 @@ auto find(const basic_variable<CharT>& self,
 {
     switch (other.code())
     {
-    case token::code::null:
+    case code::null:
         return find(self, other.template unsafe_get<nullable>());
-    case token::code::boolean:
+    case code::boolean:
         return find(self, other.template unsafe_get<bool>());
-    case token::code::signed_char:
+    case code::signed_char:
         return find(self, other.template unsafe_get<signed char>());
-    case token::code::unsigned_char:
+    case code::unsigned_char:
         return find(self, other.template unsafe_get<unsigned char>());
-    case token::code::signed_short_integer:
+    case code::signed_short_integer:
         return find(self, other.template unsafe_get<signed short int>());
-    case token::code::unsigned_short_integer:
+    case code::unsigned_short_integer:
         return find(self, other.template unsafe_get<unsigned short int>());
-    case token::code::signed_integer:
+    case code::signed_integer:
         return find(self, other.template unsafe_get<signed int>());
-    case token::code::unsigned_integer:
+    case code::unsigned_integer:
         return find(self, other.template unsafe_get<unsigned int>());
-    case token::code::signed_long_integer:
+    case code::signed_long_integer:
         return find(self, other.template unsafe_get<signed long int>());
-    case token::code::unsigned_long_integer:
+    case code::unsigned_long_integer:
         return find(self, other.template unsafe_get<unsigned long int>());
-    case token::code::signed_long_long_integer:
+    case code::signed_long_long_integer:
         return find(self, other.template unsafe_get<signed long long int>());
-    case token::code::unsigned_long_long_integer:
+    case code::unsigned_long_long_integer:
         return find(self, other.template unsafe_get<unsigned long long int>());
-    case token::code::float_number:
+    case code::float_number:
         return find(self, other.template unsafe_get<float>());
-    case token::code::double_number:
+    case code::double_number:
         return find(self, other.template unsafe_get<double>());
-    case token::code::long_double_number:
+    case code::long_double_number:
         return find(self, other.template unsafe_get<long double>());
-    case token::code::string:
+    case code::string:
         return find(self, other.template unsafe_get<typename basic_variable<CharT>::string_type>());
-    case token::code::array:
+    case code::array:
         return find(self, other.template unsafe_get<typename basic_variable<CharT>::array_type>());
-    case token::code::map:
+    case code::map:
         return find(self, other.template unsafe_get<typename basic_variable<CharT>::map_type>());
     }
     TRIAL_PROTOCOL_UNREACHABLE();

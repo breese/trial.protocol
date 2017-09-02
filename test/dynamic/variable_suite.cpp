@@ -1081,15 +1081,15 @@ namespace token_suite
 void test_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::null);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::null);
 }
 
 void test_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::boolean);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::boolean);
 }
 
 void test_integer()
@@ -1097,62 +1097,62 @@ void test_integer()
     {
         const signed char value = 0;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_char);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::signed_char);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const unsigned char value = 0U;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_char);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::unsigned_char);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const signed short int value = 0;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_short_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::signed_short_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const unsigned short int value = 0U;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_short_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::unsigned_short_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const signed int value = 0;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::signed_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const unsigned int value = 0U;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::unsigned_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const signed long int value = 0L;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_long_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::signed_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const unsigned long int value = 0UL;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_long_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::unsigned_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const signed long long int value = 0LL;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::signed_long_long_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::signed_long_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
     {
         const unsigned long long int value = 0ULL;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::unsigned_long_long_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::unsigned_long_long_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::integer);
     }
 }
 
@@ -1161,42 +1161,42 @@ void test_number()
     {
         const float value = 0.0f;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::float_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::float_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::number);
     }
     {
         const double value = 0.0;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::double_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::number);
     }
     {
         const long double value = 0.0L;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::long_double_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::long_double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::number);
     }
 }
 
 void test_string()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::string);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::string);
 }
 
 void test_array()
 {
     variable data = array::make();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::array);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::array);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::array);
 }
 
 void test_map()
 {
     variable data = map::make();
-    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), token::code::map);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), token::symbol::map);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::map);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::map);
 }
 
 void run()

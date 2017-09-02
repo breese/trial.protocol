@@ -33,71 +33,71 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
     {
         switch (data.code())
         {
-        case dynamic::token::code::null:
+        case dynamic::code::null:
             ar.template save<json::token::null>();
             break;
 
-        case dynamic::token::code::boolean:
+        case dynamic::code::boolean:
             ar.save(data.value<bool>());
             break;
 
-        case dynamic::token::code::signed_char:
+        case dynamic::code::signed_char:
             ar.save(data.value<signed char>());
             break;
 
-        case dynamic::token::code::unsigned_char:
+        case dynamic::code::unsigned_char:
             ar.save(data.value<unsigned char>());
             break;
 
-        case dynamic::token::code::signed_short_integer:
+        case dynamic::code::signed_short_integer:
             ar.save(data.value<signed short int>());
             break;
 
-        case dynamic::token::code::unsigned_short_integer:
+        case dynamic::code::unsigned_short_integer:
             ar.save(data.value<unsigned short int>());
             break;
 
-        case dynamic::token::code::signed_integer:
+        case dynamic::code::signed_integer:
             ar.save(data.value<signed int>());
             break;
 
-        case dynamic::token::code::unsigned_integer:
+        case dynamic::code::unsigned_integer:
             ar.save(data.value<unsigned int>());
             break;
 
-        case dynamic::token::code::signed_long_integer:
+        case dynamic::code::signed_long_integer:
             ar.save(data.value<signed long int>());
             break;
 
-        case dynamic::token::code::unsigned_long_integer:
+        case dynamic::code::unsigned_long_integer:
             ar.save(data.value<unsigned long int>());
             break;
 
-        case dynamic::token::code::signed_long_long_integer:
+        case dynamic::code::signed_long_long_integer:
             ar.save(data.value<signed long long int>());
             break;
 
-        case dynamic::token::code::unsigned_long_long_integer:
+        case dynamic::code::unsigned_long_long_integer:
             ar.save(data.value<unsigned long long int>());
             break;
 
-        case dynamic::token::code::float_number:
+        case dynamic::code::float_number:
             ar.save(data.value<float>());
             break;
 
-        case dynamic::token::code::double_number:
+        case dynamic::code::double_number:
             ar.save(data.value<double>());
             break;
 
-        case dynamic::token::code::long_double_number:
+        case dynamic::code::long_double_number:
             ar.save(data.value<long double>());
             break;
 
-        case dynamic::token::code::string:
+        case dynamic::code::string:
             ar.save(data.value<dynamic::string>());
             break;
 
-        case dynamic::token::code::array:
+        case dynamic::code::array:
             ar.template save<json::token::begin_array>();
             for (const auto& item : data)
             {
@@ -106,7 +106,7 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
             ar.template save<json::token::end_array>();
             break;
 
-        case dynamic::token::code::map:
+        case dynamic::code::map:
             ar.template save<json::token::begin_object>();
             for (auto it = data.begin(); it != data.end(); ++it)
             {

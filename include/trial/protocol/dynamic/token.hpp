@@ -19,7 +19,7 @@ namespace protocol
 {
 namespace dynamic
 {
-namespace token
+inline namespace token
 {
 
 struct code

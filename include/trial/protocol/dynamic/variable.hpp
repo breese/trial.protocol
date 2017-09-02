@@ -293,8 +293,8 @@ public:
     template <typename T> bool is() const noexcept;
     template <typename T> bool same() const noexcept;
 
-    token::code::value code() const noexcept;
-    token::symbol::value symbol() const noexcept;
+    dynamic::code::value code() const noexcept;
+    dynamic::symbol::value symbol() const noexcept;
 
     // Capacity
 
