@@ -16,10 +16,9 @@
 
 using namespace trial::protocol::dynamic;
 
-#define TRIAL_PROTOCOL_CONCAT(x,y) x ## y
-#define TRIAL_PROTOCOL_HAS(x) \
-    template <typename T, typename = void> struct TRIAL_PROTOCOL_CONCAT(has_, x) : std::false_type {}; \
-    template <typename T> struct TRIAL_PROTOCOL_CONCAT(has_, x) <T, trial::protocol::core::detail::meta::void_t<typename T:: x >> : std::true_type {};
+#define TRIAL_PROTOCOL_HAS_TYPE(x,y)                                    \
+    template <typename T, typename = void> struct x : std::false_type {}; \
+    template <typename T> struct x <T, trial::protocol::core::detail::meta::void_t<typename T:: y >> : std::true_type {};
 
 //-----------------------------------------------------------------------------
 // Container concept
@@ -28,13 +27,13 @@ using namespace trial::protocol::dynamic;
 namespace container_concept_suite
 {
 
-TRIAL_PROTOCOL_HAS(value_type);
-TRIAL_PROTOCOL_HAS(reference);
-TRIAL_PROTOCOL_HAS(const_reference);
-TRIAL_PROTOCOL_HAS(iterator);
-TRIAL_PROTOCOL_HAS(const_iterator);
-TRIAL_PROTOCOL_HAS(difference_type);
-TRIAL_PROTOCOL_HAS(size_type);
+TRIAL_PROTOCOL_HAS_TYPE(has_value_type, value_type);
+TRIAL_PROTOCOL_HAS_TYPE(has_reference, reference);
+TRIAL_PROTOCOL_HAS_TYPE(has_const_reference, const_reference);
+TRIAL_PROTOCOL_HAS_TYPE(has_iterator, iterator);
+TRIAL_PROTOCOL_HAS_TYPE(has_const_iterator, const_iterator);
+TRIAL_PROTOCOL_HAS_TYPE(has_difference_type, difference_type);
+TRIAL_PROTOCOL_HAS_TYPE(has_size_type, size_type);
 
 void container_types()
 {
@@ -81,6 +80,14 @@ void run()
     container_constructible();
     container_destructible();
     container_assignable();
+    // Required member functions are checked elsewhere
+    //   variable::begin()
+    //   variable::end()
+    //   variable::cbegin()
+    //   variable::cend()
+    //   variable::swap()
+    //   Equality operators
+    //   Capacity
 }
 
 } // namespace container_concept_suite
