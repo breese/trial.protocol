@@ -915,20 +915,20 @@ void run()
 namespace count_suite
 {
 
-void test_null()
+void count_null()
 {
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 0), 0);
 }
 
-void test_boolean()
+void count_boolean()
 {
     variable data(true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), false), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), true), 1);
 }
 
-void test_integer()
+void count_integer()
 {
     variable data(1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 0), 0);
@@ -936,7 +936,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 2), 0);
 }
 
-void test_number()
+void count_number()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 0.0), 0);
@@ -944,7 +944,7 @@ void test_number()
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 2.0), 0);
 }
 
-void test_string()
+void count_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::string("")), 0);
@@ -952,7 +952,7 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::string("bravo")), 0);
 }
 
-void test_array()
+void count_array()
 {
     variable data = array::make({ true, 2, 3.0, "alpha" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), true), 1);
@@ -966,7 +966,7 @@ void test_array()
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), ""), 0);
 }
 
-void test_array_arithmetic()
+void count_array_arithmetic()
 {
     variable data = array::make({ true, 1, 1.0, "alpha" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), true), 3);
@@ -974,7 +974,7 @@ void test_array_arithmetic()
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 1.0), 3);
 }
 
-void test_map()
+void count_map()
 {
     variable data = map::make(
         {
@@ -991,17 +991,167 @@ void test_map()
 
 void run()
 {
-    test_null();
-    test_boolean();
-    test_integer();
-    test_number();
-    test_string();
-    test_array();
-    test_array_arithmetic();
-    test_map();
+    count_null();
+    count_boolean();
+    count_integer();
+    count_number();
+    count_string();
+    count_array();
+    count_array_arithmetic();
+    count_map();
 }
 
 } // namespace count_suite
+
+//-----------------------------------------------------------------------------
+// std::count_if
+//-----------------------------------------------------------------------------
+
+namespace count_if_suite
+{
+
+void count_null()
+{
+    variable data;
+    // Cannot iterate over null, so nothing is counted
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == null; }),
+                              0);
+}
+
+void count_boolean()
+{
+    variable data(true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == false; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == true; }),
+                              1);
+}
+
+void count_integer()
+{
+    variable data(1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 0; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 1; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 2; }),
+                              0);
+}
+
+void count_number()
+{
+    variable data(1.0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 0.0; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 1.0; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 2.0; }),
+                              0);
+}
+
+void count_string()
+{
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == ""; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "alpha"; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "bravo"; }),
+                              0);
+}
+
+void count_array()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == true; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 2; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 3.0; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "alpha"; }),
+                              1);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == false; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 20; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 300.0; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "bravo"; }),
+                              0);
+}
+
+void count_array_arithmetic()
+{
+    variable data = array::make({ true, 1, 1.0, "alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == true; }),
+                              3);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 1; }),
+                              3);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == 1.0; }),
+                              3);
+}
+
+void count_map()
+{
+    variable data = map::make(
+        {
+            {"alpha", "hydrogen"},
+            {"bravo", "helium"},
+            {"charlie", "lithium"}
+        });
+    // Iterator dereferences value, not key
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "alpha"; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "hydrogen"; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "helium"; }),
+                              1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "lithium"; }),
+                              1);
+}
+
+void run()
+{
+    count_null();
+    count_boolean();
+    count_integer();
+    count_number();
+    count_string();
+    count_array();
+    count_array_arithmetic();
+    count_map();
+}
+
+} // namespace count_if_suite
 
 //-----------------------------------------------------------------------------
 // std::equal
@@ -4166,6 +4316,7 @@ int main()
     binary_search_suite::run();
     copy_suite::run();
     count_suite::run();
+    count_if_suite::run();
     equal_suite::run();
     equal_range_suite::run();
     find_suite::run();
