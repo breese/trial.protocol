@@ -448,25 +448,206 @@ namespace all_of_suite
 
 auto is_true = [] (const variable& value) { return bool(value); };
 
-void test_array_boolean()
+void all_null()
 {
-    variable data = array::make({ true, true, true });
+    variable data;
     TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
 }
 
-void fail_array_boolean()
+void all_boolean()
 {
-    variable data = array::make({ true, false, true });
-    TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void all_integer()
+{
+    {
+        variable data(0);
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void all_number()
+{
+    {
+        variable data(0.0);
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void all_array_boolean()
+{
+    {
+        variable data = array::make();
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ false, false, false });
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ true, false, true });
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ true, true, true });
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void all_map_boolean()
+{
+    {
+        variable data = map::make();
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", false },
+                { "bravo", false },
+                { "charlie", false }
+            };
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", true },
+                { "bravo", false },
+                { "charlie", true }
+            };
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", true },
+                { "bravo", true },
+                { "charlie", true }
+            };
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
 }
 
 void run()
 {
-    test_array_boolean();
-    fail_array_boolean();
+    all_null();
+    all_boolean();
+    all_integer();
+    all_number();
+    all_array_boolean();
+    all_map_boolean();
 }
 
 } // namespace all_of_suite
+
+//-----------------------------------------------------------------------------
+// std::any_of
+//-----------------------------------------------------------------------------
+
+namespace any_of_suite
+{
+
+auto is_true = [] (const variable& value) { return bool(value); };
+
+void any_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_true));
+}
+
+void any_boolean()
+{
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void any_array_boolean()
+{
+    {
+        variable data = array::make();
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ false, false, false });
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ true, false, true });
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ true, true, true });
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void any_map_boolean()
+{
+    {
+        variable data = map::make();
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", false },
+                { "bravo", false },
+                { "charlie", false }
+            };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", true },
+                { "bravo", false },
+                { "charlie", true }
+            };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", true },
+                { "bravo", true },
+                { "charlie", true }
+            };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void run()
+{
+    any_null();
+    any_boolean();
+    any_array_boolean();
+    any_map_boolean();
+}
+
+} // namespace any_of_suite
 
 //-----------------------------------------------------------------------------
 // std::binary_search
@@ -2655,6 +2836,98 @@ void run()
 } // namespace mismatch_suite
 
 //-----------------------------------------------------------------------------
+// std::none_of
+//-----------------------------------------------------------------------------
+
+namespace none_of_suite
+{
+
+auto is_true = [] (const variable& value) { return bool(value); };
+
+void none_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_true));
+}
+
+void none_boolean()
+{
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void none_array_boolean()
+{
+    {
+        variable data = array::make();
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ false, false, false });
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ true, false, true });
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data = array::make({ true, true, true });
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void none_map_boolean()
+{
+    {
+        variable data = map::make();
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", false },
+                { "bravo", false },
+                { "charlie", false }
+            };
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", true },
+                { "bravo", false },
+                { "charlie", true }
+            };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_true));
+    }
+    {
+        variable data =
+            {
+                { "alpha", true },
+                { "bravo", true },
+                { "charlie", true }
+            };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void run()
+{
+    none_null();
+    none_boolean();
+    none_array_boolean();
+    none_map_boolean();
+}
+
+} // namespace none_of_suite
+
+//-----------------------------------------------------------------------------
 // std::partition_point
 //-----------------------------------------------------------------------------
 
@@ -3889,6 +4162,7 @@ int main()
     accumulate_suite::run();
     adjacent_find_suite::run();
     all_of_suite::run();
+    any_of_suite::run();
     binary_search_suite::run();
     copy_suite::run();
     count_suite::run();
@@ -3903,6 +4177,7 @@ int main()
     lower_bound_suite::run();
     max_element_suite::run();
     mismatch_suite::run();
+    none_of_suite::run();
     partition_point_suite::run();
     remove_suite::run();
     search_suite::run();
