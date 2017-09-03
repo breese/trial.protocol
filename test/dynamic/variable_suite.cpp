@@ -27,13 +27,13 @@ using namespace trial::protocol::dynamic;
 namespace container_concept_suite
 {
 
-TRIAL_PROTOCOL_HAS_TYPE(has_value_type, value_type);
-TRIAL_PROTOCOL_HAS_TYPE(has_reference, reference);
-TRIAL_PROTOCOL_HAS_TYPE(has_const_reference, const_reference);
-TRIAL_PROTOCOL_HAS_TYPE(has_iterator, iterator);
-TRIAL_PROTOCOL_HAS_TYPE(has_const_iterator, const_iterator);
-TRIAL_PROTOCOL_HAS_TYPE(has_difference_type, difference_type);
-TRIAL_PROTOCOL_HAS_TYPE(has_size_type, size_type);
+TRIAL_PROTOCOL_HAS_TYPE(has_value_type, value_type)
+TRIAL_PROTOCOL_HAS_TYPE(has_reference, reference)
+TRIAL_PROTOCOL_HAS_TYPE(has_const_reference, const_reference)
+TRIAL_PROTOCOL_HAS_TYPE(has_iterator, iterator)
+TRIAL_PROTOCOL_HAS_TYPE(has_const_iterator, const_iterator)
+TRIAL_PROTOCOL_HAS_TYPE(has_difference_type, difference_type)
+TRIAL_PROTOCOL_HAS_TYPE(has_size_type, size_type)
 
 void container_types()
 {
