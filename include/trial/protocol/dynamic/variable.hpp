@@ -59,6 +59,7 @@ public:
     using value_type = basic_variable<CharT>;
     using reference = typename std::add_lvalue_reference<value_type>::type;
     using const_reference = typename std::add_const<reference>::type;
+    using difference_type = std::ptrdiff_t;
     using size_type = std::size_t;
     using string_type = std::basic_string<CharT>;
     using array_type = std::vector<value_type>;
@@ -76,7 +77,7 @@ private:
         using iterator_category = std::forward_iterator_tag;
         using key_type = typename std::add_const<typename map_type::key_type>::type;
         using value_type = T;
-        using difference_type = std::ptrdiff_t;
+        using difference_type = typename value_type::difference_type;
         using pointer = typename std::add_pointer<value_type>::type;
         using reference = typename std::add_lvalue_reference<value_type>::type;
         using const_reference = typename std::add_const<reference>::type;

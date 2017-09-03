@@ -11,9 +11,79 @@
 #include <limits>
 #include <functional>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
+#include <trial/protocol/core/detail/meta.hpp>
 #include <trial/protocol/dynamic/variable.hpp>
 
 using namespace trial::protocol::dynamic;
+
+#define TRIAL_PROTOCOL_CONCAT(x,y) x ## y
+#define TRIAL_PROTOCOL_HAS(x) \
+    template <typename T, typename = void> struct TRIAL_PROTOCOL_CONCAT(has_, x) : std::false_type {}; \
+    template <typename T> struct TRIAL_PROTOCOL_CONCAT(has_, x) <T, trial::protocol::core::detail::meta::void_t<typename T:: x >> : std::true_type {};
+
+//-----------------------------------------------------------------------------
+// Container concept
+//-----------------------------------------------------------------------------
+
+namespace container_concept_suite
+{
+
+TRIAL_PROTOCOL_HAS(value_type);
+TRIAL_PROTOCOL_HAS(reference);
+TRIAL_PROTOCOL_HAS(const_reference);
+TRIAL_PROTOCOL_HAS(iterator);
+TRIAL_PROTOCOL_HAS(const_iterator);
+TRIAL_PROTOCOL_HAS(difference_type);
+TRIAL_PROTOCOL_HAS(size_type);
+
+void container_types()
+{
+    static_assert(has_value_type<variable>::value, "variable::value_type missing");
+
+    static_assert(has_reference<variable>::value, "variable::reference missing");
+    static_assert(has_const_reference<variable>::value, "variable::const_reference missing");
+
+    static_assert(has_iterator<variable>::value, "variable::iterator missing");
+    static_assert(has_const_iterator<variable>::value, "variable::const_iterator missing");
+
+    static_assert(has_difference_type<variable>::value, "variable::difference_type missing");
+    static_assert(std::is_signed<variable::difference_type>::value, "variable::difference_type must be signed");
+    static_assert(std::is_same<variable::difference_type, variable::iterator::difference_type>::value, "Container and iterator must have same difference_type");
+    static_assert(std::is_same<variable::difference_type, variable::const_iterator::difference_type>::value, "Container and const_iterator must have same difference_type");
+
+    static_assert(has_size_type<variable>::value, "variable::size_type missing");
+    static_assert(std::is_unsigned<variable::size_type>::value, "variable::size_type must be unsigned");
+    static_assert(std::numeric_limits<variable::size_type>::max() >= std::numeric_limits<variable::difference_type>::max(), "size_type can represent any non-negative value of difference_type");
+}
+
+void container_constructible()
+{
+    static_assert(std::is_default_constructible<variable>::value, "is_default_constructible");
+    static_assert(std::is_copy_constructible<variable>::value, "is_copy_constructible");
+    static_assert(std::is_move_constructible<variable>::value, "is_move_constructible");
+}
+
+void container_destructible()
+{
+    static_assert(std::is_destructible<variable>::value, "is_destructible");
+}
+
+void container_assignable()
+{
+    static_assert(std::is_copy_assignable<variable>::value, "is_copy_assignable");
+    static_assert(std::is_move_assignable<variable>::value, "is_move_assignable");
+}
+
+void run()
+{
+    // [container.requirements.general]
+    container_types();
+    container_constructible();
+    container_destructible();
+    container_assignable();
+}
+
+} // namespace container_concept_suite
 
 //-----------------------------------------------------------------------------
 // Constructors
@@ -9022,6 +9092,8 @@ void run()
 
 int main()
 {
+    container_concept_suite::run();
+
     ctor_suite::run();
     is_suite::run();
     token_suite::run();
