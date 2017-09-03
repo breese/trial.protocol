@@ -318,6 +318,8 @@ public:
     iterator erase(const_iterator);
     iterator erase(const_iterator, const_iterator);
 
+    void swap(basic_variable&) noexcept;
+
     // Iteration
 
     iterator begin() &;

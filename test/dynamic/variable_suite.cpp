@@ -9210,6 +9210,719 @@ void run()
 } // namespace erase_suite
 
 //-----------------------------------------------------------------------------
+// Swap
+//-----------------------------------------------------------------------------
+
+namespace swap_suite
+{
+
+void swap_null()
+{
+    // null - null
+    {
+        variable data;
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+    }
+    // null - boolean
+    {
+        variable data;
+        variable other(true);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
+    }
+    // null - integer
+    {
+        variable data;
+        variable other(2);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
+    }
+    // null - number
+    {
+        variable data;
+        variable other(3.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+    }
+    // null - string
+    {
+        variable data;
+        variable other("alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "alpha");
+    }
+    // null - array
+    {
+        variable data;
+        variable other = { true, 2, 3.0, "alpha" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // null - map
+    {
+        variable data;
+        variable other = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+
+        variable expect = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void swap_boolean()
+{
+    // boolean - null
+    {
+        variable data(true);
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+    }
+    // boolean - boolean
+    {
+        variable data(true);
+        variable other(false);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == false);
+    }
+    // boolean - integer
+    {
+        variable data(true);
+        variable other(2);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
+    }
+    // boolean - number
+    {
+        variable data(true);
+        variable other(3.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+    }
+    // boolean - string
+    {
+        variable data(true);
+        variable other("alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "alpha");
+    }
+    // boolean - array
+    {
+        variable data(true);
+        variable other = { true, 2, 3.0, "alpha" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // boolean - map
+    {
+        variable data(true);
+        variable other = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+
+        variable expect = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void swap_integer()
+{
+    // integer - null
+    {
+        variable data(2);
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+    }
+    // integer - boolean
+    {
+        variable data(2);
+        variable other(true);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
+    }
+    // integer - integer
+    {
+        variable data(2);
+        variable other(20);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 20);
+    }
+    // integer - number
+    {
+        variable data(2);
+        variable other(3.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+    }
+    // integer - string
+    {
+        variable data(2);
+        variable other("alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "alpha");
+    }
+    // integer - array
+    {
+        variable data(2);
+        variable other = { true, 2, 3.0, "alpha" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // integer - map
+    {
+        variable data(2);
+        variable other = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+
+        variable expect = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void swap_number()
+{
+    // number - null
+    {
+        variable data(3.0);
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+    }
+    // number - boolean
+    {
+        variable data(3.0);
+        variable other(true);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
+    }
+    // number - integer
+    {
+        variable data(3.0);
+        variable other(2);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
+    }
+    // number - number
+    {
+        variable data(3.0);
+        variable other(300.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 300.0);
+    }
+    // number - string
+    {
+        variable data(3.0);
+        variable other("alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "alpha");
+    }
+    // number - array
+    {
+        variable data(3.0);
+        variable other = { true, 2, 3.0, "alpha" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // number - map
+    {
+        variable data(3.0);
+        variable other = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+
+        variable expect = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void swap_string()
+{
+    // string - null
+    {
+        variable data("alpha");
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+    }
+    // string - boolean
+    {
+        variable data("alpha");
+        variable other(true);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
+    }
+    // string - integer
+    {
+        variable data("alpha");
+        variable other(2);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
+    }
+    // string - number
+    {
+        variable data("alpha");
+        variable other(3.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+    }
+    // string - string
+    {
+        variable data("alpha");
+        variable other("bravo");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "bravo");
+    }
+    // string - array
+    {
+        variable data("alpha");
+        variable other = { true, 2, 3.0, "alpha" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // string - map
+    {
+        variable data("alpha");
+        variable other = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+
+        variable expect = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void swap_array()
+{
+    // array - null
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<array>());
+    }
+    // array - boolean
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        variable other(true);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<array>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
+    }
+    // array - integer
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        variable other(2);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<array>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
+    }
+    // array - number
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        variable other(3.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<array>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+    }
+    // array - string
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        variable other("alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<array>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "alpha");
+    }
+    // array - array
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        variable other = { false, 1, 2.0, "bravo" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<array>());
+
+        variable expect = array::make({ false, 1, 2.0, "bravo" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // array - map
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        variable other = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<array>());
+
+        variable expect = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void swap_map()
+{
+    // map - null
+    {
+        variable data = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<map>());
+    }
+    // map - boolean
+    {
+        variable data = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        variable other(true);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<map>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
+    }
+    // map - integer
+    {
+        variable data = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        variable other(2);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<map>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
+    }
+    // map - number
+    {
+        variable data = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        variable other(3.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<map>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+    }
+    // map - string
+    {
+        variable data = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        variable other("alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<map>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "alpha");
+    }
+    // map - array
+    {
+        variable data = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        variable other = { true, 2, 3.0, "alpha" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<map>());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // map - map
+    {
+        variable data = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        variable other = map::make(
+            {
+                { "echo", true },
+                { "foxtrot", 2 },
+                { "golf", 3.0 },
+                { "hotel", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<map>());
+
+        variable expect = map::make(
+            {
+                { "echo", true },
+                { "foxtrot", 2 },
+                { "golf", 3.0 },
+                { "hotel", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void run()
+{
+    swap_null();
+    swap_boolean();
+    swap_integer();
+    swap_number();
+    swap_string();
+    swap_array();
+    swap_map();
+}
+
+} // namespace swap_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -9240,6 +9953,7 @@ int main()
     clear_suite::run();
     insert_suite::run();
     erase_suite::run();
+    swap_suite::run();
 
     return boost::report_errors();
 }

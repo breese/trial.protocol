@@ -179,6 +179,14 @@ const T& small_union<N, Types...>::get() const
 }
 
 template <std::size_t N, typename... Types>
+void small_union<N, Types...>::swap(small_union& other) noexcept
+{
+    using std::swap;
+    swap(storage, other.storage);
+    swap(current, other.current);
+}
+
+template <std::size_t N, typename... Types>
 template <typename T>
 void small_union<N, Types...>::operator= (const T& value)
 {

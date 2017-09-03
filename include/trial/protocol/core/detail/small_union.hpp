@@ -51,6 +51,8 @@ public:
     template <typename T> T& get();
     template <typename T> const T& get() const;
 
+    void swap(small_union&) noexcept;
+
     template <typename T> void operator= (const T& value);
     template <typename T> void operator= (T&& value);
 

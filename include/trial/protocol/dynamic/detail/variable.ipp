@@ -3470,6 +3470,12 @@ auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> 
 }
 
 template <typename CharT>
+void basic_variable<CharT>::swap(basic_variable& other) noexcept
+{
+    storage.swap(other.storage);
+}
+
+template <typename CharT>
 auto basic_variable<CharT>::begin() & -> iterator
 {
     return {this};
