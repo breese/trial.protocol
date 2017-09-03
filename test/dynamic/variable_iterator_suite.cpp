@@ -229,36 +229,42 @@ void test_null()
 {
     variable data;
     TRIAL_PROTOCOL_TEST(data.begin() == data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() == data.cend());
 }
 
 void test_const_null()
 {
     const variable data;
     TRIAL_PROTOCOL_TEST(data.begin() == data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() == data.cend());
 }
 
 void test_boolean()
 {
     variable data(true);
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_const_boolean()
 {
     const variable data(true);
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_integer()
 {
     variable data(0);
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_const_integer()
 {
     const variable data(0);
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_number()
@@ -266,14 +272,17 @@ void test_number()
     {
         variable data(0.0f);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
     {
         variable data(0.0);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
     {
         variable data(0.0L);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
 }
 
@@ -282,14 +291,17 @@ void test_const_number()
     {
         const variable data(0.0f);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
     {
         const variable data(0.0);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
     {
         const variable data(0.0L);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
 }
 
@@ -297,24 +309,28 @@ void test_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_const_string()
 {
     const variable data("alpha");
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_array()
 {
     variable data = array::make({ true, 1, 2.0, "alpha" });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_const_array()
 {
     const variable data = array::make({ true, 1, 2.0, "alpha" });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_map()
@@ -324,6 +340,7 @@ void test_map()
             {"key", "alpha"}
         });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void test_const_map()
@@ -333,6 +350,7 @@ void test_const_map()
             {"key", "alpha"}
         });
     TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
 }
 
 void convert_to_const()

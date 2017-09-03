@@ -3461,6 +3461,12 @@ auto basic_variable<CharT>::begin() const & -> const_iterator
 }
 
 template <typename CharT>
+auto basic_variable<CharT>::cbegin() const & -> const_iterator
+{
+    return begin();
+}
+
+template <typename CharT>
 auto basic_variable<CharT>::end() & -> iterator
 {
     return {this, false};
@@ -3470,6 +3476,12 @@ template <typename CharT>
 auto basic_variable<CharT>::end() const & -> const_iterator
 {
     return {this, false};
+}
+
+template <typename CharT>
+auto basic_variable<CharT>::cend() const & -> const_iterator
+{
+    return end();
 }
 
 template <typename CharT>
