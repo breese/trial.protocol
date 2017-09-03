@@ -301,6 +301,7 @@ public:
 
     bool empty() const noexcept;
     size_type size() const noexcept;
+    size_type max_size() const noexcept;
 
     // Modifiers
 

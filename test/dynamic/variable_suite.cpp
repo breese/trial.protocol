@@ -7771,6 +7771,129 @@ void run()
 } // namespace size_suite
 
 //-----------------------------------------------------------------------------
+// Size
+//-----------------------------------------------------------------------------
+
+namespace max_size_suite
+{
+
+void test_null()
+{
+    variable data;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 0);
+}
+
+void test_boolean()
+{
+    variable data(false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+}
+
+void test_integer()
+{
+    {
+        signed char value = 1;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        unsigned char value = 1U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        signed short int value = 1;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        unsigned short int value = 1U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        signed int value = 1;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        unsigned int value = 1U;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        signed long int value = 1L;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        unsigned long int value = 1UL;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        signed long long int value = 1LL;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        unsigned long long int value = 1ULL;
+        variable data(value);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+}
+
+void test_number()
+{
+    {
+        variable data(1.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        variable data(1.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+    {
+        variable data(1.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
+    }
+}
+
+void test_string()
+{
+    std::string value("alpha");
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+}
+
+void test_array()
+{
+    variable::array_type value;
+    variable data = array::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+}
+
+void test_map()
+{
+    variable::map_type value;
+    variable data = map::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+}
+
+void run()
+{
+    test_null();
+    test_boolean();
+    test_integer();
+    test_number();
+    test_string();
+    test_array();
+    test_map();
+}
+
+} // namespace max_size_suite
+
+//-----------------------------------------------------------------------------
 // Count
 //-----------------------------------------------------------------------------
 
@@ -9111,6 +9234,7 @@ int main()
 
     empty_suite::run();
     size_suite::run();
+    max_size_suite::run();
     count_suite::run();
 
     clear_suite::run();

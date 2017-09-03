@@ -3235,6 +3235,27 @@ auto basic_variable<CharT>::size() const noexcept -> size_type
 }
 
 template <typename CharT>
+auto basic_variable<CharT>::max_size() const noexcept -> size_type
+{
+    switch (symbol())
+    {
+    case symbol::null:
+        return 0;
+    case symbol::boolean:
+    case symbol::integer:
+    case symbol::number:
+        return 1;
+    case symbol::string:
+        return unsafe_get<string_type>().max_size();
+    case symbol::array:
+        return unsafe_get<array_type>().max_size();
+    case symbol::map:
+        return unsafe_get<map_type>().max_size();
+    }
+    TRIAL_PROTOCOL_UNREACHABLE();
+}
+
+template <typename CharT>
 void basic_variable<CharT>::clear() noexcept
 {
     switch (code())
