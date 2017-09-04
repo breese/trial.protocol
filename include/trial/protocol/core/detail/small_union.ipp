@@ -51,8 +51,8 @@ struct small_traits
         deref(static_cast<type *>(target)) = std::move(deref(static_cast<const type *>(source)));
     }
 
-    static type& deref(void *ptr) { return *static_cast<type *>(ptr); }
-    static const type& deref(const void *ptr) { return *static_cast<const type *>(ptr); }
+    static type& deref(void *ptr) noexcept { return *static_cast<type *>(ptr); }
+    static const type& deref(const void *ptr) noexcept { return *static_cast<const type *>(ptr); }
 };
 
 template <std::size_t M, typename T>
@@ -85,8 +85,8 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
         deref(static_cast<type *>(target)) = std::move(deref(static_cast<const type *>(source)));
     }
 
-    static type& deref(void *ptr) { return **static_cast<pointer *>(ptr); }
-    static const type& deref(const void *ptr) { return **static_cast<const pointer *>(ptr); }
+    static type& deref(void *ptr) noexcept { return **static_cast<pointer *>(ptr); }
+    static const type& deref(const void *ptr) noexcept { return **static_cast<const pointer *>(ptr); }
 };
 
 //-----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ small_union<N, Types...>::~small_union()
 
 template <std::size_t N, typename... Types>
 template <typename T>
-T& small_union<N, Types...>::get()
+T& small_union<N, Types...>::get() noexcept
 {
     using type = typename std::decay<T>::type;
     return small_traits<N, type>::deref(std::addressof(storage));
@@ -172,7 +172,7 @@ T& small_union<N, Types...>::get()
 
 template <std::size_t N, typename... Types>
 template <typename T>
-const T& small_union<N, Types...>::get() const
+const T& small_union<N, Types...>::get() const noexcept
 {
     using type = typename std::decay<T>::type;
     return small_traits<N, type>::deref(std::addressof(storage));

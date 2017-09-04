@@ -46,10 +46,10 @@ public:
     small_union& operator= (small_union&&);
     ~small_union();
 
-    std::size_t which() const { return current; }
+    std::size_t which() const noexcept { return current; }
 
-    template <typename T> T& get();
-    template <typename T> const T& get() const;
+    template <typename T> T& get() noexcept;
+    template <typename T> const T& get() const noexcept;
 
     void swap(small_union&) noexcept;
 
