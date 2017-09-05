@@ -104,11 +104,11 @@ private:
                                                        typename map_type::iterator>::type;
 
         iterator_base();
-        iterator_base(const iterator_base&);
-        iterator_base(iterator_base&&);
-        iterator_base(pointer, bool = true);
-        iterator_base(pointer, array_iterator);
-        iterator_base(pointer, map_iterator);
+        explicit iterator_base(const iterator_base&);
+        explicit iterator_base(iterator_base&&);
+        explicit iterator_base(pointer, bool = true);
+        explicit iterator_base(pointer, array_iterator);
+        explicit iterator_base(pointer, map_iterator);
 
         const_reference key() const;
         reference value();
@@ -158,10 +158,10 @@ public:
         friend class basic_variable;
 
         // Conversion from const_iterator to iterator is kept private
-        iterator(const const_iterator& other);
-        iterator(pointer p, bool e = true);
-        iterator(pointer p, typename super::array_iterator);
-        iterator(pointer p, typename super::map_iterator);
+        explicit iterator(const const_iterator& other);
+        explicit iterator(pointer p, bool initialize = true);
+        explicit iterator(pointer p, typename super::array_iterator);
+        explicit iterator(pointer p, typename super::map_iterator);
     };
 
     class const_iterator
@@ -192,7 +192,7 @@ public:
         friend class basic_variable;
         template <typename T, typename U, typename> friend struct detail::iterator_overloader;
 
-        const_iterator(pointer p, bool e = true);
+        explicit const_iterator(pointer p, bool initialize = true);
     };
 
     class key_iterator
@@ -225,7 +225,7 @@ public:
     private:
         friend class basic_variable;
 
-        key_iterator(pointer p, bool e = true);
+        explicit key_iterator(pointer p, bool initialize = true);
 
     private:
         typename std::remove_const<value_type>::type index;

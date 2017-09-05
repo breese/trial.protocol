@@ -2147,8 +2147,8 @@ basic_variable<CharT>::iterator::iterator(iterator&& other)
 }
 
 template <typename CharT>
-basic_variable<CharT>::iterator::iterator(pointer p, bool e)
-    : super(p, e)
+basic_variable<CharT>::iterator::iterator(pointer p, bool initialize)
+    : super(p, initialize)
 {
 }
 
@@ -2219,8 +2219,8 @@ basic_variable<CharT>::const_iterator::const_iterator(const_iterator&& other)
 }
 
 template <typename CharT>
-basic_variable<CharT>::const_iterator::const_iterator(pointer p, bool e)
-    : super(p, e)
+basic_variable<CharT>::const_iterator::const_iterator(pointer p, bool initialize)
+    : super(p, initialize)
 {
 }
 
@@ -2268,8 +2268,8 @@ basic_variable<CharT>::key_iterator::key_iterator(key_iterator&& other)
 }
 
 template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator(pointer p, bool e)
-    : super(p, e),
+basic_variable<CharT>::key_iterator::key_iterator(pointer p, bool initialize)
+    : super(p, initialize),
       index(0)
 {
 }
@@ -2937,7 +2937,7 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
 template <typename CharT>
 auto basic_variable<CharT>::find(const basic_variable& other) & -> iterator
 {
-    return const_cast<const basic_variable&>(*this).find(other);
+    return iterator(const_cast<const basic_variable&>(*this).find(other));
 }
 
 template <typename CharT>
@@ -2989,7 +2989,7 @@ template <typename CharT>
 template <typename T>
 auto basic_variable<CharT>::find(const T& other) & -> iterator
 {
-    return const_cast<const basic_variable&>(*this).find(other);
+    return iterator(const_cast<const basic_variable&>(*this).find(other));
 }
 
 template <typename CharT>
@@ -3342,14 +3342,14 @@ auto basic_variable<CharT>::insert(const basic_variable& value) -> iterator
             // Insert at end
             auto& array = unsafe_get<array_type>();
             array.push_back(value);
-            return {this, --array.end()};
+            return iterator(this, --array.end());
         }
 
     case symbol::map:
         if (value.is_pair())
         {
             auto result = unsafe_get<map_type>().insert(pair_type{value[0], value[1]});
-            return {this, std::move(result.first)};
+            return iterator(this, std::move(result.first));
         }
         break;
 
@@ -3379,7 +3379,7 @@ auto basic_variable<CharT>::insert(const_iterator where, const basic_variable& v
             auto result = unsafe_get<array_type>()
                 .insert(where.current.template get<typename const_iterator::array_iterator>(),
                         value);
-            return {this, result};
+            return iterator(this, result);
         }
 
     case symbol::map:
@@ -3389,7 +3389,7 @@ auto basic_variable<CharT>::insert(const_iterator where, const basic_variable& v
             auto result = unsafe_get<map_type>()
                 .insert(where.current.template get<typename const_iterator::map_iterator>(),
                         pair_type{value[0], value[1]});
-            return {this, std::move(result)};
+            return iterator(this, std::move(result));
         }
         break;
 
@@ -3416,7 +3416,7 @@ auto basic_variable<CharT>::erase(const_iterator where) -> iterator
     using array_iterator = typename basic_variable::const_iterator::array_iterator;
     using map_iterator = typename basic_variable::const_iterator::map_iterator;
 
-    iterator result = where;
+    auto result = iterator(where);
 
     switch (symbol())
     {
@@ -3446,7 +3446,7 @@ auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> 
     using array_iterator = typename basic_variable::const_iterator::array_iterator;
     using map_iterator = typename basic_variable::const_iterator::map_iterator;
 
-    iterator result = first;
+    auto result = iterator(first);
 
     switch (symbol())
     {
@@ -3478,13 +3478,13 @@ void basic_variable<CharT>::swap(basic_variable& other) noexcept
 template <typename CharT>
 auto basic_variable<CharT>::begin() & -> iterator
 {
-    return {this};
+    return iterator(this);
 }
 
 template <typename CharT>
 auto basic_variable<CharT>::begin() const & -> const_iterator
 {
-    return {this};
+    return const_iterator(this);
 }
 
 template <typename CharT>
@@ -3496,13 +3496,13 @@ auto basic_variable<CharT>::cbegin() const & -> const_iterator
 template <typename CharT>
 auto basic_variable<CharT>::end() & -> iterator
 {
-    return {this, false};
+    return iterator(this, false);
 }
 
 template <typename CharT>
 auto basic_variable<CharT>::end() const & -> const_iterator
 {
-    return {this, false};
+    return const_iterator(this, false);
 }
 
 template <typename CharT>
@@ -3514,13 +3514,13 @@ auto basic_variable<CharT>::cend() const & -> const_iterator
 template <typename CharT>
 auto basic_variable<CharT>::key_begin() const & -> key_iterator
 {
-    return {this};
+    return key_iterator(this);
 }
 
 template <typename CharT>
 auto basic_variable<CharT>::key_end() const & -> key_iterator
 {
-    return {this, false};
+    return key_iterator(this, false);
 }
 
 template <typename CharT>
