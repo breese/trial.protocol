@@ -21,7 +21,7 @@ set(CMAKE_CXX_STANDARD 11)
 if (MSVC)
   set(TRIAL_PROTOCOL_WARNING_FLAGS /W4)
 else()
-  set(TRIAL_PROTOCOL_WARNING_FLAGS -Wall -Wextra -pedantic)
+  set(TRIAL_PROTOCOL_WARNING_FLAGS -Wall -Wextra -pedantic -Werror=return-type)
 endif()
 
 ###############################################################################
