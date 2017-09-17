@@ -15,7 +15,7 @@
 using namespace trial::protocol::core::detail;
 
 template <std::size_t N, typename... Types>
-using test_union = small_union<std::size_t, N, Types...>;
+using test_union = small_union<std::allocator, std::size_t, N, Types...>;
 
 //-----------------------------------------------------------------------------
 // Constructor
@@ -58,7 +58,7 @@ void run()
 namespace visitor_suite
 {
 
-using storage_type = small_union<std::size_t, sizeof(int), bool, int>;
+using storage_type = small_union<std::allocator, std::size_t, sizeof(int), bool, int>;
 
 struct visitor_void
 {
