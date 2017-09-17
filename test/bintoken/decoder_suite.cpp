@@ -1772,7 +1772,7 @@ void test_array8_int16()
                 0x7856 }};
         TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                      expected.begin(), expected.end(),
-                                     std::equal_to<value_type>());
+                                     std::equal_to<std::int16_t>());
     }
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::end);
