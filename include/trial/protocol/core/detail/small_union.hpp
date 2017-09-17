@@ -30,13 +30,15 @@ namespace detail
 // small_union
 //-----------------------------------------------------------------------------
 
-template <std::size_t N, typename... Types>
+template <typename IndexType, IndexType N, typename... Types>
 class small_union
 {
     template <typename T> struct make_small;
     using typelist = meta::transform<meta::list<Types...>, make_small>;
 
 public:
+    using index_type = IndexType;
+
     template <typename T> struct to_index;
 
     template <typename T> explicit small_union(T value);
@@ -46,7 +48,7 @@ public:
     small_union& operator= (small_union&&);
     ~small_union();
 
-    std::size_t which() const noexcept { return current; }
+    index_type index() const noexcept { return current; }
 
     template <typename T> T& get() noexcept;
     template <typename T> const T& get() const noexcept;
@@ -69,7 +71,7 @@ private:
     struct mover;
 
     typename std::aligned_storage<N, alignof(void *)>::type storage;
-    unsigned short current;
+    index_type current;
 };
 
 } // namespace detail

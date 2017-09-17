@@ -2170,7 +2170,7 @@ template <typename CharT>
 basic_variable<CharT>::iterator::iterator(const const_iterator& other)
     : super(const_cast<pointer>(other.scope))
 {
-    switch (other.current.which())
+    switch (other.current.index())
     {
     case super::small_union::template to_index<pointer>::value:
         super::current = other.current.template get<pointer>();
@@ -2228,7 +2228,7 @@ template <typename CharT>
 basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
     : super(other.scope)
 {
-    switch (other.current.which())
+    switch (other.current.index())
     {
     case super::small_union::template to_index<pointer>::value:
         super::current = other.current.template get<pointer>();
@@ -3106,13 +3106,13 @@ template <typename CharT>
 template <typename T>
 bool basic_variable<CharT>::same() const noexcept
 {
-    return detail::same_overloader<CharT, T>::same(storage.which());
+    return detail::same_overloader<CharT, T>::same(storage.index());
 }
 
 template <typename CharT>
 dynamic::code::value basic_variable<CharT>::code() const noexcept
 {
-    switch (storage.which())
+    switch (storage.index())
     {
     case traits<nullable>::value:
         return code::null;
@@ -3159,7 +3159,7 @@ dynamic::code::value basic_variable<CharT>::code() const noexcept
 template <typename CharT>
 dynamic::symbol::value basic_variable<CharT>::symbol() const noexcept
 {
-    switch (storage.which())
+    switch (storage.index())
     {
     case traits<nullable>::value:
         return symbol::null;

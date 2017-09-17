@@ -115,7 +115,8 @@ private:
         const_reference value() const;
 
     protected:
-        using small_union = core::detail::small_union<sizeof(pointer),
+        using small_union = core::detail::small_union<unsigned char,
+                                                      sizeof(pointer),
                                                       pointer,
                                                       array_iterator,
                                                       map_iterator>;
@@ -342,7 +343,8 @@ private:
     template <typename C, typename T, typename> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
-    using storage_type = core::detail::small_union<sizeof(double),
+    using storage_type = core::detail::small_union<unsigned char,
+                                                   sizeof(double),
                                                    nullable,
                                                    bool,
                                                    signed char,

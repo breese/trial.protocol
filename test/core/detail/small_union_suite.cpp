@@ -14,6 +14,9 @@
 
 using namespace trial::protocol::core::detail;
 
+template <std::size_t N, typename... Types>
+using test_union = small_union<std::size_t, N, Types...>;
+
 //-----------------------------------------------------------------------------
 // Constructor
 //-----------------------------------------------------------------------------
@@ -23,19 +26,19 @@ namespace ctor_suite
 
 void test_int()
 {
-    small_union<sizeof(int), bool, int> data{true};
+    test_union<sizeof(int), bool, int> data{true};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
 }
 
 void test_ptr_with_long_double()
 {
-    small_union<sizeof(void *), bool, int, long double> data{3.0L};
+    test_union<sizeof(void *), bool, int, long double> data{3.0L};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<long double>(), 3.0L);
 }
 
 void test_ptr_with_string()
 {
-    small_union<sizeof(void *), bool, int, std::string> data{std::string("alpha")};
+    test_union<sizeof(void *), bool, int, std::string> data{std::string("alpha")};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<std::string>(), std::string("alpha"));
 }
 
@@ -55,14 +58,14 @@ void run()
 namespace visitor_suite
 {
 
-using storage_type = small_union<sizeof(int), bool, int>;
+using storage_type = small_union<std::size_t, sizeof(int), bool, int>;
 
 struct visitor_void
 {
     template <typename Which>
     static void call(storage_type& self)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -72,7 +75,7 @@ struct const_visitor_void
     template <typename Which>
     static void call(const storage_type& self)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -82,7 +85,7 @@ struct visitor_int
     template <typename Which>
     static int call(storage_type& self)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return 43;
     }
@@ -93,7 +96,7 @@ struct const_visitor_int
     template <typename Which>
     static int call(const storage_type& self)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return 42;
     }
@@ -104,7 +107,7 @@ struct visitor_void_with_int
     template <typename Which>
     static void call(storage_type& self, int)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -114,7 +117,7 @@ struct const_visitor_void_with_int
     template <typename Which>
     static void call(const storage_type& self, int)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -124,7 +127,7 @@ struct visitor_int_with_int
     template <typename Which>
     static int call(storage_type& self, int value)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return value;
     }
@@ -135,7 +138,7 @@ struct const_visitor_int_with_int
     template <typename Which>
     static int call(const storage_type& self, int value)
     {
-        if (self.which() != storage_type::to_index<Which>::value)
+        if (self.index() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return value;
     }
