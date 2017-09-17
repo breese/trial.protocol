@@ -37,7 +37,7 @@ class small_union
     using typelist = meta::transform<meta::list<Types...>, make_small>;
 
 public:
-    template <typename T> struct index;
+    template <typename T> struct to_index;
 
     template <typename T> explicit small_union(T value);
     small_union(const small_union&);

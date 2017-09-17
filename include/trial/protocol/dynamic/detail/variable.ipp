@@ -61,7 +61,7 @@ template <typename CharT>
 template <typename T>
 struct basic_variable<CharT>::traits
 {
-    static const std::size_t value = decltype(basic_variable<CharT>::storage)::template index<T>::value;
+    static const std::size_t value = decltype(basic_variable<CharT>::storage)::template to_index<T>::value;
 };
 
 //-----------------------------------------------------------------------------
@@ -2172,13 +2172,13 @@ basic_variable<CharT>::iterator::iterator(const const_iterator& other)
 {
     switch (other.current.which())
     {
-    case super::small_union::template index<pointer>::value:
+    case super::small_union::template to_index<pointer>::value:
         super::current = other.current.template get<pointer>();
         break;
-    case super::small_union::template index<typename super::array_iterator>::value:
+    case super::small_union::template to_index<typename super::array_iterator>::value:
         super::current = other.current.template get<typename super::array_iterator>();
         break;
-    case super::small_union::template index<typename super::map_iterator>::value:
+    case super::small_union::template to_index<typename super::map_iterator>::value:
         super::current = other.current.template get<typename super::map_iterator>();
         break;
     }
@@ -2230,13 +2230,13 @@ basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
 {
     switch (other.current.which())
     {
-    case super::small_union::template index<pointer>::value:
+    case super::small_union::template to_index<pointer>::value:
         super::current = other.current.template get<pointer>();
         break;
-    case super::small_union::template index<typename super::array_iterator>::value:
+    case super::small_union::template to_index<typename super::array_iterator>::value:
         super::current = other.current.template get<typename super::array_iterator>();
         break;
-    case super::small_union::template index<typename super::map_iterator>::value:
+    case super::small_union::template to_index<typename super::map_iterator>::value:
         super::current = other.current.template get<typename super::map_iterator>();
         break;
     }

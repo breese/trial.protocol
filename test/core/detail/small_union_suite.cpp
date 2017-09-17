@@ -62,7 +62,7 @@ struct visitor_void
     template <typename Which>
     static void call(storage_type& self)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -72,7 +72,7 @@ struct const_visitor_void
     template <typename Which>
     static void call(const storage_type& self)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -82,7 +82,7 @@ struct visitor_int
     template <typename Which>
     static int call(storage_type& self)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return 43;
     }
@@ -93,7 +93,7 @@ struct const_visitor_int
     template <typename Which>
     static int call(const storage_type& self)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return 42;
     }
@@ -104,7 +104,7 @@ struct visitor_void_with_int
     template <typename Which>
     static void call(storage_type& self, int)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -114,7 +114,7 @@ struct const_visitor_void_with_int
     template <typename Which>
     static void call(const storage_type& self, int)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
     }
 };
@@ -124,7 +124,7 @@ struct visitor_int_with_int
     template <typename Which>
     static int call(storage_type& self, int value)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return value;
     }
@@ -135,7 +135,7 @@ struct const_visitor_int_with_int
     template <typename Which>
     static int call(const storage_type& self, int value)
     {
-        if (self.which() != storage_type::index<Which>::value)
+        if (self.which() != storage_type::to_index<Which>::value)
             throw std::runtime_error("");
         return value;
     }

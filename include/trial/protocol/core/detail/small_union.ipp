@@ -102,7 +102,7 @@ struct small_union<N, Types...>::make_small
 
 template <std::size_t N, typename... Types>
 template <typename T>
-struct small_union<N, Types...>::index
+struct small_union<N, Types...>::to_index
 {
 private:
     using small_type = typename make_small<T>::type;
@@ -116,7 +116,7 @@ public:
 template <std::size_t N, typename... Types>
 template <typename T>
 small_union<N, Types...>::small_union(T value)
-    : current(index<T>::value)
+    : current(to_index<T>::value)
 {
     using type = typename std::decay<T>::type;
 
@@ -194,7 +194,7 @@ void small_union<N, Types...>::operator= (const T& value)
 
     call<destructor, void>();
     small_traits<N, type>::construct(std::addressof(storage), value);
-    current = index<type>::value;
+    current = to_index<type>::value;
 }
 
 template <std::size_t N, typename... Types>
@@ -205,7 +205,7 @@ void small_union<N, Types...>::operator= (T&& value)
 
     call<destructor, void>();
     small_traits<N, type>::construct(std::addressof(storage), std::move(value));
-    current = index<type>::value;
+    current = to_index<type>::value;
 }
 
 template <std::size_t N, typename... Types>
