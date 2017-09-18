@@ -227,44 +227,44 @@ namespace begin_suite
 
 void test_null()
 {
-    variable data;
-    TRIAL_PROTOCOL_TEST(data.begin() == data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() == data.cend());
-}
-
-void test_const_null()
-{
-    const variable data;
-    TRIAL_PROTOCOL_TEST(data.begin() == data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() == data.cend());
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST(data.begin() == data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() == data.cend());
+    }
+    {
+        const variable data;
+        TRIAL_PROTOCOL_TEST(data.begin() == data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() == data.cend());
+    }
 }
 
 void test_boolean()
 {
-    variable data(true);
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
-}
-
-void test_const_boolean()
-{
-    const variable data(true);
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
+        const variable data(true);
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
 }
 
 void test_integer()
 {
-    variable data(0);
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
-}
-
-void test_const_integer()
-{
-    const variable data(0);
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    {
+        variable data(0);
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
+        const variable data(0);
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
 }
 
 void test_number()
@@ -275,26 +275,22 @@ void test_number()
         TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
     {
-        variable data(0.0);
-        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
-    }
-    {
-        variable data(0.0L);
-        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
-    }
-}
-
-void test_const_number()
-{
-    {
         const variable data(0.0f);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
         TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
     {
+        variable data(0.0);
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
         const variable data(0.0);
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
+        variable data(0.0L);
         TRIAL_PROTOCOL_TEST(data.begin() != data.end());
         TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
     }
@@ -307,50 +303,64 @@ void test_const_number()
 
 void test_string()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
+        const variable data("alpha");
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
 }
 
-void test_const_string()
+void test_wstring()
 {
-    const variable data("alpha");
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    {
+        variable data(L"bravo");
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
+        const variable data(L"bravo");
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
 }
 
 void test_array()
 {
-    variable data = array::make({ true, 1, 2.0, "alpha" });
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
-}
-
-void test_const_array()
-{
-    const variable data = array::make({ true, 1, 2.0, "alpha" });
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    {
+        variable data = array::make({ true, 1, 2.0, "alpha" });
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
+        const variable data = array::make({ true, 1, 2.0, "alpha" });
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
 }
 
 void test_map()
 {
-    variable data = map::make(
-        {
-            {"key", "alpha"}
-        });
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
-}
-
-void test_const_map()
-{
-    const variable data = map::make(
-        {
-            {"key", "alpha"}
-        });
-    TRIAL_PROTOCOL_TEST(data.begin() != data.end());
-    TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    {
+        variable data = map::make(
+            {
+                {"key", "alpha"}
+            });
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
+    {
+        const variable data = map::make(
+            {
+                {"key", "alpha"}
+            });
+        TRIAL_PROTOCOL_TEST(data.begin() != data.end());
+        TRIAL_PROTOCOL_TEST(data.cbegin() != data.cend());
+    }
 }
 
 void convert_to_const()
@@ -366,19 +376,13 @@ void convert_to_const()
 void run()
 {
     test_null();
-    test_const_null();
     test_boolean();
-    test_const_boolean();
     test_integer();
-    test_const_integer();
     test_number();
-    test_const_number();
     test_string();
-    test_const_string();
+    test_wstring();
     test_array();
-    test_const_array();
     test_map();
-    test_const_map();
     convert_to_const();
 }
 
@@ -527,10 +531,30 @@ void test_string()
     }
 }
 
+void test_wstring()
+{
+    {
+        variable data(L"bravo");
+        variable::iterator where = data.begin();
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        const variable data(L"bravo");
+        variable::const_iterator where = data.begin();
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
 void test_array()
 {
     {
-        variable data = array::make({ true, 2, 3.0, "alpha" });
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
         variable::iterator where = data.begin();
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
         TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -547,10 +571,14 @@ void test_array()
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
         TRIAL_PROTOCOL_TEST(*where == variable("alpha"));
         ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
+        TRIAL_PROTOCOL_TEST(*where == variable(L"bravo"));
+        ++where;
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
-        const variable data = array::make({ true, 2, 3.0, "alpha" });
+        const variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
         variable::const_iterator where = data.begin();
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
         TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -566,6 +594,10 @@ void test_array()
         TRIAL_PROTOCOL_TEST(where != data.end());
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
         TRIAL_PROTOCOL_TEST(*where == variable("alpha"));
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
+        TRIAL_PROTOCOL_TEST(*where == variable(L"bravo"));
         ++where;
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
@@ -615,7 +647,8 @@ void test_map()
                 {"alpha", true},
                 {"bravo", 2},
                 {"charlie", 3.0},
-                {"delta", "hydrogen"}
+                {"delta", "hydrogen"},
+                {"echo", L"helium"}
             });
         variable::iterator where = data.begin();
         TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -633,6 +666,10 @@ void test_map()
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 8);
         TRIAL_PROTOCOL_TEST(*where == variable("hydrogen"));
         ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 6);
+        TRIAL_PROTOCOL_TEST(*where == variable(L"helium"));
+        ++where;
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
@@ -641,7 +678,8 @@ void test_map()
                 {"alpha", true},
                 {"bravo", 2},
                 {"charlie", 3.0},
-                {"delta", "hydrogen"}
+                {"delta", "hydrogen"},
+                {"echo", L"helium"}
             });
         variable::const_iterator where = data.begin();
         TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -659,6 +697,10 @@ void test_map()
         TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 8);
         TRIAL_PROTOCOL_TEST(*where == variable("hydrogen"));
         ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 6);
+        TRIAL_PROTOCOL_TEST(*where == variable(L"helium"));
+        ++where;
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
@@ -670,6 +712,7 @@ void run()
     test_integer();
     test_number();
     test_string();
+    test_wstring();
     test_array();
     test_array_number();
     test_map();
@@ -793,9 +836,20 @@ void test_string()
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
+void test_wstring()
+{
+    variable data(L"alpha");
+    variable::iterator where = data.begin();
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
+    variable::iterator result = where++;
+    TRIAL_PROTOCOL_TEST(result != data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
 void test_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
     variable::iterator where = data.begin();
     TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
     TRIAL_PROTOCOL_TEST(*where == variable(true));
@@ -816,6 +870,11 @@ void test_array()
     TRIAL_PROTOCOL_TEST(*where == variable("alpha"));
     result = where++;
     TRIAL_PROTOCOL_TEST(*result == variable("alpha"));
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 5);
+    TRIAL_PROTOCOL_TEST(*where == variable(L"bravo"));
+    result = where++;
+    TRIAL_PROTOCOL_TEST(*result == variable(L"bravo"));
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
@@ -826,7 +885,8 @@ void test_map()
             {"alpha", true},
             {"bravo", 2},
             {"charlie", 3.0},
-            {"delta", "hydrogen"}
+            {"delta", "hydrogen"},
+            {"echo", L"helium"}
         });
     variable::iterator where = data.begin();
     TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 1);
@@ -848,6 +908,11 @@ void test_map()
     TRIAL_PROTOCOL_TEST(*where == variable("hydrogen"));
     result = where++;
     TRIAL_PROTOCOL_TEST(*result == variable("hydrogen"));
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(where->size(), 6);
+    TRIAL_PROTOCOL_TEST(*where == variable(L"helium"));
+    result = where++;
+    TRIAL_PROTOCOL_TEST(*result == variable(L"helium"));
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
@@ -858,6 +923,7 @@ void run()
     test_integer();
     test_number();
     test_string();
+    test_wstring();
     test_array();
     test_map();
 }
@@ -953,10 +1019,24 @@ void get_string()
     }
 }
 
+void get_wstring()
+{
+    {
+        variable data(L"alpha");
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == L"alpha");
+    }
+    {
+        const variable data(L"alpha");
+        auto where = data.begin();
+        TRIAL_PROTOCOL_TEST(*where == L"alpha");
+    }
+}
+
 void get_array()
 {
     {
-        variable data = array::make({ true, 2, 3.0, "alpha" });
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
         auto where = data.begin();
         TRIAL_PROTOCOL_TEST(where->is<bool>());
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(where.key(),
@@ -979,9 +1059,16 @@ void get_array()
         TRIAL_PROTOCOL_TEST(where->is<string>());
         TRIAL_PROTOCOL_TEST(where.value() == "alpha");
         TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(where.value() == L"bravo");
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
-        const variable data = array::make({ true, 2, 3.0, "alpha" });
+        const variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
         auto where = data.begin();
         TRIAL_PROTOCOL_TEST(where->is<bool>());
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(where.key(),
@@ -1004,6 +1091,13 @@ void get_array()
         TRIAL_PROTOCOL_TEST(where->is<string>());
         TRIAL_PROTOCOL_TEST(where.value() == "alpha");
         TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(where.value() == L"bravo");
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
 
@@ -1015,7 +1109,8 @@ void get_map()
                 {"alpha", true},
                 {"bravo", 2},
                 {"charlie", 3.0},
-                {"delta", "hydrogen"}
+                {"delta", "hydrogen"},
+                {"echo", L"helium"}
             });
         auto where = data.begin();
         TRIAL_PROTOCOL_TEST(where->is<bool>());
@@ -1040,6 +1135,14 @@ void get_map()
         TRIAL_PROTOCOL_TEST(where.key() == "delta");
         TRIAL_PROTOCOL_TEST(where.value() == "hydrogen");
         TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(where.key() == "echo");
+        TRIAL_PROTOCOL_TEST(where.value() == L"helium");
+        TRIAL_PROTOCOL_TEST(*where == L"helium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         const variable data = map::make(
@@ -1047,7 +1150,8 @@ void get_map()
                 {"alpha", true},
                 {"bravo", 2},
                 {"charlie", 3.0},
-                {"delta", "hydrogen"}
+                {"delta", "hydrogen"},
+                {"echo", L"helium"}
             });
         auto where = data.begin();
         TRIAL_PROTOCOL_TEST(where->is<bool>());
@@ -1072,6 +1176,14 @@ void get_map()
         TRIAL_PROTOCOL_TEST(where.key() == "delta");
         TRIAL_PROTOCOL_TEST(where.value() == "hydrogen");
         TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.end());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(where.key() == "echo");
+        TRIAL_PROTOCOL_TEST(where.value() == L"helium");
+        TRIAL_PROTOCOL_TEST(*where == L"helium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
 
@@ -1107,12 +1219,20 @@ void overwrite_string()
     TRIAL_PROTOCOL_TEST(data == null);
 }
 
-void overwrite_array()
+void overwrite_wstring()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha" });
+    variable data(L"bravo");
     auto where = data.begin();
     *where = null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+    TRIAL_PROTOCOL_TEST(data == null);
+}
+
+void overwrite_array()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    auto where = data.begin();
+    *where = null;
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
     TRIAL_PROTOCOL_TEST(data[0] == null);
 }
 
@@ -1124,11 +1244,12 @@ void overwrite_map()
             {"bravo", true},
             {"charlie", 2},
             {"delta", 3.0},
-            {"echo", "hydrogen"}
+            {"echo", "hydrogen"},
+            {"foxtrot", L"helium"}
         });
     auto where = data.begin();
     *where = 42;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 6);
     TRIAL_PROTOCOL_TEST(data["alpha"] == 42);
 }
 
@@ -1139,6 +1260,7 @@ void run()
     get_integer();
     get_number();
     get_string();
+    get_wstring();
     get_array();
     get_map();
 
@@ -1146,6 +1268,7 @@ void run()
     overwrite_integer();
     overwrite_number();
     overwrite_string();
+    overwrite_wstring();
     overwrite_array();
     overwrite_map();
 }
@@ -1189,10 +1312,16 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 1);
 }
 
+void test_wstring()
+{
+    variable data(L"bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 1);
+}
+
 void test_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha" });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 4);
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 5);
 }
 
 void test_array_nulls()
@@ -1219,6 +1348,7 @@ void run()
     test_integer();
     test_number();
     test_string();
+    test_wstring();
     test_array();
     test_array_nulls();
     test_map();
@@ -1288,15 +1418,26 @@ void sum_string()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 5);
 }
 
-void sum_array()
+void sum_wstring()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha" });
+    variable data(L"bravo");
     variable::size_type size = 0;
     for (const auto& value : data)
     {
         size += value.size();
     }
-    TRIAL_PROTOCOL_TEST_EQUAL(size, 1 + 1 + 1 + 5);
+    TRIAL_PROTOCOL_TEST_EQUAL(size, 5);
+}
+
+void sum_array()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable::size_type size = 0;
+    for (const auto& value : data)
+    {
+        size += value.size();
+    }
+    TRIAL_PROTOCOL_TEST_EQUAL(size, 1 + 1 + 1 + 5 + 5);
 }
 
 void sum_array_nulls()
@@ -1376,6 +1517,7 @@ void run()
     sum_integer();
     sum_number();
     sum_string();
+    sum_wstring();
     sum_array();
     sum_array_nulls();
     sum_array_array();
@@ -1458,21 +1600,44 @@ void iterate_string()
     TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
-void iterate_array()
+void iterate_wstring()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha" });
+    variable data(L"bravo");
     auto where = data.key_begin();
     TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 0);
     ++where;
+    TRIAL_PROTOCOL_TEST(where == data.key_end());
+}
+
+void iterate_array()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
+    TRIAL_PROTOCOL_TEST(*where == 0);
+    TRIAL_PROTOCOL_TEST(where.key() == 0);
+    TRIAL_PROTOCOL_TEST(where.value() == true);
+    ++where;
     TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 1);
+    TRIAL_PROTOCOL_TEST(where.key() == 1);
+    TRIAL_PROTOCOL_TEST(where.value() == 2);
     ++where;
     TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 2);
+    TRIAL_PROTOCOL_TEST(where.key() == 2);
+    TRIAL_PROTOCOL_TEST(where.value() == 3.0);
     ++where;
     TRIAL_PROTOCOL_TEST(where != data.key_end());
     TRIAL_PROTOCOL_TEST(*where == 3);
+    TRIAL_PROTOCOL_TEST(where.key() == 3);
+    TRIAL_PROTOCOL_TEST(where.value() == "alpha");
+    ++where;
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
+    TRIAL_PROTOCOL_TEST(*where == 4);
+    TRIAL_PROTOCOL_TEST(where.key() == 4);
+    TRIAL_PROTOCOL_TEST(where.value() == L"bravo");
     ++where;
     TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
@@ -1497,6 +1662,7 @@ void run()
     iterate_integer();
     iterate_number();
     iterate_string();
+    iterate_wstring();
     iterate_array();
     iterate_map();
 }
@@ -1560,6 +1726,18 @@ void find_null()
     }
     {
         variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(L"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
@@ -1632,6 +1810,18 @@ void find_boolean()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
+        variable::iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
         variable::iterator where = data.find(array::make({true}));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
@@ -1698,6 +1888,18 @@ void find_const_boolean()
     }
     {
         variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(L"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
@@ -1770,6 +1972,18 @@ void find_integer()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
+        variable::iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
         variable::iterator where = data.find(array::make({2}));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
@@ -1836,6 +2050,18 @@ void find_const_integer()
     }
     {
         variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(L"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
@@ -1908,6 +2134,18 @@ void find_number()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
+        variable::iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
         variable::iterator where = data.find(array::make({3.0}));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
@@ -1974,6 +2212,18 @@ void find_const_number()
     }
     {
         variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(L"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
@@ -2050,6 +2300,18 @@ void find_string()
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
+        variable::iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
         variable::iterator where = data.find(array::make({"hydrogen"}));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
@@ -2120,6 +2382,188 @@ void find_const_string()
     }
     {
         variable::const_iterator where = data.find(variable("alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_wstring()
+{
+    variable data(L"hydrogen");
+    {
+        variable::iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(L"alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(std::wstring(L"alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::iterator where = data.find(variable(L"alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(array::make({"hydrogen"}));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::iterator where = data.find(map::make("alpha", "hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void find_const_wstring()
+{
+    const variable data(L"hydrogen");
+    {
+        variable::const_iterator where = data.find(data);
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(null);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(true));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(2);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(2));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(3.0);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(3.0));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find("hydrogen");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::string("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable("hydrogen"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(L"hydrogen");
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(L"alpha");
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::wstring(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(std::wstring(L"alpha"));
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(L"hydrogen"));
+        TRIAL_PROTOCOL_TEST(where != data.end());
+    }
+    {
+        variable::const_iterator where = data.find(variable(L"alpha"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {

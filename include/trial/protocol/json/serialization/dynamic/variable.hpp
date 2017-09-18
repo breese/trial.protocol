@@ -97,6 +97,9 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
             ar.save(data.value<dynamic::string>());
             break;
 
+        case dynamic::code::wstring:
+            throw json::error(json::incompatible_type);
+
         case dynamic::code::array:
             ar.template save<json::token::begin_array>();
             for (const auto& item : data)

@@ -19,6 +19,7 @@
 #include <map>
 #include <trial/protocol/core/detail/config.hpp>
 #include <trial/protocol/core/detail/small_union.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 #include <trial/protocol/dynamic/error.hpp>
 #include <trial/protocol/dynamic/token.hpp>
 
@@ -35,9 +36,9 @@ namespace detail
 {
 
 template <typename T, typename U, typename> struct overloader;
-template <typename T, typename U, typename> struct iterator_overloader;
 template <typename T, typename U, typename> struct operator_overloader;
-template <typename C, typename T, typename> struct same_overloader;
+template <template <typename> class A, typename T, typename> struct same_overloader;
+template <template <typename> class A, typename U, typename> struct iterator_overloader;
 
 } // namespace detail
 
@@ -46,29 +47,40 @@ struct boolean {};
 struct integer {};
 struct number {};
 struct string {};
-template <typename CharT> struct basic_array;
-template <typename CharT> struct basic_map;
+struct wstring {};
+template <template <typename> class Allocator> struct basic_array;
+template <template <typename> class Allocator> struct basic_map;
 
-template <typename CharT>
-class basic_variable
+template <template <typename> class Allocator>
+    class basic_variable
 {
     template <typename T> struct traits;
     template <typename T, typename = void> struct tag_traits;
 
 public:
-    using value_type = basic_variable<CharT>;
+    using value_type = basic_variable<Allocator>;
     using reference = typename std::add_lvalue_reference<value_type>::type;
     using const_reference = typename std::add_const<reference>::type;
+    using allocator_type = Allocator<value_type>;
     using difference_type = std::ptrdiff_t;
     using size_type = std::size_t;
-    using string_type = std::basic_string<CharT>;
-    using array_type = std::vector<value_type>;
-    using map_type = std::map<value_type, value_type>;
+    using string_type = std::basic_string<char,
+                                          typename core::char_traits<char>,
+                                          typename std::allocator_traits<allocator_type>::template rebind_alloc<char>>;
+    using wstring_type = std::basic_string<wchar_t,
+                                           typename core::char_traits<wchar_t>,
+                                           typename std::allocator_traits<allocator_type>::template rebind_alloc<wchar_t>>;
+    using array_type = std::vector<value_type,
+                                   allocator_type>;
+    using map_type = std::map<value_type,
+                              value_type,
+                              std::less<value_type>,
+                              allocator_type>;
     using pair_type = typename map_type::value_type;
 
 private:
-    friend struct basic_array<CharT>;
-    friend struct basic_map<CharT>;
+    friend struct basic_array<Allocator>;
+    friend struct basic_map<Allocator>;
 
     template <typename Derived, typename T>
     class iterator_base
@@ -115,7 +127,7 @@ private:
         const_reference value() const;
 
     protected:
-        using small_union = core::detail::small_union<std::allocator,
+        using small_union = core::detail::small_union<Allocator,
                                                       unsigned char,
                                                       sizeof(pointer),
                                                       pointer,
@@ -192,7 +204,7 @@ public:
 
     private:
         friend class basic_variable;
-        template <typename T, typename U, typename> friend struct detail::iterator_overloader;
+        template <template <typename> class A, typename U, typename> friend struct detail::iterator_overloader;
 
         explicit const_iterator(pointer p, bool initialize = true);
     };
@@ -243,7 +255,8 @@ public:
     basic_variable();
     basic_variable(const nullable&);
     // String constructor
-    basic_variable(const CharT *);
+    basic_variable(const char *);
+    basic_variable(const wchar_t *);
     // Use factory instead
     basic_variable(typename basic_variable::array_type) = delete;
     basic_variable(typename basic_variable::map_type) = delete;
@@ -255,13 +268,15 @@ public:
     basic_variable& operator= (basic_variable&&);
     template <typename T> basic_variable& operator= (T);
     basic_variable& operator= (nullable);
-    basic_variable& operator= (const CharT *);
+    basic_variable& operator= (const char *);
+    basic_variable& operator= (const wchar_t *);
 
     // Addition / concatenation
 
     template <typename T> basic_variable& operator+= (const T&);
     basic_variable& operator+= (const basic_variable&);
-    basic_variable& operator+= (const CharT *);
+    basic_variable& operator+= (const char *);
+    basic_variable& operator+= (const wchar_t *);
 
     // Accessor
 
@@ -339,12 +354,12 @@ private:
 
 private:
     template <typename T, typename U, typename> friend struct detail::overloader;
-    template <typename T, typename U, typename> friend struct detail::iterator_overloader;
+    template <template <typename> class A, typename U, typename> friend struct detail::iterator_overloader;
     template <typename T, typename U, typename> friend struct detail::operator_overloader;
-    template <typename C, typename T, typename> friend struct detail::same_overloader;
+    template <template <typename> class A, typename T, typename> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
-    using storage_type = core::detail::small_union<std::allocator,
+    using storage_type = core::detail::small_union<Allocator,
                                                    unsigned char,
                                                    sizeof(double),
                                                    nullable,
@@ -363,16 +378,17 @@ private:
                                                    double,
                                                    long double,
                                                    string_type,
+                                                   wstring_type,
                                                    array_type,
                                                    map_type>;
     storage_type storage;
 };
 
-template <typename T, typename U>
-basic_variable<T> operator+ (const basic_variable<T>&, const U&);
+template <template <typename> class Allocator, typename U>
+basic_variable<Allocator> operator+ (const basic_variable<Allocator>&, const U&);
 
-template <typename T>
-basic_variable<T> operator+ (nullable, const basic_variable<T>&);
+template <template <typename> class Allocator>
+basic_variable<Allocator> operator+ (nullable, const basic_variable<Allocator>&);
 
 // Container comparison operators are noexcept from C++14
 
@@ -385,20 +401,20 @@ bool operator!= (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 template <typename T, typename U>
 bool operator< (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
-template <typename CharT, typename U>
-bool operator<= (const basic_variable<CharT>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+template <template <typename> class Allocator, typename U>
+bool operator<= (const basic_variable<Allocator>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
-template <typename CharT, typename U>
-bool operator> (const basic_variable<CharT>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+template <template <typename> class Allocator, typename U>
+bool operator> (const basic_variable<Allocator>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
-template <typename CharT, typename U>
-bool operator>= (const basic_variable<CharT>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+template <template <typename> class Allocator, typename U>
+bool operator>= (const basic_variable<Allocator>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
 
 // Convenience
 
-using variable = basic_variable<char>;
-using map = basic_map<char>;
-using array = basic_array<char>;
+using variable = basic_variable<std::allocator>;
+using array = basic_array<std::allocator>;
+using map = basic_map<std::allocator>;
 
 } // namespace dynamic
 } // namespace protocol

@@ -98,6 +98,9 @@ struct save_overloader< protocol::bintoken::oarchive,
             ar.save(data.value<dynamic::string>());
             break;
 
+        case dynamic::code::wstring:
+            throw bintoken::error(bintoken::incompatible_type);
+
         case dynamic::code::array:
             ar.template save<bintoken::token::begin_array>();
             ar.template save<std::size_t>(data.size());

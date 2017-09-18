@@ -24,15 +24,15 @@ namespace dynamic
 namespace detail
 {
 
-template <typename CharT, typename T>
+template <template <typename> class Allocator, typename T>
 struct convert_overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     std::vector<T>>
 {
-    static basic_variable<CharT> convert(const std::vector<T>& array,
-                                         std::error_code&)
+    static basic_variable<Allocator> convert(const std::vector<T>& array,
+                                             std::error_code&)
     {
-        auto result = basic_array<CharT>::make();
+        auto result = basic_array<Allocator>::make();
         for (const auto& entry : array)
         {
             result += entry;
@@ -41,12 +41,12 @@ struct convert_overloader<
     }
 };
 
-template <typename CharT, typename T>
+template <template <typename> class Allocator, typename T>
 struct convert_overloader<
     std::vector<T>,
-    basic_variable<CharT>>
+    basic_variable<Allocator>>
 {
-    static std::vector<T> convert(const basic_variable<CharT>& array,
+    static std::vector<T> convert(const basic_variable<Allocator>& array,
                                   std::error_code& error)
     {
         std::vector<T> result;
@@ -67,15 +67,15 @@ struct convert_overloader<
 
 // Special case for std::vector<variable>
 
-template <typename CharT>
+template <template <typename> class Allocator>
 struct convert_overloader<
-    std::vector<basic_variable<CharT>>,
-    basic_variable<CharT>>
+    std::vector<basic_variable<Allocator>>,
+    basic_variable<Allocator>>
 {
-    static std::vector<basic_variable<CharT>> convert(const basic_variable<CharT>& array,
-                                                      std::error_code&)
+    static std::vector<basic_variable<Allocator>> convert(const basic_variable<Allocator>& array,
+                                                          std::error_code&)
     {
-        std::vector<basic_variable<CharT>> result;
+        std::vector<basic_variable<Allocator>> result;
         result.reserve(array.size());
         for (auto it = array.begin(); it != array.end(); ++it)
         {

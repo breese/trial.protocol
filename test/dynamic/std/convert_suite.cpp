@@ -87,12 +87,34 @@ void to_vector_string()
                                  std::equal_to<decltype(result)::value_type>());
 }
 
+void from_vector_wstring()
+{
+    std::vector<std::wstring> input = { L"alpha", L"bravo" };
+    variable result = convert<variable>(input);
+
+    variable expect = array::make({ L"alpha", L"bravo" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void to_vector_wstring()
+{
+    variable input = { L"alpha", L"bravo" };
+    auto result = convert<std::vector<std::wstring>>(input);
+
+    std::vector<std::wstring> expect = { L"alpha", L"bravo" };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<decltype(result)::value_type>());
+}
+
 void to_vector_variable()
 {
-    variable input = { null, true, 2, 3.0, "alpha" };
+    variable input = { null, true, 2, 3.0, "alpha", L"bravo" };
     auto result = convert<std::vector<variable>>(input);
 
-    std::vector<variable> expect = { null, true, 2, 3.0, "alpha" };
+    std::vector<variable> expect = { null, true, 2, 3.0, "alpha", L"bravo" };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -120,6 +142,8 @@ void run()
     to_vector_double();
     from_vector_string();
     to_vector_string();
+    from_vector_wstring();
+    to_vector_wstring();
 
     to_vector_variable();
 
@@ -249,6 +273,44 @@ void to_map_string_string()
                                  std::equal_to<decltype(result)::value_type>());
 }
 
+void from_map_string_wstring()
+{
+    std::map<std::string, std::wstring> input =
+        {
+            { "alpha", L"hydrogen" },
+            { "bravo", L"helium" }
+        };
+    variable result = convert<variable>(input);
+
+    variable expect = map::make(
+        {
+            { "alpha", L"hydrogen" },
+            { "bravo", L"helium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void to_map_string_wstring()
+{
+    variable input =
+        {
+            { "alpha", L"hydrogen" },
+            { "bravo", L"helium" }
+        };
+    auto result = convert<std::map<std::string, std::wstring>>(input);
+
+    decltype(result) expect =
+        {
+            { "alpha", L"hydrogen" },
+            { "bravo", L"helium" }
+        };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<decltype(result)::value_type>());
+}
+
 void to_map_string_variable()
 {
     variable input =
@@ -290,6 +352,8 @@ void run()
     to_map_string_int();
     from_map_string_string();
     to_map_string_string();
+    from_map_string_wstring();
+    to_map_string_wstring();
 
     to_map_string_variable();
 

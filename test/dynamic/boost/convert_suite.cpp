@@ -125,6 +125,22 @@ void convert_string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<std::string>(), "alpha");
 }
 
+void convert_wstring()
+{
+    boost::any any(std::wstring(L"bravo"));
+    variable result = convert<variable>(any);
+    TRIAL_PROTOCOL_TEST(result.is<wstring>());
+    TRIAL_PROTOCOL_TEST(result.value<std::wstring>() == L"bravo");
+}
+
+void convert_wstring_literal()
+{
+    boost::any any(L"bravo");
+    variable result = convert<variable>(any);
+    TRIAL_PROTOCOL_TEST(result.is<wstring>());
+    TRIAL_PROTOCOL_TEST(result.value<std::wstring>() == L"bravo");
+}
+
 void convert_array_integer()
 {
     {
@@ -207,6 +223,14 @@ void convert_array_string()
     TRIAL_PROTOCOL_TEST(result == array::make({ "alpha", "bravo", "charlie" }));
 }
 
+void convert_array_wstring()
+{
+    boost::any any(std::vector<std::wstring>{ L"alpha", L"bravo", L"charlie" });
+    variable result = convert<variable>(any);
+    TRIAL_PROTOCOL_TEST(result.is<array>());
+    TRIAL_PROTOCOL_TEST(result == array::make({ L"alpha", L"bravo", L"charlie" }));
+}
+
 void fail_on_struct()
 {
     struct record {};
@@ -234,9 +258,12 @@ void run()
     convert_number();
     convert_string();
     convert_string_literal();
+    convert_wstring();
+    convert_wstring_literal();
     convert_array_integer();
     convert_array_number();
     convert_array_string();
+    convert_array_wstring();
     fail_on_struct();
     throw_on_struct();
 }

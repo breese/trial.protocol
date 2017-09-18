@@ -164,6 +164,20 @@ void append_null_with_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
     }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data += L"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data += variable(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
+    }
 }
 
 void append_null_with_array()
@@ -370,6 +384,20 @@ void append_boolean_with_string()
                                         error,
                                         "incompatible type");
     }
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(L"alpha"),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(L"alpha")),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_boolean_with_array()
@@ -541,12 +569,22 @@ void append_signed_int_with_number()
 
 void append_signed_int_with_string()
 {
-    signed int input = 2;
-    variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
-                                    error,
-                                    "incompatible type");
+    {
+        signed int input = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        signed int input = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(L"alpha")),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_signed_int_with_array()
@@ -702,12 +740,22 @@ void append_unsigned_int_with_number()
 
 void append_unsigned_int_with_string()
 {
-    unsigned int input = 2U;
-    variable data(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
-                                    error,
-                                    "incompatible type");
+    {
+        unsigned int input = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        unsigned int input = 2U;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(L"alpha")),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_unsigned_int_with_array()
@@ -793,11 +841,20 @@ void append_float_with_number()
 
 void append_float_with_string()
 {
-    variable data(3.0f);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(L"alpha")),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_float_with_array()
@@ -881,11 +938,20 @@ void append_double_with_number()
 
 void append_double_with_string()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(L"alpha")),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_double_with_array()
@@ -969,11 +1035,20 @@ void append_long_double_with_number()
 
 void append_long_double_with_string()
 {
-    variable data(3.0L);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(L"alpha")),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_long_double_with_array()
@@ -996,24 +1071,43 @@ void append_long_double_with_map()
 
 void append_string_with_null()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    data += null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        data += null;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        data += null;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
+    }
 }
 
 void append_string_with_boolean()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(true)),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(true)),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(true)),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_string_with_integer()
 {
+    // string - signed
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
@@ -1021,9 +1115,26 @@ void append_string_with_integer()
                                         error,
                                         "incompatible type");
     }
+    // string - unsigned
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(2U)),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - signed
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(2)),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - unsigned
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(2U)),
                                         error,
                                         "incompatible type");
@@ -1032,6 +1143,7 @@ void append_string_with_integer()
 
 void append_string_with_number()
 {
+    // string - float
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
@@ -1039,6 +1151,7 @@ void append_string_with_number()
                                         error,
                                         "incompatible type");
     }
+    // string - double
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
@@ -1046,9 +1159,34 @@ void append_string_with_number()
                                         error,
                                         "incompatible type");
     }
+    // string - long double
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0L)),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - float
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0f)),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - double
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0)),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - long double
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(3.0L)),
                                         error,
                                         "incompatible type");
@@ -1057,6 +1195,7 @@ void append_string_with_number()
 
 void append_string_with_string()
 {
+    // string - string literal
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
@@ -1064,6 +1203,7 @@ void append_string_with_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha-bravo");
     }
+    // string - string
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
@@ -1071,24 +1211,90 @@ void append_string_with_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha-bravo");
     }
+    // string - wstring literal
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((data += L"-bravo"),
+                                        error,
+                                        "incompatible type");
+    }
+    // string - wstring
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((data += variable(L"-bravo")),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - string literal
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((data += "-bravo"),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - string
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((data += variable("-bravo")),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - wstring literal
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        data += L"-bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha-bravo");
+    }
+    // wstring - wstring
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        data += variable(L"-bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha-bravo");
+    }
 }
 
 void append_string_with_array()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(array::make({ true, "alpha" })),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(array::make({ true, "alpha" })),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(array::make({ true, "alpha" })),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_string_with_map()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(map::make({{ "alpha", "hydrogen" }})),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(map::make({{ "alpha", "hydrogen" }})),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(map::make({{ "alpha", "hydrogen" }})),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_array_with_null()
@@ -1175,14 +1381,26 @@ void append_array_with_number()
 
 void append_array_with_string()
 {
-    variable data = { true, 2, 3.0, "alpha" };
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
-    data += "bravo";
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
-    variable expect = array::make({ true, 2, 3.0, "alpha", "bravo" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+        data += "bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable expect = array::make({ true, 2, 3.0, "alpha", "bravo" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = { true, 2, 3.0, "alpha" };
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 4);
+        data += L"bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void append_array_with_array()
@@ -1302,14 +1520,26 @@ void append_map_with_number()
 
 void append_map_with_string()
 {
-    variable data =
-        {
-            { "alpha", "hydrogen" },
-            { "bravo", "helium" }
-        };
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data =
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            };
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable("alpha")),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data =
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            };
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator+=(variable(L"alpha")),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void append_map_with_array()
@@ -1487,9 +1717,16 @@ void add_null_with_number()
 
 void add_null_with_string()
 {
-    auto data = null + variable("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
+    {
+        auto data = null + variable("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
+    }
+    {
+        auto data = null + variable(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
+    }
 }
 
 void add_null_with_array()
@@ -1561,10 +1798,18 @@ void add_boolean_with_number()
 
 void add_boolean_with_string()
 {
-    variable data(false);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(false);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(L"alpha"),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void add_boolean_with_array()
@@ -1632,10 +1877,18 @@ void add_integer_with_number()
 
 void add_integer_with_string()
 {
-    variable data(2);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(2);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(L"alpha"),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void add_integer_with_array()
@@ -1703,10 +1956,18 @@ void add_number_with_number()
 
 void add_number_with_string()
 {
-    variable data(3.0);
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(L"alpha"),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void add_number_with_array()
@@ -1727,29 +1988,60 @@ void add_number_with_map()
 
 void add_string_with_null()
 {
-    auto data = variable("alpha") + null;
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
+    {
+        auto data = variable("alpha") + null;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha");
+    }
+    {
+        auto data = variable(L"alpha") + null;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
+    }
 }
 
 void add_string_with_boolean()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(true),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(true),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(true),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void add_string_with_integer()
 {
+    // string - signed
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(2),
                                         error,
                                         "incompatible type");
     }
+    // string - unsigned
     {
         variable data("alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(2U),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - signed
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(2),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - unsigned
+    {
+        variable data(L"alpha");
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(2U),
                                         error,
                                         "incompatible type");
@@ -1758,20 +2050,44 @@ void add_string_with_integer()
 
 void add_string_with_number()
 {
+    // string - float
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(3.0f),
                                         error,
                                         "incompatible type");
     }
+    // string - double
     {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(3.0),
                                         error,
                                         "incompatible type");
     }
+    // string - long double
     {
         variable data("alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(3.0L),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - float
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(3.0f),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - double
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(3.0),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - long double
+    {
+        variable data(L"alpha");
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(3.0L),
                                         error,
                                         "incompatible type");
@@ -1780,25 +2096,62 @@ void add_string_with_number()
 
 void add_string_with_string()
 {
-    auto data = variable("alpha") + variable("-bravo");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha-bravo");
+    // string - string
+    {
+        auto data = variable("alpha") + variable("-bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<string>(), "alpha-bravo");
+    }
+    // string - wstring
+    {
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((variable("alpha") + variable(L"-bravo")),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - string
+    {
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((variable(L"alpha") + variable("-bravo")),
+                                        error,
+                                        "incompatible type");
+    }
+    // wstring - wstring
+    {
+        auto data = variable(L"alpha") + variable(L"-bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha-bravo");
+    }
 }
 
 void add_string_with_array()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + array::make({ true, "alpha" }),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + array::make({ true, "alpha" }),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + array::make({ true, "alpha" }),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void add_string_with_map()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + map::make({{ "alpha", "hydrogen" }}),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + map::make({{ "alpha", "hydrogen" }}),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + map::make({{ "alpha", "hydrogen" }}),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void add_array_with_null()
@@ -1871,12 +2224,22 @@ void add_array_with_number()
 
 void add_array_with_string()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha" }) + "bravo";
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
-    variable expect = array::make({ true, 2, 3.0, "alpha", "bravo" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha" }) + "bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable expect = array::make({ true, 2, 3.0, "alpha", "bravo" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha" }) + L"bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void add_array_with_array()
@@ -1979,14 +2342,26 @@ void add_map_with_number()
 
 void add_map_with_string()
 {
-    variable data = map::make(
-        {
-            { "alpha", "hydrogen" },
-            { "bravo", "helium" }
-        });
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data = map::make(
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            });
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data = map::make(
+            {
+                { "alpha", "hydrogen" },
+                { "bravo", "helium" }
+            });
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(L"alpha"),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void add_map_with_array()
@@ -2111,10 +2486,18 @@ void index_number()
 
 void index_string()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void index_array()
@@ -2193,10 +2576,18 @@ void key_number()
 
 void key_string()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
-                                    error,
-                                    "incompatible type");
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[L"alpha"],
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void key_array()
@@ -2300,6 +2691,9 @@ void get_null()
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
                                     error,
                                     "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::wstring_type(),
+                                    error,
+                                    "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
                                     error,
                                     "incompatible type");
@@ -2318,6 +2712,9 @@ void get_boolean()
     TRIAL_PROTOCOL_TEST(int(data) == 1);
     TRIAL_PROTOCOL_TEST(float(data) == 1.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::wstring_type(),
                                     error,
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
@@ -2340,6 +2737,9 @@ void get_integer()
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
                                     error,
                                     "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::wstring_type(),
+                                    error,
+                                    "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
                                     error,
                                     "incompatible type");
@@ -2358,6 +2758,9 @@ void get_number()
     TRIAL_PROTOCOL_TEST(int(data) == 3);
     TRIAL_PROTOCOL_TEST(float(data) == 3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::wstring_type(),
                                     error,
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
@@ -2384,6 +2787,36 @@ void get_string()
                                     error,
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST(variable::string_type(data) == "alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::wstring_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::map_type(),
+                                    error,
+                                    "incompatible type");
+}
+
+void get_wstring()
+{
+    variable data(L"alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator bool(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator int(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator float(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST(variable::wstring_type(data) == L"alpha");
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::array_type(),
                                     error,
                                     "incompatible type");
@@ -2447,6 +2880,7 @@ void run()
     get_integer();
     get_number();
     get_string();
+    get_wstring();
     get_array();
     get_map();
 }

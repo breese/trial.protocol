@@ -121,7 +121,7 @@ void compare_null_equal_string()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(""), true);
-
+    
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable("alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable("alpha"), true);
 }
@@ -133,6 +133,24 @@ void compare_null_equal_string_literal()
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == "alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != "alpha", true);
+}
+
+void compare_null_equal_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(L""), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(L"alpha"), true);
+}
+
+void compare_null_equal_wstring_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != L"", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != L"alpha", true);
 }
 
 void compare_null_equal_array()
@@ -286,6 +304,32 @@ void compare_boolean_equal_string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != "alpha", true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == "alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != "alpha", true);
+}
+
+void compare_boolean_equal_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(L""), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(L"alpha"), true);
+}
+
+void compare_boolean_equal_wstring_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != L"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != L"", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != L"alpha", true);
 }
 
 void compare_boolean_equal_array()
@@ -794,6 +838,7 @@ void compare_integer_equal_number_literal()
 
 void compare_integer_equal_string()
 {
+    // signed - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(""), true);
@@ -805,6 +850,7 @@ void compare_integer_equal_string()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable("alpha"), true);
     }
+    // unsigned - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(""), true);
@@ -820,6 +866,7 @@ void compare_integer_equal_string()
 
 void compare_integer_equal_string_literal()
 {
+    // signed - string literal
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == "", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != "", true);
@@ -831,6 +878,7 @@ void compare_integer_equal_string_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != "alpha", true);
     }
+    // unsigned - string literal
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == "", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != "", true);
@@ -841,6 +889,62 @@ void compare_integer_equal_string_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != "", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != "alpha", true);
+    }
+}
+
+void compare_integer_equal_wstring()
+{
+    // signed - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(L""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable("Lalpha"), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(L""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(L"alpha"), true);
+    }
+    // unsigned - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(L""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(L"alpha"), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(L""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(L"alpha"), true);
+    }
+}
+
+void compare_integer_equal_wstring_literal()
+{
+    // signed - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != L"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != L"alpha", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != L"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != L"alpha", true);
+    }
+    // unsigned - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != L"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != L"alpha", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != L"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != L"alpha", true);
     }
 }
 
@@ -1208,18 +1312,21 @@ void compare_number_equal_number_literal()
 
 void compare_number_equal_string()
 {
+    // float - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable("alpha"), true);
     }
+    // double - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable("alpha"), true);
     }
+    // long double - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable("alpha"), true);
@@ -1230,23 +1337,76 @@ void compare_number_equal_string()
 
 void compare_number_equal_string_literal()
 {
+    // float - string literal
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != "alpha", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != "alpha", true);
     }
+    // double - string literal
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != "alpha", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != "alpha", true);
     }
+    // long double - string literal
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != "alpha", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == "alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != "alpha", true);
+    }
+}
+
+void compare_number_equal_wstring()
+{
+    // float - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable(L"alpha"), true);
+    }
+    // double - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(L"alpha"), true);
+    }
+    // long double - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != variable(L"alpha"), true);
+    }
+}
+
+void compare_number_equal_wstring_literal()
+{
+    // float - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != L"alpha", true);
+    }
+    // double - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != L"alpha", true);
+    }
+    // long double - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != L"alpha", true);
     }
 }
 
@@ -1380,6 +1540,7 @@ void compare_string_equal_boolean_literal()
 
 void compare_string_equal_integer()
 {
+    // string - signed
     {
         const auto big = std::numeric_limits<signed int>::max();
 
@@ -1393,6 +1554,7 @@ void compare_string_equal_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
     }
+    // string - unsigned
     {
         const auto big = std::numeric_limits<unsigned int>::max();
 
@@ -1410,6 +1572,7 @@ void compare_string_equal_integer()
 
 void compare_string_equal_integer_literal()
 {
+    // string - signed
     {
         const auto big = std::numeric_limits<signed int>::max();
 
@@ -1423,6 +1586,7 @@ void compare_string_equal_integer_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
     }
+    // string - unsigned
     {
         const auto big = std::numeric_limits<unsigned int>::max();
 
@@ -1440,6 +1604,7 @@ void compare_string_equal_integer_literal()
 
 void compare_string_equal_number()
 {
+    // string - float
     {
         const auto zero = 0.0f;
         const auto big = std::numeric_limits<float>::max();
@@ -1454,6 +1619,7 @@ void compare_string_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
     }
+    // string - double
     {
         const auto zero = 0.0;
         const auto big = std::numeric_limits<double>::max();
@@ -1468,6 +1634,7 @@ void compare_string_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(big), true);
     }
+    // string - long double
     {
         const auto zero = 0.0L;
         const auto big = std::numeric_limits<long double>::max();
@@ -1486,6 +1653,7 @@ void compare_string_equal_number()
 
 void compare_string_equal_number_literal()
 {
+    // string - float
     {
         const auto zero = 0.0f;
         const auto big = std::numeric_limits<float>::max();
@@ -1500,6 +1668,7 @@ void compare_string_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
     }
+    // string - double
     {
         const auto zero = 0.0;
         const auto big = std::numeric_limits<double>::max();
@@ -1514,6 +1683,7 @@ void compare_string_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != big, true);
     }
+    // string - long double
     {
         const auto zero = 0.0L;
         const auto big = std::numeric_limits<long double>::max();
@@ -1532,38 +1702,78 @@ void compare_string_equal_number_literal()
 
 void compare_string_equal_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(""), true);
+    // string - string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(""), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("bravo"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("bravo"), false);
+    }
+    // string - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(L""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(L"bravo"), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable(L"bravo"), true);
+    }
 }
 
 void compare_string_equal_string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("") != "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "", true);
+    // string - string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "bravo", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == "bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != "bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == "bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != "bravo", false);
+    }
+    // string - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != L"", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != L"bravo", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != L"bravo", true);
+    }
 }
 
 void compare_string_equal_array()
@@ -1590,6 +1800,312 @@ void compare_string_equal_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("") != map::make({ {"alpha", 1} }), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == map::make({ {"alpha", 1} }), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != map::make({ {"alpha", 1} }), true);
+}
+
+void compare_wstring_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(), true);
+}
+
+void compare_wstring_equal_null_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != null, true);
+}
+
+void compare_wstring_equal_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(true), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(true), true);
+}
+
+void compare_wstring_equal_boolean_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != true, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != true, true);
+}
+
+void compare_wstring_equal_integer()
+{
+    // wstring - signed
+    {
+        const auto big = std::numeric_limits<signed int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+    }
+    // wstring - unsigned
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+    }
+}
+
+void compare_wstring_equal_integer_literal()
+{
+    // wstring - signed
+    {
+        const auto big = std::numeric_limits<signed int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+    }
+    // wstring - unsigned
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+    }
+}
+
+void compare_wstring_equal_number()
+{
+    // wstring - float
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+    }
+    // wstring - double
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+    }
+    // wstring - long double
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+    }
+}
+
+void compare_wstring_equal_number_literal()
+{
+    // wstring - float
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+    }
+    // wstring - double
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+    }
+    // wstring - long double
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+    }
+}
+
+void compare_wstring_equal_string()
+{
+    // wstring - string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable("bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable("bravo"), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable("alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable("alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable("bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable("bravo"), true);
+    }
+    // wstring - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(L""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(L"bravo"), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(L"bravo"), false);
+    }
+}
+
+void compare_wstring_equal_string_literal()
+{
+    // wstring - string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != "", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == "bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != "bravo", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == "alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != "alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == "bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != "bravo", true);
+    }
+    // wstring - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != L"", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != L"bravo", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == L"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == L"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != L"bravo", false);
+    }
+}
+
+void compare_wstring_equal_array()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != array::make(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != array::make({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != array::make({ 1, 2, 3 }), true);
+}
+
+void compare_wstring_equal_map()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != map::make(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != map::make({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == map::make({ {"alpha", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != map::make({ {"alpha", 1} }), true);
 }
 
 void compare_array_equal_null()
@@ -1814,6 +2330,32 @@ void compare_array_equal_string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != "", true);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == "alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != "alpha", true);
+}
+
+void compare_array_equal_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(L"alpha"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(L"alpha"), true);
+}
+
+void compare_array_equal_wstring_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != L"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != L"alpha", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != L"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != L"alpha", true);
 }
 
 void compare_array_equal_array()
@@ -2099,6 +2641,32 @@ void compare_map_equal_string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != "alpha", true);
 }
 
+void compare_map_equal_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(L"alpha"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(L"alpha"), true);
+}
+
+void compare_map_equal_wstring_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != L"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != L"alpha", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != L"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != L"alpha", true);
+}
+
 void compare_map_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() == array::make(), false);
@@ -2139,6 +2707,8 @@ void run()
     compare_null_equal_number_literal();
     compare_null_equal_string();
     compare_null_equal_string_literal();
+    compare_null_equal_wstring();
+    compare_null_equal_wstring_literal();
     compare_null_equal_array();
     compare_null_equal_map();
 
@@ -2152,6 +2722,8 @@ void run()
     compare_boolean_equal_number_literal();
     compare_boolean_equal_string();
     compare_boolean_equal_string_literal();
+    compare_boolean_equal_wstring();
+    compare_boolean_equal_wstring_literal();
     compare_boolean_equal_array();
     compare_boolean_equal_map();
 
@@ -2165,6 +2737,8 @@ void run()
     compare_integer_equal_number_literal();
     compare_integer_equal_string();
     compare_integer_equal_string_literal();
+    compare_integer_equal_wstring();
+    compare_integer_equal_wstring_literal();
     compare_integer_equal_array();
     compare_integer_equal_map();
 
@@ -2178,6 +2752,8 @@ void run()
     compare_number_equal_number_literal();
     compare_number_equal_string();
     compare_number_equal_string_literal();
+    compare_number_equal_wstring();
+    compare_number_equal_wstring_literal();
     compare_number_equal_array();
     compare_number_equal_map();
 
@@ -2194,6 +2770,19 @@ void run()
     compare_string_equal_array();
     compare_string_equal_map();
 
+    compare_wstring_equal_null();
+    compare_wstring_equal_null_literal();
+    compare_wstring_equal_boolean();
+    compare_wstring_equal_boolean_literal();
+    compare_wstring_equal_integer();
+    compare_wstring_equal_integer_literal();
+    compare_wstring_equal_number();
+    compare_wstring_equal_number_literal();
+    compare_wstring_equal_string();
+    compare_wstring_equal_string_literal();
+    compare_wstring_equal_array();
+    compare_wstring_equal_map();
+
     compare_array_equal_null();
     compare_array_equal_null_literal();
     compare_array_equal_boolean();
@@ -2204,6 +2793,8 @@ void run()
     compare_array_equal_number_literal();
     compare_array_equal_string();
     compare_array_equal_string_literal();
+    compare_array_equal_wstring();
+    compare_array_equal_wstring_literal();
     compare_array_equal_array();
     compare_array_equal_map();
 
@@ -2222,6 +2813,8 @@ void run()
     compare_map_equal_number_literal();
     compare_map_equal_string();
     compare_map_equal_string_literal();
+    compare_map_equal_wstring();
+    compare_map_equal_wstring_literal();
     compare_map_equal_array();
     compare_map_equal_map();
 }
@@ -2439,6 +3032,14 @@ void compare_null_with_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(""), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(""), false);
+}
+
+void compare_null_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(L""), false);
 }
 
 void compare_null_with_array()
@@ -2796,6 +3397,19 @@ void compare_boolean_with_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable("alpha"), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable("alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable("alpha"), false);
+}
+
+void compare_boolean_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(L"alpha"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(L"alpha"), false);
 }
 
 void compare_boolean_with_array()
@@ -3623,17 +4237,37 @@ void compare_integer_with_number_literal()
 
 void compare_integer_with_string()
 {
+    // signed - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable("alpha"), false);
     }
+    // unsigned - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable("alpha"), false);
+    }
+}
+
+void compare_integer_with_wstring()
+{
+    // signed - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(L"alpha"), false);
+    }
+    // unsigned - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(L"alpha"), false);
     }
 }
 
@@ -4929,23 +5563,51 @@ void compare_number_with_number_literal()
 
 void compare_number_with_string()
 {
+    // float - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable("alpha"), false);
     }
+    // double - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable("alpha"), false);
     }
+    // long double - string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable("alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable("alpha"), false);
+    }
+}
+
+void compare_number_with_wstring()
+{
+    // float - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(L"alpha"), false);
+    }
+    // double - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(L"alpha"), false);
+    }
+    // long double - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(L"alpha"), false);
     }
 }
 
@@ -5019,6 +5681,7 @@ void compare_string_with_boolean_literal()
 
 void compare_string_with_integer()
 {
+    // string - signed
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0), false);
@@ -5030,6 +5693,7 @@ void compare_string_with_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1), true);
     }
+    // string - unsigned
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0U), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0U), false);
@@ -5045,6 +5709,7 @@ void compare_string_with_integer()
 
 void compare_string_with_number()
 {
+    // string - float
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0.0f), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0.0f), false);
@@ -5056,6 +5721,7 @@ void compare_string_with_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1.0f), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1.0f), true);
     }
+    // string - double
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0.0), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0.0), false);
@@ -5067,6 +5733,7 @@ void compare_string_with_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(1.0), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(1.0), true);
     }
+    // string - long double
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(0.0L), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(0.0L), false);
@@ -5116,6 +5783,43 @@ void compare_string_with_string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= "alpha", true);
 }
 
+void compare_string_with_wstring()
+{
+    // string is always lesser than wstring
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(L"alpha"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(L"bravo"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= variable(L"alpha"), false);
+}
+
+void compare_string_with_wstring_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= L"alpha", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= L"bravo", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= L"alpha", false);
+}
+
 void compare_string_with_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < array::make(), true);
@@ -5130,6 +5834,214 @@ void compare_string_with_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= map::make(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > map::make(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= map::make(), false);
+}
+
+void compare_wstring_with_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") >= variable(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(), true);
+}
+
+void compare_wstring_with_null_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") >= null, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= null, true);
+}
+
+void compare_wstring_with_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(false), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(true), true);
+}
+
+void compare_wstring_with_boolean_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= false, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= true, true);
+}
+
+void compare_wstring_with_integer()
+{
+    // wstring - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1), true);
+    }
+    // wstring - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0U), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1U), true);
+    }
+}
+
+void compare_wstring_with_number()
+{
+    // wstring - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0.0f), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1.0f), true);
+    }
+    // wstring - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0.0), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1.0), true);
+    }
+    // wstring - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0.0L), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1.0L), true);
+    }
+}
+
+void compare_wstring_with_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable("alpha"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable("bravo"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable("alpha"), true);
+}
+
+void compare_wstring_with_string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= "alpha", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < "bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= "bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > "bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= "bravo", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= "alpha", true);
+}
+
+void compare_wstring_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(L"alpha"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(L"bravo"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(L"alpha"), true);
+}
+
+void compare_wstring_with_wstring_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= L"alpha", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= L"bravo", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= L"alpha", true);
+}
+
+void compare_wstring_with_array()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= array::make(), false);
+}
+
+void compare_wstring_with_map()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= map::make(), false);
 }
 
 void compare_array_with_array()
@@ -5189,10 +6101,34 @@ void compare_map_with_map_number()
 
 void compare_map_with_map_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"bravo", 1}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 1}}), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 2}}), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"bravo", 1}}) < map::make({{"alpha", 1}}), false);
+    // map string - map string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"bravo", 1}}) < map::make({{"alpha", 1}}), false);
+    }
+    // map string - map wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{L"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{L"alpha", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{L"alpha", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"bravo", 1}}) < map::make({{L"alpha", 1}}), true);
+    }
+    // map wstring - map string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{"bravo", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{"alpha", 2}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{"alpha", 1}}), false);
+    }
+    // map wstring - map wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{L"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{L"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{L"alpha", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{L"alpha", 1}}), false);
+    }
 }
 
 void run()
@@ -5206,6 +6142,7 @@ void run()
     compare_null_with_number();
     compare_null_with_number_literal();
     compare_null_with_string();
+    compare_null_with_wstring();
     compare_null_with_array();
     compare_null_with_map();
 
@@ -5218,6 +6155,7 @@ void run()
     compare_boolean_with_number();
     compare_boolean_with_number_literal();
     compare_boolean_with_string();
+    compare_boolean_with_wstring();
     compare_boolean_with_array();
     compare_boolean_with_map();
 
@@ -5230,6 +6168,7 @@ void run()
     compare_integer_with_number();
     compare_integer_with_number_literal();
     compare_integer_with_string();
+    compare_integer_with_wstring();
     compare_integer_with_array();
     compare_integer_with_map();
 
@@ -5243,6 +6182,7 @@ void run()
     compare_number_with_number();
     compare_number_with_number_literal();
     compare_number_with_string();
+    compare_number_with_wstring();
     compare_number_with_array();
     compare_number_with_map();
 
@@ -5254,8 +6194,23 @@ void run()
     compare_string_with_number();
     compare_string_with_string();
     compare_string_with_string_literal();
+    compare_string_with_wstring();
+    compare_string_with_wstring_literal();
     compare_string_with_array();
     compare_string_with_map();
+
+    compare_wstring_with_null();
+    compare_wstring_with_null_literal();
+    compare_wstring_with_boolean();
+    compare_wstring_with_boolean_literal();
+    compare_wstring_with_integer();
+    compare_wstring_with_number();
+    compare_wstring_with_string();
+    compare_wstring_with_string_literal();
+    compare_wstring_with_wstring();
+    compare_wstring_with_wstring_literal();
+    compare_wstring_with_array();
+    compare_wstring_with_map();
 
     // FIXME: More
     compare_array_with_array();
@@ -5356,10 +6311,7 @@ void compare_null_with_integer()
 {
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(2)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(2U)));
-}
 
-void compare_null_with_integer_literal()
-{
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 2));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 2U));
 }
@@ -5369,13 +6321,22 @@ void compare_null_with_number()
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(3.0)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(3.0L)));
-}
 
-void compare_null_with_number_literal()
-{
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 3.0f));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 3.0));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 3.0L));
+}
+
+void compare_null_with_string()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable("alpha")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), "alpha"));
+}
+
+void compare_null_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(L"bravo")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), L"bravo"));
 }
 
 void compare_boolean_with_null()
@@ -5395,10 +6356,7 @@ void compare_boolean_with_integer()
 {
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(2)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(2U)));
-}
 
-void compare_boolean_with_integer_literal()
-{
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), 2));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), 2U));
 }
@@ -5408,13 +6366,22 @@ void compare_boolean_with_number()
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(3.0)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(3.0L)));
-}
 
-void compare_boolean_with_number_literal()
-{
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), 3.0f));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), 3.0));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), 3.0L));
+}
+
+void compare_boolean_with_string()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable("alpha")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), "alpha"));
+}
+
+void compare_boolean_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(L"bravo")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), L"bravo"));
 }
 
 void run()
@@ -5423,16 +6390,16 @@ void run()
     compare_null_with_null();
     compare_null_with_boolean();
     compare_null_with_integer();
-    compare_null_with_integer_literal();
     compare_null_with_number();
-    compare_null_with_number_literal();
+    compare_null_with_string();
+    compare_null_with_wstring();
 
     compare_boolean_with_null();
     compare_boolean_with_boolean();
     compare_boolean_with_integer();
-    compare_boolean_with_integer_literal();
     compare_boolean_with_number();
-    compare_boolean_with_number_literal();
+    compare_boolean_with_string();
+    compare_boolean_with_wstring();
 }
 
 } // namespace equal_to_suite
@@ -5460,10 +6427,7 @@ void compare_null_with_integer()
 {
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(2)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(2U)));
-}
 
-void compare_null_with_integer_literal()
-{
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), 2));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), 2U));
 }
@@ -5473,13 +6437,22 @@ void compare_null_with_number()
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(3.0)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(3.0L)));
-}
 
-void compare_null_with_number_literal()
-{
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), 3.0f));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), 3.0));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), 3.0L));
+}
+
+void compare_null_with_string()
+{
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), "alpha"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable("alpha")));
+}
+
+void compare_null_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), L"bravo"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(L"bravo")));
 }
 
 void compare_boolean_with_null()
@@ -5499,10 +6472,7 @@ void compare_boolean_with_integer()
 {
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), variable(2)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), variable(2U)));
-}
 
-void compare_boolean_with_integer_literal()
-{
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), 2));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), 2U));
 }
@@ -5512,13 +6482,22 @@ void compare_boolean_with_number()
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), variable(3.0)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), variable(3.0L)));
-}
 
-void compare_boolean_with_number_literal()
-{
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), 3.0f));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), 3.0));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), 3.0L));
+}
+
+void compare_boolean_with_string()
+{
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), "alpha"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), variable("alpha")));
+}
+
+void compare_boolean_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), L"bravo"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), variable(L"bravo")));
 }
 
 void run()
@@ -5527,16 +6506,16 @@ void run()
     compare_null_with_null();
     compare_null_with_boolean();
     compare_null_with_integer();
-    compare_null_with_integer_literal();
     compare_null_with_number();
-    compare_null_with_number_literal();
+    compare_null_with_string();
+    compare_null_with_wstring();
 
     compare_boolean_with_null();
     compare_boolean_with_boolean();
     compare_boolean_with_integer();
-    compare_boolean_with_integer_literal();
     compare_boolean_with_number();
-    compare_boolean_with_number_literal();
+    compare_boolean_with_string();
+    compare_boolean_with_wstring();
 }
 
 } // namespace not_equal_to_suite
@@ -5564,10 +6543,7 @@ void compare_null_with_integer()
 {
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(2)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(2U)));
-}
 
-void compare_null_with_integer_literal()
-{
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 2));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 2U));
 }
@@ -5577,13 +6553,22 @@ void compare_null_with_number()
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0L)));
-}
 
-void compare_null_with_number_literal()
-{
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 3.0f));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 3.0));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 3.0L));
+}
+
+void compare_null_with_string()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), "alpha"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable("alpha")));
+}
+
+void compare_null_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), L"bravo"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(L"bravo")));
 }
 
 void compare_boolean_with_null()
@@ -5603,10 +6588,7 @@ void compare_boolean_with_integer()
 {
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(2)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(2U)));
-}
 
-void compare_boolean_with_integer_literal()
-{
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 2));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 2U));
 }
@@ -5616,13 +6598,22 @@ void compare_boolean_with_number()
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0L)));
-}
 
-void compare_boolean_with_number_literal()
-{
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 3.0f));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 3.0));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 3.0L));
+}
+
+void compare_boolean_with_string()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), "alpha"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), variable("alpha")));
+}
+
+void compare_boolean_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), L"bravo"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), variable(L"bravo")));
 }
 
 void run()
@@ -5631,16 +6622,16 @@ void run()
     compare_null_with_null();
     compare_null_with_boolean();
     compare_null_with_integer();
-    compare_null_with_integer_literal();
     compare_null_with_number();
-    compare_null_with_number_literal();
+    compare_null_with_string();
+    compare_null_with_wstring();
 
     compare_boolean_with_null();
     compare_boolean_with_boolean();
     compare_boolean_with_integer();
-    compare_boolean_with_integer_literal();
     compare_boolean_with_number();
-    compare_boolean_with_number_literal();
+    compare_boolean_with_string();
+    compare_boolean_with_wstring();
 }
 
 } // namespace less_suite

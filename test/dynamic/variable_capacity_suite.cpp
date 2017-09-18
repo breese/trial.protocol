@@ -104,11 +104,26 @@ void test_number()
 
 void test_string()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST(!data.empty());
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
+        variable data("");
+        TRIAL_PROTOCOL_TEST(data.empty());
+    }
+}
 
-    data = "";
-    TRIAL_PROTOCOL_TEST(data.empty());
+void test_wstring()
+{
+    {
+        variable data(L"bravo");
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
+        variable data(L"");
+        TRIAL_PROTOCOL_TEST(data.empty());
+    }
 }
 
 void test_array()
@@ -134,6 +149,7 @@ void run()
     test_integer();
     test_number();
     test_string();
+    test_wstring();
     test_array();
     test_map();
 }
@@ -231,11 +247,26 @@ void test_number()
 
 void test_string()
 {
-    variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    }
+    {
+        variable data("");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    }
+}
 
-    data = "";
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+void test_wstring()
+{
+    {
+        variable data(L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    }
+    {
+        variable data(L"");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    }
 }
 
 void test_array()
@@ -263,6 +294,7 @@ void run()
     test_integer();
     test_number();
     test_string();
+    test_wstring();
     test_array();
     test_array_with_size();
     test_map();
@@ -366,6 +398,13 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
 }
 
+void test_wstring()
+{
+    std::wstring value(L"bravo");
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+}
+
 void test_array()
 {
     variable::array_type value;
@@ -387,6 +426,7 @@ void run()
     test_integer();
     test_number();
     test_string();
+    test_wstring();
     test_array();
     test_map();
 }

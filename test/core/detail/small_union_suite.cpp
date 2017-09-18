@@ -58,7 +58,7 @@ void run()
 namespace visitor_suite
 {
 
-using storage_type = small_union<std::allocator, std::size_t, sizeof(int), bool, int>;
+using storage_type = test_union<sizeof(int), bool, int>;
 
 struct visitor_void
 {

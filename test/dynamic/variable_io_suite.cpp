@@ -56,10 +56,20 @@ void test_number()
 
 void test_string()
 {
-    std::ostringstream stream;
-    variable data("alpha");
-    stream << data;
-    TRIAL_PROTOCOL_TEST_EQUAL(stream.str(), "\"alpha\"");
+    {
+        std::ostringstream stream;
+        variable data("alpha");
+        stream << data;
+        TRIAL_PROTOCOL_TEST_EQUAL(stream.str(), "\"alpha\"");
+    }
+    {
+        // Wide-characters cannot be serialized
+        std::ostringstream stream;
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((stream << data),
+                                        trial::protocol::json::error,
+                                        "incompatible type");
+    }
 }
 
 void test_array()

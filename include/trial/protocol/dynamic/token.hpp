@@ -42,6 +42,7 @@ struct code
         double_number,
         long_double_number,
         string,
+        wstring,
         array,
         map
     };
@@ -56,6 +57,7 @@ struct symbol
         integer,
         number,
         string,
+        wstring,
         array,
         map
     };

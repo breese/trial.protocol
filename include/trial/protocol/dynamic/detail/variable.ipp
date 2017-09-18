@@ -28,28 +28,51 @@ namespace dynamic
 namespace detail
 {
 
+// A substitute for static_assert that outputs the type T
+template <typename T>
+struct static_assert_t;
+
 template <typename T>
 using is_null = std::is_same<T, nullable>;
 
 template <typename T>
 using is_boolean = core::detail::is_bool<T>;
 
+template <typename CharT> struct is_character : std::false_type {};
+template <> struct is_character<char> : std::true_type {};
+template <> struct is_character<wchar_t> : std::true_type {};
+
 template <typename T>
-using is_integer = typename std::conditional<std::is_integral<T>::value && !detail::is_boolean<T>::value,
+using is_integer = typename std::conditional<std::is_integral<T>::value && !detail::is_boolean<T>::value && !detail::is_character<T>::value,
                                              std::true_type,
                                              std::false_type>::type;
 
 template <typename T>
 using is_number = std::is_floating_point<T>;
 
-template <typename CharT, typename T>
-using is_string = std::is_same<T, typename basic_variable<CharT>::string_type>;
+template <typename>
+struct is_literal_string : std::false_type {};
 
-template <typename CharT, typename T>
-using is_array = std::is_same<T, typename basic_variable<CharT>::array_type>;
+template <typename CharT>
+struct is_literal_string<const CharT *>
+    : is_character<CharT>
+{
+};
 
-template <typename CharT, typename T>
-using is_map = std::is_same<T, typename basic_variable<CharT>::map_type>;
+template <typename>
+struct is_string : std::false_type {};
+
+template <typename CharT>
+struct is_string<std::basic_string<CharT>>
+    : is_character<CharT>
+{
+};
+
+template <template <typename> class Allocator, typename T>
+using is_array = std::is_same<T, typename basic_variable<Allocator>::array_type>;
+
+template <template <typename> class Allocator, typename T>
+using is_map = std::is_same<T, typename basic_variable<Allocator>::map_type>;
 
 } // namespace detail
 
@@ -57,85 +80,94 @@ using is_map = std::is_same<T, typename basic_variable<CharT>::map_type>;
 // variable::traits
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::traits
+struct basic_variable<Allocator>::traits
 {
-    static const std::size_t value = decltype(basic_variable<CharT>::storage)::template to_index<T>::value;
+    static const std::size_t value = decltype(basic_variable<Allocator>::storage)::template to_index<T>::value;
 };
 
 //-----------------------------------------------------------------------------
 // variable::tag_traits
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T, typename>
-struct basic_variable<CharT>::tag_traits
+struct basic_variable<Allocator>::tag_traits
 {
     using type = T;
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::tag_traits<
+struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, nullable>::value>::type>
 {
     using type = nullable;
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::tag_traits<
+struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::boolean>::value>::type>
 {
     using type = bool;
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::tag_traits<
+struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::integer>::value>::type>
 {
     using type = int;
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::tag_traits<
+struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::number>::value>::type>
 {
     using type = float;
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::tag_traits<
+struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::string>::value>::type>
 {
-    using type = typename basic_variable<CharT>::string_type;
+    using type = typename basic_variable<Allocator>::string_type;
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::tag_traits<
+struct basic_variable<Allocator>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, typename dynamic::wstring>::value>::type>
+{
+    using type = typename basic_variable<Allocator>::wstring_type;
+};
+
+template <template <typename> class Allocator>
+template <typename T>
+struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::array>::value>::type>
 {
-    using type = typename basic_variable<CharT>::array_type;
+    using type = typename basic_variable<Allocator>::array_type;
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::tag_traits<
+struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::map>::value>::type>
 {
-    using type = typename basic_variable<CharT>::map_type;
+    using type = typename basic_variable<Allocator>::map_type;
 };
 
 //-----------------------------------------------------------------------------
@@ -148,18 +180,18 @@ namespace detail
 template <typename T, typename U, typename = void>
 struct overloader
 {
-    static_assert(sizeof(T) == 0, "Unsupported type");
+    static_assert_t<U> unsupported_type;
 };
 
 // Null
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
     typename std::enable_if<detail::is_null<U>::value>::type>
 {
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
     using type = nullable;
     using category_type = type;
 
@@ -202,15 +234,15 @@ struct overloader<
 
 // Boolean
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
     typename std::enable_if<detail::is_boolean<U>::value>::type>
 {
     using type = bool;
     using category_type = type;
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
 
     using array_type = typename variable_type::array_type;
 
@@ -447,16 +479,16 @@ struct overloader<
 
 // Signed integer
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
     typename std::enable_if<detail::is_integer<U>::value &&
                             std::is_signed<U>::value>::type>
 {
     using type = U;
     using category_type = int;
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
 
     using array_type = typename variable_type::array_type;
 
@@ -683,16 +715,16 @@ struct overloader<
 
 // Unsigned integer
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
     typename std::enable_if<detail::is_integer<U>::value &&
                             std::is_unsigned<U>::value>::type>
 {
     using type = U;
     using category_type = int;
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
 
     using array_type = typename variable_type::array_type;
 
@@ -748,7 +780,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -794,7 +826,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -919,15 +951,15 @@ struct overloader<
 
 // Floating-point
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
     typename std::enable_if<detail::is_number<U>::value>::type>
 {
     using type = U;
     using category_type = float;
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
 
     using array_type = typename variable_type::array_type;
 
@@ -1164,15 +1196,60 @@ struct overloader<
 
 // String
 
-template <typename CharT, typename U>
-struct overloader<
-    basic_variable<CharT>,
-    U,
-    typename std::enable_if<detail::is_string<CharT, U>::value>::type>
+template <typename T, typename U, typename = void>
+struct string_overloader
 {
-    using variable_type = basic_variable<CharT>;
+    static bool equal(const T&, const U&)
+    {
+        throw dynamic::error(incompatible_type);
+    }
+
+    static bool less(const T&, const U&)
+    {
+        throw dynamic::error(incompatible_type);
+    }
+
+    static void append(T&, const U&)
+    {
+        throw dynamic::error(incompatible_type);
+    }
+};
+
+template <typename CharT, typename Traits, typename Allocator, typename U>
+struct string_overloader<
+    std::basic_string<CharT, Traits, Allocator>,
+    U,
+    typename std::enable_if<std::is_same<U, std::basic_string<CharT, Traits, Allocator>>::value>::type>
+{
+    using string_type = std::basic_string<CharT, Traits, Allocator>;
+
+    static bool equal(const string_type& lhs, const U& rhs)
+    {
+        return lhs == rhs;
+    }
+
+    static bool less(const string_type& lhs, const U& rhs)
+    {
+        return lhs < rhs;
+    }
+
+    static void append(string_type& lhs, const U& rhs)
+    {
+        lhs += rhs;
+    }
+};
+
+// string_type
+
+template <template <typename> class Allocator, typename U>
+struct overloader<
+    basic_variable<Allocator>,
+    U,
+    typename std::enable_if<std::is_same<U, typename basic_variable<Allocator>::string_type>::value>::type>
+{
+    using variable_type = basic_variable<Allocator>;
     using type = typename variable_type::string_type;
-    using category_type = type;
+    using category_type = typename variable_type::string_type;
 
     using string_type = typename variable_type::string_type;
     using array_type = typename variable_type::array_type;
@@ -1196,7 +1273,7 @@ struct overloader<
         switch (self.code())
         {
         case code::string:
-            return self.template unsafe_get<string_type>() == other;
+            return string_overloader<string_type, U>::equal(self.template unsafe_get<string_type>(), other);
 
         default:
             return false;
@@ -1208,8 +1285,9 @@ struct overloader<
         switch (self.code())
         {
         case code::string:
-            return self.template unsafe_get<string_type>() < other;
+            return string_overloader<string_type, U>::less(self.template unsafe_get<string_type>(), other);
 
+        case code::wstring:
         case code::array:
         case code::map:
             return false;
@@ -1228,7 +1306,86 @@ struct overloader<
             break;
 
         case code::string:
-            self.template unsafe_get<string_type>() += other;
+            string_overloader<string_type, U>::append(self.template unsafe_get<string_type>(), other);
+            break;
+
+        case code::array:
+            self.template unsafe_get<array_type>().push_back(other);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+};
+
+// wstring_type
+
+template <template <typename> class Allocator, typename U>
+struct overloader<
+    basic_variable<Allocator>,
+    U,
+    typename std::enable_if<std::is_same<U, typename basic_variable<Allocator>::wstring_type>::value>::type>
+{
+    using variable_type = basic_variable<Allocator>;
+    using type = typename variable_type::wstring_type;
+    using category_type = typename variable_type::wstring_type;
+
+    using wstring_type = typename variable_type::wstring_type;
+    using array_type = typename variable_type::array_type;
+    using map_type = typename variable_type::map_type;
+
+    static U convert(const variable_type& self, std::error_code& error) noexcept
+    {
+        switch (self.code())
+        {
+        case code::wstring:
+            return self.template unsafe_get<wstring_type>();
+
+        default:
+            error = dynamic::make_error_code(dynamic::incompatible_type);
+            return {};
+        }
+    }
+
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        switch (self.code())
+        {
+        case code::wstring:
+            return string_overloader<wstring_type, U>::equal(self.template unsafe_get<wstring_type>(), other);
+
+        default:
+            return false;
+        }
+    }
+
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        switch (self.code())
+        {
+        case code::wstring:
+            return string_overloader<wstring_type, U>::less(self.template unsafe_get<wstring_type>(), other);
+
+        case code::array:
+        case code::map:
+            return false;
+
+        default:
+            return true;
+        }
+    }
+
+    static void append(variable_type& self, const U& other)
+    {
+        switch (self.code())
+        {
+        case code::null:
+            self.storage = other; // Overwrite null
+            break;
+
+        case code::wstring:
+            string_overloader<wstring_type, U>::append(self.template unsafe_get<wstring_type>(), other);
             break;
 
         case code::array:
@@ -1243,20 +1400,20 @@ struct overloader<
 
 // Array
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
-    typename std::enable_if<detail::is_array<CharT, U>::value>::type>
+    typename std::enable_if<detail::is_array<Allocator, U>::value>::type>
 {
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
     using type = typename variable_type::array_type;
     using category_type = type;
 
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
 
-    static U convert(const variable& self, std::error_code& error) noexcept
+    static U convert(const variable_type& self, std::error_code& error) noexcept
     {
         switch (self.code())
         {
@@ -1338,13 +1495,13 @@ struct overloader<
 
 // Map
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
-    typename std::enable_if<detail::is_map<CharT, U>::value>::type>
+    typename std::enable_if<detail::is_map<Allocator, U>::value>::type>
 {
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
     using type = typename variable_type::map_type;
     using category_type = type;
 
@@ -1430,107 +1587,6 @@ struct overloader<
 } // namespace detail
 
 //-----------------------------------------------------------------------------
-// detail::iterator_overloader
-//-----------------------------------------------------------------------------
-
-namespace detail
-{
-
-template <typename CharT, typename Iterator, typename = void>
-struct iterator_overloader
-{
-    using variable_type = basic_variable<CharT>;
-
-    static void insert(variable_type& self,
-                       Iterator begin,
-                       Iterator end)
-    {
-        switch (self.symbol())
-        {
-        case symbol::null:
-            self = basic_array<CharT>::make();
-            // FALLTHROUGH
-        case symbol::array:
-            {
-                // Insert at end
-                auto& array = self.template unsafe_get<typename variable_type::array_type>();
-                array.insert(array.end(), begin, end);
-            }
-            break;
-
-        default:
-            throw dynamic::error(incompatible_type);
-        }
-    }
-
-    static void insert(variable_type& self,
-                       typename variable_type::const_iterator where,
-                       Iterator begin,
-                       Iterator end)
-    {
-        switch (self.symbol())
-        {
-        case symbol::array:
-            self.template unsafe_get<typename variable_type::array_type>()
-                .insert(where.current.template get<typename variable_type::const_iterator::array_iterator>(),
-                        begin,
-                        end);
-            break;
-
-        default:
-            throw dynamic::error(incompatible_type);
-        }
-    }
-};
-
-template <typename CharT, typename Iterator>
-struct iterator_overloader<
-    CharT,
-    Iterator,
-    typename std::enable_if<core::detail::is_iterator<Iterator>::value &&
-                            core::detail::is_pair<typename Iterator::value_type>::value>::type>
-{
-    using variable_type = basic_variable<CharT>;
-
-    static void insert(variable_type& self,
-                       Iterator begin,
-                       Iterator end)
-    {
-        switch (self.symbol())
-        {
-        case symbol::map:
-            self.template unsafe_get<typename variable_type::map_type>()
-                .insert(begin, end);
-            break;
-
-        default:
-            throw dynamic::error(incompatible_type);
-        }
-    }
-
-    static void insert(basic_variable<CharT>& self,
-                       typename variable_type::const_iterator,
-                       Iterator begin,
-                       Iterator end)
-    {
-        switch (self.symbol())
-        {
-        case symbol::map:
-            // Ignore hint
-            self.template unsafe_get<typename variable_type::map_type>()
-                .insert(begin,
-                        end);
-            break;
-
-        default:
-            throw dynamic::error(incompatible_type);
-        }
-    }
-};
-
-} // namespace detail
-
-//-----------------------------------------------------------------------------
 // detail::operator_overloader
 //-----------------------------------------------------------------------------
 
@@ -1569,7 +1625,7 @@ struct operator_overloader<
         // This function is called by dynamic::operator== when T is an
         // iterator.
         //
-        // basic_variable<CharT>::iterator_base<T> cannot be matched via
+        // basic_variable<Allocator>::iterator_base<T> cannot be matched via
         // SFINAE below (due to being a non-deduced context), so instead
         // lhs.operator(rhs) is called in the general case.
         //
@@ -1589,51 +1645,58 @@ struct operator_overloader<
     }
 };
 
-template <typename CharT, typename U>
+template <template <typename> class Allocator, typename U>
 struct operator_overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     U,
-    typename std::enable_if<!std::is_same<U, basic_variable<CharT> >::value>::type>
+    typename std::enable_if<!std::is_same<U, basic_variable<Allocator> >::value>::type>
 {
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
     using string_type = typename variable_type::string_type;
+    using wstring_type = typename variable_type::wstring_type;
 
     template <typename T = U>
-    static typename std::enable_if<!std::is_same<typename std::decay<T>::type,
-                                                 const CharT *>::value,
-                                   bool>::type
-    equal(const variable_type& lhs, const T& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static typename std::enable_if<!is_literal_string<typename std::decay<T>::type>::value, bool>::type
+    equal(const variable_type& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
-        return detail::template overloader<variable_type, T>::equal(lhs, rhs);
+        return detail::template overloader<variable_type, U>::equal(lhs, rhs);
     }
 
-    static bool equal(const variable_type& lhs, const CharT* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& lhs, const char* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, string_type>::equal(lhs, string_type(rhs));
     }
 
+    static bool equal(const variable_type& lhs, const wchar_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        return detail::template overloader<variable_type, wstring_type>::equal(lhs, wstring_type(rhs));
+    }
+
     template <typename T = U>
-    static typename std::enable_if<!std::is_same<typename std::decay<T>::type,
-                                                 const CharT *>::value,
-                                   bool>::type
+    static typename std::enable_if<!is_literal_string<typename std::decay<T>::type>::value, bool>::type
     less(const variable_type& lhs, const T& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, T>::less(lhs, rhs);
     }
 
-    static bool less(const variable_type& lhs, const CharT* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& lhs, const char* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, string_type>::less(lhs, string_type(rhs));
     }
+
+    static bool less(const variable_type& lhs, const wchar_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        return detail::template overloader<variable_type, wstring_type>::less(lhs, wstring_type(rhs));
+    }
 };
 
-template <typename T, typename CharT>
+template <typename T, template <typename> class Allocator>
 struct operator_overloader<
     T,
-    basic_variable<CharT>,
-    typename std::enable_if<!std::is_same<T, basic_variable<CharT> >::value>::type>
+    basic_variable<Allocator>,
+    typename std::enable_if<!std::is_same<T, basic_variable<Allocator> >::value>::type>
 {
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
 
     static bool equal(const T& lhs, const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
@@ -1646,13 +1709,14 @@ struct operator_overloader<
     }
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 struct operator_overloader<
-    basic_variable<CharT>,
-    basic_variable<core::detail::meta::identity_t<CharT>>>
+    basic_variable<Allocator>,
+    basic_variable<Allocator>>
 {
-    using variable_type = basic_variable<CharT>;
+    using variable_type = basic_variable<Allocator>;
     using string_type = typename variable_type::string_type;
+    using wstring_type = typename variable_type::wstring_type;
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
 
@@ -1724,6 +1788,10 @@ struct operator_overloader<
         case code::string:
             return detail::template overloader<variable_type, string_type>::
                 equal(lhs, rhs.template unsafe_get<string_type>());
+
+        case code::wstring:
+            return detail::template overloader<variable_type, wstring_type>::
+                equal(lhs, rhs.template unsafe_get<wstring_type>());
 
         case code::array:
             return detail::template overloader<variable_type, array_type>::
@@ -1805,6 +1873,10 @@ struct operator_overloader<
             return detail::template overloader<variable_type, string_type>::
                 less(lhs, rhs.template unsafe_get<string_type>());
 
+        case code::wstring:
+            return detail::template overloader<variable_type, wstring_type>::
+                less(lhs, rhs.template unsafe_get<wstring_type>());
+
         case code::array:
             return detail::template overloader<variable_type, array_type>::
                 less(lhs, rhs.template unsafe_get<array_type>());
@@ -1836,18 +1908,18 @@ namespace detail
 //   assert(data.same<float&>(), false);
 //   assert(data.same<const float>(), false);
 
-template <typename C, typename T, typename = void>
+template <template <typename> class Allocator, typename T, typename = void>
 struct same_overloader
 {
     static bool same(std::size_t which) noexcept
     {
-        return which == basic_variable<C>::template traits<T>::value;
+        return which == basic_variable<Allocator>::template traits<T>::value;
     }
 };
 
-template <typename C, typename T>
+template <template <typename> class Allocator, typename T>
 struct same_overloader<
-    C,
+    Allocator,
     T,
     typename std::enable_if<std::is_const<T>::value ||
                             std::is_volatile<T>::value ||
@@ -1862,37 +1934,138 @@ struct same_overloader<
 } // namespace detail
 
 //-----------------------------------------------------------------------------
+// detail::iterator_overloader
+//-----------------------------------------------------------------------------
+
+namespace detail
+{
+
+template <template <typename> class Allocator, typename Iterator, typename = void>
+struct iterator_overloader
+{
+    using variable_type = basic_variable<Allocator>;
+
+    static void insert(variable_type& self,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case symbol::null:
+            self = basic_array<Allocator>::make();
+            // FALLTHROUGH
+        case symbol::array:
+            {
+                // Insert at end
+                auto& array = self.template unsafe_get<typename variable_type::array_type>();
+                array.insert(array.end(), begin, end);
+            }
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+
+    static void insert(variable_type& self,
+                       typename variable_type::const_iterator where,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case symbol::array:
+            self.template unsafe_get<typename variable_type::array_type>()
+                .insert(where.current.template get<typename variable_type::const_iterator::array_iterator>(),
+                        begin,
+                        end);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+};
+
+template <template <typename> class Allocator, typename Iterator>
+struct iterator_overloader<
+    Allocator,
+    Iterator,
+    typename std::enable_if<core::detail::is_iterator<Iterator>::value &&
+                            core::detail::is_pair<typename Iterator::value_type>::value>::type>
+{
+    using variable_type = basic_variable<Allocator>;
+
+    static void insert(variable_type& self,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case symbol::map:
+            self.template unsafe_get<typename variable_type::map_type>()
+                .insert(begin, end);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+
+    static void insert(variable_type& self,
+                       typename variable_type::const_iterator,
+                       Iterator begin,
+                       Iterator end)
+    {
+        switch (self.symbol())
+        {
+        case symbol::map:
+            // Ignore hint
+            self.template unsafe_get<typename variable_type::map_type>()
+                .insert(begin,
+                        end);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+};
+
+} // namespace detail
+
+//-----------------------------------------------------------------------------
 // variable::iterator_base
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-basic_variable<CharT>::iterator_base<Derived, T>::iterator_base()
+basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base()
     : scope(nullptr),
       current(pointer(nullptr))
 {
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(const iterator_base& other)
+basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(const iterator_base& other)
     : scope(other.scope),
       current(other.current)
 {
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(iterator_base&& other)
+basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(iterator_base&& other)
     : scope(std::move(other.scope)),
       current(std::move(other.current))
 {
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
-                                                                bool initialize)
+basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
+                                                                    bool initialize)
     : scope(p),
       current(pointer(nullptr))
 {
@@ -1906,6 +2079,7 @@ basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         if (initialize)
             current = p;
         break;
@@ -1926,45 +2100,45 @@ basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
     }
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
-                                                                array_iterator where)
+basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
+                                                                    array_iterator where)
     : scope(p),
       current(where)
 {
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-basic_variable<CharT>::iterator_base<Derived, T>::iterator_base(pointer p,
-                                                                map_iterator where)
+basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
+                                                                    map_iterator where)
     : scope(p),
       current(where)
 {
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::operator= (const Derived& other) -> Derived&
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator= (const Derived& other) -> Derived&
 {
     scope = other.scope;
     current = other.current;
     return *static_cast<Derived*>(this);
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::operator= (Derived&& other) -> Derived&
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator= (Derived&& other) -> Derived&
 {
     scope = std::move(other.scope);
     current = std::move(other.current);
     return *static_cast<Derived*>(this);
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ () -> Derived&
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ () -> Derived&
 {
     assert(scope);
 
@@ -1975,6 +2149,7 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ () -> Derived&
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         current = pointer(nullptr);
         break;
 
@@ -1989,9 +2164,9 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ () -> Derived&
     return *static_cast<Derived*>(this);
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ (int) -> Derived
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ (int) -> Derived
 {
     assert(scope);
 
@@ -2000,9 +2175,9 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator++ (int) -> Deriv
     return result;
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::key() const -> const_reference
+auto basic_variable<Allocator>::iterator_base<Derived, T>::key() const -> const_reference
 {
     assert(scope);
 
@@ -2016,9 +2191,9 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::key() const -> const_refe
     }
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::value() -> reference
+auto basic_variable<Allocator>::iterator_base<Derived, T>::value() -> reference
 {
     assert(scope);
 
@@ -2029,6 +2204,7 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::value() -> reference
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         return *current.template get<pointer>();
 
     case symbol::array:
@@ -2040,9 +2216,9 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::value() -> reference
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> const_reference
+auto basic_variable<Allocator>::iterator_base<Derived, T>::value() const -> const_reference
 {
     assert(scope);
 
@@ -2053,6 +2229,7 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> const_re
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         return *current.template get<pointer>();
 
     case symbol::array:
@@ -2064,9 +2241,9 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::value() const -> const_re
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-auto basic_variable<CharT>::iterator_base<Derived, T>::operator-> () -> pointer
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () -> pointer
 {
     assert(scope);
 
@@ -2077,6 +2254,7 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator-> () -> pointer
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         return current.template get<pointer>();
 
     case symbol::array:
@@ -2088,9 +2266,9 @@ auto basic_variable<CharT>::iterator_base<Derived, T>::operator-> () -> pointer
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-bool basic_variable<CharT>::iterator_base<Derived, T>::operator== (const Derived& other) const
+bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Derived& other) const
 {
     if (!scope)
         return !other.scope;
@@ -2106,6 +2284,7 @@ bool basic_variable<CharT>::iterator_base<Derived, T>::operator== (const Derived
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         return current.template get<pointer>() == other.current.template get<pointer>();
 
     case symbol::array:
@@ -2117,9 +2296,9 @@ bool basic_variable<CharT>::iterator_base<Derived, T>::operator== (const Derived
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Derived, typename T>
-bool basic_variable<CharT>::iterator_base<Derived, T>::operator!= (const Derived& other) const
+bool basic_variable<Allocator>::iterator_base<Derived, T>::operator!= (const Derived& other) const
 {
     return !(*this == other);
 }
@@ -2128,46 +2307,46 @@ bool basic_variable<CharT>::iterator_base<Derived, T>::operator!= (const Derived
 // variable::iterator
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-basic_variable<CharT>::iterator::iterator()
+template <template <typename> class Allocator>
+basic_variable<Allocator>::iterator::iterator()
     : super()
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::iterator::iterator(const iterator& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::iterator::iterator(const iterator& other)
     : super(other)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::iterator::iterator(iterator&& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::iterator::iterator(iterator&& other)
     : super(std::move(other))
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::iterator::iterator(pointer p, bool initialize)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::iterator::iterator(pointer p, bool initialize)
     : super(p, initialize)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::iterator::iterator(pointer p,
-                                          typename super::array_iterator where)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::iterator::iterator(pointer p,
+                                              typename super::array_iterator where)
     : super(p, where)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::iterator::iterator(pointer p,
-                                          typename super::map_iterator where)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::iterator::iterator(pointer p,
+                                              typename super::map_iterator where)
     : super(p, where)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::iterator::iterator(const const_iterator& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::iterator::iterator(const const_iterator& other)
     : super(const_cast<pointer>(other.scope))
 {
     switch (other.current.index())
@@ -2184,14 +2363,14 @@ basic_variable<CharT>::iterator::iterator(const const_iterator& other)
     }
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::iterator::operator= (const iterator& other) -> iterator&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::iterator::operator= (const iterator& other) -> iterator&
 {
     return super::operator=(other);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::iterator::operator= (iterator&& other) -> iterator&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::iterator::operator= (iterator&& other) -> iterator&
 {
     return super::operator=(std::forward<iterator&&>(other));
 }
@@ -2200,32 +2379,32 @@ auto basic_variable<CharT>::iterator::operator= (iterator&& other) -> iterator&
 // variable::const_iterator
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-basic_variable<CharT>::const_iterator::const_iterator()
+template <template <typename> class Allocator>
+basic_variable<Allocator>::const_iterator::const_iterator()
     : super()
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::const_iterator::const_iterator(const const_iterator& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::const_iterator::const_iterator(const const_iterator& other)
     : super(other)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::const_iterator::const_iterator(const_iterator&& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::const_iterator::const_iterator(const_iterator&& other)
     : super(std::move(other))
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::const_iterator::const_iterator(pointer p, bool initialize)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::const_iterator::const_iterator(pointer p, bool initialize)
     : super(p, initialize)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::const_iterator::const_iterator(const iterator& other)
     : super(other.scope)
 {
     switch (other.current.index())
@@ -2246,48 +2425,48 @@ basic_variable<CharT>::const_iterator::const_iterator(const iterator& other)
 // variable::key_iterator
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator()
+template <template <typename> class Allocator>
+basic_variable<Allocator>::key_iterator::key_iterator()
     : super()
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator(const key_iterator& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::key_iterator::key_iterator(const key_iterator& other)
     : super(other),
       index(other.index)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator(key_iterator&& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::key_iterator::key_iterator(key_iterator&& other)
 {
     super::scope = std::move(other.scope);
     super::current = std::move(other.current);
     index = std::move(other.index);
 }
 
-template <typename CharT>
-basic_variable<CharT>::key_iterator::key_iterator(pointer p, bool initialize)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::key_iterator::key_iterator(pointer p, bool initialize)
     : super(p, initialize),
       index(0)
 {
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::operator= (const key_iterator& other) -> key_iterator&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::key_iterator::operator= (const key_iterator& other) -> key_iterator&
 {
     return super::operator=(other);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::operator= (key_iterator&& other) -> key_iterator&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::key_iterator::operator= (key_iterator&& other) -> key_iterator&
 {
     return super::operator=(std::forward<key_iterator>(other));
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::key() const -> const_reference
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::key_iterator::key() const -> const_reference
 {
     assert(super::scope);
 
@@ -2298,6 +2477,7 @@ auto basic_variable<CharT>::key_iterator::key() const -> const_reference
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
     case symbol::array:
         return index;
 
@@ -2307,8 +2487,8 @@ auto basic_variable<CharT>::key_iterator::key() const -> const_reference
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::key_iterator::operator++ () -> key_iterator&
 {
     assert(super::scope);
 
@@ -2319,6 +2499,7 @@ auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
     case symbol::array:
         index += 1;
         break;
@@ -2333,14 +2514,14 @@ auto basic_variable<CharT>::key_iterator::operator++ () -> key_iterator&
 // storage visitors
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-struct basic_variable<CharT>::similar_visitor
+struct basic_variable<Allocator>::similar_visitor
 {
     template <typename Which>
     static bool call(const storage_type&)
     {
-        using variable_type = basic_variable<CharT>;
+        using variable_type = basic_variable<Allocator>;
         using lhs_type = typename detail::overloader<variable_type, T>::category_type;
         using rhs_type = typename detail::overloader<variable_type, Which>::category_type;
         return std::is_same<lhs_type, rhs_type>::value;
@@ -2351,14 +2532,14 @@ struct basic_variable<CharT>::similar_visitor
 // variable
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
-basic_variable<CharT>::basic_variable()
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable()
     : storage(null)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::basic_variable(const basic_variable& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const basic_variable& other)
     : storage(null)
 {
     switch (other.code())
@@ -2411,6 +2592,9 @@ basic_variable<CharT>::basic_variable(const basic_variable& other)
     case code::string:
         storage = other.unsafe_get<string_type>();
         break;
+    case code::wstring:
+        storage = other.unsafe_get<wstring_type>();
+        break;
     case code::array:
         storage = other.unsafe_get<array_type>();
         break;
@@ -2420,8 +2604,8 @@ basic_variable<CharT>::basic_variable(const basic_variable& other)
     }
 }
 
-template <typename CharT>
-basic_variable<CharT>::basic_variable(basic_variable&& other)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(basic_variable&& other)
     : storage(null)
 {
     switch (other.code())
@@ -2474,6 +2658,9 @@ basic_variable<CharT>::basic_variable(basic_variable&& other)
     case code::string:
         storage = std::move(other.unsafe_get<string_type>());
         break;
+    case code::wstring:
+        storage = std::move(other.unsafe_get<wstring_type>());
+        break;
     case code::array:
         storage = std::move(other.unsafe_get<array_type>());
         break;
@@ -2483,15 +2670,15 @@ basic_variable<CharT>::basic_variable(basic_variable&& other)
     }
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-basic_variable<CharT>::basic_variable(T value)
+basic_variable<Allocator>::basic_variable(T value)
     : storage(typename detail::overloader<value_type, typename std::decay<T>::type>::type(std::move(value)))
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::basic_variable(const std::initializer_list<value_type>& init)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const std::initializer_list<value_type>& init)
     : storage(null)
 {
     if (init.size() == 0)
@@ -2518,20 +2705,26 @@ basic_variable<CharT>::basic_variable(const std::initializer_list<value_type>& i
     }
 }
 
-template <typename CharT>
-basic_variable<CharT>::basic_variable(const nullable&)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const nullable&)
     : storage(null)
 {
 }
 
-template <typename CharT>
-basic_variable<CharT>::basic_variable(const CharT *value)
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const char *value)
     : storage(string_type(value))
 {
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_variable&
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const wchar_t *value)
+    : storage(wstring_type(value))
+{
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic_variable&
 {
     switch (other.code())
     {
@@ -2583,6 +2776,9 @@ auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_var
     case code::string:
         storage = other.unsafe_get<string_type>();
         break;
+    case code::wstring:
+        storage = other.unsafe_get<wstring_type>();
+        break;
     case code::array:
         storage = other.unsafe_get<array_type>();
         break;
@@ -2593,8 +2789,8 @@ auto basic_variable<CharT>::operator= (const basic_variable& other) -> basic_var
     return *this;
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator= (basic_variable&& other) -> basic_variable&
 {
     switch (other.code())
     {
@@ -2646,6 +2842,9 @@ auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable
     case code::string:
         storage = std::move(other.unsafe_get<string_type>());
         break;
+    case code::wstring:
+        storage = std::move(other.unsafe_get<wstring_type>());
+        break;
     case code::array:
         storage = std::move(other.unsafe_get<array_type>());
         break;
@@ -2656,38 +2855,45 @@ auto basic_variable<CharT>::operator= (basic_variable&& other) -> basic_variable
     return *this;
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-auto basic_variable<CharT>::operator= (T value) -> basic_variable&
+auto basic_variable<Allocator>::operator= (T value) -> basic_variable&
 {
     storage = typename detail::overloader<value_type, T>::type{std::move(value)};
     return *this;
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator= (nullable) -> basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator= (nullable) -> basic_variable&
 {
     storage = null;
     return *this;
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator= (const CharT *value) -> basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator= (const char *value) -> basic_variable&
 {
     storage = string_type{value};
     return *this;
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator= (const wchar_t *value) -> basic_variable&
+{
+    storage = wstring_type{value};
+    return *this;
+}
+
+template <template <typename> class Allocator>
 template <typename T>
-auto basic_variable<CharT>::operator+= (const T& other) -> basic_variable&
+auto basic_variable<Allocator>::operator+= (const T& other) -> basic_variable&
 {
     detail::overloader<value_type, T>::append(*this, other);
     return *this;
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator+= (const basic_variable& other) -> basic_variable&
 {
     switch (other.code())
     {
@@ -2755,6 +2961,10 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
         detail::overloader<value_type, string_type>::
             append(*this, other.unsafe_get<string_type>());
         break;
+    case code::wstring:
+        detail::overloader<value_type, wstring_type>::
+            append(*this, other.unsafe_get<wstring_type>());
+        break;
     case code::array:
         detail::overloader<value_type, array_type>::
             append(*this, other.unsafe_get<array_type>());
@@ -2767,48 +2977,55 @@ auto basic_variable<CharT>::operator+= (const basic_variable& other) -> basic_va
     return *this;
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator+= (const CharT *other) -> basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator+= (const char *other) -> basic_variable&
 {
     detail::overloader<value_type, string_type>::append(*this, other);
     return *this;
 }
 
-template <typename T, typename U>
-auto operator+ (const basic_variable<T>& lhs, const U& rhs) -> basic_variable<T>
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator+= (const wchar_t *other) -> basic_variable&
 {
-    basic_variable<T> result(lhs);
+    detail::overloader<value_type, wstring_type>::append(*this, other);
+    return *this;
+}
+
+template <template <typename> class Allocator, typename U>
+auto operator+ (const basic_variable<Allocator>& lhs, const U& rhs) -> basic_variable<Allocator>
+{
+    basic_variable<Allocator> result(lhs);
     result += rhs;
     return result;
 }
 
-template <typename T>
+template <template <typename> class Allocator>
 auto operator+ (nullable,
-                const basic_variable<T>& rhs) -> basic_variable<T>
+                const basic_variable<Allocator>& rhs) -> basic_variable<Allocator>
 {
-    basic_variable<T> result;
+    basic_variable<Allocator> result;
     result += rhs;
     return result;
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename R>
-basic_variable<CharT>::operator R() const
+basic_variable<Allocator>::operator R() const
 {
     return value<R>();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Tag>
-auto basic_variable<CharT>::value(std::error_code& error) const noexcept -> typename tag_traits<typename std::decay<Tag>::type>::type
+auto basic_variable<Allocator>::value(std::error_code& error) const noexcept -> typename tag_traits<typename std::decay<Tag>::type>::type
 {
     using return_type = typename tag_traits<typename std::decay<Tag>::type>::type;
     return detail::overloader<value_type, return_type>::convert(*this, error);
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Tag>
-auto basic_variable<CharT>::value() const -> typename tag_traits<typename std::decay<Tag>::type>::type
+auto basic_variable<Allocator>::value() const -> typename tag_traits<typename std::decay<Tag>::type>::type
 {
     std::error_code error;
     auto result = value<Tag>(error);
@@ -2817,24 +3034,24 @@ auto basic_variable<CharT>::value() const -> typename tag_traits<typename std::d
     return result;
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename R>
-auto basic_variable<CharT>::unsafe_get() & noexcept -> R&
+auto basic_variable<Allocator>::unsafe_get() & noexcept -> R&
 {
     assert(same<R>());
     return storage.template get<typename std::decay<R>::type>();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename R>
-auto basic_variable<CharT>::unsafe_get() const & noexcept -> const R&
+auto basic_variable<Allocator>::unsafe_get() const & noexcept -> const R&
 {
     assert(same<R>());
     return storage.template get<typename std::decay<R>::type>();
 }
 
-template <typename CharT>
-basic_variable<CharT>::operator bool() const
+template <template <typename> class Allocator>
+basic_variable<Allocator>::operator bool() const
 {
     switch (code())
     {
@@ -2869,6 +3086,8 @@ basic_variable<CharT>::operator bool() const
     case code::long_double_number:
         return bool(unsafe_get<long double>());
     case code::string:
+    case code::wstring:
+        throw dynamic::error(incompatible_type);
     case code::array:
     case code::map:
         // C++ containers are not contextually convertible to bool, but we
@@ -2879,8 +3098,8 @@ basic_variable<CharT>::operator bool() const
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator[] (size_type position) & -> basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator[] (size_type position) & -> basic_variable&
 {
     switch (symbol())
     {
@@ -2892,8 +3111,8 @@ auto basic_variable<CharT>::operator[] (size_type position) & -> basic_variable&
     }
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator[] (size_type position) const & -> const basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator[] (size_type position) const & -> const basic_variable&
 {
     switch (symbol())
     {
@@ -2905,13 +3124,13 @@ auto basic_variable<CharT>::operator[] (size_type position) const & -> const bas
     }
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) & -> basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& key) & -> basic_variable&
 {
     switch (symbol())
     {
     case symbol::null:
-        *this = basic_map<CharT>::make();
+        *this = basic_map<Allocator>::make();
         // FALLTHROUGH
     case symbol::map:
         return unsafe_get<map_type>()[key];
@@ -2921,8 +3140,8 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
     }
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) const & -> const basic_variable&
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& key) const & -> const basic_variable&
 {
     switch (symbol())
     {
@@ -2934,14 +3153,14 @@ auto basic_variable<CharT>::operator[] (const typename map_type::key_type& key) 
     }
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::find(const basic_variable& other) & -> iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::find(const basic_variable& other) & -> iterator
 {
     return iterator(const_cast<const basic_variable&>(*this).find(other));
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::find(const basic_variable& other) const & -> const_iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::find(const basic_variable& other) const & -> const_iterator
 {
     switch (other.code())
     {
@@ -2977,6 +3196,8 @@ auto basic_variable<CharT>::find(const basic_variable& other) const & -> const_i
         return find(other.unsafe_get<long double>());
     case code::string:
         return find(other.unsafe_get<string_type>());
+    case code::wstring:
+        return find(other.unsafe_get<wstring_type>());
     case code::array:
         return find(other.unsafe_get<array_type>());
     case code::map:
@@ -2985,16 +3206,16 @@ auto basic_variable<CharT>::find(const basic_variable& other) const & -> const_i
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-auto basic_variable<CharT>::find(const T& other) & -> iterator
+auto basic_variable<Allocator>::find(const T& other) & -> iterator
 {
     return iterator(const_cast<const basic_variable&>(*this).find(other));
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
+auto basic_variable<Allocator>::find(const T& other) const & -> const_iterator
 {
     switch (symbol())
     {
@@ -3005,6 +3226,7 @@ auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         return (*this == other) ? begin() : end();
 
     case symbol::array:
@@ -3019,8 +3241,8 @@ auto basic_variable<CharT>::find(const T& other) const & -> const_iterator
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::count(const basic_variable& other) const -> size_type
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::count(const basic_variable& other) const -> size_type
 {
     switch (other.code())
     {
@@ -3056,6 +3278,8 @@ auto basic_variable<CharT>::count(const basic_variable& other) const -> size_typ
         return count(other.unsafe_get<long double>());
     case code::string:
         return count(other.unsafe_get<string_type>());
+    case code::wstring:
+        return count(other.unsafe_get<wstring_type>());
     case code::array:
         return count(other.unsafe_get<array_type>());
     case code::map:
@@ -3064,9 +3288,9 @@ auto basic_variable<CharT>::count(const basic_variable& other) const -> size_typ
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-auto basic_variable<CharT>::count(const T& other) const -> size_type
+auto basic_variable<Allocator>::count(const T& other) const -> size_type
 {
     switch (symbol())
     {
@@ -3077,6 +3301,7 @@ auto basic_variable<CharT>::count(const T& other) const -> size_type
     case symbol::integer:
     case symbol::number:
     case symbol::string:
+    case symbol::wstring:
         return (*this == other) ? 1 : 0;
 
     case symbol::array:
@@ -3094,23 +3319,23 @@ auto basic_variable<CharT>::count(const T& other) const -> size_type
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename Tag>
-bool basic_variable<CharT>::is() const noexcept
+bool basic_variable<Allocator>::is() const noexcept
 {
     using tag_type = typename tag_traits<typename std::decay<Tag>::type>::type;
     return storage.template call<similar_visitor<tag_type>, bool>();
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename T>
-bool basic_variable<CharT>::same() const noexcept
+bool basic_variable<Allocator>::same() const noexcept
 {
-    return detail::same_overloader<CharT, T>::same(storage.index());
+    return detail::same_overloader<Allocator, T>::same(storage.index());
 }
 
-template <typename CharT>
-dynamic::code::value basic_variable<CharT>::code() const noexcept
+template <template <typename> class Allocator>
+dynamic::code::value basic_variable<Allocator>::code() const noexcept
 {
     switch (storage.index())
     {
@@ -3144,6 +3369,8 @@ dynamic::code::value basic_variable<CharT>::code() const noexcept
         return code::double_number;
     case traits<long double>::value:
         return code::long_double_number;
+    case traits<wstring_type>::value:
+        return code::wstring;
     case traits<string_type>::value:
         return code::string;
     case traits<array_type>::value:
@@ -3156,8 +3383,8 @@ dynamic::code::value basic_variable<CharT>::code() const noexcept
     }
 }
 
-template <typename CharT>
-dynamic::symbol::value basic_variable<CharT>::symbol() const noexcept
+template <template <typename> class Allocator>
+dynamic::symbol::value basic_variable<Allocator>::symbol() const noexcept
 {
     switch (storage.index())
     {
@@ -3182,6 +3409,8 @@ dynamic::symbol::value basic_variable<CharT>::symbol() const noexcept
         return symbol::number;
     case traits<string_type>::value:
         return symbol::string;
+    case traits<wstring_type>::value:
+        return symbol::wstring;
     case traits<array_type>::value:
         return symbol::array;
     case traits<map_type>::value:
@@ -3192,8 +3421,8 @@ dynamic::symbol::value basic_variable<CharT>::symbol() const noexcept
     }
 }
 
-template <typename CharT>
-bool basic_variable<CharT>::empty() const noexcept
+template <template <typename> class Allocator>
+bool basic_variable<Allocator>::empty() const noexcept
 {
     switch (symbol())
     {
@@ -3205,6 +3434,8 @@ bool basic_variable<CharT>::empty() const noexcept
         return false;
     case symbol::string:
         return unsafe_get<string_type>().empty();
+    case symbol::wstring:
+        return unsafe_get<wstring_type>().empty();
     case symbol::array:
         return unsafe_get<array_type>().empty();
     case symbol::map:
@@ -3213,8 +3444,8 @@ bool basic_variable<CharT>::empty() const noexcept
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::size() const noexcept -> size_type
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::size() const noexcept -> size_type
 {
     switch (symbol())
     {
@@ -3226,6 +3457,8 @@ auto basic_variable<CharT>::size() const noexcept -> size_type
         return 1;
     case symbol::string:
         return unsafe_get<string_type>().size();
+    case symbol::wstring:
+        return unsafe_get<wstring_type>().size();
     case symbol::array:
         return unsafe_get<array_type>().size();
     case symbol::map:
@@ -3234,8 +3467,8 @@ auto basic_variable<CharT>::size() const noexcept -> size_type
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::max_size() const noexcept -> size_type
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::max_size() const noexcept -> size_type
 {
     switch (symbol())
     {
@@ -3247,6 +3480,8 @@ auto basic_variable<CharT>::max_size() const noexcept -> size_type
         return 1;
     case symbol::string:
         return unsafe_get<string_type>().max_size();
+    case symbol::wstring:
+        return unsafe_get<wstring_type>().max_size();
     case symbol::array:
         return unsafe_get<array_type>().max_size();
     case symbol::map:
@@ -3255,8 +3490,8 @@ auto basic_variable<CharT>::max_size() const noexcept -> size_type
     TRIAL_PROTOCOL_UNREACHABLE();
 }
 
-template <typename CharT>
-void basic_variable<CharT>::clear() noexcept
+template <template <typename> class Allocator>
+void basic_variable<Allocator>::clear() noexcept
 {
     switch (code())
     {
@@ -3320,6 +3555,9 @@ void basic_variable<CharT>::clear() noexcept
     case code::string:
         unsafe_get<string_type>().clear();
         break;
+    case code::wstring:
+        unsafe_get<wstring_type>().clear();
+        break;
     case code::array:
         unsafe_get<array_type>().clear();
         break;
@@ -3329,13 +3567,13 @@ void basic_variable<CharT>::clear() noexcept
     }
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::insert(const basic_variable& value) -> iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
 {
     switch (symbol())
     {
     case symbol::null:
-        *this = basic_array<CharT>::make();
+        *this = basic_array<Allocator>::make();
         // FALLTHROUGH
     case symbol::array:
         {
@@ -3360,17 +3598,17 @@ auto basic_variable<CharT>::insert(const basic_variable& value) -> iterator
     throw dynamic::error(incompatible_type);
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename InputIterator>
-void basic_variable<CharT>::insert(InputIterator begin,
-                                   InputIterator end)
+void basic_variable<Allocator>::insert(InputIterator begin,
+                                       InputIterator end)
 {
-    return detail::iterator_overloader<CharT, InputIterator>
+    return detail::iterator_overloader<Allocator, InputIterator>
         ::insert(*this, std::move(begin), std::move(end));
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::insert(const_iterator where, const basic_variable& value) -> iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::insert(const_iterator where, const basic_variable& value) -> iterator
 {
     switch (symbol())
     {
@@ -3400,18 +3638,18 @@ auto basic_variable<CharT>::insert(const_iterator where, const basic_variable& v
     throw dynamic::error(incompatible_type);
 }
 
-template <typename CharT>
+template <template <typename> class Allocator>
 template <typename InputIterator>
-void basic_variable<CharT>::insert(const_iterator where,
-                                   InputIterator begin,
-                                   InputIterator end)
+void basic_variable<Allocator>::insert(const_iterator where,
+                                       InputIterator begin,
+                                       InputIterator end)
 {
-    return detail::iterator_overloader<CharT, InputIterator>
+    return detail::iterator_overloader<Allocator, InputIterator>
         ::insert(*this, std::move(where), std::move(begin), std::move(end));
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::erase(const_iterator where) -> iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::erase(const_iterator where) -> iterator
 {
     using array_iterator = typename basic_variable::const_iterator::array_iterator;
     using map_iterator = typename basic_variable::const_iterator::map_iterator;
@@ -3440,8 +3678,8 @@ auto basic_variable<CharT>::erase(const_iterator where) -> iterator
     return result;
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::erase(const_iterator first, const_iterator last) -> iterator
 {
     using array_iterator = typename basic_variable::const_iterator::array_iterator;
     using map_iterator = typename basic_variable::const_iterator::map_iterator;
@@ -3469,62 +3707,62 @@ auto basic_variable<CharT>::erase(const_iterator first, const_iterator last) -> 
     return result;
 }
 
-template <typename CharT>
-void basic_variable<CharT>::swap(basic_variable& other) noexcept
+template <template <typename> class Allocator>
+void basic_variable<Allocator>::swap(basic_variable& other) noexcept
 {
     storage.swap(other.storage);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::begin() & -> iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::begin() & -> iterator
 {
     return iterator(this);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::begin() const & -> const_iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::begin() const & -> const_iterator
 {
     return const_iterator(this);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::cbegin() const & -> const_iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::cbegin() const & -> const_iterator
 {
     return begin();
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::end() & -> iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::end() & -> iterator
 {
     return iterator(this, false);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::end() const & -> const_iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::end() const & -> const_iterator
 {
     return const_iterator(this, false);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::cend() const & -> const_iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::cend() const & -> const_iterator
 {
     return end();
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::key_begin() const & -> key_iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::key_begin() const & -> key_iterator
 {
     return key_iterator(this);
 }
 
-template <typename CharT>
-auto basic_variable<CharT>::key_end() const & -> key_iterator
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::key_end() const & -> key_iterator
 {
     return key_iterator(this, false);
 }
 
-template <typename CharT>
-bool basic_variable<CharT>::is_pair() const
+template <template <typename> class Allocator>
+bool basic_variable<Allocator>::is_pair() const
 {
     return is<array>() && (size() == 2);
 }
@@ -3549,8 +3787,8 @@ bool operator< (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     return detail::operator_overloader<T, U>::less(lhs, rhs);
 }
 
-template <typename CharT, typename U>
-bool operator<= (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+template <template <typename> class Allocator, typename U>
+bool operator<= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
     if (lhs.template same<nullable>())
         return true;
@@ -3558,8 +3796,8 @@ bool operator<= (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_
     return !(rhs < lhs);
 }
 
-template <typename CharT, typename U>
-bool operator> (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+template <template <typename> class Allocator, typename U>
+bool operator> (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
     if (lhs.template same<nullable>())
         return false;
@@ -3567,8 +3805,8 @@ bool operator> (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_C
     return rhs < lhs;
 }
 
-template <typename CharT, typename U>
-bool operator>= (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+template <template <typename> class Allocator, typename U>
+bool operator>= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
 {
     return !(lhs < rhs);
 }
@@ -3577,68 +3815,68 @@ bool operator>= (const basic_variable<CharT>& lhs, const U& rhs) TRIAL_PROTOCOL_
 // Factories
 //-----------------------------------------------------------------------------
 
-template <typename CharT>
+template <template <typename> class Allocator>
 struct basic_array
 {
-    static basic_variable<CharT> make()
+    static basic_variable<Allocator> make()
     {
-        basic_variable<CharT> result;
-        result.storage = typename basic_variable<CharT>::array_type{};
+        basic_variable<Allocator> result;
+        result.storage = typename basic_variable<Allocator>::array_type{};
         return result;
     }
 
     template <typename ForwardIterator>
-    static basic_variable<CharT> make(ForwardIterator begin, ForwardIterator end)
+    static basic_variable<Allocator> make(ForwardIterator begin, ForwardIterator end)
     {
-        basic_variable<CharT> result;
-        result.storage = typename basic_variable<CharT>::array_type(begin, end);
+        basic_variable<Allocator> result;
+        result.storage = typename basic_variable<Allocator>::array_type(begin, end);
         return result;
     }
 
-    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::value_type> init)
+    static basic_variable<Allocator> make(std::initializer_list<typename basic_variable<Allocator>::value_type> init)
     {
-        basic_variable<CharT> result;
-        result.storage = typename basic_variable<CharT>::array_type(init.begin(), init.end());
+        basic_variable<Allocator> result;
+        result.storage = typename basic_variable<Allocator>::array_type(init.begin(), init.end());
         return result;
     }
 
     template <typename T>
-    static basic_variable<CharT> repeat(typename basic_variable<CharT>::size_type size,
-                                        const T& value)
+    static basic_variable<Allocator> repeat(typename basic_variable<Allocator>::size_type size,
+                                            const T& value)
     {
-        basic_variable<CharT> result;
-        result.storage = typename basic_variable<CharT>::array_type(size, basic_variable<CharT>(value));
+        basic_variable<Allocator> result;
+        result.storage = typename basic_variable<Allocator>::array_type(size, basic_variable<Allocator>(value));
         return result;
     }
 };
 
-template <typename CharT>
+template <template <typename> class Allocator>
 struct basic_map
 {
-    static basic_variable<CharT> make()
+    static basic_variable<Allocator> make()
     {
-        basic_variable<CharT> result;
-        result.storage = typename basic_variable<CharT>::map_type{};
+        basic_variable<Allocator> result;
+        result.storage = typename basic_variable<Allocator>::map_type{};
         return result;
     }
 
     template <typename T, typename U>
-    static basic_variable<CharT> make(T key, U value)
+    static basic_variable<Allocator> make(T key, U value)
     {
         return make({ std::move(key), std::move(value) });
     }
 
-    static basic_variable<CharT> make(typename basic_variable<CharT>::pair_type value)
+    static basic_variable<Allocator> make(typename basic_variable<Allocator>::pair_type value)
     {
-        basic_variable<CharT> result;
-        result.storage = typename basic_variable<CharT>::map_type{std::move(value)};
+        basic_variable<Allocator> result;
+        result.storage = typename basic_variable<Allocator>::map_type{std::move(value)};
         return result;
     }
 
-    static basic_variable<CharT> make(std::initializer_list<typename basic_variable<CharT>::pair_type> init)
+    static basic_variable<Allocator> make(std::initializer_list<typename basic_variable<Allocator>::pair_type> init)
     {
-        basic_variable<CharT> result;
-        result.storage = typename basic_variable<CharT>::map_type(init.begin(), init.end());
+        basic_variable<Allocator> result;
+        result.storage = typename basic_variable<Allocator>::map_type(init.begin(), init.end());
         return result;
     }
 };

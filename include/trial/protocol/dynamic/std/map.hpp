@@ -24,15 +24,15 @@ namespace dynamic
 namespace detail
 {
 
-template <typename CharT, typename Key, typename Value>
+template <template <typename> class Allocator, typename Key, typename Value>
 struct convert_overloader<
-    basic_variable<CharT>,
+    basic_variable<Allocator>,
     std::map<Key, Value>>
 {
-    static basic_variable<CharT> convert(const std::map<Key, Value>& map,
+    static basic_variable<Allocator> convert(const std::map<Key, Value>& map,
                                          std::error_code&)
     {
-        auto result = basic_map<CharT>::make();
+        auto result = basic_map<Allocator>::make();
         for (const auto& entry : map)
         {
             result += map::make(entry.first, entry.second);
@@ -41,12 +41,12 @@ struct convert_overloader<
     }
 };
 
-template <typename CharT, typename Key, typename Value>
+template <template <typename> class Allocator, typename Key, typename Value>
 struct convert_overloader<
     std::map<Key, Value>,
-    basic_variable<CharT>>
+    basic_variable<Allocator>>
 {
-    static std::map<Key, Value> convert(const basic_variable<CharT>& map,
+    static std::map<Key, Value> convert(const basic_variable<Allocator>& map,
                                         std::error_code& error)
     {
         std::map<Key, Value> result;
@@ -67,15 +67,15 @@ struct convert_overloader<
 
 // Special case for std::map<T, variable>
 
-template <typename CharT, typename Key>
+template <template <typename> class Allocator, typename Key>
 struct convert_overloader<
-    std::map<Key, basic_variable<CharT>>,
-    basic_variable<CharT>>
+    std::map<Key, basic_variable<Allocator>>,
+    basic_variable<Allocator>>
 {
-    static std::map<Key, basic_variable<CharT>> convert(const basic_variable<CharT>& map,
-                                                        std::error_code& error)
+    static std::map<Key, basic_variable<Allocator>> convert(const basic_variable<Allocator>& map,
+                                                            std::error_code& error)
     {
-        std::map<Key, basic_variable<CharT>> result;
+        std::map<Key, basic_variable<Allocator>> result;
         for (auto it = map.begin(); it != map.end(); ++it)
         {
             result.emplace(it.key().template value<Key>(error), it.value());
