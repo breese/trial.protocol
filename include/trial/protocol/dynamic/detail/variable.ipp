@@ -132,7 +132,7 @@ struct basic_variable<Allocator>::tag_traits<
     T,
     typename std::enable_if<std::is_same<T, typename dynamic::number>::value>::type>
 {
-    using type = float;
+    using type = double;
 };
 
 template <template <typename> class Allocator>
