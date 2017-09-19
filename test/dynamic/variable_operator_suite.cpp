@@ -3159,7 +3159,7 @@ void get_boolean()
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST(bool(data) == true);
     TRIAL_PROTOCOL_TEST(int(data) == 1);
-    TRIAL_PROTOCOL_TEST(float(data) == 1.0);
+    TRIAL_PROTOCOL_TEST(float(data) == 1.0f);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
                                     error,
                                     "incompatible type");
@@ -3182,7 +3182,7 @@ void get_integer()
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST(bool(data) == true);
     TRIAL_PROTOCOL_TEST(int(data) == 2);
-    TRIAL_PROTOCOL_TEST(float(data) == 2.0);
+    TRIAL_PROTOCOL_TEST(float(data) == 2.0f);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
                                     error,
                                     "incompatible type");
@@ -3205,7 +3205,7 @@ void get_number()
                                     "incompatible type");
     TRIAL_PROTOCOL_TEST(bool(data) == true);
     TRIAL_PROTOCOL_TEST(int(data) == 3);
-    TRIAL_PROTOCOL_TEST(float(data) == 3.0);
+    TRIAL_PROTOCOL_TEST(float(data) == 3.0f);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator variable::string_type(),
                                     error,
                                     "incompatible type");
