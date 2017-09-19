@@ -210,11 +210,11 @@ struct overloader<
         switch (self.code())
         {
         case code::null:
-            return {};
+            return null;
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
-            return {};
+            return null;
         }
     }
 
@@ -261,46 +261,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>();
+            return type(self.template unsafe_get<bool>());
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>();
+            return type(self.template unsafe_get<signed char>());
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>();
+            return type(self.template unsafe_get<unsigned char>());
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>();
+            return type(self.template unsafe_get<signed short int>());
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>();
+            return type(self.template unsafe_get<unsigned short int>());
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>();
+            return type(self.template unsafe_get<signed int>());
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>();
+            return type(self.template unsafe_get<unsigned int>());
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>();
+            return type(self.template unsafe_get<signed long int>());
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>();
+            return type(self.template unsafe_get<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>();
+            return type(self.template unsafe_get<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>();
+            return type(self.template unsafe_get<unsigned long long int>());
 
         case code::float_number:
-            return self.template unsafe_get<float>();
+            return type(self.template unsafe_get<float>());
 
         case code::double_number:
-            return self.template unsafe_get<double>();
+            return type(self.template unsafe_get<double>());
 
         case code::long_double_number:
-            return self.template unsafe_get<long double>();
+            return type(self.template unsafe_get<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -507,46 +507,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>();
+            return type(self.template unsafe_get<bool>());
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>();
+            return type(self.template unsafe_get<signed char>());
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>();
+            return type(self.template unsafe_get<unsigned char>());
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>();
+            return type(self.template unsafe_get<signed short int>());
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>();
+            return type(self.template unsafe_get<unsigned short int>());
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>();
+            return type(self.template unsafe_get<signed int>());
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>();
+            return type(self.template unsafe_get<unsigned int>());
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>();
+            return type(self.template unsafe_get<signed long int>());
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>();
+            return type(self.template unsafe_get<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>();
+            return type(self.template unsafe_get<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>();
+            return type(self.template unsafe_get<unsigned long long int>());
 
         case code::float_number:
-            return self.template unsafe_get<float>();
+            return type(self.template unsafe_get<float>());
 
         case code::double_number:
-            return self.template unsafe_get<double>();
+            return type(self.template unsafe_get<double>());
 
         case code::long_double_number:
-            return self.template unsafe_get<long double>();
+            return type(self.template unsafe_get<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -743,46 +743,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>();
+            return type(self.template unsafe_get<bool>());
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>();
+            return type(self.template unsafe_get<signed char>());
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>();
+            return type(self.template unsafe_get<unsigned char>());
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>();
+            return type(self.template unsafe_get<signed short int>());
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>();
+            return type(self.template unsafe_get<unsigned short int>());
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>();
+            return type(self.template unsafe_get<signed int>());
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>();
+            return type(self.template unsafe_get<unsigned int>());
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>();
+            return type(self.template unsafe_get<signed long int>());
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>();
+            return type(self.template unsafe_get<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>();
+            return type(self.template unsafe_get<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>();
+            return type(self.template unsafe_get<unsigned long long int>());
 
         case code::float_number:
-            return self.template unsafe_get<float>();
+            return type(self.template unsafe_get<float>());
 
         case code::double_number:
-            return self.template unsafe_get<double>();
+            return type(self.template unsafe_get<double>());
 
         case code::long_double_number:
-            return self.template unsafe_get<long double>();
+            return type(self.template unsafe_get<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -978,46 +978,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>();
+            return type(self.template unsafe_get<bool>());
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>();
+            return type(self.template unsafe_get<signed char>());
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>();
+            return type(self.template unsafe_get<unsigned char>());
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>();
+            return type(self.template unsafe_get<signed short int>());
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>();
+            return type(self.template unsafe_get<unsigned short int>());
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>();
+            return type(self.template unsafe_get<signed int>());
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>();
+            return type(self.template unsafe_get<unsigned int>());
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>();
+            return type(self.template unsafe_get<signed long int>());
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>();
+            return type(self.template unsafe_get<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>();
+            return type(self.template unsafe_get<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>();
+            return type(self.template unsafe_get<unsigned long long int>());
 
         case code::float_number:
-            return self.template unsafe_get<float>();
+            return type(self.template unsafe_get<float>());
 
         case code::double_number:
-            return self.template unsafe_get<double>();
+            return type(self.template unsafe_get<double>());
 
         case code::long_double_number:
-            return self.template unsafe_get<long double>();
+            return type(self.template unsafe_get<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
