@@ -39,6 +39,12 @@ struct convert_overloader<basic_variable<Allocator>, boost::any>
         if (any.type() == typeid(bool))
             return boost::any_cast<bool>(any);
 
+        if (any.type() == typeid(signed char))
+            return boost::any_cast<signed char>(any);
+
+        if (any.type() == typeid(unsigned char))
+            return boost::any_cast<unsigned char>(any);
+
         if (any.type() == typeid(signed short int))
             return boost::any_cast<signed short int>(any);
 
@@ -89,6 +95,12 @@ struct convert_overloader<basic_variable<Allocator>, boost::any>
 
         if (any.type() == typeid(typename variable_type::u16string_type))
             return boost::any_cast<typename variable_type::u16string_type>(any);
+
+        if (any.type() == typeid(std::vector<signed char>))
+            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed char>>(&any));
+
+        if (any.type() == typeid(std::vector<unsigned char>))
+            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<unsigned char>>(&any));
 
         if (any.type() == typeid(std::vector<signed short int>))
             return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed short int>>(&any));

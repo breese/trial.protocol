@@ -38,51 +38,73 @@ void convert_boolean()
 void convert_integer()
 {
     {
-        boost::any any((signed short int)2);
+        const signed char value = 2;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<signed short int>());
+        TRIAL_PROTOCOL_TEST(result.same<signed char>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
     {
-        boost::any any((unsigned short int)2);
+        const unsigned char value = 2U;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<unsigned short int>());
+        TRIAL_PROTOCOL_TEST(result.same<unsigned char>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
     {
-        boost::any any((signed int)2);
+        const signed short int value = 2;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<signed int>());
+        TRIAL_PROTOCOL_TEST(result.same<signed short int>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
     {
-        boost::any any((unsigned int)2);
+        const unsigned short int value = 2U;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<unsigned int>());
+        TRIAL_PROTOCOL_TEST(result.same<unsigned short int>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
     {
-        boost::any any((signed long int)2);
+        const signed int value = 2;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<signed int>());
+        TRIAL_PROTOCOL_TEST(result.same<signed int>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
     {
-        boost::any any((unsigned long int)2);
+        const unsigned int value = 2U;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<unsigned int>());
+        TRIAL_PROTOCOL_TEST(result.same<unsigned int>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
     {
-        boost::any any((signed long long int)2);
+        const signed long int value = 2L;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<signed int>());
+        TRIAL_PROTOCOL_TEST(result.same<signed long int>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
     {
-        boost::any any((unsigned long long int)2);
+        const unsigned long int value = 2UL;
+        boost::any any(value);
         variable result = convert<variable>(any);
-        TRIAL_PROTOCOL_TEST(result.is<unsigned int>());
+        TRIAL_PROTOCOL_TEST(result.same<unsigned long int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        const signed long long int value = 2LL;
+        boost::any any(value);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.same<signed long long int>());
+        TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+    }
+    {
+        const unsigned long long int value = 2ULL;
+        boost::any any(value);
+        variable result = convert<variable>(any);
+        TRIAL_PROTOCOL_TEST(result.same<unsigned long long int>());
         TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
     }
 }
