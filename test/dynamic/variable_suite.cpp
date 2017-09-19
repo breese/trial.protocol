@@ -230,6 +230,18 @@ void construct_wstring()
     }
 }
 
+void construct_u16string()
+{
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+    }
+    {
+        variable data(std::u16string(u"alpha"));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+    }
+}
+
 void construct_array_empty()
 {
     {
@@ -327,11 +339,19 @@ void construct_map_key_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     }
     {
+        variable data({ {u"alpha", 1} });
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    }
+    {
         variable data(map::make({ {"alpha", 1} }));
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     }
     {
         variable data(map::make({ {L"alpha", 1} }));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    }
+    {
+        variable data(map::make({ {u"alpha", 1} }));
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     }
     {
@@ -343,11 +363,19 @@ void construct_map_key_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     }
     {
+        variable data(map::make(std::u16string(u"alpha"), 1));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    }
+    {
         variable data(map::make("alpha", 1));
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     }
     {
         variable data(map::make(L"alpha", 1));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    }
+    {
+        variable data(map::make(u"alpha", 1));
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     }
 }
@@ -467,6 +495,7 @@ void run()
 
     construct_string();
     construct_wstring();
+    construct_u16string();
 
     construct_array_empty();
     construct_array_from_vector();
@@ -1108,6 +1137,10 @@ void is_string()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::wstring>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::wstring_type>(), false);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::u16string>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::u16string_type>(), false);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type&>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::string_type>(), false);
@@ -1134,12 +1167,46 @@ void is_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::string>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
 
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::u16string>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::u16string_type>(), false);
+
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type&>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::wstring_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::wstring_type&>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::wstring_type>(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::wstring_type&>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), false);
+}
+
+void is_u16string()
+{
+    variable data(u"alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::u16string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::u16string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::u16string_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::u16string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<const variable::u16string_type&>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::u16string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<volatile variable::u16string_type&>(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::string>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::string_type>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::wstring>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<variable::wstring_type>(), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::u16string_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<const variable::u16string_type&>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::u16string_type>(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile variable::u16string_type&>(), false);
 
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), false);
 }
@@ -1205,6 +1272,7 @@ void run()
 
     is_string();
     is_wstring();
+    is_u16string();
 
     is_array();
     is_map();
@@ -1330,6 +1398,11 @@ void test_string()
         variable data(L"alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::wstring);
         TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::wstring);
+    }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::u16string);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::u16string);
     }
 }
 
@@ -1493,6 +1566,11 @@ void copy_string()
         variable data(L"alpha");
         variable copy(data);
         TRIAL_PROTOCOL_TEST_EQUAL(copy.is<wstring>(), true);
+    }
+    {
+        variable data(u"alpha");
+        variable copy(data);
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.is<u16string>(), true);
     }
 }
 
@@ -1752,6 +1830,12 @@ void move_string()
         variable copy(std::move(data));
         TRIAL_PROTOCOL_TEST_EQUAL(copy.is<wstring>(), true);
         TRIAL_PROTOCOL_TEST(copy.value<std::wstring>() == L"alpha");
+    }
+    {
+        variable data(u"alpha");
+        variable copy(std::move(data));
+        TRIAL_PROTOCOL_TEST_EQUAL(copy.is<u16string>(), true);
+        TRIAL_PROTOCOL_TEST(copy.value<std::u16string>() == u"alpha");
     }
 }
 
@@ -2223,25 +2307,37 @@ void assign_null_with_string()
         variable data;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = std::string("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         variable data;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = "alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         variable data;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = std::wstring(L"alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
     }
     {
         variable data;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
         data = L"alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data = std::u16string(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
+    }
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
     }
 }
 
@@ -2637,13 +2733,19 @@ void assign_boolean_with_string()
         variable data(true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = "alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         variable data(true);
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
         data = L"alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
+    }
+    {
+        variable data(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
     }
 }
 
@@ -3029,14 +3131,21 @@ void assign_signed_int_with_string()
         variable data(input);
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = "alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.is<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         signed int input = 2;
         variable data(input);
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = L"alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
+    }
+    {
+        signed int input = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
     }
 }
 
@@ -3424,14 +3533,21 @@ void assign_unsigned_int_with_string()
         variable data(input);
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = "alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         unsigned int input = 2;
         variable data(input);
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
         data = L"alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
+    }
+    {
+        unsigned int input = 2;
+        variable data(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
     }
 }
 
@@ -3535,13 +3651,19 @@ void assign_float_with_string()
         variable data(3.0f);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
         data = "alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         variable data(3.0f);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
         data = L"alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
+    }
+    {
+        variable data(3.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
     }
 }
 
@@ -3643,13 +3765,19 @@ void assign_double_with_string()
         variable data(3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
         data = "alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         variable data(3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
         data = L"alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
+    }
+    {
+        variable data(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
     }
 }
 
@@ -3751,13 +3879,19 @@ void assign_long_double_with_string()
         variable data(3.0L);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
         data = "alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::string>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::string_type>(), true);
     }
     {
         variable data(3.0L);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
         data = L"alpha";
-        TRIAL_PROTOCOL_TEST_EQUAL(data.same<std::wstring>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::wstring_type>(), true);
+    }
+    {
+        variable data(3.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<variable::u16string_type>(), true);
     }
 }
 
@@ -3791,6 +3925,12 @@ void assign_string_with_null()
         data = null;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
     }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+        data = null;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
+    }
 }
 
 void assign_string_with_boolean()
@@ -3807,6 +3947,12 @@ void assign_string_with_boolean()
         data = false;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
     }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+        data = false;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
+    }
 }
 
 void assign_string_with_integer()
@@ -3820,6 +3966,12 @@ void assign_string_with_integer()
     {
         variable data(L"alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        data = 2;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
+    }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
         data = 2;
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<int>(), true);
     }
@@ -3860,6 +4012,12 @@ void assign_string_with_number()
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
     }
     {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+        data = 3.0;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
         variable data("alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
         variable number(3.0);
@@ -3869,6 +4027,13 @@ void assign_string_with_number()
     {
         variable data(L"alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        variable number(3.0);
+        data = number;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
         variable number(3.0);
         data = number;
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
@@ -3883,6 +4048,13 @@ void assign_string_with_number()
     {
         variable data(L"alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        variable number(3.0);
+        data = std::move(number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
+    }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
         variable number(3.0);
         data = std::move(number);
         TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
@@ -3925,6 +4097,13 @@ void assign_string_with_string()
         data = L"bravo";
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
     }
+    // string - u16string
+    {
+        variable data("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+        data = u"bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+    }
     // wstring - string
     {
         variable data(L"alpha");
@@ -3938,6 +4117,34 @@ void assign_string_with_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
         data = L"bravo";
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+    }
+    // wstring - u16string
+    {
+        variable data(L"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        data = u"bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+    }
+    // u16string - string
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+        data = "bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
+    }
+    // u16string - wstring
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+        data = L"bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+    }
+    // u16string - u16string
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+        data = u"bravo";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
     }
 }
 
@@ -3955,6 +4162,12 @@ void assign_string_with_array()
         data = { true, 2 };
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
     }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+        data = { true, 2 };
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+    }
 }
 
 void assign_string_with_map()
@@ -3968,6 +4181,12 @@ void assign_string_with_map()
     {
         variable data(L"alpha");
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+        data = {{ "alpha", "hydrogen" }};
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+    }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
         data = {{ "alpha", "hydrogen" }};
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
     }
@@ -4082,6 +4301,12 @@ void assign_array_with_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
         data = L"alpha";
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+    }
+    {
+        variable data = { true, 2 };
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
     }
 }
 
@@ -4210,6 +4435,12 @@ void assign_map_with_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
         data = L"alpha";
         TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
+    }
+    {
+        variable data = {{ "alpha", "hydrogen" }};
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
+        data = u"alpha";
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
     }
 }
 
@@ -4517,6 +4748,18 @@ void get_string()
         variable data(value);
         TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::wstring_type>() == value);
     }
+    // u16string
+    {
+        std::u16string value = u"alpha";
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
+    }
+    // u16string literal
+    {
+        const char16_t *value = u"alpha";
+        variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
+    }
 }
 
 void get_const_string()
@@ -4544,6 +4787,18 @@ void get_const_string()
         const wchar_t *value = L"alpha";
         const variable data(value);
         TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::wstring_type>() == value);
+    }
+    // u16string
+    {
+        std::u16string value = u"alpha";
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
+    }
+    // u16string literal
+    {
+        const char16_t *value = u"alpha";
+        const variable data(value);
+        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
     }
 }
 
@@ -4692,6 +4947,12 @@ void fail_null_as_string()
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>(error) == std::wstring{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data;
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == std::u16string{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void fail_null_as_array()
@@ -4782,6 +5043,14 @@ void fail_boolean_as_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), false);
         TRIAL_PROTOCOL_TEST(!error);
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>(error) == std::wstring{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
+    {
+        variable data(false);
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), false);
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == std::u16string{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
 }
@@ -4915,6 +5184,14 @@ void fail_integer_as_string()
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>(error) == std::wstring{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data(0);
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), 0);
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == std::u16string{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void fail_integer_as_array()
@@ -5021,6 +5298,14 @@ void fail_float_as_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
         TRIAL_PROTOCOL_TEST(!error);
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>(error) == std::wstring{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
+    {
+        variable data(0.0f);
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == std::u16string{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
 }
@@ -5131,6 +5416,14 @@ void fail_double_as_string()
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>(error) == std::wstring{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data(0.0);
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == std::u16string{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void fail_double_as_array()
@@ -5239,6 +5532,14 @@ void fail_long_double_as_string()
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>(error) == std::wstring{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data(0.0L);
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0);
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == std::u16string{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void fail_long_double_as_array()
@@ -5275,6 +5576,14 @@ void fail_string_as_null()
         data.value<nullable>(error);
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data(u"alpha");
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == u"alpha");
+        TRIAL_PROTOCOL_TEST(!error);
+        data.value<nullable>(error);
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void fail_string_as_boolean()
@@ -5295,6 +5604,14 @@ void fail_string_as_boolean()
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), bool{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data(u"alpha");
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == u"alpha");
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(error), bool{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void fail_string_as_integer()
@@ -5311,6 +5628,14 @@ void fail_string_as_integer()
         variable data(L"alpha");
         std::error_code error;
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>(error) == L"alpha");
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), int{});
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
+    {
+        variable data(u"alpha");
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == u"alpha");
         TRIAL_PROTOCOL_TEST(!error);
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<int>(error), int{});
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5347,6 +5672,20 @@ void fail_string_as_number()
         TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0L);
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data(u"alpha");
+        std::error_code error;
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>(error) == u"alpha");
+        TRIAL_PROTOCOL_TEST(!error);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(error), 0.0f);
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+        error = {};
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(error), 0.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+        error = {};
+        TRIAL_PROTOCOL_TEST_EQUAL(data.value<long double>(error), 0.0L);
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void test_string_as_string()
@@ -5365,6 +5704,13 @@ void test_string_as_string()
         data = L"bravo";
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"bravo");
     }
+    {
+        variable data(u"alpha");
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"alpha");
+
+        data = u"bravo";
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"bravo");
+    }
 }
 
 void fail_string_as_array()
@@ -5381,6 +5727,12 @@ void fail_string_as_array()
         data.value<array>(error);
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
     }
+    {
+        variable data(u"alpha");
+        std::error_code error;
+        data.value<array>(error);
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
 }
 
 void fail_string_as_map()
@@ -5393,6 +5745,12 @@ void fail_string_as_map()
     }
     {
         variable data(L"alpha");
+        std::error_code error;
+        data.value<map>(error);
+        TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
+    }
+    {
+        variable data(u"alpha");
         std::error_code error;
         data.value<map>(error);
         TRIAL_PROTOCOL_TEST_EQUAL(error, make_error_code(incompatible_type));
@@ -5505,6 +5863,8 @@ void count_null()
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
 }
@@ -5527,6 +5887,8 @@ void count_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
 }
@@ -5549,6 +5911,8 @@ void count_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
 }
@@ -5571,6 +5935,8 @@ void count_number()
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"alpha"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"alpha")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
 }
@@ -5590,12 +5956,12 @@ void count_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 1);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 1);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count("bravo"), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("bravo")), 0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"bravo"), 0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"bravo")), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"alpha"), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"alpha")), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
     }
@@ -5614,10 +5980,32 @@ void count_string()
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 1);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 1);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.count("bravo"), 0);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("bravo")), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"bravo"), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"bravo")), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"alpha"), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"alpha")), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
+    }
+    {
+        variable data(u"alpha");
+
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(null), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable()), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(true), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(true)), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(2), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(2)), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(3.0), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(3.0)), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count("alpha"), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable("alpha")), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(L"alpha"), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(L"alpha")), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"alpha"), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"alpha")), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(u"bravo"), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.count(variable(u"bravo")), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(array::make()), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(data.count(map::make()), 0);
     }

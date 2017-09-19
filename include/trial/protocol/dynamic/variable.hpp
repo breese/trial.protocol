@@ -48,6 +48,7 @@ struct integer {};
 struct number {};
 struct string {};
 struct wstring {};
+struct u16string {};
 template <template <typename> class Allocator> struct basic_array;
 template <template <typename> class Allocator> struct basic_map;
 
@@ -64,12 +65,15 @@ public:
     using allocator_type = Allocator<value_type>;
     using difference_type = std::ptrdiff_t;
     using size_type = std::size_t;
-    using string_type = std::basic_string<char,
-                                          typename core::char_traits<char>,
-                                          typename std::allocator_traits<allocator_type>::template rebind_alloc<char>>;
-    using wstring_type = std::basic_string<wchar_t,
-                                           typename core::char_traits<wchar_t>,
-                                           typename std::allocator_traits<allocator_type>::template rebind_alloc<wchar_t>>;
+private:
+    template <typename CharT>
+    using basic_string = std::basic_string<CharT,
+                                           typename core::char_traits<CharT>,
+                                           typename std::allocator_traits<allocator_type>::template rebind_alloc<CharT>>;
+public:
+    using string_type = basic_string<char>;
+    using wstring_type = basic_string<wchar_t>;
+    using u16string_type = basic_string<char16_t>;
     using array_type = std::vector<value_type,
                                    allocator_type>;
     using map_type = std::map<value_type,
@@ -257,6 +261,7 @@ public:
     // String constructor
     basic_variable(const char *);
     basic_variable(const wchar_t *);
+    basic_variable(const char16_t *);
     // Use factory instead
     basic_variable(typename basic_variable::array_type) = delete;
     basic_variable(typename basic_variable::map_type) = delete;
@@ -270,6 +275,7 @@ public:
     basic_variable& operator= (nullable);
     basic_variable& operator= (const char *);
     basic_variable& operator= (const wchar_t *);
+    basic_variable& operator= (const char16_t *);
 
     // Addition / concatenation
 
@@ -277,6 +283,7 @@ public:
     basic_variable& operator+= (const basic_variable&);
     basic_variable& operator+= (const char *);
     basic_variable& operator+= (const wchar_t *);
+    basic_variable& operator+= (const char16_t *);
 
     // Accessor
 
@@ -379,6 +386,7 @@ private:
                                                    long double,
                                                    string_type,
                                                    wstring_type,
+                                                   u16string_type,
                                                    array_type,
                                                    map_type>;
     storage_type storage;

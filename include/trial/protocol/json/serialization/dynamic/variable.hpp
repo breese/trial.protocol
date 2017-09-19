@@ -98,6 +98,7 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
             break;
 
         case dynamic::code::wstring:
+        case dynamic::code::u16string:
             throw json::error(json::incompatible_type);
 
         case dynamic::code::array:

@@ -41,6 +41,7 @@ using is_boolean = core::detail::is_bool<T>;
 template <typename CharT> struct is_character : std::false_type {};
 template <> struct is_character<char> : std::true_type {};
 template <> struct is_character<wchar_t> : std::true_type {};
+template <> struct is_character<char16_t> : std::true_type {};
 
 template <typename T>
 using is_integer = typename std::conditional<std::is_integral<T>::value && !detail::is_boolean<T>::value && !detail::is_character<T>::value,
@@ -150,6 +151,15 @@ struct basic_variable<Allocator>::tag_traits<
     typename std::enable_if<std::is_same<T, typename dynamic::wstring>::value>::type>
 {
     using type = typename basic_variable<Allocator>::wstring_type;
+};
+
+template <template <typename> class Allocator>
+template <typename T>
+struct basic_variable<Allocator>::tag_traits<
+    T,
+    typename std::enable_if<std::is_same<T, typename dynamic::u16string>::value>::type>
+{
+    using type = typename basic_variable<Allocator>::u16string_type;
 };
 
 template <template <typename> class Allocator>
@@ -1249,7 +1259,7 @@ struct overloader<
 {
     using variable_type = basic_variable<Allocator>;
     using type = typename variable_type::string_type;
-    using category_type = typename variable_type::string_type;
+    using category_type = type;
 
     using string_type = typename variable_type::string_type;
     using array_type = typename variable_type::array_type;
@@ -1288,6 +1298,7 @@ struct overloader<
             return string_overloader<string_type, U>::less(self.template unsafe_get<string_type>(), other);
 
         case code::wstring:
+        case code::u16string:
         case code::array:
         case code::map:
             return false;
@@ -1329,7 +1340,7 @@ struct overloader<
 {
     using variable_type = basic_variable<Allocator>;
     using type = typename variable_type::wstring_type;
-    using category_type = typename variable_type::wstring_type;
+    using category_type = type;
 
     using wstring_type = typename variable_type::wstring_type;
     using array_type = typename variable_type::array_type;
@@ -1367,6 +1378,7 @@ struct overloader<
         case code::wstring:
             return string_overloader<wstring_type, U>::less(self.template unsafe_get<wstring_type>(), other);
 
+        case code::u16string:
         case code::array:
         case code::map:
             return false;
@@ -1386,6 +1398,85 @@ struct overloader<
 
         case code::wstring:
             string_overloader<wstring_type, U>::append(self.template unsafe_get<wstring_type>(), other);
+            break;
+
+        case code::array:
+            self.template unsafe_get<array_type>().push_back(other);
+            break;
+
+        default:
+            throw dynamic::error(incompatible_type);
+        }
+    }
+};
+
+// u16string_type
+
+template <template <typename> class Allocator, typename U>
+struct overloader<
+    basic_variable<Allocator>,
+    U,
+    typename std::enable_if<std::is_same<U, typename basic_variable<Allocator>::u16string_type>::value>::type>
+{
+    using variable_type = basic_variable<Allocator>;
+    using type = typename variable_type::u16string_type;
+    using category_type = type;
+
+    using u16string_type = typename variable_type::u16string_type;
+    using array_type = typename variable_type::array_type;
+    using map_type = typename variable_type::map_type;
+
+    static U convert(const variable_type& self, std::error_code& error) noexcept
+    {
+        switch (self.code())
+        {
+        case code::u16string:
+            return self.template unsafe_get<u16string_type>();
+
+        default:
+            error = dynamic::make_error_code(dynamic::incompatible_type);
+            return {};
+        }
+    }
+
+    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        switch (self.code())
+        {
+        case code::u16string:
+            return string_overloader<u16string_type, U>::equal(self.template unsafe_get<u16string_type>(), other);
+
+        default:
+            return false;
+        }
+    }
+
+    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        switch (self.code())
+        {
+        case code::u16string:
+            return string_overloader<u16string_type, U>::less(self.template unsafe_get<u16string_type>(), other);
+
+        case code::array:
+        case code::map:
+            return false;
+
+        default:
+            return true;
+        }
+    }
+
+    static void append(variable_type& self, const U& other)
+    {
+        switch (self.code())
+        {
+        case code::null:
+            self.storage = other; // Overwrite null
+            break;
+
+        case code::u16string:
+            string_overloader<u16string_type, U>::append(self.template unsafe_get<u16string_type>(), other);
             break;
 
         case code::array:
@@ -1654,6 +1745,7 @@ struct operator_overloader<
     using variable_type = basic_variable<Allocator>;
     using string_type = typename variable_type::string_type;
     using wstring_type = typename variable_type::wstring_type;
+    using u16string_type = typename variable_type::u16string_type;
 
     template <typename T = U>
     static typename std::enable_if<!is_literal_string<typename std::decay<T>::type>::value, bool>::type
@@ -1672,6 +1764,11 @@ struct operator_overloader<
         return detail::template overloader<variable_type, wstring_type>::equal(lhs, wstring_type(rhs));
     }
 
+    static bool equal(const variable_type& lhs, const char16_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        return detail::template overloader<variable_type, u16string_type>::equal(lhs, u16string_type(rhs));
+    }
+
     template <typename T = U>
     static typename std::enable_if<!is_literal_string<typename std::decay<T>::type>::value, bool>::type
     less(const variable_type& lhs, const T& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
@@ -1687,6 +1784,11 @@ struct operator_overloader<
     static bool less(const variable_type& lhs, const wchar_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, wstring_type>::less(lhs, wstring_type(rhs));
+    }
+
+    static bool less(const variable_type& lhs, const char16_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    {
+        return detail::template overloader<variable_type, u16string_type>::less(lhs, u16string_type(rhs));
     }
 };
 
@@ -1717,6 +1819,7 @@ struct operator_overloader<
     using variable_type = basic_variable<Allocator>;
     using string_type = typename variable_type::string_type;
     using wstring_type = typename variable_type::wstring_type;
+    using u16string_type = typename variable_type::u16string_type;
     using array_type = typename variable_type::array_type;
     using map_type = typename variable_type::map_type;
 
@@ -1792,6 +1895,10 @@ struct operator_overloader<
         case code::wstring:
             return detail::template overloader<variable_type, wstring_type>::
                 equal(lhs, rhs.template unsafe_get<wstring_type>());
+
+        case code::u16string:
+            return detail::template overloader<variable_type, u16string_type>::
+                equal(lhs, rhs.template unsafe_get<u16string_type>());
 
         case code::array:
             return detail::template overloader<variable_type, array_type>::
@@ -1876,6 +1983,10 @@ struct operator_overloader<
         case code::wstring:
             return detail::template overloader<variable_type, wstring_type>::
                 less(lhs, rhs.template unsafe_get<wstring_type>());
+
+        case code::u16string:
+            return detail::template overloader<variable_type, u16string_type>::
+                less(lhs, rhs.template unsafe_get<u16string_type>());
 
         case code::array:
             return detail::template overloader<variable_type, array_type>::
@@ -2080,6 +2191,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         if (initialize)
             current = p;
         break;
@@ -2150,6 +2262,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ () -> Deri
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         current = pointer(nullptr);
         break;
 
@@ -2205,6 +2318,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() -> reference
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         return *current.template get<pointer>();
 
     case symbol::array:
@@ -2230,6 +2344,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() const -> cons
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         return *current.template get<pointer>();
 
     case symbol::array:
@@ -2255,6 +2370,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () -> poin
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         return current.template get<pointer>();
 
     case symbol::array:
@@ -2285,6 +2401,7 @@ bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Der
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         return current.template get<pointer>() == other.current.template get<pointer>();
 
     case symbol::array:
@@ -2478,6 +2595,7 @@ auto basic_variable<Allocator>::key_iterator::key() const -> const_reference
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
     case symbol::array:
         return index;
 
@@ -2500,6 +2618,7 @@ auto basic_variable<Allocator>::key_iterator::operator++ () -> key_iterator&
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
     case symbol::array:
         index += 1;
         break;
@@ -2595,6 +2714,9 @@ basic_variable<Allocator>::basic_variable(const basic_variable& other)
     case code::wstring:
         storage = other.unsafe_get<wstring_type>();
         break;
+    case code::u16string:
+        storage = other.unsafe_get<u16string_type>();
+        break;
     case code::array:
         storage = other.unsafe_get<array_type>();
         break;
@@ -2661,6 +2783,9 @@ basic_variable<Allocator>::basic_variable(basic_variable&& other)
     case code::wstring:
         storage = std::move(other.unsafe_get<wstring_type>());
         break;
+    case code::u16string:
+        storage = std::move(other.unsafe_get<u16string_type>());
+        break;
     case code::array:
         storage = std::move(other.unsafe_get<array_type>());
         break;
@@ -2724,6 +2849,12 @@ basic_variable<Allocator>::basic_variable(const wchar_t *value)
 }
 
 template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const char16_t *value)
+    : storage(u16string_type(value))
+{
+}
+
+template <template <typename> class Allocator>
 auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic_variable&
 {
     switch (other.code())
@@ -2778,6 +2909,9 @@ auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic
         break;
     case code::wstring:
         storage = other.unsafe_get<wstring_type>();
+        break;
+    case code::u16string:
+        storage = other.unsafe_get<u16string_type>();
         break;
     case code::array:
         storage = other.unsafe_get<array_type>();
@@ -2845,6 +2979,9 @@ auto basic_variable<Allocator>::operator= (basic_variable&& other) -> basic_vari
     case code::wstring:
         storage = std::move(other.unsafe_get<wstring_type>());
         break;
+    case code::u16string:
+        storage = std::move(other.unsafe_get<u16string_type>());
+        break;
     case code::array:
         storage = std::move(other.unsafe_get<array_type>());
         break;
@@ -2881,6 +3018,13 @@ template <template <typename> class Allocator>
 auto basic_variable<Allocator>::operator= (const wchar_t *value) -> basic_variable&
 {
     storage = wstring_type{value};
+    return *this;
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator= (const char16_t *value) -> basic_variable&
+{
+    storage = u16string_type{value};
     return *this;
 }
 
@@ -2965,6 +3109,10 @@ auto basic_variable<Allocator>::operator+= (const basic_variable& other) -> basi
         detail::overloader<value_type, wstring_type>::
             append(*this, other.unsafe_get<wstring_type>());
         break;
+    case code::u16string:
+        detail::overloader<value_type, u16string_type>::
+            append(*this, other.unsafe_get<u16string_type>());
+        break;
     case code::array:
         detail::overloader<value_type, array_type>::
             append(*this, other.unsafe_get<array_type>());
@@ -2988,6 +3136,13 @@ template <template <typename> class Allocator>
 auto basic_variable<Allocator>::operator+= (const wchar_t *other) -> basic_variable&
 {
     detail::overloader<value_type, wstring_type>::append(*this, other);
+    return *this;
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::operator+= (const char16_t *other) -> basic_variable&
+{
+    detail::overloader<value_type, u16string_type>::append(*this, other);
     return *this;
 }
 
@@ -3087,6 +3242,7 @@ basic_variable<Allocator>::operator bool() const
         return bool(unsafe_get<long double>());
     case code::string:
     case code::wstring:
+    case code::u16string:
         throw dynamic::error(incompatible_type);
     case code::array:
     case code::map:
@@ -3198,6 +3354,8 @@ auto basic_variable<Allocator>::find(const basic_variable& other) const & -> con
         return find(other.unsafe_get<string_type>());
     case code::wstring:
         return find(other.unsafe_get<wstring_type>());
+    case code::u16string:
+        return find(other.unsafe_get<u16string_type>());
     case code::array:
         return find(other.unsafe_get<array_type>());
     case code::map:
@@ -3227,6 +3385,7 @@ auto basic_variable<Allocator>::find(const T& other) const & -> const_iterator
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         return (*this == other) ? begin() : end();
 
     case symbol::array:
@@ -3280,6 +3439,8 @@ auto basic_variable<Allocator>::count(const basic_variable& other) const -> size
         return count(other.unsafe_get<string_type>());
     case code::wstring:
         return count(other.unsafe_get<wstring_type>());
+    case code::u16string:
+        return count(other.unsafe_get<u16string_type>());
     case code::array:
         return count(other.unsafe_get<array_type>());
     case code::map:
@@ -3302,6 +3463,7 @@ auto basic_variable<Allocator>::count(const T& other) const -> size_type
     case symbol::number:
     case symbol::string:
     case symbol::wstring:
+    case symbol::u16string:
         return (*this == other) ? 1 : 0;
 
     case symbol::array:
@@ -3369,10 +3531,12 @@ dynamic::code::value basic_variable<Allocator>::code() const noexcept
         return code::double_number;
     case traits<long double>::value:
         return code::long_double_number;
-    case traits<wstring_type>::value:
-        return code::wstring;
     case traits<string_type>::value:
         return code::string;
+    case traits<wstring_type>::value:
+        return code::wstring;
+    case traits<u16string_type>::value:
+        return code::u16string;
     case traits<array_type>::value:
         return code::array;
     case traits<map_type>::value:
@@ -3411,6 +3575,8 @@ dynamic::symbol::value basic_variable<Allocator>::symbol() const noexcept
         return symbol::string;
     case traits<wstring_type>::value:
         return symbol::wstring;
+    case traits<u16string_type>::value:
+        return symbol::u16string;
     case traits<array_type>::value:
         return symbol::array;
     case traits<map_type>::value:
@@ -3436,6 +3602,8 @@ bool basic_variable<Allocator>::empty() const noexcept
         return unsafe_get<string_type>().empty();
     case symbol::wstring:
         return unsafe_get<wstring_type>().empty();
+    case symbol::u16string:
+        return unsafe_get<u16string_type>().empty();
     case symbol::array:
         return unsafe_get<array_type>().empty();
     case symbol::map:
@@ -3459,6 +3627,8 @@ auto basic_variable<Allocator>::size() const noexcept -> size_type
         return unsafe_get<string_type>().size();
     case symbol::wstring:
         return unsafe_get<wstring_type>().size();
+    case symbol::u16string:
+        return unsafe_get<u16string_type>().size();
     case symbol::array:
         return unsafe_get<array_type>().size();
     case symbol::map:
@@ -3482,6 +3652,8 @@ auto basic_variable<Allocator>::max_size() const noexcept -> size_type
         return unsafe_get<string_type>().max_size();
     case symbol::wstring:
         return unsafe_get<wstring_type>().max_size();
+    case symbol::u16string:
+        return unsafe_get<u16string_type>().max_size();
     case symbol::array:
         return unsafe_get<array_type>().max_size();
     case symbol::map:
@@ -3557,6 +3729,9 @@ void basic_variable<Allocator>::clear() noexcept
         break;
     case code::wstring:
         unsafe_get<wstring_type>().clear();
+        break;
+    case code::u16string:
+        unsafe_get<u16string_type>().clear();
         break;
     case code::array:
         unsafe_get<array_type>().clear();

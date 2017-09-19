@@ -43,6 +43,7 @@ struct code
         long_double_number,
         string,
         wstring,
+        u16string,
         array,
         map
     };
@@ -58,6 +59,7 @@ struct symbol
         number,
         string,
         wstring,
+        u16string,
         array,
         map
     };

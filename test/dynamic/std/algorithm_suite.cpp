@@ -20,6 +20,7 @@ auto is_integer = [] (const variable& value) { return value.is<integer>(); };
 auto is_number = [] (const variable& value) { return value.is<number>(); };
 auto is_string = [] (const variable& value) { return value.is<string>(); };
 auto is_wstring = [] (const variable& value) { return value.is<wstring>(); };
+auto is_u16string = [] (const variable& value) { return value.is<u16string>(); };
 
 //-----------------------------------------------------------------------------
 // std::accumulate
@@ -81,6 +82,14 @@ void accumulate_wstring()
     variable result = std::accumulate(data.begin(), data.end(), variable(L"prefix"));
     TRIAL_PROTOCOL_TEST_EQUAL(result.is<wstring>(), true);
     TRIAL_PROTOCOL_TEST(result.value<std::wstring>() == L"prefixbravo");
+}
+
+void accumulate_u16string()
+{
+    variable data(u"bravo");
+    variable result = std::accumulate(data.begin(), data.end(), variable(u"prefix"));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<u16string>(), true);
+    TRIAL_PROTOCOL_TEST(result.value<std::u16string>() == u"prefixbravo");
 }
 
 void accumulate_array_null()
@@ -154,6 +163,14 @@ void accumulate_array_wstring()
     TRIAL_PROTOCOL_TEST(result.value<std::wstring>() == L"alphabravocharlie");
 }
 
+void accumulate_array_u16string()
+{
+    variable data = array::make({ u"alpha", u"bravo", u"charlie" });
+    variable result = std::accumulate(data.begin(), data.end(), variable());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.is<u16string>(), true);
+    TRIAL_PROTOCOL_TEST(result.value<std::u16string>() == u"alphabravocharlie");
+}
+
 void accumulate_array_array()
 {
     // Array flattening
@@ -188,6 +205,7 @@ void run()
     accumulate_number();
     accumulate_string();
     accumulate_wstring();
+    accumulate_u16string();
 
     accumulate_array_null();
     accumulate_array_null_with_boolean();
@@ -198,6 +216,7 @@ void run()
     accumulate_array_number_with_integer();
     accumulate_array_string();
     accumulate_array_wstring();
+    accumulate_array_u16string();
     accumulate_array_array();
 
     accumulate_map();
@@ -250,6 +269,13 @@ void find_string()
 void find_wstring()
 {
     variable data(L"bravo");
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_u16string()
+{
+    variable data(u"charlie");
     auto where = std::adjacent_find(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
@@ -316,6 +342,16 @@ void find_array_string()
 void find_array_wstring()
 {
     variable data = array::make({ L"alpha", L"bravo", L"bravo" });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void find_array_u16string()
+{
+    variable data = array::make({ u"alpha", u"bravo", u"bravo" });
     auto where = std::adjacent_find(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where != data.end());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
@@ -436,6 +472,21 @@ void find_map_wstring()
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
+void find_map_u16string()
+{
+    variable data = map::make(
+        {
+            { "alpha", u"hydrogen" },
+            { "bravo", u"helium" },
+            { "charlie", u"helium" }
+        });
+    auto where = std::adjacent_find(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    where = std::adjacent_find(++where, data.end());
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
 void find_map_mixed()
 {
     variable data = map::make(
@@ -473,6 +524,7 @@ void run()
     find_number();
     find_string();
     find_wstring();
+    find_u16string();
 
     find_array_null();
     find_array_boolean();
@@ -480,6 +532,7 @@ void run()
     find_array_number();
     find_array_string();
     find_array_wstring();
+    find_array_u16string();
     find_array_mixed();
 
     find_map_null();
@@ -488,6 +541,7 @@ void run()
     find_map_number();
     find_map_string();
     find_map_wstring();
+    find_map_u16string();
     find_map_mixed();
 }
 
@@ -561,6 +615,54 @@ void all_array_boolean()
     {
         variable data = array::make({ true, true, true });
         TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_true));
+    }
+}
+
+void all_array_string()
+{
+    {
+        variable data = { "alpha", "bravo", "charlie" };
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_string));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_string));
+    }
+    {
+        variable data = { L"alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_string));
+    }
+}
+
+void any_array_wstring()
+{
+    {
+        variable data = { L"alpha", L"bravo", L"charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_wstring));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_wstring));
+    }
+    {
+        variable data = { "alpha", "bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_wstring));
+    }
+}
+
+void any_array_u16string()
+{
+    {
+        variable data = { u"alpha", u"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_u16string));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_u16string));
+    }
+    {
+        variable data = { "alpha", L"bravo", "charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_u16string));
     }
 }
 
@@ -658,6 +760,54 @@ void any_array_boolean()
     }
 }
 
+void any_array_string()
+{
+    {
+        variable data = { "alpha", "bravo", "charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_string));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_string));
+    }
+    {
+        variable data = { L"alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_string));
+    }
+}
+
+void any_array_wstring()
+{
+    {
+        variable data = { L"alpha", L"bravo", L"charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_wstring));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_wstring));
+    }
+    {
+        variable data = { "alpha", "bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_wstring));
+    }
+}
+
+void any_array_u16string()
+{
+    {
+        variable data = { u"alpha", u"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_u16string));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_u16string));
+    }
+    {
+        variable data = { "alpha", L"bravo", "charlie" };
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_u16string));
+    }
+}
+
 void any_map_boolean()
 {
     {
@@ -698,6 +848,9 @@ void run()
     any_null();
     any_boolean();
     any_array_boolean();
+    any_array_string();
+    any_array_wstring();
+    any_array_u16string();
     any_map_boolean();
 }
 
@@ -719,6 +872,7 @@ void search_null()
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
 }
@@ -732,6 +886,7 @@ void search_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
 }
@@ -745,6 +900,7 @@ void search_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
 }
@@ -758,6 +914,7 @@ void search_number()
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
 }
@@ -771,26 +928,42 @@ void search_string()
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
 }
 
 void search_wstring()
 {
-    variable data(L"alpha");
+    variable data(L"bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
+}
+
+void search_u16string()
+{
+    variable data(u"charlie");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 2), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
 }
 
 void search_array()
 {
-    variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo", array::make({ 5 }), map::make({{ "alice", 6 }}) });
+    variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie", array::make({ 5 }), map::make({{ "alice", 6 }}) });
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), false), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), true), true);
@@ -799,9 +972,11 @@ void search_array()
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 3.0), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), 43.0), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), "zulu"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), L"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), u"zulu"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make({ 5 })), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), array::make()), false);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make({{ "alice", 6 }})), true);
@@ -845,6 +1020,8 @@ void run()
     search_integer();
     search_number();
     search_string();
+    search_wstring();
+    search_u16string();
     search_array();
     search_map();
 }
@@ -911,9 +1088,18 @@ void copy_wstring_to_array()
     TRIAL_PROTOCOL_TEST(result[0] == L"bravo");
 }
 
+void copy_u16string_to_array()
+{
+    variable data(u"charlie");
+    variable result = array::repeat(1, null);
+    std::copy(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == u"charlie");
+}
+
 void copy_array_to_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     variable result = array::repeat(data.size(), null);
     std::copy(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
@@ -974,9 +1160,18 @@ void copy_wstring_to_vector()
     TRIAL_PROTOCOL_TEST(result[0] == L"bravo");
 }
 
+void copy_u16string_to_vector()
+{
+    variable data(u"charlie");
+    std::vector<variable> result;
+    std::copy(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == u"charlie");
+}
+
 void copy_array_to_vector()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     std::vector<variable> result;
     std::copy(data.begin(), data.end(), std::back_inserter(result));
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
@@ -992,6 +1187,7 @@ void run()
     copy_number_to_array();
     copy_string_to_array();
     copy_wstring_to_array();
+    copy_u16string_to_array();
     copy_array_to_array();
 
     copy_null_to_vector();
@@ -1000,6 +1196,7 @@ void run()
     copy_number_to_vector();
     copy_string_to_vector();
     copy_wstring_to_vector();
+    copy_u16string_to_vector();
     copy_array_to_vector();
 }
 
@@ -1045,37 +1242,47 @@ void count_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::string("")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::string("zulu")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::string("alpha")), 1);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::string("bravo")), 0);
 }
 
 void count_wstring()
 {
     variable data(L"bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::wstring(L"")), 0);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::wstring(L"alpha")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::wstring(L"zulu")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::wstring(L"bravo")), 1);
+}
+
+void count_u16string()
+{
+    variable data(u"charlie");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::u16string(u"")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::u16string(u"zulu")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), std::u16string(u"charlie")), 1);
 }
 
 void count_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), true), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 2), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 3), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), "alpha"), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), L"bravo"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), u"charlie"), 1);
 
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), false), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 42), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 42.0), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), ""), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), L""), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), u""), 0);
 }
 
 void count_array_arithmetic()
 {
-    variable data = array::make({ true, 1, 1.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 1, 1.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), true), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 1), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 1.0), 3);
@@ -1104,6 +1311,7 @@ void run()
     count_number();
     count_string();
     count_wstring();
+    count_u16string();
     count_array();
     count_array_arithmetic();
     count_map();
@@ -1173,11 +1381,11 @@ void count_string()
                                             [] (const variable& value) { return value == ""; }),
                               0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == "zulu"; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
                                             [] (const variable& value) { return value == "alpha"; }),
                               1);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
-                                            [] (const variable& value) { return value == "bravo"; }),
-                              0);
 }
 
 void count_wstring()
@@ -1187,16 +1395,30 @@ void count_wstring()
                                             [] (const variable& value) { return value == L""; }),
                               0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
-                                            [] (const variable& value) { return value == L"alpha"; }),
+                                            [] (const variable& value) { return value == L"zulu"; }),
                               0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
                                             [] (const variable& value) { return value == L"bravo"; }),
                               1);
 }
 
+void count_u16string()
+{
+    variable data(u"charlie");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == u""; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == u"zulu"; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == u"charlie"; }),
+                              1);
+}
+
 void count_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
                                             [] (const variable& value) { return value == true; }),
                               1);
@@ -1212,6 +1434,9 @@ void count_array()
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
                                             [] (const variable& value) { return value == L"bravo"; }),
                               1);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == u"charlie"; }),
+                              1);
 
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
                                             [] (const variable& value) { return value == false; }),
@@ -1223,16 +1448,19 @@ void count_array()
                                             [] (const variable& value) { return value == 300.0; }),
                               0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
-                                            [] (const variable& value) { return value == "bravo"; }),
+                                            [] (const variable& value) { return value == "zulu"; }),
                               0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
-                                            [] (const variable& value) { return value == L"alpha"; }),
+                                            [] (const variable& value) { return value == L"zulu"; }),
+                              0);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
+                                            [] (const variable& value) { return value == u"zulu"; }),
                               0);
 }
 
 void count_array_arithmetic()
 {
-    variable data = array::make({ true, 1, 1.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 1, 1.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_EQUAL(std::count_if(data.begin(), data.end(),
                                             [] (const variable& value) { return value == true; }),
                               3);
@@ -1275,6 +1503,7 @@ void run()
     count_number();
     count_string();
     count_wstring();
+    count_u16string();
     count_array();
     count_array_arithmetic();
     count_map();
@@ -1345,6 +1574,16 @@ void test_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
                               true);
     variable bravo(L"bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+}
+
+void test_u16string()
+{
+    variable alpha(u"alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo(u"bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
                               false);
 }
@@ -1424,6 +1663,19 @@ void test_array_wstring()
                               false);
 }
 
+void test_array_u16string()
+{
+    variable alpha = array::make({ u"alpha", u"alpha", u"alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), alpha.begin()),
+                              true);
+    variable bravo = array::make({ u"bravo", u"alpha", u"alpha" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), bravo.begin()),
+                              false);
+    variable charlie = array::make({ u"bravo", u"bravo", u"bravo" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::equal(alpha.begin(), alpha.end(), charlie.begin()),
+                              false);
+}
+
 void run()
 {
     test_null();
@@ -1432,6 +1684,7 @@ void run()
     test_number();
     test_string();
     test_wstring();
+    test_u16string();
 
     test_array_null();
     test_array_boolean();
@@ -1439,6 +1692,7 @@ void run()
     test_array_number();
     test_array_string();
     test_array_wstring();
+    test_array_u16string();
 }
 
 } // namespace equal_suite
@@ -1483,6 +1737,11 @@ void find_null()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
     }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
+    }
 }
 
 void find_boolean()
@@ -1515,6 +1774,11 @@ void find_boolean()
     }
     {
         auto result = std::equal_range(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
     }
@@ -1553,6 +1817,11 @@ void find_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
     }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
+    }
 }
 
 void find_number()
@@ -1585,6 +1854,11 @@ void find_number()
     }
     {
         auto result = std::equal_range(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
     }
@@ -1623,6 +1897,11 @@ void find_string()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
     }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
+    }
 }
 
 void find_wstring()
@@ -1655,6 +1934,51 @@ void find_wstring()
     }
     {
         auto result = std::equal_range(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
+    }
+}
+
+void find_u16string()
+{
+    variable data(u"charlie");
+    {
+        auto result = std::equal_range(data.begin(), data.end(), null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 0);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
     }
@@ -1780,10 +2104,36 @@ void find_array_wstring()
     }
 }
 
+void find_array_u16string()
+{
+    // array must be sorted
+    variable data = array::make({ u"alpha", u"bravo", u"bravo", u"charlie", u"delta", u"delta", u"delta" });
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 1);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 3);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 3);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 4);
+    }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"delta");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 4);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 7);
+    }
+}
+
 void find_array_value()
 {
     // array must be sorted
-    variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     {
         auto result = std::equal_range(data.begin(), data.end(), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 1);
@@ -1809,6 +2159,11 @@ void find_array_value()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 5);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 6);
     }
+    {
+        auto result = std::equal_range(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.first), 6);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), result.second), 7);
+    }
 }
 
 void run()
@@ -1819,11 +2174,13 @@ void run()
     find_number();
     find_string();
     find_wstring();
+    find_u16string();
     find_array_boolean();
     find_array_integer();
     find_array_number();
     find_array_string();
     find_array_wstring();
+    find_array_u16string();
     find_array_value();
 }
 
@@ -1870,21 +2227,29 @@ void find_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), "") == data.end());
+    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), "zulu") == data.end());
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), "alpha") != data.end());
-    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), "bravo") == data.end());
 }
 
 void find_wstring()
 {
     variable data(L"bravo");
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), L"") == data.end());
-    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), L"alpha") == data.end());
+    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), L"zulu") == data.end());
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), L"bravo") != data.end());
+}
+
+void find_u16string()
+{
+    variable data(u"charlie");
+    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), u"") == data.end());
+    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), u"zulu") == data.end());
+    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), u"charlie") != data.end());
 }
 
 void find_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
 
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), false) == data.end());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
@@ -1909,6 +2274,10 @@ void find_array()
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
                                             std::find(data.begin(), data.end(), L"bravo")),
                               4);
+    TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), u"") == data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find(data.begin(), data.end(), u"charlie")),
+                              5);
 }
 
 void find_map()
@@ -1961,6 +2330,7 @@ void run()
     find_number();
     find_string();
     find_wstring();
+    find_u16string();
     find_array();
     find_map();
     find_key_map();
@@ -2020,9 +2390,9 @@ void find_string()
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
                                      [] (const variable& value) { return value == ""; }) == data.end());
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
-                                     [] (const variable& value) { return value == "alpha"; }) != data.end());
+                                     [] (const variable& value) { return value == "zulu"; }) == data.end());
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
-                                     [] (const variable& value) { return value == "bravo"; }) == data.end());
+                                     [] (const variable& value) { return value == "alpha"; }) != data.end());
 }
 
 void find_wstring()
@@ -2031,14 +2401,25 @@ void find_wstring()
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
                                      [] (const variable& value) { return value == L""; }) == data.end());
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
-                                     [] (const variable& value) { return value == L"alpha"; }) == data.end());
+                                     [] (const variable& value) { return value == L"zulu"; }) == data.end());
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
                                      [] (const variable& value) { return value == L"bravo"; }) != data.end());
 }
 
+void find_u16string()
+{
+    variable data(u"charlie");
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == u""; }) == data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == u"zulu"; }) == data.end());
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == u"charlie"; }) != data.end());
+}
+
 void find_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
 
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
                                      [] (const variable& value) { return value == false; }) == data.end());
@@ -2073,6 +2454,12 @@ void find_array()
                                             std::find_if(data.begin(), data.end(),
                                                          [] (const variable& value) { return value == L"bravo"; })),
                               4);
+    TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
+                                     [] (const variable& value) { return value == u""; }) == data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(),
+                                            std::find_if(data.begin(), data.end(),
+                                                         [] (const variable& value) { return value == u"charlie"; })),
+                              5);
 }
 
 void find_map()
@@ -2108,6 +2495,7 @@ void run()
     find_number();
     find_string();
     find_wstring();
+    find_u16string();
     find_array();
     find_map();
 }
@@ -2139,8 +2527,10 @@ void insert_array()
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
     *inserter++ = L"bravo";
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 6);
+    *inserter++ = u"charlie";
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 7);
 
-    variable expect = array::make({ null, true, 2, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -2149,7 +2539,7 @@ void insert_array()
 void insert_array_copy()
 {
     variable data = array::make();
-    variable expect = array::make({ null, true, 2, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     std::copy(expect.begin(), expect.end(), std::inserter(data, data.begin()));
 
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
@@ -2175,6 +2565,8 @@ void insert_map()
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
     *inserter++ = {"foxtrot", L"helium"};
     TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 6);
+    *inserter++ = {"golf", u"lithium"};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 7);
 
     variable expect =
         {
@@ -2183,7 +2575,8 @@ void insert_map()
             { "charlie", 2},
             { "delta", 3.0 },
             { "echo", "hydrogen" },
-            { "foxtrot", L"helium" }
+            { "foxtrot", L"helium" },
+            { "golf", u"lithium" }
         };
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
@@ -2293,6 +2686,7 @@ void test_null()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_boolean()
@@ -2303,6 +2697,7 @@ void test_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_integer()
@@ -2313,6 +2708,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_number()
@@ -2323,6 +2719,7 @@ void test_number()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_string()
@@ -2333,6 +2730,7 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_wstring()
@@ -2343,6 +2741,18 @@ void test_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
+}
+
+void test_u16string()
+{
+    variable data(u"charlie");
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_array_boolean()
@@ -2353,6 +2763,7 @@ void test_array_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_array_integer()
@@ -2363,6 +2774,7 @@ void test_array_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_array_number()
@@ -2373,6 +2785,7 @@ void test_array_number()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_array_string()
@@ -2383,6 +2796,7 @@ void test_array_string()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_array_wstring()
@@ -2393,49 +2807,75 @@ void test_array_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
     TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
+}
+
+void test_array_u16string()
+{
+    variable data = array::make({ u"bravo", u"alpha", u"charlie" });
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
 }
 
 void test_array_arithmetic()
 {
     {
-        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
     }
     {
-        variable data = array::make({ 2, 3.0, "alpha", L"bravo", true });
+        variable data = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie", true });
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
     }
     {
-        variable data = array::make({ 3.0, "alpha", L"bravo", true, 2 });
+        variable data = array::make({ 3.0, "alpha", L"bravo", u"charlie", true, 2 });
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
     }
     {
-        variable data = array::make({ "alpha", L"bravo", true, 2, 3.0 });
+        variable data = array::make({ "alpha", L"bravo", u"charlie", true, 2, 3.0 });
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
     }
     {
-        variable data = array::make({ L"bravo", true, 2, 3.0, "alpha" });
+        variable data = array::make({ L"bravo", u"charlie", true, 2, 3.0, "alpha" });
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
         TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
+    }
+    {
+        variable data = array::make({ u"charlie", true, 2, 3.0, "alpha", L"bravo" });
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
     }
 }
 
@@ -2447,11 +2887,13 @@ void run()
     test_number();
     test_string();
     test_wstring();
+    test_u16string();
     test_array_boolean();
     test_array_integer();
     test_array_number();
     test_array_string();
     test_array_wstring();
+    test_array_u16string();
     test_array_arithmetic();
 }
 
@@ -2526,6 +2968,14 @@ void test_array_wstring()
     TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
 }
 
+void test_array_u16string()
+{
+    variable sorted = array::make({ u"alpha", u"bravo", u"charlie" });
+    TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
+    variable unsorted = array::make({ u"alpha", u"charlie", u"bravo" });
+    TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
+}
+
 void run()
 {
     test_array_null();
@@ -2536,6 +2986,7 @@ void run()
     test_array_number();
     test_array_string();
     test_array_wstring();
+    test_array_u16string();
 }
 
 } // namespace is_sorted_suite
@@ -2574,6 +3025,10 @@ void find_null()
         auto where = std::lower_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
 }
 
 void find_boolean()
@@ -2601,6 +3056,10 @@ void find_boolean()
     }
     {
         auto where = std::lower_bound(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
 }
@@ -2632,6 +3091,10 @@ void find_integer()
         auto where = std::lower_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
 }
 
 void find_number()
@@ -2659,6 +3122,10 @@ void find_number()
     }
     {
         auto where = std::lower_bound(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
 }
@@ -2690,6 +3157,10 @@ void find_string()
         auto where = std::lower_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
 }
 
 void find_wstring()
@@ -2719,11 +3190,48 @@ void find_wstring()
         auto where = std::lower_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+}
+
+void find_u16string()
+{
+    variable data(u"charlie");
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
 }
 
 void find_array()
 {
-    variable data = array::make({true, 2, 3.0, "alpha", L"bravo"});
+    variable data = array::make({true, 2, 3.0, "alpha", L"bravo", u"charlie"});
     {
         auto where = std::lower_bound(data.begin(), data.end(), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
@@ -2749,7 +3257,7 @@ void find_array()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
     }
     {
-        auto where = std::lower_bound(data.begin(), data.end(), "bravo");
+        auto where = std::lower_bound(data.begin(), data.end(), "zulu");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
     }
     {
@@ -2757,8 +3265,16 @@ void find_array()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
     }
     {
-        auto where = std::lower_bound(data.begin(), data.end(), L"charlie");
+        auto where = std::lower_bound(data.begin(), data.end(), L"zulu");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"zulu");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 6);
     }
 }
 
@@ -2770,7 +3286,8 @@ void find_map()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "golf", u"lithium" }
         });
     {
         auto where = std::lower_bound(data.begin(), data.end(), 0);
@@ -2797,7 +3314,7 @@ void find_map()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
     }
     {
-        auto where = std::lower_bound(data.begin(), data.end(), "lithium");
+        auto where = std::lower_bound(data.begin(), data.end(), "tungsten");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
     }
     {
@@ -2805,7 +3322,15 @@ void find_map()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
     }
     {
-        auto where = std::lower_bound(data.begin(), data.end(), L"lithium");
+        auto where = std::lower_bound(data.begin(), data.end(), L"tungsten");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"lithium");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        auto where = std::lower_bound(data.begin(), data.end(), u"tungsten");
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
@@ -2849,6 +3374,7 @@ void run()
     find_number();
     find_string();
     find_wstring();
+    find_u16string();
     find_array();
     find_map();
     find_key_map();
@@ -2910,6 +3436,14 @@ void max_wstring()
     TRIAL_PROTOCOL_TEST(*where == L"bravo");
 }
 
+void max_u16string()
+{
+    variable data(u"charlie");
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(*where == u"charlie");
+}
+
 void max_array_arithmetic()
 {
     variable data = array::make({false, 2, 3.0});
@@ -2932,6 +3466,14 @@ void max_array_wstring()
     auto where = std::max_element(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where != data.end());
     TRIAL_PROTOCOL_TEST(*where == L"charlie");
+}
+
+void max_array_u16string()
+{
+    variable data = array::make({u"alpha", u"bravo", u"charlie"});
+    auto where = std::max_element(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where != data.end());
+    TRIAL_PROTOCOL_TEST(*where == u"charlie");
 }
 
 void max_array_value()
@@ -3027,9 +3569,11 @@ void run()
     max_number();
     max_string();
     max_wstring();
+    max_u16string();
     max_array_arithmetic();
     max_array_string();
     max_array_wstring();
+    max_array_u16string();
     max_array_value();
     max_array_array();
     max_array_map();
@@ -3050,48 +3594,63 @@ namespace mismatch_suite
 
 void test_null()
 {
+    // null - null
     {
         variable first;
         variable second;
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // null - boolean
     {
         variable first;
         variable second(true);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // null - integer
     {
         variable first;
         variable second(2);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // null - number
     {
         variable first;
         variable second(3.0);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // null - string
     {
         variable first;
         variable second("alpha");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // null - wstring
     {
         variable first;
         variable second(L"bravo");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // null - wstring
     {
         variable first;
-        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable second(u"charlie");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // null - array
+    {
+        variable first;
+        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    // null - map
     {
         variable first;
         variable second = map::make(
@@ -3100,7 +3659,8 @@ void test_null()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
@@ -3109,6 +3669,7 @@ void test_null()
 
 void test_boolean()
 {
+    // boolean - boolean
     {
         variable first(true);
         variable second(false);
@@ -3121,42 +3682,55 @@ void test_boolean()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // boolean - integer
     {
         variable first(true);
         variable second(2);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // boolean - number
     {
         variable first(true);
         variable second(3.0);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // boolean - string
     {
         variable first(true);
         variable second("alpha");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // boolean - wstring
     {
         variable first(true);
         variable second(L"bravo");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // boolean - u16string
     {
         variable first(true);
-        variable second = array::make({ false, 2, 3.0, "alpha", L"bravo" });
+        variable second(u"charlie");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // boolean - array
+    {
+        variable first(true);
+        variable second = array::make({ false, 2, 3.0, "alpha", L"bravo", u"charlie" });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
     {
         variable first(true);
-        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 1);
     }
+    // boolean - map
     {
         variable first(true);
         variable second = map::make(
@@ -3165,7 +3739,8 @@ void test_boolean()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
@@ -3178,7 +3753,8 @@ void test_boolean()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 1);
@@ -3187,12 +3763,14 @@ void test_boolean()
 
 void test_integer()
 {
+    // integer - boolean
     {
         variable first(2);
         variable second(true);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // integer - integer
     {
         variable first(2);
         variable second(1);
@@ -3205,30 +3783,42 @@ void test_integer()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // integer - number
     {
         variable first(2);
         variable second(3.0);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // integer - string
     {
         variable first(2);
         variable second("alpha");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // integer - wstring
     {
         variable first(2);
         variable second(L"bravo");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // integer - u16string
     {
         variable first(2);
-        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable second(u"charlie");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // integer - array
+    {
+        variable first(2);
+        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // integer - map
     {
         variable first(2);
         variable second = map::make(
@@ -3237,7 +3827,8 @@ void test_integer()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
@@ -3246,18 +3837,21 @@ void test_integer()
 
 void test_number()
 {
+    // number - boolean
     {
         variable first(3.0);
         variable second(true);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // number - integer
     {
         variable first(3.0);
         variable second(2);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // number - number
     {
         variable first(3.0);
         variable second(1.0);
@@ -3270,24 +3864,35 @@ void test_number()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // number - string
     {
         variable first(3.0);
         variable second("alpha");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // number - wstring
     {
         variable first(3.0);
         variable second(L"bravo");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // number - u16string
     {
         variable first(3.0);
-        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable second(u"bravo");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // number - array
+    {
+        variable first(3.0);
+        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // number - map
     {
         variable first(3.0);
         variable second = map::make(
@@ -3296,7 +3901,8 @@ void test_number()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
@@ -3305,24 +3911,28 @@ void test_number()
 
 void test_string()
 {
+    // string - boolean
     {
         variable first("alpha");
         variable second(true);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // string - integer
     {
         variable first("alpha");
         variable second(2);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // string - number
     {
         variable first("alpha");
         variable second(3.0);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // string - string
     {
         variable first("alpha");
         variable second("alpha");
@@ -3331,22 +3941,32 @@ void test_string()
     }
     {
         variable first("alpha");
-        variable second("bravo");
+        variable second("zulu");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // string - wstring
     {
         variable first("alpha");
         variable second(L"bravo");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // string - wstring
     {
         variable first("alpha");
-        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable second(u"charlie");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // string - array
+    {
+        variable first("alpha");
+        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // string - map
     {
         variable first("alpha");
         variable second = map::make(
@@ -3355,7 +3975,8 @@ void test_string()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
@@ -3364,33 +3985,38 @@ void test_string()
 
 void test_wstring()
 {
+    // wstring - boolean
     {
         variable first(L"bravo");
         variable second(true);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // wstring - integer
     {
         variable first(L"bravo");
         variable second(2);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // wstring - number
     {
         variable first(L"bravo");
         variable second(3.0);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // wstring - string
     {
         variable first(L"bravo");
-        variable second("alpha");
+        variable second("zulu");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // wstring - wstring
     {
         variable first(L"bravo");
-        variable second(L"alpha");
+        variable second(L"zulu");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
@@ -3400,12 +4026,21 @@ void test_wstring()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
+    // wstring - u16string
     {
-        variable first(L"bravo");
-        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable first(u"charlie");
+        variable second("zulu");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
+    // wstring - array
+    {
+        variable first(L"bravo");
+        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // wstring - map
     {
         variable first(L"bravo");
         variable second = map::make(
@@ -3414,7 +4049,82 @@ void test_wstring()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
+        });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+}
+
+void test_u16string()
+{
+    // u16string - boolean
+    {
+        variable first(u"charlie");
+        variable second(true);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // u16string - integer
+    {
+        variable first(u"charlie");
+        variable second(2);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // u16string - number
+    {
+        variable first(u"charlie");
+        variable second(3.0);
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // u16string - string
+    {
+        variable first(u"charlie");
+        variable second("zulu");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // u16string - wstring
+    {
+        variable first(u"charlie");
+        variable second(L"zulu");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // u16string - u16string
+    {
+        variable first(u"charlie");
+        variable second("zulu");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    {
+        variable first(u"charlie");
+        variable second(u"charlie");
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST(range.first == first.end());
+    }
+    // u16string - array
+    {
+        variable first(u"charlie");
+        variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto range = std::mismatch(first.begin(), first.end(), second.begin());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
+    }
+    // u16string - map
+    {
+        variable first(u"charlie");
+        variable second = map::make(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" },
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
@@ -3452,7 +4162,8 @@ void test_map()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         variable second = map::make(
             {
@@ -3460,7 +4171,8 @@ void test_map()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
@@ -3472,7 +4184,8 @@ void test_map()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         variable second = map::make(
             {
@@ -3480,7 +4193,8 @@ void test_map()
                 { "bravo", 3.0 },
                 { "charlie", 2 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 1);
@@ -3499,6 +4213,7 @@ void run()
     test_number();
     test_string();
     test_wstring();
+    test_u16string();
     test_array();
     test_map();
 }
@@ -3563,6 +4278,15 @@ void move_wstring_to_array()
     std::move(data.begin(), data.end(), result.begin());
     TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
     TRIAL_PROTOCOL_TEST(result[0] == L"bravo");
+}
+
+void move_u16string_to_array()
+{
+    variable data(u"charlie");
+    variable result = array::repeat(1, null);
+    std::move(data.begin(), data.end(), result.begin());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == u"charlie");
 }
 
 void move_array_to_array()
@@ -3630,13 +4354,22 @@ void move_wstring_to_vector()
     TRIAL_PROTOCOL_TEST(result[0] == L"bravo");
 }
 
+void move_u16string_to_vector()
+{
+    variable data(u"charlie");
+    std::vector<variable> result;
+    std::move(data.begin(), data.end(), std::back_inserter(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == u"charlie");
+}
+
 void move_array_to_vector()
 {
-    variable data = { true, 2, 3.0, "alpha", L"bravo" };
+    variable data = { true, 2, 3.0, "alpha", L"bravo", u"charlie" };
     std::vector<variable> result;
     std::move(data.begin(), data.end(), std::back_inserter(result));
 
-    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -3650,6 +4383,7 @@ void run()
     move_number_to_array();
     move_string_to_array();
     move_wstring_to_array();
+    move_u16string_to_array();
     move_array_to_array();
 
     move_null_to_vector();
@@ -3658,6 +4392,7 @@ void run()
     move_number_to_vector();
     move_string_to_vector();
     move_wstring_to_vector();
+    move_u16string_to_vector();
     move_array_to_vector();
 }
 
@@ -3710,6 +4445,54 @@ void none_array_boolean()
     }
 }
 
+void none_array_string()
+{
+    {
+        variable data = { "alpha", "bravo", "charlie" };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_string));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_string));
+    }
+    {
+        variable data = { L"alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_string));
+    }
+}
+
+void none_array_wstring()
+{
+    {
+        variable data = { L"alpha", L"bravo", L"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_wstring));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_wstring));
+    }
+    {
+        variable data = { "alpha", "bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_wstring));
+    }
+}
+
+void none_array_u16string()
+{
+    {
+        variable data = { u"alpha", u"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_u16string));
+    }
+    {
+        variable data = { "alpha", L"bravo", u"charlie" };
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_u16string));
+    }
+    {
+        variable data = { "alpha", L"bravo", "charlie" };
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_u16string));
+    }
+}
+
 void none_map_boolean()
 {
     {
@@ -3750,6 +4533,9 @@ void run()
     none_null();
     none_boolean();
     none_array_boolean();
+    none_array_string();
+    none_array_wstring();
+    none_array_u16string();
     none_map_boolean();
 }
 
@@ -3785,6 +4571,10 @@ void find_null()
         auto where = std::partition_point(data.begin(), data.end(), is_wstring);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
 }
 
 void find_boolean()
@@ -3808,6 +4598,10 @@ void find_boolean()
     }
     {
         auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -3835,6 +4629,10 @@ void find_integer()
         auto where = std::partition_point(data.begin(), data.end(), is_wstring);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
 }
 
 void find_number()
@@ -3858,6 +4656,10 @@ void find_number()
     }
     {
         auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -3885,6 +4687,10 @@ void find_string()
         auto where = std::partition_point(data.begin(), data.end(), is_wstring);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
 }
 
 void find_wstring()
@@ -3908,6 +4714,39 @@ void find_wstring()
     }
     {
         auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void find_u16string()
+{
+    variable data(u"charlie");
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
 }
@@ -3947,6 +4786,13 @@ void find_array_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
+void find_array_u16string()
+{
+    variable data = array::make({ u"", u"charlie", null, true, 2, 3.0, "alpha" });
+    auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
+}
+
 void run()
 {
     find_null();
@@ -3955,11 +4801,13 @@ void run()
     find_number();
     find_string();
     find_wstring();
+    find_u16string();
     find_array_boolean();
     find_array_integer();
     find_array_number();
     find_array_string();
     find_array_wstring();
+    find_array_u16string();
 }
 
 } // namespace partition_point_suite
@@ -4008,7 +4856,7 @@ void remove_number()
 void remove_string()
 {
     variable data("alpha");
-    auto where = std::remove(data.begin(), data.end(), "bravo");
+    auto where = std::remove(data.begin(), data.end(), "zulu");
     TRIAL_PROTOCOL_TEST(where == data.end());
     where = std::remove(data.begin(), data.end(), "alpha");
     TRIAL_PROTOCOL_TEST(where == data.begin());
@@ -4017,17 +4865,26 @@ void remove_string()
 void remove_wstring()
 {
     variable data(L"bravo");
-    auto where = std::remove(data.begin(), data.end(), L"alpha");
+    auto where = std::remove(data.begin(), data.end(), L"zulu");
     TRIAL_PROTOCOL_TEST(where == data.end());
     where = std::remove(data.begin(), data.end(), L"bravo");
     TRIAL_PROTOCOL_TEST(where == data.begin());
 }
 
+void remove_u16string()
+{
+    variable data(u"charlie");
+    auto where = std::remove(data.begin(), data.end(), u"zulu");
+    TRIAL_PROTOCOL_TEST(where == data.end());
+    where = std::remove(data.begin(), data.end(), u"charlie");
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+}
+
 void remove_array_null()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = std::remove(data.begin(), data.end(), null);
-    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -4035,9 +4892,9 @@ void remove_array_null()
 
 void remove_array_boolean()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = std::remove(data.begin(), data.end(), true);
-    variable expect = array::make({ 2, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -4045,9 +4902,9 @@ void remove_array_boolean()
 
 void remove_array_integer()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = std::remove(data.begin(), data.end(), 2);
-    variable expect = array::make({ true, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ true, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -4055,9 +4912,9 @@ void remove_array_integer()
 
 void remove_array_number()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = std::remove(data.begin(), data.end(), 3.0);
-    variable expect = array::make({ true, 2, "alpha", L"bravo" });
+    variable expect = array::make({ true, 2, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -4065,9 +4922,9 @@ void remove_array_number()
 
 void remove_array_string()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = std::remove(data.begin(), data.end(), "alpha");
-    variable expect = array::make({ true, 2, 3.0, L"bravo" });
+    variable expect = array::make({ true, 2, 3.0, L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -4075,9 +4932,19 @@ void remove_array_string()
 
 void remove_array_wstring()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = std::remove(data.begin(), data.end(), L"bravo");
-    variable expect = array::make({ true, 2, 3.0, "alpha" });
+    variable expect = array::make({ true, 2, 3.0, "alpha", u"charlie" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_array_u16string()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+    auto where = std::remove(data.begin(), data.end(), u"charlie");
+    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -4092,7 +4959,8 @@ void remove_map_boolean()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     auto where = std::remove(data.begin(), data.end(), false);
     TRIAL_PROTOCOL_TEST(where == data.end());
@@ -4103,7 +4971,8 @@ void remove_map_boolean()
             { "alpha", 2 },
             { "bravo", 3.0 },
             { "charlie", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
@@ -4119,7 +4988,8 @@ void remove_map_integer()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     auto where = std::remove(data.begin(), data.end(), 0);
     TRIAL_PROTOCOL_TEST(where == data.end());
@@ -4130,7 +5000,8 @@ void remove_map_integer()
             { "alpha", true },
             { "bravo", 3.0 },
             { "charlie", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
@@ -4146,7 +5017,8 @@ void remove_map_number()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     auto where = std::remove(data.begin(), data.end(), 0.0);
     TRIAL_PROTOCOL_TEST(where == data.end());
@@ -4157,7 +5029,8 @@ void remove_map_number()
             { "alpha", true },
             { "bravo", 2 },
             { "charlie", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
@@ -4173,9 +5046,10 @@ void remove_map_string()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
-    auto where = std::remove(data.begin(), data.end(), "alpha");
+    auto where = std::remove(data.begin(), data.end(), "delta");
     TRIAL_PROTOCOL_TEST(where == data.end());
 
     where = std::remove(data.begin(), data.end(), "hydrogen");
@@ -4184,7 +5058,8 @@ void remove_map_string()
             { "alpha", true },
             { "bravo", 2 },
             { "charlie", 3.0 },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
@@ -4200,9 +5075,10 @@ void remove_map_wstring()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
-    auto where = std::remove(data.begin(), data.end(), "alpha");
+    auto where = std::remove(data.begin(), data.end(), "echo");
     TRIAL_PROTOCOL_TEST(where == data.end());
 
     where = std::remove(data.begin(), data.end(), L"helium");
@@ -4211,7 +5087,37 @@ void remove_map_wstring()
             { "alpha", true },
             { "bravo", 2 },
             { "charlie", 3.0 },
-            { "delta", "hydrogen" }
+            { "delta", "hydrogen" },
+            { "foxtrot", u"lithium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void remove_map_u16string()
+{
+    // Remove by value but keep key order
+    variable data = map::make(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" },
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
+        });
+    auto where = std::remove(data.begin(), data.end(), "foxtrot");
+    TRIAL_PROTOCOL_TEST(where == data.end());
+
+    where = std::remove(data.begin(), data.end(), u"lithium");
+    variable expect = map::make(
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" },
+            { "echo", L"helium" }
         });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), where,
                                  expect.begin(), expect.end(),
@@ -4226,17 +5132,20 @@ void run()
     remove_number();
     remove_string();
     remove_wstring();
+    remove_u16string();
     remove_array_null();
     remove_array_boolean();
     remove_array_integer();
     remove_array_number();
     remove_array_string();
     remove_array_wstring();
+    remove_array_u16string();
     remove_map_boolean();
     remove_map_integer();
     remove_map_number();
     remove_map_string();
     remove_map_wstring();
+    remove_map_u16string();
 }
 
 } // namespace remove_suite
@@ -4251,48 +5160,63 @@ namespace search_suite
 void search_null()
 {
     variable data;
+    // null - null
     {
         variable subsequence;
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // null - boolean
     {
         variable subsequence(true);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // null - integer
     {
         variable subsequence(2);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // null - number
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // null - string
     {
         variable subsequence("alpha");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // null - wstring
     {
         variable subsequence(L"bravo");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // null - u16string
     {
-        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable subsequence(u"charlie");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // null - array
+    {
+        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // null - map
     {
         variable subsequence = map::make(
             {
@@ -4300,7 +5224,8 @@ void search_null()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
@@ -4311,6 +5236,7 @@ void search_null()
 void search_boolean()
 {
     variable data(true);
+    // boolean - null
     {
         variable subsequence;
         auto where = std::search(data.begin(), data.end(),
@@ -4318,42 +5244,56 @@ void search_boolean()
         // Empty subsequence returns the first entry
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // boolean - boolean
     {
         variable subsequence(true);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // boolean - integer
     {
         variable subsequence(2);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // boolean - number
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // boolean - string
     {
         variable subsequence("alpha");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // boolean - wstring
     {
         variable subsequence(L"bravo");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // boolean - u16string
     {
-        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable subsequence(u"charlie");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // boolean - array
+    {
+        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // boolean - map
     {
         variable subsequence = map::make(
             {
@@ -4361,7 +5301,8 @@ void search_boolean()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
@@ -4372,6 +5313,7 @@ void search_boolean()
 void search_integer()
 {
     variable data(2);
+    // integer - null
     {
         variable subsequence;
         auto where = std::search(data.begin(), data.end(),
@@ -4379,42 +5321,56 @@ void search_integer()
         // Empty subsequence returns the first entry
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // integer - boolean
     {
         variable subsequence(true);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // integer - integer
     {
         variable subsequence(2);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // integer - number
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // integer - string
     {
         variable subsequence("alpha");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // integer - wstring
     {
         variable subsequence(L"bravo");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // integer - u16string
     {
-        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable subsequence(u"charlie");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // integer - array
+    {
+        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // integer - map
     {
         variable subsequence = map::make(
             {
@@ -4422,7 +5378,8 @@ void search_integer()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
@@ -4433,6 +5390,7 @@ void search_integer()
 void search_number()
 {
     variable data(3.0);
+    // number - null
     {
         variable subsequence;
         auto where = std::search(data.begin(), data.end(),
@@ -4440,42 +5398,56 @@ void search_number()
         // Empty subsequence returns the first entry
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // number - boolean
     {
         variable subsequence(true);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // number - integer
     {
         variable subsequence(2);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // number - number
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // number - string
     {
         variable subsequence("alpha");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // number - wstring
     {
         variable subsequence(L"bravo");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // number - u16string
     {
-        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable subsequence(u"charlie");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // number - array
+    {
+        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // number - map
     {
         variable subsequence = map::make(
             {
@@ -4483,7 +5455,8 @@ void search_number()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
@@ -4494,6 +5467,7 @@ void search_number()
 void search_string()
 {
     variable data("alpha");
+    // string - null
     {
         variable subsequence;
         auto where = std::search(data.begin(), data.end(),
@@ -4501,38 +5475,51 @@ void search_string()
         // Empty subsequence returns the first entry
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // string - boolean
     {
         variable subsequence(true);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // string - integer
     {
         variable subsequence(2);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // string - number
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // string - string
     {
         variable subsequence("alpha");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // string - wstring
     {
         variable subsequence(L"bravo");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // string - u16string
     {
-        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable subsequence(u"charlie");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // string - array
+    {
+        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -4544,7 +5531,8 @@ void search_string()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
@@ -4555,6 +5543,7 @@ void search_string()
 void search_wstring()
 {
     variable data(L"bravo");
+    // wstring - null
     {
         variable subsequence;
         auto where = std::search(data.begin(), data.end(),
@@ -4562,42 +5551,56 @@ void search_wstring()
         // Empty subsequence returns the first entry
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // wstring - boolean
     {
         variable subsequence(true);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // wstring - integer
     {
         variable subsequence(2);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // wstring - number
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // wstring - string
     {
         variable subsequence("alpha");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // wstring - wstring
     {
         variable subsequence(L"bravo");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    // wstring - u16string
     {
-        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+        variable subsequence(u"charlie");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
+    // wstring - array
+    {
+        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // wstring - map
     {
         variable subsequence = map::make(
             {
@@ -4605,7 +5608,85 @@ void search_wstring()
                 { "bravo", 2 },
                 { "charlie", 3.0 },
                 { "delta", "hydrogen" },
-                { "echo", L"helium" }
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
+            });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void search_u16string()
+{
+    variable data(u"charlie");
+    // u16string - null
+    {
+        variable subsequence;
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        // Empty subsequence returns the first entry
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // u16string - boolean
+    {
+        variable subsequence(true);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // u16string - integer
+    {
+        variable subsequence(2);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // u16string - number
+    {
+        variable subsequence(3.0);
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // u16string - string
+    {
+        variable subsequence("alpha");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // u16string - wstring
+    {
+        variable subsequence(L"bravo");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // u16string - u16string
+    {
+        variable subsequence(u"charlie");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // u16string - array
+    {
+        variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    // u16string - map
+    {
+        variable subsequence = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "hydrogen" },
+                { "echo", L"helium" },
+                { "foxtrot", u"lithium" }
             });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
@@ -4615,7 +5696,7 @@ void search_wstring()
 
 void search_array()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     // array - boolean
     {
         variable subsequence(true);
@@ -4650,6 +5731,13 @@ void search_array()
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    // array - u16string
+    {
+        variable subsequence(u"charlie");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
     }
     // array - array
     {
@@ -4707,6 +5795,12 @@ void search_array()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
     }
     {
+        variable subsequence = array::make({ u"charlie" });
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
         variable subsequence = array::make({ true, 3.0 });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
@@ -4757,7 +5851,8 @@ void search_map()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     // map - boolean
     {
@@ -4787,12 +5882,19 @@ void search_map()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
     }
-    // map - string
+    // map - wstring
     {
         variable subsequence(L"helium");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
+    }
+    // map - wstring
+    {
+        variable subsequence(u"lithium");
+        auto where = std::search(data.begin(), data.end(),
+                                 subsequence.begin(), subsequence.end());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
     }
     // map - array
     {
@@ -4868,6 +5970,7 @@ void run()
     search_number();
     search_string();
     search_wstring();
+    search_u16string();
     search_array();
     search_map();
 }
@@ -4919,6 +6022,13 @@ void test_string()
 void test_wstring()
 {
     variable data(L"bravo");
+    auto end = std::unique(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 1);
+}
+
+void test_u16string()
+{
+    variable data(u"charlie");
     auto end = std::unique(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 1);
 }
@@ -4993,6 +6103,16 @@ void test_array_wstring()
                                  std::equal_to<variable>());
 }
 
+void test_array_u16string()
+{
+    variable data = array::make({ u"alpha", u"alpha", u"bravo", u"bravo" });
+    auto end = std::unique(data.begin(), data.end());
+    variable expect = array::make({ u"alpha", u"bravo" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), end,
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void run()
 {
     test_null();
@@ -5001,6 +6121,7 @@ void run()
     test_number();
     test_string();
     test_wstring();
+    test_u16string();
     test_array_null();
     test_array_boolean();
     test_array_integer();
@@ -5008,6 +6129,7 @@ void run()
     test_array_arithmetic();
     test_array_string();
     test_array_wstring();
+    test_array_u16string();
 }
 
 } // namespace unique_suite
@@ -5046,6 +6168,10 @@ void find_null()
         auto where = std::upper_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
 }
 
 void find_boolean()
@@ -5073,6 +6199,10 @@ void find_boolean()
     }
     {
         auto where = std::upper_bound(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
 }
@@ -5104,6 +6234,10 @@ void find_integer()
         auto where = std::upper_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
 }
 
 void find_number()
@@ -5131,6 +6265,10 @@ void find_number()
     }
     {
         auto where = std::upper_bound(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
 }
@@ -5162,6 +6300,10 @@ void find_string()
         auto where = std::upper_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
 }
 
 void find_wstring()
@@ -5191,11 +6333,48 @@ void find_wstring()
         auto where = std::upper_bound(data.begin(), data.end(), L"bravo");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
+}
+
+void find_u16string()
+{
+    variable data(u"charlie");
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+    }
 }
 
 void find_array()
 {
-    variable data = array::make({true, 2, 3.0, "alpha", L"bravo"});
+    variable data = array::make({true, 2, 3.0, "alpha", L"bravo", u"charlie"});
     {
         auto where = std::upper_bound(data.begin(), data.end(), 0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
@@ -5236,6 +6415,14 @@ void find_array()
         auto where = std::upper_bound(data.begin(), data.end(), L"charlie");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
     }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 6);
+    }
 }
 
 void find_map()
@@ -5246,7 +6433,8 @@ void find_map()
             { "bravo", 2 },
             { "charlie", 3.0 },
             { "delta", "hydrogen" },
-            { "echo", L"helium" }
+            { "echo", L"helium" },
+            { "foxtrot", u"lithium" }
         });
     {
         auto where = std::upper_bound(data.begin(), data.end(), 0);
@@ -5273,7 +6461,7 @@ void find_map()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
     }
     {
-        auto where = std::upper_bound(data.begin(), data.end(), "lithium");
+        auto where = std::upper_bound(data.begin(), data.end(), "tungsten");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 4);
     }
     {
@@ -5281,8 +6469,16 @@ void find_map()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
     }
     {
-        auto where = std::upper_bound(data.begin(), data.end(), L"lithium");
+        auto where = std::upper_bound(data.begin(), data.end(), L"tungsten");
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 5);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"lithium");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 6);
+    }
+    {
+        auto where = std::upper_bound(data.begin(), data.end(), u"tungsten");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 6);
     }
 }
 
@@ -5294,6 +6490,7 @@ void run()
     find_number();
     find_string();
     find_wstring();
+    find_u16string();
     find_array();
     find_map();
 }

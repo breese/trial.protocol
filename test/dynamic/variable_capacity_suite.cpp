@@ -126,6 +126,18 @@ void test_wstring()
     }
 }
 
+void test_u16string()
+{
+    {
+        variable data(u"bravo");
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
+        variable data(u"");
+        TRIAL_PROTOCOL_TEST(data.empty());
+    }
+}
+
 void test_array()
 {
     variable data = array::make();
@@ -150,6 +162,7 @@ void run()
     test_number();
     test_string();
     test_wstring();
+    test_u16string();
     test_array();
     test_map();
 }
@@ -269,6 +282,18 @@ void test_wstring()
     }
 }
 
+void test_16string()
+{
+    {
+        variable data(u"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    }
+    {
+        variable data(u"");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    }
+}
+
 void test_array()
 {
     variable data = array::make({ 1, 2, 3 });
@@ -295,6 +320,7 @@ void run()
     test_number();
     test_string();
     test_wstring();
+    test_16string();
     test_array();
     test_array_with_size();
     test_map();
@@ -405,6 +431,13 @@ void test_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
 }
 
+void test_u16string()
+{
+    std::u16string value(u"bravo");
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+}
+
 void test_array()
 {
     variable::array_type value;
@@ -427,6 +460,7 @@ void run()
     test_number();
     test_string();
     test_wstring();
+    test_u16string();
     test_array();
     test_map();
 }

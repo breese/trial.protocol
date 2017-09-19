@@ -78,11 +78,17 @@ struct convert_overloader<basic_variable<Allocator>, boost::any>
         if (any.type() == typeid(const wchar_t *))
             return boost::any_cast<const wchar_t *>(any);
 
+        if (any.type() == typeid(const char16_t *))
+            return boost::any_cast<const char16_t *>(any);
+
         if (any.type() == typeid(typename variable_type::string_type))
             return boost::any_cast<typename variable_type::string_type>(any);
 
         if (any.type() == typeid(typename variable_type::wstring_type))
             return boost::any_cast<typename variable_type::wstring_type>(any);
+
+        if (any.type() == typeid(typename variable_type::u16string_type))
+            return boost::any_cast<typename variable_type::u16string_type>(any);
 
         if (any.type() == typeid(std::vector<signed short int>))
             return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed short int>>(&any));
@@ -122,6 +128,9 @@ struct convert_overloader<basic_variable<Allocator>, boost::any>
 
         if (any.type() == typeid(std::vector<typename variable_type::wstring_type>))
             return dynamic::convert<variable_type>(*boost::any_cast<std::vector<typename variable_type::wstring_type>>(&any));
+
+        if (any.type() == typeid(std::vector<typename variable_type::u16string_type>))
+            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<typename variable_type::u16string_type>>(&any));
 
         error = dynamic::make_error_code(dynamic::incompatible_type);
         return null;

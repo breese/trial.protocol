@@ -20,7 +20,7 @@ using namespace trial::protocol::dynamic;
 namespace clear_suite
 {
 
-void test_null()
+void clear_null()
 {
     variable data;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
@@ -28,7 +28,7 @@ void test_null()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<nullable>(), true);
 }
 
-void test_boolean()
+void clear_boolean()
 {
     variable data(true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<bool>(), true);
@@ -37,7 +37,7 @@ void test_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<bool>(), bool{});
 }
 
-void test_integer()
+void clear_integer()
 {
     {
         signed char value = 1;
@@ -121,7 +121,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void clear_number()
 {
     {
         variable data(1.0f);
@@ -146,7 +146,7 @@ void test_number()
     }
 }
 
-void test_string()
+void clear_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
@@ -156,7 +156,7 @@ void test_string()
     TRIAL_PROTOCOL_TEST(data.empty());
 }
 
-void test_wstring()
+void clear_wstring()
 {
     variable data(L"bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
@@ -166,7 +166,17 @@ void test_wstring()
     TRIAL_PROTOCOL_TEST(data.empty());
 }
 
-void test_array()
+void clear_u16string()
+{
+    variable data(u"bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+    TRIAL_PROTOCOL_TEST(!data.empty());
+    data.clear();
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
+    TRIAL_PROTOCOL_TEST(data.empty());
+}
+
+void clear_array()
 {
     variable data = array::make({ 1, 2 });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
@@ -176,7 +186,7 @@ void test_array()
     TRIAL_PROTOCOL_TEST(data.empty());
 }
 
-void test_map()
+void clear_map()
 {
     variable data = map::make({ {"alpha", 1} });
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<map>(), true);
@@ -188,14 +198,15 @@ void test_map()
 
 void run()
 {
-    test_null();
-    test_boolean();
-    test_integer();
-    test_number();
-    test_string();
-    test_wstring();
-    test_array();
-    test_map();
+    clear_null();
+    clear_boolean();
+    clear_integer();
+    clear_number();
+    clear_string();
+    clear_wstring();
+    clear_u16string();
+    clear_array();
+    clear_map();
 }
 
 } // namespace clear_suite
@@ -390,6 +401,39 @@ void fail_wstring()
                                     "incompatible type");
 }
 
+void fail_u16string()
+{
+    variable data(u"alpha");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(true),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                    error,
+                                    "incompatible type");
+
+    variable array = { true, 2, 3.0, "alpha" };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), array.begin(), array.end()),
+                                    error,
+                                    "incompatible type");
+
+    variable map =
+        {
+            { "alpha", true },
+            { "bravo", 2 },
+            { "charlie", 3.0 },
+            { "delta", "hydrogen" }
+        };
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.end(), map.begin(), map.end()),
+                                    error,
+                                    "incompatible type");
+}
+
 void insert_array()
 {
     variable data = array::make();
@@ -515,6 +559,17 @@ void insert_array_range()
         data.insert(input.begin(), input.end());
 
         variable expect = array::make({ L"alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // u16string variable
+    {
+        variable data = array::make();
+        variable input = u"alpha";
+        data.insert(input.begin(), input.end());
+
+        variable expect = array::make({ u"alpha" });
         TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                      expect.begin(), expect.end(),
                                      std::equal_to<variable>());
@@ -705,6 +760,14 @@ void fail_map_range()
                                         error,
                                         "incompatible type");
     }
+    // u16string variable
+    {
+        variable data = map::make();
+        variable input = u"alpha";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
     // array variable
     {
         variable data = map::make();
@@ -758,6 +821,7 @@ void run()
     fail_number();
     fail_string();
     fail_wstring();
+    fail_u16string();
 
     insert_array();
     insert_array_iterator();
@@ -845,11 +909,19 @@ void erase_wstring()
     TRIAL_PROTOCOL_TEST(data == L"bravo");
 }
 
+void erase_u16string()
+{
+    variable data(u"charlie");
+    auto where = data.erase(data.begin());
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+    TRIAL_PROTOCOL_TEST(data == u"charlie");
+}
+
 void erase_array_first()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = data.erase(data.begin());
-    variable expect = array::make({ 2, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -857,9 +929,9 @@ void erase_array_first()
 
 void erase_array_second()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = data.erase(std::next(data.begin()));
-    variable expect = array::make({ true, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ true, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -867,9 +939,9 @@ void erase_array_second()
 
 void erase_array_third()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = data.erase(std::next(data.begin(), 2));
-    variable expect = array::make({ true, 2, "alpha", L"bravo" });
+    variable expect = array::make({ true, 2, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -877,9 +949,9 @@ void erase_array_third()
 
 void erase_array_fourth()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = data.erase(std::next(data.begin(), 3));
-    variable expect = array::make({ true, 2, 3.0, L"bravo" });
+    variable expect = array::make({ true, 2, 3.0, L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -887,9 +959,19 @@ void erase_array_fourth()
 
 void erase_array_fifth()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = data.erase(std::next(data.begin(), 4));
-    variable expect = array::make({ true, 2, 3.0, "alpha" });
+    variable expect = array::make({ true, 2, 3.0, "alpha", u"charlie" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void erase_array_sixth()
+{
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+    auto where = data.erase(std::next(data.begin(), 5));
+    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -897,27 +979,33 @@ void erase_array_fifth()
 
 void erase_array_all()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo" });
+    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
     auto where = data.erase(data.begin());
-    variable expect = array::make({ 2, 3.0, "alpha", L"bravo" });
+    variable expect = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
 
     where = data.erase(where);
-    expect = array::make({ 3.0, "alpha", L"bravo" });
+    expect = array::make({ 3.0, "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
 
     where = data.erase(where);
-    expect = array::make({ "alpha", L"bravo" });
+    expect = array::make({ "alpha", L"bravo", u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
 
     where = data.erase(where);
-    expect = array::make({ L"bravo" });
+    expect = array::make({ L"bravo", u"charlie" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+
+    where = data.erase(where);
+    expect = array::make({ u"charlie" });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -1036,6 +1124,14 @@ void erase_range_wstring()
     auto where = data.erase(data.begin(), data.end());
     TRIAL_PROTOCOL_TEST(where == data.begin());
     TRIAL_PROTOCOL_TEST(data == L"bravo");
+}
+
+void erase_range_u16string()
+{
+    variable data(u"charlie");
+    auto where = data.erase(data.begin(), data.end());
+    TRIAL_PROTOCOL_TEST(where == data.begin());
+    TRIAL_PROTOCOL_TEST(data == u"charlie");
 }
 
 void erase_range_array_first_first()
@@ -1230,6 +1326,7 @@ void run()
     erase_number();
     erase_string();
     erase_wstring();
+    erase_u16string();
     erase_array_first();
     erase_array_second();
     erase_array_third();
@@ -1244,6 +1341,7 @@ void run()
     erase_range_number();
     erase_range_string();
     erase_range_wstring();
+    erase_range_u16string();
     erase_range_array_first_first();
     erase_range_array_first_second();
     erase_range_array_first_third();
@@ -1327,6 +1425,16 @@ void swap_null()
         TRIAL_PROTOCOL_TEST(data.is<wstring>());
         TRIAL_PROTOCOL_TEST(other.is<nullable>());
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
+    }
+    // null - u16string
+    {
+        variable data;
+        variable other(u"alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<u16string>());
+        TRIAL_PROTOCOL_TEST(other.is<nullable>());
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"alpha");
     }
     // null - array
     {
@@ -1431,6 +1539,16 @@ void swap_boolean()
         TRIAL_PROTOCOL_TEST(other.is<boolean>());
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
     }
+    // boolean - u16string
+    {
+        variable data(true);
+        variable other(u"alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<u16string>());
+        TRIAL_PROTOCOL_TEST(other.is<boolean>());
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"alpha");
+    }
     // boolean - array
     {
         variable data(true);
@@ -1533,6 +1651,16 @@ void swap_integer()
         TRIAL_PROTOCOL_TEST(data.is<wstring>());
         TRIAL_PROTOCOL_TEST(other.is<integer>());
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
+    }
+    // integer - u16string
+    {
+        variable data(2);
+        variable other(u"alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<u16string>());
+        TRIAL_PROTOCOL_TEST(other.is<integer>());
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"alpha");
     }
     // integer - array
     {
@@ -1637,6 +1765,16 @@ void swap_number()
         TRIAL_PROTOCOL_TEST(other.is<number>());
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"alpha");
     }
+    // number - u16string
+    {
+        variable data(3.0);
+        variable other(u"alpha");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<u16string>());
+        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"alpha");
+    }
     // number - array
     {
         variable data(3.0);
@@ -1739,6 +1877,16 @@ void swap_string()
         TRIAL_PROTOCOL_TEST(data.is<wstring>());
         TRIAL_PROTOCOL_TEST(other.is<string>());
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"bravo");
+    }
+    // string - u16string
+    {
+        variable data("alpha");
+        variable other(u"bravo");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<u16string>());
+        TRIAL_PROTOCOL_TEST(other.is<string>());
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"bravo");
     }
     // string - array
     {
@@ -1843,6 +1991,16 @@ void swap_wstring()
         TRIAL_PROTOCOL_TEST(other.is<wstring>());
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"bravo");
     }
+    // wstring - u16string
+    {
+        variable data(L"alpha");
+        variable other(u"bravo");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<u16string>());
+        TRIAL_PROTOCOL_TEST(other.is<wstring>());
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"bravo");
+    }
     // wstring - array
     {
         variable data(L"bravo");
@@ -1871,6 +2029,119 @@ void swap_wstring()
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<map>());
         TRIAL_PROTOCOL_TEST(other.is<wstring>());
+
+        variable expect = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void swap_u16string()
+{
+    // u16string - null
+    {
+        variable data(u"alpha");
+        variable other;
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<nullable>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+    }
+    // u16string - boolean
+    {
+        variable data(u"alpha");
+        variable other(true);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<boolean>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+        TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
+    }
+    // u16string - integer
+    {
+        variable data(u"alpha");
+        variable other(2);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<integer>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+        TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
+    }
+    // u16string - number
+    {
+        variable data(u"alpha");
+        variable other(3.0);
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+    }
+    // u16string - string
+    {
+        variable data(u"alpha");
+        variable other("bravo");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<string>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+        TRIAL_PROTOCOL_TEST(data.value<string>() == "bravo");
+    }
+    // u16string - wstring
+    {
+        variable data(u"alpha");
+        variable other(L"bravo");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<wstring>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+        TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"bravo");
+    }
+    // u16string - u16string
+    {
+        variable data(u"alpha");
+        variable other(u"bravo");
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<u16string>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+        TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"bravo");
+    }
+    // u16string - array
+    {
+        variable data(u"bravo");
+        variable other = { true, 2, 3.0, "alpha" };
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<array>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
+
+        variable expect = array::make({ true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // u16string - map
+    {
+        variable data(u"bravo");
+        variable other = map::make(
+            {
+                { "alpha", true },
+                { "bravo", 2 },
+                { "charlie", 3.0 },
+                { "delta", "beryllium" }
+            });
+
+        data.swap(other);
+        TRIAL_PROTOCOL_TEST(data.is<map>());
+        TRIAL_PROTOCOL_TEST(other.is<u16string>());
 
         variable expect = map::make(
             {
@@ -2121,6 +2392,7 @@ void run()
     swap_number();
     swap_string();
     swap_wstring();
+    swap_u16string();
     swap_array();
     swap_map();
 }
