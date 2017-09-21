@@ -49,6 +49,7 @@ struct number {};
 struct string {};
 struct wstring {};
 struct u16string {};
+struct u32string {};
 template <template <typename> class Allocator> struct basic_array;
 template <template <typename> class Allocator> struct basic_map;
 
@@ -74,6 +75,7 @@ public:
     using string_type = basic_string<char>;
     using wstring_type = basic_string<wchar_t>;
     using u16string_type = basic_string<char16_t>;
+    using u32string_type = basic_string<char32_t>;
     using array_type = std::vector<value_type,
                                    allocator_type>;
     using map_type = std::map<value_type,
@@ -262,6 +264,7 @@ public:
     basic_variable(const char *);
     basic_variable(const wchar_t *);
     basic_variable(const char16_t *);
+    basic_variable(const char32_t *);
     // Use factory instead
     basic_variable(typename basic_variable::array_type) = delete;
     basic_variable(typename basic_variable::map_type) = delete;
@@ -276,6 +279,7 @@ public:
     basic_variable& operator= (const char *);
     basic_variable& operator= (const wchar_t *);
     basic_variable& operator= (const char16_t *);
+    basic_variable& operator= (const char32_t *);
 
     // Addition / concatenation
 
@@ -284,6 +288,7 @@ public:
     basic_variable& operator+= (const char *);
     basic_variable& operator+= (const wchar_t *);
     basic_variable& operator+= (const char16_t *);
+    basic_variable& operator+= (const char32_t *);
 
     // Accessor
 
@@ -387,6 +392,7 @@ private:
                                                    string_type,
                                                    wstring_type,
                                                    u16string_type,
+                                                   u32string_type,
                                                    array_type,
                                                    map_type>;
     storage_type storage;

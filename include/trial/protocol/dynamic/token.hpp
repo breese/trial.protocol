@@ -44,6 +44,7 @@ struct code
         string,
         wstring,
         u16string,
+        u32string,
         array,
         map
     };
@@ -60,6 +61,7 @@ struct symbol
         string,
         wstring,
         u16string,
+        u32string,
         array,
         map
     };

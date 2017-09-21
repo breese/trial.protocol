@@ -30,7 +30,8 @@ void count_map()
             {"delta", 3.0},
             {"echo", "hydrogen"},
             {"foxtrot", L"helium"},
-            {"golf", u"lithium"}
+            {"golf", u"lithium"},
+            {"hotel", U"beryllium"}
         });
 
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, "alpha"), 1);
@@ -40,6 +41,7 @@ void count_map()
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, "delta"), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, "echo"), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, "foxtrot"), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, "hotel"), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, null), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, variable()), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, true), 0);
@@ -54,6 +56,8 @@ void count_map()
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, variable(L"helium")), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, u"lithium"), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, variable(u"lithium")), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, U"beryllium"), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(key::count(data, variable(U"beryllium")), 0);
 }
 
 void run()
@@ -80,7 +84,8 @@ void find_map()
             {"delta", 3.0},
             {"echo", "hydrogen"},
             {"foxtrot", L"helium"},
-            {"golf", u"lithium"}
+            {"golf", u"lithium"},
+            {"hotel", U"beryllium"}
         });
     {
         variable::key_iterator where = key::find(data, "alpha");
@@ -136,6 +141,14 @@ void find_map()
     }
     {
         variable::key_iterator where = key::find(data, u"lithium");
+        TRIAL_PROTOCOL_TEST(where == data.key_end());
+    }
+    {
+        variable::key_iterator where = key::find(data, "hotel");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.key_begin(), where), 7);
+    }
+    {
+        variable::key_iterator where = key::find(data, U"beryllium");
         TRIAL_PROTOCOL_TEST(where == data.key_end());
     }
 }

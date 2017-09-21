@@ -78,6 +78,14 @@ void test_string()
                                         trial::protocol::json::error,
                                         "incompatible type");
     }
+    {
+        // char32_t strings cannot be serialized
+        std::ostringstream stream;
+        variable data(U"alpha");
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL((stream << data),
+                                        trial::protocol::json::error,
+                                        "incompatible type");
+    }
 }
 
 void test_array()

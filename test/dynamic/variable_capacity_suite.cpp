@@ -129,11 +129,23 @@ void test_wstring()
 void test_u16string()
 {
     {
-        variable data(u"bravo");
+        variable data(u"charlie");
         TRIAL_PROTOCOL_TEST(!data.empty());
     }
     {
         variable data(u"");
+        TRIAL_PROTOCOL_TEST(data.empty());
+    }
+}
+
+void test_u32string()
+{
+    {
+        variable data(U"delta");
+        TRIAL_PROTOCOL_TEST(!data.empty());
+    }
+    {
+        variable data(U"");
         TRIAL_PROTOCOL_TEST(data.empty());
     }
 }
@@ -163,6 +175,7 @@ void run()
     test_string();
     test_wstring();
     test_u16string();
+    test_u32string();
     test_array();
     test_map();
 }
@@ -282,14 +295,26 @@ void test_wstring()
     }
 }
 
-void test_16string()
+void test_u16string()
 {
     {
-        variable data(u"bravo");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        variable data(u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 7);
     }
     {
         variable data(u"");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+    }
+}
+
+void test_u32string()
+{
+    {
+        variable data(U"delta");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+    }
+    {
+        variable data(U"");
         TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
     }
 }
@@ -320,7 +345,8 @@ void run()
     test_number();
     test_string();
     test_wstring();
-    test_16string();
+    test_u16string();
+    test_u32string();
     test_array();
     test_array_with_size();
     test_map();
@@ -433,7 +459,14 @@ void test_wstring()
 
 void test_u16string()
 {
-    std::u16string value(u"bravo");
+    std::u16string value(u"charlie");
+    variable data(value);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+}
+
+void test_u32string()
+{
+    std::u32string value(U"delta");
     variable data(value);
     TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
 }
@@ -461,6 +494,7 @@ void run()
     test_string();
     test_wstring();
     test_u16string();
+    test_u32string();
     test_array();
     test_map();
 }

@@ -37,6 +37,7 @@ auto count(const basic_variable<Allocator>& self,
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
+    case symbol::u32string:
         return (self == other) ? 1 : 0;
 
     case symbol::array:
@@ -98,6 +99,8 @@ auto count(const basic_variable<Allocator>& self,
         return count(self, other.template unsafe_get<typename variable_type::wstring_type>());
     case code::u16string:
         return count(self, other.template unsafe_get<typename variable_type::u16string_type>());
+    case code::u32string:
+        return count(self, other.template unsafe_get<typename variable_type::u32string_type>());
     case code::array:
         return count(self, other.template unsafe_get<typename variable_type::array_type>());
     case code::map:
@@ -121,6 +124,7 @@ auto find(const basic_variable<Allocator>& self,
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
+    case symbol::u32string:
         return (self == other) ? self.key_begin() : self.key_end();
 
     case symbol::array:
@@ -179,6 +183,8 @@ auto find(const basic_variable<Allocator>& self,
         return find(self, other.template unsafe_get<typename variable_type::wstring_type>());
     case code::u16string:
         return find(self, other.template unsafe_get<typename variable_type::u16string_type>());
+    case code::u32string:
+        return find(self, other.template unsafe_get<typename variable_type::u32string_type>());
     case code::array:
         return find(self, other.template unsafe_get<typename variable_type::array_type>());
     case code::map:

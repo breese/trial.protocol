@@ -179,6 +179,22 @@ void convert_u16string_literal()
     TRIAL_PROTOCOL_TEST(result.value<std::u16string>() == u"charlie");
 }
 
+void convert_u32string()
+{
+    boost::any any(std::u32string(U"delta"));
+    variable result = convert<variable>(any);
+    TRIAL_PROTOCOL_TEST(result.is<u32string>());
+    TRIAL_PROTOCOL_TEST(result.value<std::u32string>() == U"delta");
+}
+
+void convert_u32string_literal()
+{
+    boost::any any(U"delta");
+    variable result = convert<variable>(any);
+    TRIAL_PROTOCOL_TEST(result.is<u32string>());
+    TRIAL_PROTOCOL_TEST(result.value<std::u32string>() == U"delta");
+}
+
 void convert_array_integer()
 {
     {
@@ -277,6 +293,14 @@ void convert_array_u16string()
     TRIAL_PROTOCOL_TEST(result == array::make({ u"alpha", u"bravo", u"charlie" }));
 }
 
+void convert_array_u32string()
+{
+    boost::any any(std::vector<std::u32string>{ U"alpha", U"bravo", U"charlie" });
+    variable result = convert<variable>(any);
+    TRIAL_PROTOCOL_TEST(result.is<array>());
+    TRIAL_PROTOCOL_TEST(result == array::make({ U"alpha", U"bravo", U"charlie" }));
+}
+
 void fail_on_struct()
 {
     struct record {};
@@ -308,11 +332,14 @@ void run()
     convert_wstring_literal();
     convert_u16string();
     convert_u16string_literal();
+    convert_u32string();
+    convert_u32string_literal();
     convert_array_integer();
     convert_array_number();
     convert_array_string();
     convert_array_wstring();
     convert_array_u16string();
+    convert_array_u32string();
     fail_on_struct();
     throw_on_struct();
 }

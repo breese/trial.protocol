@@ -100,6 +100,7 @@ struct save_overloader< protocol::bintoken::oarchive,
 
         case dynamic::code::wstring:
         case dynamic::code::u16string:
+        case dynamic::code::u32string:
             throw bintoken::error(bintoken::incompatible_type);
 
         case dynamic::code::array:

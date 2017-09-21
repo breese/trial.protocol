@@ -140,8 +140,8 @@ void compare_null_equal_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(L""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(L""), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(L"bravo"), true);
 }
 
 void compare_null_equal_wstring_literal()
@@ -149,8 +149,8 @@ void compare_null_equal_wstring_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == L"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != L"", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != L"bravo", true);
 }
 
 void compare_null_equal_u16string()
@@ -158,8 +158,8 @@ void compare_null_equal_u16string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(u""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(u""), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(u"charlie"), true);
 }
 
 void compare_null_equal_u16string_literal()
@@ -167,8 +167,26 @@ void compare_null_equal_u16string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == u"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != u"", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() == u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable() != u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != u"charlie", true);
+}
+
+void compare_null_equal_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(U""), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(U"delta"), true);
+}
+
+void compare_null_equal_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == U"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != U"", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() == U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() != U"delta", true);
 }
 
 void compare_null_equal_array()
@@ -331,10 +349,10 @@ void compare_boolean_equal_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(L""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(L""), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(L"bravo"), true);
 }
 
 void compare_boolean_equal_wstring_literal()
@@ -344,10 +362,10 @@ void compare_boolean_equal_wstring_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == L"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != L"", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != L"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != L"bravo", true);
 }
 
 void compare_boolean_equal_u16string()
@@ -357,10 +375,10 @@ void compare_boolean_equal_u16string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(u""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(u""), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(u"charlie"), true);
 }
 
 void compare_boolean_equal_u16string_literal()
@@ -370,10 +388,36 @@ void compare_boolean_equal_u16string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == u"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != u"", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != u"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != u"charlie", true);
+}
+
+void compare_boolean_equal_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(U""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(U""), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(U"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(U"delta"), true);
+}
+
+void compare_boolean_equal_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == U"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != U"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == U"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != U"", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != U"delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) == U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != U"delta", true);
 }
 
 void compare_boolean_equal_array()
@@ -942,25 +986,25 @@ void compare_integer_equal_wstring()
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(L""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(L""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(L"bravo"), true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(L""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(L""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(L"bravo"), true);
     }
     // unsigned - wstring
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(L""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(L""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(L"bravo"), true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(L""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(L""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(L"bravo"), true);
     }
 }
 
@@ -970,25 +1014,25 @@ void compare_integer_equal_wstring_literal()
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == L"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != L"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != L"bravo", true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == L"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != L"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != L"bravo", true);
     }
     // unsigned - wstring literal
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == L"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != L"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != L"bravo", true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == L"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != L"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != L"bravo", true);
     }
 }
 
@@ -998,25 +1042,25 @@ void compare_integer_equal_u16string()
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(u""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(u""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(u"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(u"charlie"), true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(u""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(u""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(u"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(u"charlie"), true);
     }
     // unsigned - u16string
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(u""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(u""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(u"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(u"charlie"), true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(u""), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(u""), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(u"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(u"charlie"), true);
     }
 }
 
@@ -1026,25 +1070,81 @@ void compare_integer_equal_u16string_literal()
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == u"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != u"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != u"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != u"charlie", true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == u"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != u"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != u"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != u"charlie", true);
     }
     // unsigned - u16string literal
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == u"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != u"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != u"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != u"charlie", true);
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == u"", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != u"", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != u"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != u"charlie", true);
+    }
+}
+
+void compare_integer_equal_u32string()
+{
+    // signed - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(U""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != variable(U"delta"), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(U""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != variable(U"delta"), true);
+    }
+    // unsigned - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(U""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != variable(U"delta"), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(U""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != variable(U"delta"), true);
+    }
+}
+
+void compare_integer_equal_u32string_literal()
+{
+    // signed - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != U"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) != U"delta", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != U"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1) != U"delta", true);
+    }
+    // unsigned - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != U"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) != U"delta", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != U"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1U) != U"delta", true);
     }
 }
 
@@ -1464,24 +1564,24 @@ void compare_number_equal_wstring()
 {
     // float - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable(L"bravo"), true);
     }
     // double - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(L"bravo"), true);
     }
     // long double - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != variable(L"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != variable(L"bravo"), true);
     }
 }
 
@@ -1489,24 +1589,24 @@ void compare_number_equal_wstring_literal()
 {
     // float - wstring literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != L"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != L"bravo", true);
     }
     // double - wstring literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != L"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != L"bravo", true);
     }
     // long double - wstring literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != L"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != L"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != L"bravo", true);
     }
 }
 
@@ -1514,24 +1614,24 @@ void compare_number_equal_u16string()
 {
     // float - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable(u"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable(u"charlie"), true);
     }
     // double - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(u"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(u"charlie"), true);
     }
     // long double - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != variable(u"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != variable(u"charlie"), true);
     }
 }
 
@@ -1539,24 +1639,74 @@ void compare_number_equal_u16string_literal()
 {
     // float - u16string literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != u"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != u"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != u"charlie", true);
     }
     // double - u16string literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != u"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != u"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != u"charlie", true);
     }
     // long double - u16string literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != u"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != u"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != u"charlie", true);
+    }
+}
+
+void compare_number_equal_u32string()
+{
+    // float - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != variable(U"delta"), true);
+    }
+    // double - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != variable(U"delta"), true);
+    }
+    // long double - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != variable(U"delta"), true);
+    }
+}
+
+void compare_number_equal_u32string_literal()
+{
+    // float - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) != U"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) != U"delta", true);
+    }
+    // double - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) != U"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0) != U"delta", true);
+    }
+    // long double - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) != U"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0L) != U"delta", true);
     }
 }
 
@@ -1861,13 +2011,8 @@ void compare_string_equal_string()
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("bravo"), true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable("bravo"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable("bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable("zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable("zulu"), true);
     }
     // string - wstring
     {
@@ -1878,13 +2023,8 @@ void compare_string_equal_string()
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(L"alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(L"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(L"bravo"), true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable(L"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(L"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(L"zulu"), true);
     }
     // string - u16string
     {
@@ -1895,13 +2035,20 @@ void compare_string_equal_string()
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(u"alpha"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(u"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(u"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(u"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(u"zulu"), true);
+    }
+    // string - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == variable(U"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != variable(U"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(U""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == variable(u"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != variable(u"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(U"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(U"alpha"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == variable(U"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != variable(U"zulu"), true);
     }
 }
 
@@ -1916,13 +2063,8 @@ void compare_string_equal_string_literal()
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "alpha", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "bravo", true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != "alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == "bravo", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != "bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == "zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != "zulu", true);
     }
     // string - wstring literal
     {
@@ -1933,13 +2075,8 @@ void compare_string_equal_string_literal()
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == L"alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == L"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != L"bravo", true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == L"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != L"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == L"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != L"zulu", true);
     }
     // string - u16string literal
     {
@@ -1950,13 +2087,20 @@ void compare_string_equal_string_literal()
 
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == u"alpha", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == u"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != u"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == u"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != u"zulu", true);
+    }
+    // string - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") == U"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("") != U"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != U"", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") == u"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") != u"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == U"alpha", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != U"alpha", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") == U"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") != U"zulu", true);
     }
 }
 
@@ -1998,8 +2142,8 @@ void compare_wstring_equal_null_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == null, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != null, true);
 }
 
 void compare_wstring_equal_boolean()
@@ -2009,10 +2153,10 @@ void compare_wstring_equal_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(true), true);
 }
 
 void compare_wstring_equal_boolean_literal()
@@ -2022,10 +2166,10 @@ void compare_wstring_equal_boolean_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == true, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != true, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != true, true);
 }
 
 void compare_wstring_equal_integer()
@@ -2039,10 +2183,10 @@ void compare_wstring_equal_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(big), true);
     }
     // wstring - unsigned
     {
@@ -2053,10 +2197,10 @@ void compare_wstring_equal_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(0U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(0U), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(big), true);
     }
 }
 
@@ -2071,10 +2215,10 @@ void compare_wstring_equal_integer_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == 0, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != 0, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != big, true);
     }
     // wstring - unsigned
     {
@@ -2085,10 +2229,10 @@ void compare_wstring_equal_integer_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == 0U, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != 0U, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != big, true);
     }
 }
 
@@ -2104,10 +2248,10 @@ void compare_wstring_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(big), true);
     }
     // wstring - double
     {
@@ -2119,10 +2263,10 @@ void compare_wstring_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(big), true);
     }
     // wstring - long double
     {
@@ -2134,10 +2278,10 @@ void compare_wstring_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(big), true);
     }
 }
 
@@ -2153,10 +2297,10 @@ void compare_wstring_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != big, true);
     }
     // wstring - double
     {
@@ -2168,10 +2312,10 @@ void compare_wstring_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != big, true);
     }
     // wstring - long double
     {
@@ -2183,10 +2327,10 @@ void compare_wstring_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != big, true);
     }
 }
 
@@ -2194,54 +2338,51 @@ void compare_wstring_equal_string()
 {
     // wstring - string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable("alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(""), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable("bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable("bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable("alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable("bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable("bravo"), true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable("alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable("bravo"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable("bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable("zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable("zulu"), true);
     }
     // wstring - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(L""), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(L""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(L""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(L"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(L"bravo"), true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(L"alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(L"bravo"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(L"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(L"zulu"), true);
     }
     // wstring - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(u""), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(u""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(u"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(u"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(u""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(u""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == variable(u"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != variable(u"bravo"), true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(u"alpha"), true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(u"bravo"), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(u"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(u"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(u"zulu"), true);
+    }
+    // wstring - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == variable(U"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != variable(U"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(U""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(U"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(U"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == variable(U"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != variable(U"zulu"), true);
     }
 }
 
@@ -2249,54 +2390,51 @@ void compare_wstring_equal_string_literal()
 {
     // wstring - string literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != "alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == "", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != "", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == "bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != "bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != "", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != "alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == "bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != "bravo", true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != "alpha", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == "bravo", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != "bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == "zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != "zulu", true);
     }
     // wstring - wstring literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == L"", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != L"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != L"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != L"", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == L"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != L"bravo", true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != L"alpha", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == L"bravo", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != L"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == L"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != L"zulu", true);
     }
     // wstring - u16string literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == u"", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != u"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == u"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != u"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == u"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != u"", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == u"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != u"bravo", true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != u"alpha", true);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == u"bravo", false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != u"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == u"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != u"zulu", true);
+    }
+    // wstring - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == U"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != U"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != U"", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == U"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != U"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == U"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != U"zulu", true);
     }
 }
 
@@ -2304,42 +2442,42 @@ void compare_wstring_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == array::make(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != array::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == array::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != array::make(), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == array::make({ 1, 2, 3 }), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != array::make({ 1, 2, 3 }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == array::make({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != array::make({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != array::make({ 1, 2, 3 }), true);
 }
 
 void compare_wstring_equal_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == map::make(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != map::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == map::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != map::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == map::make({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != map::make({ {"alpha", 1} }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") == map::make({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") != map::make({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") == map::make({ {"bravo", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") != map::make({ {"bravo", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") == map::make({ {"bravo", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") != map::make({ {"bravo", 1} }), true);
 }
 
 void compare_u16string_equal_null()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(), true);
 }
 
 void compare_u16string_equal_null_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == null, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != null, true);
 }
 
 void compare_u16string_equal_boolean()
@@ -2349,10 +2487,10 @@ void compare_u16string_equal_boolean()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(true), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(true), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(true), true);
 }
 
 void compare_u16string_equal_boolean_literal()
@@ -2362,10 +2500,10 @@ void compare_u16string_equal_boolean_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == true, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != true, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != true, true);
 }
 
 void compare_u16string_equal_integer()
@@ -2379,10 +2517,10 @@ void compare_u16string_equal_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(big), true);
     }
     // u16string - unsigned
     {
@@ -2393,10 +2531,10 @@ void compare_u16string_equal_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(0U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(0U), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(big), true);
     }
 }
 
@@ -2411,10 +2549,10 @@ void compare_u16string_equal_integer_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == 0, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != 0, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != big, true);
     }
     // u16string - unsigned
     {
@@ -2425,10 +2563,10 @@ void compare_u16string_equal_integer_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == 0U, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != 0U, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != big, true);
     }
 }
 
@@ -2444,10 +2582,10 @@ void compare_u16string_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(big), true);
     }
     // u16string - double
     {
@@ -2459,10 +2597,10 @@ void compare_u16string_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(big), true);
     }
     // u16string - long double
     {
@@ -2474,10 +2612,10 @@ void compare_u16string_equal_number()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(big), false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(big), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(zero), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(zero), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(big), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(big), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(big), true);
     }
 }
 
@@ -2493,10 +2631,10 @@ void compare_u16string_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != big, true);
     }
     // u16string - double
     {
@@ -2508,10 +2646,10 @@ void compare_u16string_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != big, true);
     }
     // u16string - long double
     {
@@ -2523,10 +2661,10 @@ void compare_u16string_equal_number_literal()
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == big, false);
         TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != big, true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == zero, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != zero, true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == big, false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != big, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != big, true);
     }
 }
 
@@ -2534,54 +2672,51 @@ void compare_u16string_equal_string()
 {
     // u16string - string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable("alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(""), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable("charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable("charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable("alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable("bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable("bravo"), true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == variable("alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != variable("alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == variable("bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != variable("bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable("charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable("charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable("zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable("zulu"), true);
     }
     // u16string - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(L""), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(L""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(L"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(L"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(L""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(L"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(L"bravo"), true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == variable(L"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(L"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(L"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(L"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(L"zulu"), true);
     }
     // u16string - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(u""), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(u""), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(u""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(u""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == variable(u"bravo"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != variable(u"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(u"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(u"zulu"), true);
+    }
+    // u16string - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == variable(U"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != variable(U"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(U""), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == variable(u"bravo"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != variable(u"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(U"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(U"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == variable(U"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != variable(U"zulu"), true);
     }
 }
 
@@ -2589,54 +2724,51 @@ void compare_u16string_equal_string_literal()
 {
     // u16string - string literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != "alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == "", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != "", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == "charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != "charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != "", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != "alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == "bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != "bravo", true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == "alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != "alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == "bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != "bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == "charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != "charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == "zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != "zulu", true);
     }
     // u16string - wstring literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == L"", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != L"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == L"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != L"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != L"", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == L"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != L"bravo", true);
-
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == L"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != L"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == L"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != L"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == L"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != L"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == L"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != L"zulu", true);
     }
     // u16string - u16string literal
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == u"", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != u"", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != u"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == u"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != u"", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == u"bravo", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != u"bravo", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == u"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != u"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == u"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != u"zulu", true);
+    }
+    // u16string - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == U"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != U"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != U"", true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == u"alpha", false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != u"alpha", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") == u"bravo", true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") != u"bravo", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == U"charlie", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != U"charlie", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == U"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != U"zulu", true);
     }
 }
 
@@ -2644,26 +2776,360 @@ void compare_u16string_equal_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == array::make(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != array::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == array::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != array::make(), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == array::make({ 1, 2, 3 }), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != array::make({ 1, 2, 3 }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == array::make({ 1, 2, 3 }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != array::make({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != array::make({ 1, 2, 3 }), true);
 }
 
 void compare_u16string_equal_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == map::make(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != map::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == map::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != map::make(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == map::make({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != map::make({ {"alpha", 1} }), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") == map::make({ {"alpha", 1} }), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") != map::make({ {"alpha", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") == map::make({ {"charlie", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") != map::make({ {"charlie", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") == map::make({ {"charlie", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") != map::make({ {"charlie", 1} }), true);
+}
+
+void compare_u32string_equal_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(), true);
+}
+
+void compare_u32string_equal_null_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != null, true);
+}
+
+void compare_u32string_equal_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(true), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(true), true);
+}
+
+void compare_u32string_equal_boolean_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != true, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != true, true);
+}
+
+void compare_u32string_equal_integer()
+{
+    // u32string - signed
+    {
+        const auto big = std::numeric_limits<signed int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(big), true);
+    }
+    // u32string - unsigned
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(big), true);
+    }
+}
+
+void compare_u32string_equal_integer_literal()
+{
+    // u32string - signed
+    {
+        const auto big = std::numeric_limits<signed int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == 0, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != 0, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != big, true);
+    }
+    // u32string - unsigned
+    {
+        const auto big = std::numeric_limits<unsigned int>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == 0U, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != 0U, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != big, true);
+    }
+}
+
+void compare_u32string_equal_number()
+{
+    // u32string - float
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(big), true);
+    }
+    // u32string - double
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(big), true);
+    }
+    // u32string - long double
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(big), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(zero), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(zero), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(big), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(big), true);
+    }
+}
+
+void compare_u32string_equal_number_literal()
+{
+    // u32string - float
+    {
+        const auto zero = 0.0f;
+        const auto big = std::numeric_limits<float>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != big, true);
+    }
+    // u32string - double
+    {
+        const auto zero = 0.0;
+        const auto big = std::numeric_limits<double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != big, true);
+    }
+    // u32string - long double
+    {
+        const auto zero = 0.0L;
+        const auto big = std::numeric_limits<long double>::max();
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != big, true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == zero, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != zero, true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == big, false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != big, true);
+    }
+}
+
+void compare_u32string_equal_string()
+{
+    // u32string - string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable("delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable("delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable("delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable("delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable("zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable("zulu"), true);
+    }
+    // u32string - wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(L"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(L"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(L""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(L""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(L"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(L"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(L"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(L"zulu"), true);
+    }
+    // u32string - u16string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(u"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(u"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(u""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(u""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(u"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(u"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(u"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(u"zulu"), true);
+    }
+    // u32string - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(U""), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(U""), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == variable(U"zulu"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != variable(U"zulu"), true);
+    }
+}
+
+void compare_u32string_equal_string_literal()
+{
+    // u32string - string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == "delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != "delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == "", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != "", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == "delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != "delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == "zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != "zulu", true);
+    }
+    // u32string - wstring literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == L"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != L"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == L"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != L"", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == L"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != L"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == L"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != L"zulu", true);
+    }
+    // u32string - u16string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == u"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != u"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == u"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != u"", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == u"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != u"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == u"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != u"zulu", true);
+    }
+    // u32string - u32string literal
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != U"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == U"", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != U"", true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == U"delta", true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != U"delta", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == U"zulu", false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != U"zulu", true);
+    }
+}
+
+void compare_u32string_equal_array()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != array::make(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != array::make({ 1, 2, 3 }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == array::make({ 1, 2, 3 }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != array::make({ 1, 2, 3 }), true);
+}
+
+void compare_u32string_equal_map()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != map::make(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") == map::make({ {"delta", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") != map::make({ {"delta", 1} }), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") == map::make({ {"delta", 1} }), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") != map::make({ {"delta", 1} }), true);
 }
 
 void compare_array_equal_null()
@@ -2894,52 +3360,78 @@ void compare_array_equal_wstring()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(L""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(L""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(L"bravo"), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(L""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(L""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(L"bravo"), true);
 }
 
 void compare_array_equal_wstring_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() == L"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() != L"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != L"bravo", true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == L"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != L"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != L"bravo", true);
 }
 
 void compare_array_equal_u16string()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(u""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(u""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(u"charlie"), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(u""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(u""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(u"charlie"), true);
 }
 
 void compare_array_equal_u16string_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() == u"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make() != u"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != u"charlie", true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == u"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != u"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != u"charlie", true);
+}
+
+void compare_array_equal_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(U""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != variable(U"delta"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(U""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != variable(U"delta"), true);
+}
+
+void compare_array_equal_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == U"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != U"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() == U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make() != U"delta", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == U"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != U"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) == U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(array::make({ 1, 2, 3 }) != U"delta", true);
 }
 
 void compare_array_equal_array()
@@ -3229,52 +3721,78 @@ void compare_map_equal_wstring()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(L""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(L""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(L"bravo"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(L""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(L""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) == variable(L""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) != variable(L""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) == variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) != variable(L"bravo"), true);
 }
 
 void compare_map_equal_wstring_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() == L"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() != L"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != L"bravo", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == L"", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != L"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) == L"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) != L"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) == L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {L"bravo", 1} }) != L"bravo", true);
 }
 
 void compare_map_equal_u16string()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(u""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(u""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(u"charlie"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(u""), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(u""), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) == variable(u""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) != variable(u""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) == variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) != variable(u"charlie"), true);
 }
 
 void compare_map_equal_u16string_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() == u"", false);
     TRIAL_PROTOCOL_TEST_EQUAL(map::make() != u"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != u"charlie", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == u"", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != u"", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) == u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {"alpha", 1} }) != u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) == u"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) != u"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) == u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {u"charlie", 1} }) != u"charlie", true);
+}
+
+void compare_map_equal_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(U""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != variable(U"delta"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) == variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) != variable(U""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) == variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) != variable(U"delta"), true);
+}
+
+void compare_map_equal_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == U"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != U"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() == U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make() != U"delta", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) == U"", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) != U"", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) == U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {U"delta", 1} }) != U"delta", true);
 }
 
 void compare_map_equal_array()
@@ -3321,6 +3839,8 @@ void run()
     compare_null_equal_wstring_literal();
     compare_null_equal_u16string();
     compare_null_equal_u16string_literal();
+    compare_null_equal_u32string();
+    compare_null_equal_u32string_literal();
     compare_null_equal_array();
     compare_null_equal_map();
 
@@ -3338,6 +3858,8 @@ void run()
     compare_boolean_equal_wstring_literal();
     compare_boolean_equal_u16string();
     compare_boolean_equal_u16string_literal();
+    compare_boolean_equal_u32string();
+    compare_boolean_equal_u32string_literal();
     compare_boolean_equal_array();
     compare_boolean_equal_map();
 
@@ -3355,6 +3877,8 @@ void run()
     compare_integer_equal_wstring_literal();
     compare_integer_equal_u16string();
     compare_integer_equal_u16string_literal();
+    compare_integer_equal_u32string();
+    compare_integer_equal_u32string_literal();
     compare_integer_equal_array();
     compare_integer_equal_map();
 
@@ -3372,6 +3896,8 @@ void run()
     compare_number_equal_wstring_literal();
     compare_number_equal_u16string();
     compare_number_equal_u16string_literal();
+    compare_number_equal_u32string();
+    compare_number_equal_u32string_literal();
     compare_number_equal_array();
     compare_number_equal_map();
 
@@ -3414,6 +3940,19 @@ void run()
     compare_u16string_equal_array();
     compare_u16string_equal_map();
 
+    compare_u32string_equal_null();
+    compare_u32string_equal_null_literal();
+    compare_u32string_equal_boolean();
+    compare_u32string_equal_boolean_literal();
+    compare_u32string_equal_integer();
+    compare_u32string_equal_integer_literal();
+    compare_u32string_equal_number();
+    compare_u32string_equal_number_literal();
+    compare_u32string_equal_string();
+    compare_u32string_equal_string_literal();
+    compare_u32string_equal_array();
+    compare_u32string_equal_map();
+
     compare_array_equal_null();
     compare_array_equal_null_literal();
     compare_array_equal_boolean();
@@ -3428,6 +3967,8 @@ void run()
     compare_array_equal_wstring_literal();
     compare_array_equal_u16string();
     compare_array_equal_u16string_literal();
+    compare_array_equal_u32string();
+    compare_array_equal_u32string_literal();
     compare_array_equal_array();
     compare_array_equal_map();
 
@@ -3450,6 +3991,8 @@ void run()
     compare_map_equal_wstring_literal();
     compare_map_equal_u16string();
     compare_map_equal_u16string_literal();
+    compare_map_equal_u32string();
+    compare_map_equal_u32string_literal();
     compare_map_equal_array();
     compare_map_equal_map();
 }
@@ -3683,6 +4226,14 @@ void compare_null_with_u16string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(u""), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(u""), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(u""), false);
+}
+
+void compare_null_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() < variable(U""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() <= variable(U""), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() > variable(U""), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable() >= variable(U""), false);
 }
 
 void compare_null_with_array()
@@ -4044,28 +4595,41 @@ void compare_boolean_with_string()
 
 void compare_boolean_with_wstring()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(L"bravo"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(L"bravo"), false);
 }
 
 void compare_boolean_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(u"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(u"charlie"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(u"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(u"charlie"), false);
+}
+
+void compare_boolean_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) < variable(U"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) <= variable(U"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) > variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(false) >= variable(U"delta"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) < variable(U"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) <= variable(U"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) > variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(true) >= variable(U"delta"), false);
 }
 
 void compare_boolean_with_array()
@@ -4913,17 +5477,17 @@ void compare_integer_with_wstring()
 {
     // signed - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(L"bravo"), false);
     }
     // unsigned - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(L"bravo"), false);
     }
 }
 
@@ -4931,17 +5495,35 @@ void compare_integer_with_u16string()
 {
     // signed - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(u"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(u"charlie"), false);
     }
     // unsigned - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(u"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(u"charlie"), false);
+    }
+}
+
+void compare_integer_with_u32string()
+{
+    // signed - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) < variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) <= variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) > variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0) >= variable(U"delta"), false);
+    }
+    // unsigned - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) < variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) <= variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) > variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0U) >= variable(U"delta"), false);
     }
 }
 
@@ -6264,24 +6846,24 @@ void compare_number_with_wstring()
 {
     // float - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(L"bravo"), false);
     }
     // double - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(L"bravo"), false);
     }
     // long double - wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(L"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(L"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(L"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(L"bravo"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(L"bravo"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(L"bravo"), false);
     }
 }
 
@@ -6289,24 +6871,49 @@ void compare_number_with_u16string()
 {
     // float - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(u"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(u"charlie"), false);
     }
     // double - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(u"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(u"charlie"), false);
     }
     // long double - u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(u"alpha"), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(u"alpha"), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(u"alpha"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(u"charlie"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(u"charlie"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(u"charlie"), false);
+    }
+}
+
+void compare_number_with_u32string()
+{
+    // float - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) <= variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) > variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) >= variable(U"delta"), false);
+    }
+    // double - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) < variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) <= variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) > variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0) >= variable(U"delta"), false);
+    }
+    // long double - u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) < variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) <= variable(U"delta"), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) > variable(U"delta"), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0L) >= variable(U"delta"), false);
     }
 }
 
@@ -6453,15 +7060,15 @@ void compare_string_with_string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable("alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable("alpha"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable("bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable("bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable("bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable("zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable("zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable("zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable("zulu"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= variable("alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= variable("alpha"), true);
 }
 
 void compare_string_with_string_literal()
@@ -6471,15 +7078,15 @@ void compare_string_with_string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > "alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= "alpha", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < "bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= "bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > "bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= "bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < "zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= "zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > "zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= "zulu", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= "alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= "alpha", true);
 }
 
 void compare_string_with_wstring()
@@ -6490,15 +7097,15 @@ void compare_string_with_wstring()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(L"alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(L"alpha"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(L"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(L"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(L"bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(L"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(L"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(L"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(L"zulu"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > variable(L"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= variable(L"alpha"), false);
 }
 
 void compare_string_with_wstring_literal()
@@ -6508,15 +7115,15 @@ void compare_string_with_wstring_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > L"alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= L"alpha", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < L"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= L"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > L"bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < L"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= L"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > L"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= L"zulu", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < L"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= L"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > L"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= L"alpha", false);
 }
 
 void compare_string_with_u16string()
@@ -6527,15 +7134,15 @@ void compare_string_with_u16string()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(u"alpha"), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(u"alpha"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(u"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(u"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(u"bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(u"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(u"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(u"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(u"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(u"zulu"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= variable(u"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > variable(u"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= variable(u"alpha"), false);
 }
 
 void compare_string_with_u16string_literal()
@@ -6545,15 +7152,52 @@ void compare_string_with_u16string_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > u"alpha", false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= u"alpha", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < u"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= u"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > u"bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= u"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < u"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= u"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > u"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= u"zulu", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") < u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") <= u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") > u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable("bravo") >= u"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > u"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= u"alpha", false);
+}
+
+void compare_string_with_u32string()
+{
+    // string is always lesser than u32string
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(U"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(U"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(U"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(U"alpha"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > variable(U"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= variable(U"zulu"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < variable(U"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= variable(U"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > variable(U"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= variable(U"alpha"), false);
+}
+
+void compare_string_with_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < U"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= U"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > U"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= U"alpha", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") < U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") <= U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") > U"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("alpha") >= U"zulu", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") < U"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") <= U"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") > U"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable("zulu") >= U"alpha", false);
 }
 
 void compare_string_with_array()
@@ -6579,10 +7223,10 @@ void compare_wstring_with_null()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") > variable(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") >= variable(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(), true);
 }
 
 void compare_wstring_with_null_literal()
@@ -6592,63 +7236,63 @@ void compare_wstring_with_null_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") > null, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(L"") >= null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= null, true);
 }
 
 void compare_wstring_with_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(false), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(true), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(true), true);
 }
 
 void compare_wstring_with_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= false, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= true, true);
 }
 
 void compare_wstring_with_integer()
 {
     // wstring - signed
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(0), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(1), true);
     }
     // wstring - unsigned
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0U), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(0U), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1U), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(1U), true);
     }
 }
 
@@ -6656,164 +7300,200 @@ void compare_wstring_with_number()
 {
     // wstring - float
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0.0f), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(0.0f), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1.0f), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(1.0f), true);
     }
     // wstring - double
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0.0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(0.0), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1.0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(1.0), true);
     }
     // wstring - long double
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(0.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(0.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(0.0L), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(0.0L), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(1.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(1.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(1.0L), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(1.0L), true);
     }
 }
 
 void compare_wstring_with_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable("bravo"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable("bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable("bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable("bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable("zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable("zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable("zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable("zulu"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= variable("bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= variable("bravo"), true);
 }
 
 void compare_wstring_with_string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < "bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= "bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > "bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= "bravo", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < "bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= "bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > "bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= "bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < "zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= "zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > "zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= "zulu", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < "bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= "bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > "bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= "bravo", true);
 }
 
 void compare_wstring_with_wstring()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(L"bravo"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(L"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(L"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(L"bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(L"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(L"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(L"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(L"zulu"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= variable(L"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= variable(L"bravo"), true);
 }
 
 void compare_wstring_with_wstring_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= L"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= L"bravo", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < L"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= L"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > L"bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < L"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= L"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > L"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= L"zulu", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > L"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= L"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= L"bravo", true);
 }
 
 void compare_wstring_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(u"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(u"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(u"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(u"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(u"bravo"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < variable(u"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= variable(u"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > variable(u"bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= variable(u"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(u"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(u"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(u"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(u"zulu"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(u"alpha"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < variable(u"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= variable(u"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > variable(u"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= variable(u"bravo"), false);
 }
 
 void compare_wstring_with_u16string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= u"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < u"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= u"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > u"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= u"bravo", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < u"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= u"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > u"bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= u"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < u"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= u"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > u"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= u"zulu", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= u"alpha", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < u"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= u"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > u"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= u"bravo", false);
+}
+
+void compare_wstring_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(U"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(U"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(U"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(U"bravo"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > variable(U"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= variable(U"zulu"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < variable(U"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= variable(U"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > variable(U"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= variable(U"bravo"), false);
+}
+
+void compare_wstring_with_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < U"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= U"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > U"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= U"bravo", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > U"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= U"zulu", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") < U"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") <= U"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") > U"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"zulu") >= U"bravo", false);
 }
 
 void compare_wstring_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < array::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= array::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > array::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= array::make(), false);
 }
 
 void compare_wstring_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") < map::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") <= map::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") > map::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"alpha") >= map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(L"bravo") >= map::make(), false);
 }
 
 void compare_u16string_with_null()
@@ -6823,10 +7503,10 @@ void compare_u16string_with_null()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") > variable(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") >= variable(), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(), true);
 }
 
 void compare_u16string_with_null_literal()
@@ -6836,63 +7516,63 @@ void compare_u16string_with_null_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") > null, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(u"") >= null, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= null, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > null, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= null, true);
 }
 
 void compare_u16string_with_boolean()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(false), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(false), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(false), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(true), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(true), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(true), true);
 }
 
 void compare_u16string_with_boolean_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= false, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > false, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= false, true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= true, false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > true, true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= true, true);
 }
 
 void compare_u16string_with_integer()
 {
     // u16string - signed
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(0), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(1), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(1), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(1), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(1), true);
     }
     // u16string - unsigned
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(0U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(0U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(0U), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(0U), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(1U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(1U), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(1U), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(1U), true);
     }
 }
 
@@ -6900,164 +7580,480 @@ void compare_u16string_with_number()
 {
     // u16string - float
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(0.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(0.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(0.0f), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(0.0f), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(1.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(1.0f), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(1.0f), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(1.0f), true);
     }
     // u16string - double
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(0.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(0.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(0.0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(0.0), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(1.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(1.0), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(1.0), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(1.0), true);
     }
     // u16string - long double
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(0.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(0.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(0.0L), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(0.0L), true);
 
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(1.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(1.0L), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(1.0L), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(1.0L), true);
     }
 }
 
 void compare_u16string_with_string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable("charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable("charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable("charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable("charlie"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable("bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable("bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable("bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable("bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable("zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable("zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable("zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable("zulu"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") < variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") <= variable("alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") > variable("alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") >= variable("alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < variable("charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= variable("charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > variable("charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= variable("charlie"), true);
 }
 
 void compare_u16string_with_string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < "charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= "charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > "charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= "charlie", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < "bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= "bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > "bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= "bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < "zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= "zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > "zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= "zulu", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") < "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") <= "alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") > "alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") >= "alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < "charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= "charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > "charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= "charlie", true);
 }
 
 void compare_u16string_with_wstring()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(L"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(L"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(L"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(L"charlie"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(L"bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(L"bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(L"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(L"bravo"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(L"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(L"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(L"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(L"zulu"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") < variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") <= variable(L"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") > variable(L"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") >= variable(L"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < variable(L"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= variable(L"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > variable(L"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= variable(L"charlie"), true);
 }
 
 void compare_u16string_with_wstring_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > L"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < L"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= L"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > L"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= L"charlie", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < L"bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= L"bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > L"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= L"bravo", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < L"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= L"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > L"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= L"zulu", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") < L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") <= L"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") > L"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") >= L"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < L"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= L"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > L"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= L"charlie", true);
 }
 
 void compare_u16string_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(u"charlie"), true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < variable(u"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= variable(u"bravo"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > variable(u"bravo"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= variable(u"bravo"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(u"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(u"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(u"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(u"zulu"), false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") < variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") <= variable(u"alpha"), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") > variable(u"alpha"), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") >= variable(u"alpha"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= variable(u"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > variable(u"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= variable(u"charlie"), true);
 }
 
 void compare_u16string_with_u16string_literal()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= u"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= u"charlie", true);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < u"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= u"bravo", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > u"bravo", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= u"bravo", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < u"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= u"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > u"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= u"zulu", false);
 
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") < u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") <= u"alpha", false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") > u"alpha", true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"bravo") >= u"alpha", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= u"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > u"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= u"charlie", true);
+}
+
+void compare_u16string_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(U"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(U"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(U"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(U"charlie"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > variable(U"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= variable(U"zulu"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < variable(U"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= variable(U"charlie"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > variable(U"charlie"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= variable(U"charlie"), false);
+}
+
+void compare_u16string_with_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < U"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= U"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > U"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= U"charlie", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > U"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= U"zulu", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < U"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= U"charlie", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > U"charlie", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= U"charlie", false);
 }
 
 void compare_u16string_with_array()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < array::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= array::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > array::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= array::make(), false);
 }
 
 void compare_u16string_with_map()
 {
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") < map::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") <= map::make(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") > map::make(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"alpha") >= map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"charlie") >= map::make(), false);
+}
+
+void compare_u32string_with_null()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") >= variable(), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(), true);
+}
+
+void compare_u32string_with_null_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"") >= null, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= null, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > null, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= null, true);
+}
+
+void compare_u32string_with_boolean()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(false), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(false), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(false), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(true), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(true), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(true), true);
+}
+
+void compare_u32string_with_boolean_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= false, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= false, true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= true, false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= true, true);
+}
+
+void compare_u32string_with_integer()
+{
+    // u32string - signed
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(0), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(1), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(1), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(1), true);
+    }
+    // u32string - unsigned
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(0U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(0U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(0U), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(1U), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(1U), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(1U), true);
+    }
+}
+
+void compare_u32string_with_number()
+{
+    // u32string - float
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(0.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(0.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(0.0f), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(1.0f), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(1.0f), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(1.0f), true);
+    }
+    // u32string - double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(0.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(0.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(0.0), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(1.0), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(1.0), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(1.0), true);
+    }
+    // u32string - long double
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(0.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(0.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(0.0L), true);
+
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(1.0L), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(1.0L), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(1.0L), true);
+    }
+}
+
+void compare_u32string_with_string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable("delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable("delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable("delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable("delta"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable("zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable("zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable("zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable("zulu"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < variable("delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= variable("delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > variable("delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= variable("delta"), true);
+}
+
+void compare_u32string_with_string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < "delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= "delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > "delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= "delta", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < "zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= "zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > "zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= "zulu", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < "delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= "delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > "delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= "delta", true);
+}
+
+void compare_u32string_with_wstring()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(L"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(L"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(L"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(L"delta"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(L"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(L"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(L"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(L"zulu"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < variable(L"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= variable(L"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > variable(L"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= variable(L"delta"), true);
+}
+
+void compare_u32string_with_wstring_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < L"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= L"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > L"delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= L"delta", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < L"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= L"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > L"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= L"zulu", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < L"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= L"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > L"delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= L"delta", true);
+}
+
+void compare_u32string_with_u16string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(u"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(u"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(u"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(u"delta"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(u"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(u"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(u"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(u"zulu"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < variable(u"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= variable(u"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > variable(u"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= variable(u"delta"), true);
+}
+
+void compare_u32string_with_u16string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < u"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= u"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > u"delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= u"delta", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < u"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= u"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > u"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= u"zulu", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") < u"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") <= u"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") > u"delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(u"zulu") >= u"delta", true);
+}
+
+void compare_u32string_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(U"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(U"delta"), true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= variable(U"zulu"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > variable(U"zulu"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= variable(U"zulu"), false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") < variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") <= variable(U"delta"), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") > variable(U"delta"), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") >= variable(U"delta"), true);
+}
+
+void compare_u32string_with_u32string_literal()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= U"delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= U"delta", true);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= U"zulu", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > U"zulu", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= U"zulu", false);
+
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") < U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") <= U"delta", false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") > U"delta", true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"zulu") >= U"delta", true);
+}
+
+void compare_u32string_with_array()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= array::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > array::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= array::make(), false);
+}
+
+void compare_u32string_with_map()
+{
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") < map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") <= map::make(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") > map::make(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(variable(U"delta") >= map::make(), false);
 }
 
 void compare_array_with_array()
@@ -7119,66 +8115,127 @@ void compare_map_with_map_string()
 {
     // map string - map string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"zulu", 1}}), true);
         TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 1}}), false);
         TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{"alpha", 2}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"bravo", 1}}) < map::make({{"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"zulu", 1}}) < map::make({{"alpha", 1}}), false);
     }
     // map string - map wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{L"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{L"zulu", 1}}), true);
         TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{L"alpha", 1}}), true);
         TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{L"alpha", 2}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"bravo", 1}}) < map::make({{L"alpha", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"zulu", 1}}) < map::make({{L"alpha", 1}}), true);
     }
     // map string - map u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{u"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{u"zulu", 1}}), true);
         TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{u"alpha", 1}}), true);
         TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{u"alpha", 2}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"bravo", 1}}) < map::make({{u"alpha", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"zulu", 1}}) < map::make({{u"alpha", 1}}), true);
     }
+    // map string - map u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{U"zulu", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{U"alpha", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{U"alpha", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"zulu", 1}}) < map::make({{U"alpha", 1}}), true);
+    }
+}
+
+void compare_map_with_map_wstring()
+{
     // map wstring - map string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{"bravo", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{"alpha", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{"alpha", 2}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{"zulu", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{"bravo", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{"bravo", 2}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"zulu", 1}}) < map::make({{"bravo", 1}}), false);
     }
     // map wstring - map wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{L"bravo", 1}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{L"alpha", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{L"alpha", 2}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{L"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{L"zulu", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{L"bravo", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{L"bravo", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"zulu", 1}}) < map::make({{L"bravo", 1}}), false);
     }
     // map wstring - map u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{u"bravo", 1}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{u"alpha", 1}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"alpha", 1}}) < map::make({{u"alpha", 2}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{u"alpha", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{u"zulu", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{u"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{u"bravo", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"zulu", 1}}) < map::make({{u"bravo", 1}}), true);
     }
+    // map wstring - map u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{U"zulu", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{U"bravo", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"bravo", 1}}) < map::make({{U"bravo", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{L"zulu", 1}}) < map::make({{U"bravo", 1}}), true);
+    }
+}
+
+void compare_map_with_map_u16string()
+{
     // map u16string - map string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{"bravo", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{"alpha", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{"alpha", 2}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"bravo", 1}}) < map::make({{"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{"zulu", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{"charlie", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{"charlie", 2}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"zulu", 1}}) < map::make({{"charlie", 1}}), false);
     }
     // map u16string - map wstring
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{L"bravo", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{L"alpha", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{L"alpha", 2}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"bravo", 1}}) < map::make({{L"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{L"zulu", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{L"charlie", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{L"charlie", 2}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"zulu", 1}}) < map::make({{L"charlie", 1}}), false);
     }
     // map u16string - map u16string
     {
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{u"bravo", 1}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{u"alpha", 1}}), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"alpha", 1}}) < map::make({{u"alpha", 2}}), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"bravo", 1}}) < map::make({{u"alpha", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{u"zulu", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{u"charlie", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{u"charlie", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"zulu", 1}}) < map::make({{u"charlie", 1}}), false);
+    }
+    // map u16string - map u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{U"zulu", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{U"charlie", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"charlie", 1}}) < map::make({{U"charlie", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{u"zulu", 1}}) < map::make({{U"charlie", 1}}), true);
+    }
+}
+
+void compare_map_with_map_u32string()
+{
+    // map u32string - map string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{"zulu", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{"delta", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{"delta", 2}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"zulu", 1}}) < map::make({{"delta", 1}}), false);
+    }
+    // map u32string - map wstring
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{L"zulu", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{L"delta", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{L"delta", 2}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"zulu", 1}}) < map::make({{L"delta", 1}}), false);
+    }
+    // map u32string - map u16string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{u"zulu", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{u"delta", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{u"delta", 2}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"zulu", 1}}) < map::make({{u"delta", 1}}), false);
+    }
+    // map u32string - map u32string
+    {
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{U"zulu", 1}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{U"delta", 1}}), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"delta", 1}}) < map::make({{U"delta", 2}}), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(map::make({{U"zulu", 1}}) < map::make({{U"delta", 1}}), false);
     }
 }
 
@@ -7195,6 +8252,7 @@ void run()
     compare_null_with_string();
     compare_null_with_wstring();
     compare_null_with_u16string();
+    compare_null_with_u32string();
     compare_null_with_array();
     compare_null_with_map();
 
@@ -7209,6 +8267,7 @@ void run()
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();
+    compare_boolean_with_u32string();
     compare_boolean_with_array();
     compare_boolean_with_map();
 
@@ -7223,6 +8282,7 @@ void run()
     compare_integer_with_string();
     compare_integer_with_wstring();
     compare_integer_with_u16string();
+    compare_integer_with_u32string();
     compare_integer_with_array();
     compare_integer_with_map();
 
@@ -7238,6 +8298,7 @@ void run()
     compare_number_with_string();
     compare_number_with_wstring();
     compare_number_with_u16string();
+    compare_number_with_u32string();
     compare_number_with_array();
     compare_number_with_map();
 
@@ -7253,6 +8314,8 @@ void run()
     compare_string_with_wstring_literal();
     compare_string_with_u16string();
     compare_string_with_u16string_literal();
+    compare_string_with_u32string();
+    compare_string_with_u32string_literal();
     compare_string_with_array();
     compare_string_with_map();
 
@@ -7268,6 +8331,8 @@ void run()
     compare_wstring_with_wstring_literal();
     compare_wstring_with_u16string();
     compare_wstring_with_u16string_literal();
+    compare_wstring_with_u32string();
+    compare_wstring_with_u32string_literal();
     compare_wstring_with_array();
     compare_wstring_with_map();
 
@@ -7283,8 +8348,27 @@ void run()
     compare_u16string_with_wstring_literal();
     compare_u16string_with_u16string();
     compare_u16string_with_u16string_literal();
+    compare_u16string_with_u32string();
+    compare_u16string_with_u32string_literal();
     compare_u16string_with_array();
     compare_u16string_with_map();
+
+    compare_u32string_with_null();
+    compare_u32string_with_null_literal();
+    compare_u32string_with_boolean();
+    compare_u32string_with_boolean_literal();
+    compare_u32string_with_integer();
+    compare_u32string_with_number();
+    compare_u32string_with_string();
+    compare_u32string_with_string_literal();
+    compare_u32string_with_wstring();
+    compare_u32string_with_wstring_literal();
+    compare_u32string_with_u16string();
+    compare_u32string_with_u16string_literal();
+    compare_u32string_with_u32string();
+    compare_u32string_with_u32string_literal();
+    compare_u32string_with_array();
+    compare_u32string_with_map();
 
     // FIXME: More
     compare_array_with_array();
@@ -7295,6 +8379,9 @@ void run()
     compare_map_with_map_integer();
     compare_map_with_map_number();
     compare_map_with_map_string();
+    compare_map_with_map_wstring();
+    compare_map_with_map_u16string();
+    compare_map_with_map_u32string();
 }
 
 } // namespace relational_suite
@@ -7415,8 +8502,14 @@ void compare_null_with_wstring()
 
 void compare_null_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(u"bravo")));
-    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), u"bravo"));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(u"charlie")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), u"charlie"));
+}
+
+void compare_null_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(U"delta")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), U"delta"));
 }
 
 void compare_boolean_with_null()
@@ -7466,8 +8559,14 @@ void compare_boolean_with_wstring()
 
 void compare_boolean_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(u"bravo")));
-    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), u"bravo"));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(u"charlie")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), u"charlie"));
+}
+
+void compare_boolean_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(U"delta")));
+    TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), U"delta"));
 }
 
 void run()
@@ -7479,6 +8578,8 @@ void run()
     compare_null_with_number();
     compare_null_with_string();
     compare_null_with_wstring();
+    compare_null_with_u16string();
+    compare_null_with_u32string();
 
     compare_boolean_with_null();
     compare_boolean_with_boolean();
@@ -7487,6 +8588,7 @@ void run()
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();
+    compare_boolean_with_u32string();
 }
 
 } // namespace equal_to_suite
@@ -7544,8 +8646,14 @@ void compare_null_with_wstring()
 
 void compare_null_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), u"bravo"));
-    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(u"bravo")));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), u"charlie"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(u"charlie")));
+}
+
+void compare_null_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), U"delta"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(U"delta")));
 }
 
 void compare_boolean_with_null()
@@ -7595,8 +8703,14 @@ void compare_boolean_with_wstring()
 
 void compare_boolean_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), u"bravo"));
-    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), variable(u"bravo")));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), u"charlie"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), variable(u"charlie")));
+}
+
+void compare_boolean_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), U"delta"));
+    TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(false), variable(U"delta")));
 }
 
 void run()
@@ -7609,6 +8723,7 @@ void run()
     compare_null_with_string();
     compare_null_with_wstring();
     compare_null_with_u16string();
+    compare_null_with_u32string();
 
     compare_boolean_with_null();
     compare_boolean_with_boolean();
@@ -7617,6 +8732,7 @@ void run()
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();
+    compare_boolean_with_u32string();
 }
 
 } // namespace not_equal_to_suite
@@ -7674,8 +8790,14 @@ void compare_null_with_wstring()
 
 void compare_null_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), u"bravo"));
-    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(u"bravo")));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), u"charlie"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(u"charlie")));
+}
+
+void compare_null_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), U"delta"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(U"delta")));
 }
 
 void compare_boolean_with_null()
@@ -7725,8 +8847,14 @@ void compare_boolean_with_wstring()
 
 void compare_boolean_with_u16string()
 {
-    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), u"alpha"));
-    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), variable(u"alpha")));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), u"charlie"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), variable(u"charlie")));
+}
+
+void compare_boolean_with_u32string()
+{
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), U"delta"));
+    TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(false), variable(U"delta")));
 }
 
 void run()
@@ -7739,6 +8867,7 @@ void run()
     compare_null_with_string();
     compare_null_with_wstring();
     compare_null_with_u16string();
+    compare_null_with_u32string();
 
     compare_boolean_with_null();
     compare_boolean_with_boolean();
@@ -7747,6 +8876,7 @@ void run()
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();
+    compare_boolean_with_u32string();
 }
 
 } // namespace less_suite

@@ -131,12 +131,34 @@ void to_vector_u16string()
                                  std::equal_to<decltype(result)::value_type>());
 }
 
+void from_vector_u32string()
+{
+    std::vector<std::u32string> input = { U"alpha", U"bravo" };
+    variable result = convert<variable>(input);
+
+    variable expect = array::make({ U"alpha", U"bravo" });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void to_vector_u32string()
+{
+    variable input = { U"alpha", U"bravo" };
+    auto result = convert<std::vector<std::u32string>>(input);
+
+    std::vector<std::u32string> expect = { U"alpha", U"bravo" };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<decltype(result)::value_type>());
+}
+
 void to_vector_variable()
 {
-    variable input = { null, true, 2, 3.0, "alpha", L"bravo", u"charlie" };
+    variable input = { null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" };
     auto result = convert<std::vector<variable>>(input);
 
-    std::vector<variable> expect = { null, true, 2, 3.0, "alpha", L"bravo", u"charlie" };
+    std::vector<variable> expect = { null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expect.begin(), expect.end(),
                                  std::equal_to<variable>());
@@ -168,6 +190,8 @@ void run()
     to_vector_wstring();
     from_vector_u16string();
     to_vector_u16string();
+    from_vector_u32string();
+    to_vector_u32string();
 
     to_vector_variable();
 
@@ -373,6 +397,44 @@ void to_map_string_u16string()
                                  std::equal_to<decltype(result)::value_type>());
 }
 
+void from_map_string_u32string()
+{
+    std::map<std::string, std::u32string> input =
+        {
+            { "alpha", U"hydrogen" },
+            { "bravo", U"helium" }
+        };
+    variable result = convert<variable>(input);
+
+    variable expect = map::make(
+        {
+            { "alpha", U"hydrogen" },
+            { "bravo", U"helium" }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void to_map_string_u32string()
+{
+    variable input =
+        {
+            { "alpha", U"hydrogen" },
+            { "bravo", U"helium" }
+        };
+    auto result = convert<std::map<std::string, std::u32string>>(input);
+
+    decltype(result) expect =
+        {
+            { "alpha", U"hydrogen" },
+            { "bravo", U"helium" }
+        };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<decltype(result)::value_type>());
+}
+
 void to_map_string_variable()
 {
     variable input =
@@ -418,6 +480,8 @@ void run()
     to_map_string_wstring();
     from_map_string_u16string();
     to_map_string_u16string();
+    from_map_string_u32string();
+    to_map_string_u32string();
 
     to_map_string_variable();
 
