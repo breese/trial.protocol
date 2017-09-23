@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_ALGORITHM_KEY_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_ALGORITHM_KEY_HPP
+#ifndef TRIAL_DYNAMIC_ALGORITHM_KEY_HPP
+#define TRIAL_DYNAMIC_ALGORITHM_KEY_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,11 +11,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/dynamic/variable.hpp>
+#include <trial/dynamic/variable.hpp>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -52,7 +50,7 @@ auto count(const basic_variable<Allocator>& self,
             return result;
         }
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -106,7 +104,7 @@ auto count(const basic_variable<Allocator>& self,
     case code::map:
         return count(self, other.template unsafe_get<typename variable_type::map_type>());
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator, typename T>
@@ -136,7 +134,7 @@ auto find(const basic_variable<Allocator>& self,
         }
         return self.key_end();
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -190,12 +188,11 @@ auto find(const basic_variable<Allocator>& self,
     case code::map:
         return find(self, other.template unsafe_get<typename variable_type::map_type>());
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 } // namespace key
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_ALGORITHM_KEY_HPP
+#endif // TRIAL_DYNAMIC_ALGORITHM_KEY_HPP

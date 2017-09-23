@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_CORE_DETAIL_CONFIG_HPP
-#define TRIAL_PROTOCOL_CORE_DETAIL_CONFIG_HPP
+#ifndef TRIAL_DYNAMIC_DETAIL_CONFIG_HPP
+#define TRIAL_DYNAMIC_DETAIL_CONFIG_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -14,15 +14,15 @@
 #include <cassert>
 
 #if __cplusplus >= 201402L
-# define TRIAL_PROTOCOL_CXX14(x) x
+# define TRIAL_DYNAMIC_CXX14(x) x
 #else
-# define TRIAL_PROTOCOL_CXX14(x)
+# define TRIAL_DYNAMIC_CXX14(x)
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)
-# define TRIAL_PROTOCOL_UNREACHABLE() __builtin_unreachable()
+# define TRIAL_DYNAMIC_UNREACHABLE() __builtin_unreachable()
 #else
-# define TRIAL_PROTOCOL_UNREACHABLE() assert(false)
+# define TRIAL_DYNAMIC_UNREACHABLE() assert(false)
 #endif
 
-#endif // TRIAL_PROTOCOL_CORE_DETAIL_CONFIG_HPP
+#endif // TRIAL_DYNAMIC_DETAIL_CONFIG_HPP

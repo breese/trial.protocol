@@ -626,11 +626,13 @@ void run()
 namespace dynamic_suite
 {
 
+using namespace trial::dynamic;
+
 void test_null()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value;
+    variable value;
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "null");
 }
@@ -639,7 +641,7 @@ void test_boolean()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value(true);
+    variable value(true);
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "true");
 }
@@ -648,7 +650,7 @@ void test_integer()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value(2);
+    variable value(2);
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "2");
 }
@@ -657,7 +659,7 @@ void test_number()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value(3.0);
+    variable value(3.0);
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "3.00000000000000");
 }
@@ -666,7 +668,7 @@ void test_string()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value("alpha");
+    variable value("alpha");
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "\"alpha\"");
 }
@@ -675,7 +677,7 @@ void test_array()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value = dynamic::array::make({ true, 2, 3.0, "alpha" });;
+    variable value = array::make({ true, 2, 3.0, "alpha" });;
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[true,2,3.00000000000000,\"alpha\"]");
 }
@@ -684,7 +686,7 @@ void test_map()
 {
     std::ostringstream result;
     json::oarchive ar(result);
-    dynamic::variable value = dynamic::map::make({{ "alpha", "hydrogen" }});
+    variable value = map::make({{ "alpha", "hydrogen" }});
     ar << value;
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "{\"alpha\":\"hydrogen\"}");
 }

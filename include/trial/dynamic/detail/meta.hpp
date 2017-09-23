@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_CORE_DETAIL_META_HPP
-#define TRIAL_PROTOCOL_CORE_DETAIL_META_HPP
+#ifndef TRIAL_DYNAMIC_DETAIL_META_HPP
+#define TRIAL_DYNAMIC_DETAIL_META_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -17,11 +17,7 @@
 
 namespace trial
 {
-namespace protocol
-{
-namespace core
-{
-namespace detail
+namespace dynamic
 {
 namespace meta
 {
@@ -171,9 +167,7 @@ template <typename List, std::size_t N>
 using to_type = typename impl::to_type<List, N>::type;
 
 } // namespace meta
-} // namespace detail
-} // namespace core
-} // namespace protocol
+} // namespace dynamic
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_CORE_DETAIL_META_HPP
+#endif // TRIAL_DYNAMIC_DETAIL_META_HPP

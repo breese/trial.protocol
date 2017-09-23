@@ -9,9 +9,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/core/detail/lightweight_test.hpp>
-#include <trial/protocol/dynamic/boost/any.hpp>
+#include <trial/dynamic/boost/any.hpp>
 
-using namespace trial::protocol::dynamic;
+using namespace trial::dynamic;
 
 //-----------------------------------------------------------------------------
 // boost::any

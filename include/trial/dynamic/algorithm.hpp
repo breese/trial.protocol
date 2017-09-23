@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_ALGORITHM_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_ALGORITHM_HPP
+#ifndef TRIAL_DYNAMIC_ALGORITHM_HPP
+#define TRIAL_DYNAMIC_ALGORITHM_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,6 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/dynamic/algorithm/key.hpp>
+#include <trial/dynamic/algorithm/key.hpp>
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_ALGORITHM_HPP
+#endif // TRIAL_DYNAMIC_ALGORITHM_HPP

@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_VARIABLE_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_VARIABLE_HPP
+#ifndef TRIAL_DYNAMIC_VARIABLE_HPP
+#define TRIAL_DYNAMIC_VARIABLE_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -17,15 +17,12 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <trial/protocol/core/detail/config.hpp>
-#include <trial/protocol/core/detail/small_union.hpp>
-#include <trial/protocol/core/char_traits.hpp>
-#include <trial/protocol/dynamic/error.hpp>
-#include <trial/protocol/dynamic/token.hpp>
+#include <trial/dynamic/detail/config.hpp>
+#include <trial/dynamic/detail/small_union.hpp>
+#include <trial/dynamic/error.hpp>
+#include <trial/dynamic/token.hpp>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -118,7 +115,7 @@ public:
 private:
     template <typename CharT>
     using basic_string = std::basic_string<CharT,
-                                           typename core::char_traits<CharT>,
+                                           typename std::char_traits<CharT>,
                                            typename std::allocator_traits<allocator_type>::template rebind_alloc<CharT>>;
 public:
     using string_type = basic_string<char>;
@@ -184,12 +181,12 @@ private:
         const_reference value() const;
 
     protected:
-        using small_union = core::detail::small_union<Allocator,
-                                                      unsigned char,
-                                                      sizeof(pointer),
-                                                      pointer,
-                                                      array_iterator,
-                                                      map_iterator>;
+        using small_union = detail::small_union<Allocator,
+                                                unsigned char,
+                                                sizeof(pointer),
+                                                pointer,
+                                                array_iterator,
+                                                map_iterator>;
 
         pointer scope;
         small_union current;
@@ -900,30 +897,30 @@ private:
     template <template <typename> class A, typename T, typename> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
-    using storage_type = core::detail::small_union<Allocator,
-                                                   unsigned char,
-                                                   sizeof(double),
-                                                   nullable,
-                                                   bool,
-                                                   signed char,
-                                                   unsigned char,
-                                                   signed short int,
-                                                   unsigned short int,
-                                                   signed int,
-                                                   unsigned int,
-                                                   signed long int,
-                                                   unsigned long int,
-                                                   signed long long int,
-                                                   unsigned long long int,
-                                                   float,
-                                                   double,
-                                                   long double,
-                                                   string_type,
-                                                   wstring_type,
-                                                   u16string_type,
-                                                   u32string_type,
-                                                   array_type,
-                                                   map_type>;
+    using storage_type = detail::small_union<Allocator,
+                                             unsigned char,
+                                             sizeof(double),
+                                             nullable,
+                                             bool,
+                                             signed char,
+                                             unsigned char,
+                                             signed short int,
+                                             unsigned short int,
+                                             signed int,
+                                             unsigned int,
+                                             signed long int,
+                                             unsigned long int,
+                                             signed long long int,
+                                             unsigned long long int,
+                                             float,
+                                             double,
+                                             long double,
+                                             string_type,
+                                             wstring_type,
+                                             u16string_type,
+                                             u32string_type,
+                                             array_type,
+                                             map_type>;
     storage_type storage;
 #endif
 };
@@ -937,22 +934,22 @@ basic_variable<Allocator> operator+ (nullable, const basic_variable<Allocator>&)
 // Container comparison operators are noexcept from C++14
 
 template <typename T, typename U>
-bool operator== (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+bool operator== (const T&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
 
 template <typename T, typename U>
-bool operator!= (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+bool operator!= (const T&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
 
 template <typename T, typename U>
-bool operator< (const T&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+bool operator< (const T&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
 
 template <template <typename> class Allocator, typename U>
-bool operator<= (const basic_variable<Allocator>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+bool operator<= (const basic_variable<Allocator>&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
 
 template <template <typename> class Allocator, typename U>
-bool operator> (const basic_variable<Allocator>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+bool operator> (const basic_variable<Allocator>&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
 
 template <template <typename> class Allocator, typename U>
-bool operator>= (const basic_variable<Allocator>&, const U&) TRIAL_PROTOCOL_CXX14(noexcept);
+bool operator>= (const basic_variable<Allocator>&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
 
 // Convenience
 
@@ -961,9 +958,8 @@ using array = basic_array<std::allocator>;
 using map = basic_map<std::allocator>;
 
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#include <trial/protocol/dynamic/detail/variable.ipp>
+#include <trial/dynamic/detail/variable.ipp>
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_VARIABLE_HPP
+#endif // TRIAL_DYNAMIC_VARIABLE_HPP

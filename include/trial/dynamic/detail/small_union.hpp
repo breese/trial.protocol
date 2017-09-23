@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_CORE_DETAIL_SMALL_UNION_HPP
-#define TRIAL_PROTOCOL_CORE_DETAIL_SMALL_UNION_HPP
+#ifndef TRIAL_DYNAMIC_DETAIL_SMALL_UNION_HPP
+#define TRIAL_DYNAMIC_DETAIL_SMALL_UNION_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -15,13 +15,11 @@
 
 #include <cassert>
 #include <type_traits>
-#include <trial/protocol/core/detail/meta.hpp>
+#include <trial/dynamic/detail/meta.hpp>
 
 namespace trial
 {
-namespace protocol
-{
-namespace core
+namespace dynamic
 {
 namespace detail
 {
@@ -75,10 +73,9 @@ private:
 };
 
 } // namespace detail
-} // namespace core
-} // namespace protocol
+} // namespace dynamic
 } // namespace trial
 
-#include <trial/protocol/core/detail/small_union.ipp>
+#include <trial/dynamic/detail/small_union.ipp>
 
-#endif // TRIAL_PROTOCOL_CORE_DETAIL_SMALL_UNION_HPP
+#endif // TRIAL_DYNAMIC_DETAIL_SMALL_UNION_HPP

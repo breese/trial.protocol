@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_CONVERT_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_CONVERT_HPP
+#ifndef TRIAL_DYNAMIC_CONVERT_HPP
+#define TRIAL_DYNAMIC_CONVERT_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,11 +11,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/dynamic/error.hpp>
+#include <trial/dynamic/error.hpp>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -50,7 +48,6 @@ T convert(const U& u)
 }
 
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_CONVERT_HPP
+#endif // TRIAL_DYNAMIC_CONVERT_HPP

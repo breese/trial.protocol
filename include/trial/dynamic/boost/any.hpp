@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_BOOST_ANY_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_BOOST_ANY_HPP
+#ifndef TRIAL_DYNAMIC_BOOST_ANY_HPP
+#define TRIAL_DYNAMIC_BOOST_ANY_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -12,13 +12,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/any.hpp>
-#include <trial/protocol/dynamic/variable.hpp>
-#include <trial/protocol/dynamic/convert.hpp>
-#include <trial/protocol/dynamic/std/vector.hpp>
+#include <trial/dynamic/variable.hpp>
+#include <trial/dynamic/convert.hpp>
+#include <trial/dynamic/std/vector.hpp>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -160,7 +158,6 @@ struct convert_overloader<basic_variable<Allocator>, boost::any>
 
 } // namespace detail
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_BOOST_ANY_HPP
+#endif // TRIAL_DYNAMIC_BOOST_ANY_HPP

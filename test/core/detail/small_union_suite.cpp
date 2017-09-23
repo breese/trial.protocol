@@ -10,9 +10,9 @@
 
 #include <string>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
-#include <trial/protocol/core/detail/small_union.hpp>
+#include <trial/dynamic/detail/small_union.hpp>
 
-using namespace trial::protocol::core::detail;
+using namespace trial::dynamic::detail;
 
 template <std::size_t N, typename... Types>
 using test_union = small_union<std::allocator, std::size_t, N, Types...>;

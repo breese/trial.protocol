@@ -869,22 +869,24 @@ void run()
 namespace dynamic_suite
 {
 
+using namespace trial::dynamic;
+
 void test_null()
 {
-    const value_type input[] = { token::code::null };
+    const value_type input[] = { bintoken::token::code::null };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::nullable>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<nullable>(), true);
 }
 
 void test_boolean()
 {
-    const value_type input[] = { token::code::true_value };
+    const value_type input[] = { bintoken::token::code::true_value };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::boolean>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<boolean>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<bool>(), true);
 }
 
@@ -892,106 +894,106 @@ void test_integer_small()
 {
     const value_type input[] = { 0x02 };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::integer>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<integer>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<signed int>(), 2);
 }
 
 void test_integer()
 {
-    const value_type input[] = { token::code::int16, 0x02, 0x00 };
+    const value_type input[] = { bintoken::token::code::int16, 0x02, 0x00 };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::integer>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<integer>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<int>(), 2);
 }
 
 void test_number()
 {
-    const value_type input[] = { token::code::float32, 0x00, 0x00, 0x80, 0x3F };
+    const value_type input[] = { bintoken::token::code::float32, 0x00, 0x00, 0x80, 0x3F };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<number>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<float>(), 1.0f);
 }
 
 void test_string()
 {
-    const value_type input[] = { token::code::string8, 0x03, 0x41, 0x42, 0x43 };
+    const value_type input[] = { bintoken::token::code::string8, 0x03, 0x41, 0x42, 0x43 };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::string>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.value<dynamic::string>(), "ABC");
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<string>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.value<string>(), "ABC");
 }
 
 void test_array_empty()
 {
-    const value_type input[] = { token::code::begin_array,
+    const value_type input[] = { bintoken::token::code::begin_array,
                                  0x00,
-                                 token::code::end_array };
+                                 bintoken::token::code::end_array };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::array>(), true);
-    dynamic::variable expect = dynamic::array::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<array>(), true);
+    variable expect = array::make();
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
-                                 std::equal_to<dynamic::variable>());
+                                 std::equal_to<variable>());
 }
 
 void test_array()
 {
-    const value_type input[] = { token::code::begin_array,
+    const value_type input[] = { bintoken::token::code::begin_array,
                                  0x02,
-                                 token::code::true_value,
+                                 bintoken::token::code::true_value,
                                  0x02,
-                                 token::code::end_array };
+                                 bintoken::token::code::end_array };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::array>(), true);
-    dynamic::variable expect = dynamic::array::make({ true, 2 });
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<array>(), true);
+    variable expect = array::make({ true, 2 });
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
-                                 std::equal_to<dynamic::variable>());
+                                 std::equal_to<variable>());
 }
 
 void test_map_empty()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
-                                 token::code::null,
-                                 token::code::end_assoc_array };
+    const value_type input[] = { bintoken::token::code::begin_assoc_array,
+                                 bintoken::token::code::null,
+                                 bintoken::token::code::end_assoc_array };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::map>(), true);
-    dynamic::variable expect = dynamic::map::make();
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<map>(), true);
+    variable expect = map::make();
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
-                                 std::equal_to<dynamic::variable>());
+                                 std::equal_to<variable>());
 }
 
 void test_map()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
-                                 token::code::null,
-                                 token::code::begin_record,
-                                 token::code::string8, 0x03, 0x41, 0x42, 0x43,
-                                 token::code::true_value,
-                                 token::code::end_record,
-                                 token::code::end_assoc_array };
+    const value_type input[] = { bintoken::token::code::begin_assoc_array,
+                                 bintoken::token::code::null,
+                                 bintoken::token::code::begin_record,
+                                 bintoken::token::code::string8, 0x03, 0x41, 0x42, 0x43,
+                                 bintoken::token::code::true_value,
+                                 bintoken::token::code::end_record,
+                                 bintoken::token::code::end_assoc_array };
     format::iarchive in(input);
-    dynamic::variable value;
+    variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<dynamic::map>(), true);
-    dynamic::variable expect = dynamic::map::make({{ "ABC", true }});
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<map>(), true);
+    variable expect = map::make({{ "ABC", true }});
     TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
                                  expect.begin(), expect.end(),
-                                 std::equal_to<dynamic::variable>());
+                                 std::equal_to<variable>());
 }
 
 void run()

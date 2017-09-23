@@ -671,7 +671,7 @@ void run()
 namespace dynamic_suite
 {
 
-using namespace trial::protocol::dynamic;
+using namespace trial::dynamic;
 
 void test_null()
 {

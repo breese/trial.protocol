@@ -10,9 +10,9 @@
 
 #include <algorithm>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
-#include <trial/protocol/core/detail/meta.hpp>
+#include <trial/dynamic/detail/meta.hpp>
 
-using namespace trial::protocol::core::detail;
+using namespace trial::dynamic;
 
 //-----------------------------------------------------------------------------
 // transform

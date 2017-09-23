@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_STD_MAP_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_STD_MAP_HPP
+#ifndef TRIAL_DYNAMIC_STD_MAP_HPP
+#define TRIAL_DYNAMIC_STD_MAP_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -12,12 +12,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <map>
-#include <trial/protocol/dynamic/variable.hpp>
-#include <trial/protocol/dynamic/convert.hpp>
+#include <trial/dynamic/variable.hpp>
+#include <trial/dynamic/convert.hpp>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -89,7 +87,6 @@ struct convert_overloader<
 
 } // namespace detail
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_STD_MAP_HPP
+#endif // TRIAL_DYNAMIC_STD_MAP_HPP

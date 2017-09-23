@@ -9,9 +9,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/core/detail/lightweight_test.hpp>
-#include <trial/protocol/dynamic/algorithm/key.hpp>
+#include <trial/dynamic/algorithm/key.hpp>
 
-using namespace trial::protocol::dynamic;
+using namespace trial::dynamic;
 
 //-----------------------------------------------------------------------------
 // key::count

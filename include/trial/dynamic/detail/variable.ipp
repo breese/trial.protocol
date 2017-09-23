@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_DETAIL_VARIABLE_IPP
-#define TRIAL_PROTOCOL_DYNAMIC_DETAIL_VARIABLE_IPP
+#ifndef TRIAL_DYNAMIC_DETAIL_VARIABLE_IPP
+#define TRIAL_DYNAMIC_DETAIL_VARIABLE_IPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -11,12 +11,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/core/detail/type_traits.hpp>
-#include <trial/protocol/dynamic/error.hpp>
+#include <trial/dynamic/detail/type_traits.hpp>
+#include <trial/dynamic/error.hpp>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -36,7 +34,7 @@ template <typename T>
 using is_null = std::is_same<T, nullable>;
 
 template <typename T>
-using is_boolean = core::detail::is_bool<T>;
+using is_boolean = detail::is_bool<T>;
 
 template <typename CharT> struct is_character : std::false_type {};
 template <> struct is_character<char> : std::true_type {};
@@ -228,7 +226,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U&) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U&) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -240,7 +238,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type&, const U&) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type&, const U&) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         // Null is smaller than anything
         return false;
@@ -318,7 +316,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -369,7 +367,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -564,7 +562,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -610,7 +608,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -800,7 +798,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -846,7 +844,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1035,7 +1033,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1086,7 +1084,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1288,7 +1286,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1300,7 +1298,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1370,7 +1368,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1382,7 +1380,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1451,7 +1449,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1463,7 +1461,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1531,7 +1529,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1543,7 +1541,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1609,7 +1607,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1627,7 +1625,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1703,7 +1701,7 @@ struct overloader<
         }
     }
 
-    static bool equal(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1721,7 +1719,7 @@ struct overloader<
         }
     }
 
-    static bool less(const variable_type& self, const U& other) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& self, const U& other) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (self.code())
         {
@@ -1801,7 +1799,7 @@ template <typename T, typename U>
 struct operator_overloader<
     T,
     U,
-    typename std::enable_if<core::detail::is_iterator<T>::value>::type>
+    typename std::enable_if<detail::is_iterator<T>::value>::type>
 {
     static bool equal(const T& lhs, const U& rhs)
     {
@@ -1842,54 +1840,54 @@ struct operator_overloader<
 
     template <typename T = U>
     static typename std::enable_if<!is_literal_string<typename std::decay<T>::type>::value, bool>::type
-    equal(const variable_type& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    equal(const variable_type& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, U>::equal(lhs, rhs);
     }
 
-    static bool equal(const variable_type& lhs, const char* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& lhs, const char* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, string_type>::equal(lhs, string_type(rhs));
     }
 
-    static bool equal(const variable_type& lhs, const wchar_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& lhs, const wchar_t* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, wstring_type>::equal(lhs, wstring_type(rhs));
     }
 
-    static bool equal(const variable_type& lhs, const char16_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& lhs, const char16_t* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, u16string_type>::equal(lhs, u16string_type(rhs));
     }
 
-    static bool equal(const variable_type& lhs, const char32_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const variable_type& lhs, const char32_t* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, u32string_type>::equal(lhs, u32string_type(rhs));
     }
 
     template <typename T = U>
     static typename std::enable_if<!is_literal_string<typename std::decay<T>::type>::value, bool>::type
-    less(const variable_type& lhs, const T& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    less(const variable_type& lhs, const T& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, T>::less(lhs, rhs);
     }
 
-    static bool less(const variable_type& lhs, const char* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& lhs, const char* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, string_type>::less(lhs, string_type(rhs));
     }
 
-    static bool less(const variable_type& lhs, const wchar_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& lhs, const wchar_t* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, wstring_type>::less(lhs, wstring_type(rhs));
     }
 
-    static bool less(const variable_type& lhs, const char16_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& lhs, const char16_t* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, u16string_type>::less(lhs, u16string_type(rhs));
     }
 
-    static bool less(const variable_type& lhs, const char32_t* rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const variable_type& lhs, const char32_t* rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return detail::template overloader<variable_type, u32string_type>::less(lhs, u32string_type(rhs));
     }
@@ -1903,12 +1901,12 @@ struct operator_overloader<
 {
     using variable_type = basic_variable<Allocator>;
 
-    static bool equal(const T& lhs, const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool equal(const T& lhs, const variable_type& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return operator_overloader<variable_type, variable_type>::equal(variable_type(lhs), rhs);
     }
 
-    static bool less(const T& lhs, const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+    static bool less(const T& lhs, const variable_type& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         return operator_overloader<variable_type, variable_type>::less(variable_type(lhs), rhs);
     }
@@ -1928,7 +1926,7 @@ struct operator_overloader<
     using map_type = typename variable_type::map_type;
 
     static bool equal(const variable_type& lhs,
-                      const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+                      const variable_type& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (rhs.code())
         {
@@ -2020,7 +2018,7 @@ struct operator_overloader<
     }
 
     static bool less(const variable_type& lhs,
-                     const variable_type& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+                     const variable_type& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     {
         switch (rhs.code())
         {
@@ -2214,8 +2212,8 @@ template <template <typename> class Allocator, typename Iterator>
 struct iterator_overloader<
     Allocator,
     Iterator,
-    typename std::enable_if<core::detail::is_iterator<Iterator>::value &&
-                            core::detail::is_pair<typename Iterator::value_type>::value>::type>
+    typename std::enable_if<detail::is_iterator<Iterator>::value &&
+                            detail::is_pair<typename Iterator::value_type>::value>::type>
 {
     using variable_type = basic_variable<Allocator>;
 
@@ -2442,7 +2440,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() -> reference
     case symbol::map:
         return current.template get<map_iterator>()->second;
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -2469,7 +2467,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() const -> cons
     case symbol::map:
         return current.template get<map_iterator>()->second;
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -2496,7 +2494,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () -> poin
     case symbol::map:
         return &current.template get<map_iterator>()->second;
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -2528,7 +2526,7 @@ bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Der
     case symbol::map:
         return current.template get<map_iterator>() == other.current.template get<map_iterator>();
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -2721,7 +2719,7 @@ auto basic_variable<Allocator>::key_iterator::key() const -> const_reference
     case symbol::map:
         return super::key();
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3408,7 +3406,7 @@ basic_variable<Allocator>::operator bool() const
         // types.
         throw dynamic::error(incompatible_type);
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3520,7 +3518,7 @@ auto basic_variable<Allocator>::find(const basic_variable& other) const & -> con
     case code::map:
         return find(other.unsafe_get<map_type>());
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3557,7 +3555,7 @@ auto basic_variable<Allocator>::find(const T& other) const & -> const_iterator
         }
         return end();
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3608,7 +3606,7 @@ auto basic_variable<Allocator>::count(const basic_variable& other) const -> size
     case code::map:
         return count(other.unsafe_get<map_type>());
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3641,7 +3639,7 @@ auto basic_variable<Allocator>::count(const T& other) const -> size_type
             return result;
         }
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3778,7 +3776,7 @@ bool basic_variable<Allocator>::empty() const noexcept
     case symbol::map:
         return unsafe_get<map_type>().empty();
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3801,7 +3799,7 @@ auto basic_variable<Allocator>::size() const noexcept -> size_type
     case symbol::map:
         return unsafe_get<map_type>().size();
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -3824,7 +3822,7 @@ auto basic_variable<Allocator>::max_size() const noexcept -> size_type
     case symbol::map:
         return unsafe_get<map_type>().max_size();
     }
-    TRIAL_PROTOCOL_UNREACHABLE();
+    TRIAL_DYNAMIC_UNREACHABLE();
 }
 
 template <template <typename> class Allocator>
@@ -4113,25 +4111,25 @@ bool basic_variable<Allocator>::is_pair() const
 // Comparison
 
 template <typename T, typename U>
-bool operator== (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+bool operator== (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     return detail::operator_overloader<T, U>::equal(lhs, rhs);
 }
 
 template <typename T, typename U>
-bool operator!= (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+bool operator!= (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     return !(lhs == rhs);
 }
 
 template <typename T, typename U>
-bool operator< (const T& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+bool operator< (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     return detail::operator_overloader<T, U>::less(lhs, rhs);
 }
 
 template <template <typename> class Allocator, typename U>
-bool operator<= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+bool operator<= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     if (lhs.template same<nullable>())
         return true;
@@ -4140,7 +4138,7 @@ bool operator<= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTO
 }
 
 template <template <typename> class Allocator, typename U>
-bool operator> (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+bool operator> (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     if (lhs.template same<nullable>())
         return false;
@@ -4149,7 +4147,7 @@ bool operator> (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTOC
 }
 
 template <template <typename> class Allocator, typename U>
-bool operator>= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_PROTOCOL_CXX14(noexcept)
+bool operator>= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     return !(lhs < rhs);
 }
@@ -4225,7 +4223,6 @@ struct basic_map
 };
 
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_DETAIL_VARIABLE_IPP
+#endif // TRIAL_DYNAMIC_DETAIL_VARIABLE_IPP

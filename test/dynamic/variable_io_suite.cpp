@@ -11,9 +11,9 @@
 #include <sstream>
 #include <ios>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
-#include <trial/protocol/dynamic/variable_io.hpp>
+#include <trial/dynamic/variable_io.hpp>
 
-using namespace trial::protocol::dynamic;
+using namespace trial::dynamic;
 
 //-----------------------------------------------------------------------------
 // std::ostringstream

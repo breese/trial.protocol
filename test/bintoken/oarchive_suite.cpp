@@ -778,14 +778,16 @@ void run()
 namespace dynamic_suite
 {
 
+using namespace trial::dynamic;
+
 void test_null()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value;
+    variable value;
     ar << value;
 
-    output_type expected[] = { token::code::null };
+    output_type expected[] = { bintoken::token::code::null };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());
@@ -795,10 +797,10 @@ void test_boolean()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value(true);
+    variable value(true);
     ar << value;
 
-    output_type expected[] = { token::code::true_value };
+    output_type expected[] = { bintoken::token::code::true_value };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());
@@ -808,7 +810,7 @@ void test_integer()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value(2);
+    variable value(2);
     ar << value;
 
     output_type expected[] = { 0x02 };
@@ -821,10 +823,10 @@ void test_number()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value(1.0);
+    variable value(1.0);
     ar << value;
 
-    output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+    output_type expected[] = { bintoken::token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());
@@ -834,10 +836,10 @@ void test_string()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value("ABC");
+    variable value("ABC");
     ar << value;
 
-    output_type expected[] = { token::code::string8, 0x03, 0x41, 0x42, 0x43 };
+    output_type expected[] = { bintoken::token::code::string8, 0x03, 0x41, 0x42, 0x43 };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());
@@ -847,12 +849,12 @@ void test_array_empty()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::array::make();
+    variable value = array::make();
     ar << value;
 
-    output_type expected[] = { token::code::begin_array,
-                              0x00,
-                              token::code::end_array };
+    output_type expected[] = { bintoken::token::code::begin_array,
+                               0x00,
+                               bintoken::token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());
@@ -862,14 +864,14 @@ void test_array()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::array::make({ true, 2 });
+    variable value = array::make({ true, 2 });
     ar << value;
 
-    output_type expected[] = { token::code::begin_array,
-                              0x02,
-                              token::code::true_value,
-                              0x02,
-                              token::code::end_array };
+    output_type expected[] = { bintoken::token::code::begin_array,
+                               0x02,
+                               bintoken::token::code::true_value,
+                               0x02,
+                               bintoken::token::code::end_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());
@@ -879,12 +881,12 @@ void test_map_empty()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::map::make();
+    variable value = map::make();
     ar << value;
 
-    output_type expected[] = { token::code::begin_assoc_array,
-                              token::code::null,
-                              token::code::end_assoc_array };
+    output_type expected[] = { bintoken::token::code::begin_assoc_array,
+                               bintoken::token::code::null,
+                               bintoken::token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());
@@ -894,16 +896,16 @@ void test_map()
 {
     std::vector<output_type> result;
     format::oarchive ar(result);
-    dynamic::variable value = dynamic::map::make({{ "ABC", true }});
+    variable value = map::make({{ "ABC", true }});
     ar << value;
 
-    output_type expected[] = { token::code::begin_assoc_array,
-                              token::code::null,
-                              token::code::begin_record,
-                              token::code::string8, 0x03, 0x41, 0x42, 0x43,
-                              token::code::true_value,
-                              token::code::end_record,
-                              token::code::end_assoc_array };
+    output_type expected[] = { bintoken::token::code::begin_assoc_array,
+                               bintoken::token::code::null,
+                               bintoken::token::code::begin_record,
+                               bintoken::token::code::string8, 0x03, 0x41, 0x42, 0x43,
+                               bintoken::token::code::true_value,
+                               bintoken::token::code::end_record,
+                               bintoken::token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<output_type>());

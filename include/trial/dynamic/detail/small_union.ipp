@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DETAIL_SMALL_UNION_IPP
-#define TRIAL_PROTOCOL_DETAIL_SMALL_UNION_IPP
+#ifndef TRIAL_DYNAMIC_DETAIL_SMALL_UNION_IPP
+#define TRIAL_DYNAMIC_DETAIL_SMALL_UNION_IPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -15,9 +15,7 @@
 
 namespace trial
 {
-namespace protocol
-{
-namespace core
+namespace dynamic
 {
 namespace detail
 {
@@ -301,8 +299,7 @@ struct small_union<Allocator, IndexType, N, Types...>::mover
 };
 
 } // namespace detail
-} // namespace core
-} // namespace protocol
+} // namespace dynamic
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DETAIL_SMALL_UNION_IPP
+#endif // TRIAL_DYNAMIC_DETAIL_SMALL_UNION_IPP

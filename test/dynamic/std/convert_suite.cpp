@@ -9,10 +9,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/protocol/core/detail/lightweight_test.hpp>
-#include <trial/protocol/dynamic/std/map.hpp>
-#include <trial/protocol/dynamic/std/vector.hpp>
+#include <trial/dynamic/std/map.hpp>
+#include <trial/dynamic/std/vector.hpp>
 
-using namespace trial::protocol::dynamic;
+using namespace trial::dynamic;
 
 //-----------------------------------------------------------------------------
 // std::vector

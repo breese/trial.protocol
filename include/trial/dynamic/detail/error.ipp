@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_ERROR_IPP
-#define TRIAL_PROTOCOL_DYNAMIC_ERROR_IPP
+#ifndef TRIAL_DYNAMIC_ERROR_IPP
+#define TRIAL_DYNAMIC_ERROR_IPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,8 +13,6 @@
 
 namespace trial
 {
-namespace protocol
-{
 namespace dynamic
 {
 
@@ -26,7 +24,7 @@ class error_category : public std::error_category
 public:
     const char *name() const noexcept
     {
-        return "trial.protocol.dynamic";
+        return "trial.dynamic";
     }
 
     std::string message(int value) const
@@ -36,7 +34,7 @@ public:
         case incompatible_type:
             return "incompatible type";
         }
-        return "trial.protocol.dynamic error";
+        return "trial.dynamic error";
     }
 };
 
@@ -49,7 +47,6 @@ inline const std::error_category& error_category()
 }
 
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_ERROR_IPP
+#endif // TRIAL_DYNAMIC_ERROR_IPP

@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_TOKEN_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_TOKEN_HPP
+#ifndef TRIAL_DYNAMIC_TOKEN_HPP
+#define TRIAL_DYNAMIC_TOKEN_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -14,8 +14,6 @@
 #include <cstddef>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -69,7 +67,6 @@ struct symbol
 
 } // namespace token
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_TOKEN_HPP
+#endif // TRIAL_DYNAMIC_TOKEN_HPP

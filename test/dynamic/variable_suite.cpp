@@ -11,14 +11,14 @@
 #include <limits>
 #include <functional>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
-#include <trial/protocol/core/detail/meta.hpp>
-#include <trial/protocol/dynamic/variable.hpp>
+#include <trial/dynamic/detail/meta.hpp>
+#include <trial/dynamic/variable.hpp>
 
-using namespace trial::protocol::dynamic;
+using namespace trial::dynamic;
 
 #define TRIAL_PROTOCOL_HAS_TYPE(x,y)                                    \
     template <typename T, typename = void> struct x : std::false_type {}; \
-    template <typename T> struct x <T, trial::protocol::core::detail::meta::void_t<typename T:: y >> : std::true_type {};
+    template <typename T> struct x <T, trial::dynamic::meta::void_t<typename T:: y >> : std::true_type {};
 
 //-----------------------------------------------------------------------------
 // Container concept

@@ -1,5 +1,5 @@
-#ifndef TRIAL_PROTOCOL_DYNAMIC_ERROR_HPP
-#define TRIAL_PROTOCOL_DYNAMIC_ERROR_HPP
+#ifndef TRIAL_DYNAMIC_ERROR_HPP
+#define TRIAL_DYNAMIC_ERROR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -14,8 +14,6 @@
 #include <system_error>
 
 namespace trial
-{
-namespace protocol
 {
 namespace dynamic
 {
@@ -44,20 +42,19 @@ public:
 };
 
 } // namespace dynamic
-} // namespace protocol
 } // namespace trial
 
 namespace std
 {
 
 template <>
-struct is_error_code_enum<trial::protocol::dynamic::errc>
+struct is_error_code_enum<trial::dynamic::errc>
     : public std::true_type
 {
 };
 
 } // namespace std
 
-#include <trial/protocol/dynamic/detail/error.ipp>
+#include <trial/dynamic/detail/error.ipp>
 
-#endif // TRIAL_PROTOCOL_DYNAMIC_ERROR_HPP
+#endif // TRIAL_DYNAMIC_ERROR_HPP
