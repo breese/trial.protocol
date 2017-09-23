@@ -3791,15 +3791,11 @@ auto basic_variable<Allocator>::size() const noexcept -> size_type
     case symbol::boolean:
     case symbol::integer:
     case symbol::number:
-        return 1;
     case symbol::string:
-        return unsafe_get<string_type>().size();
     case symbol::wstring:
-        return unsafe_get<wstring_type>().size();
     case symbol::u16string:
-        return unsafe_get<u16string_type>().size();
     case symbol::u32string:
-        return unsafe_get<u32string_type>().size();
+        return 1;
     case symbol::array:
         return unsafe_get<array_type>().size();
     case symbol::map:
@@ -3818,15 +3814,11 @@ auto basic_variable<Allocator>::max_size() const noexcept -> size_type
     case symbol::boolean:
     case symbol::integer:
     case symbol::number:
-        return 1;
     case symbol::string:
-        return unsafe_get<string_type>().max_size();
     case symbol::wstring:
-        return unsafe_get<wstring_type>().max_size();
     case symbol::u16string:
-        return unsafe_get<u16string_type>().max_size();
     case symbol::u32string:
-        return unsafe_get<u32string_type>().max_size();
+        return 1;
     case symbol::array:
         return unsafe_get<array_type>().max_size();
     case symbol::map:

@@ -275,11 +275,11 @@ void test_string()
 {
     {
         variable data("alpha");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
     {
         variable data("");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
 }
 
@@ -287,11 +287,11 @@ void test_wstring()
 {
     {
         variable data(L"bravo");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
     {
         variable data(L"");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
 }
 
@@ -299,11 +299,11 @@ void test_u16string()
 {
     {
         variable data(u"charlie");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 7);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
     {
         variable data(u"");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
 }
 
@@ -311,11 +311,11 @@ void test_u32string()
 {
     {
         variable data(U"delta");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 5);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
     {
         variable data(U"");
-        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
     }
 }
 
@@ -445,30 +445,26 @@ void test_number()
 
 void test_string()
 {
-    std::string value("alpha");
-    variable data(value);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+    variable data("alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
 }
 
 void test_wstring()
 {
-    std::wstring value(L"bravo");
-    variable data(value);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+    variable data(L"bravo");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
 }
 
 void test_u16string()
 {
-    std::u16string value(u"charlie");
-    variable data(value);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+    variable data(u"charlie");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
 }
 
 void test_u32string()
 {
-    std::u32string value(U"delta");
-    variable data(value);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), value.max_size());
+    variable data(U"delta");
+    TRIAL_PROTOCOL_TEST_EQUAL(data.max_size(), 1);
 }
 
 void test_array()
