@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/dynamic/algorithm/key.hpp>
+#include <trial/dynamic/algorithm/count.hpp>
+#include <trial/dynamic/algorithm/find.hpp>
 
 #endif // TRIAL_DYNAMIC_ALGORITHM_HPP

@@ -562,16 +562,6 @@ public:
 
     const basic_variable& operator[] (const typename map_type::key_type& key) const &;
 
-#if !defined(TRIAL_PROTOCOL_DOXYGEN)
-    iterator find(const basic_variable&) &;
-    const_iterator find(const basic_variable&) const &;
-    template <typename T> iterator find(const T&) &;
-    template <typename T> const_iterator find(const T&) const &;
-
-    size_type count(const basic_variable&) const;
-    template <typename T> size_type count(const T&) const;
-#endif
-
     //! @brief Checks if variable has a given tag.
     //!
     //! Converts `T` into a tag, and returns true if variable has the same
