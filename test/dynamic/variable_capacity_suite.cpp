@@ -110,7 +110,7 @@ void test_string()
     }
     {
         variable data("");
-        TRIAL_PROTOCOL_TEST(data.empty());
+        TRIAL_PROTOCOL_TEST(!data.empty());
     }
 }
 
@@ -122,7 +122,7 @@ void test_wstring()
     }
     {
         variable data(L"");
-        TRIAL_PROTOCOL_TEST(data.empty());
+        TRIAL_PROTOCOL_TEST(!data.empty());
     }
 }
 
@@ -134,7 +134,7 @@ void test_u16string()
     }
     {
         variable data(u"");
-        TRIAL_PROTOCOL_TEST(data.empty());
+        TRIAL_PROTOCOL_TEST(!data.empty());
     }
 }
 
@@ -146,7 +146,7 @@ void test_u32string()
     }
     {
         variable data(U"");
-        TRIAL_PROTOCOL_TEST(data.empty());
+        TRIAL_PROTOCOL_TEST(!data.empty());
     }
 }
 

@@ -150,40 +150,36 @@ void clear_string()
 {
     variable data("alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<string>(), true);
-    TRIAL_PROTOCOL_TEST(data.empty());
+    TRIAL_PROTOCOL_TEST(data == "");
 }
 
 void clear_wstring()
 {
     variable data(L"bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
-    TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<wstring>(), true);
-    TRIAL_PROTOCOL_TEST(data.empty());
+    TRIAL_PROTOCOL_TEST(data == L"");
 }
 
 void clear_u16string()
 {
     variable data(u"charlie");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
-    TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<u16string>(), true);
-    TRIAL_PROTOCOL_TEST(data.empty());
+    TRIAL_PROTOCOL_TEST(data == u"");
 }
 
 void clear_u32string()
 {
     variable data(U"delta");
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<u32string>(), true);
-    TRIAL_PROTOCOL_TEST(!data.empty());
     data.clear();
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<u32string>(), true);
-    TRIAL_PROTOCOL_TEST(data.empty());
+    TRIAL_PROTOCOL_TEST(data == U"");
 }
 
 void clear_array()

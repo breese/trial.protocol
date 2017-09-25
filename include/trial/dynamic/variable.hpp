@@ -683,6 +683,12 @@ public:
 
     //! @brief Returns the number of elements in variable.
     //!
+    //! The number of elements stored in a variable corresponds to the iteration
+    //! count, that is `v.size() == std::distance(v.begin(), v.end())`.
+    //!
+    //! Notice that strings are regarded as single elements, rather than a
+    //! sequence of characters.
+    //!
     //! Current tag | Size | Description
     //! ------------|------|----
     //! nullable    | 0    | null is an empty variable.

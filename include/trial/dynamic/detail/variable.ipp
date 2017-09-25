@@ -3584,15 +3584,11 @@ bool basic_variable<Allocator>::empty() const noexcept
     case symbol::boolean:
     case symbol::integer:
     case symbol::number:
-        return false;
     case symbol::string:
-        return unsafe_get<string_type>().empty();
     case symbol::wstring:
-        return unsafe_get<wstring_type>().empty();
     case symbol::u16string:
-        return unsafe_get<u16string_type>().empty();
     case symbol::u32string:
-        return unsafe_get<u32string_type>().empty();
+        return false;
     case symbol::array:
         return unsafe_get<array_type>().empty();
     case symbol::map:
