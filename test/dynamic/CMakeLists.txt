@@ -9,6 +9,7 @@
 ###############################################################################
 
 trial_add_test(dynamic_variable_suite variable_suite.cpp)
+trial_add_test(dynamic_variable_concept_suite variable_concept_suite.cpp)
 trial_add_test(dynamic_variable_capacity_suite variable_capacity_suite.cpp)
 trial_add_test(dynamic_variable_modifier_suite variable_modifier_suite.cpp)
 trial_add_test(dynamic_variable_operator_suite variable_operator_suite.cpp)
