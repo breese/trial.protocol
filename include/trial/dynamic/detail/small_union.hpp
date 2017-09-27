@@ -28,8 +28,8 @@ namespace detail
 // small_union
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator, typename IndexType, IndexType N, typename... Types>
-class small_union : public Allocator<void>
+template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+class small_union : public Allocator
 {
     template <typename T> struct make_small;
     using typelist = meta::transform<meta::list<Types...>, make_small>;

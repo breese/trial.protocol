@@ -15,7 +15,7 @@
 using namespace trial::dynamic::detail;
 
 template <std::size_t N, typename... Types>
-using test_union = small_union<std::allocator, std::size_t, N, Types...>;
+using test_union = small_union<std::allocator<void>, std::size_t, N, Types...>;
 
 //-----------------------------------------------------------------------------
 // Constructor

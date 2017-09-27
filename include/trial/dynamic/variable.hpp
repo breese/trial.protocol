@@ -181,8 +181,9 @@ private:
         const_reference value() const;
 
     protected:
-        using small_union = detail::small_union<Allocator,
-                                                unsigned char,
+        using index_type = unsigned char;
+        using small_union = detail::small_union<allocator_type,
+                                                index_type,
                                                 sizeof(pointer),
                                                 pointer,
                                                 array_iterator,
@@ -893,8 +894,9 @@ private:
     template <template <typename> class A, typename T, typename> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
-    using storage_type = detail::small_union<Allocator,
-                                             unsigned char,
+    using index_type = unsigned char;
+    using storage_type = detail::small_union<allocator_type,
+                                             index_type,
                                              sizeof(double),
                                              nullable,
                                              bool,
