@@ -40,17 +40,17 @@ struct small_traits
     template <typename Allocator>
     static void destroy(Allocator&, void *storage)
     {
-        deref(static_cast<type *>(storage)).~T();
+        deref(storage).~T();
     }
 
     static void copy(void *target, const void *source)
     {
-        deref(static_cast<type *>(target)) = deref(static_cast<const type *>(source));
+        deref(target) = deref(source);
     }
 
     static void move(void *target, const void *source)
     {
-        deref(static_cast<type *>(target)) = std::move(deref(static_cast<const type *>(source)));
+        deref(target) = std::move(deref(source));
     }
 
     static type& deref(void *storage) noexcept { return *static_cast<type *>(storage); }
@@ -89,12 +89,12 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
 
     static void copy(void *target, const void *source)
     {
-        deref(static_cast<type *>(target)) = deref(static_cast<const type *>(source));
+        deref(target) = deref(source);
     }
 
     static void move(void *target, const void *source)
     {
-        deref(static_cast<type *>(target)) = std::move(deref(static_cast<const type *>(source)));
+        deref(target) = std::move(deref(source));
     }
 
     static type& deref(void *storage) noexcept { return **static_cast<pointer *>(storage); }
