@@ -31,16 +31,25 @@ struct small_traits
     using small_type = type;
 
     template <typename Allocator, typename... Args>
-    static void construct(Allocator&, void *storage, Args... args)
+    static void construct(Allocator& alloc, void *storage, Args... args)
     {
+        using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
+        typename traits_type::allocator_type allocator(alloc);
+
         // Place object in storage
-        ::new (storage) type(std::forward<Args...>(args...));
+        traits_type::construct(allocator,
+                               &deref(storage),
+                               std::forward<Args...>(args...));
     }
 
     template <typename Allocator>
-    static void destroy(Allocator&, void *storage)
+    static void destroy(Allocator& alloc, void *storage)
     {
-        deref(storage).~T();
+        using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
+        typename traits_type::allocator_type allocator(alloc);
+
+        traits_type::destroy(allocator,
+                             &deref(storage));
     }
 
     static void copy(void *target, const void *source)
@@ -71,6 +80,8 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
     {
         using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
         typename traits_type::allocator_type allocator(alloc);
+
+        // Place object on heap
         auto ptr = traits_type::allocate(allocator, 1);
         traits_type::construct(allocator, ptr, std::forward<Args...>(args...));
         // Place pointer in storage
@@ -82,6 +93,7 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
     {
         using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
         typename traits_type::allocator_type allocator(alloc);
+
         auto ptr = &deref(storage);
         traits_type::destroy(allocator, ptr);
         traits_type::deallocate(allocator, ptr, sizeof(pointer));
