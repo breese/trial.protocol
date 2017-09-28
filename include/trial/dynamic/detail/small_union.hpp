@@ -42,6 +42,7 @@ public:
     template <typename T> explicit small_union(T value);
     small_union(const small_union&);
     small_union(small_union&&);
+    template <typename T> void operator= (T value);
     small_union& operator= (const small_union&);
     small_union& operator= (small_union&&);
     ~small_union();
@@ -52,9 +53,6 @@ public:
     template <typename T> const T& get() const noexcept;
 
     void swap(small_union&) noexcept;
-
-    template <typename T> void operator= (const T& value);
-    template <typename T> void operator= (T&& value);
 
     template <typename Visitor, typename R> R call();
     template <typename Visitor, typename R> R call() const;

@@ -176,6 +176,17 @@ small_union<Allocator, IndexType, N, Types...>::small_union(small_union&& other)
 }
 
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename T>
+void small_union<Allocator, IndexType, N, Types...>::operator= (T value)
+{
+    using type = typename std::decay<T>::type;
+
+    call<destructor, void>();
+    small_traits<N, type>::construct(*this, std::addressof(storage), std::move(value));
+    current = to_index<type>::value;
+}
+
+template <typename Allocator, typename IndexType, IndexType N, typename... Types>
 auto small_union<Allocator, IndexType, N, Types...>::operator= (const small_union& other) -> small_union&
 {
     assert(other.current < sizeof...(Types));
@@ -221,28 +232,6 @@ void small_union<Allocator, IndexType, N, Types...>::swap(small_union& other) no
     using std::swap;
     swap(storage, other.storage);
     swap(current, other.current);
-}
-
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-template <typename T>
-void small_union<Allocator, IndexType, N, Types...>::operator= (const T& value)
-{
-    using type = typename std::decay<T>::type;
-
-    call<destructor, void>();
-    small_traits<N, type>::construct(*this, std::addressof(storage), value);
-    current = to_index<type>::value;
-}
-
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-template <typename T>
-void small_union<Allocator, IndexType, N, Types...>::operator= (T&& value)
-{
-    using type = typename std::decay<T>::type;
-
-    call<destructor, void>();
-    small_traits<N, type>::construct(*this, std::addressof(storage), std::move(value));
-    current = to_index<type>::value;
 }
 
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
