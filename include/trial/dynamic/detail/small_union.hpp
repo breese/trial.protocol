@@ -35,11 +35,12 @@ class small_union : public Allocator
     using typelist = meta::transform<meta::list<Types...>, make_small>;
 
 public:
+    using allocator_type = Allocator;
     using index_type = IndexType;
 
     template <typename T> struct to_index;
 
-    template <typename T> explicit small_union(T value);
+    template <typename T> explicit small_union(T value, const allocator_type& = allocator_type{});
     small_union(const small_union&);
     small_union(small_union&&);
     template <typename T> void operator= (T value);
@@ -48,6 +49,7 @@ public:
     ~small_union();
 
     index_type index() const noexcept { return current; }
+    allocator_type get_allocator() const noexcept { return *this; }
 
     template <typename T> T& get() noexcept;
     template <typename T> const T& get() const noexcept;
@@ -62,6 +64,7 @@ public:
 private:
     template <std::size_t M, typename T, typename Enable> friend struct small_traits;
 
+    struct reconstructor;
     struct destructor;
     struct copier;
     struct mover;

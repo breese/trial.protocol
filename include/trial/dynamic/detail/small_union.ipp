@@ -150,8 +150,9 @@ public:
 
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
 template <typename T>
-small_union<Allocator, IndexType, N, Types...>::small_union(T value)
-    : current(to_index<T>::value)
+small_union<Allocator, IndexType, N, Types...>::small_union(T value, const allocator_type& alloc)
+    : Allocator(alloc),
+      current(to_index<T>::value)
 {
     using type = typename std::decay<T>::type;
 
@@ -161,7 +162,7 @@ small_union<Allocator, IndexType, N, Types...>::small_union(T value)
 
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
 small_union<Allocator, IndexType, N, Types...>::small_union(const small_union& other)
-    : Allocator(other),
+    : Allocator(std::allocator_traits<Allocator>::select_on_container_copy_construction(other)),
       current(other.current)
 {
     call<copier, void>(other);
@@ -189,8 +190,23 @@ void small_union<Allocator, IndexType, N, Types...>::operator= (T value)
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
 auto small_union<Allocator, IndexType, N, Types...>::operator= (const small_union& other) -> small_union&
 {
+    if (this == &other)
+        return *this;
+
     assert(other.current < sizeof...(Types));
-    call<copier, void>(other);
+
+    if (std::allocator_traits<Allocator>::propagate_on_container_copy_assignment::value)
+    {
+        // Destroy with old allocator
+        call<destructor, void>();
+        // Create with new allocator
+        static_cast<allocator_type&>(*this) = other.get_allocator();
+        call<reconstructor, void>(other);
+    }
+    else
+    {
+        call<copier, void>(other);
+    }
     current = other.current;
     return *this;
 }
@@ -198,8 +214,26 @@ auto small_union<Allocator, IndexType, N, Types...>::operator= (const small_unio
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
 auto small_union<Allocator, IndexType, N, Types...>::operator= (small_union&& other) -> small_union&
 {
+    if (this == &other)
+        return *this;
+
     assert(other.current < sizeof...(Types));
-    call<mover, void>(std::move(other));
+
+    if (std::allocator_traits<Allocator>::propagate_on_container_move_assignment::value)
+    {
+        static_cast<allocator_type&>(*this) = std::move(static_cast<allocator_type&>(other));
+        call<mover, void>(std::move(other));
+    }
+    else if (static_cast<allocator_type&>(*this) == static_cast<allocator_type&>(other))
+    {
+        call<mover, void>(std::move(other));
+    }
+    else
+    {
+        call<destructor, void>();
+        static_cast<allocator_type&>(*this) = std::move(static_cast<allocator_type&>(other));
+        call<reconstructor, void>(std::move(other));
+    }
     current = other.current;
     return *this;
 }
@@ -277,6 +311,16 @@ R small_union<Allocator, IndexType, N, Types...>::call(Args&&... args) const
     static constexpr signature table[] = { &Visitor::template call<Types>... };
     return table[current](*this, std::forward<Args...>(args...));
 }
+
+template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+struct small_union<Allocator, IndexType, N, Types...>::reconstructor
+{
+    template <typename T>
+    static void call(small_union& self, const small_union& other)
+    {
+        small_traits<N, T>::construct(self, std::addressof(self.storage), other.get<T>());
+    }
+};
 
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
 struct small_union<Allocator, IndexType, N, Types...>::destructor
