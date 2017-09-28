@@ -24,29 +24,67 @@ using test_union = small_union<std::allocator<void>, std::size_t, N, Types...>;
 namespace ctor_suite
 {
 
-void test_int()
+void construct_int()
 {
     test_union<sizeof(int), bool, int> data{true};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
 }
 
-void test_ptr_with_long_double()
+void construct_ptr_with_long_double()
 {
     test_union<sizeof(void *), bool, int, long double> data{3.0L};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<long double>(), 3.0L);
 }
 
-void test_ptr_with_string()
+void construct_ptr_with_string()
 {
     test_union<sizeof(void *), bool, int, std::string> data{std::string("alpha")};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<std::string>(), std::string("alpha"));
 }
 
+void copy_construct_int()
+{
+    test_union<sizeof(int), bool, int> data{true};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
+    test_union<sizeof(int), bool, int> other(data);
+    TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
+}
+
+void move_construct_int()
+{
+    test_union<sizeof(int), bool, int> data{true};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
+    test_union<sizeof(int), bool, int> other(std::move(data));
+    TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
+}
+
+void copy_assign_int()
+{
+    test_union<sizeof(int), bool, int> data{true};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
+    test_union<sizeof(int), bool, int> other{false};
+    other = data;
+    TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
+}
+
+void move_assign_int()
+{
+    test_union<sizeof(int), bool, int> data{true};
+    TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
+    test_union<sizeof(int), bool, int> other{false};
+    other = std::move(data);
+    TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
+}
+
 void run()
 {
-    test_int();
-    test_ptr_with_long_double();
-    test_ptr_with_string();
+    construct_int();
+    construct_ptr_with_long_double();
+    construct_ptr_with_string();
+    copy_construct_int();
+    move_construct_int();
+    copy_assign_int();
+    move_assign_int();
 }
 
 } // namespace ctor_suite
