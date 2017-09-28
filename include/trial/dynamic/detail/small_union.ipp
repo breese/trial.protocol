@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <new>
 #include <memory>
 
 namespace trial
@@ -33,23 +34,26 @@ struct small_traits
     template <typename Allocator, typename... Args>
     static void construct(Allocator& alloc, void *storage, Args... args)
     {
-        using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
-        typename traits_type::allocator_type allocator(alloc);
+        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
+        using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
+
+        allocator_type typed_allocator(alloc);
 
         // Place object in storage
-        traits_type::construct(allocator,
-                               &deref(storage),
-                               std::forward<Args...>(args...));
+        allocator_traits::construct(typed_allocator,
+                                    &deref(storage),
+                                    std::forward<Args...>(args...));
     }
 
     template <typename Allocator>
     static void destroy(Allocator& alloc, void *storage)
     {
-        using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
-        typename traits_type::allocator_type allocator(alloc);
+        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
+        using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
 
-        traits_type::destroy(allocator,
-                             &deref(storage));
+        allocator_type typed_allocator(alloc);
+
+        allocator_traits::destroy(typed_allocator, &deref(storage));
     }
 
     static void copy(void *target, const void *source)
@@ -78,25 +82,32 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
     template <typename Allocator, typename... Args>
     static void construct(Allocator& alloc, void *storage, Args... args)
     {
-        using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
-        typename traits_type::allocator_type allocator(alloc);
+        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
+        using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
+
+        allocator_type typed_allocator(alloc);
 
         // Place object on heap
-        auto ptr = traits_type::allocate(allocator, 1);
-        traits_type::construct(allocator, ptr, std::forward<Args...>(args...));
+        auto ptr = allocator_traits::allocate(typed_allocator, 1);
+        if (!ptr) throw std::bad_alloc{};
+        allocator_traits::construct(typed_allocator,
+                                    std::addressof(*ptr),
+                                    std::forward<Args...>(args...));
         // Place pointer in storage
-        ::new (storage) pointer{ptr};
+        ::new (storage) typename allocator_traits::pointer{ptr};
     }
 
     template <typename Allocator>
     static void destroy(Allocator& alloc, void *storage)
     {
-        using traits_type = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
-        typename traits_type::allocator_type allocator(alloc);
+        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
+        using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
 
-        auto ptr = &deref(storage);
-        traits_type::destroy(allocator, ptr);
-        traits_type::deallocate(allocator, ptr, sizeof(pointer));
+        allocator_type typed_allocator(alloc);
+
+        auto ptr = *static_cast<typename allocator_traits::pointer *>(storage);
+        allocator_traits::destroy(typed_allocator, ptr);
+        allocator_traits::deallocate(typed_allocator, ptr, 1);
     }
 
     static void copy(void *target, const void *source)
