@@ -8,7 +8,6 @@ Makefile
 cmake_install.cmake
 Testing/
 CTestTestfile.cmake
-doc/html
-doc/src
-doc/*.xml
+doc/protocol/html
+doc/protocol/*.xml
 *.diff
