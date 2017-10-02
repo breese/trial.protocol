@@ -92,7 +92,7 @@ class basic_variable
     template <typename T, typename = void> struct tag_traits;
 
 public:
-#if defined(TRIAL_PROTOCOL_DOXYGEN)
+#if defined(BOOST_DOXYGEN_INVOKED)
     using value_type = basic_variable<Allocator>;
     using reference = value_type&;
     using const_reference = const value_type&;
@@ -131,7 +131,7 @@ public:
     using pair_type = typename map_type::value_type;
 #endif
 
-#if !defined(TRIAL_PROTOCOL_DOXYGEN)
+#if !defined(BOOST_DOXYGEN_INVOKED)
 private:
     friend struct basic_array<Allocator>;
     friend struct basic_map<Allocator>;
@@ -349,7 +349,7 @@ public:
 
     basic_variable(const char32_t *);
 
-#if !defined(TRIAL_PROTOCOL_DOXYGEN)
+#if !defined(BOOST_DOXYGEN_INVOKED)
     // Use factory instead
     basic_variable(typename basic_variable::array_type) = delete;
     basic_variable(typename basic_variable::map_type) = delete;
@@ -440,7 +440,7 @@ public:
 
     // Accessor
 
-#if defined(TRIAL_PROTOCOL_DOXYGEN)
+#if defined(BOOST_DOXYGEN_INVOKED)
 
     //! @brief Returns current value as type T.
     //!
@@ -515,7 +515,7 @@ public:
 
     template <typename R> const R& unsafe_get() const & noexcept;
 
-#if !defined(TRIAL_PROTOCOL_DOXYGEN)
+#if !defined(BOOST_DOXYGEN_INVOKED)
     explicit operator bool() const;
 #endif
 
@@ -883,7 +883,7 @@ public:
 
     key_iterator key_end() const &;
 
-#if !defined(TRIAL_PROTOCOL_DOXYGEN)
+#if !defined(BOOST_DOXYGEN_INVOKED)
 private:
     bool is_pair() const;
 
