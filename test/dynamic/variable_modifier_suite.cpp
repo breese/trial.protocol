@@ -227,20 +227,125 @@ namespace insert_suite
 
 void insert_null()
 {
+    // null - null
+    {
+        variable data;
+        auto where = data.insert(null);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == null);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - boolean
+    {
+        variable data;
+        auto where = data.insert(true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - integer
+    {
+        variable data;
+        auto where = data.insert(2);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == 2);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - number
+    {
+        variable data;
+        auto where = data.insert(3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == 3.0);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - string
+    {
+        variable data;
+        auto where = data.insert("alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == "alpha");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - wstring
+    {
+        variable data;
+        auto where = data.insert(L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == L"bravo");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - u16string
+    {
+        variable data;
+        auto where = data.insert(u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == u"charlie");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - u32string
+    {
+        variable data;
+        auto where = data.insert(U"delta");
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == U"delta");
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - array
+    {
+        variable data;
+        auto where = data.insert(array::make({ 1, 20, 300 }));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == array::make({ 1, 20, 300 }));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+    // null - map
+    {
+        variable data;
+        auto where = data.insert(map::make("alpha", true));
+        TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+        TRIAL_PROTOCOL_TEST(data[0] == map::make("alpha", true));
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    }
+}
+
+void insert_null_range()
+{
+    std::vector<int> input = { 1, 20, 300 };
     variable data;
-    auto where = data.insert(null);
+    TRIAL_PROTOCOL_TEST_NO_THROW(data.insert(input.begin(), input.end()));
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
-    TRIAL_PROTOCOL_TEST(data[0] == null);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 3);
+    TRIAL_PROTOCOL_TEST(data[0] == 1);
+    TRIAL_PROTOCOL_TEST(data[1] == 20);
+    TRIAL_PROTOCOL_TEST(data[2] == 300);
 }
 
 void fail_null()
 {
-    variable data;
-    TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
-                                    error,
-                                    "incompatible type");
+    {
+        variable data;
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), true),
+                                        error,
+                                        "incompatible type");
+    }
+    {
+        std::vector<int> input = { 1, 20, 300 };
+        variable data;
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(data.begin(), input.begin(), input.end()),
+                                        error,
+                                        "incompatible type");
+    }
 }
 
 void fail_boolean()
@@ -874,6 +979,7 @@ void insert_map_range_iterator()
 void run()
 {
     insert_null();
+    insert_null_range();
     fail_null();
     fail_boolean();
     fail_integer();

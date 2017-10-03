@@ -796,7 +796,7 @@ public:
     //!
     //! Current tag | Behavior
     //! ------------|---------
-    //! nullable    | Create `array` and insert range.
+    //! nullable    | Fails.
     //! boolean     | Fails.
     //! integer     | Fails.
     //! number      | Fails.
