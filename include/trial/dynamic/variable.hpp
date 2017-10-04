@@ -93,19 +93,22 @@ class basic_variable
 
 public:
 #if defined(BOOST_DOXYGEN_INVOKED)
+
     using value_type = basic_variable<Allocator>;
     using reference = value_type&;
     using const_reference = const value_type&;
-    using difference_type = std::ptrdiff_t;
-    using size_type = std::size_t;
+    using difference_type = unspecified; //!< signed integer type
+    using size_type = unspecified; //!< unsigned integer type
     using string_type = std::basic_string<char, std::char_traits<char>, Allocator>; //!< std::string by default
     using wstring_type = std::basic_string<wchar_t, std::char_traits<wchar_t>, Allocator>; //!< std::wstring by default
     using u16string_type = std::basic_string<char16_t, std::char_traits<char16_t>, Allocator>; //!< std::u16string by default
     using u32string_type = std::basic_string<char32_t, std::char_traits<char32_t>, Allocator>; //!< std::u32string by default
-    using array_type = unspecified;
-    using map_type = unspecified;
+    using array_type = unspecified; //!< SequenceContainer
+    using map_type = unspecified; //!< AssociativeContainer
     using pair_type = unspecified;
+
 #else
+
     using value_type = basic_variable<Allocator>;
     using reference = typename std::add_lvalue_reference<value_type>::type;
     using const_reference = typename std::add_const<reference>::type;
@@ -129,6 +132,7 @@ public:
                               std::less<value_type>,
                               allocator_type>;
     using pair_type = typename map_type::value_type;
+
 #endif
 
 #if !defined(BOOST_DOXYGEN_INVOKED)
