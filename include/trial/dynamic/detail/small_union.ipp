@@ -157,7 +157,9 @@ small_union<Allocator, IndexType, N, Types...>::small_union(T value, const alloc
     using type = typename std::decay<T>::type;
 
     assert(current < sizeof...(Types));
-    small_traits<N, type>::construct(*this, std::addressof(storage), std::move(value));
+    small_traits<N, type>::construct(static_cast<allocator_type&>(*this),
+                                     std::addressof(storage),
+                                     std::move(value));
 }
 
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
@@ -183,7 +185,9 @@ void small_union<Allocator, IndexType, N, Types...>::operator= (T value)
     using type = typename std::decay<T>::type;
 
     call<destructor, void>();
-    small_traits<N, type>::construct(*this, std::addressof(storage), std::move(value));
+    small_traits<N, type>::construct(static_cast<allocator_type&>(*this),
+                                     std::addressof(storage),
+                                     std::move(value));
     current = to_index<type>::value;
 }
 
@@ -318,7 +322,9 @@ struct small_union<Allocator, IndexType, N, Types...>::reconstructor
     template <typename T>
     static void call(small_union& self, const small_union& other)
     {
-        small_traits<N, T>::construct(self, std::addressof(self.storage), other.get<T>());
+        small_traits<N, T>::construct(static_cast<allocator_type&>(self),
+                                      std::addressof(self.storage),
+                                      other.get<T>());
     }
 };
 
@@ -328,7 +334,8 @@ struct small_union<Allocator, IndexType, N, Types...>::destructor
     template <typename T>
     static void call(small_union& self)
     {
-        small_traits<N, T>::destroy(self, std::addressof(self.storage));
+        small_traits<N, T>::destroy(static_cast<allocator_type&>(self),
+                                    std::addressof(self.storage));
     }
 };
 
