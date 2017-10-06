@@ -34,8 +34,8 @@ struct small_traits
     template <typename Allocator, typename... Args>
     static void construct(Allocator& alloc, void *storage, Args... args)
     {
-        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
         using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
+        using allocator_traits = typename std::allocator_traits<allocator_type>;
 
         allocator_type typed_allocator(alloc);
 
@@ -48,8 +48,8 @@ struct small_traits
     template <typename Allocator>
     static void destroy(Allocator& alloc, void *storage)
     {
-        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
         using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
+        using allocator_traits = typename std::allocator_traits<allocator_type>;
 
         allocator_type typed_allocator(alloc);
 
@@ -82,8 +82,8 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
     template <typename Allocator, typename... Args>
     static void construct(Allocator& alloc, void *storage, Args... args)
     {
-        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
         using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
+        using allocator_traits = typename std::allocator_traits<allocator_type>;
 
         allocator_type typed_allocator(alloc);
 
@@ -100,8 +100,8 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
     template <typename Allocator>
     static void destroy(Allocator& alloc, void *storage)
     {
-        using allocator_traits = typename std::allocator_traits<Allocator>::template rebind_traits<type>;
         using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<type>;
+        using allocator_traits = typename std::allocator_traits<allocator_type>;
 
         allocator_type typed_allocator(alloc);
 
