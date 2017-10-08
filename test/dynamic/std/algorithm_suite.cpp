@@ -15,6 +15,7 @@
 
 using namespace trial::dynamic;
 
+auto is_nullable = [] (const variable& value) { return value.is<nullable>(); };
 auto is_boolean = [] (const variable& value) { return value.is<boolean>(); };
 auto is_integer = [] (const variable& value) { return value.is<integer>(); };
 auto is_number = [] (const variable& value) { return value.is<number>(); };
@@ -22,6 +23,8 @@ auto is_string = [] (const variable& value) { return value.is<string>(); };
 auto is_wstring = [] (const variable& value) { return value.is<wstring>(); };
 auto is_u16string = [] (const variable& value) { return value.is<u16string>(); };
 auto is_u32string = [] (const variable& value) { return value.is<u32string>(); };
+auto is_array = [] (const variable& value) { return value.is<array>(); };
+auto is_map = [] (const variable& value) { return value.is<map>(); };
 
 //-----------------------------------------------------------------------------
 // std::accumulate
@@ -5229,6 +5232,220 @@ void run()
 } // namespace none_of_suite
 
 //-----------------------------------------------------------------------------
+// std::partition
+//-----------------------------------------------------------------------------
+
+namespace partition_suite
+{
+
+void partition_null()
+{
+    variable data;
+    auto where = std::partition(data.begin(), data.end(), is_nullable);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_nullable), true);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void partition_boolean()
+{
+    variable data(true);
+    auto where = std::partition(data.begin(), data.end(), is_boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    TRIAL_PROTOCOL_TEST(where == data.end());
+}
+
+void partition_integer()
+{
+    {
+        variable data(2);
+        auto where = std::partition(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable data(2U);
+        auto where = std::partition(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void partition_number()
+{
+    {
+        variable data(3.0f);
+        auto where = std::partition(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable data(3.0);
+        auto where = std::partition(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable data(3.0L);
+        auto where = std::partition(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void partition_string()
+{
+    {
+        variable data("alpha");
+        auto where = std::partition(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable data(L"bravo");
+        auto where = std::partition(data.begin(), data.end(), is_wstring);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable data(u"charlie");
+        auto where = std::partition(data.begin(), data.end(), is_u16string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+    {
+        variable data(U"delta");
+        auto where = std::partition(data.begin(), data.end(), is_u32string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+        TRIAL_PROTOCOL_TEST(where == data.end());
+    }
+}
+
+void partition_array()
+{
+    variable data = { null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" };
+    {
+        auto where = std::partition(data.begin(), data.end(), is_nullable);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_nullable), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == null);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == true);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == 2);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == 3.0);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == "alpha");
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_wstring);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == L"bravo");
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_u16string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == u"charlie");
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_u32string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == U"delta");
+    }
+}
+
+void partition_map_value()
+{
+    variable data =
+        {
+            { "alpha", null },
+            { "bravo", true },
+            { "charlie", 2 },
+            { "delta", 3.0 },
+            { "echo", "hydrogen" },
+            { "foxtrot", L"helium" },
+            { "golf", array::make({ 5 }) },
+            { "hotel", map::make({ {"alice", 6} }) }
+        };
+    {
+        auto where = std::partition(data.begin(), data.end(), is_nullable);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_nullable), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == null);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_boolean);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == true);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == 2);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == 3.0);
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_string);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(*data.begin() == "hydrogen");
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_array);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_array), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(data.begin()->is<array>());
+        TRIAL_PROTOCOL_TEST(data.begin().key() == "alpha");
+    }
+    {
+        auto where = std::partition(data.begin(), data.end(), is_map);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_map), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
+        TRIAL_PROTOCOL_TEST(data.begin()->is<map>());
+        TRIAL_PROTOCOL_TEST(data.begin().key() == "alpha");
+    }
+}
+
+void run()
+{
+    partition_null();
+    partition_boolean();
+    partition_integer();
+    partition_number();
+    partition_string();
+    partition_array();
+    partition_map_value();
+}
+
+} // namespace partition_suite
+
+//-----------------------------------------------------------------------------
 // std::partition_point
 //-----------------------------------------------------------------------------
 
@@ -7611,6 +7828,7 @@ int main()
     mismatch_suite::run();
     move_suite::run();
     none_of_suite::run();
+    partition_suite::run();
     partition_point_suite::run();
     remove_suite::run();
     search_suite::run();

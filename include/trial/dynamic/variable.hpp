@@ -144,7 +144,7 @@ private:
     class iterator_base
     {
     public:
-        using iterator_category = std::forward_iterator_tag;
+        using iterator_category = std::bidirectional_iterator_tag;
         using key_type = typename std::add_const<typename map_type::key_type>::type;
         using value_type = T;
         using difference_type = typename value_type::difference_type;
@@ -157,6 +157,8 @@ private:
 
         Derived& operator++ ();
         Derived operator++ (int);
+        Derived& operator-- ();
+        Derived operator-- (int);
 
         pointer operator-> ();
 
@@ -196,6 +198,7 @@ private:
         pointer scope;
         small_union current;
     };
+
 #endif
 
 public:

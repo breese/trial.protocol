@@ -2402,6 +2402,53 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ (int) -> D
 
 template <template <typename> class Allocator>
 template <typename Derived, typename T>
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-- () -> Derived&
+{
+    assert(scope);
+
+    switch (scope->symbol())
+    {
+    case symbol::null:
+        current = pointer(nullptr);
+        break;
+
+    case symbol::boolean:
+    case symbol::integer:
+    case symbol::number:
+    case symbol::string:
+    case symbol::wstring:
+    case symbol::u16string:
+    case symbol::u32string:
+        if (current.template get<pointer>() == nullptr)
+        {
+            current = scope;
+        }
+        break;
+
+    case symbol::array:
+        --current.template get<array_iterator>();
+        break;
+
+    case symbol::map:
+        --current.template get<map_iterator>();
+        break;
+    }
+    return *static_cast<Derived*>(this);
+}
+
+template <template <typename> class Allocator>
+template <typename Derived, typename T>
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-- (int) -> Derived
+{
+    assert(scope);
+
+    Derived result = *static_cast<Derived*>(this);
+    --(*this);
+    return result;
+}
+
+template <template <typename> class Allocator>
+template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::key() const -> const_reference
 {
     assert(scope);
