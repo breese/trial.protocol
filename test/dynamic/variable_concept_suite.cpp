@@ -92,12 +92,41 @@ void run()
 } // namespace container_suite
 
 //-----------------------------------------------------------------------------
+// ReversibleContainer
+//-----------------------------------------------------------------------------
+
+namespace reversible_container_suite
+{
+
+TRIAL_DYNAMIC_HAS_TYPE(has_reverse_iterator, reverse_iterator)
+TRIAL_DYNAMIC_HAS_TYPE(has_const_reverse_iterator, const_reverse_iterator)
+
+void container_types()
+{
+    static_assert(has_reverse_iterator<variable>::value, "variable::reserse_iterator missing");
+    static_assert(has_const_reverse_iterator<variable>::value, "variable::const_reverse_iterator missing");
+}
+
+void run()
+{
+    container_types();
+    // Required member functions are check elsewhere
+    //   variable::rbegin()
+    //   variable::rend()
+    //   variable::crbegin()
+    //   variable::crend()
+}
+
+} // namespace reversible_container_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
 int main()
 {
     container_suite::run();
+    reversible_container_suite::run();
 
     return boost::report_errors();
 }

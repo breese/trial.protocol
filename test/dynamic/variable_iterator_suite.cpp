@@ -180,7 +180,6 @@ void run()
     // [bidirectional.iterators]
     bidirectional_iterator_decrementable();
     bidirectional_iterator_post_decrementable();
-    // FIXME
 }
 
 } // namespace concept_suite
@@ -2516,6 +2515,525 @@ void run()
 } // namespace range_for_suite
 
 //-----------------------------------------------------------------------------
+// reverse_iterator
+//-----------------------------------------------------------------------------
+
+namespace reverse_iterator_suite
+{
+
+void iterate_null()
+{
+    {
+        variable data;
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data;
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data;
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where == data.crend());
+    }
+}
+
+void iterate_boolean()
+{
+    {
+        variable data(true);
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data(true);
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data(true);
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_integer()
+{
+    {
+        variable data(2);
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data(2);
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data(2);
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_number()
+{
+    {
+        variable data(3.0);
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data(3.0);
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data(3.0);
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_string()
+{
+    {
+        variable data("alpha");
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data("alpha");
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data("alpha");
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_wstring()
+{
+    {
+        variable data(L"bravo");
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data(L"bravo");
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data(L"bravo");
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_u16string()
+{
+    {
+        variable data(u"charlie");
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"charlie");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data(u"charlie");
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"charlie");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data(u"charlie");
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"charlie");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_u32string()
+{
+    {
+        variable data(U"delta");
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"delta");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data(U"delta");
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"delta");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data(U"delta");
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"delta");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_array()
+{
+    {
+        variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"delta");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"charlie");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<nullable>());
+        TRIAL_PROTOCOL_TEST(*where == null);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"delta");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"charlie");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<nullable>());
+        TRIAL_PROTOCOL_TEST(*where == null);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"delta");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"charlie");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"bravo");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "alpha");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<nullable>());
+        TRIAL_PROTOCOL_TEST(*where == null);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void iterate_map()
+{
+    {
+        variable data = map::make(
+            {
+                {"alpha", null},
+                {"bravo", true},
+                {"charlie", 2},
+                {"delta", 3.0},
+                {"echo", "hydrogen"},
+                {"foxtrot", L"helium"},
+                {"golf", u"lithium"},
+                {"hotel", U"beryllium"}
+            });
+        variable::reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"beryllium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"lithium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"helium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<nullable>());
+        TRIAL_PROTOCOL_TEST(*where == null);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        const variable data = map::make(
+            {
+                {"alpha", null},
+                {"bravo", true},
+                {"charlie", 2},
+                {"delta", 3.0},
+                {"echo", "hydrogen"},
+                {"foxtrot", L"helium"},
+                {"golf", u"lithium"},
+                {"hotel", U"beryllium"}
+            });
+        variable::const_reverse_iterator where = data.rbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"beryllium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"lithium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"helium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<nullable>());
+        TRIAL_PROTOCOL_TEST(*where == null);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+    {
+        variable data = map::make(
+            {
+                {"alpha", null},
+                {"bravo", true},
+                {"charlie", 2},
+                {"delta", 3.0},
+                {"echo", "hydrogen"},
+                {"foxtrot", L"helium"},
+                {"golf", u"lithium"},
+                {"hotel", U"beryllium"}
+            });
+        variable::const_reverse_iterator where = data.crbegin();
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u32string>());
+        TRIAL_PROTOCOL_TEST(*where == U"beryllium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<u16string>());
+        TRIAL_PROTOCOL_TEST(*where == u"lithium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<wstring>());
+        TRIAL_PROTOCOL_TEST(*where == L"helium");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<string>());
+        TRIAL_PROTOCOL_TEST(*where == "hydrogen");
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(*where == 3.0);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<integer>());
+        TRIAL_PROTOCOL_TEST(*where == 2);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<boolean>());
+        TRIAL_PROTOCOL_TEST(*where == true);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where != data.rend());
+        TRIAL_PROTOCOL_TEST(where->is<nullable>());
+        TRIAL_PROTOCOL_TEST(*where == null);
+        ++where;
+        TRIAL_PROTOCOL_TEST(where == data.rend());
+    }
+}
+
+void run()
+{
+    iterate_null();
+    iterate_boolean();
+    iterate_integer();
+    iterate_number();
+    iterate_string();
+    iterate_wstring();
+    iterate_u16string();
+    iterate_u32string();
+    iterate_array();
+    iterate_map();
+}
+
+} // namespace reverse_iterator_suite
+
+//-----------------------------------------------------------------------------
 // key_iterator
 //-----------------------------------------------------------------------------
 
@@ -2704,6 +3222,7 @@ int main()
     dereference_suite::run();
     distance_suite::run();
     range_for_suite::run();
+    reverse_iterator_suite::run();
     key_iterator_suite::run();
 
     return boost::report_errors();

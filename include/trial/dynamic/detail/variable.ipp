@@ -3956,6 +3956,42 @@ auto basic_variable<Allocator>::cend() const & -> const_iterator
 }
 
 template <template <typename> class Allocator>
+auto basic_variable<Allocator>::rbegin() & -> reverse_iterator
+{
+    return reverse_iterator(end());
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::rbegin() const & -> const_reverse_iterator
+{
+    return const_reverse_iterator(cend());
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::crbegin() const & -> const_reverse_iterator
+{
+    return const_reverse_iterator(cend());
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::rend() & -> reverse_iterator
+{
+    return reverse_iterator(begin());
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::rend() const & -> const_reverse_iterator
+{
+    return const_reverse_iterator(cbegin());
+}
+
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::crend() const & -> const_reverse_iterator
+{
+    return const_reverse_iterator(cbegin());
+}
+
+template <template <typename> class Allocator>
 auto basic_variable<Allocator>::key_begin() const & -> key_iterator
 {
     return key_iterator(this);

@@ -308,6 +308,9 @@ public:
         typename std::remove_const<value_type>::type index;
     };
 
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
     //! @brief Constructs a default variable of type `nullable`.
     //!
     //! A default constructed variable contains `null`, which means it has no
@@ -881,6 +884,30 @@ public:
     //! @brief Returns an iterator to the end.
 
     const_iterator cend() const &;
+
+    //! @brief Returns a reverse iterator to the beginning.
+
+    reverse_iterator rbegin() &;
+
+    //! @brief Returns a reverse iterator to the beginning.
+
+    const_reverse_iterator rbegin() const &;
+
+    //! @brief Returns a reverse iterator to the beginning.
+
+    const_reverse_iterator crbegin() const &;
+
+    //! @brief Returns a reverse iterator to the end.
+
+    reverse_iterator rend() &;
+
+    //! @brief Returns a reverse iterator to the end.
+
+    const_reverse_iterator rend() const&;
+
+    //! @brief Returns a reverse iterator to the end.
+
+    const_reverse_iterator crend() const&;
 
     //! @brief Returns a key iterator to the beginning.
 
