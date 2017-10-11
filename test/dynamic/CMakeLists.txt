@@ -21,5 +21,6 @@ trial_add_test(dynamic_algorithm_count_suite algorithm/count_suite.cpp)
 trial_add_test(dynamic_algorithm_find_suite algorithm/find_suite.cpp)
 
 trial_add_test(dynamic_std_algorithm_suite std/algorithm_suite.cpp)
+trial_add_test(dynamic_std_numeric_suite std/numeric_suite.cpp)
 trial_add_test(dynamic_std_convert_suite std/convert_suite.cpp)
 trial_add_test(dynamic_boost_convert_suite boost/convert_suite.cpp)
