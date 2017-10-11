@@ -1342,6 +1342,109 @@ void run()
 } // namespace copy_suite
 
 //-----------------------------------------------------------------------------
+// std::copy_backward
+//-----------------------------------------------------------------------------
+
+namespace copy_backward_suite
+{
+
+void copy_null_to_array()
+{
+    variable data;
+    variable result = array::repeat(0, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 0);
+}
+
+void copy_boolean_to_array()
+{
+    variable data(true);
+    variable result = array::repeat(1, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == true);
+}
+
+void copy_integer_to_array()
+{
+    variable data(2);
+    variable result = array::repeat(1, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == 2);
+}
+
+void copy_number_to_array()
+{
+    variable data(3.0);
+    variable result = array::repeat(1, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == 3.0);
+}
+
+void copy_string_to_array()
+{
+    variable data("alpha");
+    variable result = array::repeat(1, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == "alpha");
+}
+
+void copy_wstring_to_array()
+{
+    variable data(L"bravo");
+    variable result = array::repeat(1, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == L"bravo");
+}
+
+void copy_u16string_to_array()
+{
+    variable data(u"charlie");
+    variable result = array::repeat(1, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == u"charlie");
+}
+
+void copy_u32string_to_array()
+{
+    variable data(U"delta");
+    variable result = array::repeat(1, null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 1);
+    TRIAL_PROTOCOL_TEST(result[0] == U"delta");
+}
+
+void copy_array_to_array()
+{
+    variable data = array::make({ null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+    variable result = array::repeat(data.size(), null);
+    std::copy_backward(data.begin(), data.end(), result.end());
+    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                 result.begin(), result.end(),
+                                 std::equal_to<variable>());
+}
+
+void run()
+{
+    copy_null_to_array();
+    copy_boolean_to_array();
+    copy_integer_to_array();
+    copy_number_to_array();
+    copy_string_to_array();
+    copy_wstring_to_array();
+    copy_u16string_to_array();
+    copy_u32string_to_array();
+    copy_array_to_array();
+}
+
+} // namespace copy_backward_suite
+
+//-----------------------------------------------------------------------------
 // std::count
 //-----------------------------------------------------------------------------
 
@@ -7925,6 +8028,7 @@ int main()
     any_of_suite::run();
     binary_search_suite::run();
     copy_suite::run();
+    copy_backward_suite::run();
     count_suite::run();
     count_if_suite::run();
     equal_suite::run();
