@@ -52,7 +52,10 @@ trial_add_test(dynamic_std_transform_suite std/transform_suite.cpp)
 trial_add_test(dynamic_std_unique_suite std/unique_suite.cpp)
 trial_add_test(dynamic_std_upper_bound_suite std/upper_bound_suite.cpp)
 
-trial_add_test(dynamic_std_numeric_suite std/numeric_suite.cpp)
+# <numeric>
+trial_add_test(dynamic_std_accumulate_suite std/accumulate_suite.cpp)
+trial_add_test(dynamic_std_iota_suite std/iota_suite.cpp)
+trial_add_test(dynamic_std_partial_sum_suite std/partial_sum_suite.cpp)
 
 trial_add_test(dynamic_std_convert_suite std/convert_suite.cpp)
 trial_add_test(dynamic_boost_convert_suite boost/convert_suite.cpp)
