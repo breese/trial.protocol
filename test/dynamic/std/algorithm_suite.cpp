@@ -12,19 +12,9 @@
 #include <iterator>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
 #include <trial/dynamic/variable.hpp>
+#include <trial/dynamic/functional.hpp>
 
 using namespace trial::dynamic;
-
-auto is_nullable = [] (const variable& value) { return value.is<nullable>(); };
-auto is_boolean = [] (const variable& value) { return value.is<boolean>(); };
-auto is_integer = [] (const variable& value) { return value.is<integer>(); };
-auto is_number = [] (const variable& value) { return value.is<number>(); };
-auto is_string = [] (const variable& value) { return value.is<string>(); };
-auto is_wstring = [] (const variable& value) { return value.is<wstring>(); };
-auto is_u16string = [] (const variable& value) { return value.is<u16string>(); };
-auto is_u32string = [] (const variable& value) { return value.is<u32string>(); };
-auto is_array = [] (const variable& value) { return value.is<array>(); };
-auto is_map = [] (const variable& value) { return value.is<map>(); };
 
 //-----------------------------------------------------------------------------
 // std::adjacent_find
@@ -459,15 +449,15 @@ void all_array_string()
 {
     {
         variable data = { "alpha", "bravo", "charlie", "delta" };
-        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is<string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<string>()));
     }
     {
         variable data = { L"alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<string>()));
     }
 }
 
@@ -475,15 +465,15 @@ void all_array_wstring()
 {
     {
         variable data = { L"alpha", L"bravo", L"charlie", L"delta" };
-        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is<wstring>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<wstring>()));
     }
     {
         variable data = { "alpha", "bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<wstring>()));
     }
 }
 
@@ -491,15 +481,15 @@ void all_array_u16string()
 {
     {
         variable data = { u"alpha", u"bravo", u"charlie", u"delta" };
-        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is<u16string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<u16string>()));
     }
     {
         variable data = { "alpha", L"bravo", "charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<u16string>()));
     }
 }
 
@@ -507,15 +497,15 @@ void all_array_u32string()
 {
     {
         variable data = { U"alpha", U"bravo", U"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(std::all_of(data.begin(), data.end(), is<u32string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<u32string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", "delta" };
-        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(!std::all_of(data.begin(), data.end(), is<u32string>()));
     }
 }
 
@@ -621,15 +611,15 @@ void any_array_string()
 {
     {
         variable data = { "alpha", "bravo", "charlie", "delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<string>()));
     }
     {
         variable data = { L"alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is<string>()));
     }
 }
 
@@ -637,15 +627,15 @@ void any_array_wstring()
 {
     {
         variable data = { L"alpha", L"bravo", L"charlie", L"delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<wstring>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<wstring>()));
     }
     {
         variable data = { "alpha", "bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is<wstring>()));
     }
 }
 
@@ -653,15 +643,15 @@ void any_array_u16string()
 {
     {
         variable data = { u"alpha", u"bravo", u"charlie", u"delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<u16string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<u16string>()));
     }
     {
         variable data = { "alpha", L"bravo", "charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is<u16string>()));
     }
 }
 
@@ -669,15 +659,15 @@ void any_array_u32string()
 {
     {
         variable data = { U"alpha", U"bravo", U"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<u32string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(std::any_of(data.begin(), data.end(), is<u32string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", "delta" };
-        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(!std::any_of(data.begin(), data.end(), is<u32string>()));
     }
 }
 
@@ -2862,254 +2852,254 @@ namespace is_partitioned_suite
 void test_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_integer()
 {
     variable data(2);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_number()
 {
     variable data(3.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_string()
 {
     variable data("alpha");
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_wstring()
 {
     variable data(L"bravo");
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_u16string()
 {
     variable data(u"charlie");
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_u32string()
 {
     variable data(U"delta");
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_boolean()
 {
     variable data = array::make({ true, false, true });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_integer()
 {
     variable data = array::make({ 3, 2, 4 });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_number()
 {
     variable data = array::make({ 3.0, 2.0, 4.0 });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_string()
 {
     variable data = array::make({ "bravo", "alpha", "charlie" });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_wstring()
 {
     variable data = array::make({ L"bravo", L"alpha", L"charlie" });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_u16string()
 {
     variable data = array::make({ u"bravo", u"alpha", u"charlie" });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_u32string()
 {
     variable data = array::make({ U"bravo", U"alpha", U"charlie" });
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
 }
 
 void test_array_arithmetic()
 {
     {
         variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), false);
     }
     {
         variable data = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie", U"delta", true });
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), false);
     }
     {
         variable data = array::make({ 3.0, "alpha", L"bravo", u"charlie", U"delta", true, 2 });
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), false);
     }
     {
         variable data = array::make({ "alpha", L"bravo", u"charlie", U"delta", true, 2, 3.0 });
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), false);
     }
     {
         variable data = array::make({ L"bravo", u"charlie", U"delta", true, 2, 3.0, "alpha" });
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), false);
     }
     {
         variable data = array::make({ u"charlie", U"delta", true, 2, 3.0, "alpha", L"bravo" });
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), false);
     }
     {
         variable data = array::make({ U"delta", true, 2, 3.0, "alpha", L"bravo", u"charlie" });
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), false);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), false);
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
     }
 }
 
@@ -5064,15 +5054,15 @@ void none_array_string()
 {
     {
         variable data = { "alpha", "bravo", "charlie", "delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<string>()));
     }
     {
         variable data = { L"alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_string));
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is<string>()));
     }
 }
 
@@ -5080,15 +5070,15 @@ void none_array_wstring()
 {
     {
         variable data = { L"alpha", L"bravo", L"charlie", L"delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<wstring>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<wstring>()));
     }
     {
         variable data = { "alpha", "bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_wstring));
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is<wstring>()));
     }
 }
 
@@ -5096,15 +5086,15 @@ void none_array_u16string()
 {
     {
         variable data = { u"alpha", u"bravo", u"charlie", u"delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<u16string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<u16string>()));
     }
     {
         variable data = { "alpha", L"bravo", "charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_u16string));
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is<u16string>()));
     }
 }
 
@@ -5112,15 +5102,15 @@ void none_array_u32string()
 {
     {
         variable data = { U"alpha", U"bravo", U"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<u32string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", U"delta" };
-        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(!std::none_of(data.begin(), data.end(), is<u32string>()));
     }
     {
         variable data = { "alpha", L"bravo", u"charlie", "delta" };
-        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is_u32string));
+        TRIAL_PROTOCOL_TEST(std::none_of(data.begin(), data.end(), is<u32string>()));
     }
 }
 
@@ -5183,16 +5173,16 @@ namespace partition_suite
 void partition_null()
 {
     variable data;
-    auto where = std::partition(data.begin(), data.end(), is_nullable);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_nullable), true);
+    auto where = std::partition(data.begin(), data.end(), is<nullable>());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<nullable>()), true);
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
 void partition_boolean()
 {
     variable data(true);
-    auto where = std::partition(data.begin(), data.end(), is_boolean);
-    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+    auto where = std::partition(data.begin(), data.end(), is<boolean>());
+    TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
@@ -5200,14 +5190,14 @@ void partition_integer()
 {
     {
         variable data(2);
-        auto where = std::partition(data.begin(), data.end(), is_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        auto where = std::partition(data.begin(), data.end(), is<integer>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(2U);
-        auto where = std::partition(data.begin(), data.end(), is_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        auto where = std::partition(data.begin(), data.end(), is<integer>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
@@ -5216,20 +5206,20 @@ void partition_number()
 {
     {
         variable data(3.0f);
-        auto where = std::partition(data.begin(), data.end(), is_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        auto where = std::partition(data.begin(), data.end(), is<number>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(3.0);
-        auto where = std::partition(data.begin(), data.end(), is_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        auto where = std::partition(data.begin(), data.end(), is<number>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(3.0L);
-        auto where = std::partition(data.begin(), data.end(), is_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        auto where = std::partition(data.begin(), data.end(), is<number>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
@@ -5238,26 +5228,26 @@ void partition_string()
 {
     {
         variable data("alpha");
-        auto where = std::partition(data.begin(), data.end(), is_string);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+        auto where = std::partition(data.begin(), data.end(), is<string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(L"bravo");
-        auto where = std::partition(data.begin(), data.end(), is_wstring);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+        auto where = std::partition(data.begin(), data.end(), is<wstring>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(u"charlie");
-        auto where = std::partition(data.begin(), data.end(), is_u16string);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
+        auto where = std::partition(data.begin(), data.end(), is<u16string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(U"delta");
-        auto where = std::partition(data.begin(), data.end(), is_u32string);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+        auto where = std::partition(data.begin(), data.end(), is<u32string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
@@ -5266,50 +5256,50 @@ void partition_array()
 {
     variable data = { null, true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" };
     {
-        auto where = std::partition(data.begin(), data.end(), is_nullable);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_nullable), true);
+        auto where = std::partition(data.begin(), data.end(), is<nullable>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<nullable>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == null);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_boolean);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+        auto where = std::partition(data.begin(), data.end(), is<boolean>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == true);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        auto where = std::partition(data.begin(), data.end(), is<integer>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == 2);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        auto where = std::partition(data.begin(), data.end(), is<number>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == 3.0);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_string);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+        auto where = std::partition(data.begin(), data.end(), is<string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == "alpha");
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_wstring);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_wstring), true);
+        auto where = std::partition(data.begin(), data.end(), is<wstring>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<wstring>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == L"bravo");
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_u16string);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u16string), true);
+        auto where = std::partition(data.begin(), data.end(), is<u16string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u16string>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == u"charlie");
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_u32string);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_u32string), true);
+        auto where = std::partition(data.begin(), data.end(), is<u32string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<u32string>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == U"delta");
     }
@@ -5329,45 +5319,45 @@ void partition_map_value()
             { "hotel", map::make({ {"alice", 6} }) }
         };
     {
-        auto where = std::partition(data.begin(), data.end(), is_nullable);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_nullable), true);
+        auto where = std::partition(data.begin(), data.end(), is<nullable>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<nullable>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == null);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_boolean);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_boolean), true);
+        auto where = std::partition(data.begin(), data.end(), is<boolean>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<boolean>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == true);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_integer);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_integer), true);
+        auto where = std::partition(data.begin(), data.end(), is<integer>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<integer>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == 2);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_number), true);
+        auto where = std::partition(data.begin(), data.end(), is<number>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == 3.0);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_string);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_string), true);
+        auto where = std::partition(data.begin(), data.end(), is<string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<string>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == "hydrogen");
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_array);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_array), true);
+        auto where = std::partition(data.begin(), data.end(), is<array>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<array>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(data.begin()->is<array>());
         TRIAL_PROTOCOL_TEST(data.begin().key() == "alpha");
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is_map);
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is_map), true);
+        auto where = std::partition(data.begin(), data.end(), is<map>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<map>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(data.begin()->is<map>());
         TRIAL_PROTOCOL_TEST(data.begin().key() == "alpha");
@@ -5398,31 +5388,31 @@ void find_null()
 {
     variable data;
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -5431,31 +5421,31 @@ void find_boolean()
 {
     variable data(true);
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -5464,31 +5454,31 @@ void find_integer()
 {
     variable data(2);
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -5497,31 +5487,31 @@ void find_number()
 {
     variable data(3.0);
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -5530,31 +5520,31 @@ void find_string()
 {
     variable data("alpha");
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -5563,31 +5553,31 @@ void find_wstring()
 {
     variable data(L"bravo");
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -5596,31 +5586,31 @@ void find_u16string()
 {
     variable data(u"charlie");
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
 }
@@ -5629,31 +5619,31 @@ void find_u32string()
 {
     variable data(U"delta");
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+        auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_integer);
+        auto where = std::partition_point(data.begin(), data.end(), is<integer>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_number);
+        auto where = std::partition_point(data.begin(), data.end(), is<number>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_string);
+        auto where = std::partition_point(data.begin(), data.end(), is<string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+        auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+        auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
 }
@@ -5661,49 +5651,49 @@ void find_u32string()
 void find_array_boolean()
 {
     variable data = array::make({ false, true, null, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = std::partition_point(data.begin(), data.end(), is_boolean);
+    auto where = std::partition_point(data.begin(), data.end(), is<boolean>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_integer()
 {
     variable data = array::make({ 0, 2, null, true, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = std::partition_point(data.begin(), data.end(), is_integer);
+    auto where = std::partition_point(data.begin(), data.end(), is<integer>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_number()
 {
     variable data = array::make({ 0.0, 3.0, null, true, 2, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = std::partition_point(data.begin(), data.end(), is_number);
+    auto where = std::partition_point(data.begin(), data.end(), is<number>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_string()
 {
     variable data = array::make({ "", "alpha", null, true, 2, 3.0, L"bravo", u"charlie", U"delta" });
-    auto where = std::partition_point(data.begin(), data.end(), is_string);
+    auto where = std::partition_point(data.begin(), data.end(), is<string>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_wstring()
 {
     variable data = array::make({ L"", L"bravo", null, true, 2, 3.0, "alpha", u"charlie", U"delta" });
-    auto where = std::partition_point(data.begin(), data.end(), is_wstring);
+    auto where = std::partition_point(data.begin(), data.end(), is<wstring>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_u16string()
 {
     variable data = array::make({ u"", u"charlie", null, true, 2, 3.0, "alpha", L"bravo", U"delta" });
-    auto where = std::partition_point(data.begin(), data.end(), is_u16string);
+    auto where = std::partition_point(data.begin(), data.end(), is<u16string>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
 void find_array_u32string()
 {
     variable data = array::make({ U"", U"delta", null, true, 2, 3.0, "alpha", L"bravo", u"charlie" });
-    auto where = std::partition_point(data.begin(), data.end(), is_u32string);
+    auto where = std::partition_point(data.begin(), data.end(), is<u32string>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
