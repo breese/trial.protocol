@@ -359,10 +359,39 @@ public:
 
     basic_variable(const char32_t *);
 
+    //! @brief Construct a variable from array type.
+    //!
+    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //!
+    //! Prefer to use factory or initializer-lists when creating arrays.
+
+    basic_variable(const typename basic_variable::array_type&);
+
+    //! @brief Construct a variable from array type.
+    //!
+    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //!
+    //! Prefer to use factory or initializer-lists when creating arrays.
+
+    basic_variable(typename basic_variable::array_type&&);
+
+    //! @brief Construct a variable from map type.
+    //!
+    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //!
+    //! Prefer to use factory or initializer-lists when creating associative arrays.
+
+    basic_variable(const typename basic_variable::map_type&);
+
+    //! @brief Construct a variable from map type.
+    //!
+    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //!
+    //! Prefer to use factory or initializer-lists when creating associative arrays.
+
+    basic_variable(typename basic_variable::map_type&&);
+
 #if !defined(BOOST_DOXYGEN_INVOKED)
-    // Use factory instead
-    basic_variable(typename basic_variable::array_type) = delete;
-    basic_variable(typename basic_variable::map_type) = delete;
     basic_variable(typename basic_variable::pair_type) = delete;
 #endif
  

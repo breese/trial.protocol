@@ -3032,6 +3032,30 @@ basic_variable<Allocator>::basic_variable(const char32_t *value)
 }
 
 template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const typename basic_variable::array_type& value)
+    : storage(value)
+{
+}
+
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(typename basic_variable::array_type&& value)
+    : storage(std::move(value))
+{
+}
+
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(const typename basic_variable::map_type& value)
+    : storage(value)
+{
+}
+
+template <template <typename> class Allocator>
+basic_variable<Allocator>::basic_variable(typename basic_variable::map_type&& value)
+    : storage(std::move(value))
+{
+}
+
+template <template <typename> class Allocator>
 auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic_variable&
 {
     switch (other.code())

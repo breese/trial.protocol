@@ -423,6 +423,80 @@ void construct_no_map()
     }
 }
 
+void construct_from_array()
+{
+    // lvalue
+    {
+        variable::array_type array = { null, true, 2, 3.0, "alpha" };
+        variable data = array;
+
+        variable expect = array::make({ null, true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // rvalue
+    {
+        variable data = variable::array_type{ null, true, 2, 3.0, "alpha" };
+
+        variable expect = array::make({ null, true, 2, 3.0, "alpha" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
+void construct_from_map()
+{
+    // lvalue
+    {
+        variable::map_type array =
+            {
+                { "alpha", null },
+                { "bravo", true },
+                { "charlie", 2 },
+                { "delta", 3.0 },
+                { "echo", "hydrogen" }
+            };
+        variable data = array;
+
+        variable expect = map::make(
+            {
+                { "alpha", null },
+                { "bravo", true },
+                { "charlie", 2 },
+                { "delta", 3.0 },
+                { "echo", "hydrogen" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    // rvalue
+    {
+        variable data = variable::map_type(
+            {
+                { "alpha", null },
+                { "bravo", true },
+                { "charlie", 2 },
+                { "delta", 3.0 },
+                { "echo", "hydrogen" }
+            });
+ 
+        variable expect = map::make(
+            {
+                { "alpha", null },
+                { "bravo", true },
+                { "charlie", 2 },
+                { "delta", 3.0 },
+                { "echo", "hydrogen" }
+            });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+}
+
 void run()
 {
     construct_null();
@@ -468,6 +542,9 @@ void run()
     construct_map_with_nested_map();
 
     construct_no_map();
+
+    construct_from_array();
+    construct_from_map();
 }
 
 } // namespace ctor_suite
