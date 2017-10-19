@@ -19,6 +19,7 @@ trial_add_test(dynamic_variable_io_suite variable_io_suite.cpp)
 
 trial_add_test(dynamic_algorithm_count_suite algorithm/count_suite.cpp)
 trial_add_test(dynamic_algorithm_find_suite algorithm/find_suite.cpp)
+trial_add_test(dynamic_algorithm_visit_suite algorithm/visit_suite.cpp)
 
 # <algorithm>
 trial_add_test(dynamic_std_adjacent_find_suite std/adjacent_find_suite.cpp)
