@@ -33,6 +33,10 @@ inline std::error_code make_error_code(dynamic::errc e = no_error)
                            dynamic::error_category());
 }
 
+//! @brief Dynamic system error.
+//!
+//! Specialization of @c std::system_error that is used to distinguish between
+//! exceptions throw from Trial.Dynamic and other components.
 class error : public std::system_error
 {
 public:
