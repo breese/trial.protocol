@@ -18,6 +18,7 @@ namespace trial
 namespace dynamic
 {
 
+//! @brief Error value.
 enum errc
 {
     no_error = 0,
@@ -25,8 +26,10 @@ enum errc
     incompatible_type
 };
 
+//! @brief Error category.
 const std::error_category& error_category();
 
+//! @brief Error code factory.
 inline std::error_code make_error_code(dynamic::errc e = no_error)
 {
     return std::error_code(static_cast<int>(e),
@@ -40,6 +43,7 @@ inline std::error_code make_error_code(dynamic::errc e = no_error)
 class error : public std::system_error
 {
 public:
+    //! @brief Constructs an exception from an error code.
     error(std::error_code ec)
         : system_error(std::move(ec))
     {}
@@ -48,6 +52,7 @@ public:
 } // namespace dynamic
 } // namespace trial
 
+#if !defined(BOOST_DOXYGEN_INVOKED)
 namespace std
 {
 
@@ -58,6 +63,7 @@ struct is_error_code_enum<trial::dynamic::errc>
 };
 
 } // namespace std
+#endif
 
 #include <trial/dynamic/detail/error.ipp>
 
