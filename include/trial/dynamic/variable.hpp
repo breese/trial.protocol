@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <iterator>
@@ -960,7 +961,7 @@ private:
     using index_type = unsigned char;
     using storage_type = detail::small_union<allocator_type,
                                              index_type,
-                                             sizeof(double),
+                                             sizeof(std::max_align_t),
                                              nullable,
                                              bool,
                                              signed char,
