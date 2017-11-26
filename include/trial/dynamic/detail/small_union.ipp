@@ -265,14 +265,6 @@ const T& small_union<Allocator, IndexType, N, Types...>::get() const noexcept
 }
 
 template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-void small_union<Allocator, IndexType, N, Types...>::swap(small_union& other) noexcept
-{
-    using std::swap;
-    swap(storage, other.storage);
-    swap(current, other.current);
-}
-
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
 template <typename Visitor, typename R>
 R small_union<Allocator, IndexType, N, Types...>::call()
 {

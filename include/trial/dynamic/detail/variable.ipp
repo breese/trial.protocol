@@ -2895,7 +2895,7 @@ basic_variable<Allocator>::basic_variable(const basic_variable& other)
 }
 
 template <template <typename> class Allocator>
-basic_variable<Allocator>::basic_variable(basic_variable&& other)
+basic_variable<Allocator>::basic_variable(basic_variable&& other) noexcept
     : storage(null)
 {
     switch (other.code())
@@ -2961,6 +2961,7 @@ basic_variable<Allocator>::basic_variable(basic_variable&& other)
         storage = std::move(other.unsafe_get<array_type>());
         break;
     case code::map:
+        // This is not guaranteed to be noexcept
         storage = std::move(other.unsafe_get<map_type>());
         break;
     }
@@ -3940,7 +3941,8 @@ auto basic_variable<Allocator>::erase(const_iterator first, const_iterator last)
 template <template <typename> class Allocator>
 void basic_variable<Allocator>::swap(basic_variable& other) noexcept
 {
-    storage.swap(other.storage);
+    using std::swap;
+    swap(*this, other);
 }
 
 template <template <typename> class Allocator>

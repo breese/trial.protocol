@@ -324,7 +324,7 @@ public:
 
     //! @brief Move-constructs a copy of `element`.
 
-    basic_variable(basic_variable&& element);
+    basic_variable(basic_variable&& element) noexcept;
 
     //! @brief Constructs a variable of type `T`.
     //!

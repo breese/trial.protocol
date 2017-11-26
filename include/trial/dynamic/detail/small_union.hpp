@@ -54,8 +54,6 @@ public:
     template <typename T> T& get() noexcept;
     template <typename T> const T& get() const noexcept;
 
-    void swap(small_union&) noexcept;
-
     template <typename Visitor, typename R> R call();
     template <typename Visitor, typename R> R call() const;
     template <typename Visitor, typename R, typename... Args> R call(Args&&...);
