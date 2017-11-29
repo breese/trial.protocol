@@ -14,11 +14,7 @@
 #include <boost/version.hpp>
 
 #if BOOST_VERSION >= 105600
-# define TRIAL_PROTOCOL_HEADER_BOOST_CSTDFLOAT_HPP
-#endif
-
-#if defined(TRIAL_PROTOCOL_HEADER_BOOST_CSTDFLOAT_HPP)
-#include <boost/cstdfloat.hpp>
+#include <boost/math/cstdfloat/cstdfloat_types.hpp>
 #endif
 
 namespace trial
@@ -28,16 +24,16 @@ namespace protocol
 namespace detail
 {
 
-#if defined(TRIAL_PROTOCOL_HEADER_BOOST_CSTDFLOAT_HPP)
+#if defined(BOOST_FLOAT32_C)
 using float32_t = boost::float32_t;
-using float64_t = boost::float64_t;
-#if defined(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE)
-using float128_t = boost::float128_t;
-#endif
 #else
 using float32_t = float;
+#endif
+
+#if defined(BOOST_FLOAT64_C)
+using float64_t = boost::float64_t;
+#else
 using float64_t = double;
-using float128_t = long double;
 #endif
 
 } // namespace detail
