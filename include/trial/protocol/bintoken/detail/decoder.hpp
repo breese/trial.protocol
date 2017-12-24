@@ -34,8 +34,8 @@ public:
     using size_type = std::size_t;
     using view_type = core::detail::basic_string_view<value_type, core::char_traits<value_type>>;
 
-    template <typename T>
-    decoder(const T& input);
+    decoder(view_type);
+    template <typename T> decoder(const T& input);
 
     void next() BOOST_NOEXCEPT;
 

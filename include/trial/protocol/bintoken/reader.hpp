@@ -30,8 +30,8 @@ public:
     using value_type = detail::decoder::value_type;
     using view_type = detail::decoder::view_type;
 
-    template <typename T>
-    reader(const T&);
+    reader(view_type);
+    template <typename T> reader(const T&);
 
     //! @brief Advance to the next token.
     bool next() BOOST_NOEXCEPT;

@@ -404,12 +404,17 @@ struct decoder::overloader<token::string>
 // decoder
 //-----------------------------------------------------------------------------
 
-template <typename T>
-decoder::decoder(const T& input)
-    : input(buffer::traits<T>::view_cast(input))
+decoder::decoder(view_type view)
+    : input(std::move(view))
 {
     current.code = token::code::end;
     next();
+}
+
+template <typename T>
+decoder::decoder(const T& input)
+    : decoder(buffer::traits<T>::view_cast(input))
+{
 }
 
 inline void decoder::code(token::code::value v) BOOST_NOEXCEPT

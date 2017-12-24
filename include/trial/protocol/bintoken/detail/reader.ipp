@@ -378,6 +378,12 @@ struct reader::overloader<std::string>
 // reader
 //-----------------------------------------------------------------------------
 
+reader::reader(view_type view)
+    : decoder(std::move(view))
+{
+    stack.push(token::code::end);
+}
+
 template <typename T>
 reader::reader(const T& input)
     : decoder(input)
