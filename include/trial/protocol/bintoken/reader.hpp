@@ -75,6 +75,9 @@ public:
     //! @brief Return a view of the current value before it is converted into its type.
     const view_type& literal() const BOOST_NOEXCEPT;
 
+    //! @returns A view of the remaining buffer.
+    const view_type& tail() const BOOST_NOEXCEPT;
+
 private:
     template <typename ReturnType, typename Enable = void> struct overloader;
 

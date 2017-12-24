@@ -447,6 +447,11 @@ inline const decoder::view_type& decoder::literal() const BOOST_NOEXCEPT
     return current.view;
 }
 
+auto decoder::tail() const BOOST_NOEXCEPT -> const view_type&
+{
+    return input;
+}
+
 template <typename Tag>
 typename Tag::type decoder::value() const
 {

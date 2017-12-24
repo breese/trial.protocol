@@ -46,6 +46,7 @@ public:
     std::error_code error() const BOOST_NOEXCEPT;
 
     const view_type& literal() const BOOST_NOEXCEPT;
+    const view_type& tail() const BOOST_NOEXCEPT;
     template <typename Tag> typename Tag::type value() const;
 
     size_type array(token::int8::type *output, size_type output_length);

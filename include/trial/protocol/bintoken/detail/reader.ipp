@@ -572,6 +572,11 @@ inline const reader::view_type& reader::literal() const BOOST_NOEXCEPT
     return decoder.literal();
 }
 
+auto reader::tail() const BOOST_NOEXCEPT -> const view_type&
+{
+    return decoder.tail();
+}
+
 } // namespace bintoken
 } // namespace protocol
 } // namespace trial
