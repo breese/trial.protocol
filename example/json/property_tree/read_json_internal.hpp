@@ -17,7 +17,7 @@
 #include <istream>
 #include <trial/protocol/json/reader.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/detail/json_parser_error.hpp>
+#include <boost/property_tree/json_parser/error.hpp>
 
 namespace trial
 {

@@ -1,7 +1,6 @@
 #include <string>
 #include <iostream>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/property_tree/detail/json_parser_error.hpp>
 #include "json_parser.hpp"
 
 int main(int argc, char *argv[])

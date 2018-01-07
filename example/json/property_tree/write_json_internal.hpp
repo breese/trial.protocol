@@ -13,7 +13,7 @@
 
 #include <ostream>
 #include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/detail/json_parser_error.hpp>
+#include <boost/property_tree/json_parser/error.hpp>
 #include <trial/protocol/buffer/ostream.hpp>
 #include <trial/protocol/json/writer.hpp>
 

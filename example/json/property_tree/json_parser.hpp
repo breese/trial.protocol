@@ -13,7 +13,7 @@
 
 #include <locale>
 #include <fstream>
-#include <boost/property_tree/detail/json_parser_error.hpp>
+#include <boost/property_tree/json_parser/error.hpp>
 #include "read_json_internal.hpp"
 #include "write_json_internal.hpp"
 
