@@ -40,7 +40,7 @@ void compare_null()
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                          other.begin(), other.end()));
     }
-    // null - number
+    // null - real
     {
         variable other(3.0);
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
@@ -101,7 +101,7 @@ void compare_boolean()
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                          other.begin(), other.end()));
     }
-    // boolean - number
+    // boolean - real
     {
         variable other(3.0);
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
@@ -164,7 +164,7 @@ void compare_integer()
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                           larger.begin(), larger.end()));
     }
-    // integer - number
+    // integer - real
     {
         variable smaller(0.0);
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
@@ -199,7 +199,7 @@ void compare_integer()
     }
 }
 
-void compare_number()
+void compare_real()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
@@ -207,7 +207,7 @@ void compare_number()
     TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
                                                       data.begin(), data.end(),
                                                       std::less<variable>()));
-    // number - null
+    // real - null
     {
         // See boolean - null comparison
 
@@ -215,13 +215,13 @@ void compare_number()
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
                                                           other.begin(), other.end()));
     }
-    // number - boolean
+    // real - boolean
     {
         variable other(true);
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
                                                           other.begin(), other.end()));
     }
-    // number - integer
+    // real - integer
     {
         variable smaller(0);
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
@@ -230,7 +230,7 @@ void compare_number()
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                           larger.begin(), larger.end()));
     }
-    // number - number
+    // real - real
     {
         variable smaller(0.0);
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
@@ -239,25 +239,25 @@ void compare_number()
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                          larger.begin(), larger.end()));
     }
-    // number - string
+    // real - string
     {
         variable other("alpha");
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                          other.begin(), other.end()));
     }
-    // number - wstring
+    // real - wstring
     {
         variable other(L"bravo");
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                          other.begin(), other.end()));
     }
-    // number - u16string
+    // real - u16string
     {
         variable other(u"charlie");
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                          other.begin(), other.end()));
     }
-    // number - u32string
+    // real - u32string
     {
         variable other(U"delta");
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
@@ -293,7 +293,7 @@ void compare_string()
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
                                                           other.begin(), other.end()));
     }
-    // string - number
+    // string - real
     {
         variable other(3.0);
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
@@ -349,7 +349,7 @@ void compare_array_array()
         TRIAL_PROTOCOL_TEST(std::lexicographical_compare(data.begin(), data.end(),
                                                          larger.begin(), larger.end()));
     }
-    // number
+    // real
     {
         variable smaller = array::make({ null, true, 2, 0.0, "alpha", L"bravo", u"charlie", U"delta" });
         TRIAL_PROTOCOL_TEST(!std::lexicographical_compare(data.begin(), data.end(),
@@ -401,7 +401,7 @@ int main()
     compare_null();
     compare_boolean();
     compare_integer();
-    compare_number();
+    compare_real();
     compare_string();
     compare_array_array();
 

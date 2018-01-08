@@ -51,7 +51,7 @@ void all_integer()
     }
 }
 
-void all_number()
+void all_real()
 {
     {
         variable data(0.0);
@@ -187,7 +187,7 @@ int main()
     all_null();
     all_boolean();
     all_integer();
-    all_number();
+    all_real();
     all_array_boolean();
     all_array_string();
     all_array_wstring();

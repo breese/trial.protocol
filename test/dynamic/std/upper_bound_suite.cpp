@@ -129,7 +129,7 @@ void find_integer()
     }
 }
 
-void find_number()
+void find_real()
 {
     variable data(3.0);
     {
@@ -446,7 +446,7 @@ int main()
     find_null();
     find_boolean();
     find_integer();
-    find_number();
+    find_real();
     find_string();
     find_wstring();
     find_u16string();

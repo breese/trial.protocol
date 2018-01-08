@@ -30,7 +30,7 @@ void i_number_double_huge_neg_exp()
 {
     const char input[] = "123.456e-789";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "123.456e-789");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), 123.456e-789L);
 }
@@ -39,7 +39,7 @@ void i_number_huge_exp()
 {
     const char input[] = "0.4e00669999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999969999999006";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "0.4e00669999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999969999999006");
     // Cannot be represented by long double
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), std::numeric_limits<long double>::infinity());
@@ -49,7 +49,7 @@ void i_number_neg_int_huge_exp()
 {
     const char input[] = "-1e+9999";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "-1e+9999");
     // Cannot be represented by long double
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), -std::numeric_limits<long double>::infinity());
@@ -59,7 +59,7 @@ void i_number_pos_double_huge_exp()
 {
     const char input[] = "1.5e+9999";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1.5e+9999");
     // Cannot be represented by long double
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), std::numeric_limits<long double>::infinity());
@@ -69,7 +69,7 @@ void i_number_real_neg_overflow()
 {
     const char input[] = "-123123e100000";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "-123123e100000");
     // Cannot be represented by long double
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), -std::numeric_limits<long double>::infinity());
@@ -79,7 +79,7 @@ void i_number_real_pos_overflow()
 {
     const char input[] = "123123e100000";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "123123e100000");
     // Cannot be represented by long double
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), std::numeric_limits<long double>::infinity());
@@ -932,7 +932,7 @@ void n_number_minus_1_dot_0_dot()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<double>(), -1.0);
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
@@ -980,7 +980,7 @@ void n_number_0_dot_1_dot_2()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<double>(), 0.1);
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
@@ -1220,7 +1220,7 @@ void n_number_invalid_negative_real()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "-123.123");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
@@ -1244,7 +1244,7 @@ void n_number_invalid_utf_8_in_exponent()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1e1");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
@@ -1361,7 +1361,7 @@ void n_number_with_alpha()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1.2");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
@@ -1373,7 +1373,7 @@ void n_number_with_alpha_char()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1.8011670033376514");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
@@ -2888,7 +2888,7 @@ void y_number()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "123e65");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -2902,7 +2902,7 @@ void y_number_0e_plus_1()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "0e+1");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -2916,7 +2916,7 @@ void y_number_0e1()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "0e1");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -2944,7 +2944,7 @@ void y_number_double_close_to_zero()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "-0.000000000000000000000000000000000000000000000000000000000000000000000000000001");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -2958,7 +2958,7 @@ void y_number_int_with_exp()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "20e1");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3014,7 +3014,7 @@ void y_number_real_capital_e()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1E22");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3028,7 +3028,7 @@ void y_number_real_capital_e_neg_exp()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1E-2");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3042,7 +3042,7 @@ void y_number_real_capital_e_pos_exp()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1E+2");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3056,7 +3056,7 @@ void y_number_real_exponent()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "123E45");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3070,7 +3070,7 @@ void y_number_real_fraction_exponent()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "123.456e78");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3084,7 +3084,7 @@ void y_number_real_neg_exp()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1e-2");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3098,7 +3098,7 @@ void y_number_real_pos_exp()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1e+2");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3126,7 +3126,7 @@ void y_number_simple_real()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "123.456789");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
@@ -3304,13 +3304,13 @@ void y_object_extreme_numbers()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "min");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<double>(), -1e+28);
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "max");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<double>(), 1e+28);
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
@@ -4103,7 +4103,7 @@ void y_structure_lonely_negative_real()
 {
     const char input[] = "-0.1";
     json::reader reader(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "-0.1");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);

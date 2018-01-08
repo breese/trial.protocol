@@ -291,7 +291,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(0.0f);
@@ -430,7 +430,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
@@ -507,7 +507,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(3.0f);
@@ -713,7 +713,7 @@ void test_array()
     }
 }
 
-void test_array_number()
+void test_array_real()
 {
     {
         variable data = array::make({ 1.0f, 2.0, 3.0L });
@@ -840,13 +840,13 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
     test_u32string();
     test_array();
-    test_array_number();
+    test_array_real();
     test_map();
 }
 
@@ -923,7 +923,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(3.0f);
@@ -1097,7 +1097,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
@@ -1173,7 +1173,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(3.0f);
@@ -1381,7 +1381,7 @@ void test_array()
     }
 }
 
-void test_array_number()
+void test_array_real()
 {
     {
         variable data = array::make({ 1.0f, 2.0, 3.0L });
@@ -1512,13 +1512,13 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
     test_u32string();
     test_array();
-    test_array_number();
+    test_array_real();
     test_map();
 }
 
@@ -1595,7 +1595,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(3.0f);
@@ -1769,7 +1769,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
@@ -1833,7 +1833,7 @@ void get_integer()
     }
 }
 
-void get_number()
+void get_real()
 {
     {
         const float value = 0.0f;
@@ -2129,7 +2129,7 @@ void overwrite_integer()
     TRIAL_PROTOCOL_TEST(data == null);
 }
 
-void overwrite_number()
+void overwrite_real()
 {
     variable data(3.0);
     auto where = data.begin();
@@ -2202,7 +2202,7 @@ void run()
     get_null();
     get_boolean();
     get_integer();
-    get_number();
+    get_real();
     get_string();
     get_wstring();
     get_u16string();
@@ -2212,7 +2212,7 @@ void run()
 
     overwrite_boolean();
     overwrite_integer();
-    overwrite_number();
+    overwrite_real();
     overwrite_string();
     overwrite_wstring();
     overwrite_u16string();
@@ -2248,7 +2248,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 1);
 }
 
-void test_number()
+void test_real()
 {
     variable data(0.0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), data.end()), 1);
@@ -2306,7 +2306,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
@@ -2358,7 +2358,7 @@ void sum_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(size, 1);
 }
 
-void sum_number()
+void sum_real()
 {
     variable data(0.0);
     variable::size_type size = 0;
@@ -2499,7 +2499,7 @@ void run()
     sum_null();
     sum_boolean();
     sum_integer();
-    sum_number();
+    sum_real();
     sum_string();
     sum_wstring();
     sum_u16string();
@@ -2602,13 +2602,13 @@ void iterate_integer()
     }
 }
 
-void iterate_number()
+void iterate_real()
 {
     {
         variable data(3.0);
         variable::reverse_iterator where = data.rbegin();
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where == data.rend());
@@ -2617,7 +2617,7 @@ void iterate_number()
         const variable data(3.0);
         variable::const_reverse_iterator where = data.rbegin();
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where == data.rend());
@@ -2626,7 +2626,7 @@ void iterate_number()
         variable data(3.0);
         variable::const_reverse_iterator where = data.crbegin();
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where == data.rend());
@@ -2779,7 +2779,7 @@ void iterate_array()
         TRIAL_PROTOCOL_TEST(*where == "alpha");
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
@@ -2816,7 +2816,7 @@ void iterate_array()
         TRIAL_PROTOCOL_TEST(*where == "alpha");
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
@@ -2853,7 +2853,7 @@ void iterate_array()
         TRIAL_PROTOCOL_TEST(*where == "alpha");
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
@@ -2904,7 +2904,7 @@ void iterate_map()
         TRIAL_PROTOCOL_TEST(*where == "hydrogen");
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
@@ -2951,7 +2951,7 @@ void iterate_map()
         TRIAL_PROTOCOL_TEST(*where == "hydrogen");
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
@@ -2998,7 +2998,7 @@ void iterate_map()
         TRIAL_PROTOCOL_TEST(*where == "hydrogen");
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
-        TRIAL_PROTOCOL_TEST(where->is<number>());
+        TRIAL_PROTOCOL_TEST(where->is<real>());
         TRIAL_PROTOCOL_TEST(*where == 3.0);
         ++where;
         TRIAL_PROTOCOL_TEST(where != data.rend());
@@ -3022,7 +3022,7 @@ void run()
     iterate_null();
     iterate_boolean();
     iterate_integer();
-    iterate_number();
+    iterate_real();
     iterate_string();
     iterate_wstring();
     iterate_u16string();
@@ -3067,7 +3067,7 @@ void iterate_integer()
     TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
-void iterate_number()
+void iterate_real()
 {
     {
         variable data(3.0f);
@@ -3195,7 +3195,7 @@ void run()
     iterate_null();
     iterate_boolean();
     iterate_integer();
-    iterate_number();
+    iterate_real();
     iterate_string();
     iterate_wstring();
     iterate_u16string();

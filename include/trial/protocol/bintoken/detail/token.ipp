@@ -59,7 +59,7 @@ inline symbol::value symbol::convert(code::value value)
 
     case code::float32:
     case code::float64:
-        return symbol::number;
+        return symbol::real;
 
     case code::string8:
     case code::string16:
@@ -127,7 +127,7 @@ inline category::value category::convert(symbol::value value)
 
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::array:
         return category::data;

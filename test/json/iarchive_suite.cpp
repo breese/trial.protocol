@@ -709,7 +709,7 @@ void test_number()
     json::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST(value.is<number>());
+    TRIAL_PROTOCOL_TEST(value.is<real>());
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<double>(), 3.0);
 }
 

@@ -81,7 +81,7 @@ void compare_null_equal_integer_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != 1U, true);
 }
 
-void compare_null_equal_number()
+void compare_null_equal_real()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == variable(0.0f), false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(0.0f), true);
@@ -99,7 +99,7 @@ void compare_null_equal_number()
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != variable(1.0L), true);
 }
 
-void compare_null_equal_number_literal()
+void compare_null_equal_real_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == 0.0f, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != 0.0f, true);
@@ -280,7 +280,7 @@ void compare_boolean_equal_integer_literal()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != 0U, true);
 }
 
-void compare_boolean_equal_number()
+void compare_boolean_equal_real()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == variable(0.0f), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != variable(0.0f), false);
@@ -298,7 +298,7 @@ void compare_boolean_equal_number()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(true) != variable(0.0L), true);
 }
 
-void compare_boolean_equal_number_literal()
+void compare_boolean_equal_real_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) == 0.0f, true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(false) != 0.0f, false);
@@ -700,7 +700,7 @@ void compare_integer_equal_integer_literal()
     }
 }
 
-void compare_integer_equal_number()
+void compare_integer_equal_real()
 {
     // signed - float
     {
@@ -812,7 +812,7 @@ void compare_integer_equal_number()
     }
 }
 
-void compare_integer_equal_number_literal()
+void compare_integer_equal_real_literal()
 {
     // signed - float
     {
@@ -1208,7 +1208,7 @@ void compare_integer_equal_map()
     }
 }
 
-void compare_number_equal_null()
+void compare_real_equal_null()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(), false);
@@ -1224,7 +1224,7 @@ void compare_number_equal_null()
     }
 }
 
-void compare_number_equal_null_literal()
+void compare_real_equal_null_literal()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == null, false);
@@ -1240,7 +1240,7 @@ void compare_number_equal_null_literal()
     }
 }
 
-void compare_number_equal_boolean()
+void compare_real_equal_boolean()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == variable(false), true);
@@ -1262,7 +1262,7 @@ void compare_number_equal_boolean()
     }
 }
 
-void compare_number_equal_boolean_literal()
+void compare_real_equal_boolean_literal()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) == false, true);
@@ -1284,7 +1284,7 @@ void compare_number_equal_boolean_literal()
     }
 }
 
-void compare_number_equal_integer()
+void compare_real_equal_integer()
 {
     // float - signed
     {
@@ -1330,7 +1330,7 @@ void compare_number_equal_integer()
     }
 }
 
-void compare_number_equal_integer_literal()
+void compare_real_equal_integer_literal()
 {
     // float - signed
     {
@@ -1376,7 +1376,7 @@ void compare_number_equal_integer_literal()
     }
 }
 
-void compare_number_equal_number()
+void compare_real_equal_real()
 {
     // float - float
     {
@@ -1443,7 +1443,7 @@ void compare_number_equal_number()
     }
 }
 
-void compare_number_equal_number_literal()
+void compare_real_equal_real_literal()
 {
     // float - float
     {
@@ -1510,7 +1510,7 @@ void compare_number_equal_number_literal()
     }
 }
 
-void compare_number_equal_string()
+void compare_real_equal_string()
 {
     // float - string
     {
@@ -1535,7 +1535,7 @@ void compare_number_equal_string()
     }
 }
 
-void compare_number_equal_string_literal()
+void compare_real_equal_string_literal()
 {
     // float - string literal
     {
@@ -1560,7 +1560,7 @@ void compare_number_equal_string_literal()
     }
 }
 
-void compare_number_equal_wstring()
+void compare_real_equal_wstring()
 {
     // float - wstring
     {
@@ -1585,7 +1585,7 @@ void compare_number_equal_wstring()
     }
 }
 
-void compare_number_equal_wstring_literal()
+void compare_real_equal_wstring_literal()
 {
     // float - wstring literal
     {
@@ -1610,7 +1610,7 @@ void compare_number_equal_wstring_literal()
     }
 }
 
-void compare_number_equal_u16string()
+void compare_real_equal_u16string()
 {
     // float - u16string
     {
@@ -1635,7 +1635,7 @@ void compare_number_equal_u16string()
     }
 }
 
-void compare_number_equal_u16string_literal()
+void compare_real_equal_u16string_literal()
 {
     // float - u16string literal
     {
@@ -1660,7 +1660,7 @@ void compare_number_equal_u16string_literal()
     }
 }
 
-void compare_number_equal_u32string()
+void compare_real_equal_u32string()
 {
     // float - u32string
     {
@@ -1685,7 +1685,7 @@ void compare_number_equal_u32string()
     }
 }
 
-void compare_number_equal_u32string_literal()
+void compare_real_equal_u32string_literal()
 {
     // float - u32string literal
     {
@@ -1710,7 +1710,7 @@ void compare_number_equal_u32string_literal()
     }
 }
 
-void compare_number_equal_array()
+void compare_real_equal_array()
 {
     {
         const auto big = std::numeric_limits<float>::max();
@@ -1753,7 +1753,7 @@ void compare_number_equal_array()
     }
 }
 
-void compare_number_equal_map()
+void compare_real_equal_map()
 {
     {
         const auto big = std::numeric_limits<float>::max();
@@ -1902,7 +1902,7 @@ void compare_string_equal_integer_literal()
     }
 }
 
-void compare_string_equal_number()
+void compare_string_equal_real()
 {
     // string - float
     {
@@ -1951,7 +1951,7 @@ void compare_string_equal_number()
     }
 }
 
-void compare_string_equal_number_literal()
+void compare_string_equal_real_literal()
 {
     // string - float
     {
@@ -2236,7 +2236,7 @@ void compare_wstring_equal_integer_literal()
     }
 }
 
-void compare_wstring_equal_number()
+void compare_wstring_equal_real()
 {
     // wstring - float
     {
@@ -2285,7 +2285,7 @@ void compare_wstring_equal_number()
     }
 }
 
-void compare_wstring_equal_number_literal()
+void compare_wstring_equal_real_literal()
 {
     // wstring - float
     {
@@ -2570,7 +2570,7 @@ void compare_u16string_equal_integer_literal()
     }
 }
 
-void compare_u16string_equal_number()
+void compare_u16string_equal_real()
 {
     // u16string - float
     {
@@ -2619,7 +2619,7 @@ void compare_u16string_equal_number()
     }
 }
 
-void compare_u16string_equal_number_literal()
+void compare_u16string_equal_real_literal()
 {
     // u16string - float
     {
@@ -2904,7 +2904,7 @@ void compare_u32string_equal_integer_literal()
     }
 }
 
-void compare_u32string_equal_number()
+void compare_u32string_equal_real()
 {
     // u32string - float
     {
@@ -2953,7 +2953,7 @@ void compare_u32string_equal_number()
     }
 }
 
-void compare_u32string_equal_number_literal()
+void compare_u32string_equal_real_literal()
 {
     // u32string - float
     {
@@ -3238,7 +3238,7 @@ void compare_array_equal_integer_literal()
     }
 }
 
-void compare_array_equal_number()
+void compare_array_equal_real()
 {
     {
         const auto zero = 0.0f;
@@ -3284,7 +3284,7 @@ void compare_array_equal_number()
     }
 }
 
-void compare_array_equal_number_literal()
+void compare_array_equal_real_literal()
 {
     {
         const auto zero = 0.0f;
@@ -3497,7 +3497,7 @@ void compare_map_integer_equal_null()
     TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {2, 1} }) != variable(), true);
 }
 
-void compare_map_number_equal_null()
+void compare_map_real_equal_null()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {3.0, 1} }) == variable(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(map::make({ {3.0, 1} }) != variable(), true);
@@ -3599,7 +3599,7 @@ void compare_map_equal_integer_literal()
     }
 }
 
-void compare_map_equal_number()
+void compare_map_equal_real()
 {
     {
         const auto zero = 0.0f;
@@ -3645,7 +3645,7 @@ void compare_map_equal_number()
     }
 }
 
-void compare_map_equal_number_literal()
+void compare_map_equal_real_literal()
 {
     {
         const auto zero = 0.0f;
@@ -3831,8 +3831,8 @@ void run()
     compare_null_equal_boolean_literal();
     compare_null_equal_integer();
     compare_null_equal_integer_literal();
-    compare_null_equal_number();
-    compare_null_equal_number_literal();
+    compare_null_equal_real();
+    compare_null_equal_real_literal();
     compare_null_equal_string();
     compare_null_equal_string_literal();
     compare_null_equal_wstring();
@@ -3850,8 +3850,8 @@ void run()
     compare_boolean_equal_boolean_literal();
     compare_boolean_equal_integer();
     compare_boolean_equal_integer_literal();
-    compare_boolean_equal_number();
-    compare_boolean_equal_number_literal();
+    compare_boolean_equal_real();
+    compare_boolean_equal_real_literal();
     compare_boolean_equal_string();
     compare_boolean_equal_string_literal();
     compare_boolean_equal_wstring();
@@ -3869,8 +3869,8 @@ void run()
     compare_integer_equal_boolean_literal();
     compare_integer_equal_integer();
     compare_integer_equal_integer_literal();
-    compare_integer_equal_number();
-    compare_integer_equal_number_literal();
+    compare_integer_equal_real();
+    compare_integer_equal_real_literal();
     compare_integer_equal_string();
     compare_integer_equal_string_literal();
     compare_integer_equal_wstring();
@@ -3882,24 +3882,24 @@ void run()
     compare_integer_equal_array();
     compare_integer_equal_map();
 
-    compare_number_equal_null();
-    compare_number_equal_null_literal();
-    compare_number_equal_boolean();
-    compare_number_equal_boolean_literal();
-    compare_number_equal_integer();
-    compare_number_equal_integer_literal();
-    compare_number_equal_number();
-    compare_number_equal_number_literal();
-    compare_number_equal_string();
-    compare_number_equal_string_literal();
-    compare_number_equal_wstring();
-    compare_number_equal_wstring_literal();
-    compare_number_equal_u16string();
-    compare_number_equal_u16string_literal();
-    compare_number_equal_u32string();
-    compare_number_equal_u32string_literal();
-    compare_number_equal_array();
-    compare_number_equal_map();
+    compare_real_equal_null();
+    compare_real_equal_null_literal();
+    compare_real_equal_boolean();
+    compare_real_equal_boolean_literal();
+    compare_real_equal_integer();
+    compare_real_equal_integer_literal();
+    compare_real_equal_real();
+    compare_real_equal_real_literal();
+    compare_real_equal_string();
+    compare_real_equal_string_literal();
+    compare_real_equal_wstring();
+    compare_real_equal_wstring_literal();
+    compare_real_equal_u16string();
+    compare_real_equal_u16string_literal();
+    compare_real_equal_u32string();
+    compare_real_equal_u32string_literal();
+    compare_real_equal_array();
+    compare_real_equal_map();
 
     compare_string_equal_null();
     compare_string_equal_null_literal();
@@ -3907,8 +3907,8 @@ void run()
     compare_string_equal_boolean_literal();
     compare_string_equal_integer();
     compare_string_equal_integer_literal();
-    compare_string_equal_number();
-    compare_string_equal_number_literal();
+    compare_string_equal_real();
+    compare_string_equal_real_literal();
     compare_string_equal_string();
     compare_string_equal_string_literal();
     compare_string_equal_array();
@@ -3920,8 +3920,8 @@ void run()
     compare_wstring_equal_boolean_literal();
     compare_wstring_equal_integer();
     compare_wstring_equal_integer_literal();
-    compare_wstring_equal_number();
-    compare_wstring_equal_number_literal();
+    compare_wstring_equal_real();
+    compare_wstring_equal_real_literal();
     compare_wstring_equal_string();
     compare_wstring_equal_string_literal();
     compare_wstring_equal_array();
@@ -3933,8 +3933,8 @@ void run()
     compare_u16string_equal_boolean_literal();
     compare_u16string_equal_integer();
     compare_u16string_equal_integer_literal();
-    compare_u16string_equal_number();
-    compare_u16string_equal_number_literal();
+    compare_u16string_equal_real();
+    compare_u16string_equal_real_literal();
     compare_u16string_equal_string();
     compare_u16string_equal_string_literal();
     compare_u16string_equal_array();
@@ -3946,8 +3946,8 @@ void run()
     compare_u32string_equal_boolean_literal();
     compare_u32string_equal_integer();
     compare_u32string_equal_integer_literal();
-    compare_u32string_equal_number();
-    compare_u32string_equal_number_literal();
+    compare_u32string_equal_real();
+    compare_u32string_equal_real_literal();
     compare_u32string_equal_string();
     compare_u32string_equal_string_literal();
     compare_u32string_equal_array();
@@ -3959,8 +3959,8 @@ void run()
     compare_array_equal_boolean_literal();
     compare_array_equal_integer();
     compare_array_equal_integer_literal();
-    compare_array_equal_number();
-    compare_array_equal_number_literal();
+    compare_array_equal_real();
+    compare_array_equal_real_literal();
     compare_array_equal_string();
     compare_array_equal_string_literal();
     compare_array_equal_wstring();
@@ -3977,14 +3977,14 @@ void run()
     compare_map_null_equal_null();
     compare_map_boolean_equal_null();
     compare_map_integer_equal_null();
-    compare_map_number_equal_null();
+    compare_map_real_equal_null();
     compare_map_array_equal_null();
     compare_map_equal_boolean();
     compare_map_equal_boolean_literal();
     compare_map_equal_integer();
     compare_map_equal_integer_literal();
-    compare_map_equal_number();
-    compare_map_equal_number_literal();
+    compare_map_equal_real();
+    compare_map_equal_real_literal();
     compare_map_equal_string();
     compare_map_equal_string_literal();
     compare_map_equal_wstring();
@@ -4112,7 +4112,7 @@ void compare_null_with_integer_literal()
     }
 }
 
-void compare_null_with_number()
+void compare_null_with_real()
 {
     {
         const float zero = 0.0f;
@@ -4158,7 +4158,7 @@ void compare_null_with_number()
     }
 }
 
-void compare_null_with_number_literal()
+void compare_null_with_real_literal()
 {
     {
         const float zero = 0.0f;
@@ -4428,7 +4428,7 @@ void compare_boolean_with_integer_literal()
     }
 }
 
-void compare_boolean_with_number()
+void compare_boolean_with_real()
 {
     {
         const float zero = 0.0f;
@@ -4504,7 +4504,7 @@ void compare_boolean_with_number()
     }
 }
 
-void compare_boolean_with_number_literal()
+void compare_boolean_with_real_literal()
 {
     {
         const float zero = 0.0f;
@@ -5015,7 +5015,7 @@ void compare_integer_with_integer_literal()
     }
 }
 
-void compare_integer_with_number()
+void compare_integer_with_real()
 {
     // signed - float
     {
@@ -5235,7 +5235,7 @@ void compare_integer_with_number()
     }
 }
 
-void compare_integer_with_number_literal()
+void compare_integer_with_real_literal()
 {
     // signed - float
     {
@@ -5543,7 +5543,7 @@ void compare_integer_with_map()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(2) >= map::make(), false);
 }
 
-void compare_number_with_null()
+void compare_real_with_null()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < variable(), false);
@@ -5565,7 +5565,7 @@ void compare_number_with_null()
     }
 }
 
-void compare_number_with_null_literal()
+void compare_real_with_null_literal()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(1.0f) < null, false);
@@ -5587,7 +5587,7 @@ void compare_number_with_null_literal()
     }
 }
 
-void compare_number_with_boolean()
+void compare_real_with_boolean()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < variable(false), false);
@@ -5654,7 +5654,7 @@ void compare_number_with_boolean()
     }
 }
 
-void compare_number_with_boolean_literal()
+void compare_real_with_boolean_literal()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(variable(0.0f) < false, false);
@@ -5721,7 +5721,7 @@ void compare_number_with_boolean_literal()
     }
 }
 
-void compare_number_with_integer()
+void compare_real_with_integer()
 {
     // float - signed
     {
@@ -5941,7 +5941,7 @@ void compare_number_with_integer()
     }
 }
 
-void compare_number_with_integer_literal()
+void compare_real_with_integer_literal()
 {
     // float - signed
     {
@@ -6161,7 +6161,7 @@ void compare_number_with_integer_literal()
     }
 }
 
-void compare_number_with_number()
+void compare_real_with_real()
 {
     // float - float
     {
@@ -6489,7 +6489,7 @@ void compare_number_with_number()
     }
 }
 
-void compare_number_with_number_literal()
+void compare_real_with_real_literal()
 {
     // float - float
     {
@@ -6817,7 +6817,7 @@ void compare_number_with_number_literal()
     }
 }
 
-void compare_number_with_string()
+void compare_real_with_string()
 {
     // float - string
     {
@@ -6842,7 +6842,7 @@ void compare_number_with_string()
     }
 }
 
-void compare_number_with_wstring()
+void compare_real_with_wstring()
 {
     // float - wstring
     {
@@ -6867,7 +6867,7 @@ void compare_number_with_wstring()
     }
 }
 
-void compare_number_with_u16string()
+void compare_real_with_u16string()
 {
     // float - u16string
     {
@@ -6892,7 +6892,7 @@ void compare_number_with_u16string()
     }
 }
 
-void compare_number_with_u32string()
+void compare_real_with_u32string()
 {
     // float - u32string
     {
@@ -6917,7 +6917,7 @@ void compare_number_with_u32string()
     }
 }
 
-void compare_number_with_array()
+void compare_real_with_array()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < array::make(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= array::make(), true);
@@ -6925,7 +6925,7 @@ void compare_number_with_array()
     TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) >= array::make(), false);
 }
 
-void compare_number_with_map()
+void compare_real_with_map()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) < map::make(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(variable(3.0) <= map::make(), true);
@@ -7013,7 +7013,7 @@ void compare_string_with_integer()
     }
 }
 
-void compare_string_with_number()
+void compare_string_with_real()
 {
     // string - float
     {
@@ -7296,7 +7296,7 @@ void compare_wstring_with_integer()
     }
 }
 
-void compare_wstring_with_number()
+void compare_wstring_with_real()
 {
     // wstring - float
     {
@@ -7576,7 +7576,7 @@ void compare_u16string_with_integer()
     }
 }
 
-void compare_u16string_with_number()
+void compare_u16string_with_real()
 {
     // u16string - float
     {
@@ -7856,7 +7856,7 @@ void compare_u32string_with_integer()
     }
 }
 
-void compare_u32string_with_number()
+void compare_u32string_with_real()
 {
     // u32string - float
     {
@@ -8103,7 +8103,7 @@ void compare_map_with_map_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) >= map::make({{2, 1}}), true);
 }
 
-void compare_map_with_map_number()
+void compare_map_with_map_real()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) < map::make({{3.0, 1}}), false);
     TRIAL_PROTOCOL_TEST_EQUAL(map::make({{"alpha", 1}}) <= map::make({{3.0, 1}}), false);
@@ -8247,8 +8247,8 @@ void run()
     compare_null_with_boolean_literal();
     compare_null_with_integer();
     compare_null_with_integer_literal();
-    compare_null_with_number();
-    compare_null_with_number_literal();
+    compare_null_with_real();
+    compare_null_with_real_literal();
     compare_null_with_string();
     compare_null_with_wstring();
     compare_null_with_u16string();
@@ -8262,8 +8262,8 @@ void run()
     compare_boolean_with_boolean_literal();
     compare_boolean_with_integer();
     compare_boolean_with_integer_literal();
-    compare_boolean_with_number();
-    compare_boolean_with_number_literal();
+    compare_boolean_with_real();
+    compare_boolean_with_real_literal();
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();
@@ -8277,8 +8277,8 @@ void run()
     compare_integer_with_boolean_literal();
     compare_integer_with_integer();
     compare_integer_with_integer_literal();
-    compare_integer_with_number();
-    compare_integer_with_number_literal();
+    compare_integer_with_real();
+    compare_integer_with_real_literal();
     compare_integer_with_string();
     compare_integer_with_wstring();
     compare_integer_with_u16string();
@@ -8286,28 +8286,28 @@ void run()
     compare_integer_with_array();
     compare_integer_with_map();
 
-    // FIXME: Number with NaN etc.
-    compare_number_with_null();
-    compare_number_with_null_literal();
-    compare_number_with_boolean();
-    compare_number_with_boolean_literal();
-    compare_number_with_integer();
-    compare_number_with_integer_literal();
-    compare_number_with_number();
-    compare_number_with_number_literal();
-    compare_number_with_string();
-    compare_number_with_wstring();
-    compare_number_with_u16string();
-    compare_number_with_u32string();
-    compare_number_with_array();
-    compare_number_with_map();
+    // FIXME: Real with NaN etc.
+    compare_real_with_null();
+    compare_real_with_null_literal();
+    compare_real_with_boolean();
+    compare_real_with_boolean_literal();
+    compare_real_with_integer();
+    compare_real_with_integer_literal();
+    compare_real_with_real();
+    compare_real_with_real_literal();
+    compare_real_with_string();
+    compare_real_with_wstring();
+    compare_real_with_u16string();
+    compare_real_with_u32string();
+    compare_real_with_array();
+    compare_real_with_map();
 
     compare_string_with_null();
     compare_string_with_null_literal();
     compare_string_with_boolean();
     compare_string_with_boolean_literal();
     compare_string_with_integer();
-    compare_string_with_number();
+    compare_string_with_real();
     compare_string_with_string();
     compare_string_with_string_literal();
     compare_string_with_wstring();
@@ -8324,7 +8324,7 @@ void run()
     compare_wstring_with_boolean();
     compare_wstring_with_boolean_literal();
     compare_wstring_with_integer();
-    compare_wstring_with_number();
+    compare_wstring_with_real();
     compare_wstring_with_string();
     compare_wstring_with_string_literal();
     compare_wstring_with_wstring();
@@ -8341,7 +8341,7 @@ void run()
     compare_u16string_with_boolean();
     compare_u16string_with_boolean_literal();
     compare_u16string_with_integer();
-    compare_u16string_with_number();
+    compare_u16string_with_real();
     compare_u16string_with_string();
     compare_u16string_with_string_literal();
     compare_u16string_with_wstring();
@@ -8358,7 +8358,7 @@ void run()
     compare_u32string_with_boolean();
     compare_u32string_with_boolean_literal();
     compare_u32string_with_integer();
-    compare_u32string_with_number();
+    compare_u32string_with_real();
     compare_u32string_with_string();
     compare_u32string_with_string_literal();
     compare_u32string_with_wstring();
@@ -8377,7 +8377,7 @@ void run()
     compare_map_with_map_null();
     compare_map_with_map_boolean();
     compare_map_with_map_integer();
-    compare_map_with_map_number();
+    compare_map_with_map_real();
     compare_map_with_map_string();
     compare_map_with_map_wstring();
     compare_map_with_map_u16string();
@@ -8419,7 +8419,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         TRIAL_PROTOCOL_TEST_EQUAL(bool(variable(0.0f)), false);
@@ -8444,7 +8444,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
 }
 
 } // namespace operator_bool_suite
@@ -8477,7 +8477,7 @@ void compare_null_with_integer()
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), 2U));
 }
 
-void compare_null_with_number()
+void compare_null_with_real()
 {
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(), variable(3.0)));
@@ -8534,7 +8534,7 @@ void compare_boolean_with_integer()
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), 2U));
 }
 
-void compare_boolean_with_number()
+void compare_boolean_with_real()
 {
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(!std::equal_to<variable>()(variable(true), variable(3.0)));
@@ -8575,7 +8575,7 @@ void run()
     compare_null_with_null();
     compare_null_with_boolean();
     compare_null_with_integer();
-    compare_null_with_number();
+    compare_null_with_real();
     compare_null_with_string();
     compare_null_with_wstring();
     compare_null_with_u16string();
@@ -8584,7 +8584,7 @@ void run()
     compare_boolean_with_null();
     compare_boolean_with_boolean();
     compare_boolean_with_integer();
-    compare_boolean_with_number();
+    compare_boolean_with_real();
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();
@@ -8621,7 +8621,7 @@ void compare_null_with_integer()
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), 2U));
 }
 
-void compare_null_with_number()
+void compare_null_with_real()
 {
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(), variable(3.0)));
@@ -8678,7 +8678,7 @@ void compare_boolean_with_integer()
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), 2U));
 }
 
-void compare_boolean_with_number()
+void compare_boolean_with_real()
 {
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::not_equal_to<variable>()(variable(true), variable(3.0)));
@@ -8719,7 +8719,7 @@ void run()
     compare_null_with_null();
     compare_null_with_boolean();
     compare_null_with_integer();
-    compare_null_with_number();
+    compare_null_with_real();
     compare_null_with_string();
     compare_null_with_wstring();
     compare_null_with_u16string();
@@ -8728,7 +8728,7 @@ void run()
     compare_boolean_with_null();
     compare_boolean_with_boolean();
     compare_boolean_with_integer();
-    compare_boolean_with_number();
+    compare_boolean_with_real();
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();
@@ -8765,7 +8765,7 @@ void compare_null_with_integer()
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), 2U));
 }
 
-void compare_null_with_number()
+void compare_null_with_real()
 {
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(), variable(3.0)));
@@ -8822,7 +8822,7 @@ void compare_boolean_with_integer()
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), 2U));
 }
 
-void compare_boolean_with_number()
+void compare_boolean_with_real()
 {
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0f)));
     TRIAL_PROTOCOL_TEST(std::less<variable>()(variable(true), variable(3.0)));
@@ -8863,7 +8863,7 @@ void run()
     compare_null_with_null();
     compare_null_with_boolean();
     compare_null_with_integer();
-    compare_null_with_number();
+    compare_null_with_real();
     compare_null_with_string();
     compare_null_with_wstring();
     compare_null_with_u16string();
@@ -8872,7 +8872,7 @@ void run()
     compare_boolean_with_null();
     compare_boolean_with_boolean();
     compare_boolean_with_integer();
-    compare_boolean_with_number();
+    compare_boolean_with_real();
     compare_boolean_with_string();
     compare_boolean_with_wstring();
     compare_boolean_with_u16string();

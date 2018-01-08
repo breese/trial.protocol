@@ -40,7 +40,7 @@ void find_integer()
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), 2) == data.end());
 }
 
-void find_number()
+void find_real()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST(std::find(data.begin(), data.end(), 0.0) == data.end());
@@ -164,7 +164,7 @@ int main()
     find_null();
     find_boolean();
     find_integer();
-    find_number();
+    find_real();
     find_string();
     find_wstring();
     find_u16string();

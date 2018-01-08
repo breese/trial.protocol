@@ -51,8 +51,8 @@ inline symbol::value symbol::convert(code::value value)
     case code::integer:
         return symbol::integer;
 
-    case code::number:
-        return symbol::number;
+    case code::real:
+        return symbol::real;
 
     case code::string:
         return symbol::string;
@@ -85,7 +85,7 @@ inline category::value category::convert(symbol::value value)
 
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
         return category::data;
 

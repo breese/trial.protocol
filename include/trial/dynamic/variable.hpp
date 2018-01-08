@@ -43,7 +43,7 @@ template <template <typename> class A, typename U, typename> struct iterator_ove
 enum nullable { null };
 struct boolean {};
 struct integer {};
-struct number {};
+struct real {};
 struct string {};
 struct wstring {};
 struct u16string {};
@@ -74,9 +74,9 @@ template <template <typename> class Allocator> struct basic_map;
 //! `unsigned int`                | `dynamic::integer`
 //! `unsigned long int`           | `dynamic::integer`
 //! `unsigned long long int`      | `dynamic::integer`
-//! `float`                       | `dynamic::number`
-//! `double`                      | `dynamic::number`
-//! `long double`                 | `dynamic::number`
+//! `float`                       | `dynamic::real`
+//! `double`                      | `dynamic::real`
+//! `long double`                 | `dynamic::real`
 //! `dynamic::string_type`        | `dynamic::string`
 //! `dynamic::wstring_type`       | `dynamic::wstring`
 //! `dynamic::u16string_type`     | `dynamic::u16string`
@@ -443,12 +443,12 @@ public:
     //! * Appending any type to an array inserts the value at the end of the array.
     //! * Appending a map to a map merges the two.
     //!
-    //! Tag      | nullable  | boolean  | integer  | number  | string  | wstring  | u16string | u32string | array   | map
+    //! Tag      | nullable  | boolean  | integer  | real    | string  | wstring  | u16string | u32string | array   | map
     //! ---------|-----------|----------|----------|---------|---------|----------|-----------|-----------|---------|-----
     //! nullable | No effect | Assigns  | Assigns  | Assigns | Assigns | Assigns  | Assigns   | Assigns   | Assigns | Assigns
     //! boolean  | No effect | Adds     | Adds     | Adds    | Fails   | Fails    | Fails     | Fails     | Fails   | Fails
     //! integer  | No effect | Adds     | Adds     | Adds    | Fails   | Fails    | Fails     | Fails     | Fails   | Fails
-    //! number   | No effect | Adds     | Adds     | Adds    | Fails   | Fails    | Fails     | Fails     | Fails   | Fails
+    //! real     | No effect | Adds     | Adds     | Adds    | Fails   | Fails    | Fails     | Fails     | Fails   | Fails
     //! string   | No effect | Fails    | Fails    | Fails   | Concats | Fails    | Fails     | Fails     | Fails   | Fails
     //! wstring  | No effect | Fails    | Fails    | Fails   | Fails   | Concats  | Fails     | Fails     | Fails   | Fails
     //! u16string| No effect | Fails    | Fails    | Fails   | Fails   | Fails    | Concats   | Fails     | Fails   | Fails
@@ -499,7 +499,7 @@ public:
     //!
     //! `T` can either be a type or a tag.
     //!
-    //! If current tag is `dynamic::integer` or `dynamic::number`, then `T` can
+    //! If current tag is `dynamic::integer` or `dynamic::real`, then `T` can
     //! be any arithmetic type. Such a conversion may result in loss of precision.
     //!
     //! If current tag is any other type, then `T` must be the associated type.
@@ -511,7 +511,7 @@ public:
     //! nullable    | `dynamic::nullable`
     //! boolean     | `bool`
     //! integer     | `int`
-    //! number      | `float`
+    //! real        | `float`
     //! string      | `variable::string_type`
     //! wstring     | `variable::wstring_type`
     //! u16string   | `variable::u16string_type`
@@ -673,9 +673,9 @@ public:
     //! `unsigned int`                | `dynamic::code::unsigned_integer`
     //! `unsigned long int`           | `dynamic::code::unsigned_long_integer`
     //! `unsigned long long int`      | `dynamic::code::unsigned_long_long_integer`
-    //! `float`                       | `dynamic::code::float_number`
-    //! `double`                      | `dynamic::code::double_number`
-    //! `long double`                 | `dynamic::code::long_double_number`
+    //! `float`                       | `dynamic::code::real`
+    //! `double`                      | `dynamic::code::long_real`
+    //! `long double`                 | `dynamic::code::long_long_real`
     //! `dynamic::string_type`        | `dynamic::code::string`
     //! `dynamic::wstring_type`       | `dynamic::code::wstring`
     //! `dynamic::u16string_type`     | `dynamic::code::u16string`
@@ -704,9 +704,9 @@ public:
     //! `unsigned int`                | integer   | `dynamic::symbol::integer`
     //! `unsigned long int`           | integer   | `dynamic::symbol::integer`
     //! `unsigned long long int`      | integer   | `dynamic::symbol::integer`
-    //! `float`                       | number    | `dynamic::symbol::number`
-    //! `double`                      | number    | `dynamic::symbol::number`
-    //! `long double`                 | number    | `dynamic::symbol::number`
+    //! `float`                       | real      | `dynamic::symbol::real`
+    //! `double`                      | real      | `dynamic::symbol::real`
+    //! `long double`                 | real      | `dynamic::symbol::real`
     //! `dynamic::string_type`        | string    | `dynamic::symbol::string`
     //! `dynamic::wstring_type`       | wstring   | `dynamic::symbol::wstring`
     //! `dynamic::u16string_type`     | u16string | `dynamic::symbol::u16string`
@@ -735,7 +735,7 @@ public:
     //! nullable    | 0    | null is an empty variable.
     //! boolean     | 1    | boolean is a single element.
     //! integer     | 1    | integer is a single element.
-    //! number      | 1    | number is a single element.
+    //! real        | 1    | real is a single element.
     //! string      | 1    | string is a single element, so `variable::string_type::size()` is not used.
     //! wstring     | 1    | wstring is a single element, so `variable::wstring_type::size()` is not used.
     //! u16string   | 1    | u16string is a single element, so `variable::u16string_type::size()` is not used.
@@ -752,7 +752,7 @@ public:
     //! nullable    | 0    | null cannot contain element.
     //! boolean     | 1    | Can contain a single boolean element.
     //! integer     | 1    | Can contain a single integer element.
-    //! number      | 1    | Can contain a single number element.
+    //! real        | 1    | Can contain a single real element.
     //! string      | 1    | Can contain a single string element, so `variable::string_type::max_size()` is not used.
     //! wstring     | 1    | Can contain a single wstring element, so `variable::wstring_type::max_size()` is not used.
     //! u16string   | 1    | Can contain a single u16string element, so `variable::u16string_type::max_size()` is not used.
@@ -771,7 +771,7 @@ public:
     //! nullable    | No effect.
     //! boolean     | Sets the default constructed value.
     //! integer     | Sets the default constructed value.
-    //! number      | Sets the default constructed value.
+    //! real        | Sets the default constructed value.
     //! string      | Calls `variable::string_type::clear()`.
     //! wstring     | Calls `variable::wstring_type::clear()`.
     //! u16string   | Calls `variable::u16string_type::clear()`.
@@ -787,7 +787,7 @@ public:
     //! nullable    | Create `array` and insert `element`.
     //! boolean     | Fails.
     //! integer     | Fails.
-    //! number      | Fails.
+    //! real        | Fails.
     //! string      | Fails.
     //! wstring     | Fails.
     //! u16string   | Fails.
@@ -804,7 +804,7 @@ public:
     //! nullable    | Create `array` and insert range.
     //! boolean     | Fails.
     //! integer     | Fails.
-    //! number      | Fails.
+    //! real        | Fails.
     //! string      | Fails.
     //! wstring     | Fails.
     //! u16string   | Fails.
@@ -822,7 +822,7 @@ public:
     //! nullable    | Fails.
     //! boolean     | Fails.
     //! integer     | Fails.
-    //! number      | Fails.
+    //! real        | Fails.
     //! string      | Fails.
     //! wstring     | Fails.
     //! u16string   | Fails.
@@ -839,7 +839,7 @@ public:
     //! nullable    | Fails.
     //! boolean     | Fails.
     //! integer     | Fails.
-    //! number      | Fails.
+    //! real        | Fails.
     //! string      | Fails.
     //! wstring     | Fails.
     //! u16string   | Fails.
@@ -859,7 +859,7 @@ public:
     //! nullable    | No effect.
     //! boolean     | No effect.
     //! integer     | No effect.
-    //! number      | No effect.
+    //! real        | No effect.
     //! string      | No effect.
     //! wstring     | No effect.
     //! u16string   | No effect.
@@ -878,7 +878,7 @@ public:
     //! nullable    | No effect.
     //! boolean     | No effect.
     //! integer     | No effect.
-    //! number      | No effect.
+    //! real        | No effect.
     //! string      | No effect.
     //! wstring     | No effect.
     //! u16string   | No effect.

@@ -505,17 +505,17 @@ void run()
 } // namespace integer_suite
 
 //-----------------------------------------------------------------------------
-// Number
+// Real
 //-----------------------------------------------------------------------------
 
-namespace number_suite
+namespace real_suite
 {
 
 void test_zero()
 {
     const char input[] = "0.0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 0.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 0.0);
     decoder.next();
@@ -526,7 +526,7 @@ void test_one()
 {
     const char input[] = "1.0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
     decoder.next();
@@ -537,7 +537,7 @@ void test_minus_one()
 {
     const char input[] = "-1.0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), -1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), -1.0);
     decoder.next();
@@ -548,7 +548,7 @@ void test_half()
 {
     const char input[] = "0.5";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 0.5f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 0.5);
     decoder.next();
@@ -559,7 +559,7 @@ void test_one_exp_one()
 {
     const char input[] = "1e1";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
     decoder.next();
@@ -570,7 +570,7 @@ void test_one_upper_exp_one()
 {
     const char input[] = "1E1";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
     decoder.next();
@@ -581,7 +581,7 @@ void test_one_dot_exp_one()
 {
     const char input[] = "1.0e1";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
     decoder.next();
@@ -592,7 +592,7 @@ void test_one_exp_plus_one()
 {
     const char input[] = "1e+1";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e1);
     decoder.next();
@@ -603,7 +603,7 @@ void test_one_exp_minus_one()
 {
     const char input[] = "1e-1";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1e-1f);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1e-1);
     decoder.next();
@@ -686,7 +686,7 @@ void fail_as_int()
 {
     const char input[] = "1.0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<int>(),
                                     json::error, "incompatible type");
@@ -696,7 +696,7 @@ void fail_as_string()
 {
     const char input[] = "1.0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 1.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::string>(),
                                     json::error, "incompatible type");
@@ -725,7 +725,7 @@ void run()
     fail_as_string();
 }
 
-} // namespace number_suite
+} // namespace real_suite
 
 //-----------------------------------------------------------------------------
 // String
@@ -1740,22 +1740,22 @@ void test_integer_zero()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
 }
 
-void test_number_zero()
+void test_real_zero()
 {
     const char input[] = "0.0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "0.0");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 0.0);
     decoder.next();
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
 }
 
-void test_number_float()
+void test_real_float()
 {
     const char input[] = "1.0";
     decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::number);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "1.0");
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<float>(), 1.0f);
     decoder.next();
@@ -1790,8 +1790,8 @@ void run()
     test_true();
     test_false();
     test_integer_zero();
-    test_number_zero();
-    test_number_float();
+    test_real_zero();
+    test_real_float();
     test_string_empty();
     test_string_alpha();
 }
@@ -1807,7 +1807,7 @@ int main()
     whitespace_suite::run();
     basic_suite::run();
     integer_suite::run();
-    number_suite::run();
+    real_suite::run();
     string_suite::run();
     utf8_suite::run();
     pangram_suite::run();

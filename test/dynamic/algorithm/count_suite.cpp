@@ -151,7 +151,7 @@ void count_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(value::count(data, map::make()), 0);
 }
 
-void count_number()
+void count_real()
 {
     variable data(3.0);
 
@@ -359,7 +359,7 @@ void run()
     count_null();
     count_boolean();
     count_integer();
-    count_number();
+    count_real();
     count_string();
     count_array();
     count_map();

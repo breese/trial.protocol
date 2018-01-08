@@ -46,7 +46,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(stream.str(), "2");
 }
 
-void test_number()
+void test_real()
 {
     std::ostringstream stream;
     variable data(3.0);
@@ -115,7 +115,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_array();
     test_map();

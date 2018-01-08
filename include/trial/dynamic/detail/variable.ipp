@@ -48,7 +48,7 @@ using is_integer = typename std::conditional<std::is_integral<T>::value && !deta
                                              std::false_type>::type;
 
 template <typename T>
-using is_number = std::is_floating_point<T>;
+using is_real = std::is_floating_point<T>;
 
 template <typename>
 struct is_literal_string : std::false_type {};
@@ -129,7 +129,7 @@ template <template <typename> class Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
-    typename std::enable_if<std::is_same<T, typename dynamic::number>::value>::type>
+    typename std::enable_if<std::is_same<T, typename dynamic::real>::value>::type>
 {
     using type = double;
 };
@@ -301,13 +301,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return type(self.template unsafe_get<unsigned long long int>());
 
-        case code::float_number:
+        case code::real:
             return type(self.template unsafe_get<float>());
 
-        case code::double_number:
+        case code::long_real:
             return type(self.template unsafe_get<double>());
 
-        case code::long_double_number:
+        case code::long_long_real:
             return type(self.template unsafe_get<long double>());
 
         default:
@@ -353,13 +353,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() == other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() == other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() == other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() == other;
 
         default:
@@ -407,13 +407,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() < other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() < other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() < other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() < other;
 
         default:
@@ -473,15 +473,15 @@ struct overloader<
             self.template unsafe_get<unsigned long long int>() += other;
             break;
 
-        case code::float_number:
+        case code::real:
             self.template unsafe_get<float>() += other;
             break;
 
-        case code::double_number:
+        case code::long_real:
             self.template unsafe_get<double>() += other;
             break;
 
-        case code::long_double_number:
+        case code::long_long_real:
             self.template unsafe_get<long double>() += other;
             break;
 
@@ -547,13 +547,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return type(self.template unsafe_get<unsigned long long int>());
 
-        case code::float_number:
+        case code::real:
             return type(self.template unsafe_get<float>());
 
-        case code::double_number:
+        case code::long_real:
             return type(self.template unsafe_get<double>());
 
-        case code::long_double_number:
+        case code::long_long_real:
             return type(self.template unsafe_get<long double>());
 
         default:
@@ -594,13 +594,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return static_cast<signed long long int>(self.template unsafe_get<unsigned long long int>()) == other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() == other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() == other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() == other;
 
         default:
@@ -643,13 +643,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return static_cast<signed long long int>(self.template unsafe_get<unsigned long long int>()) < other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() < other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() < other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() < other;
 
         default:
@@ -709,15 +709,15 @@ struct overloader<
             self.template unsafe_get<unsigned long long int>() += other;
             break;
 
-        case code::float_number:
+        case code::real:
             self.template unsafe_get<float>() += other;
             break;
 
-        case code::double_number:
+        case code::long_real:
             self.template unsafe_get<double>() += other;
             break;
 
-        case code::long_double_number:
+        case code::long_long_real:
             self.template unsafe_get<long double>() += other;
             break;
 
@@ -783,13 +783,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return type(self.template unsafe_get<unsigned long long int>());
 
-        case code::float_number:
+        case code::real:
             return type(self.template unsafe_get<float>());
 
-        case code::double_number:
+        case code::long_real:
             return type(self.template unsafe_get<double>());
 
-        case code::long_double_number:
+        case code::long_long_real:
             return type(self.template unsafe_get<long double>());
 
         default:
@@ -830,13 +830,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() == other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() == other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() == other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() == other;
 
         default:
@@ -879,13 +879,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() < other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() < other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() < other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() < other;
 
         default:
@@ -945,15 +945,15 @@ struct overloader<
             self.template unsafe_get<unsigned long long int>() += other;
             break;
 
-        case code::float_number:
+        case code::real:
             self.template unsafe_get<float>() += other;
             break;
 
-        case code::double_number:
+        case code::long_real:
             self.template unsafe_get<double>() += other;
             break;
 
-        case code::long_double_number:
+        case code::long_long_real:
             self.template unsafe_get<long double>() += other;
             break;
 
@@ -973,7 +973,7 @@ template <template <typename> class Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
-    typename std::enable_if<detail::is_number<U>::value>::type>
+    typename std::enable_if<detail::is_real<U>::value>::type>
 {
     using type = U;
     using category_type = float;
@@ -1018,13 +1018,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return type(self.template unsafe_get<unsigned long long int>());
 
-        case code::float_number:
+        case code::real:
             return type(self.template unsafe_get<float>());
 
-        case code::double_number:
+        case code::long_real:
             return type(self.template unsafe_get<double>());
 
-        case code::long_double_number:
+        case code::long_long_real:
             return type(self.template unsafe_get<long double>());
 
         default:
@@ -1070,13 +1070,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() == other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() == other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() == other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() == other;
 
         default:
@@ -1124,13 +1124,13 @@ struct overloader<
         case code::unsigned_long_long_integer:
             return self.template unsafe_get<unsigned long long int>() < other;
 
-        case code::float_number:
+        case code::real:
             return self.template unsafe_get<float>() < other;
 
-        case code::double_number:
+        case code::long_real:
             return self.template unsafe_get<double>() < other;
 
-        case code::long_double_number:
+        case code::long_long_real:
             return self.template unsafe_get<long double>() < other;
 
         default:
@@ -1190,15 +1190,15 @@ struct overloader<
             self.template unsafe_get<unsigned long long int>() += other;
             break;
 
-        case code::float_number:
+        case code::real:
             self.template unsafe_get<float>() += other;
             break;
 
-        case code::double_number:
+        case code::long_real:
             self.template unsafe_get<double>() += other;
             break;
 
-        case code::long_double_number:
+        case code::long_long_real:
             self.template unsafe_get<long double>() += other;
             break;
 
@@ -1978,15 +1978,15 @@ struct operator_overloader<
             return detail::template overloader<variable_type, unsigned long long int>::
                 equal(lhs, rhs.template unsafe_get<unsigned long long int>());
 
-        case code::float_number:
+        case code::real:
             return detail::template overloader<variable_type, float>::
                 equal(lhs, rhs.template unsafe_get<float>());
 
-        case code::double_number:
+        case code::long_real:
             return detail::template overloader<variable_type, double>::
                 equal(lhs, rhs.template unsafe_get<double>());
 
-        case code::long_double_number:
+        case code::long_long_real:
             return detail::template overloader<variable_type, long double>::
                 equal(lhs, rhs.template unsafe_get<long double>());
 
@@ -2070,15 +2070,15 @@ struct operator_overloader<
             return detail::template overloader<variable_type, unsigned long long int>::
                 less(lhs, rhs.template unsafe_get<unsigned long long int>());
 
-        case code::float_number:
+        case code::real:
             return detail::template overloader<variable_type, float>::
                 less(lhs, rhs.template unsafe_get<float>());
 
-        case code::double_number:
+        case code::long_real:
             return detail::template overloader<variable_type, double>::
                 less(lhs, rhs.template unsafe_get<double>());
 
-        case code::long_double_number:
+        case code::long_long_real:
             return detail::template overloader<variable_type, long double>::
                 less(lhs, rhs.template unsafe_get<long double>());
 
@@ -2298,7 +2298,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
 
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2370,7 +2370,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ () -> Deri
     case symbol::null:
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2414,7 +2414,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-- () -> Deri
 
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2474,7 +2474,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() -> reference
     case symbol::null:
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2501,7 +2501,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() const -> cons
     case symbol::null:
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2528,7 +2528,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () -> poin
     case symbol::null:
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2560,7 +2560,7 @@ bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Der
     case symbol::null:
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2755,7 +2755,7 @@ auto basic_variable<Allocator>::key_iterator::key() const -> const_reference
     case symbol::null:
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2779,7 +2779,7 @@ auto basic_variable<Allocator>::key_iterator::operator++ () -> key_iterator&
     case symbol::null:
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -2864,13 +2864,13 @@ basic_variable<Allocator>::basic_variable(const basic_variable& other)
     case code::unsigned_long_long_integer:
         storage = other.unsafe_get<unsigned long long int>();
         break;
-    case code::float_number:
+    case code::real:
         storage = other.unsafe_get<float>();
         break;
-    case code::double_number:
+    case code::long_real:
         storage = other.unsafe_get<double>();
         break;
-    case code::long_double_number:
+    case code::long_long_real:
         storage = other.unsafe_get<long double>();
         break;
     case code::string:
@@ -2936,13 +2936,13 @@ basic_variable<Allocator>::basic_variable(basic_variable&& other) noexcept
     case code::unsigned_long_long_integer:
         storage = std::move(other.unsafe_get<unsigned long long int>());
         break;
-    case code::float_number:
+    case code::real:
         storage = std::move(other.unsafe_get<float>());
         break;
-    case code::double_number:
+    case code::long_real:
         storage = std::move(other.unsafe_get<double>());
         break;
-    case code::long_double_number:
+    case code::long_long_real:
         storage = std::move(other.unsafe_get<long double>());
         break;
     case code::string:
@@ -3097,13 +3097,13 @@ auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic
     case code::unsigned_long_long_integer:
         storage = other.unsafe_get<unsigned long long int>();
         break;
-    case code::float_number:
+    case code::real:
         storage = other.unsafe_get<float>();
         break;
-    case code::double_number:
+    case code::long_real:
         storage = other.unsafe_get<double>();
         break;
-    case code::long_double_number:
+    case code::long_long_real:
         storage = other.unsafe_get<long double>();
         break;
     case code::string:
@@ -3169,13 +3169,13 @@ auto basic_variable<Allocator>::operator= (basic_variable&& other) -> basic_vari
     case code::unsigned_long_long_integer:
         storage = std::move(other.unsafe_get<unsigned long long int>());
         break;
-    case code::float_number:
+    case code::real:
         storage = std::move(other.unsafe_get<float>());
         break;
-    case code::double_number:
+    case code::long_real:
         storage = std::move(other.unsafe_get<double>());
         break;
-    case code::long_double_number:
+    case code::long_long_real:
         storage = std::move(other.unsafe_get<long double>());
         break;
     case code::string:
@@ -3304,15 +3304,15 @@ auto basic_variable<Allocator>::operator+= (const basic_variable& other) -> basi
         detail::overloader<value_type, unsigned long long int>::
             append(*this, other.unsafe_get<unsigned long long int>());
         break;
-    case code::float_number:
+    case code::real:
         detail::overloader<value_type, float>::
             append(*this, other.unsafe_get<float>());
         break;
-    case code::double_number:
+    case code::long_real:
         detail::overloader<value_type, double>::
             append(*this, other.unsafe_get<double>());
         break;
-    case code::long_double_number:
+    case code::long_long_real:
         detail::overloader<value_type, long double>::
             append(*this, other.unsafe_get<long double>());
         break;
@@ -3460,11 +3460,11 @@ basic_variable<Allocator>::operator bool() const
         return bool(unsafe_get<signed long long int>());
     case code::unsigned_long_long_integer:
         return bool(unsafe_get<unsigned long long int>());
-    case code::float_number:
+    case code::real:
         return bool(unsafe_get<float>());
-    case code::double_number:
+    case code::long_real:
         return bool(unsafe_get<double>());
-    case code::long_double_number:
+    case code::long_long_real:
         return bool(unsafe_get<long double>());
     case code::string:
     case code::wstring:
@@ -3581,11 +3581,11 @@ dynamic::code::value basic_variable<Allocator>::code() const noexcept
     case traits<unsigned long long int>::value:
         return code::unsigned_long_long_integer;
     case traits<float>::value:
-        return code::float_number;
+        return code::real;
     case traits<double>::value:
-        return code::double_number;
+        return code::long_real;
     case traits<long double>::value:
-        return code::long_double_number;
+        return code::long_long_real;
     case traits<string_type>::value:
         return code::string;
     case traits<wstring_type>::value:
@@ -3627,7 +3627,7 @@ dynamic::symbol::value basic_variable<Allocator>::symbol() const noexcept
     case traits<float>::value:
     case traits<double>::value:
     case traits<long double>::value:
-        return symbol::number;
+        return symbol::real;
     case traits<string_type>::value:
         return symbol::string;
     case traits<wstring_type>::value:
@@ -3655,7 +3655,7 @@ bool basic_variable<Allocator>::empty() const noexcept
         return true;
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -3678,7 +3678,7 @@ auto basic_variable<Allocator>::size() const noexcept -> size_type
         return 0;
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -3701,7 +3701,7 @@ auto basic_variable<Allocator>::max_size() const noexcept -> size_type
         return 0;
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -3768,13 +3768,13 @@ void basic_variable<Allocator>::clear() noexcept
     case code::unsigned_long_long_integer:
         storage = 0ULL;
         break;
-    case code::float_number:
+    case code::real:
         storage = 0.0f;
         break;
-    case code::double_number:
+    case code::long_real:
         storage = 0.0;
         break;
-    case code::long_double_number:
+    case code::long_long_real:
         storage = 0.0L;
         break;
     case code::string:

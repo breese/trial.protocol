@@ -63,7 +63,7 @@ void search_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), map::make()), false);
 }
 
-void search_number()
+void search_real()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::binary_search(data.begin(), data.end(), null), false);
@@ -197,7 +197,7 @@ int main()
     search_null();
     search_boolean();
     search_integer();
-    search_number();
+    search_real();
     search_string();
     search_wstring();
     search_u16string();

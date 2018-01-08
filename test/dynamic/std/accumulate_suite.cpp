@@ -49,7 +49,7 @@ void accumulate_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
 }
 
-void accumulate_number()
+void accumulate_real()
 {
     variable data(3.0);
     variable result = std::accumulate(data.begin(), data.end(), variable(0.0));
@@ -120,7 +120,7 @@ void accumulate_array_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 55);
 }
 
-void accumulate_array_integer_with_number()
+void accumulate_array_integer_with_real()
 {
     variable data = array::make({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
     variable result = std::accumulate(data.begin(), data.end(), variable(0.0));
@@ -128,7 +128,7 @@ void accumulate_array_integer_with_number()
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 55.0);
 }
 
-void accumulate_array_number()
+void accumulate_array_real()
 {
     variable data = array::make({ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 });
     variable result = std::accumulate(data.begin(), data.end(), variable());
@@ -136,7 +136,7 @@ void accumulate_array_number()
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<double>(), 55.0);
 }
 
-void accumulate_array_number_with_integer()
+void accumulate_array_real_with_integer()
 {
     variable data = array::make({ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 });
     variable result = std::accumulate(data.begin(), data.end(), variable(0));
@@ -207,7 +207,7 @@ int main()
     accumulate_null_with_boolean();
     accumulate_boolean();
     accumulate_integer();
-    accumulate_number();
+    accumulate_real();
     accumulate_string();
     accumulate_wstring();
     accumulate_u16string();
@@ -217,9 +217,9 @@ int main()
     accumulate_array_null_with_boolean();
     accumulate_array_boolean();
     accumulate_array_integer();
-    accumulate_array_integer_with_number();
-    accumulate_array_number();
-    accumulate_array_number_with_integer();
+    accumulate_array_integer_with_real();
+    accumulate_array_real();
+    accumulate_array_real_with_integer();
     accumulate_array_string();
     accumulate_array_wstring();
     accumulate_array_u16string();

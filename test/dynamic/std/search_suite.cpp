@@ -42,7 +42,7 @@ void search_null()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // null - number
+    // null - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -127,7 +127,7 @@ void search_boolean()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // boolean - number
+    // boolean - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -212,7 +212,7 @@ void search_integer()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
-    // integer - number
+    // integer - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -272,10 +272,10 @@ void search_integer()
     }
 }
 
-void search_number()
+void search_real()
 {
     variable data(3.0);
-    // number - null
+    // real - null
     {
         variable subsequence;
         auto where = std::search(data.begin(), data.end(),
@@ -283,63 +283,63 @@ void search_number()
         // Empty subsequence returns the first entry
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
-    // number - boolean
+    // real - boolean
     {
         variable subsequence(true);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - integer
+    // real - integer
     {
         variable subsequence(2);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - number
+    // real - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
-    // number - string
+    // real - string
     {
         variable subsequence("alpha");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - wstring
+    // real - wstring
     {
         variable subsequence(L"bravo");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - u16string
+    // real - u16string
     {
         variable subsequence(u"charlie");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - u32string
+    // real - u32string
     {
         variable subsequence(U"delta");
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - array
+    // real - array
     {
         variable subsequence = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
         auto where = std::search(data.begin(), data.end(),
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - map
+    // real - map
     {
         variable subsequence = map::make(
             {
@@ -382,7 +382,7 @@ void search_string()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // string - number
+    // string - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -466,7 +466,7 @@ void search_wstring()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // wstring - number
+    // wstring - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -551,7 +551,7 @@ void search_u16string()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // u16string - number
+    // u16string - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -636,7 +636,7 @@ void search_u32string()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // u32string - number
+    // u32string - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -713,7 +713,7 @@ void search_array()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
-    // array - number
+    // array - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -884,7 +884,7 @@ void search_map()
                                  subsequence.begin(), subsequence.end());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
-    // map - number
+    // map - real
     {
         variable subsequence(3.0);
         auto where = std::search(data.begin(), data.end(),
@@ -990,7 +990,7 @@ int main()
     search_null();
     search_boolean();
     search_integer();
-    search_number();
+    search_real();
     search_string();
     search_wstring();
     search_u16string();

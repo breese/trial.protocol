@@ -81,15 +81,15 @@ struct save_overloader< protocol::bintoken::oarchive,
             ar.save(data.value<unsigned long long int>());
             break;
 
-        case dynamic::code::float_number:
+        case dynamic::code::real:
             ar.save(data.value<float>());
             break;
 
-        case dynamic::code::double_number:
+        case dynamic::code::long_real:
             ar.save(data.value<double>());
             break;
 
-        case dynamic::code::long_double_number:
+        case dynamic::code::long_long_real:
             // Format only supports 64-bit floats
             ar.save(data.value<double>());
             break;
@@ -159,7 +159,7 @@ struct load_overloader< protocol::bintoken::iarchive,
             }
             break;
 
-        case token::symbol::number:
+        case token::symbol::real:
             {
                 long double value = {};
                 ar.load(value);

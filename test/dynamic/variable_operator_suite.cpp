@@ -123,7 +123,7 @@ void append_null_with_integer()
     }
 }
 
-void append_null_with_number()
+void append_null_with_real()
 {
     {
         variable data;
@@ -372,7 +372,7 @@ void append_boolean_with_integer()
     }
 }
 
-void append_boolean_with_number()
+void append_boolean_with_real()
 {
     {
         variable data(false);
@@ -605,7 +605,7 @@ void append_signed_int_with_integer()
     }
 }
 
-void append_signed_int_with_number()
+void append_signed_int_with_real()
 {
     signed int input = 2;
     {
@@ -796,7 +796,7 @@ void append_unsigned_int_with_integer()
     }
 }
 
-void append_unsigned_int_with_number()
+void append_unsigned_int_with_real()
 {
     unsigned int input = 2U;
     {
@@ -918,7 +918,7 @@ void append_float_with_integer()
     }
 }
 
-void append_float_with_number()
+void append_float_with_real()
 {
     {
         variable data(3.0f);
@@ -1033,7 +1033,7 @@ void append_double_with_integer()
     }
 }
 
-void append_double_with_number()
+void append_double_with_real()
 {
     {
         variable data(3.0);
@@ -1148,7 +1148,7 @@ void append_long_double_with_integer()
     }
 }
 
-void append_long_double_with_number()
+void append_long_double_with_real()
 {
     {
         variable data(3.0L);
@@ -1367,7 +1367,7 @@ void append_string_with_integer()
     }
 }
 
-void append_string_with_number()
+void append_string_with_real()
 {
     // string - float
     {
@@ -1847,7 +1847,7 @@ void append_array_with_integer()
     }
 }
 
-void append_array_with_number()
+void append_array_with_real()
 {
     {
         variable data = { true, 2, 3.0, "alpha" };
@@ -2010,7 +2010,7 @@ void append_map_with_integer()
     }
 }
 
-void append_map_with_number()
+void append_map_with_real()
 {
     {
         variable data =
@@ -2133,7 +2133,7 @@ void run()
     append_null_with_null();
     append_null_with_boolean();
     append_null_with_integer();
-    append_null_with_number();
+    append_null_with_real();
     append_null_with_string();
     append_null_with_array();
     append_null_with_map();
@@ -2141,7 +2141,7 @@ void run()
     append_boolean_with_null();
     append_boolean_with_boolean();
     append_boolean_with_integer();
-    append_boolean_with_number();
+    append_boolean_with_real();
     append_boolean_with_string();
     append_boolean_with_array();
     append_boolean_with_map();
@@ -2149,7 +2149,7 @@ void run()
     append_signed_int_with_null();
     append_signed_int_with_boolean();
     append_signed_int_with_integer();
-    append_signed_int_with_number();
+    append_signed_int_with_real();
     append_signed_int_with_string();
     append_signed_int_with_array();
     append_signed_int_with_map();
@@ -2157,7 +2157,7 @@ void run()
     append_unsigned_int_with_null();
     append_unsigned_int_with_boolean();
     append_unsigned_int_with_integer();
-    append_unsigned_int_with_number();
+    append_unsigned_int_with_real();
     append_unsigned_int_with_string();
     append_unsigned_int_with_array();
     append_unsigned_int_with_map();
@@ -2165,7 +2165,7 @@ void run()
     append_float_with_null();
     append_float_with_boolean();
     append_float_with_integer();
-    append_float_with_number();
+    append_float_with_real();
     append_float_with_string();
     append_float_with_array();
     append_float_with_map();
@@ -2173,7 +2173,7 @@ void run()
     append_double_with_null();
     append_double_with_boolean();
     append_double_with_integer();
-    append_double_with_number();
+    append_double_with_real();
     append_double_with_string();
     append_double_with_array();
     append_double_with_map();
@@ -2181,7 +2181,7 @@ void run()
     append_long_double_with_null();
     append_long_double_with_boolean();
     append_long_double_with_integer();
-    append_long_double_with_number();
+    append_long_double_with_real();
     append_long_double_with_string();
     append_long_double_with_array();
     append_long_double_with_map();
@@ -2189,7 +2189,7 @@ void run()
     append_string_with_null();
     append_string_with_boolean();
     append_string_with_integer();
-    append_string_with_number();
+    append_string_with_real();
     append_string_with_string();
     append_string_with_array();
     append_string_with_map();
@@ -2197,7 +2197,7 @@ void run()
     append_array_with_null();
     append_array_with_boolean();
     append_array_with_integer();
-    append_array_with_number();
+    append_array_with_real();
     append_array_with_string();
     append_array_with_array();
     append_array_with_map();
@@ -2205,7 +2205,7 @@ void run()
     append_map_with_null();
     append_map_with_boolean();
     append_map_with_integer();
-    append_map_with_number();
+    append_map_with_real();
     append_map_with_string();
     append_map_with_array();
     append_map_with_map();
@@ -2246,7 +2246,7 @@ void add_null_with_integer()
     }
 }
 
-void add_null_with_number()
+void add_null_with_real()
 {
     {
         auto data = null + variable(3.0f);
@@ -2341,7 +2341,7 @@ void add_boolean_with_integer()
     }
 }
 
-void add_boolean_with_number()
+void add_boolean_with_real()
 {
     {
         auto data = variable(true) + 3.0f;
@@ -2436,7 +2436,7 @@ void add_integer_with_integer()
     }
 }
 
-void add_integer_with_number()
+void add_integer_with_real()
 {
     {
         auto data = variable(2) + 3.0f;
@@ -2503,21 +2503,21 @@ void add_integer_with_map()
                                     "incompatible type");
 }
 
-void add_number_with_null()
+void add_real_with_null()
 {
     auto data = variable(3.0) + null;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 3.0);
 }
 
-void add_number_with_boolean()
+void add_real_with_boolean()
 {
     auto data = variable(3.0) + true;
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<double>(), 4.0);
 }
 
-void add_number_with_integer()
+void add_real_with_integer()
 {
     {
         auto data = variable(3.0) + 2;
@@ -2531,7 +2531,7 @@ void add_number_with_integer()
     }
 }
 
-void add_number_with_number()
+void add_real_with_real()
 {
     {
         auto data = variable(3.0) + 3.0f;
@@ -2550,30 +2550,30 @@ void add_number_with_number()
     }
 }
 
-void add_number_with_string()
+void add_real_with_string()
 {
-    // number - string
+    // real - string
     {
         variable data(3.0);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable("alpha"),
                                         error,
                                         "incompatible type");
     }
-    // number - wstring
+    // real - wstring
     {
         variable data(3.0);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(L"bravo"),
                                         error,
                                         "incompatible type");
     }
-    // number - u16string
+    // real - u16string
     {
         variable data(3.0);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(u"charlie"),
                                         error,
                                         "incompatible type");
     }
-    // number - u32string
+    // real - u32string
     {
         variable data(3.0);
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + variable(U"delta"),
@@ -2582,7 +2582,7 @@ void add_number_with_string()
     }
 }
 
-void add_number_with_array()
+void add_real_with_array()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + array::make({ true, "alpha" }),
@@ -2590,7 +2590,7 @@ void add_number_with_array()
                                     "incompatible type");
 }
 
-void add_number_with_map()
+void add_real_with_map()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data + map::make({{ "alpha", "hydrogen" }}),
@@ -2718,7 +2718,7 @@ void add_string_with_integer()
     }
 }
 
-void add_string_with_number()
+void add_string_with_real()
 {
     // string - float
     {
@@ -3010,7 +3010,7 @@ void add_array_with_integer()
     }
 }
 
-void add_array_with_number()
+void add_array_with_real()
 {
     {
         variable data = array::make({ true, 2, 3.0, "alpha" }) + 6.0f;
@@ -3142,7 +3142,7 @@ void add_map_with_integer()
     }
 }
 
-void add_map_with_number()
+void add_map_with_real()
 {
     {
         variable data = map::make(
@@ -3249,7 +3249,7 @@ void run()
     add_null_with_null();
     add_null_with_boolean();
     add_null_with_integer();
-    add_null_with_number();
+    add_null_with_real();
     add_null_with_string();
     add_null_with_array();
     add_null_with_map();
@@ -3257,7 +3257,7 @@ void run()
     add_boolean_with_null();
     add_boolean_with_boolean();
     add_boolean_with_integer();
-    add_boolean_with_number();
+    add_boolean_with_real();
     add_boolean_with_string();
     add_boolean_with_array();
     add_boolean_with_map();
@@ -3265,23 +3265,23 @@ void run()
     add_integer_with_null();
     add_integer_with_boolean();
     add_integer_with_integer();
-    add_integer_with_number();
+    add_integer_with_real();
     add_integer_with_string();
     add_integer_with_array();
     add_integer_with_map();
 
-    add_number_with_null();
-    add_number_with_boolean();
-    add_number_with_integer();
-    add_number_with_number();
-    add_number_with_string();
-    add_number_with_array();
-    add_number_with_map();
+    add_real_with_null();
+    add_real_with_boolean();
+    add_real_with_integer();
+    add_real_with_real();
+    add_real_with_string();
+    add_real_with_array();
+    add_real_with_map();
 
     add_string_with_null();
     add_string_with_boolean();
     add_string_with_integer();
-    add_string_with_number();
+    add_string_with_real();
     add_string_with_string();
     add_string_with_array();
     add_string_with_map();
@@ -3289,7 +3289,7 @@ void run()
     add_array_with_null();
     add_array_with_boolean();
     add_array_with_integer();
-    add_array_with_number();
+    add_array_with_real();
     add_array_with_string();
     add_array_with_array();
     add_array_with_map();
@@ -3297,7 +3297,7 @@ void run()
     add_map_with_null();
     add_map_with_boolean();
     add_map_with_integer();
-    add_map_with_number();
+    add_map_with_real();
     add_map_with_string();
     add_map_with_array();
     add_map_with_map();
@@ -3336,7 +3336,7 @@ void index_integer()
                                     "incompatible type");
 }
 
-void index_number()
+void index_real()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data[0],
@@ -3442,7 +3442,7 @@ void key_integer()
                                     "incompatible type");
 }
 
-void key_number()
+void key_real()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data["alpha"],
@@ -3541,7 +3541,7 @@ void run()
     index_null();
     index_boolean();
     index_integer();
-    index_number();
+    index_real();
     index_string();
     index_array();
     index_array_const();
@@ -3551,7 +3551,7 @@ void run()
     key_null();
     key_boolean();
     key_integer();
-    key_number();
+    key_real();
     key_string();
     key_array();
     key_map();
@@ -3658,7 +3658,7 @@ void get_integer()
                                     "incompatible type");
 }
 
-void get_number()
+void get_real()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.operator nullable(),
@@ -3890,7 +3890,7 @@ void run()
     get_null();
     get_boolean();
     get_integer();
-    get_number();
+    get_real();
     get_string();
     get_wstring();
     get_u16string();

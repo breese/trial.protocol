@@ -112,21 +112,21 @@ void construct_float()
 {
     variable data(1.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<float>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<real>(), true);
 }
 
 void construct_double()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<double>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<real>(), true);
 }
 
 void construct_long_double()
 {
     variable data(1.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<real>(), true);
 }
 
 void construct_string()
@@ -1066,10 +1066,10 @@ void is_integer_with_unsigned_long_long_int()
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<volatile unsigned long long int&>(), false);
 }
 
-void is_number_with_float()
+void is_real_with_float()
 {
     variable data(1.0f);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<real>(), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<float>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<float&>(), true);
@@ -1094,10 +1094,10 @@ void is_number_with_float()
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), false);
 }
 
-void is_number_with_double()
+void is_real_with_double()
 {
     variable data(1.0);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<real>(), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<double>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<double&>(), true);
@@ -1122,10 +1122,10 @@ void is_number_with_double()
     TRIAL_PROTOCOL_TEST_EQUAL(data.same<long double>(), false);
 }
 
-void is_number_with_long_double()
+void is_real_with_long_double()
 {
     variable data(1.0L);
-    TRIAL_PROTOCOL_TEST_EQUAL(data.is<number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<real>(), true);
 
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<long double&>(), true);
@@ -1341,9 +1341,9 @@ void run()
     is_integer_with_signed_long_long_int();
     is_integer_with_unsigned_long_long_int();
 
-    is_number_with_float();
-    is_number_with_double();
-    is_number_with_long_double();
+    is_real_with_float();
+    is_real_with_double();
+    is_real_with_long_double();
 
     is_string();
     is_wstring();
@@ -1441,25 +1441,25 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         const float value = 0.0f;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::float_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::real);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::real);
     }
     {
         const double value = 0.0;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::double_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::long_real);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::real);
     }
     {
         const long double value = 0.0L;
         variable data(value);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::long_double_number);
-        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::number);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.code(), code::long_long_real);
+        TRIAL_PROTOCOL_TEST_EQUAL(data.symbol(), symbol::real);
     }
 }
 
@@ -1506,7 +1506,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_array();
     test_map();
@@ -1611,7 +1611,7 @@ void copy_integer()
     }
 }
 
-void copy_number()
+void copy_real()
 {
     {
         float value = 3.0f;
@@ -1771,7 +1771,7 @@ void run()
     copy_null();
     copy_boolean();
     copy_integer();
-    copy_number();
+    copy_real();
     copy_string();
     copy_array();
     copy_array_nested();
@@ -1878,7 +1878,7 @@ void move_integer()
     }
 }
 
-void move_number()
+void move_real()
 {
     {
         float value = 3.0f;
@@ -2022,7 +2022,7 @@ void run()
     move_null();
     move_boolean();
     move_integer();
-    move_number();
+    move_real();
     move_string();
     move_array();
     move_array_nested();
@@ -2329,7 +2329,7 @@ void assign_null_with_integer()
     }
 }
 
-void assign_null_with_number()
+void assign_null_with_real()
 {
     {
         variable data;
@@ -2779,7 +2779,7 @@ void assign_boolean_with_integer()
     }
 }
 
-void assign_boolean_with_number()
+void assign_boolean_with_real()
 {
     {
         variable data(true);
@@ -3185,7 +3185,7 @@ void assign_signed_int_with_integer()
     }
 }
 
-void assign_signed_int_with_number()
+void assign_signed_int_with_real()
 {
     signed int input = 2;
     {
@@ -3598,7 +3598,7 @@ void assign_unsigned_int_with_integer()
     }
 }
 
-void assign_unsigned_int_with_number()
+void assign_unsigned_int_with_real()
 {
     unsigned int input = 2;
     {
@@ -3749,7 +3749,7 @@ void assign_float_with_integer()
     }
 }
 
-void assign_float_with_number()
+void assign_float_with_real()
 {
     {
         variable data(3.0f);
@@ -3873,7 +3873,7 @@ void assign_double_with_integer()
     }
 }
 
-void assign_double_with_number()
+void assign_double_with_real()
 {
     {
         variable data(3.0);
@@ -3997,7 +3997,7 @@ void assign_long_double_with_integer()
     }
 }
 
-void assign_long_double_with_number()
+void assign_long_double_with_real()
 {
     {
         variable data(3.0L);
@@ -4163,7 +4163,7 @@ void assign_string_with_integer()
     }
 }
 
-void assign_string_with_number()
+void assign_string_with_real()
 {
     // string - float
     {
@@ -4513,7 +4513,7 @@ void assign_array_with_integer()
     }
 }
 
-void assign_array_with_number()
+void assign_array_with_real()
 {
     {
         variable data = { true, 2 };
@@ -4657,7 +4657,7 @@ void assign_map_with_integer()
     }
 }
 
-void assign_map_with_number()
+void assign_map_with_real()
 {
     {
         variable data = {{ "alpha", "hydrogen" }};
@@ -4774,7 +4774,7 @@ void run()
     assign_null_with_null();
     assign_null_with_boolean();
     assign_null_with_integer();
-    assign_null_with_number();
+    assign_null_with_real();
     assign_null_with_string();
     assign_null_with_array();
     assign_null_with_map();
@@ -4782,7 +4782,7 @@ void run()
     assign_boolean_with_null();
     assign_boolean_with_boolean();
     assign_boolean_with_integer();
-    assign_boolean_with_number();
+    assign_boolean_with_real();
     assign_boolean_with_string();
     assign_boolean_with_array();
     assign_boolean_with_map();
@@ -4790,7 +4790,7 @@ void run()
     assign_signed_int_with_null();
     assign_signed_int_with_boolean();
     assign_signed_int_with_integer();
-    assign_signed_int_with_number();
+    assign_signed_int_with_real();
     assign_signed_int_with_string();
     assign_signed_int_with_array();
     assign_signed_int_with_map();
@@ -4798,7 +4798,7 @@ void run()
     assign_unsigned_int_with_null();
     assign_unsigned_int_with_boolean();
     assign_unsigned_int_with_integer();
-    assign_unsigned_int_with_number();
+    assign_unsigned_int_with_real();
     assign_unsigned_int_with_string();
     assign_unsigned_int_with_array();
     assign_unsigned_int_with_map();
@@ -4806,7 +4806,7 @@ void run()
     assign_float_with_null();
     assign_float_with_boolean();
     assign_float_with_integer();
-    assign_float_with_number();
+    assign_float_with_real();
     assign_float_with_string();
     assign_float_with_array();
     assign_float_with_map();
@@ -4814,7 +4814,7 @@ void run()
     assign_double_with_null();
     assign_double_with_boolean();
     assign_double_with_integer();
-    assign_double_with_number();
+    assign_double_with_real();
     assign_double_with_string();
     assign_double_with_array();
     assign_double_with_map();
@@ -4822,7 +4822,7 @@ void run()
     assign_long_double_with_null();
     assign_long_double_with_boolean();
     assign_long_double_with_integer();
-    assign_long_double_with_number();
+    assign_long_double_with_real();
     assign_long_double_with_string();
     assign_long_double_with_array();
     assign_long_double_with_map();
@@ -4830,7 +4830,7 @@ void run()
     assign_string_with_null();
     assign_string_with_boolean();
     assign_string_with_integer();
-    assign_string_with_number();
+    assign_string_with_real();
     assign_string_with_string();
     assign_string_with_array();
     assign_string_with_map();
@@ -4838,7 +4838,7 @@ void run()
     assign_array_with_null();
     assign_array_with_boolean();
     assign_array_with_integer();
-    assign_array_with_number();
+    assign_array_with_real();
     assign_array_with_string();
     assign_array_with_array();
     assign_array_with_map();
@@ -4846,7 +4846,7 @@ void run()
     assign_map_with_null();
     assign_map_with_boolean();
     assign_map_with_integer();
-    assign_map_with_number();
+    assign_map_with_real();
     assign_map_with_string();
     assign_map_with_array();
     assign_map_with_map();
@@ -4993,7 +4993,7 @@ void get_const_integer()
     }
 }
 
-void get_number()
+void get_real()
 {
     {
         const float value = 3.0f;
@@ -5012,7 +5012,7 @@ void get_number()
     }
 }
 
-void get_const_number()
+void get_const_real()
 {
     {
         const float value = 3.0f;
@@ -5193,8 +5193,8 @@ void run()
     get_const_boolean();
     get_integer();
     get_const_integer();
-    get_number();
-    get_const_number();
+    get_real();
+    get_const_real();
     get_string();
     get_const_string();
     get_array();
@@ -5244,7 +5244,7 @@ void fail_null_as_integer()
     }
 }
 
-void fail_null_as_number()
+void fail_null_as_real()
 {
     {
         variable data;
@@ -5350,7 +5350,7 @@ void test_boolean_as_integer()
     }
 }
 
-void test_boolean_as_number()
+void test_boolean_as_real()
 {
     {
         variable data(false);
@@ -5488,7 +5488,7 @@ void test_integer_as_integer()
     }
 }
 
-void test_integer_as_number()
+void test_integer_as_real()
 {
     {
         variable data(0);
@@ -5616,7 +5616,7 @@ void test_float_as_integer()
     }
 }
 
-void test_float_as_number()
+void test_float_as_real()
 {
     variable data(0.0f);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
@@ -5740,7 +5740,7 @@ void test_double_as_integer()
     }
 }
 
-void test_double_as_number()
+void test_double_as_real()
 {
     variable data(0.0);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
@@ -5864,7 +5864,7 @@ void test_long_double_as_integer()
     }
 }
 
-void test_long_double_as_number()
+void test_long_double_as_real()
 {
     variable data(0.0L);
     TRIAL_PROTOCOL_TEST_EQUAL(data.value<float>(), 0.0f);
@@ -6045,7 +6045,7 @@ void fail_string_as_integer()
     }
 }
 
-void fail_string_as_number()
+void fail_string_as_real()
 {
     {
         variable data("alpha");
@@ -6216,7 +6216,7 @@ void run()
     test_null_as_null();
     fail_null_as_boolean();
     fail_null_as_integer();
-    fail_null_as_number();
+    fail_null_as_real();
     fail_null_as_string();
     fail_null_as_array();
     fail_null_as_map();
@@ -6224,7 +6224,7 @@ void run()
     fail_boolean_as_null();
     test_boolean_as_boolean();
     test_boolean_as_integer();
-    test_boolean_as_number();
+    test_boolean_as_real();
     fail_boolean_as_string();
     fail_boolean_as_array();
     fail_boolean_as_map();
@@ -6232,7 +6232,7 @@ void run()
     fail_integer_as_null();
     test_integer_as_boolean();
     test_integer_as_integer();
-    test_integer_as_number();
+    test_integer_as_real();
     fail_integer_as_string();
     fail_integer_as_array();
     fail_integer_as_map();
@@ -6240,7 +6240,7 @@ void run()
     fail_float_as_null();
     test_float_as_boolean();
     test_float_as_integer();
-    test_float_as_number();
+    test_float_as_real();
     fail_float_as_string();
     fail_float_as_array();
     fail_float_as_map();
@@ -6248,7 +6248,7 @@ void run()
     fail_double_as_null();
     test_double_as_boolean();
     test_double_as_integer();
-    test_double_as_number();
+    test_double_as_real();
     fail_double_as_string();
     fail_double_as_array();
     fail_double_as_map();
@@ -6256,7 +6256,7 @@ void run()
     fail_long_double_as_null();
     test_long_double_as_boolean();
     test_long_double_as_integer();
-    test_long_double_as_number();
+    test_long_double_as_real();
     fail_long_double_as_string();
     fail_long_double_as_array();
     fail_long_double_as_map();
@@ -6264,7 +6264,7 @@ void run()
     fail_string_as_null();
     fail_string_as_boolean();
     fail_string_as_integer();
-    fail_string_as_number();
+    fail_string_as_real();
     test_string_as_string();
     fail_string_as_array();
     fail_string_as_map();

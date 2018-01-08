@@ -71,13 +71,13 @@ void swap_boolean()
         TRIAL_PROTOCOL_TEST(other.is<boolean>());
         TRIAL_PROTOCOL_TEST(other == true);
     }
-    // boolean - number
+    // boolean - real
     {
         variable data(true);
         variable other(3.0);
         auto where = std::swap_ranges(data.begin(), data.end(), other.begin());
         TRIAL_PROTOCOL_TEST(where == other.end());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         TRIAL_PROTOCOL_TEST(other.is<boolean>());
         TRIAL_PROTOCOL_TEST(other == true);
@@ -156,13 +156,13 @@ void swap_integer()
         TRIAL_PROTOCOL_TEST(other.is<integer>());
         TRIAL_PROTOCOL_TEST(other == 2);
     }
-    // integer - number
+    // integer - real
     {
         variable data(2);
         variable other(3.0);
         auto where = std::swap_ranges(data.begin(), data.end(), other.begin());
         TRIAL_PROTOCOL_TEST(where == other.end());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         TRIAL_PROTOCOL_TEST(other.is<integer>());
         TRIAL_PROTOCOL_TEST(other == 2);
@@ -213,13 +213,13 @@ void swap_integer()
     }
 }
 
-void swap_number()
+void swap_real()
 {
-    // number - null
+    // real - null
     {
         // See swap_boolean
     }
-    // number - boolean
+    // real - boolean
     {
         variable data(3.0);
         variable other(true);
@@ -227,10 +227,10 @@ void swap_number()
         TRIAL_PROTOCOL_TEST(where == other.end());
         TRIAL_PROTOCOL_TEST(data.is<boolean>());
         TRIAL_PROTOCOL_TEST(data == true);
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(other == 3.0);
     }
-    // number - integer
+    // real - integer
     {
         variable data(3.0);
         variable other(2);
@@ -238,21 +238,21 @@ void swap_number()
         TRIAL_PROTOCOL_TEST(where == other.end());
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(other == 3.0);
     }
-    // number - number
+    // real - real
     {
         variable data(3.0);
         variable other(33.0);
         auto where = std::swap_ranges(data.begin(), data.end(), other.begin());
         TRIAL_PROTOCOL_TEST(where == other.end());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 33.0);
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(other == 3.0);
     }
-    // number - string
+    // real - string
     {
         variable data(3.0);
         variable other("alpha");
@@ -260,10 +260,10 @@ void swap_number()
         TRIAL_PROTOCOL_TEST(where == other.end());
         TRIAL_PROTOCOL_TEST(data.is<string>());
         TRIAL_PROTOCOL_TEST(data == "alpha");
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(other == 3.0);
     }
-    // number - wstring
+    // real - wstring
     {
         variable data(3.0);
         variable other(L"bravo");
@@ -271,10 +271,10 @@ void swap_number()
         TRIAL_PROTOCOL_TEST(where == other.end());
         TRIAL_PROTOCOL_TEST(data.is<wstring>());
         TRIAL_PROTOCOL_TEST(data == L"bravo");
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(other == 3.0);
     }
-    // number - u16string
+    // real - u16string
     {
         variable data(3.0);
         variable other(u"charlie");
@@ -282,10 +282,10 @@ void swap_number()
         TRIAL_PROTOCOL_TEST(where == other.end());
         TRIAL_PROTOCOL_TEST(data.is<u16string>());
         TRIAL_PROTOCOL_TEST(data == u"charlie");
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(other == 3.0);
     }
-    // number - u32string
+    // real - u32string
     {
         variable data(3.0);
         variable other(U"delta");
@@ -293,7 +293,7 @@ void swap_number()
         TRIAL_PROTOCOL_TEST(where == other.end());
         TRIAL_PROTOCOL_TEST(data.is<u32string>());
         TRIAL_PROTOCOL_TEST(data == U"delta");
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(other == 3.0);
     }
 }
@@ -326,13 +326,13 @@ void swap_string()
         TRIAL_PROTOCOL_TEST(other.is<string>());
         TRIAL_PROTOCOL_TEST(other == "alpha");
     }
-    // string - number
+    // string - real
     {
         variable data("alpha");
         variable other(3.0);
         auto where = std::swap_ranges(data.begin(), data.end(), other.begin());
         TRIAL_PROTOCOL_TEST(where == other.end());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         TRIAL_PROTOCOL_TEST(other.is<string>());
         TRIAL_PROTOCOL_TEST(other == "alpha");
@@ -411,13 +411,13 @@ void swap_wstring()
         TRIAL_PROTOCOL_TEST(other.is<wstring>());
         TRIAL_PROTOCOL_TEST(other == L"bravo");
     }
-    // wstring - number
+    // wstring - real
     {
         variable data(L"bravo");
         variable other(3.0);
         auto where = std::swap_ranges(data.begin(), data.end(), other.begin());
         TRIAL_PROTOCOL_TEST(where == other.end());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         TRIAL_PROTOCOL_TEST(other.is<wstring>());
         TRIAL_PROTOCOL_TEST(other == L"bravo");
@@ -496,13 +496,13 @@ void swap_u16string()
         TRIAL_PROTOCOL_TEST(other.is<u16string>());
         TRIAL_PROTOCOL_TEST(other == u"charlie");
     }
-    // u16string - number
+    // u16string - real
     {
         variable data(u"charlie");
         variable other(3.0);
         auto where = std::swap_ranges(data.begin(), data.end(), other.begin());
         TRIAL_PROTOCOL_TEST(where == other.end());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         TRIAL_PROTOCOL_TEST(other.is<u16string>());
         TRIAL_PROTOCOL_TEST(other == u"charlie");
@@ -581,13 +581,13 @@ void swap_u32string()
         TRIAL_PROTOCOL_TEST(other.is<u32string>());
         TRIAL_PROTOCOL_TEST(other == U"delta");
     }
-    // u32string - number
+    // u32string - real
     {
         variable data(U"delta");
         variable other(3.0);
         auto where = std::swap_ranges(data.begin(), data.end(), other.begin());
         TRIAL_PROTOCOL_TEST(where == other.end());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         TRIAL_PROTOCOL_TEST(other.is<u32string>());
         TRIAL_PROTOCOL_TEST(other == U"delta");
@@ -687,7 +687,7 @@ int main()
     swap_null();
     swap_boolean();
     swap_integer();
-    swap_number();
+    swap_real();
     swap_string();
     swap_wstring();
     swap_u16string();

@@ -113,7 +113,7 @@ struct symbol
         null,
         boolean,
         integer,
-        number,
+        real,
         string,
         array,
 

@@ -57,7 +57,7 @@ struct basic_reader<CharT>::overloader<
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.template number_value<ReturnType>();
+        return self.template real_value<ReturnType>();
     }
 };
 
@@ -265,9 +265,9 @@ ReturnType basic_reader<CharT>::integer_value() const
             return result;
         }
 
-    case token::detail::code::number:
-        using number_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
-        return ReturnType(std::round(decoder.template value<number_return_type>()));
+    case token::detail::code::real:
+        using real_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
+        return ReturnType(std::round(decoder.template value<real_return_type>()));
 
     default:
         decoder.code(token::detail::code::error_invalid_value);
@@ -277,7 +277,7 @@ ReturnType basic_reader<CharT>::integer_value() const
 
 template <typename CharT>
 template <typename ReturnType>
-ReturnType basic_reader<CharT>::number_value() const
+ReturnType basic_reader<CharT>::real_value() const
 {
     switch (decoder.code())
     {
@@ -285,7 +285,7 @@ ReturnType basic_reader<CharT>::number_value() const
         using integer_return_type = typename core::detail::make_integral<ReturnType>::type;
         return ReturnType(decoder.template value<integer_return_type>());
 
-    case token::detail::code::number:
+    case token::detail::code::real:
         return decoder.template value<ReturnType>();
 
     default:

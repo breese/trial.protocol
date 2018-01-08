@@ -41,7 +41,7 @@ void max_integer()
     TRIAL_PROTOCOL_TEST(*where == 1);
 }
 
-void max_number()
+void max_real()
 {
     variable data(1.0);
     auto where = std::max_element(data.begin(), data.end());
@@ -211,7 +211,7 @@ int main()
     max_null();
     max_boolean();
     max_integer();
-    max_number();
+    max_real();
     max_string();
     max_wstring();
     max_u16string();

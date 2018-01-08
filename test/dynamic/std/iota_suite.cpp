@@ -38,7 +38,7 @@ void test_array_integer()
                                  std::equal_to<variable>());
 }
 
-void test_array_number()
+void test_array_real()
 {
     variable data = array::repeat(4, null);
     std::iota(data.begin(), data.end(), 1.0);
@@ -52,7 +52,7 @@ int main()
 {
     test_array_boolean();
     test_array_integer();
-    test_array_number();
+    test_array_real();
 
     return boost::report_errors();
 }

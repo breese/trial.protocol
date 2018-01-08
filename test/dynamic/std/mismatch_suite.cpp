@@ -41,7 +41,7 @@ void test_null()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
-    // null - number
+    // null - real
     {
         variable first;
         variable second(3.0);
@@ -123,7 +123,7 @@ void test_boolean()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // boolean - number
+    // boolean - real
     {
         variable first(true);
         variable second(3.0);
@@ -226,7 +226,7 @@ void test_integer()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
-    // integer - number
+    // integer - real
     {
         variable first(2);
         variable second(3.0);
@@ -286,23 +286,23 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
-    // number - boolean
+    // real - boolean
     {
         variable first(3.0);
         variable second(true);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // number - integer
+    // real - integer
     {
         variable first(3.0);
         variable second(2);
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // number - number
+    // real - real
     {
         variable first(3.0);
         variable second(1.0);
@@ -315,42 +315,42 @@ void test_number()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST(range.first == first.end());
     }
-    // number - string
+    // real - string
     {
         variable first(3.0);
         variable second("alpha");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // number - wstring
+    // real - wstring
     {
         variable first(3.0);
         variable second(L"bravo");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // number - u16string
+    // real - u16string
     {
         variable first(3.0);
         variable second(u"charlie");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // number - u32string
+    // real - u32string
     {
         variable first(3.0);
         variable second(U"delta");
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // number - array
+    // real - array
     {
         variable first(3.0);
         variable second = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // number - map
+    // real - map
     {
         variable first(3.0);
         variable second = map::make(
@@ -384,7 +384,7 @@ void test_string()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // string - number
+    // string - real
     {
         variable first("alpha");
         variable second(3.0);
@@ -466,7 +466,7 @@ void test_wstring()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // wstring - number
+    // wstring - real
     {
         variable first(L"bravo");
         variable second(3.0);
@@ -548,7 +548,7 @@ void test_u16string()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // u16string - number
+    // u16string - real
     {
         variable first(u"charlie");
         variable second(3.0);
@@ -630,7 +630,7 @@ void test_u32string()
         auto range = std::mismatch(first.begin(), first.end(), second.begin());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(first.begin(), range.first), 0);
     }
-    // u32string - number
+    // u32string - real
     {
         variable first(U"delta");
         variable second(3.0);
@@ -779,7 +779,7 @@ int main()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();

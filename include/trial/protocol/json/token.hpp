@@ -45,7 +45,7 @@ struct code
         true_value,
         false_value,
         integer,
-        number,
+        real,
         string,
 
         begin_array,
@@ -78,7 +78,7 @@ struct code
         true_value = detail::code::true_value,
         false_value = detail::code::false_value,
         integer = detail::code::integer,
-        number = detail::code::number,
+        real = detail::code::real,
         string = detail::code::string,
 
         begin_array = detail::code::begin_array,
@@ -98,7 +98,7 @@ struct symbol
         null,
         boolean,
         integer,
-        number,
+        real,
         string,
 
         begin_array,

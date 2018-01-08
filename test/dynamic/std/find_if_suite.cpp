@@ -46,7 +46,7 @@ void find_integer()
                                      [] (const variable& value) { return value == 2; }) == data.end());
 }
 
-void find_number()
+void find_real()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST(std::find_if(data.begin(), data.end(),
@@ -182,7 +182,7 @@ int main()
     find_null();
     find_boolean();
     find_integer();
-    find_number();
+    find_real();
     find_string();
     find_wstring();
     find_u16string();

@@ -52,11 +52,11 @@ auto visit(Visitor&& visitor, basic_variable<Allocator>& variable)
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<signed long long int>());
     case token::code::unsigned_long_long_integer:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<unsigned long long int>());
-    case token::code::float_number:
+    case token::code::real:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<float>());
-    case token::code::double_number:
+    case token::code::long_real:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<double>());
-    case token::code::long_double_number:
+    case token::code::long_long_real:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<long double>());
     case token::code::string:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<typename variable_type::string_type>());
@@ -108,11 +108,11 @@ auto visit(Visitor&& visitor, const basic_variable<Allocator>& variable)
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<signed long long int>());
     case token::code::unsigned_long_long_integer:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<unsigned long long int>());
-    case token::code::float_number:
+    case token::code::real:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<float>());
-    case token::code::double_number:
+    case token::code::long_real:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<double>());
-    case token::code::long_double_number:
+    case token::code::long_long_real:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<long double>());
     case token::code::string:
         return std::forward<Visitor>(visitor)(variable.template unsafe_get<typename variable_type::string_type>());

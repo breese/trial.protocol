@@ -916,7 +916,7 @@ void test_number()
     format::iarchive in(input);
     variable value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
-    TRIAL_PROTOCOL_TEST_EQUAL(value.is<number>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.is<real>(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(value.value<float>(), 1.0f);
 }
 

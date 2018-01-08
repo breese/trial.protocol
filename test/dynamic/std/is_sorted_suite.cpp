@@ -48,7 +48,7 @@ void test_array_integer()
     TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
 }
 
-void test_array_integer_number()
+void test_array_integer_real()
 {
     variable sorted = array::make({ 1, 2.0, 3, 4.0 });
     TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
@@ -56,7 +56,7 @@ void test_array_integer_number()
     TRIAL_PROTOCOL_TEST(!std::is_sorted(unsorted.begin(), unsorted.end()));
 }
 
-void test_array_number()
+void test_array_real()
 {
     variable sorted = array::make({ 1.0, 2.0, 3.0, 4.0 });
     TRIAL_PROTOCOL_TEST(std::is_sorted(sorted.begin(), sorted.end()));
@@ -102,8 +102,8 @@ int main()
     test_array_boolean();
     test_array_boolean_integer();
     test_array_integer();
-    test_array_integer_number();
-    test_array_number();
+    test_array_integer_real();
+    test_array_real();
     test_array_string();
     test_array_wstring();
     test_array_u16string();

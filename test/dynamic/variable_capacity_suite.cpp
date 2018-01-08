@@ -86,7 +86,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(1.0f);
@@ -171,7 +171,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
@@ -255,7 +255,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(1.0f);
@@ -342,7 +342,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
@@ -427,7 +427,7 @@ void test_integer()
     }
 }
 
-void test_number()
+void test_real()
 {
     {
         variable data(1.0f);
@@ -486,7 +486,7 @@ void run()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();

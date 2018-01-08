@@ -148,7 +148,7 @@ void find_null()
         variable::iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // null - number
+    // null - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -263,7 +263,7 @@ void find_boolean()
         variable::iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // boolean - number
+    // boolean - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -378,7 +378,7 @@ void find_const_boolean()
         variable::const_iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // boolean - number
+    // boolean - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -493,7 +493,7 @@ void find_integer()
         variable::iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // integer - number
+    // integer - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -608,7 +608,7 @@ void find_const_integer()
         variable::const_iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // integer - number
+    // integer - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -681,14 +681,14 @@ void find_const_integer()
     }
 }
 
-void find_number()
+void find_real()
 {
     variable data(3.0);
     {
         variable::iterator where = value::find(data, data);
         TRIAL_PROTOCOL_TEST(where != data.end());
     }
-    // number - null
+    // real - null
     {
         variable::iterator where = value::find(data, null);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -697,7 +697,7 @@ void find_number()
         variable::iterator where = value::find(data, variable());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - boolean
+    // real - boolean
     {
         variable::iterator where = value::find(data, true);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -706,7 +706,7 @@ void find_number()
         variable::iterator where = value::find(data, variable(true));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - integer
+    // real - integer
     {
         variable::iterator where = value::find(data, 2);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -715,7 +715,7 @@ void find_number()
         variable::iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - number
+    // real - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where != data.end());
@@ -732,7 +732,7 @@ void find_number()
         variable::iterator where = value::find(data, variable(33.0));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - string
+    // real - string
     {
         variable::iterator where = value::find(data, "hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -745,7 +745,7 @@ void find_number()
         variable::iterator where = value::find(data, variable("hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - wstring
+    // real - wstring
     {
         variable::iterator where = value::find(data, L"hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -758,7 +758,7 @@ void find_number()
         variable::iterator where = value::find(data, variable(L"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - u16string
+    // real - u16string
     {
         variable::iterator where = value::find(data, u"hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -771,7 +771,7 @@ void find_number()
         variable::iterator where = value::find(data, variable(u"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - u32string
+    // real - u32string
     {
         variable::iterator where = value::find(data, U"hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -784,26 +784,26 @@ void find_number()
         variable::iterator where = value::find(data, variable(U"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - array
+    // real - array
     {
         variable::iterator where = value::find(data, array::make({3.0}));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - map
+    // real - map
     {
         variable::iterator where = value::find(data, map::make("alpha", 3.0));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
 
-void find_const_number()
+void find_const_real()
 {
     const variable data(3.0);
     {
         variable::const_iterator where = value::find(data, data);
         TRIAL_PROTOCOL_TEST(where != data.end());
     }
-    // number - null
+    // real - null
     {
         variable::const_iterator where = value::find(data, null);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -812,7 +812,7 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable());
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - boolean
+    // real - boolean
     {
         variable::const_iterator where = value::find(data, true);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -821,7 +821,7 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable(true));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - integer
+    // real - integer
     {
         variable::const_iterator where = value::find(data, 2);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -830,7 +830,7 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - number
+    // real - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where != data.end());
@@ -847,7 +847,7 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable(33.0));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - string
+    // real - string
     {
         variable::const_iterator where = value::find(data, "hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -860,7 +860,7 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable("hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - wstring
+    // real - wstring
     {
         variable::const_iterator where = value::find(data, L"hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -873,7 +873,7 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable(L"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - u16string
+    // real - u16string
     {
         variable::const_iterator where = value::find(data, u"hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -886,7 +886,7 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable(u"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - u32string
+    // real - u32string
     {
         variable::const_iterator where = value::find(data, U"hydrogen");
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -899,12 +899,12 @@ void find_const_number()
         variable::const_iterator where = value::find(data, variable(U"hydrogen"));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - array
+    // real - array
     {
         variable::const_iterator where = value::find(data, array::make({3.0}));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // number - map
+    // real - map
     {
         variable::const_iterator where = value::find(data, map::make("alpha", 3.0));
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -945,7 +945,7 @@ void find_string()
         variable::iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // string - number
+    // string - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1064,7 +1064,7 @@ void find_const_string()
         variable::const_iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // string - number
+    // string - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1183,7 +1183,7 @@ void find_wstring()
         variable::iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // wstring - number
+    // wstring - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1302,7 +1302,7 @@ void find_const_wstring()
         variable::const_iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // wstring - number
+    // wstring - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1421,7 +1421,7 @@ void find_u16string()
         variable::iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // u16string - number
+    // u16string - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1540,7 +1540,7 @@ void find_const_u16string()
         variable::const_iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // u16string - number
+    // u16string - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1659,7 +1659,7 @@ void find_u32string()
         variable::iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // u32string - number
+    // u32string - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1778,7 +1778,7 @@ void find_const_u32string()
         variable::const_iterator where = value::find(data, variable(2));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // u32string - number
+    // u32string - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST(where == data.end());
@@ -1913,7 +1913,7 @@ void find_array()
         variable::iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // array - number
+    // array - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2009,7 +2009,7 @@ void find_const_array()
         variable::const_iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // array - number
+    // array - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2105,7 +2105,7 @@ void find_array_with_array()
         variable::iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // array - number
+    // array - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2209,7 +2209,7 @@ void find_array_with_map()
         variable::iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // array - number
+    // array - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2324,7 +2324,7 @@ void find_map()
         variable::iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // map - number
+    // map - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2427,7 +2427,7 @@ void find_const_map()
         variable::const_iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // map - number
+    // map - real
     {
         variable::const_iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2531,7 +2531,7 @@ void find_map_with_array()
         variable::iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // map - number
+    // map - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2643,7 +2643,7 @@ void find_map_with_map()
         variable::iterator where = value::find(data, variable(22));
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
-    // map - number
+    // map - real
     {
         variable::iterator where = value::find(data, 3.0);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 3);
@@ -2708,8 +2708,8 @@ void run()
     find_const_boolean();
     find_integer();
     find_const_integer();
-    find_number();
-    find_const_number();
+    find_real();
+    find_const_real();
     find_string();
     find_const_string();
     find_wstring();

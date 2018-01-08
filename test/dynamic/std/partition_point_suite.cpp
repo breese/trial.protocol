@@ -31,7 +31,7 @@ void find_null()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -64,7 +64,7 @@ void find_boolean()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -97,7 +97,7 @@ void find_integer()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -118,7 +118,7 @@ void find_integer()
     }
 }
 
-void find_number()
+void find_real()
 {
     variable data(3.0);
     {
@@ -130,7 +130,7 @@ void find_number()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
     }
     {
@@ -163,7 +163,7 @@ void find_string()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -196,7 +196,7 @@ void find_wstring()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -229,7 +229,7 @@ void find_u16string()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -262,7 +262,7 @@ void find_u32string()
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
-        auto where = std::partition_point(data.begin(), data.end(), is<number>());
+        auto where = std::partition_point(data.begin(), data.end(), is<real>());
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
     {
@@ -297,10 +297,10 @@ void find_array_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
-void find_array_number()
+void find_array_real()
 {
     variable data = array::make({ 0.0, 3.0, null, true, 2, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = std::partition_point(data.begin(), data.end(), is<number>());
+    auto where = std::partition_point(data.begin(), data.end(), is<real>());
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 2);
 }
 
@@ -337,14 +337,14 @@ int main()
     find_null();
     find_boolean();
     find_integer();
-    find_number();
+    find_real();
     find_string();
     find_wstring();
     find_u16string();
     find_u32string();
     find_array_boolean();
     find_array_integer();
-    find_array_number();
+    find_array_real();
     find_array_string();
     find_array_wstring();
     find_array_u16string();

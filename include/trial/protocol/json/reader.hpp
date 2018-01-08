@@ -103,7 +103,7 @@ public:
     //! The following conversions are valid:
     //! -# Convert a symbol::boolean token into bool.
     //! -# Convert a symbol::integer token into an integral C++ type (expect bool.)
-    //! -# Convert a symbol::number token into a floating-point C++ type.
+    //! -# Convert a symbol::real token into a floating-point C++ type.
     //! -# Convert a symbol::string token into std::string.
     //!
     //! @returns The converted value.
@@ -123,7 +123,7 @@ private:
 
     template <typename ReturnType> ReturnType bool_value() const;
     template <typename ReturnType> ReturnType integer_value() const;
-    template <typename ReturnType> ReturnType number_value() const;
+    template <typename ReturnType> ReturnType real_value() const;
     template <typename ReturnType> ReturnType string_value() const;
 
 private:

@@ -39,7 +39,7 @@ void reverse_integer()
     TRIAL_PROTOCOL_TEST(data == 2);
 }
 
-void reverse_number()
+void reverse_real()
 {
     variable data = 3.0;
     std::reverse(data.begin(), data.end());
@@ -115,7 +115,7 @@ int main()
     reverse_null();
     reverse_boolean();
     reverse_integer();
-    reverse_number();
+    reverse_real();
     reverse_string();
     reverse_array();
     reverse_map();

@@ -39,7 +39,7 @@ void find_integer()
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
-void find_number()
+void find_real()
 {
     variable data(3.0);
     auto where = std::adjacent_find(data.begin(), data.end());
@@ -110,7 +110,7 @@ void find_array_integer()
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
-void find_array_number()
+void find_array_real()
 {
     variable data = array::make({ 0.0, 1.0, 2.0, 3.0, 40.0, 40.0, 41.0, 41.0, 5.0 });
     auto where = std::adjacent_find(data.begin(), data.end());
@@ -231,7 +231,7 @@ void find_map_integer()
     TRIAL_PROTOCOL_TEST(where == data.end());
 }
 
-void find_map_number()
+void find_map_real()
 {
     variable data = map::make(
         {
@@ -340,7 +340,7 @@ int main()
     find_null();
     find_boolean();
     find_integer();
-    find_number();
+    find_real();
     find_string();
     find_wstring();
     find_u16string();
@@ -349,7 +349,7 @@ int main()
     find_array_null();
     find_array_boolean();
     find_array_integer();
-    find_array_number();
+    find_array_real();
     find_array_string();
     find_array_wstring();
     find_array_u16string();
@@ -359,7 +359,7 @@ int main()
     find_map_null();
     find_map_boolean();
     find_map_integer();
-    find_map_number();
+    find_map_real();
     find_map_string();
     find_map_wstring();
     find_map_u16string();

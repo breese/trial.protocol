@@ -11,8 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cstddef>
-
 namespace trial
 {
 namespace dynamic
@@ -36,15 +34,20 @@ struct code
         unsigned_long_integer,
         signed_long_long_integer,
         unsigned_long_long_integer,
-        float_number,
-        double_number,
-        long_double_number,
+        real,
+        long_real,
+        long_long_real,
         string,
         wstring,
         u16string,
         u32string,
         array,
-        map
+        map,
+
+        // Aliases
+        float_number = real,
+        double_number = long_real,
+        long_double_number = long_long_real
     };
 };
 
@@ -55,7 +58,7 @@ struct symbol
         null,
         boolean,
         integer,
-        number,
+        real,
         string,
         wstring,
         u16string,

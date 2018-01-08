@@ -44,7 +44,7 @@ void copy_integer_to_array()
     TRIAL_PROTOCOL_TEST(result[0] == 2);
 }
 
-void copy_number_to_array()
+void copy_real_to_array()
 {
     variable data(3.0);
     variable result = array::repeat(1, null);
@@ -125,7 +125,7 @@ void copy_integer_to_vector()
     TRIAL_PROTOCOL_TEST(result[0] == 2);
 }
 
-void copy_number_to_vector()
+void copy_real_to_vector()
 {
     variable data(3.0);
     std::vector<variable> result;
@@ -185,7 +185,7 @@ int main()
     copy_null_to_array();
     copy_boolean_to_array();
     copy_integer_to_array();
-    copy_number_to_array();
+    copy_real_to_array();
     copy_string_to_array();
     copy_wstring_to_array();
     copy_u16string_to_array();
@@ -195,7 +195,7 @@ int main()
     copy_null_to_vector();
     copy_boolean_to_vector();
     copy_integer_to_vector();
-    copy_number_to_vector();
+    copy_real_to_vector();
     copy_string_to_vector();
     copy_wstring_to_vector();
     copy_u16string_to_vector();

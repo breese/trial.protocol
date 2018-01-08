@@ -43,7 +43,7 @@ void remove_integer()
     TRIAL_PROTOCOL_TEST(where == data.begin());
 }
 
-void remove_number()
+void remove_real()
 {
     variable data(3.0);
     auto where = std::remove(data.begin(), data.end(), 0.0);
@@ -118,7 +118,7 @@ void remove_array_integer()
                                  std::equal_to<variable>());
 }
 
-void remove_array_number()
+void remove_array_real()
 {
     variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
     auto where = std::remove(data.begin(), data.end(), 3.0);
@@ -230,7 +230,7 @@ void remove_map_integer()
                                  std::equal_to<variable>());
 }
 
-void remove_map_number()
+void remove_map_real()
 {
     // Remove by value but keep key order
     variable data = map::make(
@@ -390,7 +390,7 @@ int main()
     remove_null();
     remove_boolean();
     remove_integer();
-    remove_number();
+    remove_real();
     remove_string();
     remove_wstring();
     remove_u16string();
@@ -398,14 +398,14 @@ int main()
     remove_array_null();
     remove_array_boolean();
     remove_array_integer();
-    remove_array_number();
+    remove_array_real();
     remove_array_string();
     remove_array_wstring();
     remove_array_u16string();
     remove_array_u32string();
     remove_map_boolean();
     remove_map_integer();
-    remove_map_number();
+    remove_map_real();
     remove_map_string();
     remove_map_wstring();
     remove_map_u16string();

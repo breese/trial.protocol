@@ -39,7 +39,7 @@ void count_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 2), 0);
 }
 
-void count_number()
+void count_real()
 {
     variable data(1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(std::count(data.begin(), data.end(), 0.0), 0);
@@ -126,7 +126,7 @@ int main()
     count_null();
     count_boolean();
     count_integer();
-    count_number();
+    count_real();
     count_string();
     count_wstring();
     count_u16string();

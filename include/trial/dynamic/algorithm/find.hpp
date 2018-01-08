@@ -36,7 +36,7 @@ auto find(const basic_variable<Allocator>& self,
 
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -75,7 +75,7 @@ auto find(basic_variable<Allocator>& self,
 
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:
@@ -105,7 +105,7 @@ auto find(const basic_variable<Allocator>& self,
 
     case symbol::boolean:
     case symbol::integer:
-    case symbol::number:
+    case symbol::real:
     case symbol::string:
     case symbol::wstring:
     case symbol::u16string:

@@ -51,24 +51,24 @@ void partition_integer()
     }
 }
 
-void partition_number()
+void partition_real()
 {
     {
         variable data(3.0f);
-        auto where = std::partition(data.begin(), data.end(), is<number>());
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+        auto where = std::partition(data.begin(), data.end(), is<real>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<real>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(3.0);
-        auto where = std::partition(data.begin(), data.end(), is<number>());
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+        auto where = std::partition(data.begin(), data.end(), is<real>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<real>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
     {
         variable data(3.0L);
-        auto where = std::partition(data.begin(), data.end(), is<number>());
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+        auto where = std::partition(data.begin(), data.end(), is<real>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<real>()), true);
         TRIAL_PROTOCOL_TEST(where == data.end());
     }
 }
@@ -123,8 +123,8 @@ void partition_array()
         TRIAL_PROTOCOL_TEST(*data.begin() == 2);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is<number>());
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+        auto where = std::partition(data.begin(), data.end(), is<real>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<real>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == 3.0);
     }
@@ -186,8 +186,8 @@ void partition_map_value()
         TRIAL_PROTOCOL_TEST(*data.begin() == 2);
     }
     {
-        auto where = std::partition(data.begin(), data.end(), is<number>());
-        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<number>()), true);
+        auto where = std::partition(data.begin(), data.end(), is<real>());
+        TRIAL_PROTOCOL_TEST_EQUAL(std::is_partitioned(data.begin(), data.end(), is<real>()), true);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 1);
         TRIAL_PROTOCOL_TEST(*data.begin() == 3.0);
     }
@@ -218,7 +218,7 @@ int main()
     partition_null();
     partition_boolean();
     partition_integer();
-    partition_number();
+    partition_real();
     partition_string();
     partition_array();
     partition_map_value();

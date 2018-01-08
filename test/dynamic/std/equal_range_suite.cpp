@@ -153,7 +153,7 @@ void find_integer()
     }
 }
 
-void find_number()
+void find_real()
 {
     variable data(3.0);
     {
@@ -420,7 +420,7 @@ void find_array_integer()
     }
 }
 
-void find_array_number()
+void find_array_real()
 {
     // array must be sorted
     variable data = array::make({ 0.0, 1.0, 1.0, 2.0, 3.0, 3.0, 3.0 });
@@ -596,14 +596,14 @@ int main()
     find_null();
     find_boolean();
     find_integer();
-    find_number();
+    find_real();
     find_string();
     find_wstring();
     find_u16string();
     find_u32string();
     find_array_boolean();
     find_array_integer();
-    find_array_number();
+    find_array_real();
     find_array_string();
     find_array_wstring();
     find_array_u16string();

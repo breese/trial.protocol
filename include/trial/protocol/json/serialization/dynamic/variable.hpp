@@ -81,15 +81,15 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
             ar.save(data.value<unsigned long long int>());
             break;
 
-        case dynamic::code::float_number:
+        case dynamic::code::real:
             ar.save(data.value<float>());
             break;
 
-        case dynamic::code::double_number:
+        case dynamic::code::long_real:
             ar.save(data.value<double>());
             break;
 
-        case dynamic::code::long_double_number:
+        case dynamic::code::long_long_real:
             ar.save(data.value<long double>());
             break;
 
@@ -156,7 +156,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
             }
             break;
 
-        case token::symbol::number:
+        case token::symbol::real:
             {
                 long double value = {};
                 ar.load(value);

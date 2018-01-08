@@ -44,7 +44,7 @@ void move_integer_to_array()
     TRIAL_PROTOCOL_TEST(result[0] == 2);
 }
 
-void move_number_to_array()
+void move_real_to_array()
 {
     variable data(3.0);
     variable result = array::repeat(1, null);
@@ -106,7 +106,7 @@ int main()
     move_null_to_array();
     move_boolean_to_array();
     move_integer_to_array();
-    move_number_to_array();
+    move_real_to_array();
     move_string_to_array();
     move_wstring_to_array();
     move_u16string_to_array();

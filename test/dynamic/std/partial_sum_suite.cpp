@@ -49,7 +49,7 @@ void sum_integer()
                                  std::equal_to<variable>());
 }
 
-void sum_number()
+void sum_real()
 {
     variable data(3.0);
     std::vector<variable> result;
@@ -133,7 +133,7 @@ void sum_array_integer()
                                  std::equal_to<variable>());
 }
 
-void sum_array_number()
+void sum_array_real()
 {
     variable data = array::make({ 1.0, 20.0, 300.0 });
     std::vector<variable> result;
@@ -198,12 +198,12 @@ int main()
     sum_null();
     sum_boolean();
     sum_integer();
-    sum_number();
+    sum_real();
     sum_string();
     sum_array_null();
     sum_array_boolean();
     sum_array_integer();
-    sum_array_number();
+    sum_array_real();
     sum_array_string();
     fail_array_string();
 

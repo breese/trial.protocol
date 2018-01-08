@@ -59,14 +59,14 @@ void replace_boolean()
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
     }
-    // boolean - number
+    // boolean - real
     {
         variable data(true);
         std::replace(data.begin(), data.end(), variable(false), variable(3.0));
         TRIAL_PROTOCOL_TEST(data.is<boolean>());
         TRIAL_PROTOCOL_TEST(data == true);
         std::replace(data.begin(), data.end(), variable(true), variable(3.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
     }
     // boolean - string
@@ -142,14 +142,14 @@ void replace_integer()
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 22);
     }
-    // integer - number
+    // integer - real
     {
         variable data(2);
         std::replace(data.begin(), data.end(), variable(0), variable(3.0));
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
         std::replace(data.begin(), data.end(), variable(2), variable(3.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
     }
     // integer - string
@@ -194,82 +194,82 @@ void replace_integer()
     }
 }
 
-void replace_number()
+void replace_real()
 {
-    // number - null
+    // real - null
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable());
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable());
         TRIAL_PROTOCOL_TEST(data.is<nullable>());
     }
-    // number - boolean
+    // real - boolean
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable(true));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable(true));
         TRIAL_PROTOCOL_TEST(data.is<boolean>());
         TRIAL_PROTOCOL_TEST(data == true);
     }
-    // number - integer
+    // real - integer
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable(2));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable(2));
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
     }
-    // number - number
+    // real - real
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable(33.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable(33.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 33.0);
     }
-    // number - string
+    // real - string
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable("alpha"));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable("alpha"));
         TRIAL_PROTOCOL_TEST(data.is<string>());
         TRIAL_PROTOCOL_TEST(data == "alpha");
     }
-    // number - wstring
+    // real - wstring
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable(L"bravo"));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable(L"bravo"));
         TRIAL_PROTOCOL_TEST(data.is<wstring>());
         TRIAL_PROTOCOL_TEST(data == L"bravo");
     }
-    // number - u16string
+    // real - u16string
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable(u"charlie"));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable(u"charlie"));
         TRIAL_PROTOCOL_TEST(data.is<u16string>());
         TRIAL_PROTOCOL_TEST(data == u"charlie");
     }
-    // number - u32string
+    // real - u32string
     {
         variable data(3.0);
         std::replace(data.begin(), data.end(), variable(0.0), variable(U"delta"));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
         std::replace(data.begin(), data.end(), variable(3.0), variable(U"delta"));
         TRIAL_PROTOCOL_TEST(data.is<u32string>());
@@ -308,14 +308,14 @@ void replace_string()
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
     }
-    // string - number
+    // string - real
     {
         variable data("alpha");
         std::replace(data.begin(), data.end(), variable("zulu"), variable(3.0));
         TRIAL_PROTOCOL_TEST(data.is<string>());
         TRIAL_PROTOCOL_TEST(data == "alpha");
         std::replace(data.begin(), data.end(), variable("alpha"), variable(3.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
     }
     // string - string
@@ -391,14 +391,14 @@ void replace_wstring()
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
     }
-    // wstring - number
+    // wstring - real
     {
         variable data(L"bravo");
         std::replace(data.begin(), data.end(), variable(L"zulu"), variable(3.0));
         TRIAL_PROTOCOL_TEST(data.is<wstring>());
         TRIAL_PROTOCOL_TEST(data == L"bravo");
         std::replace(data.begin(), data.end(), variable(L"bravo"), variable(3.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
     }
     // wstring - string
@@ -474,14 +474,14 @@ void replace_u16string()
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
     }
-    // u16string - number
+    // u16string - real
     {
         variable data(u"charlie");
         std::replace(data.begin(), data.end(), variable(u"zulu"), variable(3.0));
         TRIAL_PROTOCOL_TEST(data.is<u16string>());
         TRIAL_PROTOCOL_TEST(data == u"charlie");
         std::replace(data.begin(), data.end(), variable(u"charlie"), variable(3.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
     }
     // u16string - string
@@ -557,14 +557,14 @@ void replace_u32string()
         TRIAL_PROTOCOL_TEST(data.is<integer>());
         TRIAL_PROTOCOL_TEST(data == 2);
     }
-    // u32string - number
+    // u32string - real
     {
         variable data(U"delta");
         std::replace(data.begin(), data.end(), variable(U"zulu"), variable(3.0));
         TRIAL_PROTOCOL_TEST(data.is<u32string>());
         TRIAL_PROTOCOL_TEST(data == U"delta");
         std::replace(data.begin(), data.end(), variable(U"delta"), variable(3.0));
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(data == 3.0);
     }
     // u32string - string
@@ -688,7 +688,7 @@ int main()
     replace_null();
     replace_boolean();
     replace_integer();
-    replace_number();
+    replace_real();
     replace_string();
     replace_wstring();
     replace_u16string();

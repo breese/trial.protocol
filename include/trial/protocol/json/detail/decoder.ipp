@@ -258,7 +258,7 @@ template <typename CharT>
 template <typename ReturnType>
 ReturnType basic_decoder<CharT>::number_value() const
 {
-    if (current.code != token::detail::code::number)
+    if (current.code != token::detail::code::real)
     {
         current.code = token::detail::code::error_incompatible_type;
         throw json::error(error());
@@ -530,7 +530,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
         {
             if (input.front() == traits<CharT>::alpha_dot)
             {
-                type = token::detail::code::number;
+                type = token::detail::code::real;
                 input.remove_prefix(1);
                 if (input.empty())
                 {
@@ -551,7 +551,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
             if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
                                    (input.front() == traits<CharT>::alpha_e)))
             {
-                type = token::detail::code::number;
+                type = token::detail::code::real;
                 input.remove_prefix(1);
                 if (input.empty())
                 {

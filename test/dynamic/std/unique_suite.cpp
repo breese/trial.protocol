@@ -39,7 +39,7 @@ void test_integer()
     TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), end), 1);
 }
 
-void test_number()
+void test_real()
 {
     variable data(3.0);
     auto end = std::unique(data.begin(), data.end());
@@ -104,7 +104,7 @@ void test_array_integer()
                                  std::equal_to<variable>());
 }
 
-void test_array_number()
+void test_array_real()
 {
     variable data = array::make({ 0.0, 0.0, 2.0, 1.0, 1.0 });
     auto end = std::unique(data.begin(), data.end());
@@ -169,7 +169,7 @@ int main()
     test_null();
     test_boolean();
     test_integer();
-    test_number();
+    test_real();
     test_string();
     test_wstring();
     test_u16string();
@@ -177,7 +177,7 @@ int main()
     test_array_null();
     test_array_boolean();
     test_array_integer();
-    test_array_number();
+    test_array_real();
     test_array_arithmetic();
     test_array_string();
     test_array_wstring();

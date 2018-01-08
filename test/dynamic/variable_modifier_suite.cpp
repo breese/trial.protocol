@@ -121,7 +121,7 @@ void clear_integer()
     }
 }
 
-void clear_number()
+void clear_real()
 {
     {
         variable data(1.0f);
@@ -207,7 +207,7 @@ void run()
     clear_null();
     clear_boolean();
     clear_integer();
-    clear_number();
+    clear_real();
     clear_string();
     clear_wstring();
     clear_u16string();
@@ -254,7 +254,7 @@ void insert_null()
         TRIAL_PROTOCOL_TEST(data[0] == 2);
         TRIAL_PROTOCOL_TEST_EQUAL(std::distance(data.begin(), where), 0);
     }
-    // null - number
+    // null - real
     {
         variable data;
         auto where = data.insert(3.0);
@@ -414,7 +414,7 @@ void fail_integer()
                                     "incompatible type");
 }
 
-void fail_number()
+void fail_real()
 {
     variable data(3.0);
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(data.insert(true),
@@ -675,7 +675,7 @@ void insert_array_range()
                                      expect.begin(), expect.end(),
                                      std::equal_to<variable>());
     }
-    // number variable
+    // real variable
     {
         variable data = array::make();
         variable input = 3.0;
@@ -892,7 +892,7 @@ void fail_map_range()
                                         error,
                                         "incompatible type");
     }
-    // number variable
+    // real variable
     {
         variable data = map::make();
         variable input = 3.0;
@@ -983,7 +983,7 @@ void run()
     fail_null();
     fail_boolean();
     fail_integer();
-    fail_number();
+    fail_real();
     fail_string();
     fail_wstring();
     fail_u16string();
@@ -1037,7 +1037,7 @@ void erase_integer()
     TRIAL_PROTOCOL_TEST(data == 2);
 }
 
-void erase_number()
+void erase_real()
 {
     {
         variable data(3.0f);
@@ -1278,7 +1278,7 @@ void erase_range_integer()
     TRIAL_PROTOCOL_TEST(data == 2);
 }
 
-void erase_range_number()
+void erase_range_real()
 {
     {
         variable data(3.0f);
@@ -1521,7 +1521,7 @@ void run()
     erase_null();
     erase_boolean();
     erase_integer();
-    erase_number();
+    erase_real();
     erase_string();
     erase_wstring();
     erase_u16string();
@@ -1539,7 +1539,7 @@ void run()
     erase_range_null();
     erase_range_boolean();
     erase_range_integer();
-    erase_range_number();
+    erase_range_real();
     erase_range_string();
     erase_range_wstring();
     erase_range_u16string();
@@ -1598,15 +1598,15 @@ void swap_null()
         TRIAL_PROTOCOL_TEST(other.is<nullable>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // null - number
+    // null - real
     {
         variable data;
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<nullable>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // null - string
     {
@@ -1721,15 +1721,15 @@ void swap_boolean()
         TRIAL_PROTOCOL_TEST(other.is<boolean>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // boolean - number
+    // boolean - real
     {
         variable data(true);
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<boolean>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // boolean - string
     {
@@ -1844,15 +1844,15 @@ void swap_integer()
         TRIAL_PROTOCOL_TEST(other.is<integer>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 20);
     }
-    // integer - number
+    // integer - real
     {
         variable data(2);
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<integer>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // integer - string
     {
@@ -1936,102 +1936,102 @@ void swap_integer()
     }
 }
 
-void swap_number()
+void swap_real()
 {
-    // number - null
+    // real - null
     {
         variable data(3.0);
         variable other;
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<nullable>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
     }
-    // number - boolean
+    // real - boolean
     {
         variable data(3.0);
         variable other(true);
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<boolean>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(data.value<boolean>() == true);
     }
-    // number - integer
+    // real - integer
     {
         variable data(3.0);
         variable other(2);
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<integer>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // number - number
+    // real - real
     {
         variable data(3.0);
         variable other(300.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 300.0);
+        TRIAL_PROTOCOL_TEST(data.is<real>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 300.0);
     }
-    // number - string
+    // real - string
     {
         variable data(3.0);
         variable other("alpha");
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<string>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(data.value<string>() == "alpha");
     }
-    // number - wstring
+    // real - wstring
     {
         variable data(3.0);
         variable other(L"bravo");
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<wstring>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(data.value<std::wstring>() == L"bravo");
     }
-    // number - u16string
+    // real - u16string
     {
         variable data(3.0);
         variable other(u"charlie");
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<u16string>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(data.value<std::u16string>() == u"charlie");
     }
-    // number - u32string
+    // real - u32string
     {
         variable data(3.0);
         variable other(U"delta");
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<u32string>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
         TRIAL_PROTOCOL_TEST(data.value<std::u32string>() == U"delta");
     }
-    // number - array
+    // real - array
     {
         variable data(3.0);
         variable other = { true, 2, 3.0, "alpha" };
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<array>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
 
         variable expect = array::make({ true, 2, 3.0, "alpha" });
         TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                      expect.begin(), expect.end(),
                                      std::equal_to<variable>());
     }
-    // number - map
+    // real - map
     {
         variable data(3.0);
         variable other = map::make(
@@ -2044,7 +2044,7 @@ void swap_number()
 
         data.swap(other);
         TRIAL_PROTOCOL_TEST(data.is<map>());
-        TRIAL_PROTOCOL_TEST(other.is<number>());
+        TRIAL_PROTOCOL_TEST(other.is<real>());
 
         variable expect = map::make(
             {
@@ -2090,15 +2090,15 @@ void swap_string()
         TRIAL_PROTOCOL_TEST(other.is<string>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // string - number
+    // string - real
     {
         variable data("alpha");
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<string>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // string - string
     {
@@ -2213,15 +2213,15 @@ void swap_wstring()
         TRIAL_PROTOCOL_TEST(other.is<wstring>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // wstring - number
+    // wstring - real
     {
         variable data(L"bravo");
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<wstring>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // wstring - string
     {
@@ -2336,15 +2336,15 @@ void swap_u16string()
         TRIAL_PROTOCOL_TEST(other.is<u16string>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // u16string - number
+    // u16string - real
     {
         variable data(u"charlie");
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<u16string>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // u16string - string
     {
@@ -2459,15 +2459,15 @@ void swap_array()
         TRIAL_PROTOCOL_TEST(other.is<array>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // array - number
+    // array - real
     {
         variable data = { true, 2, 3.0, "alpha" };
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<array>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // array - string
     {
@@ -2600,7 +2600,7 @@ void swap_map()
         TRIAL_PROTOCOL_TEST(other.is<map>());
         TRIAL_PROTOCOL_TEST(data.value<integer>() == 2);
     }
-    // map - number
+    // map - real
     {
         variable data = map::make(
             {
@@ -2612,9 +2612,9 @@ void swap_map()
         variable other(3.0);
 
         data.swap(other);
-        TRIAL_PROTOCOL_TEST(data.is<number>());
+        TRIAL_PROTOCOL_TEST(data.is<real>());
         TRIAL_PROTOCOL_TEST(other.is<map>());
-        TRIAL_PROTOCOL_TEST(data.value<number>() == 3.0);
+        TRIAL_PROTOCOL_TEST(data.value<real>() == 3.0);
     }
     // map - string
     {
@@ -2691,7 +2691,7 @@ void run()
     swap_null();
     swap_boolean();
     swap_integer();
-    swap_number();
+    swap_real();
     swap_string();
     swap_wstring();
     swap_u16string();

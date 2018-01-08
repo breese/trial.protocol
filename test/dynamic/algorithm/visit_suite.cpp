@@ -85,17 +85,17 @@ struct visitor
 
     token::code::value operator()(float)
     {
-        return token::code::float_number;
+        return token::code::real;
     }
 
     token::code::value operator()(double)
     {
-        return token::code::double_number;
+        return token::code::long_real;
     }
 
     token::code::value operator()(long double)
     {
-        return token::code::long_double_number;
+        return token::code::long_long_real;
     }
 
     token::code::value operator()(const variable::string_type&)
@@ -207,22 +207,22 @@ void visit_integer()
     }
 }
 
-void visit_number()
+void visit_real()
 {
     {
         variable data(3.0f);
         visitor vis;
-        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::float_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::real);
     }
     {
         variable data(3.0);
         visitor vis;
-        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::long_real);
     }
     {
         variable data(3.0L);
         visitor vis;
-        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::long_double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::long_long_real);
     }
 }
 
@@ -269,7 +269,7 @@ void run()
     visit_null();
     visit_boolean();
     visit_integer();
-    visit_number();
+    visit_real();
     visit_string();
     visit_array();
     visit_map();
@@ -370,22 +370,22 @@ void visit_integer()
     }
 }
 
-void visit_number()
+void visit_real()
 {
     {
         variable data(3.0f);
         visitor vis;
-        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::float_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::real);
     }
     {
         variable data(3.0);
         visitor vis;
-        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::long_real);
     }
     {
         variable data(3.0L);
         visitor vis;
-        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::long_double_number);
+        TRIAL_PROTOCOL_TEST_EQUAL(visit(vis, data), token::code::long_long_real);
     }
 }
 
@@ -432,7 +432,7 @@ void run()
     visit_null();
     visit_boolean();
     visit_integer();
-    visit_number();
+    visit_real();
     visit_string();
     visit_array();
     visit_map();
@@ -635,7 +635,7 @@ void visit_integer()
     }
 }
 
-void visit_number()
+void visit_real()
 {
     visitor vis;
     // Non-matching
@@ -671,7 +671,7 @@ void run()
     visit_null();
     visit_boolean();
     visit_integer();
-    visit_number();
+    visit_real();
     visit_array();
     visit_map();
 }

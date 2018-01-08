@@ -45,12 +45,12 @@ void transform_integer()
     TRIAL_PROTOCOL_TEST(data == 2);
 }
 
-void transform_number()
+void transform_real()
 {
     variable data(3.0);
     auto where = std::transform(data.begin(), data.end(), data.begin(), identity);
     TRIAL_PROTOCOL_TEST(where == data.end());
-    TRIAL_PROTOCOL_TEST(data.is<number>());
+    TRIAL_PROTOCOL_TEST(data.is<real>());
     TRIAL_PROTOCOL_TEST(data == 3.0);
 }
 
@@ -107,7 +107,7 @@ int main()
     transform_null();
     transform_boolean();
     transform_integer();
-    transform_number();
+    transform_real();
     transform_string();
     transform_wstring();
     transform_u16string();

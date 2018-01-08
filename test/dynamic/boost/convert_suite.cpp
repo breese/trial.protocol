@@ -109,7 +109,7 @@ void convert_integer()
     }
 }
 
-void convert_number()
+void convert_real()
 {
     {
         boost::any any(3.0f);
@@ -247,7 +247,7 @@ void convert_array_integer()
     }
 }
 
-void convert_array_number()
+void convert_array_real()
 {
     {
         boost::any any(std::vector<float>{ 3.0f, 33.0f, 333.0f });
@@ -325,7 +325,7 @@ void run()
     convert_null();
     convert_boolean();
     convert_integer();
-    convert_number();
+    convert_real();
     convert_string();
     convert_string_literal();
     convert_wstring();
@@ -335,7 +335,7 @@ void run()
     convert_u32string();
     convert_u32string_literal();
     convert_array_integer();
-    convert_array_number();
+    convert_array_real();
     convert_array_string();
     convert_array_wstring();
     convert_array_u16string();
