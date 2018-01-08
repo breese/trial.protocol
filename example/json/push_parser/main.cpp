@@ -35,9 +35,9 @@ public:
         std::cout << "integer: " << value << std::endl;
     }
 
-    void on_number(double value)
+    void on_real(double value)
     {
-        std::cout << "float: " << value << std::endl;
+        std::cout << "real: " << value << std::endl;
     }
 
     void on_string(const std::string& value)
