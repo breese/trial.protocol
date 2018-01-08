@@ -378,7 +378,7 @@ struct reader::overloader<std::string>
 // reader
 //-----------------------------------------------------------------------------
 
-reader::reader(view_type view)
+inline reader::reader(view_type view)
     : decoder(std::move(view))
 {
     stack.push(token::code::end);
@@ -572,7 +572,7 @@ inline const reader::view_type& reader::literal() const BOOST_NOEXCEPT
     return decoder.literal();
 }
 
-auto reader::tail() const BOOST_NOEXCEPT -> const view_type&
+inline auto reader::tail() const BOOST_NOEXCEPT -> const view_type&
 {
     return decoder.tail();
 }

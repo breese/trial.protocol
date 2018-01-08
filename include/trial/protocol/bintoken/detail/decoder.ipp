@@ -404,7 +404,7 @@ struct decoder::overloader<token::string>
 // decoder
 //-----------------------------------------------------------------------------
 
-decoder::decoder(view_type view)
+inline decoder::decoder(view_type view)
     : input(std::move(view))
 {
     current.code = token::code::end;
@@ -447,7 +447,7 @@ inline const decoder::view_type& decoder::literal() const BOOST_NOEXCEPT
     return current.view;
 }
 
-auto decoder::tail() const BOOST_NOEXCEPT -> const view_type&
+inline auto decoder::tail() const BOOST_NOEXCEPT -> const view_type&
 {
     return input;
 }
