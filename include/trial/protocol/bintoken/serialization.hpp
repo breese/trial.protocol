@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/protocol/bintoken/serialization/serialization.hpp>
 #include <trial/protocol/bintoken/serialization/array.hpp>
 #include <trial/protocol/bintoken/serialization/std/array.hpp>
 #include <trial/protocol/bintoken/serialization/std/map.hpp>
