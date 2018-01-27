@@ -4855,34 +4855,34 @@ void run()
 } // namespace assign_suite
 
 //-----------------------------------------------------------------------------
-// variable::unsafe_get
+// variable::assume_value
 //-----------------------------------------------------------------------------
 
-namespace unsafe_get_suite
+namespace assume_value_suite
 {
 
 void get_null()
 {
     variable data;
-    TRIAL_PROTOCOL_TEST(data.unsafe_get<nullable>() == null);
+    TRIAL_PROTOCOL_TEST(data.assume_value<nullable>() == null);
 }
 
 void get_const_null()
 {
     const variable data;
-    TRIAL_PROTOCOL_TEST(data.unsafe_get<nullable>() == null);
+    TRIAL_PROTOCOL_TEST(data.assume_value<nullable>() == null);
 }
 
 void get_boolean()
 {
     variable data(true);
-    TRIAL_PROTOCOL_TEST(data.unsafe_get<bool>() == true);
+    TRIAL_PROTOCOL_TEST(data.assume_value<bool>() == true);
 }
 
 void get_const_boolean()
 {
     const variable data(true);
-    TRIAL_PROTOCOL_TEST(data.unsafe_get<bool>() == true);
+    TRIAL_PROTOCOL_TEST(data.assume_value<bool>() == true);
 }
 
 void get_integer()
@@ -4890,52 +4890,52 @@ void get_integer()
     {
         const signed char value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed char>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed char>() == value);
     }
     {
         const unsigned char value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned char>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned char>() == value);
     }
     {
         const signed short int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed short int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed short int>() == value);
     }
     {
         const unsigned short int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned short int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned short int>() == value);
     }
     {
         const signed int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed int>() == value);
     }
     {
         const unsigned int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned int>() == value);
     }
     {
         const signed long int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed long int>() == value);
     }
     {
         const unsigned long int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned long int>() == value);
     }
     {
         const signed long long int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed long long int>() == value);
     }
     {
         const unsigned long long int value{2};
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned long long int>() == value);
     }
 }
 
@@ -4944,52 +4944,52 @@ void get_const_integer()
     {
         const signed char value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed char>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed char>() == value);
     }
     {
         const unsigned char value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned char>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned char>() == value);
     }
     {
         const signed short int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed short int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed short int>() == value);
     }
     {
         const unsigned short int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned short int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned short int>() == value);
     }
     {
         const signed int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed int>() == value);
     }
     {
         const unsigned int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned int>() == value);
     }
     {
         const signed long int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed long int>() == value);
     }
     {
         const unsigned long int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned long int>() == value);
     }
     {
         const signed long long int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<signed long long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<signed long long int>() == value);
     }
     {
         const unsigned long long int value{2};
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<unsigned long long int>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<unsigned long long int>() == value);
     }
 }
 
@@ -4998,17 +4998,17 @@ void get_real()
     {
         const float value = 3.0f;
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<float>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<float>() == value);
     }
     {
         const double value = 3.0;
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<double>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<double>() == value);
     }
     {
         const long double value = 3.0L;
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<long double>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<long double>() == value);
     }
 }
 
@@ -5017,17 +5017,17 @@ void get_const_real()
     {
         const float value = 3.0f;
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<float>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<float>() == value);
     }
     {
         const double value = 3.0;
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<double>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<double>() == value);
     }
     {
         const long double value = 3.0L;
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<long double>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<long double>() == value);
     }
 }
 
@@ -5037,49 +5037,49 @@ void get_string()
     {
         std::string value = "alpha";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::string_type>() == value);
     }
     // string literal
     {
         const char *value = "alpha";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::string_type>() == value);
     }
     // wstring
     {
         std::wstring value = L"bravo";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::wstring_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::wstring_type>() == value);
     }
     // wstring literal
     {
         const wchar_t *value = L"bravo";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::wstring_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::wstring_type>() == value);
     }
     // u16string
     {
         std::u16string value = u"charlie";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u16string_type>() == value);
     }
     // u16string literal
     {
         const char16_t *value = u"charlie";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u16string_type>() == value);
     }
     // u32string
     {
         std::u32string value = U"delta";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u32string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u32string_type>() == value);
     }
     // u32string literal
     {
         const char32_t *value = U"delta";
         variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u32string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u32string_type>() == value);
     }
 }
 
@@ -5089,56 +5089,56 @@ void get_const_string()
     {
         std::string value = "alpha";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::string_type>() == value);
     }
     // string literal
     {
         const char *value = "alpha";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::string_type>() == value);
     }
     // wstring
     {
         std::wstring value = L"bravo";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::wstring_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::wstring_type>() == value);
     }
     // wstring literal
     {
         const wchar_t *value = L"bravo";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::wstring_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::wstring_type>() == value);
     }
     // u16string
     {
         std::u16string value = u"charlie";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u16string_type>() == value);
     }
     // u16string literal
     {
         const char16_t *value = u"charlie";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u16string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u16string_type>() == value);
     }
     // u32string
     {
         std::u32string value = U"delta";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u32string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u32string_type>() == value);
     }
     // u16string literal
     {
         const char32_t *value = U"delta";
         const variable data(value);
-        TRIAL_PROTOCOL_TEST(data.unsafe_get<variable::u32string_type>() == value);
+        TRIAL_PROTOCOL_TEST(data.assume_value<variable::u32string_type>() == value);
     }
 }
 
 void get_array()
 {
     variable data = array::make({ true, 2, 3.0, "alpha" });
-    auto& result = data.unsafe_get<variable::array_type>();
+    auto& result = data.assume_value<variable::array_type>();
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  data.begin(), data.end(),
                                  std::equal_to<variable>());
@@ -5147,7 +5147,7 @@ void get_array()
 void get_const_array()
 {
     const variable data = array::make({ true, 2, 3.0, "alpha" });
-    const auto& result = data.unsafe_get<variable::array_type>();
+    const auto& result = data.assume_value<variable::array_type>();
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  data.begin(), data.end(),
                                  std::equal_to<variable>());
@@ -5162,7 +5162,7 @@ void get_map()
             { "charlie", 3.0 },
             { "delta", "beryllium" }
         });
-    auto& result = data.unsafe_get<variable::map_type>();
+    auto& result = data.assume_value<variable::map_type>();
     TRIAL_PROTOCOL_TEST(data["alpha"] == result.at("alpha"));
     TRIAL_PROTOCOL_TEST(data["bravo"] == result.at("bravo"));
     TRIAL_PROTOCOL_TEST(data["charlie"] == result.at("charlie"));
@@ -5178,7 +5178,7 @@ void get_const_map()
             { "charlie", 3.0 },
             { "delta", "beryllium" }
         });
-    const auto& result = data.unsafe_get<variable::map_type>();
+    const auto& result = data.assume_value<variable::map_type>();
     TRIAL_PROTOCOL_TEST(data["alpha"] == result.at("alpha"));
     TRIAL_PROTOCOL_TEST(data["bravo"] == result.at("bravo"));
     TRIAL_PROTOCOL_TEST(data["charlie"] == result.at("charlie"));
@@ -5203,7 +5203,7 @@ void run()
     get_const_map();
 }
 
-} // namespace unsafe_get_suite
+} // namespace assume_value_suite
 
 //-----------------------------------------------------------------------------
 // variable::value
@@ -6289,7 +6289,7 @@ int main()
     move_suite::run();
     assign_suite::run();
 
-    unsafe_get_suite::run();
+    assume_value_suite::run();
     value_suite::run();
 
     return boost::report_errors();

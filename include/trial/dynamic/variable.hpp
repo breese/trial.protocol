@@ -362,7 +362,7 @@ public:
 
     //! @brief Construct a variable from array type.
     //!
-    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //! Re-construct a variable from the value returned by @c assume_value.
     //!
     //! Prefer to use factory or initializer-lists when creating arrays.
 
@@ -370,7 +370,7 @@ public:
 
     //! @brief Construct a variable from array type.
     //!
-    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //! Re-construct a variable from the value returned by @c assume_value.
     //!
     //! Prefer to use factory or initializer-lists when creating arrays.
 
@@ -378,7 +378,7 @@ public:
 
     //! @brief Construct a variable from map type.
     //!
-    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //! Re-construct a variable from the value returned by @c assume_value.
     //!
     //! Prefer to use factory or initializer-lists when creating associative arrays.
 
@@ -386,7 +386,7 @@ public:
 
     //! @brief Construct a variable from map type.
     //!
-    //! Re-construct a variable from the value returned by @c unsafe_get.
+    //! Re-construct a variable from the value returned by @c assume_value.
     //!
     //! Prefer to use factory or initializer-lists when creating associative arrays.
 
@@ -532,7 +532,7 @@ public:
 
     //! @brief Returns current value as type `R`.
     //!
-    //! Calls `basic_variable<Allocator>::value<T>()`
+    //! Calls `basic_variable<Allocator>::value<R>()`
     //!
     //! @sa basic_variable<Allocator>::value<T>()
 
@@ -540,20 +540,20 @@ public:
 
     //! @brief Returns reference to stored value.
     //!
-    //! `unsafe_get()` has a narrow contract. Using a type `R` that does not
+    //! `assume_value()` has a narrow contract. Using a type `R` that does not
     //! match the type of the stored value results in undefined behavior.
     //!
     //! @tparam R Supported type.
     //!
     //! @pre basic_variable<Allocator>::same<R>() is true.
 
-    template <typename R> R& unsafe_get() & noexcept;
+    template <typename R> R& assume_value() & noexcept;
 
     //! @brief Returns constant reference to stored value.
     //!
-    //! @overload basic_variable<Allocator>::unsafe_get()
+    //! @overload basic_variable<Allocator>::assume_value()
 
-    template <typename R> const R& unsafe_get() const & noexcept;
+    template <typename R> const R& assume_value() const & noexcept;
 
 #if !defined(BOOST_DOXYGEN_INVOKED)
     explicit operator bool() const;

@@ -269,46 +269,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return type(self.template unsafe_get<bool>());
+            return type(self.template assume_value<bool>());
 
         case code::signed_char:
-            return type(self.template unsafe_get<signed char>());
+            return type(self.template assume_value<signed char>());
 
         case code::unsigned_char:
-            return type(self.template unsafe_get<unsigned char>());
+            return type(self.template assume_value<unsigned char>());
 
         case code::signed_short_integer:
-            return type(self.template unsafe_get<signed short int>());
+            return type(self.template assume_value<signed short int>());
 
         case code::unsigned_short_integer:
-            return type(self.template unsafe_get<unsigned short int>());
+            return type(self.template assume_value<unsigned short int>());
 
         case code::signed_integer:
-            return type(self.template unsafe_get<signed int>());
+            return type(self.template assume_value<signed int>());
 
         case code::unsigned_integer:
-            return type(self.template unsafe_get<unsigned int>());
+            return type(self.template assume_value<unsigned int>());
 
         case code::signed_long_integer:
-            return type(self.template unsafe_get<signed long int>());
+            return type(self.template assume_value<signed long int>());
 
         case code::unsigned_long_integer:
-            return type(self.template unsafe_get<unsigned long int>());
+            return type(self.template assume_value<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return type(self.template unsafe_get<signed long long int>());
+            return type(self.template assume_value<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return type(self.template unsafe_get<unsigned long long int>());
+            return type(self.template assume_value<unsigned long long int>());
 
         case code::real:
-            return type(self.template unsafe_get<float>());
+            return type(self.template assume_value<float>());
 
         case code::long_real:
-            return type(self.template unsafe_get<double>());
+            return type(self.template assume_value<double>());
 
         case code::long_long_real:
-            return type(self.template unsafe_get<long double>());
+            return type(self.template assume_value<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -321,46 +321,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>() == other;
+            return self.template assume_value<bool>() == other;
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>() == other;
+            return self.template assume_value<signed char>() == other;
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>() == other;
+            return self.template assume_value<unsigned char>() == other;
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>() == other;
+            return self.template assume_value<signed short int>() == other;
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>() == other;
+            return self.template assume_value<unsigned short int>() == other;
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>() == other;
+            return self.template assume_value<signed int>() == other;
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>() == other;
+            return self.template assume_value<unsigned int>() == other;
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>() == other;
+            return self.template assume_value<signed long int>() == other;
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>() == other;
+            return self.template assume_value<unsigned long int>() == other;
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>() == other;
+            return self.template assume_value<signed long long int>() == other;
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>() == other;
+            return self.template assume_value<unsigned long long int>() == other;
 
         case code::real:
-            return self.template unsafe_get<float>() == other;
+            return self.template assume_value<float>() == other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() == other;
+            return self.template assume_value<double>() == other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() == other;
+            return self.template assume_value<long double>() == other;
 
         default:
             return false;
@@ -375,46 +375,46 @@ struct overloader<
             return true;
 
         case code::boolean:
-            return self.template unsafe_get<bool>() < other;
+            return self.template assume_value<bool>() < other;
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>() < other;
+            return self.template assume_value<signed char>() < other;
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>() < other;
+            return self.template assume_value<unsigned char>() < other;
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>() < other;
+            return self.template assume_value<signed short int>() < other;
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>() < other;
+            return self.template assume_value<unsigned short int>() < other;
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>() < other;
+            return self.template assume_value<signed int>() < other;
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>() < other;
+            return self.template assume_value<unsigned int>() < other;
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>() < other;
+            return self.template assume_value<signed long int>() < other;
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>() < other;
+            return self.template assume_value<unsigned long int>() < other;
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>() < other;
+            return self.template assume_value<signed long long int>() < other;
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>() < other;
+            return self.template assume_value<unsigned long long int>() < other;
 
         case code::real:
-            return self.template unsafe_get<float>() < other;
+            return self.template assume_value<float>() < other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() < other;
+            return self.template assume_value<double>() < other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() < other;
+            return self.template assume_value<long double>() < other;
 
         default:
             return false;
@@ -430,63 +430,63 @@ struct overloader<
             break;
 
         case code::boolean:
-            self.template unsafe_get<bool>() += other;
+            self.template assume_value<bool>() += other;
             break;
 
         case code::signed_char:
-            self.template unsafe_get<signed char>() += other;
+            self.template assume_value<signed char>() += other;
             break;
 
         case code::unsigned_char:
-            self.template unsafe_get<unsigned char>() += other;
+            self.template assume_value<unsigned char>() += other;
             break;
 
         case code::signed_short_integer:
-            self.template unsafe_get<signed short int>() += other;
+            self.template assume_value<signed short int>() += other;
             break;
 
         case code::unsigned_short_integer:
-            self.template unsafe_get<unsigned short int>() += other;
+            self.template assume_value<unsigned short int>() += other;
             break;
 
         case code::signed_integer:
-            self.template unsafe_get<signed int>() += other;
+            self.template assume_value<signed int>() += other;
             break;
 
         case code::unsigned_integer:
-            self.template unsafe_get<unsigned int>() += other;
+            self.template assume_value<unsigned int>() += other;
             break;
 
         case code::signed_long_integer:
-            self.template unsafe_get<signed long int>() += other;
+            self.template assume_value<signed long int>() += other;
             break;
 
         case code::unsigned_long_integer:
-            self.template unsafe_get<unsigned long int>() += other;
+            self.template assume_value<unsigned long int>() += other;
             break;
 
         case code::signed_long_long_integer:
-            self.template unsafe_get<signed long long int>() += other;
+            self.template assume_value<signed long long int>() += other;
             break;
 
         case code::unsigned_long_long_integer:
-            self.template unsafe_get<unsigned long long int>() += other;
+            self.template assume_value<unsigned long long int>() += other;
             break;
 
         case code::real:
-            self.template unsafe_get<float>() += other;
+            self.template assume_value<float>() += other;
             break;
 
         case code::long_real:
-            self.template unsafe_get<double>() += other;
+            self.template assume_value<double>() += other;
             break;
 
         case code::long_long_real:
-            self.template unsafe_get<long double>() += other;
+            self.template assume_value<long double>() += other;
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -515,46 +515,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return type(self.template unsafe_get<bool>());
+            return type(self.template assume_value<bool>());
 
         case code::signed_char:
-            return type(self.template unsafe_get<signed char>());
+            return type(self.template assume_value<signed char>());
 
         case code::unsigned_char:
-            return type(self.template unsafe_get<unsigned char>());
+            return type(self.template assume_value<unsigned char>());
 
         case code::signed_short_integer:
-            return type(self.template unsafe_get<signed short int>());
+            return type(self.template assume_value<signed short int>());
 
         case code::unsigned_short_integer:
-            return type(self.template unsafe_get<unsigned short int>());
+            return type(self.template assume_value<unsigned short int>());
 
         case code::signed_integer:
-            return type(self.template unsafe_get<signed int>());
+            return type(self.template assume_value<signed int>());
 
         case code::unsigned_integer:
-            return type(self.template unsafe_get<unsigned int>());
+            return type(self.template assume_value<unsigned int>());
 
         case code::signed_long_integer:
-            return type(self.template unsafe_get<signed long int>());
+            return type(self.template assume_value<signed long int>());
 
         case code::unsigned_long_integer:
-            return type(self.template unsafe_get<unsigned long int>());
+            return type(self.template assume_value<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return type(self.template unsafe_get<signed long long int>());
+            return type(self.template assume_value<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return type(self.template unsafe_get<unsigned long long int>());
+            return type(self.template assume_value<unsigned long long int>());
 
         case code::real:
-            return type(self.template unsafe_get<float>());
+            return type(self.template assume_value<float>());
 
         case code::long_real:
-            return type(self.template unsafe_get<double>());
+            return type(self.template assume_value<double>());
 
         case code::long_long_real:
-            return type(self.template unsafe_get<long double>());
+            return type(self.template assume_value<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -567,41 +567,41 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>() == other;
+            return self.template assume_value<bool>() == other;
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>() == other;
+            return self.template assume_value<signed char>() == other;
         case code::unsigned_char:
-            return static_cast<signed char>(self.template unsafe_get<unsigned char>()) == other;
+            return static_cast<signed char>(self.template assume_value<unsigned char>()) == other;
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>() == other;
+            return self.template assume_value<signed short int>() == other;
         case code::unsigned_short_integer:
-            return static_cast<signed short int>(self.template unsafe_get<unsigned short int>()) == other;
+            return static_cast<signed short int>(self.template assume_value<unsigned short int>()) == other;
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>() == other;
+            return self.template assume_value<signed int>() == other;
         case code::unsigned_integer:
-            return static_cast<signed int>(self.template unsafe_get<unsigned int>()) == other;
+            return static_cast<signed int>(self.template assume_value<unsigned int>()) == other;
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>() == other;
+            return self.template assume_value<signed long int>() == other;
         case code::unsigned_long_integer:
-            return static_cast<signed long int>(self.template unsafe_get<unsigned long int>()) == other;
+            return static_cast<signed long int>(self.template assume_value<unsigned long int>()) == other;
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>() == other;
+            return self.template assume_value<signed long long int>() == other;
         case code::unsigned_long_long_integer:
-            return static_cast<signed long long int>(self.template unsafe_get<unsigned long long int>()) == other;
+            return static_cast<signed long long int>(self.template assume_value<unsigned long long int>()) == other;
 
         case code::real:
-            return self.template unsafe_get<float>() == other;
+            return self.template assume_value<float>() == other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() == other;
+            return self.template assume_value<double>() == other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() == other;
+            return self.template assume_value<long double>() == other;
 
         default:
             return false;
@@ -616,41 +616,41 @@ struct overloader<
             return true;
 
         case code::boolean:
-            return self.template unsafe_get<bool>() < other;
+            return self.template assume_value<bool>() < other;
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>() < other;
+            return self.template assume_value<signed char>() < other;
         case code::unsigned_char:
-            return static_cast<signed char>(self.template unsafe_get<unsigned char>()) < other;
+            return static_cast<signed char>(self.template assume_value<unsigned char>()) < other;
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>() < other;
+            return self.template assume_value<signed short int>() < other;
         case code::unsigned_short_integer:
-            return static_cast<signed short int>(self.template unsafe_get<unsigned short int>()) < other;
+            return static_cast<signed short int>(self.template assume_value<unsigned short int>()) < other;
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>() < other;
+            return self.template assume_value<signed int>() < other;
         case code::unsigned_integer:
-            return static_cast<signed int>(self.template unsafe_get<unsigned int>()) < other;
+            return static_cast<signed int>(self.template assume_value<unsigned int>()) < other;
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>() < other;
+            return self.template assume_value<signed long int>() < other;
         case code::unsigned_long_integer:
-            return static_cast<signed long int>(self.template unsafe_get<unsigned long int>()) < other;
+            return static_cast<signed long int>(self.template assume_value<unsigned long int>()) < other;
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>() < other;
+            return self.template assume_value<signed long long int>() < other;
         case code::unsigned_long_long_integer:
-            return static_cast<signed long long int>(self.template unsafe_get<unsigned long long int>()) < other;
+            return static_cast<signed long long int>(self.template assume_value<unsigned long long int>()) < other;
 
         case code::real:
-            return self.template unsafe_get<float>() < other;
+            return self.template assume_value<float>() < other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() < other;
+            return self.template assume_value<double>() < other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() < other;
+            return self.template assume_value<long double>() < other;
 
         default:
             return false;
@@ -666,63 +666,63 @@ struct overloader<
             break;
 
         case code::boolean:
-            self.template unsafe_get<bool>() += other;
+            self.template assume_value<bool>() += other;
             break;
 
         case code::signed_char:
-            self.template unsafe_get<signed char>() += other;
+            self.template assume_value<signed char>() += other;
             break;
 
         case code::unsigned_char:
-            self.template unsafe_get<unsigned char>() += other;
+            self.template assume_value<unsigned char>() += other;
             break;
 
         case code::signed_short_integer:
-            self.template unsafe_get<signed short int>() += other;
+            self.template assume_value<signed short int>() += other;
             break;
 
         case code::unsigned_short_integer:
-            self.template unsafe_get<unsigned short int>() += other;
+            self.template assume_value<unsigned short int>() += other;
             break;
 
         case code::signed_integer:
-            self.template unsafe_get<signed int>() += other;
+            self.template assume_value<signed int>() += other;
             break;
 
         case code::unsigned_integer:
-            self.template unsafe_get<unsigned int>() += other;
+            self.template assume_value<unsigned int>() += other;
             break;
 
         case code::signed_long_integer:
-            self.template unsafe_get<signed long int>() += other;
+            self.template assume_value<signed long int>() += other;
             break;
 
         case code::unsigned_long_integer:
-            self.template unsafe_get<unsigned long int>() += other;
+            self.template assume_value<unsigned long int>() += other;
             break;
 
         case code::signed_long_long_integer:
-            self.template unsafe_get<signed long long int>() += other;
+            self.template assume_value<signed long long int>() += other;
             break;
 
         case code::unsigned_long_long_integer:
-            self.template unsafe_get<unsigned long long int>() += other;
+            self.template assume_value<unsigned long long int>() += other;
             break;
 
         case code::real:
-            self.template unsafe_get<float>() += other;
+            self.template assume_value<float>() += other;
             break;
 
         case code::long_real:
-            self.template unsafe_get<double>() += other;
+            self.template assume_value<double>() += other;
             break;
 
         case code::long_long_real:
-            self.template unsafe_get<long double>() += other;
+            self.template assume_value<long double>() += other;
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -751,46 +751,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return type(self.template unsafe_get<bool>());
+            return type(self.template assume_value<bool>());
 
         case code::signed_char:
-            return type(self.template unsafe_get<signed char>());
+            return type(self.template assume_value<signed char>());
 
         case code::unsigned_char:
-            return type(self.template unsafe_get<unsigned char>());
+            return type(self.template assume_value<unsigned char>());
 
         case code::signed_short_integer:
-            return type(self.template unsafe_get<signed short int>());
+            return type(self.template assume_value<signed short int>());
 
         case code::unsigned_short_integer:
-            return type(self.template unsafe_get<unsigned short int>());
+            return type(self.template assume_value<unsigned short int>());
 
         case code::signed_integer:
-            return type(self.template unsafe_get<signed int>());
+            return type(self.template assume_value<signed int>());
 
         case code::unsigned_integer:
-            return type(self.template unsafe_get<unsigned int>());
+            return type(self.template assume_value<unsigned int>());
 
         case code::signed_long_integer:
-            return type(self.template unsafe_get<signed long int>());
+            return type(self.template assume_value<signed long int>());
 
         case code::unsigned_long_integer:
-            return type(self.template unsafe_get<unsigned long int>());
+            return type(self.template assume_value<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return type(self.template unsafe_get<signed long long int>());
+            return type(self.template assume_value<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return type(self.template unsafe_get<unsigned long long int>());
+            return type(self.template assume_value<unsigned long long int>());
 
         case code::real:
-            return type(self.template unsafe_get<float>());
+            return type(self.template assume_value<float>());
 
         case code::long_real:
-            return type(self.template unsafe_get<double>());
+            return type(self.template assume_value<double>());
 
         case code::long_long_real:
-            return type(self.template unsafe_get<long double>());
+            return type(self.template assume_value<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -803,41 +803,41 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>() == other;
+            return self.template assume_value<bool>() == other;
 
         case code::signed_char:
-            return static_cast<unsigned char>(self.template unsafe_get<signed char>()) == other;
+            return static_cast<unsigned char>(self.template assume_value<signed char>()) == other;
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>() == other;
+            return self.template assume_value<unsigned char>() == other;
 
         case code::signed_short_integer:
-            return static_cast<unsigned short int>(self.template unsafe_get<signed short int>()) == other;
+            return static_cast<unsigned short int>(self.template assume_value<signed short int>()) == other;
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>() == other;
+            return self.template assume_value<unsigned short int>() == other;
 
         case code::signed_integer:
-            return static_cast<unsigned int>(self.template unsafe_get<signed int>()) == other;
+            return static_cast<unsigned int>(self.template assume_value<signed int>()) == other;
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>() == other;
+            return self.template assume_value<unsigned int>() == other;
 
         case code::signed_long_integer:
-            return static_cast<unsigned long int>(self.template unsafe_get<signed long int>()) == other;
+            return static_cast<unsigned long int>(self.template assume_value<signed long int>()) == other;
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>() == other;
+            return self.template assume_value<unsigned long int>() == other;
 
         case code::signed_long_long_integer:
-            return static_cast<unsigned long long int>(self.template unsafe_get<signed long long int>()) == other;
+            return static_cast<unsigned long long int>(self.template assume_value<signed long long int>()) == other;
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>() == other;
+            return self.template assume_value<unsigned long long int>() == other;
 
         case code::real:
-            return self.template unsafe_get<float>() == other;
+            return self.template assume_value<float>() == other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() == other;
+            return self.template assume_value<double>() == other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() == other;
+            return self.template assume_value<long double>() == other;
 
         default:
             return false;
@@ -852,41 +852,41 @@ struct overloader<
             return true;
 
         case code::boolean:
-            return self.template unsafe_get<bool>() < other;
+            return self.template assume_value<bool>() < other;
 
         case code::signed_char:
-            return static_cast<unsigned char>(self.template unsafe_get<signed char>()) < other;
+            return static_cast<unsigned char>(self.template assume_value<signed char>()) < other;
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>() < other;
+            return self.template assume_value<unsigned char>() < other;
 
         case code::signed_short_integer:
-            return static_cast<unsigned short int>(self.template unsafe_get<signed short int>()) < other;
+            return static_cast<unsigned short int>(self.template assume_value<signed short int>()) < other;
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>() < other;
+            return self.template assume_value<unsigned short int>() < other;
 
         case code::signed_integer:
-            return static_cast<unsigned int>(self.template unsafe_get<signed int>()) < other;
+            return static_cast<unsigned int>(self.template assume_value<signed int>()) < other;
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>() < other;
+            return self.template assume_value<unsigned int>() < other;
 
         case code::signed_long_integer:
-            return static_cast<unsigned long int>(self.template unsafe_get<signed long int>()) < other;
+            return static_cast<unsigned long int>(self.template assume_value<signed long int>()) < other;
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>() < other;
+            return self.template assume_value<unsigned long int>() < other;
 
         case code::signed_long_long_integer:
-            return static_cast<unsigned long long int>(self.template unsafe_get<signed long long int>()) < other;
+            return static_cast<unsigned long long int>(self.template assume_value<signed long long int>()) < other;
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>() < other;
+            return self.template assume_value<unsigned long long int>() < other;
 
         case code::real:
-            return self.template unsafe_get<float>() < other;
+            return self.template assume_value<float>() < other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() < other;
+            return self.template assume_value<double>() < other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() < other;
+            return self.template assume_value<long double>() < other;
 
         default:
             return false;
@@ -902,63 +902,63 @@ struct overloader<
             break;
 
         case code::boolean:
-            self.template unsafe_get<bool>() += other;
+            self.template assume_value<bool>() += other;
             break;
 
         case code::signed_char:
-            self.template unsafe_get<signed char>() += other;
+            self.template assume_value<signed char>() += other;
             break;
 
         case code::unsigned_char:
-            self.template unsafe_get<unsigned char>() += other;
+            self.template assume_value<unsigned char>() += other;
             break;
 
         case code::signed_short_integer:
-            self.template unsafe_get<signed short int>() += other;
+            self.template assume_value<signed short int>() += other;
             break;
 
         case code::unsigned_short_integer:
-            self.template unsafe_get<unsigned short int>() += other;
+            self.template assume_value<unsigned short int>() += other;
             break;
 
         case code::signed_integer:
-            self.template unsafe_get<signed int>() += other;
+            self.template assume_value<signed int>() += other;
             break;
 
         case code::unsigned_integer:
-            self.template unsafe_get<unsigned int>() += other;
+            self.template assume_value<unsigned int>() += other;
             break;
 
         case code::signed_long_integer:
-            self.template unsafe_get<signed long int>() += other;
+            self.template assume_value<signed long int>() += other;
             break;
 
         case code::unsigned_long_integer:
-            self.template unsafe_get<unsigned long int>() += other;
+            self.template assume_value<unsigned long int>() += other;
             break;
 
         case code::signed_long_long_integer:
-            self.template unsafe_get<signed long long int>() += other;
+            self.template assume_value<signed long long int>() += other;
             break;
 
         case code::unsigned_long_long_integer:
-            self.template unsafe_get<unsigned long long int>() += other;
+            self.template assume_value<unsigned long long int>() += other;
             break;
 
         case code::real:
-            self.template unsafe_get<float>() += other;
+            self.template assume_value<float>() += other;
             break;
 
         case code::long_real:
-            self.template unsafe_get<double>() += other;
+            self.template assume_value<double>() += other;
             break;
 
         case code::long_long_real:
-            self.template unsafe_get<long double>() += other;
+            self.template assume_value<long double>() += other;
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -986,46 +986,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return type(self.template unsafe_get<bool>());
+            return type(self.template assume_value<bool>());
 
         case code::signed_char:
-            return type(self.template unsafe_get<signed char>());
+            return type(self.template assume_value<signed char>());
 
         case code::unsigned_char:
-            return type(self.template unsafe_get<unsigned char>());
+            return type(self.template assume_value<unsigned char>());
 
         case code::signed_short_integer:
-            return type(self.template unsafe_get<signed short int>());
+            return type(self.template assume_value<signed short int>());
 
         case code::unsigned_short_integer:
-            return type(self.template unsafe_get<unsigned short int>());
+            return type(self.template assume_value<unsigned short int>());
 
         case code::signed_integer:
-            return type(self.template unsafe_get<signed int>());
+            return type(self.template assume_value<signed int>());
 
         case code::unsigned_integer:
-            return type(self.template unsafe_get<unsigned int>());
+            return type(self.template assume_value<unsigned int>());
 
         case code::signed_long_integer:
-            return type(self.template unsafe_get<signed long int>());
+            return type(self.template assume_value<signed long int>());
 
         case code::unsigned_long_integer:
-            return type(self.template unsafe_get<unsigned long int>());
+            return type(self.template assume_value<unsigned long int>());
 
         case code::signed_long_long_integer:
-            return type(self.template unsafe_get<signed long long int>());
+            return type(self.template assume_value<signed long long int>());
 
         case code::unsigned_long_long_integer:
-            return type(self.template unsafe_get<unsigned long long int>());
+            return type(self.template assume_value<unsigned long long int>());
 
         case code::real:
-            return type(self.template unsafe_get<float>());
+            return type(self.template assume_value<float>());
 
         case code::long_real:
-            return type(self.template unsafe_get<double>());
+            return type(self.template assume_value<double>());
 
         case code::long_long_real:
-            return type(self.template unsafe_get<long double>());
+            return type(self.template assume_value<long double>());
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1038,46 +1038,46 @@ struct overloader<
         switch (self.code())
         {
         case code::boolean:
-            return self.template unsafe_get<bool>() == other;
+            return self.template assume_value<bool>() == other;
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>() == other;
+            return self.template assume_value<signed char>() == other;
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>() == other;
+            return self.template assume_value<unsigned char>() == other;
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>() == other;
+            return self.template assume_value<signed short int>() == other;
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>() == other;
+            return self.template assume_value<unsigned short int>() == other;
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>() == other;
+            return self.template assume_value<signed int>() == other;
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>() == other;
+            return self.template assume_value<unsigned int>() == other;
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>() == other;
+            return self.template assume_value<signed long int>() == other;
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>() == other;
+            return self.template assume_value<unsigned long int>() == other;
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>() == other;
+            return self.template assume_value<signed long long int>() == other;
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>() == other;
+            return self.template assume_value<unsigned long long int>() == other;
 
         case code::real:
-            return self.template unsafe_get<float>() == other;
+            return self.template assume_value<float>() == other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() == other;
+            return self.template assume_value<double>() == other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() == other;
+            return self.template assume_value<long double>() == other;
 
         default:
             return false;
@@ -1092,46 +1092,46 @@ struct overloader<
             return true;
 
         case code::boolean:
-            return self.template unsafe_get<bool>() < other;
+            return self.template assume_value<bool>() < other;
 
         case code::signed_char:
-            return self.template unsafe_get<signed char>() < other;
+            return self.template assume_value<signed char>() < other;
 
         case code::unsigned_char:
-            return self.template unsafe_get<unsigned char>() < other;
+            return self.template assume_value<unsigned char>() < other;
 
         case code::signed_short_integer:
-            return self.template unsafe_get<signed short int>() < other;
+            return self.template assume_value<signed short int>() < other;
 
         case code::unsigned_short_integer:
-            return self.template unsafe_get<unsigned short int>() < other;
+            return self.template assume_value<unsigned short int>() < other;
 
         case code::signed_integer:
-            return self.template unsafe_get<signed int>() < other;
+            return self.template assume_value<signed int>() < other;
 
         case code::unsigned_integer:
-            return self.template unsafe_get<unsigned int>() < other;
+            return self.template assume_value<unsigned int>() < other;
 
         case code::signed_long_integer:
-            return self.template unsafe_get<signed long int>() < other;
+            return self.template assume_value<signed long int>() < other;
 
         case code::unsigned_long_integer:
-            return self.template unsafe_get<unsigned long int>() < other;
+            return self.template assume_value<unsigned long int>() < other;
 
         case code::signed_long_long_integer:
-            return self.template unsafe_get<signed long long int>() < other;
+            return self.template assume_value<signed long long int>() < other;
 
         case code::unsigned_long_long_integer:
-            return self.template unsafe_get<unsigned long long int>() < other;
+            return self.template assume_value<unsigned long long int>() < other;
 
         case code::real:
-            return self.template unsafe_get<float>() < other;
+            return self.template assume_value<float>() < other;
 
         case code::long_real:
-            return self.template unsafe_get<double>() < other;
+            return self.template assume_value<double>() < other;
 
         case code::long_long_real:
-            return self.template unsafe_get<long double>() < other;
+            return self.template assume_value<long double>() < other;
 
         default:
             return false;
@@ -1147,63 +1147,63 @@ struct overloader<
             break;
 
         case code::boolean:
-            self.template unsafe_get<bool>() += other;
+            self.template assume_value<bool>() += other;
             break;
 
         case code::signed_char:
-            self.template unsafe_get<signed char>() += other;
+            self.template assume_value<signed char>() += other;
             break;
 
         case code::unsigned_char:
-            self.template unsafe_get<unsigned char>() += other;
+            self.template assume_value<unsigned char>() += other;
             break;
 
         case code::signed_short_integer:
-            self.template unsafe_get<signed short int>() += other;
+            self.template assume_value<signed short int>() += other;
             break;
 
         case code::unsigned_short_integer:
-            self.template unsafe_get<unsigned short int>() += other;
+            self.template assume_value<unsigned short int>() += other;
             break;
 
         case code::signed_integer:
-            self.template unsafe_get<signed int>() += other;
+            self.template assume_value<signed int>() += other;
             break;
 
         case code::unsigned_integer:
-            self.template unsafe_get<unsigned int>() += other;
+            self.template assume_value<unsigned int>() += other;
             break;
 
         case code::signed_long_integer:
-            self.template unsafe_get<signed long int>() += other;
+            self.template assume_value<signed long int>() += other;
             break;
 
         case code::unsigned_long_integer:
-            self.template unsafe_get<unsigned long int>() += other;
+            self.template assume_value<unsigned long int>() += other;
             break;
 
         case code::signed_long_long_integer:
-            self.template unsafe_get<signed long long int>() += other;
+            self.template assume_value<signed long long int>() += other;
             break;
 
         case code::unsigned_long_long_integer:
-            self.template unsafe_get<unsigned long long int>() += other;
+            self.template assume_value<unsigned long long int>() += other;
             break;
 
         case code::real:
-            self.template unsafe_get<float>() += other;
+            self.template assume_value<float>() += other;
             break;
 
         case code::long_real:
-            self.template unsafe_get<double>() += other;
+            self.template assume_value<double>() += other;
             break;
 
         case code::long_long_real:
-            self.template unsafe_get<long double>() += other;
+            self.template assume_value<long double>() += other;
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -1278,7 +1278,7 @@ struct overloader<
         switch (self.code())
         {
         case code::string:
-            return self.template unsafe_get<string_type>();
+            return self.template assume_value<string_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1291,7 +1291,7 @@ struct overloader<
         switch (self.code())
         {
         case code::string:
-            return string_overloader<string_type, U>::equal(self.template unsafe_get<string_type>(), other);
+            return string_overloader<string_type, U>::equal(self.template assume_value<string_type>(), other);
 
         default:
             return false;
@@ -1303,7 +1303,7 @@ struct overloader<
         switch (self.code())
         {
         case code::string:
-            return string_overloader<string_type, U>::less(self.template unsafe_get<string_type>(), other);
+            return string_overloader<string_type, U>::less(self.template assume_value<string_type>(), other);
 
         case code::wstring:
         case code::u16string:
@@ -1326,11 +1326,11 @@ struct overloader<
             break;
 
         case code::string:
-            string_overloader<string_type, U>::append(self.template unsafe_get<string_type>(), other);
+            string_overloader<string_type, U>::append(self.template assume_value<string_type>(), other);
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -1360,7 +1360,7 @@ struct overloader<
         switch (self.code())
         {
         case code::wstring:
-            return self.template unsafe_get<wstring_type>();
+            return self.template assume_value<wstring_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1373,7 +1373,7 @@ struct overloader<
         switch (self.code())
         {
         case code::wstring:
-            return string_overloader<wstring_type, U>::equal(self.template unsafe_get<wstring_type>(), other);
+            return string_overloader<wstring_type, U>::equal(self.template assume_value<wstring_type>(), other);
 
         default:
             return false;
@@ -1385,7 +1385,7 @@ struct overloader<
         switch (self.code())
         {
         case code::wstring:
-            return string_overloader<wstring_type, U>::less(self.template unsafe_get<wstring_type>(), other);
+            return string_overloader<wstring_type, U>::less(self.template assume_value<wstring_type>(), other);
 
         case code::u16string:
         case code::u32string:
@@ -1407,11 +1407,11 @@ struct overloader<
             break;
 
         case code::wstring:
-            string_overloader<wstring_type, U>::append(self.template unsafe_get<wstring_type>(), other);
+            string_overloader<wstring_type, U>::append(self.template assume_value<wstring_type>(), other);
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -1441,7 +1441,7 @@ struct overloader<
         switch (self.code())
         {
         case code::u16string:
-            return self.template unsafe_get<u16string_type>();
+            return self.template assume_value<u16string_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1454,7 +1454,7 @@ struct overloader<
         switch (self.code())
         {
         case code::u16string:
-            return string_overloader<u16string_type, U>::equal(self.template unsafe_get<u16string_type>(), other);
+            return string_overloader<u16string_type, U>::equal(self.template assume_value<u16string_type>(), other);
 
         default:
             return false;
@@ -1466,7 +1466,7 @@ struct overloader<
         switch (self.code())
         {
         case code::u16string:
-            return string_overloader<u16string_type, U>::less(self.template unsafe_get<u16string_type>(), other);
+            return string_overloader<u16string_type, U>::less(self.template assume_value<u16string_type>(), other);
 
         case code::u32string:
         case code::array:
@@ -1487,11 +1487,11 @@ struct overloader<
             break;
 
         case code::u16string:
-            string_overloader<u16string_type, U>::append(self.template unsafe_get<u16string_type>(), other);
+            string_overloader<u16string_type, U>::append(self.template assume_value<u16string_type>(), other);
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -1521,7 +1521,7 @@ struct overloader<
         switch (self.code())
         {
         case code::u32string:
-            return self.template unsafe_get<u32string_type>();
+            return self.template assume_value<u32string_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1534,7 +1534,7 @@ struct overloader<
         switch (self.code())
         {
         case code::u32string:
-            return string_overloader<u32string_type, U>::equal(self.template unsafe_get<u32string_type>(), other);
+            return string_overloader<u32string_type, U>::equal(self.template assume_value<u32string_type>(), other);
 
         default:
             return false;
@@ -1546,7 +1546,7 @@ struct overloader<
         switch (self.code())
         {
         case code::u32string:
-            return string_overloader<u32string_type, U>::less(self.template unsafe_get<u32string_type>(), other);
+            return string_overloader<u32string_type, U>::less(self.template assume_value<u32string_type>(), other);
 
         case code::array:
         case code::map:
@@ -1566,11 +1566,11 @@ struct overloader<
             break;
 
         case code::u32string:
-            string_overloader<u32string_type, U>::append(self.template unsafe_get<u32string_type>(), other);
+            string_overloader<u32string_type, U>::append(self.template assume_value<u32string_type>(), other);
             break;
 
         case code::array:
-            self.template unsafe_get<array_type>().push_back(other);
+            self.template assume_value<array_type>().push_back(other);
             break;
 
         default:
@@ -1599,7 +1599,7 @@ struct overloader<
         switch (self.code())
         {
         case code::array:
-            return self.template unsafe_get<array_type>();
+            return self.template assume_value<array_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1613,7 +1613,7 @@ struct overloader<
         {
         case code::array:
             {
-                const auto& array = self.template unsafe_get<array_type>();
+                const auto& array = self.template assume_value<array_type>();
                 if (array.size() == other.size())
                 {
                     return std::equal(array.begin(), array.end(), other.begin());
@@ -1631,7 +1631,7 @@ struct overloader<
         {
         case code::array:
             {
-                const auto& array = self.template unsafe_get<array_type>();
+                const auto& array = self.template assume_value<array_type>();
                 auto less_than = std::less<decltype(*array.begin())>();
                 auto array_it = array.begin();
                 auto other_it = other.begin();
@@ -1663,7 +1663,7 @@ struct overloader<
 
         case code::array:
             {
-                auto& array = self.template unsafe_get<array_type>();
+                auto& array = self.template assume_value<array_type>();
                 array.insert(array.end(), other.begin(), other.end());
             }
             break;
@@ -1693,7 +1693,7 @@ struct overloader<
         switch (self.code())
         {
         case code::map:
-            return self.template unsafe_get<map_type>();
+            return self.template assume_value<map_type>();
 
         default:
             error = dynamic::make_error_code(dynamic::incompatible_type);
@@ -1707,7 +1707,7 @@ struct overloader<
         {
         case code::map:
             {
-                const auto& map = self.template unsafe_get<map_type>();
+                const auto& map = self.template assume_value<map_type>();
                 if (map.size() == other.size())
                 {
                     return std::equal(map.begin(), map.end(), other.begin());
@@ -1725,7 +1725,7 @@ struct overloader<
         {
         case code::map:
             {
-                const auto& map = self.template unsafe_get<map_type>();
+                const auto& map = self.template assume_value<map_type>();
                 auto less_than = std::less<decltype(*map.begin())>();
                 auto map_it = map.begin();
                 auto other_it = other.begin();
@@ -1754,7 +1754,7 @@ struct overloader<
 
         case code::map:
             {
-                auto& map = self.template unsafe_get<map_type>();
+                auto& map = self.template assume_value<map_type>();
                 map.insert(other.begin(), other.end());
             }
             break;
@@ -1936,83 +1936,83 @@ struct operator_overloader<
 
         case code::boolean:
             return detail::template overloader<variable_type, bool>::
-                equal(lhs, rhs.template unsafe_get<bool>());
+                equal(lhs, rhs.template assume_value<bool>());
 
         case code::signed_char:
             return detail::template overloader<variable_type, signed char>::
-                equal(lhs, rhs.template unsafe_get<signed char>());
+                equal(lhs, rhs.template assume_value<signed char>());
 
         case code::unsigned_char:
             return detail::template overloader<variable_type, unsigned char>::
-                equal(lhs, rhs.template unsafe_get<unsigned char>());
+                equal(lhs, rhs.template assume_value<unsigned char>());
 
         case code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
-                equal(lhs, rhs.template unsafe_get<signed short int>());
+                equal(lhs, rhs.template assume_value<signed short int>());
 
         case code::unsigned_short_integer:
             return detail::template overloader<variable_type, unsigned short int>::
-                equal(lhs, rhs.template unsafe_get<unsigned short int>());
+                equal(lhs, rhs.template assume_value<unsigned short int>());
 
         case code::signed_integer:
             return detail::template overloader<variable_type, signed int>::
-                equal(lhs, rhs.template unsafe_get<signed int>());
+                equal(lhs, rhs.template assume_value<signed int>());
 
         case code::unsigned_integer:
             return detail::template overloader<variable_type, unsigned int>::
-                equal(lhs, rhs.template unsafe_get<unsigned int>());
+                equal(lhs, rhs.template assume_value<unsigned int>());
 
         case code::signed_long_integer:
             return detail::template overloader<variable_type, signed long int>::
-                equal(lhs, rhs.template unsafe_get<signed long int>());
+                equal(lhs, rhs.template assume_value<signed long int>());
 
         case code::unsigned_long_integer:
             return detail::template overloader<variable_type, unsigned long int>::
-                equal(lhs, rhs.template unsafe_get<unsigned long int>());
+                equal(lhs, rhs.template assume_value<unsigned long int>());
 
         case code::signed_long_long_integer:
             return detail::template overloader<variable_type, signed long long int>::
-                equal(lhs, rhs.template unsafe_get<signed long long int>());
+                equal(lhs, rhs.template assume_value<signed long long int>());
 
         case code::unsigned_long_long_integer:
             return detail::template overloader<variable_type, unsigned long long int>::
-                equal(lhs, rhs.template unsafe_get<unsigned long long int>());
+                equal(lhs, rhs.template assume_value<unsigned long long int>());
 
         case code::real:
             return detail::template overloader<variable_type, float>::
-                equal(lhs, rhs.template unsafe_get<float>());
+                equal(lhs, rhs.template assume_value<float>());
 
         case code::long_real:
             return detail::template overloader<variable_type, double>::
-                equal(lhs, rhs.template unsafe_get<double>());
+                equal(lhs, rhs.template assume_value<double>());
 
         case code::long_long_real:
             return detail::template overloader<variable_type, long double>::
-                equal(lhs, rhs.template unsafe_get<long double>());
+                equal(lhs, rhs.template assume_value<long double>());
 
         case code::string:
             return detail::template overloader<variable_type, string_type>::
-                equal(lhs, rhs.template unsafe_get<string_type>());
+                equal(lhs, rhs.template assume_value<string_type>());
 
         case code::wstring:
             return detail::template overloader<variable_type, wstring_type>::
-                equal(lhs, rhs.template unsafe_get<wstring_type>());
+                equal(lhs, rhs.template assume_value<wstring_type>());
 
         case code::u16string:
             return detail::template overloader<variable_type, u16string_type>::
-                equal(lhs, rhs.template unsafe_get<u16string_type>());
+                equal(lhs, rhs.template assume_value<u16string_type>());
 
         case code::u32string:
             return detail::template overloader<variable_type, u32string_type>::
-                equal(lhs, rhs.template unsafe_get<u32string_type>());
+                equal(lhs, rhs.template assume_value<u32string_type>());
 
         case code::array:
             return detail::template overloader<variable_type, array_type>::
-                equal(lhs, rhs.template unsafe_get<array_type>());
+                equal(lhs, rhs.template assume_value<array_type>());
 
         case code::map:
             return detail::template overloader<variable_type, map_type>::
-                equal(lhs, rhs.template unsafe_get<map_type>());
+                equal(lhs, rhs.template assume_value<map_type>());
         }
         return false;
     }
@@ -2028,83 +2028,83 @@ struct operator_overloader<
 
         case code::boolean:
             return detail::template overloader<variable_type, bool>::
-                less(lhs, rhs.template unsafe_get<bool>());
+                less(lhs, rhs.template assume_value<bool>());
 
         case code::signed_char:
             return detail::template overloader<variable_type, signed char>::
-                less(lhs, rhs.template unsafe_get<signed char>());
+                less(lhs, rhs.template assume_value<signed char>());
 
         case code::unsigned_char:
             return detail::template overloader<variable_type, unsigned char>::
-                less(lhs, rhs.template unsafe_get<unsigned char>());
+                less(lhs, rhs.template assume_value<unsigned char>());
 
         case code::signed_short_integer:
             return detail::template overloader<variable_type, signed short int>::
-                less(lhs, rhs.template unsafe_get<signed short int>());
+                less(lhs, rhs.template assume_value<signed short int>());
 
         case code::unsigned_short_integer:
             return detail::template overloader<variable_type, unsigned short int>::
-                less(lhs, rhs.template unsafe_get<unsigned short int>());
+                less(lhs, rhs.template assume_value<unsigned short int>());
 
         case code::signed_integer:
             return detail::template overloader<variable_type, signed int>::
-                less(lhs, rhs.template unsafe_get<signed int>());
+                less(lhs, rhs.template assume_value<signed int>());
 
         case code::unsigned_integer:
             return detail::template overloader<variable_type, unsigned int>::
-                less(lhs, rhs.template unsafe_get<unsigned int>());
+                less(lhs, rhs.template assume_value<unsigned int>());
 
         case code::signed_long_integer:
             return detail::template overloader<variable_type, signed long int>::
-                less(lhs, rhs.template unsafe_get<signed long int>());
+                less(lhs, rhs.template assume_value<signed long int>());
 
         case code::unsigned_long_integer:
             return detail::template overloader<variable_type, unsigned long int>::
-                less(lhs, rhs.template unsafe_get<unsigned long int>());
+                less(lhs, rhs.template assume_value<unsigned long int>());
 
         case code::signed_long_long_integer:
             return detail::template overloader<variable_type, signed long long int>::
-                less(lhs, rhs.template unsafe_get<signed long long int>());
+                less(lhs, rhs.template assume_value<signed long long int>());
 
         case code::unsigned_long_long_integer:
             return detail::template overloader<variable_type, unsigned long long int>::
-                less(lhs, rhs.template unsafe_get<unsigned long long int>());
+                less(lhs, rhs.template assume_value<unsigned long long int>());
 
         case code::real:
             return detail::template overloader<variable_type, float>::
-                less(lhs, rhs.template unsafe_get<float>());
+                less(lhs, rhs.template assume_value<float>());
 
         case code::long_real:
             return detail::template overloader<variable_type, double>::
-                less(lhs, rhs.template unsafe_get<double>());
+                less(lhs, rhs.template assume_value<double>());
 
         case code::long_long_real:
             return detail::template overloader<variable_type, long double>::
-                less(lhs, rhs.template unsafe_get<long double>());
+                less(lhs, rhs.template assume_value<long double>());
 
         case code::string:
             return detail::template overloader<variable_type, string_type>::
-                less(lhs, rhs.template unsafe_get<string_type>());
+                less(lhs, rhs.template assume_value<string_type>());
 
         case code::wstring:
             return detail::template overloader<variable_type, wstring_type>::
-                less(lhs, rhs.template unsafe_get<wstring_type>());
+                less(lhs, rhs.template assume_value<wstring_type>());
 
         case code::u16string:
             return detail::template overloader<variable_type, u16string_type>::
-                less(lhs, rhs.template unsafe_get<u16string_type>());
+                less(lhs, rhs.template assume_value<u16string_type>());
 
         case code::u32string:
             return detail::template overloader<variable_type, u32string_type>::
-                less(lhs, rhs.template unsafe_get<u32string_type>());
+                less(lhs, rhs.template assume_value<u32string_type>());
 
         case code::array:
             return detail::template overloader<variable_type, array_type>::
-                less(lhs, rhs.template unsafe_get<array_type>());
+                less(lhs, rhs.template assume_value<array_type>());
 
         case code::map:
             return detail::template overloader<variable_type, map_type>::
-                less(lhs, rhs.template unsafe_get<map_type>());
+                less(lhs, rhs.template assume_value<map_type>());
         }
         return false;
     }
@@ -2178,7 +2178,7 @@ struct iterator_overloader
         case symbol::array:
             {
                 // Insert at end
-                auto& array = self.template unsafe_get<typename variable_type::array_type>();
+                auto& array = self.template assume_value<typename variable_type::array_type>();
                 array.insert(array.end(), begin, end);
             }
             break;
@@ -2196,7 +2196,7 @@ struct iterator_overloader
         switch (self.symbol())
         {
         case symbol::array:
-            self.template unsafe_get<typename variable_type::array_type>()
+            self.template assume_value<typename variable_type::array_type>()
                 .insert(where.current.template get<typename variable_type::const_iterator::array_iterator>(),
                         begin,
                         end);
@@ -2224,7 +2224,7 @@ struct iterator_overloader<
         switch (self.symbol())
         {
         case symbol::map:
-            self.template unsafe_get<typename variable_type::map_type>()
+            self.template assume_value<typename variable_type::map_type>()
                 .insert(begin, end);
             break;
 
@@ -2242,7 +2242,7 @@ struct iterator_overloader<
         {
         case symbol::map:
             // Ignore hint
-            self.template unsafe_get<typename variable_type::map_type>()
+            self.template assume_value<typename variable_type::map_type>()
                 .insert(begin,
                         end);
             break;
@@ -2309,16 +2309,16 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
 
     case symbol::array:
         if (initialize)
-            current = p->template unsafe_get<array_type>().begin();
+            current = p->template assume_value<array_type>().begin();
         else
-            current = p->template unsafe_get<array_type>().end();
+            current = p->template assume_value<array_type>().end();
         break;
 
     case symbol::map:
         if (initialize)
-            current = p->template unsafe_get<map_type>().begin();
+            current = p->template assume_value<map_type>().begin();
         else
-            current = p->template unsafe_get<map_type>().end();
+            current = p->template assume_value<map_type>().end();
         break;
     }
 }
@@ -2832,64 +2832,64 @@ basic_variable<Allocator>::basic_variable(const basic_variable& other)
         storage = null;
         break;
     case code::boolean:
-        storage = other.unsafe_get<bool>();
+        storage = other.assume_value<bool>();
         break;
     case code::signed_char:
-        storage = other.unsafe_get<signed char>();
+        storage = other.assume_value<signed char>();
         break;
     case code::unsigned_char:
-        storage = other.unsafe_get<unsigned char>();
+        storage = other.assume_value<unsigned char>();
         break;
     case code::signed_short_integer:
-        storage = other.unsafe_get<signed short int>();
+        storage = other.assume_value<signed short int>();
         break;
     case code::unsigned_short_integer:
-        storage = other.unsafe_get<unsigned short int>();
+        storage = other.assume_value<unsigned short int>();
         break;
     case code::signed_integer:
-        storage = other.unsafe_get<signed int>();
+        storage = other.assume_value<signed int>();
         break;
     case code::unsigned_integer:
-        storage = other.unsafe_get<unsigned int>();
+        storage = other.assume_value<unsigned int>();
         break;
     case code::signed_long_integer:
-        storage = other.unsafe_get<signed long int>();
+        storage = other.assume_value<signed long int>();
         break;
     case code::unsigned_long_integer:
-        storage = other.unsafe_get<unsigned long int>();
+        storage = other.assume_value<unsigned long int>();
         break;
     case code::signed_long_long_integer:
-        storage = other.unsafe_get<signed long long int>();
+        storage = other.assume_value<signed long long int>();
         break;
     case code::unsigned_long_long_integer:
-        storage = other.unsafe_get<unsigned long long int>();
+        storage = other.assume_value<unsigned long long int>();
         break;
     case code::real:
-        storage = other.unsafe_get<float>();
+        storage = other.assume_value<float>();
         break;
     case code::long_real:
-        storage = other.unsafe_get<double>();
+        storage = other.assume_value<double>();
         break;
     case code::long_long_real:
-        storage = other.unsafe_get<long double>();
+        storage = other.assume_value<long double>();
         break;
     case code::string:
-        storage = other.unsafe_get<string_type>();
+        storage = other.assume_value<string_type>();
         break;
     case code::wstring:
-        storage = other.unsafe_get<wstring_type>();
+        storage = other.assume_value<wstring_type>();
         break;
     case code::u16string:
-        storage = other.unsafe_get<u16string_type>();
+        storage = other.assume_value<u16string_type>();
         break;
     case code::u32string:
-        storage = other.unsafe_get<u32string_type>();
+        storage = other.assume_value<u32string_type>();
         break;
     case code::array:
-        storage = other.unsafe_get<array_type>();
+        storage = other.assume_value<array_type>();
         break;
     case code::map:
-        storage = other.unsafe_get<map_type>();
+        storage = other.assume_value<map_type>();
         break;
     }
 }
@@ -2904,65 +2904,65 @@ basic_variable<Allocator>::basic_variable(basic_variable&& other) noexcept
         storage = null;
         break;
     case code::boolean:
-        storage = std::move(other.unsafe_get<bool>());
+        storage = std::move(other.assume_value<bool>());
         break;
     case code::signed_char:
-        storage = std::move(other.unsafe_get<signed char>());
+        storage = std::move(other.assume_value<signed char>());
         break;
     case code::unsigned_char:
-        storage = std::move(other.unsafe_get<unsigned char>());
+        storage = std::move(other.assume_value<unsigned char>());
         break;
     case code::signed_short_integer:
-        storage = std::move(other.unsafe_get<signed short int>());
+        storage = std::move(other.assume_value<signed short int>());
         break;
     case code::unsigned_short_integer:
-        storage = std::move(other.unsafe_get<unsigned short int>());
+        storage = std::move(other.assume_value<unsigned short int>());
         break;
     case code::signed_integer:
-        storage = std::move(other.unsafe_get<signed int>());
+        storage = std::move(other.assume_value<signed int>());
         break;
     case code::unsigned_integer:
-        storage = std::move(other.unsafe_get<unsigned int>());
+        storage = std::move(other.assume_value<unsigned int>());
         break;
     case code::signed_long_integer:
-        storage = std::move(other.unsafe_get<signed long int>());
+        storage = std::move(other.assume_value<signed long int>());
         break;
     case code::unsigned_long_integer:
-        storage = std::move(other.unsafe_get<unsigned long int>());
+        storage = std::move(other.assume_value<unsigned long int>());
         break;
     case code::signed_long_long_integer:
-        storage = std::move(other.unsafe_get<signed long long int>());
+        storage = std::move(other.assume_value<signed long long int>());
         break;
     case code::unsigned_long_long_integer:
-        storage = std::move(other.unsafe_get<unsigned long long int>());
+        storage = std::move(other.assume_value<unsigned long long int>());
         break;
     case code::real:
-        storage = std::move(other.unsafe_get<float>());
+        storage = std::move(other.assume_value<float>());
         break;
     case code::long_real:
-        storage = std::move(other.unsafe_get<double>());
+        storage = std::move(other.assume_value<double>());
         break;
     case code::long_long_real:
-        storage = std::move(other.unsafe_get<long double>());
+        storage = std::move(other.assume_value<long double>());
         break;
     case code::string:
-        storage = std::move(other.unsafe_get<string_type>());
+        storage = std::move(other.assume_value<string_type>());
         break;
     case code::wstring:
-        storage = std::move(other.unsafe_get<wstring_type>());
+        storage = std::move(other.assume_value<wstring_type>());
         break;
     case code::u16string:
-        storage = std::move(other.unsafe_get<u16string_type>());
+        storage = std::move(other.assume_value<u16string_type>());
         break;
     case code::u32string:
-        storage = std::move(other.unsafe_get<u32string_type>());
+        storage = std::move(other.assume_value<u32string_type>());
         break;
     case code::array:
-        storage = std::move(other.unsafe_get<array_type>());
+        storage = std::move(other.assume_value<array_type>());
         break;
     case code::map:
         // This is not guaranteed to be noexcept
-        storage = std::move(other.unsafe_get<map_type>());
+        storage = std::move(other.assume_value<map_type>());
         break;
     }
 }
@@ -2994,10 +2994,10 @@ basic_variable<Allocator>::basic_variable(const std::initializer_list<value_type
     }
 
     storage = map_type{};
-    auto& map = unsafe_get<map_type>();
+    auto& map = assume_value<map_type>();
     for (const auto& i : init)
     {
-        auto& array = i.template unsafe_get<array_type>();
+        auto& array = i.template assume_value<array_type>();
         map[array[0]] = array[1];
     }
 }
@@ -3065,64 +3065,64 @@ auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic
         storage = null;
         break;
     case code::boolean:
-        storage = other.unsafe_get<bool>();
+        storage = other.assume_value<bool>();
         break;
     case code::signed_char:
-        storage = other.unsafe_get<signed char>();
+        storage = other.assume_value<signed char>();
         break;
     case code::unsigned_char:
-        storage = other.unsafe_get<unsigned char>();
+        storage = other.assume_value<unsigned char>();
         break;
     case code::signed_short_integer:
-        storage = other.unsafe_get<signed short int>();
+        storage = other.assume_value<signed short int>();
         break;
     case code::unsigned_short_integer:
-        storage = other.unsafe_get<unsigned short int>();
+        storage = other.assume_value<unsigned short int>();
         break;
     case code::signed_integer:
-        storage = other.unsafe_get<signed int>();
+        storage = other.assume_value<signed int>();
         break;
     case code::unsigned_integer:
-        storage = other.unsafe_get<unsigned int>();
+        storage = other.assume_value<unsigned int>();
         break;
     case code::signed_long_integer:
-        storage = other.unsafe_get<signed long int>();
+        storage = other.assume_value<signed long int>();
         break;
     case code::unsigned_long_integer:
-        storage = other.unsafe_get<unsigned long int>();
+        storage = other.assume_value<unsigned long int>();
         break;
     case code::signed_long_long_integer:
-        storage = other.unsafe_get<signed long long int>();
+        storage = other.assume_value<signed long long int>();
         break;
     case code::unsigned_long_long_integer:
-        storage = other.unsafe_get<unsigned long long int>();
+        storage = other.assume_value<unsigned long long int>();
         break;
     case code::real:
-        storage = other.unsafe_get<float>();
+        storage = other.assume_value<float>();
         break;
     case code::long_real:
-        storage = other.unsafe_get<double>();
+        storage = other.assume_value<double>();
         break;
     case code::long_long_real:
-        storage = other.unsafe_get<long double>();
+        storage = other.assume_value<long double>();
         break;
     case code::string:
-        storage = other.unsafe_get<string_type>();
+        storage = other.assume_value<string_type>();
         break;
     case code::wstring:
-        storage = other.unsafe_get<wstring_type>();
+        storage = other.assume_value<wstring_type>();
         break;
     case code::u16string:
-        storage = other.unsafe_get<u16string_type>();
+        storage = other.assume_value<u16string_type>();
         break;
     case code::u32string:
-        storage = other.unsafe_get<u32string_type>();
+        storage = other.assume_value<u32string_type>();
         break;
     case code::array:
-        storage = other.unsafe_get<array_type>();
+        storage = other.assume_value<array_type>();
         break;
     case code::map:
-        storage = other.unsafe_get<map_type>();
+        storage = other.assume_value<map_type>();
         break;
     }
     return *this;
@@ -3137,64 +3137,64 @@ auto basic_variable<Allocator>::operator= (basic_variable&& other) -> basic_vari
         storage = null;
         break;
     case code::boolean:
-        storage = std::move(other.unsafe_get<bool>());
+        storage = std::move(other.assume_value<bool>());
         break;
     case code::signed_char:
-        storage = std::move(other.unsafe_get<signed char>());
+        storage = std::move(other.assume_value<signed char>());
         break;
     case code::unsigned_char:
-        storage = std::move(other.unsafe_get<unsigned char>());
+        storage = std::move(other.assume_value<unsigned char>());
         break;
     case code::signed_short_integer:
-        storage = std::move(other.unsafe_get<signed short int>());
+        storage = std::move(other.assume_value<signed short int>());
         break;
     case code::unsigned_short_integer:
-        storage = std::move(other.unsafe_get<unsigned short int>());
+        storage = std::move(other.assume_value<unsigned short int>());
         break;
     case code::signed_integer:
-        storage = std::move(other.unsafe_get<signed int>());
+        storage = std::move(other.assume_value<signed int>());
         break;
     case code::unsigned_integer:
-        storage = std::move(other.unsafe_get<unsigned int>());
+        storage = std::move(other.assume_value<unsigned int>());
         break;
     case code::signed_long_integer:
-        storage = std::move(other.unsafe_get<signed long int>());
+        storage = std::move(other.assume_value<signed long int>());
         break;
     case code::unsigned_long_integer:
-        storage = std::move(other.unsafe_get<unsigned long int>());
+        storage = std::move(other.assume_value<unsigned long int>());
         break;
     case code::signed_long_long_integer:
-        storage = std::move(other.unsafe_get<signed long long int>());
+        storage = std::move(other.assume_value<signed long long int>());
         break;
     case code::unsigned_long_long_integer:
-        storage = std::move(other.unsafe_get<unsigned long long int>());
+        storage = std::move(other.assume_value<unsigned long long int>());
         break;
     case code::real:
-        storage = std::move(other.unsafe_get<float>());
+        storage = std::move(other.assume_value<float>());
         break;
     case code::long_real:
-        storage = std::move(other.unsafe_get<double>());
+        storage = std::move(other.assume_value<double>());
         break;
     case code::long_long_real:
-        storage = std::move(other.unsafe_get<long double>());
+        storage = std::move(other.assume_value<long double>());
         break;
     case code::string:
-        storage = std::move(other.unsafe_get<string_type>());
+        storage = std::move(other.assume_value<string_type>());
         break;
     case code::wstring:
-        storage = std::move(other.unsafe_get<wstring_type>());
+        storage = std::move(other.assume_value<wstring_type>());
         break;
     case code::u16string:
-        storage = std::move(other.unsafe_get<u16string_type>());
+        storage = std::move(other.assume_value<u16string_type>());
         break;
     case code::u32string:
-        storage = std::move(other.unsafe_get<u32string_type>());
+        storage = std::move(other.assume_value<u32string_type>());
         break;
     case code::array:
-        storage = std::move(other.unsafe_get<array_type>());
+        storage = std::move(other.assume_value<array_type>());
         break;
     case code::map:
-        storage = std::move(other.unsafe_get<map_type>());
+        storage = std::move(other.assume_value<map_type>());
         break;
     }
     return *this;
@@ -3258,87 +3258,87 @@ auto basic_variable<Allocator>::operator+= (const basic_variable& other) -> basi
     {
     case code::null:
         detail::overloader<value_type, nullable>::
-            append(*this, other.unsafe_get<nullable>());
+            append(*this, other.assume_value<nullable>());
         break;
     case code::boolean:
         detail::overloader<value_type, bool>::
-            append(*this, other.unsafe_get<bool>());
+            append(*this, other.assume_value<bool>());
         break;
     case code::signed_char:
         detail::overloader<value_type, signed char>::
-            append(*this, other.unsafe_get<signed char>());
+            append(*this, other.assume_value<signed char>());
         break;
     case code::unsigned_char:
         detail::overloader<value_type, unsigned char>::
-            append(*this, other.unsafe_get<unsigned char>());
+            append(*this, other.assume_value<unsigned char>());
         break;
     case code::signed_short_integer:
         detail::overloader<value_type, signed short int>::
-            append(*this, other.unsafe_get<signed short int>());
+            append(*this, other.assume_value<signed short int>());
         break;
     case code::unsigned_short_integer:
         detail::overloader<value_type, unsigned short int>::
-            append(*this, other.unsafe_get<unsigned short int>());
+            append(*this, other.assume_value<unsigned short int>());
         break;
     case code::signed_integer:
         detail::overloader<value_type, signed int>::
-            append(*this, other.unsafe_get<signed int>());
+            append(*this, other.assume_value<signed int>());
         break;
     case code::unsigned_integer:
         detail::overloader<value_type, unsigned int>::
-            append(*this, other.unsafe_get<unsigned int>());
+            append(*this, other.assume_value<unsigned int>());
         break;
     case code::signed_long_integer:
         detail::overloader<value_type, signed long int>::
-            append(*this, other.unsafe_get<signed long int>());
+            append(*this, other.assume_value<signed long int>());
         break;
     case code::unsigned_long_integer:
         detail::overloader<value_type, unsigned long int>::
-            append(*this, other.unsafe_get<unsigned long int>());
+            append(*this, other.assume_value<unsigned long int>());
         break;
     case code::signed_long_long_integer:
         detail::overloader<value_type, signed long long int>::
-            append(*this, other.unsafe_get<signed long long int>());
+            append(*this, other.assume_value<signed long long int>());
         break;
     case code::unsigned_long_long_integer:
         detail::overloader<value_type, unsigned long long int>::
-            append(*this, other.unsafe_get<unsigned long long int>());
+            append(*this, other.assume_value<unsigned long long int>());
         break;
     case code::real:
         detail::overloader<value_type, float>::
-            append(*this, other.unsafe_get<float>());
+            append(*this, other.assume_value<float>());
         break;
     case code::long_real:
         detail::overloader<value_type, double>::
-            append(*this, other.unsafe_get<double>());
+            append(*this, other.assume_value<double>());
         break;
     case code::long_long_real:
         detail::overloader<value_type, long double>::
-            append(*this, other.unsafe_get<long double>());
+            append(*this, other.assume_value<long double>());
         break;
     case code::string:
         detail::overloader<value_type, string_type>::
-            append(*this, other.unsafe_get<string_type>());
+            append(*this, other.assume_value<string_type>());
         break;
     case code::wstring:
         detail::overloader<value_type, wstring_type>::
-            append(*this, other.unsafe_get<wstring_type>());
+            append(*this, other.assume_value<wstring_type>());
         break;
     case code::u16string:
         detail::overloader<value_type, u16string_type>::
-            append(*this, other.unsafe_get<u16string_type>());
+            append(*this, other.assume_value<u16string_type>());
         break;
     case code::u32string:
         detail::overloader<value_type, u32string_type>::
-            append(*this, other.unsafe_get<u32string_type>());
+            append(*this, other.assume_value<u32string_type>());
         break;
     case code::array:
         detail::overloader<value_type, array_type>::
-            append(*this, other.unsafe_get<array_type>());
+            append(*this, other.assume_value<array_type>());
         break;
     case code::map:
         detail::overloader<value_type, map_type>::
-            append(*this, other.unsafe_get<map_type>());
+            append(*this, other.assume_value<map_type>());
         break;
     }
     return *this;
@@ -3417,7 +3417,7 @@ auto basic_variable<Allocator>::value() const -> typename tag_traits<typename st
 
 template <template <typename> class Allocator>
 template <typename R>
-auto basic_variable<Allocator>::unsafe_get() & noexcept -> R&
+auto basic_variable<Allocator>::assume_value() & noexcept -> R&
 {
     assert(same<R>());
     return storage.template get<typename std::decay<R>::type>();
@@ -3425,7 +3425,7 @@ auto basic_variable<Allocator>::unsafe_get() & noexcept -> R&
 
 template <template <typename> class Allocator>
 template <typename R>
-auto basic_variable<Allocator>::unsafe_get() const & noexcept -> const R&
+auto basic_variable<Allocator>::assume_value() const & noexcept -> const R&
 {
     assert(same<R>());
     return storage.template get<typename std::decay<R>::type>();
@@ -3439,33 +3439,33 @@ basic_variable<Allocator>::operator bool() const
     case code::null:
         return false;
     case code::boolean:
-        return bool(unsafe_get<bool>());
+        return bool(assume_value<bool>());
     case code::signed_char:
-        return bool(unsafe_get<signed char>());
+        return bool(assume_value<signed char>());
     case code::unsigned_char:
-        return bool(unsafe_get<unsigned char>());
+        return bool(assume_value<unsigned char>());
     case code::signed_short_integer:
-        return bool(unsafe_get<signed short int>());
+        return bool(assume_value<signed short int>());
     case code::unsigned_short_integer:
-        return bool(unsafe_get<unsigned short int>());
+        return bool(assume_value<unsigned short int>());
     case code::signed_integer:
-        return bool(unsafe_get<signed int>());
+        return bool(assume_value<signed int>());
     case code::unsigned_integer:
-        return bool(unsafe_get<unsigned int>());
+        return bool(assume_value<unsigned int>());
     case code::signed_long_integer:
-        return bool(unsafe_get<signed long int>());
+        return bool(assume_value<signed long int>());
     case code::unsigned_long_integer:
-        return bool(unsafe_get<unsigned long int>());
+        return bool(assume_value<unsigned long int>());
     case code::signed_long_long_integer:
-        return bool(unsafe_get<signed long long int>());
+        return bool(assume_value<signed long long int>());
     case code::unsigned_long_long_integer:
-        return bool(unsafe_get<unsigned long long int>());
+        return bool(assume_value<unsigned long long int>());
     case code::real:
-        return bool(unsafe_get<float>());
+        return bool(assume_value<float>());
     case code::long_real:
-        return bool(unsafe_get<double>());
+        return bool(assume_value<double>());
     case code::long_long_real:
-        return bool(unsafe_get<long double>());
+        return bool(assume_value<long double>());
     case code::string:
     case code::wstring:
     case code::u16string:
@@ -3487,7 +3487,7 @@ auto basic_variable<Allocator>::operator[] (size_type position) & -> basic_varia
     switch (symbol())
     {
     case symbol::array:
-        return unsafe_get<array_type>()[position];
+        return assume_value<array_type>()[position];
 
     default:
         throw dynamic::error(incompatible_type);
@@ -3500,7 +3500,7 @@ auto basic_variable<Allocator>::operator[] (size_type position) const & -> const
     switch (symbol())
     {
     case symbol::array:
-        return unsafe_get<array_type>().at(position);
+        return assume_value<array_type>().at(position);
 
     default:
         throw dynamic::error(incompatible_type);
@@ -3516,7 +3516,7 @@ auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& k
         *this = basic_map<Allocator>::make();
         // FALLTHROUGH
     case symbol::map:
-        return unsafe_get<map_type>()[key];
+        return assume_value<map_type>()[key];
 
     default:
         throw dynamic::error(incompatible_type);
@@ -3529,7 +3529,7 @@ auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& k
     switch (symbol())
     {
     case symbol::map:
-        return unsafe_get<map_type>().at(key);
+        return assume_value<map_type>().at(key);
 
     default:
         throw dynamic::error(incompatible_type);
@@ -3662,9 +3662,9 @@ bool basic_variable<Allocator>::empty() const noexcept
     case symbol::u32string:
         return false;
     case symbol::array:
-        return unsafe_get<array_type>().empty();
+        return assume_value<array_type>().empty();
     case symbol::map:
-        return unsafe_get<map_type>().empty();
+        return assume_value<map_type>().empty();
     }
     TRIAL_DYNAMIC_UNREACHABLE();
 }
@@ -3685,9 +3685,9 @@ auto basic_variable<Allocator>::size() const noexcept -> size_type
     case symbol::u32string:
         return 1;
     case symbol::array:
-        return unsafe_get<array_type>().size();
+        return assume_value<array_type>().size();
     case symbol::map:
-        return unsafe_get<map_type>().size();
+        return assume_value<map_type>().size();
     }
     TRIAL_DYNAMIC_UNREACHABLE();
 }
@@ -3708,9 +3708,9 @@ auto basic_variable<Allocator>::max_size() const noexcept -> size_type
     case symbol::u32string:
         return 1;
     case symbol::array:
-        return unsafe_get<array_type>().max_size();
+        return assume_value<array_type>().max_size();
     case symbol::map:
-        return unsafe_get<map_type>().max_size();
+        return assume_value<map_type>().max_size();
     }
     TRIAL_DYNAMIC_UNREACHABLE();
 }
@@ -3778,22 +3778,22 @@ void basic_variable<Allocator>::clear() noexcept
         storage = 0.0L;
         break;
     case code::string:
-        unsafe_get<string_type>().clear();
+        assume_value<string_type>().clear();
         break;
     case code::wstring:
-        unsafe_get<wstring_type>().clear();
+        assume_value<wstring_type>().clear();
         break;
     case code::u16string:
-        unsafe_get<u16string_type>().clear();
+        assume_value<u16string_type>().clear();
         break;
     case code::u32string:
-        unsafe_get<u32string_type>().clear();
+        assume_value<u32string_type>().clear();
         break;
     case code::array:
-        unsafe_get<array_type>().clear();
+        assume_value<array_type>().clear();
         break;
     case code::map:
-        unsafe_get<map_type>().clear();
+        assume_value<map_type>().clear();
         break;
     }
 }
@@ -3809,7 +3809,7 @@ auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
     case symbol::array:
         {
             // Insert at end
-            auto& array = unsafe_get<array_type>();
+            auto& array = assume_value<array_type>();
             array.push_back(value);
             return iterator(this, --array.end());
         }
@@ -3817,7 +3817,7 @@ auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
     case symbol::map:
         if (value.is_pair())
         {
-            auto result = unsafe_get<map_type>().insert(pair_type{value[0], value[1]});
+            auto result = assume_value<map_type>().insert(pair_type{value[0], value[1]});
             return iterator(this, std::move(result.first));
         }
         break;
@@ -3845,7 +3845,7 @@ auto basic_variable<Allocator>::insert(const_iterator where, const basic_variabl
     {
     case symbol::array:
         {
-            auto result = unsafe_get<array_type>()
+            auto result = assume_value<array_type>()
                 .insert(where.current.template get<typename const_iterator::array_iterator>(),
                         value);
             return iterator(this, result);
@@ -3855,7 +3855,7 @@ auto basic_variable<Allocator>::insert(const_iterator where, const basic_variabl
         if (value.is_pair())
         {
             // Use iterator as hint
-            auto result = unsafe_get<map_type>()
+            auto result = assume_value<map_type>()
                 .insert(where.current.template get<typename const_iterator::map_iterator>(),
                         pair_type{value[0], value[1]});
             return iterator(this, std::move(result));
@@ -3891,7 +3891,7 @@ auto basic_variable<Allocator>::erase(const_iterator where) -> iterator
     {
     case symbol::array:
         {
-            auto& array = unsafe_get<array_type>();
+            auto& array = assume_value<array_type>();
             auto& array_where = where.current.template get<array_iterator>();
             result.current = array.erase(array_where);
         }
@@ -3899,7 +3899,7 @@ auto basic_variable<Allocator>::erase(const_iterator where) -> iterator
 
     case symbol::map:
         result.current =
-            unsafe_get<map_type>().erase(where.current.template get<map_iterator>());
+            assume_value<map_type>().erase(where.current.template get<map_iterator>());
         break;
 
     default:
@@ -3921,14 +3921,14 @@ auto basic_variable<Allocator>::erase(const_iterator first, const_iterator last)
     {
     case symbol::array:
         result.current =
-            unsafe_get<array_type>().erase(first.current.template get<array_iterator>(),
-                                           last.current.template get<array_iterator>());
+            assume_value<array_type>().erase(first.current.template get<array_iterator>(),
+                                             last.current.template get<array_iterator>());
         break;
 
     case symbol::map:
         result.current =
-            unsafe_get<map_type>().erase(first.current.template get<map_iterator>(),
-                                         last.current.template get<map_iterator>());
+            assume_value<map_type>().erase(first.current.template get<map_iterator>(),
+                                           last.current.template get<map_iterator>());
         break;
 
     default:
