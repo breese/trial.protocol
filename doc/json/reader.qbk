@@ -12,7 +12,7 @@
 Reader is an incremental parser (also called a pull parser) that transforms the
 JSON input into a sequence of C++ tokens.
 This transformation is done piecemeal, which means that the reader will stay at
-the first token until explicitly instructed to parse and move to the next token.
+the first token until explicitly instructed to parse the next token.
 
 Based on the [@http://en.wikipedia.org/wiki/Iterator_pattern Iterator design
 pattern], `reader` parses just enough of the input to identify a single token.

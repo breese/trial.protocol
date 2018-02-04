@@ -9,7 +9,8 @@
 [#protocol.json.error]
 [section Error]
 
-The Boost.System framework is used for error codes and exceptions.
+The [@http://en.cppreference.com/w/cpp/header/system_error `<system_error>`]
+framework is used for error codes and exceptions.
 
 [note Error codes and utilities are located in the `<trial/protocol/json/error.hpp>` header.]
 
@@ -48,15 +49,14 @@ The following error codes exists.
 
 [table Error codes
 [[`json::errc`][Description]]
-[[`not_implemented`][The requested functionality has not been implemented yet.]]
 [[`unexpected_token`][An unexpected token is encountered in the input.]]
 [[`invalid_key`][An associative array key is not in a valid format.]]
 [[`invalid_value`][The content is not in a valid format.]]
 [[`incompatible_type`][Conversion between two incompatible types failed.]]
-[[`unbalanced_end_array`][]]
-[[`unbalanced_end_object`][]]
-[[`expected_end_array`][]]
-[[`expected_end_object`][]]
+[[`unbalanced_end_array`][Encountered an end array token without a corresponding begin array token.]]
+[[`unbalanced_end_object`][Encountered an end object token without a corresponding begin object token.]]
+[[`expected_end_array`][Encountered an end array token outside an array.]]
+[[`expected_end_object`][Encountered an end object token outside an associative array.]]
 ]
 
 [h5 Exception]

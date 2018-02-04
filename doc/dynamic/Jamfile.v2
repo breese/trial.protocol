@@ -1,6 +1,6 @@
-#  Trial.Protocol Doc Jamfile
+#  Trial.Dynamic Doc Jamfile
 #
-#  Copyright (C) 2015 Bjorn Reese
+#  Copyright (C) 2017 Bjorn Reese
 #  Distributed under the Boost Software License, Version 1.0.
 #     (See accompanying file LICENSE_1_0.txt or copy at
 #           http://www.boost.org/LICENSE_1_0.txt)
@@ -11,31 +11,33 @@ using doxygen ;
 
 import doxygen ;
 
-doxygen json_reference
+doxygen dynamic_reference
   :
-    ../../include/trial/protocol/json/reader.hpp
-    ../../include/trial/protocol/json/writer.hpp
-    ../../include/trial/protocol/json/serialization/iarchive.hpp
+    ../../include/trial/dynamic/token.hpp
+    ../../include/trial/dynamic/error.hpp
+    ../../include/trial/dynamic/variable.hpp
+    ../../include/trial/dynamic/functional.hpp
+    ../../include/trial/dynamic/algorithm/visit.hpp
   :
     <reftitle>"Reference"
     <doxygen:param>HIDE_UNDOC_MEMBERS=YES
     <doxygen:param>"PREDEFINED=\"BOOST_DOXYGEN_INVOKED\""
   ;
 
-xml protocol
+xml dynamic
   :
-    protocol.qbk
+    dynamic.qbk
   :
-    <dependency>json_reference
+    <dependency>dynamic_reference
   ;
 
 boostbook standalone
   :
-    protocol
+    dynamic
   :
     # HTML options
     #<xsl:param>boost.root=../../../../..
-    <xsl:param>boost.root=http://www.boost.org/doc/libs/1_59_0
+    <xsl:param>boost.root=http://www.boost.org/doc/libs/1_66_0
     <xsl:param>chunk.section.depth=8
     <xsl:param>toc.section.depth=3
     <xsl:param>toc.max.depth=2

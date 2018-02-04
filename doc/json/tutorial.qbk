@@ -1,0 +1,392 @@
+[/ 
+  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+
+  Distributed under the Boost Software License, Version 1.0.
+     (See accompanying file LICENSE_1_0.txt or copy at
+           http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:tutorial Tutorials]
+
+[note The tutorials assume that the following alias has been declared
+```
+namespace json = trial::protocol::json;
+```]
+
+[section Serialization]
+
+This tutorial shows how the [link protocol.json.oarchive JSON output archive]
+and the [link protocol.json.iarchive JSON input archive] can be used to serialize
+C++ data into JSON and deserialize JSON into C++ data in just a few lines of code.
+
+[heading Fundamental types]
+
+We start by serializing [@http://en.cppreference.com/w/cpp/language/types
+fundamental types], because there is built-in serialization support for most
+of them.
+
+The JSON output archive knows how to generate valid JSON, but it needs a buffer
+to store the output in. This buffer is passed to the constructor of the output
+archive. We can choose between several [link protocol.core.adapter buffer types].
+In the following we will only demonstrate how to serialize to a `std::string`.
+We first need to include a wrapper for `std::string` that is used by the output
+archive.
+```
+#include <trial/protocol/buffer/string.hpp> // Use std::string as output buffer
+```
+We also need to include [link protocol.json.oarchive `json::oarchive`] together
+with other headers to glue __protocol__ into Boost.Serialization.
+This is most easily done like this:
+```
+#include <trial/protocol/json/serialization.hpp>
+```
+
+Serializing is as simple as creating a `std::string` and a `json::oarchive`,
+and then stream our data to the archive.
+```
+// Create data
+bool input = true;
+
+// Serialization
+std::string buffer;
+json::oarchive oarchive(buffer);
+oarchive << input;
+```
+The `buffer` string now contains the formatted JSON output.
+```
+assert(buffer == "true");
+```
+
+We can deserialize the buffer again with the [link protocol.json.iarchive JSON input archive].
+```
+bool output = false;
+json::iarchive iarchive(buffer);
+iarchive >> output;
+
+assert(output == true);
+```
+
+[heading Containers]
+
+There is also built-in support for serialization of certain standard C++ containers,
+such as `std::vector`, `std::set`, and `std::map`.
+
+The following example shows how to serialize an `std::map`.
+The serialization code follows the same pattern as used in the previous example.
+```
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/serialization.hpp>
+
+// Build data
+std::map<std::string, std::string> input;
+input["alpha"] = "hydrogen";
+input["bravo"] = "helium";
+
+// Serialization
+std::string buffer;
+json::oarchive oarchive(buffer);
+oarchive << input;
+
+assert(buffer == "{\"alpha\":\"hydrogen",\"bravo\":\"helium\"}");
+```
+Deserialization is done by adding:
+```
+std::map<std::string, std::string> output;
+json::iarchive iarchive(buffer);
+iarchive >> output;
+
+assert(output.size() == 2);
+assert(output["alpha"] == "hydrogen");
+assert(output["bravo"] == "helium");
+```
+
+[endsect]
+
+[section Incremental Processing]
+
+Serialization and document processing is build on top of incremental processing.
+Incremental processing can also be used directly for more efficient processing
+such as searching for keys in a JSON file without having to convert strings or
+from JSON into C++ types.
+
+We are going to start with incremental generation to create JSON formatted
+output using the [link protocol.json.writer `json::writer`].
+Afterwards we will use the [link protocol.json.reader `json::reader`] to parse
+JSON formatted input.
+
+[heading Generating fundamental types]
+
+The [link protocol.json.writer `json::writer`] is used to incrementally generate
+a JSON formatted buffer. We can either write a fundamental type, or use tags to
+write special tokens.
+
+We first need to include a couple of headers.
+```
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/writer.hpp>
+```
+Let us generate a boolean value:
+```
+std::string output;
+json::writer writer(output);
+
+writer.write(true);
+
+assert(output == "true");
+```
+We can also generate a `null` value, which means that the current entry does not
+have a value. Think of it as an uninitialized optional value. We pass a tag as
+template parameter to indicate that `null` should be inserted.
+```
+std::string output;
+json::writer writer(output);
+
+writer.write<json::token::null>();
+
+assert(output == "null");
+```
+
+[heading Generating array]
+
+Containers have to start with with a begin bracket and terminate with an end bracket.
+These brackets must be written explicitly with a tag.
+The separators between entries are automatically inserted.
+
+```
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/writer.hpp>
+
+std::string output;
+json::writer writer(output);
+
+writer.write<json::token::begin_array>();
+assert(output == "[");
+
+writer.write(true);
+assert(output == "[true");
+
+writer.write(2);
+assert(output == "[true,2");
+
+writer.write(3.0);
+assert(output == "[true,2,3.0");
+
+writer.write("alpha");
+assert(output == "[true,2,3.0,\"alpha\"");
+
+writer.write<json::token::end_array>();
+assert(output == "[true,2,3.0.\"alpha\"]");
+```
+
+[heading Counting keys]
+
+We now turn our attention to incremental parsing. [link protocol.json.reader
+`json::reader`] is a pull parser that lazily parses a single token in the input.
+The `json::reader::next()` function is used to advance the cursor to the next
+token.
+
+Suppose we have string called `haystack` containing a JSON object, and that we
+want to count all key-value pairs with a given key called `needle`.
+
+For the sake of simplicity we are going to assume that there are no nested
+containers.
+
+```
+#include <trial/protocol/json/reader.hpp>
+
+std::size_t prefix_count(const std::string& haystack,
+                         const std::string& needle)
+{
+  std::size_t count = 0;
+  json::reader reader(haystack);
+  do
+  {
+    auto key = reader.value<std::string>();
+    if (key == needle)
+    {
+      ++count;
+    }
+    reader.next(); // Skip key
+  } while (reader.next()); // Skip value
+  return count;
+}
+```
+
+In the above example we convert the current `key` from JSON to `std::string`
+before doing the comparison.
+
+We can optimize this by converting the `needle` into a JSON string and then
+comparing it with the unconverted JSON string. We will use the `json::writer`
+for that.
+```
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/reader.hpp>
+#include <trial/protocol/json/writer.hpp>
+
+std::size_t prefix_count_fast(const std::string& haystack,
+                              const std::string& needle)
+{
+  std::string literal;
+  json::writer writer(literal);
+  writer.value(needle);
+
+  std::size_t count = 0;
+  json::reader reader(haystack);
+  do
+  {
+    const auto& key = reader.literal();
+    if (key == literal)
+    {
+      ++count;
+    }
+    reader.next(); // Skip key
+  } while (reader.next()) // Skip value
+  return count;
+}
+```
+
+[endsect]
+
+[section Push Parser]
+
+In this tutorial we are going to use the incremental [link protocol.json.reader
+`json::reader`] parser to build another kind of incremental parser, so we are
+going to introduce a distinction between incremental /pull/ parsers and
+incremental /push/ parsers.
+The main difference between them is the direction of control.
+With pull parsers, like [link protocol.json.reader `json::reader`],
+the user extracts or pulls one token after another, whereas with push parser the
+tokens are automatically pushed to the user via callback functions.
+
+We will use [link protocol.json.reader `json::reader`] to build the push parser,
+because pull parsers are well-suited to create other kinds of parser interfaces.
+The serialization output archives that we saw in a previous tutorial is another
+example of a higher-level parser build on top of pull parsers.
+This tutorial demonstrates how `json::reader` can be used to create a push parser.
+
+A push parser iterates over the JSON input and invokes callback functions for
+each parsed data item. Each data type has a distinct callback function. The
+user provides the implemention of these callback functions. The design is a
+variation of the [@http://en.wikipedia.org/wiki/Builder_pattern Builder pattern],
+and this is how XML [@http://en.wikipedia.org/wiki/Simple_API_for_XML SAX] parsers
+work.
+
+[heading Definitions]
+
+First we define the `push_parser` class which takes the callback functions as
+a template parameter.[footnote We could also have used a polymorphic interface
+for the callback functions.]
+```
+#include <trial/protocol/json/reader.hpp>
+
+template <typename Callbacks>
+class push_parser
+{
+public:
+    push_parser(const json::reader& reader) : reader(reader) {}
+
+    void parse();
+
+private:
+    Callbacks callbacks;
+    json::reader reader;
+};
+```
+The `Callbacks` template parameter must be a class that implements a member
+function for each callback function.
+The `Callbacks` class looks something like this:
+```
+#include <cstdint>
+#include <string>
+
+class my_callbacks
+{
+public:
+    void on_null();
+    void on_boolean(bool);
+    void on_integer(std::intmax_t);
+    void on_number(double);
+    void on_string(const std::string&);
+    void on_begin_array();
+    void on_end_array();
+    void on_begin_object();
+    void on_end_object();
+};
+```
+We are not going to implement `my_callbacks` here, although a simple
+implementation could be to simply print the type and value in each callback
+function.
+
+[heading Execution]
+
+After these preliminary definitions, we have now arrived at the crux of the
+problem: how to implement the `push_parser::parse()` function.
+Fortunately that is very simple using a pull parser:
+
+# Iterate over the JSON input using `json::reader::next()`.
+    # Identify the current token with `json::reader::symbol()`.
+    # Invoke the appropriate callback function.
+      The current value for data tokens is obtained with `json::reader::value<T>()`.
+      
+Here is the entire implementation in its full glory:
+```
+void push_parser::parse()
+{
+    do
+    {
+        switch (reader.symbol())
+        {
+        case json::symbol::null:
+            callbacks.on_null();
+            break;
+
+        case json::symbol::boolean:
+            callbacks.on_boolean(reader.value<bool>());
+            break;
+
+        case json::symbol::integer:
+            callbacks.on_integer(reader.value<std::intmax_t>());
+            break;
+
+        case json::symbol::number:
+            callbacks.on_number(reader.value<double>());
+            break;
+
+        case json::symbol::string:
+            callbacks.on_string(reader.value<std::string>());
+            break;
+
+        case json::symbol::begin_array:
+            callbacks.on_begin_array();
+            break;
+
+        case json::symbol::end_array:
+            callbacks.on_end_array();
+            break;
+
+        case json::symbol::begin_object:
+            callbacks.on_begin_object();
+            break;
+
+        case json::symbol::end_object:
+            callbacks.on_end_object();
+            break;
+
+        default:
+            break;
+        }
+
+    } while (reader.next());
+}
+```
+
+Finally, we use the above push parser as follows:
+```
+json::reader reader("[null,true,42]"); // Replace with actual JSON input
+push_parser<my_callbacks> parser(reader);
+parser.parse();
+```
+
+[endsect]
+
+[endsect]

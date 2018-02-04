@@ -1,0 +1,113 @@
+[/ 
+  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+
+  Distributed under the Boost Software License, Version 1.0.
+     (See accompanying file LICENSE_1_0.txt or copy at
+           http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section Design Rationale]
+
+This section describes the rationale behind the design of the dynamic variable.
+
+[heading Supported Types]
+
+The dynamic variable only supports a pre-defined list of types. No custom types are allowed. This restriction is imposed to define various relationships between supported types such that the dynamic variable can meet the requirements for the Container concept.
+
+[table
+[[Tag type] [Description]]
+[[`dynamic::nullable`] [Indicates the absence of data. It serves a similar purpose as [@http://en.cppreference.com/w/cpp/utility/optional/nullopt_t `std::nullopt_t`.]]]
+[[[pre `dynamic::boolean`
+`dynamic::integer`
+`dynamic::number`]] [Indicates a single value of an [@http://en.cppreference.com/w/c/language/arithmetic_types arithmetic type]. Arithmetic operations on dynamic variables will use the normal C++ arithmetic operations.]]
+[[[pre `dynamic::string`
+`dynamic::wstring`
+`dynamic::u16string`
+`dynamic::u32string`]] [Indicates a sequence of characters. Single characters[footnote Except `signed char` and `unsigned char` which are considered small integers.] cannot be stored directly, but have to be added as strings.
+
+The string types are considered incompatible types, so no comparison or conversion between them are supported.]]
+[[`dynamic::array`] [Indicates a sequence of nested dynamic variables. Adheres to the `SequenceContainer` concept.]]
+[[`dynamic::map`] [Indicates an ordered sequence of key-value pairs, where both key and value are dynamic variables.
+
+Adheres to the `AssociativeContainer` concept with a `mapped_type`.]]
+]
+ 
+A variable can only change its type via construction, assignment, or swapping. For instance, the `clear()` member function resets the content of a variable, but retains the type. An exemption is when the variable is nullable, in which case insertion can also change the type via arithmetic operations.
+
+As the type can change dynamically during program execution, operations between incompatible supported types results in run-time errors, rather than compile-time errors. Depending on the operation, either a `std::error_code` set to `dynamic::incompatible_types` is returned, or thrown as a `dynamic::error` exception containing this error code.
+
+Assigning an unsupported type to a variable results in a compile-time error.
+
+[heading Concepts]
+
+The dynamic variable meets the requirements of the [@http://en.cppreference.com/w/cpp/concept/Container Container], [@http://en.cppreference.com/w/cpp/concept/ReversibleContainer ReversibleContainer], and [link dynamic-container DynamicContainer] concepts.
+
+Meeting the requirements of the Container concept means that the dynamic variable can be used together with C++ algorithms. In order to meet the Container concept, each supported type must be considered a container. Singular types like the fundamental data types and strings are considered containers with a single element, except nullable which has no elements. The singular types can be used both as a value and as a container. The container size of each supported type is listed in the table below.
+
+[table
+[[Tag type] [Container size]]
+[[`dynamic::nullable`] [0]]
+[[[pre `dynamic::boolean`
+`dynamic::integer`
+`dynamic::number`
+`dynamic::string`
+`dynamic::wstring`
+`dynamic::u16string`
+`dynamic::u32string`]] [1]]
+[[`dynamic::array`] [`dynamic::variable::array_type::size()`]]
+[[`dynamic::map`] [`dynamic::variable::map_type::size()`]]
+]
+
+The DynamicContainer concept has been constructed as a common set of insertion and erasure operations that maps to the [@http://en.cppreference.com/w/cpp/concept/SequenceContainer SequenceContainer] and [@http://en.cppreference.com/w/cpp/concept/AssociativeContainer AssociativeContainer] concepts.
+
+The dynamic variable does not meet the requirements of the [@http://en.cppreference.com/w/cpp/concept/AllocatorAwareContainer AllocatorAwareContainer] concept.
+ 
+[heading Type Checks]
+
+The stored type of a variable can be queried in different ways.
+
+* Query by type is done with the `is<T>()` and `same<T>()` member functions. These are primarily intended for checking pre-conditions. Query functions with a template parameter was chosen over explicit query functions, such as `is_boolean()`, because the former can be used in generic code.
+* Query by enumeration is done with the `code()` and `symbol()` member functions. These are intended for dispatching based on the stored type. The use of enumeration enables the compiler to warn against missing cases in switch statements.
+* Visitation via the `dynamic::visit` algorithm.
+
+[heading Construction]
+
+[/ FIXME: Initializer-lists ]
+[/ FIXME: Factories ]
+
+[heading Comparison]
+
+Comparison takes both the type and value into account. Some types, such as arithmetic types, are directly comparable, and they will be compared using the normal C++ rules. An exemption is comparison between signed and unsigned integers, which does not trigger compiler warnings nor raises run-time errors.
+
+When supported types are not value-comparable, a type ordering is imposed. Nullable types always compares less than other types. Apart from the nullable type, the ordering between the remaining type has been chosen arbitrarily. The reason for type ordering is to ensure that any combination of values can be compared. This is needed because `dynamic::variable::map_type` uses `dynamic::variable` as the key, so the less-than operator must work. It is also useful for algorithms with predicates that use relational comparison.
+
+Strings of different types are not value-comparable, which is in accordance with normal C++ rules,[footnote Despite attempts to make different string types directly comparable, such as [@http://www.open-std.org/Jtc1/sc22/wg21/docs/papers/2012/n3398.html N3398].] so they will be compared using their types. The ordering between string types is arbitrary.
+
+Comparison against unsupported types results in compiler errors.
+
+[heading Traversal]
+
+The dynamic variable supports container types, so it must be possible to traverse the content of these containers. There are two ways to traverse a dynamic variable.
+
+# Adherence to the Container concept means that the dynamic variable can traversed by iterators.
+# Visitation can be done using the `dynamic::visit` algorithm. The array and associative arrays can be iterated over for recursive visitation.
+
+Special attention is needed for iterator dereferencing, because it returns a reference to the embedded value. This return type must be the same for any value. The iterators use `dynamic::variable` as the return type. The associative array stands out because the key-value pair is stored as an `std::pair`, not as a `dynamic::variable`. The solution is that dereference returns a reference to the value, not the entire key-value pair. The iterator is therefore a value iterator.
+
+A consequence of using value iterators is that when sorting an associated array, only the values are sorted. In other words, values are moved between keys. For example, sorting `{ {"alpha", 20}, {"bravo", 10} }` becomes `{ {"alpha", 10}, {"bravo", 20} }`. This may make more sense if we regard an array as an associative array with the index as the key. For example, the array `{20, 10}` can be regarded as `{ {0, 20}, {1, 10} }`. Sorting this arrays results in `{ {0, 10}, {1, 20} }` which corresponds to `{10, 20}`.
+
+The iterator has explicit methods to obtain both the key and the value by reference.
+
+A key iterator also exists. It works like the value iterator but the dereferencing operator returns the key rather than the value. Only the associative array has keys, so the key of other supported types is their index. The key iterator is const, because the key cannot be changed. Changing the key can only be done by erasing the old key and inserting the new key.
+
+[heading Customization]
+
+The only customization point in the dynamic variable is allocator support.
+
+A custom allocator can be specified as a template parameter for the `dynamic::basic_variable<Allocator>` class. This allocator is passed to all string types, as well as `array_type` and `map_type`.
+
+`dynamic::variable` is a convenience alias for `dynamic::basic_variable<std::allocator>`.
+
+[/ FIXME: Why not custom array or map? ]
+
+[endsect]

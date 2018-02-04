@@ -1,0 +1,60 @@
+#  Trial.Protocol Doc Jamfile
+#
+#  Copyright (C) 2015 Bjorn Reese
+#  Distributed under the Boost Software License, Version 1.0.
+#     (See accompanying file LICENSE_1_0.txt or copy at
+#           http://www.boost.org/LICENSE_1_0.txt)
+
+using quickbook ;
+using boostbook ;
+using doxygen ;
+
+import doxygen ;
+
+doxygen json_reference
+  :
+    ../include/trial/protocol/json/error.hpp
+    ../include/trial/protocol/json/reader.hpp
+    ../include/trial/protocol/json/writer.hpp
+    ../include/trial/protocol/json/serialization/iarchive.hpp
+  :
+    <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+    <doxygen:param>"PREDEFINED=\"BOOST_DOXYGEN_INVOKED\""
+    <doxygen:param>HIDE_COMPOUND_REFERENCE=YES
+    <reftitle>"JSON Reference"
+  ;
+
+doxygen dynamic_reference
+  :
+    ../include/trial/dynamic/token.hpp
+    ../include/trial/dynamic/error.hpp
+    ../include/trial/dynamic/variable.hpp
+    ../include/trial/dynamic/functional.hpp
+    ../include/trial/dynamic/algorithm/visit.hpp
+  :
+    <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+    <doxygen:param>"PREDEFINED=\"BOOST_DOXYGEN_INVOKED\""
+    <doxygen:param>HIDE_COMPOUND_REFERENCE=YES
+    <reftitle>"Dynamic Reference"
+  ;
+
+xml protocol
+  :
+    protocol.qbk
+  :
+    <dependency>json_reference
+    <dependency>dynamic_reference
+  ;
+
+boostbook standalone
+  :
+    protocol
+  :
+    # HTML options
+    #<xsl:param>boost.root=../../../../..
+    <xsl:param>boost.root=http://www.boost.org/doc/libs/1_66_0
+    <xsl:param>chunk.section.depth=8
+    <xsl:param>toc.section.depth=3
+    <xsl:param>toc.max.depth=2
+    <xsl:param>generate.section.toc.level=2
+  ;

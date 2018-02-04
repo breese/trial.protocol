@@ -14,21 +14,29 @@ and strings, as well as [@http://en.wikipedia.org/wiki/Array_data_structure arra
 and [@http://en.wikipedia.org/wiki/Associative_array associative arrays] (called
 JSON objects).
 
-The supported JSON format is described in [@http://tools.ietf.org/html/rfc7159 RFC 7159].
+[note
+__protocol__ supports [@http://tools.ietf.org/html/rfc7159 RFC 7159].
 No [@http://json5.org/ JSON extensions] are supported.
+]
+
+[section Overview]
+
+__protocol__ provides the following classes for JSON parsing and generation.
+
+[table
+[[] [Parser] [Generator]]
+[[Incremental] [[link protocol.json.reader `json::reader`]] [[link protocol.json.writer `json::writer`]]]
+[[Serialization] [[link protocol.json.iarchive `json::iarchive`]] [[link protocol.json.oarchive `json::oarchive`]]]
+[[Tree] [`json::parse`] [`json::format`]]
+]
+[endsect]
 
 [/ Serialization does not support pointers or inheritance/tracking ]
 [/ Pointers/links can be implemented via http://www.w3.org/TR/json-ld/ ]
 
-[include overview.qbk]
-[include design.qbk]
 [include tutorial.qbk]
-[include token.qbk]
-[include error.qbk]
-[include reader.qbk]
-[include writer.qbk]
-[include iarchive.qbk]
-[include oarchive.qbk]
+[include guide.qbk]
+[include design.qbk]
 [include reference.qbk]
 
 [endsect]

@@ -1,0 +1,98 @@
+[/ 
+  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+
+  Distributed under the Boost Software License, Version 1.0.
+     (See accompanying file LICENSE_1_0.txt or copy at
+           http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section Tutorial]
+
+All examples throughout this documentation assumes the following prologue:
+
+```
+#include <trial/dynamic/variable.hpp>
+namespace dynamic = trial::dynamic;
+```
+
+[section Shapeshifter]
+
+A default-initialized `dynamic::variable` has no value. No value is represented
+with the `dynamic::nullable` type.
+
+We can query if the variable has a certain type with the
+[memberref trial::dynamic::basic_variable::is `dynamic::variable::is<T>()`] member
+function.
+We can also examine if the variable has no value by comparing it with `dynamic::null`.
+```
+// Create an empty variable
+dynamic::variable data;
+assert(data.is<dynamic::nullable>());
+assert(data == dynamic::null);
+```
+If we assign a boolean value to the above variable then the variable changes into
+a boolean type.
+```
+// Change into boolean
+data = true;
+assert(data.is<bool>());
+assert(data == true);
+```
+We can even change it into an array by assigning an initializer list to it.
+```
+// Change into array
+data = { 1, 20, 300 };
+assert(data.is<dynamic::array>());
+assert(data.size() == 3);
+assert(data[0] == 1);
+assert(data[1] == 20);
+assert(data[2] == 300);
+```
+Finally, we will change our variable into an associative array.
+```
+// Change into associative array
+data =
+  {
+    { "alpha", null },             // nullable
+    { "bravo", true },             // boolean
+    { "charlie", 2 },              // integer
+    { "delta", 3.0 },              // floating-point number
+    { "echo", "blue" },            // string
+    { "foxtrot", { 1, 2, 3 } },    // nested array of integers
+    { "golf", { { "level", 2 } } } // nested associative array
+  };
+assert(data.is<dynamic::map>());
+assert(data.size() == 7);
+```
+
+[endsect]
+
+[section Algorithms]
+
+[heading Accumulation]
+
+Suppose we have a dynamic variable that contains an array of integers.
+```
+dynamic::variable data = { 1, 20, 300 };
+```
+We can calculate the sum of this array with the
+[@http://en.cppreference.com/w/cpp/algorithm/accumulate `std::accumulate()`]
+algorithm.
+
+As `std::accumulate()` works on homogeneous types, the initial value must be a
+`dynamic::variable`. We could wrap zero with `dynamic::variable(0)`, but in the
+example below we simply start with a empty dynamic variable. The empty dynamic
+variable behaves as a zero value when used in integer additions, so the
+resulting dynamic variable will contain an integer type.
+```
+#include <numeric>
+
+// Calculate sum
+auto sum = std::accumulate(data.begin(), data.end(), dynamic::variable());
+assert(sum.is<int>());
+assert(sum == 1 + 20 + 300);
+```
+
+[endsect]
+
+[endsect]

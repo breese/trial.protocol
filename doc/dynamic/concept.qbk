@@ -1,0 +1,194 @@
+[/ 
+  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+
+  Distributed under the Boost Software License, Version 1.0.
+     (See accompanying file LICENSE_1_0.txt or copy at
+           http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section Concepts]
+
+[important Work-in-progress.]
+
+[#dynamic-nested]
+[heading NestedContainer]
+
+A *NestedContainer* is a [@http://en.cppreference.com/w/cpp/concept/Container Container] that can store sequences of elements and ordered sequences.
+
+[/ FIXME: v CopyInsertable etc.]
+
+[table Types
+[[Name] [Type] [Notes]]
+[[`array_type`] [] [SequenceContainer.]]
+[[`map_type`] [] [AssociativeContainer.]]
+[[`pair_type`] [] []]
+]
+
+A NestedContainer must keep track of whether the stored type is `value_type`, `array_type`, or `map_type`. The semantics of insertion and erasure depends on the stored type.
+
+[table Singular semantics
+[[Expression] [Return type] [Singular semantics] [Conditions]]
+[[`a.clear()`] [`void`] [Assigns value-initialized `T` to `a`.] [ /Effects:/
+
+`*a == T{}`]]
+[[`a.erase(p)`] [`iterator`] [No effect.] [ /Returns:/
+
+Iterator `p`.]]
+[[`a.erase(i, j)`] [`iterator`] [No effect.] [ /Returns:/
+
+Iterator `i`.]]
+[[`a.insert(t)`] [`iterator`] [Fails.] []]
+[[`a.insert(i, j)`] [`void`] [Fails.] []]
+[[`a.insert(p, t)`] [`iterator`] [Fails.] []]
+[[`a.insert(p, i, j)`] [`void`] [Fails.] []]
+]
+
+[table Sequence semantics
+[[Expression] [Return type] [Sequence semantics] [Conditions]]
+[[`a.clear()`] [`void`] [Removes all nested elements.] [ /Effects:/
+
+`a.empty() == true`]]
+[[`a.erase(p)`] [`iterator`] [Removes a given element.] [ /Requires:/
+
+`T` shall be `MoveAssignable`.
+
+/Effects:/
+
+Erases the element pointed to by `p`.
+
+/Returns:/
+
+Iterator pointing to the element immediately following `p` prior to the element being erased, or `a.end()` if no such element exists.]]
+[[`a.erase(i, j)`] [`iterator`] [Removes all elements in range.] [ /Requires:/
+
+`T` shall be `MoveAssignable`.
+
+/Effects:/
+
+Erases the elements in the range \[`i`, `j`\).
+
+/Returns:/
+
+Iterator pointing to the element pointed to by `j` prior to the element being erased, or `a.end()` if no such element exists.]]
+[[`a.insert(t)`] [`iterator`] [Inserts element at end.] [ /Requires:/
+
+`T` shall be `CopyInsertable` into `a`.
+
+/Effects:/
+
+`a.insert(a.end(), t)`
+
+/Returns:/
+
+Iterator `a.end()`]]
+[[`a.insert(i, j)`] [`void`] [Inserts all elements in range at end.] [ /Requires:/
+
+`T` shall be `EmplaceConstructible` into `a` from `*i`.
+
+`i` and `j` are not iterators into `a`.
+
+/Effects:/
+
+`a.insert(a.end(), i, j)`]]
+[[`a.insert(p, t)`] [`iterator`] [Inserts element before position.] [ /Requires:/
+
+`T` shall be `CopyInsertable` into `a`.
+
+`p` is iterator into `a`.
+
+/Effects:/
+
+Inserts a copy of `t` before position `p`.
+
+/Returns:/
+
+Iterator `p`.]]
+[[`a.insert(p, i, j)`] [`void`] [Inserts all elements in range before position.] [ /Requires:/
+
+`T` shall be `EmplaceConstructible` into `a` from `*i`.
+
+`p` is iterator into `a`.
+
+`i` and `j` are not iterators into `a`.
+
+/Effects:/
+
+Inserts a copy of each element in the range \[`i`, `j`\) into `a` before position `p`.]]
+]
+
+[table Associative semantics
+[[Expression] [Return type] [Associative semantics] [Conditions]]
+[[`a.clear()`] [`void`] [Removes all nested elements.] [ /Effects:/
+
+`a.empty() == true`]]
+[[`a.erase(p)`] [`iterator`] [Removes a given element.] [ /Effects:/
+
+Erases the element pointed to by `p`.
+
+/Returns:/
+
+Iterator pointing to the element immediately following `p` prior to the element being erased, or `a.end()` if no such element exists.]]
+[[`a.erase(i, j)`] [`iterator`] [Removes all elements in range.] [ /Effects:/
+
+Erases the elements in the range \[`i`, `j`\).
+
+/Returns:/
+
+Iterator pointing to the element pointed to by `j` prior to the element being erased, or `a.end()` if no such element exists.]]
+[[`a.insert(t)`] [`iterator`] [Inserts `t`.] [ /Requires:/
+
+`T` is a `pair_type`.
+
+/Effects:/
+
+```
+p = std::find(a.begin(), a.end(), get<0>(t))
+a.insert(p, t)```]]
+[[`a.insert(i, j)`] [`void`] [Inserts all elements in range \[`i`, `j`\)] [ /Requires:/
+
+Each elements in range \[`i`, `j`\) is a `pair_type`.]]
+[[`a.insert(p, t)`] [`iterator`] [Inserts `t` with position `p` as hint.] [ /Requires:/
+
+`T` is a `pair_type`.]]
+[[`a.insert(p, i, j)`] [`void`] [Inserts all elements in range \[`i`, `j`\) with position `p` as hint.] [ /Requires:/
+
+Each elements in range \[`i`, `j`\) is a `pair_type`.]]
+]
+
+[#dynamic-container]
+[heading DynamicContainer]
+
+A *DynamicContainer* is a [link dynamic-nested NestedContainer] that can also store heterogenous elements, one of which is a nullable element indicating the absence of a value.
+
+[table Nullable semantics
+[[Expression] [Return type] [Nullable semantics] [Conditions]]
+[[`a.clear()`] [`void`] [No effect.] []]
+[[`a.erase(p)`] [`iterator`] [No effect.] [ /Returns:/
+
+Iterator `p`.]]
+[[`a.erase(i, j)`] [`iterator`] [No effect.] [ /Returns:/
+
+Iterator `i`.]]
+[[`a.insert(t)`] [`iterator`] [Changes stored type to SequenceContainer and inserts element.] [ /Requires:/
+
+`T` shall be `CopyInsertable` into `a`.
+
+/Effects:/
+
+`a` becomes a sequenced array containing a copy of `t`.
+
+/Returns:/
+
+Iterator `a.end()`.]]
+[[`a.insert(i, j)`] [`void`] [Changes stored type to SequenceContainer and inserts all elements in range.] [ /Requires:/
+
+`T` shall be `EmplaceConstructible` into `a`.
+
+/Effects:/
+
+`a` becomes a sequenced array containing a copy of each element in the range \[`i`, `j`\).]]
+[[`a.insert(p, t)`] [`iterator`] [Fails.] []]
+[[`a.insert(p, i, j)`] [`void`] [Fails.] []]
+]
+
+[endsect]
