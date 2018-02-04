@@ -18,7 +18,27 @@ namespace trial
 namespace dynamic
 {
 
-// Mutable visitation
+//! @brief Mutable visitation
+//!
+//! Invokes the call operator on the visitor whose type matches the stored type
+//! of the dynamic variable. The type is resolved using the normal rules for C++
+//! function overloading. All call operators must use the same return type.
+//!
+//! ```
+//! struct visitor
+//! {
+//!   // Matches any stored type; returns nothing.
+//!   template <typename T> void operator()(T);
+//! };
+//!
+//! dynamic::variable data = 1;
+//! assert(data.same<int>());
+//! dynamic::visit(visitor{}, data); // Invokes visitor.operator()(int)
+//! ```
+//!
+//! @param[in] visitor Visitor object.
+//! @param[in] variable Non-const dynamic variable.
+//! @returns Return type of `Visitor::operator()(nullable)`.
 
 template <typename Visitor, template <typename> class Allocator>
 auto visit(Visitor&& visitor, basic_variable<Allocator>& variable)
@@ -74,7 +94,7 @@ auto visit(Visitor&& visitor, basic_variable<Allocator>& variable)
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-// Const visitation
+//! @brief Immutable visitation
 
 template <typename Visitor, template <typename> class Allocator>
 auto visit(Visitor&& visitor, const basic_variable<Allocator>& variable)
