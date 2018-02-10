@@ -1015,30 +1015,55 @@ namespace erase_suite
 
 void erase_null()
 {
-    variable data;
-    auto where = data.erase(data.begin());
-    TRIAL_PROTOCOL_TEST(where == data.begin());
-    TRIAL_PROTOCOL_TEST(data == null);
+    {
+        variable data;
+        variable::iterator where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == null);
+    }
+    {
+        variable data;
+        variable::iterator where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == null);
+    }
 }
 
 void erase_boolean()
 {
-    variable data(true);
-    auto where = data.erase(data.begin());
-    TRIAL_PROTOCOL_TEST(where == data.begin());
-    TRIAL_PROTOCOL_TEST(data == true);
+    {
+        variable data(true);
+        auto where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == true);
+    }
+    {
+        variable data(true);
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == true);
+    }
 }
 
 void erase_integer()
 {
-    variable data(2);
-    auto where = data.erase(data.begin());
-    TRIAL_PROTOCOL_TEST(where == data.begin());
-    TRIAL_PROTOCOL_TEST(data == 2);
+    {
+        variable data(2);
+        auto where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == 2);
+    }
+    {
+        variable data(2);
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == 2);
+    }
 }
 
 void erase_real()
 {
+    // float
     {
         variable data(3.0f);
         auto where = data.erase(data.begin());
@@ -1046,14 +1071,34 @@ void erase_real()
         TRIAL_PROTOCOL_TEST(data == 3.0f);
     }
     {
+        variable data(3.0f);
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == 3.0f);
+    }
+    // double
+    {
         variable data(3.0);
         auto where = data.erase(data.begin());
         TRIAL_PROTOCOL_TEST(where == data.begin());
         TRIAL_PROTOCOL_TEST(data == 3.0);
     }
     {
+        variable data(3.0);
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == 3.0);
+    }
+    // long double
+    {
         variable data(3.0L);
         auto where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == 3.0L);
+    }
+    {
+        variable data(3.0L);
+        auto where = data.erase(data.cbegin());
         TRIAL_PROTOCOL_TEST(where == data.begin());
         TRIAL_PROTOCOL_TEST(data == 3.0L);
     }
@@ -1061,104 +1106,206 @@ void erase_real()
 
 void erase_string()
 {
-    variable data("alpha");
-    auto where = data.erase(data.begin());
-    TRIAL_PROTOCOL_TEST(where == data.begin());
-    TRIAL_PROTOCOL_TEST(data == "alpha");
+    {
+        variable data("alpha");
+        auto where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == "alpha");
+    }
+    {
+        variable data("alpha");
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == "alpha");
+    }
 }
 
 void erase_wstring()
 {
-    variable data(L"bravo");
-    auto where = data.erase(data.begin());
-    TRIAL_PROTOCOL_TEST(where == data.begin());
-    TRIAL_PROTOCOL_TEST(data == L"bravo");
+    {
+        variable data(L"bravo");
+        auto where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == L"bravo");
+    }
+    {
+        variable data(L"bravo");
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == L"bravo");
+    }
 }
 
 void erase_u16string()
 {
-    variable data(u"charlie");
-    auto where = data.erase(data.begin());
-    TRIAL_PROTOCOL_TEST(where == data.begin());
-    TRIAL_PROTOCOL_TEST(data == u"charlie");
+    {
+        variable data(u"charlie");
+        auto where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == u"charlie");
+    }
+    {
+        variable data(u"charlie");
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == u"charlie");
+    }
 }
 
 void erase_u32string()
 {
-    variable data(U"delta");
-    auto where = data.erase(data.begin());
-    TRIAL_PROTOCOL_TEST(where == data.begin());
-    TRIAL_PROTOCOL_TEST(data == U"delta");
+    {
+        variable data(U"delta");
+        auto where = data.erase(data.begin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == U"delta");
+    }
+    {
+        variable data(U"delta");
+        auto where = data.erase(data.cbegin());
+        TRIAL_PROTOCOL_TEST(where == data.begin());
+        TRIAL_PROTOCOL_TEST(data == U"delta");
+    }
 }
 
 void erase_array_first()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = data.erase(data.begin());
-    variable expect = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(data.begin());
+        variable expect = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(data.cbegin());
+        variable expect = array::make({ 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void erase_array_second()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = data.erase(std::next(data.begin()));
-    variable expect = array::make({ true, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.begin()));
+        variable expect = array::make({ true, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.cbegin()));
+        variable expect = array::make({ true, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void erase_array_third()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = data.erase(std::next(data.begin(), 2));
-    variable expect = array::make({ true, 2, "alpha", L"bravo", u"charlie", U"delta" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.begin(), 2));
+        variable expect = array::make({ true, 2, "alpha", L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.cbegin(), 2));
+        variable expect = array::make({ true, 2, "alpha", L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void erase_array_fourth()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = data.erase(std::next(data.begin(), 3));
-    variable expect = array::make({ true, 2, 3.0, L"bravo", u"charlie", U"delta" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.begin(), 3));
+        variable expect = array::make({ true, 2, 3.0, L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.cbegin(), 3));
+        variable expect = array::make({ true, 2, 3.0, L"bravo", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void erase_array_fifth()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = data.erase(std::next(data.begin(), 4));
-    variable expect = array::make({ true, 2, 3.0, "alpha", u"charlie", U"delta" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.begin(), 4));
+        variable expect = array::make({ true, 2, 3.0, "alpha", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.cbegin(), 4));
+        variable expect = array::make({ true, 2, 3.0, "alpha", u"charlie", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void erase_array_sixth()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = data.erase(std::next(data.begin(), 5));
-    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", U"delta" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.begin(), 5));
+        variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.cbegin(), 5));
+        variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", U"delta" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void erase_array_seventh()
 {
-    variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
-    auto where = data.erase(std::next(data.begin(), 6));
-    variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
-    TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
-                                 expect.begin(), expect.end(),
-                                 std::equal_to<variable>());
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.begin(), 6));
+        variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
+    {
+        variable data = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie", U"delta" });
+        auto where = data.erase(std::next(data.cbegin(), 6));
+        variable expect = array::make({ true, 2, 3.0, "alpha", L"bravo", u"charlie" });
+        TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
+                                     expect.begin(), expect.end(),
+                                     std::equal_to<variable>());
+    }
 }
 
 void erase_array_all()

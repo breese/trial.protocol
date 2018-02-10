@@ -3880,8 +3880,42 @@ void basic_variable<Allocator>::insert(const_iterator where,
 }
 
 template <template <typename> class Allocator>
+auto basic_variable<Allocator>::erase(iterator where) -> iterator
+{
+    // The iterator to iterator signature was introduced in C++17 as a
+    // resolution to LWG defect 2059.
+
+    using array_iterator = typename basic_variable::const_iterator::array_iterator;
+    using map_iterator = typename basic_variable::const_iterator::map_iterator;
+
+    switch (symbol())
+    {
+    case symbol::array:
+        {
+            auto& array = assume_value<array_type>();
+            auto& array_where = where.current.template get<array_iterator>();
+            where.current = array.erase(array_where);
+        }
+        break;
+
+    case symbol::map:
+        where.current =
+            assume_value<map_type>().erase(where.current.template get<map_iterator>());
+        break;
+
+    default:
+        // Non-container types are unerasable
+        break;
+    }
+    return where;
+}
+
+template <template <typename> class Allocator>
 auto basic_variable<Allocator>::erase(const_iterator where) -> iterator
 {
+    // The const_iterator to iterator signature was introduced in C++11 by
+    // proposal N2350.
+
     using array_iterator = typename basic_variable::const_iterator::array_iterator;
     using map_iterator = typename basic_variable::const_iterator::map_iterator;
 

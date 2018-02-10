@@ -867,6 +867,12 @@ public:
     //! array       | Erases element at `position`.
     //! map         | Erases element at `position`.
 
+    iterator erase(iterator position);
+
+    //! @brief Erases an element from variable.
+    //!
+    //! @sa basic_variable<Allocator>::erase(iterator)
+
     iterator erase(const_iterator position);
 
     //! @brief Erases range from variable.
