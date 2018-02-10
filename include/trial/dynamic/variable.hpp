@@ -300,6 +300,16 @@ public:
 
         key_iterator& operator++();
 
+        //! @brief Convert key_iterator to const_iterator
+        //!
+        //! This conversion is lossy because const_iterator has fewer member
+        //! variables than key_iterator.
+        //!
+        //! @returns const_iterator pointing to the same container item as
+        //! key_iterator.
+
+        const_iterator base() const;
+
     private:
         friend class basic_variable;
 

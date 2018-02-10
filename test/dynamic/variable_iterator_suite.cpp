@@ -3190,6 +3190,19 @@ void iterate_map()
     TRIAL_PROTOCOL_TEST(where == data.key_end());
 }
 
+void erase_base()
+{
+    variable data = map::make(
+        {
+            {"key", "alpha"}
+        });
+    auto where = data.key_begin();
+    TRIAL_PROTOCOL_TEST(where != data.key_end());
+    TRIAL_PROTOCOL_TEST(*where == "key");
+    auto it = data.erase(where.base());
+    TRIAL_PROTOCOL_TEST(it == data.end());
+}
+
 void run()
 {
     iterate_null();
@@ -3202,6 +3215,8 @@ void run()
     iterate_u32string();
     iterate_array();
     iterate_map();
+
+    erase_base();
 }
 
 } // namespace key_iterator_suite

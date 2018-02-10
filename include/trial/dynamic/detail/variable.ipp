@@ -2794,6 +2794,17 @@ auto basic_variable<Allocator>::key_iterator::operator++ () -> key_iterator&
     return super::operator++();
 }
 
+template <template <typename> class Allocator>
+auto basic_variable<Allocator>::key_iterator::base() const -> const_iterator
+{
+    assert(super::scope);
+
+    const_iterator result;
+    result.scope = super::scope;
+    result.current = super::current;
+    return result;
+}
+
 //-----------------------------------------------------------------------------
 // storage visitors
 //-----------------------------------------------------------------------------
