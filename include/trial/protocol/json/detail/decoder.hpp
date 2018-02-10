@@ -60,8 +60,9 @@ private:
 
     template <typename ReturnType, typename Enable = void>
     struct overloader;
-    template <typename ReturnType> ReturnType integer_value() const;
-    template <typename ReturnType> ReturnType number_value() const;
+    template <typename ReturnType> ReturnType signed_integer_value() const;
+    template <typename ReturnType> ReturnType unsigned_integer_value() const;
+    template <typename ReturnType> ReturnType real_value() const;
     std::basic_string<CharT> string_value() const;
 
 private:

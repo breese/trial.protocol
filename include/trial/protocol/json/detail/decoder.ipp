@@ -49,11 +49,34 @@ struct basic_decoder<CharT>::overloader
 template <typename CharT>
 template <typename ReturnType>
 struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename std::enable_if<std::is_integral<ReturnType>::value>::type>
+                                        typename std::enable_if<std::is_integral<ReturnType>::value &&
+                                                                std::is_signed<ReturnType>::value>::type>
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
-        return self.template integer_value<ReturnType>();
+        if (self.code() != token::detail::code::integer)
+        {
+            self.current.code = token::detail::code::error_incompatible_type;
+            throw json::error(self.error());
+        }
+        return self.template signed_integer_value<ReturnType>();
+    }
+};
+
+template <typename CharT>
+template <typename ReturnType>
+struct basic_decoder<CharT>::overloader<ReturnType,
+                                        typename std::enable_if<std::is_integral<ReturnType>::value &&
+                                                                std::is_unsigned<ReturnType>::value>::type>
+{
+    inline static ReturnType value(const basic_decoder<CharT>& self)
+    {
+        if (self.code() != token::detail::code::integer)
+        {
+            self.current.code = token::detail::code::error_incompatible_type;
+            throw json::error(self.error());
+        }
+        return self.template unsigned_integer_value<ReturnType>();
     }
 };
 
@@ -66,7 +89,12 @@ struct basic_decoder<CharT>::overloader<ReturnType,
 {
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
-        return self.template number_value<ReturnType>();
+        if (self.code() != token::detail::code::real)
+        {
+            self.current.code = token::detail::code::error_incompatible_type;
+            throw json::error(self.error());
+        }
+        return self.template real_value<ReturnType>();
     }
 };
 
@@ -79,6 +107,11 @@ struct basic_decoder<CharT>::overloader<ReturnType,
 {
     inline static std::string value(const basic_decoder<CharT>& self)
     {
+        if (self.code() != token::detail::code::string)
+        {
+            self.current.code = token::detail::code::error_incompatible_type;
+            throw json::error(self.error());
+        }
         return self.string_value();
     }
 };
@@ -210,26 +243,62 @@ ReturnType basic_decoder<CharT>::value() const
 
 template <typename CharT>
 template <typename ReturnType>
-ReturnType basic_decoder<CharT>::integer_value() const
+ReturnType basic_decoder<CharT>::signed_integer_value() const
 {
-    if (current.code != token::detail::code::integer)
-    {
-        current.code = token::detail::code::error_incompatible_type;
-        throw json::error(error());
-    }
+    static_assert(std::is_signed<ReturnType>::value, "ReturnType must be signed");
+    assert(current.code == token::detail::code::integer);
 
     typename view_type::const_iterator it = literal().begin();
 
     const bool is_negative = (*it == traits<CharT>::alpha_minus);
     if (is_negative)
     {
-        if (std::is_unsigned<ReturnType>::value)
+        ++it; // Skip minus
+
+        ReturnType result = ReturnType();
+        const ReturnType lowest = std::numeric_limits<ReturnType>::lowest();
+        while (it != literal().end())
         {
-            current.code = token::detail::code::error_invalid_value;
-            throw json::error(error());
+            if (lowest / ReturnType(10) > result) {
+                // Overflow
+                current.code = token::detail::code::error_invalid_value;
+                throw json::error(error());
+            }
+            result *= ReturnType(10);
+
+            const ReturnType digit = ReturnType(traits<CharT>::to_int(*it));
+            if (lowest + digit > result + 1) {
+                // Overflow
+                current.code = token::detail::code::error_invalid_value;
+                throw json::error(error());
+            }
+            result -= digit;
+
+            ++it;
         }
-        ++it;
+        return result;
     }
+    else
+    {
+        return unsigned_integer_value<ReturnType>();
+    }
+}
+
+template <typename CharT>
+template <typename ReturnType>
+ReturnType basic_decoder<CharT>::unsigned_integer_value() const
+{
+    assert(current.code == token::detail::code::integer);
+
+    typename view_type::const_iterator it = literal().begin();
+
+    const bool is_negative = (*it == traits<CharT>::alpha_minus);
+    if (is_negative)
+    {
+        current.code = token::detail::code::error_invalid_value;
+        throw json::error(error());
+    }
+
     ReturnType result = ReturnType();
     const ReturnType max = std::numeric_limits<ReturnType>::max();
     while (it != literal().end())
@@ -251,19 +320,15 @@ ReturnType basic_decoder<CharT>::integer_value() const
 
         ++it;
     }
-    return is_negative ? -result : result;
+    return result;
 }
 
 template <typename CharT>
 template <typename ReturnType>
-ReturnType basic_decoder<CharT>::number_value() const
+ReturnType basic_decoder<CharT>::real_value() const
 {
-    if (current.code != token::detail::code::real)
-    {
-        current.code = token::detail::code::error_incompatible_type;
-        throw json::error(error());
-    }
-    
+    assert(current.code == token::detail::code::real);
+
     return string_converter<CharT, ReturnType>::decode(current.view);
 }
 
@@ -271,11 +336,7 @@ template <typename CharT>
 std::basic_string<CharT> basic_decoder<CharT>::string_value() const
 {
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
-    if (current.code != token::detail::code::string)
-    {
-        current.code = token::detail::code::error_incompatible_type;
-        throw json::error(error());
-    }
+    assert(current.code == token::detail::code::string);
 
     const typename view_type::size_type  approximateSize = literal().size();
     assert(approximateSize >= 2);

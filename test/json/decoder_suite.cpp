@@ -8,6 +8,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <limits>
+#include <sstream>
+#include <iomanip>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
 
@@ -294,24 +297,207 @@ void test_minus_hundred()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
 }
 
-void test_large()
+void test_lowest()
 {
-    const char input[] = "100000000000000000";
-    decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::int64_t>(), INT64_C(100000000000000000));
-    decoder.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    {
+        using integer_type = signed char;
+        auto value = std::numeric_limits<integer_type>::lowest();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << signed(value);
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed short int;
+        auto value = std::numeric_limits<integer_type>::lowest();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed int;
+        auto value = std::numeric_limits<integer_type>::lowest();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed long int;
+        auto value = std::numeric_limits<integer_type>::lowest();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed long long int;
+        auto value = std::numeric_limits<integer_type>::lowest();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
 }
 
 void test_max()
 {
-    const char input[] = "9223372036854775807";
-    decoder_type decoder(input);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::int64_t>(), INT64_C(9223372036854775807));
-    decoder.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    {
+        using integer_type = signed char;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << signed(value);
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = unsigned char;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << unsigned(value);
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed short int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = unsigned short int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = unsigned int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed long int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = unsigned long int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = signed long long int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
+    {
+        using integer_type = unsigned long long int;
+        auto value = std::numeric_limits<integer_type>::max();
+        std::ostringstream stream;
+        stream.precision(std::numeric_limits<integer_type>::max_digits10);
+        stream << value;
+        auto input = stream.str();
+        decoder_type decoder(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
+        decoder.next();
+        TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    }
 }
 
 void fail_minus()
@@ -479,7 +665,7 @@ void run()
     test_zero_white();
     test_hundred();
     test_minus_hundred();
-    test_large();
+    test_lowest();
     test_max();
     fail_minus();
     fail_minus_white();
