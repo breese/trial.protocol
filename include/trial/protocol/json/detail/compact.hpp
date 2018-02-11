@@ -22,6 +22,7 @@ namespace json
 namespace detail
 {
 
+// Convert std::intmax_t into smallest possible signed integer
 template <typename ReturnType>
 auto compact(std::intmax_t value) -> ReturnType
 {
@@ -40,6 +41,7 @@ auto compact(std::intmax_t value) -> ReturnType
     return value;
 }
 
+// Convert std::uintmax_t into smallest possible unsigned integer
 template <typename ReturnType>
 auto compact(std::uintmax_t value) -> ReturnType
 {
@@ -54,32 +56,38 @@ auto compact(std::uintmax_t value) -> ReturnType
     return value;
 }
 
+// Convert long double into smallest possible floating-point number
 template <typename ReturnType>
 auto compact(long double value) -> ReturnType
 {
-    // Use the smallest possible floating-point type.
     // Check that
     //   1. Value is large enough to be represented as type.
     //   2. Value is larger than the lowest number of type.
     //   3. Value is smaller than the highest number of type.
+
+    // float
     {
-        const auto tolerance = 1.0L + std::numeric_limits<float>::epsilon();
-        if ((std::abs(value) * tolerance >= std::numeric_limits<float>::min()) &&
-            (value >= std::numeric_limits<float>::lowest() * tolerance) &&
-            (value <= std::numeric_limits<float>::max() * tolerance))
+        using real_type = float;
+        const auto tolerance = 1.0L + std::numeric_limits<real_type>::epsilon();
+        if ((std::abs(value) * tolerance >= std::numeric_limits<real_type>::min()) &&
+            (value >= std::numeric_limits<real_type>::lowest() * tolerance) &&
+            (value <= std::numeric_limits<real_type>::max() * tolerance))
         {
-            return static_cast<float>(value);
+            return static_cast<real_type>(value);
         }
     }
+    // double
     {
-        const auto tolerance = 1.0L + std::numeric_limits<double>::epsilon();
-        if ((std::abs(value) * tolerance >= std::numeric_limits<double>::min()) &&
-            (value >= std::numeric_limits<double>::lowest() * tolerance) &&
-            (value <= std::numeric_limits<double>::max() * tolerance))
+        using real_type = double;
+        const auto tolerance = 1.0L + std::numeric_limits<real_type>::epsilon();
+        if ((std::abs(value) * tolerance >= std::numeric_limits<real_type>::min()) &&
+            (value >= std::numeric_limits<real_type>::lowest() * tolerance) &&
+            (value <= std::numeric_limits<real_type>::max() * tolerance))
         {
-            return static_cast<double>(value);
+            return static_cast<real_type>(value);
         }
     }
+    // long double
     return value;
 }
 
