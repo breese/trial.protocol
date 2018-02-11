@@ -15,6 +15,7 @@
 #include <trial/protocol/json/serialization/serialization.hpp>
 #include <trial/protocol/serialization/dynamic/variable.hpp>
 #include <trial/protocol/json/token.hpp>
+#include <trial/protocol/json/detail/compact.hpp>
 
 namespace trial
 {
@@ -152,7 +153,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
             {
                 std::intmax_t value = {};
                 ar.load(value);
-                data = value;
+                data = detail::compact<dynamic::variable>(value);
             }
             break;
 
@@ -160,7 +161,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
             {
                 long double value = {};
                 ar.load(value);
-                data = value;
+                data = detail::compact<dynamic::variable>(value);
             }
             break;
 
