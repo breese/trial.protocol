@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cmath>
 #include <string>
 #include <algorithm>
 #include <iterator>
@@ -24,6 +25,26 @@ namespace core
 {
 namespace detail
 {
+
+template <typename T>
+inline void test_close_impl(char const * expr1,
+                            char const * expr2,
+                            char const * file, int line, char const * function,
+                            const T& lhs, const T& rhs, T tolerance)
+{
+    if (std::fabs(lhs - rhs) <= tolerance)
+    {
+        boost::detail::report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " == " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << lhs << "' != '" << rhs << "'" << std::endl;
+        ++boost::detail::test_errors();
+    }
+}
 
 template<class FormattedOutputFunction, class InputIterator1, class InputIterator2>
 void test_all_eq_impl(FormattedOutputFunction& output,
@@ -195,7 +216,10 @@ void test_all_with_impl(FormattedOutputFunction& output,
         ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
     }
 
+#define TRIAL_PROTOCOL_TEST_CLOSE(LHS, RHS, TOLERANCE) ::trial::protocol::core::detail::test_close_impl(#LHS, #RHS, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, LHS, RHS, TOLERANCE)
+
 #define TRIAL_PROTOCOL_TEST_ALL_EQUAL(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END) ::trial::protocol::core::detail::test_all_eq_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END)
+
 #define TRIAL_PROTOCOL_TEST_ALL_WITH(FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE) ::trial::protocol::core::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, FIRST_BEGIN, FIRST_END, SECOND_BEGIN, SECOND_END, PREDICATE)
 
 #endif // TRIAL_PROTOCOL_CORE_DETAIL_LIGHTWEIGHT_TEST_HPP
