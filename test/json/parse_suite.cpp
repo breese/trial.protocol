@@ -330,6 +330,163 @@ void run()
 
 //-----------------------------------------------------------------------------
 
+namespace reader_suite
+{
+
+void parse_empty()
+{
+    std::string input = "";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.empty());
+}
+
+void parse_null()
+{
+    std::string input = "null";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<nullable>());
+}
+
+void parse_boolean()
+{
+    std::string input = "true";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<bool>());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<bool>(), true);
+}
+
+void parse_integer()
+{
+    std::string input = "2";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<int>());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
+}
+
+void parse_real()
+{
+    std::string input = "3.0";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<float>());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<float>(), 3.0);
+}
+
+void parse_string()
+{
+    std::string input = "\"alpha\"";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<std::string>());
+    TRIAL_PROTOCOL_TEST_EQUAL(result.value<std::string>(), "alpha");
+}
+
+void parse_array()
+{
+    std::string input = "[null,true,2,3.0,\"alpha\"]";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<array>());
+
+    variable expect = { null, true, 2, 3.0, "alpha" };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void parse_nested_array()
+{
+    std::string input = "[[null,true,2,3.0,\"alpha\"]]";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_array);
+    reader.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_array);
+
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<array>());
+
+    variable expect = { null, true, 2, 3.0, "alpha" };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::end_array);
+    reader.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::end);
+}
+
+void parse_map()
+{
+    std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}";
+    json::reader reader(input);
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<map>());
+
+    variable expect =
+        {
+            { "alpha", null },
+            { "bravo", true },
+            { "charlie", 2 },
+            { "delta", 3.0 },
+            { "echo", "hydrogen" }
+        };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void parse_nested_map()
+{
+    std::string input = "{\"outer\":{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}}";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_object);
+    reader.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::string);
+    reader.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_object);
+
+    auto result = json::parse(reader);
+    TRIAL_PROTOCOL_TEST(result.is<map>());
+
+    variable expect =
+        {
+            { "alpha", null },
+            { "bravo", true },
+            { "charlie", 2 },
+            { "delta", 3.0 },
+            { "echo", "hydrogen" }
+        };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::end_object);
+    reader.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::end);
+}
+
+void run()
+{
+    parse_empty();
+    parse_null();
+    parse_boolean();
+    parse_integer();
+    parse_real();
+    parse_string();
+    parse_array();
+    parse_nested_array();
+    parse_map();
+    parse_nested_map();
+}
+
+} // namespace reader_suite
+
+//-----------------------------------------------------------------------------
+
 namespace failure_suite
 {
 
@@ -418,6 +575,7 @@ void run()
 int main()
 {
     parser_suite::run();
+    reader_suite::run();
     failure_suite::run();
 
     return boost::report_errors();

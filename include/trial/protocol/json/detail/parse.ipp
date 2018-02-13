@@ -32,9 +32,8 @@ class basic_parser
 public:
     using variable_type = dynamic::basic_variable<Allocator>;
 
-    template <typename U>
-    basic_parser(const U& input)
-        : reader(input)
+    basic_parser(basic_reader<CharT>& reader)
+        : reader(reader)
     {}
 
     // Parse outer scope
@@ -68,6 +67,7 @@ public:
 
         default:
             outer = parse_value();
+            break;
         }
 
         return outer;
@@ -89,6 +89,7 @@ private:
                 break;
 
             case token::symbol::end_array:
+                reader.next();
                 return scope;
 
             case token::symbol::begin_object:
@@ -100,6 +101,7 @@ private:
 
             default:
                 scope.insert(parse_value());
+                break;
             }
         }
 
@@ -119,6 +121,7 @@ private:
             switch (reader.symbol())
             {
             case token::symbol::end_object:
+                reader.next();
                 return scope;
             case token::symbol::string:
                 key = reader.template value<std::string>();
@@ -194,7 +197,7 @@ private:
         }
     }
 
-    json::basic_reader<CharT> reader;
+    json::basic_reader<CharT>& reader;
 };
 
 } // namespace detail

@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/dynamic/variable.hpp>
+#include <trial/protocol/json/reader.hpp>
 #include <trial/protocol/json/detail/parse.ipp>
 
 namespace trial
@@ -31,7 +32,15 @@ namespace json
 template <typename U, template <typename> class Allocator = std::allocator>
 auto parse(const U& input) -> dynamic::basic_variable<Allocator>
 {
-    detail::basic_parser<char, Allocator> parser(input);
+    json::reader reader(input);
+    detail::basic_parser<char, Allocator> parser(reader);
+    return parser.parse();
+}
+
+template <template <typename> class Allocator = std::allocator>
+auto parse(json::reader& reader) -> dynamic::basic_variable<Allocator>
+{
+    detail::basic_parser<char, Allocator> parser(reader);
     return parser.parse();
 }
 
