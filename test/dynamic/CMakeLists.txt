@@ -56,6 +56,7 @@ trial_add_test(dynamic_std_swap_ranges_suite std/swap_ranges_suite.cpp)
 trial_add_test(dynamic_std_transform_suite std/transform_suite.cpp)
 trial_add_test(dynamic_std_unique_suite std/unique_suite.cpp)
 trial_add_test(dynamic_std_upper_bound_suite std/upper_bound_suite.cpp)
+trial_add_test(dynamic_erase_suite erase_suite.cpp)
 
 # <numeric>
 trial_add_test(dynamic_std_accumulate_suite std/accumulate_suite.cpp)

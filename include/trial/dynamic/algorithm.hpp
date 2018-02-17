@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/dynamic/algorithm/count.hpp>
+#include <trial/dynamic/algorithm/erase.hpp>
 #include <trial/dynamic/algorithm/find.hpp>
 
 #endif // TRIAL_DYNAMIC_ALGORITHM_HPP
