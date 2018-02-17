@@ -330,14 +330,14 @@ void run()
 
 //-----------------------------------------------------------------------------
 
-namespace reader_suite
+namespace partial_suite
 {
 
 void parse_empty()
 {
     std::string input = "";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.empty());
 }
 
@@ -345,7 +345,7 @@ void parse_null()
 {
     std::string input = "null";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<nullable>());
 }
 
@@ -353,7 +353,7 @@ void parse_boolean()
 {
     std::string input = "true";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<bool>());
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<bool>(), true);
 }
@@ -362,7 +362,7 @@ void parse_integer()
 {
     std::string input = "2";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<int>());
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<int>(), 2);
 }
@@ -371,7 +371,7 @@ void parse_real()
 {
     std::string input = "3.0";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<float>());
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<float>(), 3.0);
 }
@@ -380,7 +380,7 @@ void parse_string()
 {
     std::string input = "\"alpha\"";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<std::string>());
     TRIAL_PROTOCOL_TEST_EQUAL(result.value<std::string>(), "alpha");
 }
@@ -389,7 +389,7 @@ void parse_array()
 {
     std::string input = "[null,true,2,3.0,\"alpha\"]";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<array>());
 
     variable expect = { null, true, 2, 3.0, "alpha" };
@@ -406,7 +406,7 @@ void parse_nested_array()
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_array);
 
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<array>());
 
     variable expect = { null, true, 2, 3.0, "alpha" };
@@ -423,7 +423,7 @@ void parse_map()
 {
     std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}";
     json::reader reader(input);
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<map>());
 
     variable expect =
@@ -449,7 +449,7 @@ void parse_nested_map()
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_object);
 
-    auto result = json::parse(reader);
+    auto result = json::partial::parse(reader);
     TRIAL_PROTOCOL_TEST(result.is<map>());
 
     variable expect =
@@ -483,7 +483,7 @@ void run()
     parse_nested_map();
 }
 
-} // namespace reader_suite
+} // namespace partial_suite
 
 //-----------------------------------------------------------------------------
 
@@ -616,6 +616,16 @@ void parse_null()
                                         json::error,
                                         "unexpected token");
     }
+    // Partial
+    {
+        std::string input = "null[]";
+        json::reader reader(input);
+        auto result = json::partial::parse(reader);
+        TRIAL_PROTOCOL_TEST(result.is<nullable>());
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::error);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    }
 }
 
 void parse_array()
@@ -660,6 +670,16 @@ void parse_array()
         TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
                                         json::error,
                                         "unexpected token");
+    }
+    // Partial
+    {
+        std::string input = "[null,true,2,3.0,\"alpha\"][]";
+        json::reader reader(input);
+        auto result = json::partial::parse(reader);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::error);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
     }
 }
 
@@ -706,6 +726,16 @@ void parse_object()
                                         json::error,
                                         "unexpected token");
     }
+    // Partial
+    {
+        std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}[]";
+        json::reader reader(input);
+        auto result = json::partial::parse(reader);
+        TRIAL_PROTOCOL_TEST(result.is<map>());
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::error);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    }
 }
 
 void run()
@@ -724,7 +754,7 @@ void run()
 int main()
 {
     parser_suite::run();
-    reader_suite::run();
+    partial_suite::run();
     failure_suite::run();
     residue_suite::run();
 

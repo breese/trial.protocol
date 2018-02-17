@@ -22,6 +22,18 @@ namespace protocol
 namespace json
 {
 
+namespace partial
+{
+
+template <template <typename> class Allocator = std::allocator>
+auto parse(json::reader& reader) -> dynamic::basic_variable<Allocator>
+{
+    detail::basic_parser<char, Allocator> parser(reader);
+    return parser.parse();
+}
+
+} // namespace partial
+
 //! @brief Tree JSON parser.
 //!
 //! Parse JSON formatted data into a dynamic variable.
@@ -33,18 +45,10 @@ template <typename U, template <typename> class Allocator = std::allocator>
 auto parse(const U& input) -> dynamic::basic_variable<Allocator>
 {
     json::reader reader(input);
-    detail::basic_parser<char, Allocator> parser(reader);
-    auto result = parser.parse();
+    auto result = partial::parse(reader);
     if (reader.symbol() != json::token::symbol::end)
         throw json::error(json::unexpected_token);
     return result;
-}
-
-template <template <typename> class Allocator = std::allocator>
-auto parse(json::reader& reader) -> dynamic::basic_variable<Allocator>
-{
-    detail::basic_parser<char, Allocator> parser(reader);
-    return parser.parse();
 }
 
 } // namespace json
