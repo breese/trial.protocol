@@ -569,6 +569,155 @@ void run()
 } // namespace failure_suite
 
 //-----------------------------------------------------------------------------
+
+namespace residue_suite
+{
+
+void parse_null()
+{
+    // Trailing whitespace
+    {
+        std::string input = "null ";
+        auto result = json::parse(input);
+        TRIAL_PROTOCOL_TEST(result.same<nullable>());
+    }
+    // Trailing separator
+    {
+        std::string input = "null,";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing value
+    {
+        std::string input = "null true";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing string
+    {
+        std::string input = "null\"zulu\"";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing array
+    {
+        std::string input = "null[]";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing object
+    {
+        std::string input = "null{}";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+}
+
+void parse_array()
+{
+    // Trailing whitespace
+    {
+        std::string input = "[null,true,2,3.0,\"alpha\"] ";
+        auto result = json::parse(input);
+        TRIAL_PROTOCOL_TEST(result.is<array>());
+    }
+    // Trailing separator
+    {
+        std::string input = "[null,true,2,3.0,\"alpha\"],";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing value
+    {
+        std::string input = "[null,true,2,3.0,\"alpha\"]true";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing string
+    {
+        std::string input = "[null,true,2,3.0,\"alpha\"]\"zulu\"";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing array
+    {
+        std::string input = "[null,true,2,3.0,\"alpha\"][]";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing object
+    {
+        std::string input = "[null,true,2,3.0,\"alpha\"]{}";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+}
+
+void parse_object()
+{
+    // Trailing whitespace
+    {
+        std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"} ";
+        auto result = json::parse(input);
+        TRIAL_PROTOCOL_TEST(result.is<map>());
+    }
+    // Trailing separator
+    {
+        std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"},";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing value
+    {
+        std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}true";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing value
+    {
+        std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}\"zulu\"";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing array
+    {
+        std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}[]";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing object
+    {
+        std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}{}";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+}
+
+void run()
+{
+    parse_null();
+    parse_array();
+    parse_object();
+}
+
+} // namespace residue_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -577,6 +726,7 @@ int main()
     parser_suite::run();
     reader_suite::run();
     failure_suite::run();
+    residue_suite::run();
 
     return boost::report_errors();
 }

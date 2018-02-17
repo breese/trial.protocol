@@ -67,6 +67,7 @@ public:
 
         default:
             outer = parse_value();
+            reader.next();
             break;
         }
 

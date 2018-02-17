@@ -34,7 +34,10 @@ auto parse(const U& input) -> dynamic::basic_variable<Allocator>
 {
     json::reader reader(input);
     detail::basic_parser<char, Allocator> parser(reader);
-    return parser.parse();
+    auto result = parser.parse();
+    if (reader.symbol() != json::token::symbol::end)
+        throw json::error(json::unexpected_token);
+    return result;
 }
 
 template <template <typename> class Allocator = std::allocator>
