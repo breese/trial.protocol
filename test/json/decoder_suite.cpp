@@ -1253,6 +1253,36 @@ void run()
 } // namespace string_suite
 
 //-----------------------------------------------------------------------------
+// std::basic_string<unsigned char>
+//-----------------------------------------------------------------------------
+
+namespace ustring_suite
+{
+
+using ustring_type = std::basic_string<unsigned char>;
+using udecoder_type = json::detail::basic_decoder<unsigned char>;
+
+void test_empty()
+{
+    const unsigned char input[] = { '"', '"', 0 };
+    udecoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::string);
+    TRIAL_PROTOCOL_TEST(decoder.value<ustring_type>().empty());
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal().size(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal()[0], '"');
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal()[1], '"');
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void run()
+{
+    test_empty();
+}
+
+} // namespace ustring_suite
+
+//-----------------------------------------------------------------------------
 // UTF-8 characters
 //-----------------------------------------------------------------------------
 
@@ -1995,6 +2025,7 @@ int main()
     integer_suite::run();
     real_suite::run();
     string_suite::run();
+    ustring_suite::run();
     utf8_suite::run();
     pangram_suite::run();
     container_suite::run();

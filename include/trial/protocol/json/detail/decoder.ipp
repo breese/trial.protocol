@@ -105,7 +105,7 @@ template <typename ReturnType>
 struct basic_decoder<CharT>::overloader<ReturnType,
                                         typename std::enable_if<std::is_same<ReturnType, std::basic_string<CharT> >::value>::type>
 {
-    inline static std::string value(const basic_decoder<CharT>& self)
+    inline static std::basic_string<CharT> value(const basic_decoder<CharT>& self)
     {
         if (self.code() != token::detail::code::string)
         {
