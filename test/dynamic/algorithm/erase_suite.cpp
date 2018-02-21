@@ -18,7 +18,10 @@ using namespace trial::dynamic;
 // key::erase
 //-----------------------------------------------------------------------------
 
-void key_erase_null()
+namespace key_erase_suite
+{
+
+void erase_null()
 {
     variable data, data2;
     // Cannot iterate over null, so nothing changes
@@ -27,7 +30,7 @@ void key_erase_null()
     TRIAL_PROTOCOL_TEST(data == data2);
 }
 
-void key_erase_string_matching_key()
+void erase_string_matching_key()
 {
     variable data("test");
     TRIAL_PROTOCOL_TEST(data == "test");
@@ -36,7 +39,7 @@ void key_erase_string_matching_key()
     TRIAL_PROTOCOL_TEST(data == "test");
 }
 
-void key_erase_first_out_of_three_on_list()
+void erase_first_out_of_three_on_list()
 {
     variable data{"test", 2, 3};
     auto it = key::erase(data, "test");
@@ -44,7 +47,7 @@ void key_erase_first_out_of_three_on_list()
     TRIAL_PROTOCOL_TEST(*data.begin() == "test");
 }
 
-void key_erase_first_out_of_three()
+void erase_first_out_of_three()
 {
     variable data;
     data["a"] = 1;
@@ -56,7 +59,7 @@ void key_erase_first_out_of_three()
     TRIAL_PROTOCOL_TEST(data.size() == 2);
 }
 
-void key_erase_last()
+void erase_last()
 {
     variable data;
     data["a"] = 1;
@@ -69,7 +72,7 @@ void key_erase_last()
     TRIAL_PROTOCOL_TEST(data["b"] == 2);
 }
 
-void key_erase_on_one_sized_map()
+void erase_on_one_sized_map()
 {
     variable data;
     data["a"] = 1;
@@ -78,12 +81,25 @@ void key_erase_on_one_sized_map()
     TRIAL_PROTOCOL_TEST(data.size() == 0);
 }
 
+void run()
+{
+    erase_null();
+    erase_string_matching_key();
+    erase_first_out_of_three_on_list();
+    erase_first_out_of_three();
+    erase_last();
+    erase_on_one_sized_map();
+}
+
+} // namespace key_erase_suite
+
+//-----------------------------------------------------------------------------
+// main
+//-----------------------------------------------------------------------------
+
 int main()
 {
-    key_erase_null();
-    key_erase_string_matching_key();
-    key_erase_first_out_of_three_on_list();
-    key_erase_first_out_of_three();
-    key_erase_last();
-    key_erase_on_one_sized_map();
+    key_erase_suite::run();
+
+    return boost::report_errors();
 }

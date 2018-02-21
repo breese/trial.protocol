@@ -18,6 +18,7 @@ trial_add_test(dynamic_variable_iterator_suite variable_iterator_suite.cpp)
 trial_add_test(dynamic_variable_io_suite variable_io_suite.cpp)
 
 trial_add_test(dynamic_algorithm_count_suite algorithm/count_suite.cpp)
+trial_add_test(dynamic_algorithm_erase_suite algorithm/erase_suite.cpp)
 trial_add_test(dynamic_algorithm_find_suite algorithm/find_suite.cpp)
 trial_add_test(dynamic_algorithm_visit_suite algorithm/visit_suite.cpp)
 
@@ -56,7 +57,6 @@ trial_add_test(dynamic_std_swap_ranges_suite std/swap_ranges_suite.cpp)
 trial_add_test(dynamic_std_transform_suite std/transform_suite.cpp)
 trial_add_test(dynamic_std_unique_suite std/unique_suite.cpp)
 trial_add_test(dynamic_std_upper_bound_suite std/upper_bound_suite.cpp)
-trial_add_test(dynamic_erase_suite erase_suite.cpp)
 
 # <numeric>
 trial_add_test(dynamic_std_accumulate_suite std/accumulate_suite.cpp)
