@@ -8,6 +8,7 @@
 #
 ###############################################################################
 
+# dynamic
 trial_add_test(dynamic_variable_suite variable_suite.cpp)
 trial_add_test(dynamic_variable_concept_suite variable_concept_suite.cpp)
 trial_add_test(dynamic_variable_capacity_suite variable_capacity_suite.cpp)
@@ -17,6 +18,7 @@ trial_add_test(dynamic_variable_comparison_suite variable_comparison_suite.cpp)
 trial_add_test(dynamic_variable_iterator_suite variable_iterator_suite.cpp)
 trial_add_test(dynamic_variable_io_suite variable_io_suite.cpp)
 
+# dynamic algorithm
 trial_add_test(dynamic_algorithm_count_suite algorithm/count_suite.cpp)
 trial_add_test(dynamic_algorithm_erase_suite algorithm/erase_suite.cpp)
 trial_add_test(dynamic_algorithm_find_suite algorithm/find_suite.cpp)
@@ -63,5 +65,7 @@ trial_add_test(dynamic_std_accumulate_suite std/accumulate_suite.cpp)
 trial_add_test(dynamic_std_iota_suite std/iota_suite.cpp)
 trial_add_test(dynamic_std_partial_sum_suite std/partial_sum_suite.cpp)
 
+# convert
 trial_add_test(dynamic_std_convert_suite std/convert_suite.cpp)
-trial_add_test(dynamic_boost_convert_suite boost/convert_suite.cpp)
+trial_add_test(dynamic_boost_convert_any_suite boost/convert_any_suite.cpp)
+trial_add_test(dynamic_boost_convert_optional_suite boost/convert_optional_suite.cpp)
