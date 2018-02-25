@@ -33,7 +33,9 @@ enum errc
     unbalanced_end_array,
     unbalanced_end_object,
     expected_end_array,
-    expected_end_object
+    expected_end_object,
+
+    insufficient_tokens
 };
 
 const std::error_category& error_category();

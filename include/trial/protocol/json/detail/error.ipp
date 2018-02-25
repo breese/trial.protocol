@@ -55,6 +55,9 @@ public:
 
         case expected_end_object:
             return "expected end object bracket";
+
+        case insufficient_tokens:
+            return "algorithm used requires more tokens than available";
         }
         return "trial.protocol.json error";
     }
