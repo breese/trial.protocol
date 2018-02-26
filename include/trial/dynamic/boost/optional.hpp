@@ -53,7 +53,7 @@ struct convert_overloader<boost::optional<T>,
             return boost::none;
 
         if (data.template is<T>())
-            return data.template value<T>();
+            return data.template value<T>(error);
 
         error = dynamic::make_error_code(incompatible_type);
         return {};
