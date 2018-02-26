@@ -21,6 +21,19 @@ namespace protocol
 namespace json
 {
 
+namespace partial
+{
+
+template <template <typename> class Allocator>
+void format(const trial::dynamic::basic_variable<Allocator>& data,
+            json::writer& writer)
+{
+    detail::basic_formatter<char, Allocator> vis(writer);
+    trial::dynamic::visit(vis, data);
+}
+
+} // namespace partial
+
 //! @brief Encode dynamic variable into JSON.
 //!
 //! @param data Dynamic variable.
@@ -31,8 +44,8 @@ template <typename T, template <typename> class Allocator>
 auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
 {
     T result;
-    detail::basic_formatter<char, Allocator> vis(result);
-    trial::dynamic::visit(vis, data);
+    json::writer writer(result);
+    partial::format(data, writer);
     return result;
 }
 
@@ -46,8 +59,8 @@ template <typename T, template <typename> class Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
             T& result)
 {
-    detail::basic_formatter<char, Allocator> vis(result);
-    trial::dynamic::visit(vis, data);
+    json::writer writer(result);
+    partial::format(data, writer);
 }
 
 } // namespace tree

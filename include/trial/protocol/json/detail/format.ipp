@@ -28,20 +28,19 @@ struct basic_formatter
 {
     using variable_type = trial::dynamic::basic_variable<Allocator>;
 
-    template <typename U>
-    basic_formatter(U& result)
-        : output(result)
+    basic_formatter(basic_writer<CharT>& writer)
+        : writer(writer)
     {}
 
     template <typename T>
     void operator()(const T& value)
     {
-        output.value(value);
+        writer.value(value);
     }
 
     void operator()(const trial::dynamic::nullable&)
     {
-        output.template value<json::token::null>();
+        writer.template value<json::token::null>();
     }
 
     void operator()(const typename variable_type::wstring_type&)
@@ -61,26 +60,26 @@ struct basic_formatter
 
     void operator()(const typename variable_type::array_type& array)
     {
-        output.template value<json::token::begin_array>();
+        writer.template value<json::token::begin_array>();
         for (const auto& item : array)
         {
             trial::dynamic::visit(*this, item);
         }
-        output.template value<json::token::end_array>();
+        writer.template value<json::token::end_array>();
     }
 
     void operator()(const typename variable_type::map_type& map)
     {
-        output.template value<json::token::begin_object>();
+        writer.template value<json::token::begin_object>();
         for (const auto& item : map)
         {
             trial::dynamic::visit(*this, item.first);
             trial::dynamic::visit(*this, item.second);
         }
-        output.template value<json::token::end_object>();
+        writer.template value<json::token::end_object>();
     }
 
-    json::basic_writer<CharT> output;
+    json::basic_writer<CharT>& writer;
 };
 
 } // namespace detail
