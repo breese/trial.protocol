@@ -26,10 +26,6 @@ namespace dynamic
 namespace detail
 {
 
-// A substitute for static_assert that outputs the type T
-template <typename T>
-struct static_assert_t;
-
 template <typename T>
 using is_null = std::is_same<T, nullable>;
 
@@ -198,7 +194,7 @@ namespace detail
 template <typename T, typename U, typename = void>
 struct overloader
 {
-    static_assert_t<U> unsupported_type;
+    static_assert_t<T, U> unsupported_type;
 };
 
 // Null

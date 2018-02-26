@@ -21,6 +21,10 @@ namespace dynamic
 namespace detail
 {
 
+// An alternative for static_assert that outputs the type T
+template <typename...>
+struct static_assert_t;
+
 template <typename T>
 using is_bool = std::is_same<typename std::decay<T>::type, bool>;
 

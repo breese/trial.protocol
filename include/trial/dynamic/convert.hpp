@@ -21,10 +21,10 @@ namespace dynamic
 namespace detail
 {
 
-template <typename T, typename U, typename Enable = void>
+template <typename T, typename U, typename = void>
 struct convert_overloader
 {
-    static_assert(sizeof(T) == 0, "Unsupported type");
+    static_assert_t<T, U> unsupported_type;
 };
 
 } // namespace detail
