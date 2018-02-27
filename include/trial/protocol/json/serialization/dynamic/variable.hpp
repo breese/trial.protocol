@@ -153,7 +153,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
             {
                 std::intmax_t value = {};
                 ar.load(value);
-                data = detail::compact<dynamic::variable>(value);
+                data = json::detail::compact<dynamic::variable>(value);
             }
             break;
 
@@ -161,7 +161,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
             {
                 long double value = {};
                 ar.load(value);
-                data = detail::compact<dynamic::variable>(value);
+                data = json::detail::compact<dynamic::variable>(value);
             }
             break;
 
