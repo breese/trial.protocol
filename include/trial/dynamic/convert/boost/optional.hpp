@@ -1,5 +1,5 @@
-#ifndef TRIAL_DYNAMIC_BOOST_OPTIONAL_HPP
-#define TRIAL_DYNAMIC_BOOST_OPTIONAL_HPP
+#ifndef TRIAL_DYNAMIC_CONVERT_BOOST_OPTIONAL_HPP
+#define TRIAL_DYNAMIC_CONVERT_BOOST_OPTIONAL_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,23 +13,23 @@
 
 #include <boost/optional/optional.hpp>
 #include <trial/dynamic/variable.hpp>
-#include <trial/dynamic/convert.hpp>
+#include <trial/dynamic/convert/convert.hpp>
 
 namespace trial
 {
 namespace dynamic
 {
-namespace detail
+namespace convert
 {
 
 template <template <typename> class Allocator, typename T>
-struct convert_overloader<basic_variable<Allocator>,
-                          boost::optional<T>>
+struct overloader<basic_variable<Allocator>,
+                  boost::optional<T>>
 {
     using variable_type = basic_variable<Allocator>;
 
-    static variable_type convert(const boost::optional<T>& value,
-                                 std::error_code&)
+    static variable_type into(const boost::optional<T>& value,
+                              std::error_code&)
     {
         if (!value)
             return dynamic::null;
@@ -39,13 +39,13 @@ struct convert_overloader<basic_variable<Allocator>,
 };
 
 template <template <typename> class Allocator, typename T>
-struct convert_overloader<boost::optional<T>,
-                          basic_variable<Allocator>>
+struct overloader<boost::optional<T>,
+                  basic_variable<Allocator>>
 {
     using variable_type = basic_variable<Allocator>;
 
-    static boost::optional<T> convert(const basic_variable<Allocator>& data,
-                                      std::error_code& error)
+    static boost::optional<T> into(const basic_variable<Allocator>& data,
+                                   std::error_code& error)
     {
         error.clear();
 
@@ -60,8 +60,8 @@ struct convert_overloader<boost::optional<T>,
     }
 };
 
-} // namespace detail
+} // namespace convert
 } // namespace dynamic
 } // namespace trial
 
-#endif // TRIAL_DYNAMIC_BOOST_OPTIONAL_HPP
+#endif // TRIAL_DYNAMIC_CONVERT_BOOST_OPTIONAL_HPP

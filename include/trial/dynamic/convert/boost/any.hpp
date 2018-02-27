@@ -1,5 +1,5 @@
-#ifndef TRIAL_DYNAMIC_BOOST_ANY_HPP
-#define TRIAL_DYNAMIC_BOOST_ANY_HPP
+#ifndef TRIAL_DYNAMIC_CONVERT_BOOST_ANY_HPP
+#define TRIAL_DYNAMIC_CONVERT_BOOST_ANY_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,23 +13,23 @@
 
 #include <boost/any.hpp>
 #include <trial/dynamic/variable.hpp>
-#include <trial/dynamic/convert.hpp>
-#include <trial/dynamic/std/vector.hpp>
+#include <trial/dynamic/convert/convert.hpp>
+#include <trial/dynamic/convert/std/vector.hpp>
 
 namespace trial
 {
 namespace dynamic
 {
-namespace detail
+namespace convert
 {
 
 template <template <typename> class Allocator>
-struct convert_overloader<basic_variable<Allocator>, boost::any>
+struct overloader<basic_variable<Allocator>, boost::any>
 {
     using variable_type = basic_variable<Allocator>;
 
-    static variable_type convert(const boost::any& any,
-                                 std::error_code& error)
+    static variable_type into(const boost::any& any,
+                              std::error_code& error)
     {
         if (any.empty())
             return dynamic::null;
@@ -101,63 +101,63 @@ struct convert_overloader<basic_variable<Allocator>, boost::any>
             return boost::any_cast<typename variable_type::u32string_type>(any);
 
         if (any.type() == typeid(std::vector<signed char>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed char>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<signed char>>(&any));
 
         if (any.type() == typeid(std::vector<unsigned char>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<unsigned char>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<unsigned char>>(&any));
 
         if (any.type() == typeid(std::vector<signed short int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed short int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<signed short int>>(&any));
 
         if (any.type() == typeid(std::vector<unsigned short int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<unsigned short int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<unsigned short int>>(&any));
 
         if (any.type() == typeid(std::vector<signed int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<signed int>>(&any));
 
         if (any.type() == typeid(std::vector<unsigned int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<unsigned int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<unsigned int>>(&any));
 
         if (any.type() == typeid(std::vector<signed long int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed long int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<signed long int>>(&any));
 
         if (any.type() == typeid(std::vector<unsigned long int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<unsigned long int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<unsigned long int>>(&any));
 
         if (any.type() == typeid(std::vector<signed long long int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<signed long long int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<signed long long int>>(&any));
 
         if (any.type() == typeid(std::vector<unsigned long long int>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<unsigned long long int>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<unsigned long long int>>(&any));
 
         if (any.type() == typeid(std::vector<float>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<float>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<float>>(&any));
 
         if (any.type() == typeid(std::vector<double>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<double>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<double>>(&any));
 
         if (any.type() == typeid(std::vector<long double>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<long double>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<long double>>(&any));
 
         if (any.type() == typeid(std::vector<typename variable_type::string_type>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<typename variable_type::string_type>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<typename variable_type::string_type>>(&any));
 
         if (any.type() == typeid(std::vector<typename variable_type::wstring_type>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<typename variable_type::wstring_type>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<typename variable_type::wstring_type>>(&any));
 
         if (any.type() == typeid(std::vector<typename variable_type::u16string_type>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<typename variable_type::u16string_type>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<typename variable_type::u16string_type>>(&any));
 
         if (any.type() == typeid(std::vector<typename variable_type::u32string_type>))
-            return dynamic::convert<variable_type>(*boost::any_cast<std::vector<typename variable_type::u32string_type>>(&any));
+            return convert::into<variable_type>(*boost::any_cast<std::vector<typename variable_type::u32string_type>>(&any));
 
         error = dynamic::make_error_code(dynamic::incompatible_type);
         return null;
     }
 };
 
-} // namespace detail
+} // namespace convert
 } // namespace dynamic
 } // namespace trial
 
-#endif // TRIAL_DYNAMIC_BOOST_ANY_HPP
+#endif // TRIAL_DYNAMIC_CONVERT_BOOST_ANY_HPP
