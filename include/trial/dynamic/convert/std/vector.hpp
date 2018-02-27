@@ -1,5 +1,5 @@
-#ifndef TRIAL_DYNAMIC_STD_VECTOR_HPP
-#define TRIAL_DYNAMIC_STD_VECTOR_HPP
+#ifndef TRIAL_DYNAMIC_CONVERT_STD_VECTOR_HPP
+#define TRIAL_DYNAMIC_CONVERT_STD_VECTOR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,22 +13,22 @@
 
 #include <vector>
 #include <trial/dynamic/variable.hpp>
-#include <trial/dynamic/convert.hpp>
+#include <trial/dynamic/convert/convert.hpp>
 
 namespace trial
 {
 namespace dynamic
 {
-namespace detail
+namespace convert
 {
 
 template <template <typename> class Allocator, typename T>
-struct convert_overloader<
+struct overloader<
     basic_variable<Allocator>,
     std::vector<T>>
 {
-    static basic_variable<Allocator> convert(const std::vector<T>& array,
-                                             std::error_code&)
+    static basic_variable<Allocator> into(const std::vector<T>& array,
+                                          std::error_code&)
     {
         auto result = basic_array<Allocator>::make();
         for (const auto& entry : array)
@@ -40,12 +40,12 @@ struct convert_overloader<
 };
 
 template <template <typename> class Allocator, typename T>
-struct convert_overloader<
+struct overloader<
     std::vector<T>,
     basic_variable<Allocator>>
 {
-    static std::vector<T> convert(const basic_variable<Allocator>& array,
-                                  std::error_code& error)
+    static std::vector<T> into(const basic_variable<Allocator>& array,
+                               std::error_code& error)
     {
         std::vector<T> result;
         result.reserve(array.size());
@@ -66,12 +66,12 @@ struct convert_overloader<
 // Special case for std::vector<variable>
 
 template <template <typename> class Allocator>
-struct convert_overloader<
+struct overloader<
     std::vector<basic_variable<Allocator>>,
     basic_variable<Allocator>>
 {
-    static std::vector<basic_variable<Allocator>> convert(const basic_variable<Allocator>& array,
-                                                          std::error_code&)
+    static std::vector<basic_variable<Allocator>> into(const basic_variable<Allocator>& array,
+                                                       std::error_code&)
     {
         std::vector<basic_variable<Allocator>> result;
         result.reserve(array.size());
@@ -83,8 +83,8 @@ struct convert_overloader<
     }
 };
 
-} // namespace detail
+} // namespace convert
 } // namespace dynamic
 } // namespace trial
 
-#endif // TRIAL_DYNAMIC_STD_VECTOR_HPP
+#endif // TRIAL_DYNAMIC_CONVERT_STD_VECTOR_HPP

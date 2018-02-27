@@ -2128,7 +2128,7 @@ namespace detail
 template <template <typename> class Allocator, typename T, typename = void>
 struct same_overloader
 {
-    static bool same(std::size_t which) noexcept
+    static constexpr bool same(std::size_t which) noexcept
     {
         return which == basic_variable<Allocator>::template traits<T>::value;
     }
@@ -2142,7 +2142,7 @@ struct same_overloader<
                             std::is_volatile<T>::value ||
                             std::is_reference<T>::value>::type>
 {
-    static bool same(std::size_t) noexcept
+    static constexpr bool same(std::size_t) noexcept
     {
         return false;
     }

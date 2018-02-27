@@ -1,5 +1,5 @@
-#ifndef TRIAL_DYNAMIC_STD_MAP_HPP
-#define TRIAL_DYNAMIC_STD_MAP_HPP
+#ifndef TRIAL_DYNAMIC_CONVERT_STD_MAP_HPP
+#define TRIAL_DYNAMIC_CONVERT_STD_MAP_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -19,16 +19,16 @@ namespace trial
 {
 namespace dynamic
 {
-namespace detail
+namespace convert
 {
 
 template <template <typename> class Allocator, typename Key, typename Value>
-struct convert_overloader<
+struct overloader<
     basic_variable<Allocator>,
     std::map<Key, Value>>
 {
-    static basic_variable<Allocator> convert(const std::map<Key, Value>& map,
-                                         std::error_code&)
+    static basic_variable<Allocator> into(const std::map<Key, Value>& map,
+                                          std::error_code&)
     {
         auto result = basic_map<Allocator>::make();
         for (const auto& entry : map)
@@ -40,12 +40,12 @@ struct convert_overloader<
 };
 
 template <template <typename> class Allocator, typename Key, typename Value>
-struct convert_overloader<
+struct overloader<
     std::map<Key, Value>,
     basic_variable<Allocator>>
 {
-    static std::map<Key, Value> convert(const basic_variable<Allocator>& map,
-                                        std::error_code& error)
+    static std::map<Key, Value> into(const basic_variable<Allocator>& map,
+                                     std::error_code& error)
     {
         std::map<Key, Value> result;
         for (auto it = map.begin(); it != map.end(); ++it)
@@ -66,12 +66,12 @@ struct convert_overloader<
 // Special case for std::map<T, variable>
 
 template <template <typename> class Allocator, typename Key>
-struct convert_overloader<
+struct overloader<
     std::map<Key, basic_variable<Allocator>>,
     basic_variable<Allocator>>
 {
-    static std::map<Key, basic_variable<Allocator>> convert(const basic_variable<Allocator>& map,
-                                                            std::error_code& error)
+    static std::map<Key, basic_variable<Allocator>> into(const basic_variable<Allocator>& map,
+                                                         std::error_code& error)
     {
         std::map<Key, basic_variable<Allocator>> result;
         for (auto it = map.begin(); it != map.end(); ++it)
@@ -85,8 +85,8 @@ struct convert_overloader<
     }
 };
 
-} // namespace detail
+} // namespace convert
 } // namespace dynamic
 } // namespace trial
 
-#endif // TRIAL_DYNAMIC_STD_MAP_HPP
+#endif // TRIAL_DYNAMIC_CONVERT_STD_MAP_HPP
