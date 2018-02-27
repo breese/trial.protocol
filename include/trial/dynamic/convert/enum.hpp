@@ -36,6 +36,11 @@ struct is_enum
 
 } // namespace detail
 
+//! @brief Trait for enum conversion.
+//!
+//! Specialize trait to enable conversion between dynamic variable and enum
+//! using the underlying type.
+
 template <typename T>
 struct use_underlying_type : public std::false_type {};
 
@@ -43,8 +48,8 @@ template <template <typename> class Allocator, typename T>
 struct overloader<
     basic_variable<Allocator>,
     T,
-    typename std::enable_if<detail::is_enum<T>::value
-                            && use_underlying_type<T>::value>::type>
+    typename std::enable_if<detail::is_enum<T>::value &&
+                            use_underlying_type<T>::value>::type>
 {
     static basic_variable<Allocator> into(const T& data,
                                           std::error_code&)
