@@ -45,6 +45,8 @@ public:
         {
         case token::symbol::begin_array:
             outer = parse_array();
+            if (reader.symbol() == token::symbol::end_array)
+                reader.next();
             break;
 
         case token::symbol::end_array:
@@ -52,6 +54,8 @@ public:
 
         case token::symbol::begin_object:
             outer = parse_object();
+            if (reader.symbol() == token::symbol::end_object)
+                reader.next();
             break;
             
         case token::symbol::end_object:
@@ -90,7 +94,6 @@ private:
                 break;
 
             case token::symbol::end_array:
-                reader.next();
                 return scope;
 
             case token::symbol::begin_object:
@@ -122,7 +125,6 @@ private:
             switch (reader.symbol())
             {
             case token::symbol::end_object:
-                reader.next();
                 return scope;
             case token::symbol::string:
                 key = reader.template value<std::string>();

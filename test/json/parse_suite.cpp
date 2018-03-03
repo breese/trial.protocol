@@ -293,6 +293,30 @@ void parse_array()
                                  std::equal_to<variable>());
 }
 
+void parse_array_nested_array()
+{
+    std::string input = "[null,[true,2,3.0,\"alpha\"]]";
+    auto result = json::parse(input);
+    TRIAL_PROTOCOL_TEST(result.is<array>());
+
+    variable expect = { null, { true, 2, 3.0, "alpha" } };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void parse_array_nested_map()
+{
+    std::string input = "[null,true,{\"alpha\":2}]";
+    auto result = json::parse(input);
+    TRIAL_PROTOCOL_TEST(result.is<array>());
+
+    variable expect = { null, true, {{ "alpha", 2 }} };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void parse_map()
 {
     std::string input = "{\"alpha\":null,\"bravo\":true,\"charlie\":2,\"delta\":3.0,\"echo\":\"hydrogen\"}";
@@ -312,6 +336,38 @@ void parse_map()
                                  std::equal_to<variable>());
 }
 
+void parse_map_nested_array()
+{
+    std::string input = "{\"alpha\":null,\"bravo\":[true,2,3.0]}";
+    auto result = json::parse(input);
+    TRIAL_PROTOCOL_TEST(result.is<map>());
+
+    variable expect =
+        {
+            { "alpha", null },
+            { "bravo", { true, 2, 3.0 } }
+        };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
+void parse_map_nested_map()
+{
+    std::string input = "{\"alpha\":null,\"bravo\":{\"charlie\":true}}";
+    auto result = json::parse(input);
+    TRIAL_PROTOCOL_TEST(result.is<map>());
+
+    variable expect =
+        {
+            { "alpha", null },
+            { "bravo", {{ "charlie", true }} }
+        };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void run()
 {
     parse_empty();
@@ -323,7 +379,11 @@ void run()
     parse_long_long_real();
     parse_string();
     parse_array();
+    parse_array_nested_array();
+    parse_array_nested_map();
     parse_map();
+    parse_map_nested_array();
+    parse_map_nested_map();
 }
 
 } // namespace parser_suite
