@@ -17,6 +17,7 @@
 #include <memory>
 #include <trial/protocol/core/detail/string_view.hpp>
 #include <trial/protocol/core/char_traits.hpp>
+#include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/bintoken/token.hpp>
 
 namespace trial
