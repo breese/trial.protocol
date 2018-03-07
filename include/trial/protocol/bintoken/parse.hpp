@@ -25,6 +25,15 @@ namespace bintoken
 namespace partial
 {
 
+//! @brief Decode BinToken formatted data into dynamic variable.
+//!
+//! Starts decoding at the current position of @c reader. Decodes a singular
+//! value or a container. The @c reader will point to the remainder of the
+//! encoded data after this function.
+//!
+//! @param reader Reader pointing to an arbitrary position within a buffer.
+//! @returns Dynamic variable containing the decoded BinToken data.
+
 template <template <typename> class Allocator = std::allocator>
 auto parse(bintoken::reader& reader) -> dynamic::basic_variable<Allocator>
 {
@@ -33,6 +42,11 @@ auto parse(bintoken::reader& reader) -> dynamic::basic_variable<Allocator>
 }
 
 } // namespace partial
+
+//! @brief Decode BinToken formatted data into dynamic variable.
+//!
+//! @param input The BinToken formatted input buffer.
+//! @returns Dynamic variable containing the decoded BinToken data.
 
 template <typename U, template <typename> class Allocator = std::allocator>
 auto parse(const U& input) -> dynamic::basic_variable<Allocator>

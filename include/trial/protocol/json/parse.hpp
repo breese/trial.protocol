@@ -25,6 +25,15 @@ namespace json
 namespace partial
 {
 
+//! @brief Decode JSON formatted data into dynamic variable.
+//!
+//! Starts decoding at the current position of @c reader. Decodes a singular
+//! value or a container. The @c reader will point to the remainder of the
+//! encoded data after this function.
+//!
+//! @param reader Reader pointing to an arbitrary position within a buffer.
+//! @returns Dynamic variable containing the decoded JSON data.
+
 template <template <typename> class Allocator = std::allocator>
 auto parse(json::reader& reader) -> dynamic::basic_variable<Allocator>
 {
@@ -34,12 +43,10 @@ auto parse(json::reader& reader) -> dynamic::basic_variable<Allocator>
 
 } // namespace partial
 
-//! @brief Tree JSON parser.
-//!
-//! Parse JSON formatted data into a dynamic variable.
+//! @brief Decode JSON formatted data into dynamic variable.
 //!
 //! @param input The JSON formatted input buffer.
-//! @returns Dynamic variable with the parsed JSON data.
+//! @returns Dynamic variable containing the decoded JSON data.
 
 template <typename U, template <typename> class Allocator = std::allocator>
 auto parse(const U& input) -> dynamic::basic_variable<Allocator>
