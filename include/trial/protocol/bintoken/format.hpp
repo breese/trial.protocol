@@ -44,6 +44,14 @@ auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
     return result;
 }
 
+template <typename T, template <typename> class Allocator>
+void format(const trial::dynamic::basic_variable<Allocator>& data,
+            T& result)
+{
+    bintoken::writer writer(result);
+    partial::format(data, writer);
+}
+
 } // namespace bintoken
 } // namespace protocol
 } // namespace trial

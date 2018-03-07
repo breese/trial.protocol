@@ -8,6 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <trial/protocol/buffer/string.hpp>
 #include <trial/protocol/buffer/vector.hpp>
 #include <trial/protocol/bintoken/format.hpp>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
@@ -17,6 +18,41 @@ using namespace trial::protocol;
 
 using value_type = std::uint8_t;
 using buffer_type = std::vector<value_type>;
+
+//-----------------------------------------------------------------------------
+
+namespace buffer_suite
+{
+
+void format_string()
+{
+    variable data(true);
+    std::basic_string<value_type> result;
+    bintoken::format(data, result);
+    const value_type expected[] = { bintoken::token::code::true_value };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+}
+
+void format_vector()
+{
+    variable data(true);
+    std::vector<value_type> result;
+    bintoken::format(data, result);
+    const value_type expected[] = { bintoken::token::code::true_value };
+    TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
+                                 expected, expected + sizeof(expected),
+                                 std::equal_to<value_type>());
+}
+
+void run()
+{
+    format_string();
+    format_vector();
+}
+
+} // namespace buffer_suite
 
 //-----------------------------------------------------------------------------
 
@@ -481,6 +517,7 @@ void run()
 
 int main()
 {
+    buffer_suite::run();
     formatter_suite::run();
     partial_suite::run();
 
