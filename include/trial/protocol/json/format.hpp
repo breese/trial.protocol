@@ -24,6 +24,12 @@ namespace json
 namespace partial
 {
 
+//! @brief Encode dynamic variable into JSON at current position.
+//!
+//! @param data Dynamic variable.
+//! @param[out] writer Writer pointing to an arbitrary location within a buffer.
+//! @throws json::error if input contains a wstring, u16string, or u32string.
+
 template <template <typename> class Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
             json::writer& writer)

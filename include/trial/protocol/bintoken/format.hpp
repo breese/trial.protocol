@@ -25,6 +25,12 @@ namespace bintoken
 namespace partial
 {
 
+//! @brief Encode dynamic variable into BinToken at current position.
+//!
+//! @param data Dynamic variable.
+//! @param[out] writer Writer pointing to arbitrary location within a buffer.
+//! @throw bintoken::error if input contains a long double, wstring, u16string,
+//!        or u32string.
 template <template <typename> class Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
             bintoken::writer& writer)
@@ -35,6 +41,13 @@ void format(const trial::dynamic::basic_variable<Allocator>& data,
 
 } // namespace partial
 
+//! @brief Encode dynamic variable into BinToken.
+//!
+//! @param data Dynamic variable.
+//! @returns Buffer containing the formatted BinToken output.
+//! @throw bintoken::error if input contains a long double, wstring, u16string,
+//!        or u32string.
+
 template <typename T, template <typename> class Allocator>
 auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
 {
@@ -43,6 +56,13 @@ auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
     partial::format(data, writer);
     return result;
 }
+
+//! @brief Encode dynamic variable into BinToken.
+//!
+//! @param data Dynamic variable.
+//! @param[out] result Buffer containing the formatted BinToken output.
+//! @throw bintoken::error if input contains a long double, wstring, u16string,
+//!        or u32string.
 
 template <typename T, template <typename> class Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
