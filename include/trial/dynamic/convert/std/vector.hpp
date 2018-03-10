@@ -49,10 +49,10 @@ struct overloader<
     {
         std::vector<T> result;
         result.reserve(array.size());
-        for (auto it = array.begin(); it != array.end(); ++it)
+        for (const auto& entry : array)
         {
-            if (it->template is<T>())
-                result.push_back(it->template value<T>(error));
+            if (entry.template is<T>())
+                result.push_back(entry.template value<T>(error));
             else
                 error = dynamic::make_error_code(incompatible_type);
 
