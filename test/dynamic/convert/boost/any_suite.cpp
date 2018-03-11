@@ -14,10 +14,8 @@
 using namespace trial::dynamic;
 
 //-----------------------------------------------------------------------------
-// boost::any
-//-----------------------------------------------------------------------------
 
-namespace any_suite
+namespace from_suite
 {
 
 void convert_null()
@@ -344,7 +342,205 @@ void run()
     throw_on_struct();
 }
 
-} // namespace any_suite
+} // namespace from_suite
+
+//-----------------------------------------------------------------------------
+
+namespace to_suite
+{
+
+void convert_null()
+{
+    variable data;
+    auto result = convert::into<boost::any>(data);
+    TRIAL_PROTOCOL_TEST(result.empty());
+    TRIAL_PROTOCOL_TEST(result.type() == typeid(void));
+}
+
+void convert_boolean()
+{
+    variable data(true);
+    auto result = convert::into<boost::any>(data);
+    TRIAL_PROTOCOL_TEST(result.type() == typeid(bool));
+    TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<bool>(result), true);
+}
+
+void convert_integer()
+{
+    {
+        using integer_type = signed char;
+        integer_type input = 2;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = unsigned char;
+        integer_type input = 2U;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = signed short int;
+        integer_type input = 2;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = unsigned short int;
+        integer_type input = 2U;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = signed int;
+        integer_type input = 2;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = unsigned int;
+        integer_type input = 2U;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = signed long int;
+        integer_type input = 2L;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = unsigned long int;
+        integer_type input = 2UL;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = signed long long int;
+        integer_type input = 2LL;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+    {
+        using integer_type = unsigned long long int;
+        integer_type input = 2ULL;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(integer_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<integer_type>(result), input);
+    }
+}
+
+void convert_real()
+{
+    {
+        using real_type = float;
+        real_type input = 3.0f;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(real_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<real_type>(result), input);
+    }
+    {
+        using real_type = double;
+        real_type input = 3.0;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(real_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<real_type>(result), input);
+    }
+    {
+        using real_type = double;
+        real_type input = 3.0L;
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(real_type));
+        TRIAL_PROTOCOL_TEST_EQUAL(boost::any_cast<real_type>(result), input);
+    }
+}
+
+void convert_string()
+{
+    {
+        using string_type = std::string;
+        string_type input = "alpha";
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(string_type));
+        TRIAL_PROTOCOL_TEST(boost::any_cast<string_type>(result) == input);
+    }
+    {
+        using string_type = std::wstring;
+        string_type input = L"bravo";
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(string_type));
+        TRIAL_PROTOCOL_TEST(boost::any_cast<string_type>(result) == input);
+    }
+    {
+        using string_type = std::u16string;
+        string_type input = u"charlie";
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(string_type));
+        TRIAL_PROTOCOL_TEST(boost::any_cast<string_type>(result) == input);
+    }
+    {
+        using string_type = std::u32string;
+        string_type input = U"delta";
+        variable data(input);
+        auto result = convert::into<boost::any>(data);
+        TRIAL_PROTOCOL_TEST(result.type() == typeid(string_type));
+        TRIAL_PROTOCOL_TEST(boost::any_cast<string_type>(result) == input);
+    }
+}
+
+void convert_array()
+{
+    variable data = { null, true, 2, 3.0f, "alpha" };
+    std::error_code error;
+    auto result = convert::into<std::vector<boost::any>>(data, error);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.size(), 5);
+    TRIAL_PROTOCOL_TEST(result[0].type() == typeid(void));
+    TRIAL_PROTOCOL_TEST(result[1].type() == typeid(bool));
+    TRIAL_PROTOCOL_TEST(boost::any_cast<bool>(result[1]) == true);
+    TRIAL_PROTOCOL_TEST(result[2].type() == typeid(int));
+    TRIAL_PROTOCOL_TEST(boost::any_cast<int>(result[2]) == 2);
+    TRIAL_PROTOCOL_TEST(result[3].type() == typeid(float));
+    TRIAL_PROTOCOL_TEST(boost::any_cast<float>(result[3]) == 3.0f);
+    TRIAL_PROTOCOL_TEST(result[4].type() == typeid(std::string));
+    TRIAL_PROTOCOL_TEST(boost::any_cast<std::string>(result[4]) == "alpha");
+}
+
+void run()
+{
+    convert_null();
+    convert_boolean();
+    convert_integer();
+    convert_real();
+    convert_string();
+    convert_array();
+}
+
+} // namespace to_suite
 
 //-----------------------------------------------------------------------------
 // main
@@ -352,7 +548,8 @@ void run()
 
 int main()
 {
-    any_suite::run();
+    from_suite::run();
+    to_suite::run();
 
     return boost::report_errors();
 }

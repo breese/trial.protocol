@@ -156,6 +156,101 @@ struct overloader<basic_variable<Allocator>, boost::any>
     }
 };
 
+template <template <typename> class Allocator>
+struct overloader<boost::any, basic_variable<Allocator>>
+{
+    using variable_type = basic_variable<Allocator>;
+
+    static boost::any into(const variable_type& data,
+                           std::error_code& error)
+    {
+        switch (data.code())
+        {
+        case token::code::null:
+            return {};
+
+        case token::code::boolean:
+            return data.template value<bool>();
+
+        case token::code::signed_char:
+            return data.template value<signed char>();
+
+        case token::code::unsigned_char:
+            return data.template value<unsigned char>();
+
+        case token::code::signed_short_integer:
+            return data.template value<signed short int>();
+
+        case token::code::unsigned_short_integer:
+            return data.template value<unsigned short int>();
+
+        case token::code::signed_integer:
+            return data.template value<signed int>();
+
+        case token::code::unsigned_integer:
+            return data.template value<unsigned int>();
+
+        case token::code::signed_long_integer:
+            return data.template value<signed long int>();
+
+        case token::code::unsigned_long_integer:
+            return data.template value<unsigned long int>();
+
+        case token::code::signed_long_long_integer:
+            return data.template value<signed long long int>();
+
+        case token::code::unsigned_long_long_integer:
+            return data.template value<unsigned long long int>();
+
+        case token::code::real:
+            return data.template value<float>();
+
+        case token::code::long_real:
+            return data.template value<double>();
+
+        case token::code::long_long_real:
+            return data.template value<long double>();
+
+        case token::code::string:
+            return data.template value<typename variable_type::string_type>();
+
+        case token::code::wstring:
+            return data.template value<typename variable_type::wstring_type>();
+
+        case token::code::u16string:
+            return data.template value<typename variable_type::u16string_type>();
+
+        case token::code::u32string:
+            return data.template value<typename variable_type::u32string_type>();
+
+        default:
+            error = dynamic::make_error_code(dynamic::incompatible_type);
+            return {};
+        }
+    }
+};
+
+template <template <typename> class Allocator>
+struct overloader<std::vector<boost::any>, basic_variable<Allocator>>
+{
+    using variable_type = basic_variable<Allocator>;
+
+    static std::vector<boost::any> into(const variable_type& input,
+                                        std::error_code& error)
+    {
+        std::vector<boost::any> result;
+        for (const auto& entry : input)
+        {
+            auto value = convert::into<boost::any>(entry, error);
+            if (error)
+                return {};
+
+            result.push_back(std::move(value));
+        }
+        return result;
+    }
+};
+
 } // namespace convert
 } // namespace dynamic
 } // namespace trial
