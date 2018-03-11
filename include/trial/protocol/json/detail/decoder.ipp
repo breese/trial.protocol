@@ -124,7 +124,7 @@ template <typename CharT>
 basic_decoder<CharT>::basic_decoder(const view_type& view)
     : input(view)
 {
-    current.code = token::detail::code::value::end;
+    current.code = token::detail::code::error_uninitialized;
     next();
 }
 
@@ -151,6 +151,8 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
 {
     switch (current.code)
     {
+    case token::detail::code::error_uninitialized:
+        break;
     case token::detail::code::error_unexpected_token:
     case token::detail::code::error_invalid_key:
     case token::detail::code::error_invalid_value:
@@ -159,6 +161,9 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
     case token::detail::code::error_unbalanced_end_object:
     case token::detail::code::error_expected_end_array:
     case token::detail::code::error_expected_end_object:
+        return;
+    case token::detail::code::end:
+        current.code = token::detail::code::error_unexpected_token;
         return;
     default:
         break;

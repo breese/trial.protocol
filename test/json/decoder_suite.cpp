@@ -227,6 +227,15 @@ void fail_truer()
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.literal(), "truer");
 }
 
+void fail_past_end()
+{
+    const char input[] = "";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
+}
+
 void run()
 {
     test_null();
@@ -246,6 +255,8 @@ void run()
     fail_tru();
     fail_tau();
     fail_truer();
+
+    fail_past_end();
 }
 
 } // namespace basic_suite

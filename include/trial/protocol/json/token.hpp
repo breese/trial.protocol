@@ -32,6 +32,7 @@ struct code
     enum value
     {
         end,
+        error_uninitialized,
         error_unexpected_token,
         error_invalid_key,
         error_invalid_value,
