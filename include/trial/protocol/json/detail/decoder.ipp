@@ -174,6 +174,7 @@ void basic_decoder<CharT>::next() BOOST_NOEXCEPT
     if (input.empty())
     {
         current.code = token::detail::code::value::end;
+        current.view = input;
         return;
     }
 
