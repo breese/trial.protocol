@@ -14,5 +14,6 @@ trial_add_test(json_reader_suite reader_suite.cpp)
 trial_add_test(json_writer_suite writer_suite.cpp)
 trial_add_test(json_iarchive_suite iarchive_suite.cpp)
 trial_add_test(json_oarchive_suite oarchive_suite.cpp)
+trial_add_test(json_partial_skip_suite skip_suite.cpp)
 
 trial_add_test(json_seriot_suite seriot_suite.cpp)
