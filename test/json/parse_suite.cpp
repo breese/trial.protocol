@@ -688,6 +688,61 @@ void parse_null()
     }
 }
 
+void parse_string()
+{
+    // Trailing whitespace
+    {
+        std::string input = "\"alpha\" ";
+        auto result = json::parse(input);
+        TRIAL_PROTOCOL_TEST(result.same<std::string>());
+    }
+    // Trailing separator
+    {
+        std::string input = "\"alpha\",";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing value
+    {
+        std::string input = "\"alpha\"true";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing string
+    {
+        std::string input = "\"alpha\"\"zulu\"";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing array
+    {
+        std::string input = "\"alpha\"[]";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Trailing object
+    {
+        std::string input = "\"alpha\"{}";
+        TRIAL_PROTOCOL_TEST_THROW_EQUAL(json::parse(input),
+                                        json::error,
+                                        "unexpected token");
+    }
+    // Partial
+    {
+        std::string input = "\"alpha\"[]";
+        json::reader reader(input);
+        auto result = json::partial::parse(reader);
+        TRIAL_PROTOCOL_TEST(result.is<string>());
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::error);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
+        TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
+    }
+}
+
 void parse_array()
 {
     // Trailing whitespace
@@ -801,6 +856,7 @@ void parse_object()
 void run()
 {
     parse_null();
+    parse_string();
     parse_array();
     parse_object();
 }
