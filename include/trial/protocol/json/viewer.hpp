@@ -92,6 +92,11 @@ public:
             return reader.symbol();
         }
 
+        token::category::value category() const BOOST_NOEXCEPT
+        {
+            return reader.category();
+        }
+
         template <typename ReturnType> ReturnType value() const
         {
             return reader.template value<ReturnType>();
