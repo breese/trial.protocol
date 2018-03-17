@@ -235,17 +235,67 @@ void run()
 namespace algorithm_suite
 {
 
-void find_boolean()
+auto is_boolean = [] (const json::viewer::view_type& view)
 {
-    const char input[] = "[false,true]";
+    return (view == "true" || view == "false");
+};
+
+void all_of_boolean()
+{
+    const char input[] = "[null,true,2,3.0,\"alpha\",[42],{\"bravo\":42.0}]";
+    json::viewer viewer(input);
+    TRIAL_PROTOCOL_TEST(!std::all_of(viewer.begin(), viewer.end(), is_boolean));
+}
+
+void any_of_boolean()
+{
+    const char input[] = "[null,true,2,3.0,\"alpha\",[42],{\"bravo\":42.0}]";
+    json::viewer viewer(input);
+    TRIAL_PROTOCOL_TEST(std::any_of(viewer.begin(), viewer.end(), is_boolean));
+}
+
+void count_true()
+{
+    const char input[] = "[null,true,2,3.0,\"alpha\",[42],{\"bravo\":42.0}]";
+    json::viewer viewer(input);
+    auto amount = std::count(viewer.begin(), viewer.end(), "true");
+    TRIAL_PROTOCOL_TEST_EQUAL(amount, 1);    
+}
+
+void count_if_boolean()
+{
+    const char input[] = "[null,true,2,3.0,\"alpha\",[42],{\"bravo\":42.0}]";
+    json::viewer viewer(input);
+    auto amount = std::count_if(viewer.begin(), viewer.end(), is_boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(amount, 1);    
+}
+
+void find_true()
+{
+    const char input[] = "[null,true,2,3.0,\"alpha\",[42],{\"bravo\":42.0}]";
     json::viewer viewer(input);
     auto where = std::find(viewer.begin(), viewer.end(), "true");
+    TRIAL_PROTOCOL_TEST(where != viewer.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(*where, "true");    
+}
+
+void find_if_boolean()
+{
+    const char input[] = "[null,true,2,3.0,\"alpha\",[42],{\"bravo\":42.0}]";
+    json::viewer viewer(input);
+    auto where = std::find_if(viewer.begin(), viewer.end(), is_boolean);
+    TRIAL_PROTOCOL_TEST(where != viewer.end());
     TRIAL_PROTOCOL_TEST_EQUAL(*where, "true");    
 }
 
 void run()
 {
-    find_boolean();
+    all_of_boolean();
+    any_of_boolean();
+    count_true();
+    count_if_boolean();
+    find_true();
+    find_if_boolean();
 }
 
 } // namespace algorithm_suite
