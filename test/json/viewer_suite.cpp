@@ -165,11 +165,67 @@ void test_dereference()
     TRIAL_PROTOCOL_TEST(it == viewer.end());
 }
 
+void test_level()
+{
+    const char input[] = "[null,[true,[2,[3.0,[\"alpha\"]]]]]";
+    json::viewer viewer(input);
+    json::viewer::const_iterator it = viewer.begin();
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 0);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 1);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 1);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::boolean);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 2);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 2);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 3);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 3);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::real);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 4);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 4);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 5);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 5);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 4);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 3);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 2);
+    ++it;
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 1);
+    ++it;
+    TRIAL_PROTOCOL_TEST(it == viewer.end());
+    TRIAL_PROTOCOL_TEST_EQUAL(it.symbol(), json::token::symbol::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(it.level(), 0);
+}
+
 void run()
 {
     test_token();
     test_value();
     test_dereference();
+    test_level();
 }
 
 } // namespace iterator_suite

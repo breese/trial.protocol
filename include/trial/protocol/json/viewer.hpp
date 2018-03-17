@@ -82,6 +82,11 @@ public:
             return reader.literal();
         }
 
+        size_type level() const BOOST_NOEXCEPT
+        {
+            return reader.level();
+        }
+
         token::code::value code() const BOOST_NOEXCEPT
         {
             return reader.code();
