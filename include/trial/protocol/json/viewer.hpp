@@ -87,6 +87,11 @@ public:
             return reader.code();
         }
 
+        token::symbol::value symbol() const BOOST_NOEXCEPT
+        {
+            return reader.symbol();
+        }
+
         template <typename ReturnType> ReturnType value() const
         {
             return reader.template value<ReturnType>();
