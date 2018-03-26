@@ -36,21 +36,20 @@ endif()
 
 include_directories(BEFORE ${Boost_INCLUDE_DIR})
 
-set(TRIAL_PROTOCOL_DEPENDENT_LIBRARIES
-  ${Boost_SERIALIZATION_LIBRARY}
-  ${Boost_SYSTEM_LIBRARY})
-
 ###############################################################################
 # Trial.Protocol package
 ###############################################################################
 
-include_directories(BEFORE include)
+add_library(trial-protocol INTERFACE)
+target_include_directories(trial-protocol INTERFACE "${TRIAL_PROTOCOL_ROOT}/include")
+add_dependencies(trial-protocol
+  ${Boost_SYSTEM_LIBRARY})
 
 install(DIRECTORY ${TRIAL_PROTOCOL_ROOT}/include/ DESTINATION include)
 
 function(trial_add_test name)
   add_executable(${name} ${ARGN})
-  target_link_libraries(${name} ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+  target_link_libraries(${name} trial-protocol ${Boost_SERIALIZATION_LIBRARY})
   add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
   target_compile_options(${name} PRIVATE ${TRIAL_PROTOCOL_WARNING_FLAGS})
 endfunction()
