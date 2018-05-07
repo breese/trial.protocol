@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <limits>
-#include <algorithm> // std::fill_n
+#include <memory> // std::uninitialized_fill_n
 #include <functional>
 #include <trial/protocol/buffer/array.hpp>
 #include <trial/protocol/bintoken/detail/decoder.hpp>
@@ -1415,11 +1415,11 @@ void test_array8_int8_two()
 void test_array8_int8_128()
 {
     value_type input[2 + 0x80] = { token::code::array8_int8, 0x80 };
-    std::fill_n(&input[2], sizeof(input) - 2, 0x12);
+    std::uninitialized_fill_n(&input[2], sizeof(input) - 2, 0x12);
     format::detail::decoder decoder(input);
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::array8_int8);
     value_type expected[0x80];
-    std::fill_n(&expected[0], sizeof(expected), 0x12);
+    std::uninitialized_fill_n(&expected[0], sizeof(expected), 0x12);
     TRIAL_PROTOCOL_TEST_ALL_WITH(decoder.literal().begin(), decoder.literal().end(),
                                  expected, expected + sizeof(expected),
                                  std::equal_to<value_type>());
