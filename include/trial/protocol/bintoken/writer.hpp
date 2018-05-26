@@ -22,14 +22,15 @@ namespace protocol
 namespace bintoken
 {
 
-class writer
+template <std::size_t N = 2 * sizeof(void *)>
+class basic_writer
 {
 public:
-    using size_type = detail::encoder::size_type;
-    using view_type = detail::encoder::view_type;
-    using string_view_type = detail::encoder::string_view_type;
+    using size_type = typename detail::basic_encoder<N>::size_type;
+    using view_type = typename detail::basic_encoder<N>::view_type;
+    using string_view_type = typename detail::basic_encoder<N>::string_view_type;
 
-    template <typename T> writer(T&);
+    template <typename T> basic_writer(T&);
 
     template <typename T>
     size_type value();
@@ -45,10 +46,12 @@ private:
 
 private:
     template <typename T, typename Enable = void> struct overloader;
-    detail::encoder encoder;
 
+    detail::basic_encoder<N> encoder;
     std::stack<token::code::value> stack;
 };
+
+using writer = basic_writer<>;
 
 } // namespace bintoken
 } // namespace protocol

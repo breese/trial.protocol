@@ -14,7 +14,7 @@
 #include <cstddef> // std::size_t
 #include <cstdint>
 #include <string>
-#include <memory>
+#include <type_traits>
 #include <trial/protocol/core/detail/string_view.hpp>
 #include <trial/protocol/core/char_traits.hpp>
 #include <trial/protocol/buffer/base.hpp>
@@ -29,16 +29,18 @@ namespace bintoken
 namespace detail
 {
 
-class encoder
+template <std::size_t N>
+class basic_encoder
 {
     using value_type = std::uint8_t;
 public:
     using size_type = std::size_t;
+    using buffer_type = buffer::base<value_type>;
     using view_type = core::detail::basic_string_view<value_type, core::char_traits<value_type>>;
     using string_view_type = core::detail::basic_string_view<char, core::char_traits<char>>;
 
     template <typename T>
-    encoder(T&);
+    basic_encoder(T&);
 
     template <typename T> size_type value();
     size_type value(bool);
@@ -60,6 +62,9 @@ public:
     size_type array(const token::float64::type *, size_type);
 
 private:
+    template <typename T, typename = void>
+    struct overloader;
+
     size_type write_length(std::uint8_t);
     size_type write_length(std::uint16_t);
     size_type write_length(std::uint32_t);
@@ -77,9 +82,11 @@ private:
     void endian_write(std::uint32_t);
     void endian_write(std::uint64_t);
 
+    buffer_type& buffer();
+    const buffer_type& buffer() const;
+
 private:
-    using buffer_type = buffer::base<value_type>;
-    std::unique_ptr<buffer_type> buffer;
+    typename std::aligned_storage<N>::type storage;
 };
 
 } // namespace detail

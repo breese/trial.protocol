@@ -15,9 +15,11 @@
 #include <trial/protocol/bintoken/detail/encoder.hpp>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
 
-namespace format = trial::protocol::bintoken;
-namespace token = format::token;
+using namespace trial::protocol;
+namespace token = bintoken::token;
+
 using output_type = std::uint8_t;
+using encoder_type = bintoken::detail::basic_encoder<sizeof(buffer::array<char, 1>)>;
 
 //-----------------------------------------------------------------------------
 // Basic
@@ -29,7 +31,7 @@ namespace basic_suite
 void test_null()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::null);
@@ -38,14 +40,14 @@ void test_null()
 void fail_null_empty()
 {
     std::array<output_type, 0> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::null>(), 0);
 }
 
 void test_false()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::false_value);
@@ -54,14 +56,14 @@ void test_false()
 void fail_false_empty()
 {
     std::array<output_type, 0> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(false), 0);
 }
 
 void test_true()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::true_value);
@@ -70,7 +72,7 @@ void test_true()
 void fail_true_empty()
 {
     std::array<output_type, 0> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(true), 0);
 }
 
@@ -96,7 +98,7 @@ namespace small_suite
 void test_zero()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(0)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0x00);
@@ -105,7 +107,7 @@ void test_zero()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(1)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0x01);
@@ -114,7 +116,7 @@ void test_one()
 void test_minus_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-1)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0xFF);
@@ -123,7 +125,7 @@ void test_minus_one()
 void test_lower()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-32)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0xE0);
@@ -132,7 +134,7 @@ void test_lower()
 void test_upper()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(127)), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], 0x7F);
@@ -141,7 +143,7 @@ void test_upper()
 void fail_empty()
 {
     std::array<output_type, 0> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(0)), 0);
 }
 
@@ -167,7 +169,7 @@ namespace int8_suite
 void test_negative_min()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-33)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int8);
@@ -177,7 +179,7 @@ void test_negative_min()
 void test_negative_max()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-128)), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int8);
@@ -187,14 +189,14 @@ void test_negative_max()
 void fail_missing_one()
 {
     std::array<output_type, 1> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-128)), 0);
 }
 
 void fail_missing_two()
 {
     std::array<output_type, 0> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int8_t(-128)), 0);
 }
 
@@ -218,7 +220,7 @@ namespace int16_suite
 void test_zero()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int16_t(0)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
@@ -229,7 +231,7 @@ void test_zero()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int16_t(1)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
@@ -240,7 +242,7 @@ void test_one()
 void test_minus_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int16_t(-1)), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
@@ -251,7 +253,7 @@ void test_minus_one()
 void test_max()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::int16::type>::max()), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
@@ -262,7 +264,7 @@ void test_max()
 void test_min()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::int16::type>::min()), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int16);
@@ -291,7 +293,7 @@ namespace int32_suite
 void test_zero()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int32_t(0)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
@@ -304,7 +306,7 @@ void test_zero()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int32_t(1)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
@@ -317,7 +319,7 @@ void test_one()
 void test_minus_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int32_t(-1)), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
@@ -330,7 +332,7 @@ void test_minus_one()
 void test_max()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::int32::type>::max()), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
@@ -343,7 +345,7 @@ void test_max()
 void test_min()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::int32::type>::min()), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int32);
@@ -374,7 +376,7 @@ namespace int64_suite
 void test_zero()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(0)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
@@ -391,7 +393,7 @@ void test_zero()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(1)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
@@ -408,7 +410,7 @@ void test_one()
 void test_minus_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::int64_t(-1)), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
@@ -425,7 +427,7 @@ void test_minus_one()
 void test_max()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::int64::type>::max()), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
@@ -442,7 +444,7 @@ void test_max()
 void test_min()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::int64::type>::min()), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 9);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::int64);
@@ -477,7 +479,7 @@ namespace float32_suite
 void test_zero()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0f), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -490,7 +492,7 @@ void test_zero()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1.0f), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -503,7 +505,7 @@ void test_one()
 void test_minus_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-1.0f), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -516,7 +518,7 @@ void test_minus_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(2.0f), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -529,7 +531,7 @@ void test_two()
 void test_minus_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-2.0f), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -542,7 +544,7 @@ void test_minus_two()
 void test_min()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::float32::type>::min()), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -555,7 +557,7 @@ void test_min()
 void test_max()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::float32::type>::max()), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -568,7 +570,7 @@ void test_max()
 void test_infinity()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::float32::type>::infinity()), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -581,7 +583,7 @@ void test_infinity()
 void test_minus_infinity()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-std::numeric_limits<token::float32::type>::infinity()), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 5);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::float32);
@@ -612,7 +614,7 @@ namespace float64_suite
 void test_zero()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(0.0), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -624,7 +626,7 @@ void test_zero()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(1.0), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
@@ -636,7 +638,7 @@ void test_one()
 void test_minus_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-1.0), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xBF };
@@ -648,7 +650,7 @@ void test_minus_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(2.0), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40 };
@@ -660,7 +662,7 @@ void test_two()
 void test_minus_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-2.0), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0 };
@@ -672,7 +674,7 @@ void test_minus_two()
 void test_min()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::float64::type>::min()), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00 };
@@ -684,7 +686,7 @@ void test_min()
 void test_max()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::float64::type>::max()), 9);
 
     output_type expected[] = { token::code::float64, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xEF, 0x7F };
@@ -696,7 +698,7 @@ void test_max()
 void test_infinity()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(std::numeric_limits<token::float64::type>::infinity()), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x7F };
@@ -708,7 +710,7 @@ void test_infinity()
 void test_minus_infinity()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(-std::numeric_limits<token::float64::type>::infinity()), 9);
 
     output_type expected[] = { token::code::float64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xFF };
@@ -742,7 +744,7 @@ namespace string_suite
 void test_string8_empty()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(""), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::string8);
@@ -752,7 +754,7 @@ void test_string8_empty()
 void test_string8_abcde()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value("ABCDE"), 7);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 7);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::string8);
@@ -767,7 +769,7 @@ void test_string8_abcde()
 void test_string16()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::string data(0x100, 'A');
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value(data), 3 + data.size());
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 3 + data.size());
@@ -797,7 +799,7 @@ namespace container_suite
 void test_record_begin()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_record>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::begin_record);
@@ -806,7 +808,7 @@ void test_record_begin()
 void test_record_end()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_record>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::end_record);
@@ -815,7 +817,7 @@ void test_record_end()
 void test_array_begin()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::begin_array);
@@ -824,7 +826,7 @@ void test_array_begin()
 void test_array_end()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::end_array);
@@ -833,7 +835,7 @@ void test_array_end()
 void test_assoc_array_begin()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::begin_assoc_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::begin_assoc_array);
@@ -842,7 +844,7 @@ void test_assoc_array_begin()
 void test_assoc_array_end()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.value<token::end_assoc_array>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer[0], token::code::end_assoc_array);
@@ -870,7 +872,7 @@ namespace compact_int8_suite
 void test_empty()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::vector<std::int8_t> data;
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
@@ -881,7 +883,7 @@ void test_empty()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int8::type, 1> data{{0x12}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 3);
     const output_type expected[] = {
@@ -895,7 +897,7 @@ void test_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int8::type, 2> data{{0x12, 0x34}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 4);
     const output_type expected[] = {
@@ -925,7 +927,7 @@ namespace compact_int16_suite
 void test_empty()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::vector<token::int16::type> data;
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
@@ -936,7 +938,7 @@ void test_empty()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int16::type, 1> data{{0x0201}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 4);
     const output_type expected[] = {
@@ -951,7 +953,7 @@ void test_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int16::type, 2> data{{0x0201, 0x1211}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 6);
     const output_type expected[] = {
@@ -983,7 +985,7 @@ namespace compact_int32_suite
 void test_empty()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::vector<token::int32::type> data;
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
@@ -994,7 +996,7 @@ void test_empty()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int32::type, 1> data{{0x04030201}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 6);
     const output_type expected[] = {
@@ -1009,7 +1011,7 @@ void test_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int32::type, 2> data{{0x04030201, 0x14131211}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 10);
     const output_type expected[] = {
@@ -1041,7 +1043,7 @@ namespace compact_int64_suite
 void test_empty()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::vector<token::int64::type> data;
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
@@ -1052,7 +1054,7 @@ void test_empty()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int64::type, 1> data{{0x0807060504030201}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 10);
     const output_type expected[] = {
@@ -1067,7 +1069,7 @@ void test_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::int64::type, 2> data{{0x0807060504030201, 0x1817161514131211}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 18);
     const output_type expected[] = {
@@ -1099,7 +1101,7 @@ namespace compact_float32_suite
 void test_empty()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::vector<token::float32::type> data;
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
@@ -1110,7 +1112,7 @@ void test_empty()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::float32::type, 1> data{{1.0}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 6);
     const output_type expected[] = {
@@ -1125,7 +1127,7 @@ void test_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::float32::type, 2> data{{0.0, 1.0}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 10);
     const output_type expected[] = {
@@ -1157,7 +1159,7 @@ namespace compact_float64_suite
 void test_empty()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::vector<token::float64::type> data;
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(buffer.size(), 2);
@@ -1168,7 +1170,7 @@ void test_empty()
 void test_one()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::float64::type, 1> data{{1.0}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 10);
     const output_type expected[] = {
@@ -1183,7 +1185,7 @@ void test_one()
 void test_two()
 {
     std::vector<output_type> buffer;
-    format::detail::encoder encoder(buffer);
+    encoder_type encoder(buffer);
     std::array<token::float64::type, 2> data{{0.0, 1.0}};
     TRIAL_PROTOCOL_TEST_EQUAL(encoder.array(data.data(), data.size()), 18);
     const output_type expected[] = {
