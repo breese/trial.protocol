@@ -1010,25 +1010,7 @@ basic_variable<Allocator> operator+ (const basic_variable<Allocator>&, const U&)
 template <template <typename> class Allocator>
 basic_variable<Allocator> operator+ (nullable, const basic_variable<Allocator>&);
 
-// Container comparison operators are noexcept from C++14
-
-template <typename T, typename U>
-bool operator== (const T&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
-
-template <typename T, typename U>
-bool operator!= (const T&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
-
-template <typename T, typename U>
-bool operator< (const T&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
-
-template <template <typename> class Allocator, typename U>
-bool operator<= (const basic_variable<Allocator>&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
-
-template <template <typename> class Allocator, typename U>
-bool operator> (const basic_variable<Allocator>&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
-
-template <template <typename> class Allocator, typename U>
-bool operator>= (const basic_variable<Allocator>&, const U&) TRIAL_DYNAMIC_CXX14(noexcept);
+// Comparison operators defined in variable.ipp
 
 // Convenience
 

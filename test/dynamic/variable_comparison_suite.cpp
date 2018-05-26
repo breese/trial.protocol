@@ -46,9 +46,11 @@ void compare_null_equal_boolean_literal()
 {
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == false, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != false, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(false == variable(), false);
 
     TRIAL_PROTOCOL_TEST_EQUAL(variable() == true, false);
     TRIAL_PROTOCOL_TEST_EQUAL(variable() != true, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(true == variable(), false);
 }
 
 void compare_null_equal_integer()

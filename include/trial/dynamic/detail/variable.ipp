@@ -1773,53 +1773,7 @@ namespace detail
 template <typename T, typename U, typename = void>
 struct operator_overloader
 {
-    static bool equal(const T& lhs, const U& rhs)
-    {
-        // This function is called by dynamic::operator== so we must avoid
-        // infinite recursion.
-
-        using std::operator==;
-        return operator==(lhs, rhs);
-    }
-
-    static bool less(const T& lhs, const U& rhs)
-    {
-        // See comment in equal() in this struct.
-
-        using std::operator<;
-        return operator<(lhs, rhs);
-    }
-};
-
-template <typename T, typename U>
-struct operator_overloader<
-    T,
-    U,
-    typename std::enable_if<detail::is_iterator<T>::value>::type>
-{
-    static bool equal(const T& lhs, const U& rhs)
-    {
-        // This function is called by dynamic::operator== when T is an
-        // iterator.
-        //
-        // basic_variable<Allocator>::iterator_base<T> cannot be matched via
-        // SFINAE below (due to being a non-deduced context), so instead
-        // lhs.operator(rhs) is called in the general case.
-        //
-        // Notice: operator==(lhs, rhs) cannot be used because it uses
-        // argument dependent lookup which will find dynamic::operator==
-        // which got us here in the first place. That would cause an
-        // infinite recursion.
-
-        return lhs.operator==(rhs);
-    }
-
-    static bool less(const T& lhs, const U& rhs)
-    {
-        // See comment for equal() in this struct.
-
-        return lhs.operator<(rhs);
-    }
+    static_assert_t<T, U> unsupported_type;
 };
 
 template <template <typename> class Allocator, typename U>
@@ -4076,12 +4030,26 @@ bool basic_variable<Allocator>::is_pair() const
     return is<array>() && (size() == 2);
 }
 
-// Comparison
+// Container comparison operators are noexcept from C++14
 
-template <typename T, typename U>
-bool operator== (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+template <template <typename> class Allocator, typename U>
+auto operator== (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+    -> typename std::enable_if<!std::is_same<U, basic_variable<Allocator>>::value, bool>::type
 {
-    return detail::operator_overloader<T, U>::equal(lhs, rhs);
+    return detail::operator_overloader<basic_variable<Allocator>, U>::equal(lhs, rhs);
+}
+
+template <typename T, template <typename> class Allocator>
+auto operator== (const T& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+    -> typename std::enable_if<!std::is_same<T, basic_variable<Allocator>>::value, bool>::type
+{
+    return detail::operator_overloader<T, basic_variable<Allocator>>::equal(lhs, rhs);
+}
+
+template <template <typename> class Allocator>
+bool operator== (const basic_variable<Allocator>& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+{
+    return detail::operator_overloader<basic_variable<Allocator>, basic_variable<Allocator>>::equal(lhs, rhs);
 }
 
 template <typename T, typename U>
@@ -4090,10 +4058,24 @@ bool operator!= (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     return !(lhs == rhs);
 }
 
-template <typename T, typename U>
-bool operator< (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+template <template <typename> class Allocator, typename U>
+auto operator< (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+    -> typename std::enable_if<!std::is_same<U, basic_variable<Allocator>>::value, bool>::type
 {
-    return detail::operator_overloader<T, U>::less(lhs, rhs);
+    return detail::operator_overloader<basic_variable<Allocator>, U>::less(lhs, rhs);
+}
+
+template <typename T, template <typename> class Allocator>
+auto operator< (const T& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+    -> typename std::enable_if<!std::is_same<T, basic_variable<Allocator>>::value, bool>::type
+{
+    return detail::operator_overloader<T, basic_variable<Allocator>>::less(lhs, rhs);
+}
+
+template <template <typename> class Allocator>
+bool operator< (const basic_variable<Allocator>& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+{
+    return detail::operator_overloader<basic_variable<Allocator>, basic_variable<Allocator>>::less(lhs, rhs);
 }
 
 template <template <typename> class Allocator, typename U>
@@ -4114,8 +4096,8 @@ bool operator> (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMI
     return rhs < lhs;
 }
 
-template <template <typename> class Allocator, typename U>
-bool operator>= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
+template <typename T, typename U>
+bool operator>= (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     return !(lhs < rhs);
 }
