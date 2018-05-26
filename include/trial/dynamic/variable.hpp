@@ -121,6 +121,7 @@ private:
     using basic_string = std::basic_string<CharT,
                                            typename std::char_traits<CharT>,
                                            typename std::allocator_traits<allocator_type>::template rebind_alloc<CharT>>;
+    using map_value_type = typename std::map<value_type, value_type>::value_type;
 public:
     using string_type = basic_string<char>;
     using wstring_type = basic_string<wchar_t>;
@@ -131,7 +132,7 @@ public:
     using map_type = std::map<value_type,
                               value_type,
                               std::less<value_type>,
-                              allocator_type>;
+                              typename std::allocator_traits<allocator_type>::template rebind_alloc<map_value_type>>;
     using pair_type = typename map_type::value_type;
 
 #endif
