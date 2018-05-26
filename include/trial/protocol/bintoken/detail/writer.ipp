@@ -44,7 +44,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<core::detail::is_bool<T>::value>::type>
 {
-    static size_type value(basic_writer& self, T data)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self, T data)
     {
         return self.encoder.value(data);
     }
@@ -58,7 +60,9 @@ struct basic_writer<N>::overloader<
                             std::is_signed<T>::value &&
                             !core::detail::is_bool<T>::value>::type>
 {
-    static size_type value(basic_writer& self, T data)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self, T data)
     {
         if ((data <= std::numeric_limits<std::int8_t>::max()) &&
             (data >= std::numeric_limits<std::int8_t>::min()))
@@ -81,7 +85,7 @@ struct basic_writer<N>::overloader<
         }
     }
 
-    static size_type array(basic_writer& self, const T *data, size_type size)
+    static size_type array(basic_writer<N>& self, const T *data, size_type size)
     {
         return self.encoder.array(data, size);
     }
@@ -95,7 +99,9 @@ struct basic_writer<N>::overloader<
                             !std::is_signed<T>::value &&
                             !core::detail::is_bool<T>::value>::type>
 {
-    static size_type value(basic_writer& self, T data)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self, T data)
     {
         if (data <= std::numeric_limits<std::uint8_t>::max())
         {
@@ -115,7 +121,7 @@ struct basic_writer<N>::overloader<
         }
     }
 
-    static size_type array(basic_writer& self, const T *data, size_type size)
+    static size_type array(basic_writer<N>& self, const T *data, size_type size)
     {
         using signed_type = typename std::make_signed<T>::type;
 
@@ -130,12 +136,14 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_floating_point<T>::value>::type>
 {
-    static size_type value(basic_writer& self, T data)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self, T data)
     {
         return self.encoder.value(data);
     }
 
-    static size_type array(basic_writer& self, const T *data, size_type size)
+    static size_type array(basic_writer<N>& self, const T *data, size_type size)
     {
         return self.encoder.array(data, size);
     }
@@ -147,8 +155,9 @@ template <typename CharT, std::size_t M>
 struct basic_writer<N>::overloader<CharT[M]>
 {
     using type = CharT[M];
+    using size_type = typename basic_writer<N>::size_type;
 
-    static size_type value(basic_writer& self, const type& data)
+    static size_type value(basic_writer<N>& self, const type& data)
     {
         return self.encoder.value(data, M - 1); // Drop terminating zero
     }
@@ -160,7 +169,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, typename basic_writer<N>::string_view_type>::value>::type>
 {
-    static size_type value(basic_writer& self, const T& data)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self, const T& data)
     {
         return self.encoder.value(data);
     }
@@ -172,7 +183,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, std::string>::value>::type>
 {
-    static size_type value(basic_writer& self, const T& data)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self, const T& data)
     {
         return self.encoder.value(data);
     }
@@ -184,7 +197,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::null>::value>::type>
 {
-    static size_type value(basic_writer& self)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self)
     {
         return self.encoder.template value<token::null>();
     }
@@ -196,7 +211,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::begin_record>::value>::type>
 {
-    static size_type value(basic_writer& self)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self)
     {
         self.stack.push(token::code::end_record);
         return self.encoder.template value<T>();
@@ -209,7 +226,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::end_record>::value>::type>
 {
-    static size_type value(basic_writer& self)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self)
     {
         self.validate_scope(token::code::end_record, unexpected_token);
         size_type result = self.encoder.template value<T>();
@@ -224,7 +243,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::begin_array>::value>::type>
 {
-    static size_type value(basic_writer& self)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self)
     {
         self.stack.push(token::code::end_array);
         return self.encoder.template value<T>();
@@ -237,7 +258,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::end_array>::value>::type>
 {
-    static size_type value(basic_writer& self)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self)
     {
         self.validate_scope(token::code::end_array, unexpected_token);
         size_type result = self.encoder.template value<T>();
@@ -252,7 +275,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::begin_assoc_array>::value>::type>
 {
-    static size_type value(basic_writer& self)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self)
     {
         self.stack.push(token::code::end_assoc_array);
         return self.encoder.template value<T>();
@@ -265,7 +290,9 @@ struct basic_writer<N>::overloader<
     T,
     typename std::enable_if<std::is_same<T, token::end_assoc_array>::value>::type>
 {
-    static size_type value(basic_writer& self)
+    using size_type = typename basic_writer<N>::size_type;
+
+    static size_type value(basic_writer<N>& self)
     {
         self.validate_scope(token::code::end_assoc_array, unexpected_token);
         size_type result = self.encoder.template value<T>();
