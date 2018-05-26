@@ -41,6 +41,7 @@ public:
 
     template <typename T>
     basic_encoder(T&);
+    ~basic_encoder();
 
     template <typename T> size_type value();
     size_type value(bool);

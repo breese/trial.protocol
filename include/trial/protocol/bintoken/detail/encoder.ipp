@@ -153,6 +153,12 @@ basic_encoder<N>::basic_encoder(T& output)
 }
 
 template <std::size_t N>
+basic_encoder<N>::~basic_encoder()
+{
+    buffer().~buffer_type();
+}
+
+template <std::size_t N>
 template <typename U>
 auto basic_encoder<N>::value() -> size_type
 {
