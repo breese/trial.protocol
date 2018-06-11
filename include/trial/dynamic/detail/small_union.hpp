@@ -28,7 +28,7 @@ namespace detail
 // small_union
 //-----------------------------------------------------------------------------
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 class small_union : public Allocator
 {
     template <typename T> struct make_small;
@@ -67,7 +67,7 @@ private:
     struct copier;
     struct mover;
 
-    typename std::aligned_storage<N, alignof(void *)>::type storage;
+    typename std::aligned_storage<sizeof(MaxType), alignof(MaxType)>::type storage;
     index_type current;
 };
 

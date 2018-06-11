@@ -128,16 +128,16 @@ struct small_traits<M, T, typename std::enable_if<(sizeof(T) > M)>::type>
 // small_union
 //-----------------------------------------------------------------------------
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename T>
-struct small_union<Allocator, IndexType, N, Types...>::make_small
+struct small_union<Allocator, MaxType, IndexType, Types...>::make_small
 {
-    using type = typename small_traits<N, typename std::decay<T>::type>::small_type;
+    using type = typename small_traits<sizeof(MaxType), typename std::decay<T>::type>::small_type;
 };
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename T>
-struct small_union<Allocator, IndexType, N, Types...>::to_index
+struct small_union<Allocator, MaxType, IndexType, Types...>::to_index
 {
 private:
     using small_type = typename make_small<T>::type;
@@ -148,51 +148,51 @@ public:
     static const std::size_t value = type::value;
 };
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename T>
-small_union<Allocator, IndexType, N, Types...>::small_union(T value, const allocator_type& alloc)
+small_union<Allocator, MaxType, IndexType, Types...>::small_union(T value, const allocator_type& alloc)
     : Allocator(alloc),
       current(to_index<T>::value)
 {
     using type = typename std::decay<T>::type;
 
     assert(current < sizeof...(Types));
-    small_traits<N, type>::construct(static_cast<allocator_type&>(*this),
-                                     std::addressof(storage),
-                                     std::move(value));
+    small_traits<sizeof(MaxType), type>::construct(static_cast<allocator_type&>(*this),
+                                                   std::addressof(storage),
+                                                   std::move(value));
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-small_union<Allocator, IndexType, N, Types...>::small_union(const small_union& other)
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+small_union<Allocator, MaxType, IndexType, Types...>::small_union(const small_union& other)
     : Allocator(std::allocator_traits<Allocator>::select_on_container_copy_construction(other)),
       current(other.current)
 {
     call<copier, void>(other);
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-small_union<Allocator, IndexType, N, Types...>::small_union(small_union&& other)
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+small_union<Allocator, MaxType, IndexType, Types...>::small_union(small_union&& other)
     : Allocator(other),
       current(other.current)
 {
     call<mover, void>(std::move(other));
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename T>
-void small_union<Allocator, IndexType, N, Types...>::operator= (T value)
+void small_union<Allocator, MaxType, IndexType, Types...>::operator= (T value)
 {
     using type = typename std::decay<T>::type;
 
     call<destructor, void>();
-    small_traits<N, type>::construct(static_cast<allocator_type&>(*this),
-                                     std::addressof(storage),
-                                     std::move(value));
+    small_traits<sizeof(MaxType), type>::construct(static_cast<allocator_type&>(*this),
+                                                   std::addressof(storage),
+                                                   std::move(value));
     current = to_index<type>::value;
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-auto small_union<Allocator, IndexType, N, Types...>::operator= (const small_union& other) -> small_union&
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+auto small_union<Allocator, MaxType, IndexType, Types...>::operator= (const small_union& other) -> small_union&
 {
     if (this == &other)
         return *this;
@@ -215,8 +215,8 @@ auto small_union<Allocator, IndexType, N, Types...>::operator= (const small_unio
     return *this;
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-auto small_union<Allocator, IndexType, N, Types...>::operator= (small_union&& other) -> small_union&
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+auto small_union<Allocator, MaxType, IndexType, Types...>::operator= (small_union&& other) -> small_union&
 {
     if (this == &other)
         return *this;
@@ -242,31 +242,31 @@ auto small_union<Allocator, IndexType, N, Types...>::operator= (small_union&& ot
     return *this;
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-small_union<Allocator, IndexType, N, Types...>::~small_union()
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+small_union<Allocator, MaxType, IndexType, Types...>::~small_union()
 {
     call<destructor, void>();
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename T>
-T& small_union<Allocator, IndexType, N, Types...>::get() noexcept
+T& small_union<Allocator, MaxType, IndexType, Types...>::get() noexcept
 {
     using type = typename std::decay<T>::type;
-    return small_traits<N, type>::deref(std::addressof(storage));
+    return small_traits<sizeof(MaxType), type>::deref(std::addressof(storage));
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename T>
-const T& small_union<Allocator, IndexType, N, Types...>::get() const noexcept
+const T& small_union<Allocator, MaxType, IndexType, Types...>::get() const noexcept
 {
     using type = typename std::decay<T>::type;
-    return small_traits<N, type>::deref(std::addressof(storage));
+    return small_traits<sizeof(MaxType), type>::deref(std::addressof(storage));
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename Visitor, typename R>
-R small_union<Allocator, IndexType, N, Types...>::call()
+R small_union<Allocator, MaxType, IndexType, Types...>::call()
 {
     assert(current < sizeof...(Types));
 
@@ -275,9 +275,9 @@ R small_union<Allocator, IndexType, N, Types...>::call()
     return table[current](*this);
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename Visitor, typename R>
-R small_union<Allocator, IndexType, N, Types...>::call() const
+R small_union<Allocator, MaxType, IndexType, Types...>::call() const
 {
     assert(current < sizeof...(Types));
 
@@ -286,9 +286,9 @@ R small_union<Allocator, IndexType, N, Types...>::call() const
     return table[current](*this);
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename Visitor, typename R, typename... Args>
-R small_union<Allocator, IndexType, N, Types...>::call(Args&&... args)
+R small_union<Allocator, MaxType, IndexType, Types...>::call(Args&&... args)
 {
     assert(current < sizeof...(Types));
 
@@ -297,9 +297,9 @@ R small_union<Allocator, IndexType, N, Types...>::call(Args&&... args)
     return table[current](*this, std::forward<Args...>(args...));
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename Visitor, typename R, typename... Args>
-R small_union<Allocator, IndexType, N, Types...>::call(Args&&... args) const
+R small_union<Allocator, MaxType, IndexType, Types...>::call(Args&&... args) const
 {
     assert(current < sizeof...(Types));
 
@@ -308,48 +308,48 @@ R small_union<Allocator, IndexType, N, Types...>::call(Args&&... args) const
     return table[current](*this, std::forward<Args...>(args...));
 }
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-struct small_union<Allocator, IndexType, N, Types...>::reconstructor
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+struct small_union<Allocator, MaxType, IndexType, Types...>::reconstructor
 {
     template <typename T>
     static void call(small_union& self, const small_union& other)
     {
-        small_traits<N, T>::construct(static_cast<allocator_type&>(self),
-                                      std::addressof(self.storage),
-                                      other.get<T>());
+        small_traits<sizeof(MaxType), T>::construct(static_cast<allocator_type&>(self),
+                                                    std::addressof(self.storage),
+                                                    other.get<T>());
     }
 };
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-struct small_union<Allocator, IndexType, N, Types...>::destructor
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+struct small_union<Allocator, MaxType, IndexType, Types...>::destructor
 {
     template <typename T>
     static void call(small_union& self)
     {
-        small_traits<N, T>::destroy(static_cast<allocator_type&>(self),
-                                    std::addressof(self.storage));
+        small_traits<sizeof(MaxType), T>::destroy(static_cast<allocator_type&>(self),
+                                                  std::addressof(self.storage));
     }
 };
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-struct small_union<Allocator, IndexType, N, Types...>::copier
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+struct small_union<Allocator, MaxType, IndexType, Types...>::copier
 {
     template <typename T>
     static void call(small_union& self, const small_union& other)
     {
-        small_traits<N, T>::copy(std::addressof(self.storage),
-                                 std::addressof(other.storage));
+        small_traits<sizeof(MaxType), T>::copy(std::addressof(self.storage),
+                                               std::addressof(other.storage));
     }
 };
 
-template <typename Allocator, typename IndexType, IndexType N, typename... Types>
-struct small_union<Allocator, IndexType, N, Types...>::mover
+template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
+struct small_union<Allocator, MaxType, IndexType, Types...>::mover
 {
     template <typename T>
     static void call(small_union& self, small_union&& other)
     {
-        small_traits<N, T>::move(std::addressof(self.storage),
-                                 std::addressof(other.storage));
+        small_traits<sizeof(MaxType), T>::move(std::addressof(self.storage),
+                                               std::addressof(other.storage));
     }
 };
 

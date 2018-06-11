@@ -191,8 +191,8 @@ private:
     protected:
         using index_type = unsigned char;
         using small_union = detail::small_union<allocator_type,
+                                                pointer,
                                                 index_type,
-                                                sizeof(pointer),
                                                 pointer,
                                                 array_iterator,
                                                 map_iterator>;
@@ -977,8 +977,8 @@ private:
 
     using index_type = unsigned char;
     using storage_type = detail::small_union<allocator_type,
+                                             std::max_align_t,
                                              index_type,
-                                             sizeof(std::max_align_t),
                                              nullable,
                                              bool,
                                              signed char,

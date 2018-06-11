@@ -14,8 +14,8 @@
 
 using namespace trial::dynamic::detail;
 
-template <std::size_t N, typename... Types>
-using test_union = small_union<std::allocator<void>, std::size_t, N, Types...>;
+template <typename MaxType, typename... Types>
+using test_union = small_union<std::allocator<void>, MaxType, std::size_t, Types...>;
 
 //-----------------------------------------------------------------------------
 // Constructor
@@ -26,52 +26,52 @@ namespace ctor_suite
 
 void construct_int()
 {
-    test_union<sizeof(int), bool, int> data{true};
+    test_union<int, bool, int> data{true};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
 }
 
 void construct_ptr_with_long_double()
 {
-    test_union<sizeof(void *), bool, int, long double> data{3.0L};
+    test_union<void *, bool, int, long double> data{3.0L};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<long double>(), 3.0L);
 }
 
 void construct_ptr_with_string()
 {
-    test_union<sizeof(void *), bool, int, std::string> data{std::string("alpha")};
+    test_union<void *, bool, int, std::string> data{std::string("alpha")};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<std::string>(), std::string("alpha"));
 }
 
 void copy_construct_int()
 {
-    test_union<sizeof(int), bool, int> data{true};
+    test_union<int, bool, int> data{true};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
-    test_union<sizeof(int), bool, int> other(data);
+    test_union<int, bool, int> other(data);
     TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
 }
 
 void move_construct_int()
 {
-    test_union<sizeof(int), bool, int> data{true};
+    test_union<int, bool, int> data{true};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
-    test_union<sizeof(int), bool, int> other(std::move(data));
+    test_union<int, bool, int> other(std::move(data));
     TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
 }
 
 void copy_assign_int()
 {
-    test_union<sizeof(int), bool, int> data{true};
+    test_union<int, bool, int> data{true};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
-    test_union<sizeof(int), bool, int> other{false};
+    test_union<int, bool, int> other{false};
     other = data;
     TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
 }
 
 void move_assign_int()
 {
-    test_union<sizeof(int), bool, int> data{true};
+    test_union<int, bool, int> data{true};
     TRIAL_PROTOCOL_TEST_EQUAL(data.get<bool>(), true);
-    test_union<sizeof(int), bool, int> other{false};
+    test_union<int, bool, int> other{false};
     other = std::move(data);
     TRIAL_PROTOCOL_TEST_EQUAL(other.get<bool>(), true);
 }
@@ -96,7 +96,7 @@ void run()
 namespace visitor_suite
 {
 
-using storage_type = test_union<sizeof(int), bool, int>;
+using storage_type = test_union<int, bool, int>;
 
 struct visitor_void
 {
