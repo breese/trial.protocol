@@ -13,5 +13,5 @@ add_executable(json_push_parser
 )
 
 target_link_libraries(json_push_parser
-  ${Boost_FILESYSTEM_LIBRARY}
-  ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+  trial-protocol
+  ${Boost_FILESYSTEM_LIBRARY})

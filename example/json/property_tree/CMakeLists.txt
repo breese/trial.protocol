@@ -12,4 +12,4 @@ add_executable(json_property_tree
   main.cpp
 )
 
-target_link_libraries(json_property_tree ${TRIAL_PROTOCOL_DEPENDENT_LIBRARIES})
+target_link_libraries(json_property_tree trial-protocol)
