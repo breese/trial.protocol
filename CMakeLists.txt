@@ -10,8 +10,8 @@
 
 cmake_minimum_required(VERSION 3.8)
 
+enable_testing()
+
 add_subdirectory(cmake)
 add_subdirectory(test)
 add_subdirectory(example/json)
-
-enable_testing()
