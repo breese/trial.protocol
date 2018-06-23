@@ -482,7 +482,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -718,7 +718,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -954,7 +954,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -1199,7 +1199,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -1326,7 +1326,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -1407,7 +1407,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -1487,7 +1487,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -1566,7 +1566,7 @@ struct overloader<
             break;
 
         case code::array:
-            self.template assume_value<array_type>().push_back(other);
+            self.template assume_value<array_type>().emplace_back(other);
             break;
 
         default:
@@ -3771,7 +3771,7 @@ auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
         {
             // Insert at end
             auto& array = assume_value<array_type>();
-            array.push_back(value);
+            array.emplace_back(value);
             return iterator(this, --array.end());
         }
 
