@@ -187,7 +187,7 @@ struct load_overloader< protocol::bintoken::iarchive,
                 {
                     dynamic::variable value;
                     ar.load_override(value);
-                    data += value;
+                    data.insert(data.end(), value);
                 }
                 ar.template load<token::end_array>();
             }
@@ -205,7 +205,7 @@ struct load_overloader< protocol::bintoken::iarchive,
                 {
                     std::pair<std::string, dynamic::variable> value;
                     ar.load_override(value);
-                    data += dynamic::map::make({value});
+                    data.insert(data.end(), { std::move(value.first), std::move(value.second) });
                 }
                 ar.template load<token::end_assoc_array>();
             }

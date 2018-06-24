@@ -215,6 +215,15 @@ void construct_array_from_initializer()
     TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
 }
 
+void construct_array_from_nested_initializer()
+{
+    variable data = array::make({{ "alpha", "helium" }});
+    TRIAL_PROTOCOL_TEST_EQUAL(data.is<array>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data.size(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(data[0].is<array>(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(data[0].size(), 2);
+}
+
 void construct_array_from_size()
 {
     variable data(array::repeat(4, true));
@@ -528,6 +537,7 @@ void run()
     construct_array_from_iterator();
     construct_array_from_factory();
     construct_array_from_initializer();
+    construct_array_from_nested_initializer();
     construct_array_from_size();
 
     construct_map_empty();

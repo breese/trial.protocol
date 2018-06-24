@@ -736,6 +736,20 @@ void test_array()
                                  std::equal_to<variable>());
 }
 
+void test_array_nested_array()
+{
+    const char input[] = "[[\"hydrogen\", \"helium\"]]";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<array>());
+    TRIAL_PROTOCOL_TEST(value[0].is<array>());
+    variable expect = array::make({{ "hydrogen", "helium" }});
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void test_map()
 {
     const char input[] = "{\"alpha\":true,\"bravo\":2,\"charlie\":3.0,\"delta\":\"beryllium\"}";
@@ -755,6 +769,23 @@ void test_map()
                                  std::equal_to<variable>());
 }
 
+void test_map_nested_array()
+{
+    const char input[] = "{\"alpha\":[\"hydrogen\", \"helium\"]}";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST(value.is<map>());
+    TRIAL_PROTOCOL_TEST(value["alpha"].is<array>());
+    variable expect = map::make(
+        {
+            { "alpha", array::make({ "hydrogen", "helium" }) }
+        });
+    TRIAL_PROTOCOL_TEST_ALL_WITH(value.begin(), value.end(),
+                                 expect.begin(), expect.end(),
+                                 std::equal_to<variable>());
+}
+
 void run()
 {
     test_null();
@@ -763,7 +794,9 @@ void run()
     test_number();
     test_string();
     test_array();
+    test_array_nested_array();
     test_map();
+    test_map_nested_array();
 }
 
 } // namespace dynamic_suite

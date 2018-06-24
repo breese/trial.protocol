@@ -181,7 +181,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
                 {
                     dynamic::variable value;
                     ar.load_override(value);
-                    data += value;
+                    data.insert(data.end(), value);
                 }
                 ar.template load<token::end_array>();
             }
@@ -197,7 +197,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
                     ar.load_override(key);
                     dynamic::variable value;
                     ar.load_override(value);
-                    data += dynamic::map::make({{ key, value }});
+                    data.insert(data.end(), { std::move(key), std::move(value) });
                 }
                 ar.template load<token::end_object>();
             }
