@@ -8,7 +8,7 @@
 #
 ###############################################################################
 
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.7)
 
 set(TRIAL_PROTOCOL_BUILD_DIR ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${TRIAL_PROTOCOL_BUILD_DIR}/lib)
