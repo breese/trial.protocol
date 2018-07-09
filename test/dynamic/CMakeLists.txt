@@ -67,7 +67,8 @@ trial_add_test(dynamic_std_partial_sum_suite std/partial_sum_suite.cpp)
 
 # convert
 trial_add_test(dynamic_convert_enum_suite convert/enum_suite.cpp)
-trial_add_test(dynamic_convert_std_vector_suite convert/std/vector_suite.cpp)
 trial_add_test(dynamic_convert_std_map_suite convert/std/map_suite.cpp)
+trial_add_test(dynamic_convert_std_set_suite convert/std/set_suite.cpp)
+trial_add_test(dynamic_convert_std_vector_suite convert/std/vector_suite.cpp)
 trial_add_test(dynamic_convert_boost_any_suite convert/boost/any_suite.cpp)
 trial_add_test(dynamic_convert_boost_optional_suite convert/boost/optional_suite.cpp)
