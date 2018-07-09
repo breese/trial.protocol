@@ -52,7 +52,7 @@ struct overloader<
         for (const auto& entry : array)
         {
             if (entry.template is<T>())
-                result.push_back(entry.template value<T>(error));
+                result.push_back(entry.template assume_value<T>());
             else
                 error = dynamic::make_error_code(incompatible_type);
 
@@ -75,9 +75,9 @@ struct overloader<
     {
         std::vector<basic_variable<Allocator>> result;
         result.reserve(array.size());
-        for (auto it = array.begin(); it != array.end(); ++it)
+        for (const auto& item : array)
         {
-            result.push_back(*it);
+            result.push_back(item);
         }
         return result;
     }

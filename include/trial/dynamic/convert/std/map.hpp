@@ -52,7 +52,7 @@ struct overloader<
         {
             if (it->template is<Value>())
                 result.emplace(it.key().template value<Key>(error),
-                               it->template value<Value>(error));
+                               it->template assume_value<Value>());
             else
                 error = dynamic::make_error_code(incompatible_type);
 
