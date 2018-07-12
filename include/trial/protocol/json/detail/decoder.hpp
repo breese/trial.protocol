@@ -16,6 +16,7 @@
 #include <string>
 #include <boost/config.hpp>
 #include <trial/protocol/core/detail/string_view.hpp>
+#include <trial/protocol/core/char_traits.hpp>
 #include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/error.hpp>
 
@@ -34,7 +35,7 @@ class basic_decoder
 public:
     using size_type = std::size_t;
     using value_type = CharT;
-    using view_type = core::detail::basic_string_view<CharT>;
+    using view_type = core::detail::basic_string_view<CharT, core::char_traits<CharT>>;
 
     basic_decoder(const view_type& input);
 
