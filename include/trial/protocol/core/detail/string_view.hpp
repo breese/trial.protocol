@@ -14,7 +14,7 @@
 #include <boost/version.hpp>
 
 #if !defined(TRIAL_PROTOCOL_USE_BOOST_STRING_REF)
-# if BOOST_VERSION < 106100
+# if BOOST_VERSION < 106200
 #  define TRIAL_PROTOCOL_USE_BOOST_STRING_REF 1
 # endif
 #endif
