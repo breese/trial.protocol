@@ -31,17 +31,17 @@ public:
     {
     }
 
-    virtual bool grow(size_type size)
+    virtual bool grow(size_type size) override
     {
         return Super::grow(size);
     }
 
-    virtual void write(value_type value)
+    virtual void write(value_type value) override
     {
         return Super::write(value);
     }
 
-    virtual void write(const view_type& view)
+    virtual void write(const view_type& view) override
     {
         return Super::write(view);
     }
