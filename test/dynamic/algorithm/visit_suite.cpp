@@ -448,7 +448,7 @@ namespace implicit_const_reference_suite
 struct visitor
 {
     // User-provided constructor needed for const instantiation
-    visitor() {}
+    visitor() = default;
 
     template <typename T>
     token::code::value operator()(const T&) const
