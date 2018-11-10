@@ -19,7 +19,7 @@ using namespace trial::dynamic;
 // std::any_of
 //-----------------------------------------------------------------------------
 
-auto is_true = [] (const variable& value) { return bool(value); };
+auto is_true = [] (const variable& value) { return bool(value); }; // NOLINT(cert-err58-cpp)
 
 void any_null()
 {

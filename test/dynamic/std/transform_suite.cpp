@@ -18,7 +18,7 @@ using namespace trial::dynamic;
 // std::transform
 //-----------------------------------------------------------------------------
 
-auto identity = [] (const variable& value) -> variable { return value; };
+auto identity = [] (const variable& value) -> variable { return value; }; // NOLINT(cert-err58-cpp)
 
 void transform_null()
 {
