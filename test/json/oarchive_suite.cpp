@@ -587,8 +587,8 @@ namespace record_suite
 
 struct person
 {
-    person(const std::string& name, int age)
-        : name(name),
+    person(std::string name, int age)
+        : name(std::move(name)),
           age(age)
     {}
 
