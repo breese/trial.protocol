@@ -26,7 +26,7 @@ endif()
 ###############################################################################
 
 set(Boost_COMPONENTS serialization system)
-find_package(Boost 1.55.0 COMPONENTS ${Boost_COMPONENTS})
+find_package(Boost 1.55.0 QUIET COMPONENTS ${Boost_COMPONENTS})
 if (NOT ${Boost_FOUND})
   message(FATAL_ERROR "${Boost_ERROR_REASON}")
 endif()
