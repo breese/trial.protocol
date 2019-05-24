@@ -1013,6 +1013,34 @@ void run()
 } // namespace dynamic_suite
 
 //-----------------------------------------------------------------------------
+
+namespace regression_suite
+{
+
+void regress_array_next()
+{
+    // Internal view was not advanced to next token after an array so reading
+    // the subsequent string would raise an invalid_value exception.
+    const value_type input[] = { bintoken::token::code::array8_int8, 2 *  token::int8::size,
+                                 0x02,
+                                 0x02,
+                                 bintoken::token::code::string8, 0x03, 0x41, 0x42, 0x43 };
+    format::iarchive in(input);
+    std::vector<std::uint8_t> array;
+    std::string text;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> array);
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> text);
+    TRIAL_PROTOCOL_TEST_EQUAL(text, std::string("ABC"));
+}
+
+void run()
+{
+    regress_array_next();
+}
+
+} // namespace regression_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -1028,6 +1056,7 @@ int main()
     split_struct_suite::run();
     container_suite::run();
     dynamic_suite::run();
+    regression_suite::run();
 
     return boost::report_errors();
 }

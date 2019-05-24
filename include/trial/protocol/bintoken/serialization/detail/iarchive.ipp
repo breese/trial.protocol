@@ -57,6 +57,7 @@ template <typename T>
 void iarchive::load_array(T *data, std::size_t size)
 {
     reader.array(data, size);
+    next();
 }
 
 template <typename Tag>
