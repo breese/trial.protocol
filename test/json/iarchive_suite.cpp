@@ -786,6 +786,15 @@ void test_map_nested_array()
                                  std::equal_to<variable>());
 }
 
+void test_bad()
+{
+    const char input[] = "ERR,{\"alpha\":[\"hydrogen\", \"helium\"]}";
+    json::iarchive in(input);
+    variable value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    json::error, "unexpected token");
+}
+
 void run()
 {
     test_null();
@@ -797,6 +806,7 @@ void run()
     test_array_nested_array();
     test_map();
     test_map_nested_array();
+    test_bad();
 }
 
 } // namespace dynamic_suite

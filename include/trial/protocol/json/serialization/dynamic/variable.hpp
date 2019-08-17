@@ -204,7 +204,7 @@ struct load_overloader< protocol::json::basic_iarchive<CharT>,
             break;
 
         default:
-            assert(false);
+            throw json::error(json::errc::unexpected_token);
             break;
         }
     }
