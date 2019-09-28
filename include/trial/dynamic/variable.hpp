@@ -269,7 +269,7 @@ public:
 
     private:
         friend class basic_variable;
-        template <template <typename> class A, typename U, typename> friend struct detail::iterator_overloader;
+        template <typename A, typename U, typename> friend struct detail::iterator_overloader;
 
         explicit const_iterator(pointer p, bool initialize = true);
     };
@@ -970,9 +970,9 @@ private:
 
 private:
     template <typename T, typename U, typename> friend struct detail::overloader;
-    template <template <typename> class A, typename U, typename> friend struct detail::iterator_overloader;
+    template <typename A, typename U, typename> friend struct detail::iterator_overloader;
     template <typename T, typename U, typename> friend struct detail::operator_overloader;
-    template <template <typename> class A, typename T, typename> friend struct detail::same_overloader;
+    template <typename A, typename T, typename> friend struct detail::same_overloader;
     template <typename T> struct similar_visitor;
 
     using index_type = unsigned char;
