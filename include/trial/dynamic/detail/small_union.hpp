@@ -49,7 +49,8 @@ public:
     ~small_union();
 
     index_type index() const noexcept { return current; }
-    allocator_type get_allocator() const noexcept { return *this; }
+    const allocator_type& get_allocator() const noexcept { return *this; }
+    allocator_type& get_allocator() noexcept { return *this; }
 
     template <typename T> T& get() noexcept;
     template <typename T> const T& get() const noexcept;

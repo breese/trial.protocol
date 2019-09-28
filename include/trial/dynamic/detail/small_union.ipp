@@ -157,7 +157,7 @@ small_union<Allocator, MaxType, IndexType, Types...>::small_union(T value, const
     using type = typename std::decay<T>::type;
 
     assert(current < sizeof...(Types));
-    small_traits<sizeof(MaxType), type>::construct(static_cast<allocator_type&>(*this),
+    small_traits<sizeof(MaxType), type>::construct(get_allocator(),
                                                    std::addressof(storage),
                                                    std::move(value));
 }
@@ -185,7 +185,7 @@ void small_union<Allocator, MaxType, IndexType, Types...>::operator= (T value)
     using type = typename std::decay<T>::type;
 
     call<destructor, void>();
-    small_traits<sizeof(MaxType), type>::construct(static_cast<allocator_type&>(*this),
+    small_traits<sizeof(MaxType), type>::construct(get_allocator(),
                                                    std::addressof(storage),
                                                    std::move(value));
     current = to_index<type>::value;
@@ -204,7 +204,7 @@ auto small_union<Allocator, MaxType, IndexType, Types...>::operator= (const smal
         // Destroy with old allocator
         call<destructor, void>();
         // Create with new allocator
-        static_cast<allocator_type&>(*this) = other.get_allocator();
+        get_allocator() = other.get_allocator();
         call<reconstructor, void>(other);
     }
     else
@@ -225,17 +225,17 @@ auto small_union<Allocator, MaxType, IndexType, Types...>::operator= (small_unio
 
     if (std::allocator_traits<Allocator>::propagate_on_container_move_assignment::value)
     {
-        static_cast<allocator_type&>(*this) = std::move(static_cast<allocator_type&>(other));
+        get_allocator() = std::move(other.get_allocator());
         call<mover, void>(std::move(other));
     }
-    else if (static_cast<allocator_type&>(*this) == static_cast<allocator_type&>(other))
+    else if (get_allocator() == other.get_allocator())
     {
         call<mover, void>(std::move(other));
     }
     else
     {
         call<destructor, void>();
-        static_cast<allocator_type&>(*this) = std::move(static_cast<allocator_type&>(other));
+        get_allocator() = std::move(other.get_allocator());
         call<reconstructor, void>(std::move(other));
     }
     current = other.current;
@@ -314,7 +314,7 @@ struct small_union<Allocator, MaxType, IndexType, Types...>::reconstructor
     template <typename T>
     static void call(small_union& self, const small_union& other)
     {
-        small_traits<sizeof(MaxType), T>::construct(static_cast<allocator_type&>(self),
+        small_traits<sizeof(MaxType), T>::construct(self.get_allocator(),
                                                     std::addressof(self.storage),
                                                     other.get<T>());
     }
@@ -326,7 +326,7 @@ struct small_union<Allocator, MaxType, IndexType, Types...>::destructor
     template <typename T>
     static void call(small_union& self)
     {
-        small_traits<sizeof(MaxType), T>::destroy(static_cast<allocator_type&>(self),
+        small_traits<sizeof(MaxType), T>::destroy(self.get_allocator(),
                                                   std::addressof(self.storage));
     }
 };
