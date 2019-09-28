@@ -16,6 +16,7 @@
 #include <cassert>
 #include <type_traits>
 #include <trial/dynamic/detail/meta.hpp>
+#include <trial/dynamic/detail/empty_value.hpp>
 
 namespace trial
 {
@@ -29,8 +30,10 @@ namespace detail
 //-----------------------------------------------------------------------------
 
 template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
-class small_union : public Allocator
+class small_union : public detail::empty_value<Allocator>
 {
+    using allocator_base = detail::empty_value<Allocator>;
+
     template <typename T> struct make_small;
     using typelist = meta::transform<meta::list<Types...>, make_small>;
 
@@ -49,8 +52,8 @@ public:
     ~small_union();
 
     index_type index() const noexcept { return current; }
-    const allocator_type& get_allocator() const noexcept { return *this; }
-    allocator_type& get_allocator() noexcept { return *this; }
+    const allocator_type& get_allocator() const noexcept { return allocator_base::get(); }
+    allocator_type& get_allocator() noexcept { return allocator_base::get(); }
 
     template <typename T> T& get() noexcept;
     template <typename T> const T& get() const noexcept;

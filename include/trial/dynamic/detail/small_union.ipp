@@ -151,7 +151,7 @@ public:
 template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 template <typename T>
 small_union<Allocator, MaxType, IndexType, Types...>::small_union(T value, const allocator_type& alloc)
-    : Allocator(alloc),
+    : allocator_base(detail::empty_init_t{}, alloc),
       current(to_index<T>::value)
 {
     using type = typename std::decay<T>::type;
@@ -164,7 +164,8 @@ small_union<Allocator, MaxType, IndexType, Types...>::small_union(T value, const
 
 template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 small_union<Allocator, MaxType, IndexType, Types...>::small_union(const small_union& other)
-    : Allocator(std::allocator_traits<Allocator>::select_on_container_copy_construction(other)),
+    : allocator_base(detail::empty_init_t{},
+                     std::allocator_traits<Allocator>::select_on_container_copy_construction(other.get_allocator())),
       current(other.current)
 {
     call<copier, void>(other);
@@ -172,7 +173,7 @@ small_union<Allocator, MaxType, IndexType, Types...>::small_union(const small_un
 
 template <typename Allocator, typename MaxType, typename IndexType, typename... Types>
 small_union<Allocator, MaxType, IndexType, Types...>::small_union(small_union&& other)
-    : Allocator(other),
+    : allocator_base(detail::empty_init_t{}, other.get_allocator()),
       current(other.current)
 {
     call<mover, void>(std::move(other));
