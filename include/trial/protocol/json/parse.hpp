@@ -34,7 +34,7 @@ namespace partial
 //! @param reader Reader pointing to an arbitrary position within a buffer.
 //! @returns Dynamic variable containing the decoded JSON data.
 
-template <template <typename> class Allocator = std::allocator>
+template <typename Allocator = std::allocator<char>>
 auto parse(json::reader& reader) -> dynamic::basic_variable<Allocator>
 {
     detail::basic_parser<char, Allocator> parser(reader);
@@ -48,7 +48,7 @@ auto parse(json::reader& reader) -> dynamic::basic_variable<Allocator>
 //! @param input The JSON formatted input buffer.
 //! @returns Dynamic variable containing the decoded JSON data.
 
-template <typename U, template <typename> class Allocator = std::allocator>
+template <typename U, typename Allocator = std::allocator<char>>
 auto parse(const U& input) -> dynamic::basic_variable<Allocator>
 {
     json::reader reader(input);

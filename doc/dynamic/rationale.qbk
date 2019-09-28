@@ -106,7 +106,7 @@ The only customization point in the dynamic variable is allocator support.
 
 A custom allocator can be specified as a template parameter for the `dynamic::basic_variable<Allocator>` class. This allocator is passed to all string types, as well as `array_type` and `map_type`.
 
-`dynamic::variable` is a convenience alias for `dynamic::basic_variable<std::allocator>`.
+`dynamic::variable` is a convenience alias for `dynamic::basic_variable<std::allocator<char>>`.
 
 [/ FIXME: Why not custom array or map? ]
 

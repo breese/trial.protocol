@@ -23,7 +23,7 @@ namespace json
 namespace detail
 {
 
-template <typename CharT, template <typename> class Allocator>
+template <typename CharT, typename Allocator>
 struct basic_formatter
 {
     using variable_type = trial::dynamic::basic_variable<Allocator>;

@@ -23,7 +23,7 @@ namespace bintoken
 namespace detail
 {
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 class basic_parser
 {
 public:

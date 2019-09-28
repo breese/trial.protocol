@@ -22,7 +22,7 @@ namespace dynamic
 namespace convert
 {
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 struct overloader<
     basic_variable<Allocator>,
     std::set<T>>
@@ -39,7 +39,7 @@ struct overloader<
     }
 };
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 struct overloader<
     std::set<T>,
     basic_variable<Allocator>>
@@ -64,7 +64,7 @@ struct overloader<
 
 // Special case for std::vector<variable>
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct overloader<
     std::set<basic_variable<Allocator>>,
     basic_variable<Allocator>>

@@ -22,7 +22,7 @@ namespace dynamic
 namespace convert
 {
 
-template <template <typename> class Allocator, typename Key, typename Value>
+template <typename Allocator, typename Key, typename Value>
 struct overloader<
     basic_variable<Allocator>,
     std::map<Key, Value>>
@@ -39,7 +39,7 @@ struct overloader<
     }
 };
 
-template <template <typename> class Allocator, typename Key, typename Value>
+template <typename Allocator, typename Key, typename Value>
 struct overloader<
     std::map<Key, Value>,
     basic_variable<Allocator>>
@@ -65,7 +65,7 @@ struct overloader<
 
 // Special case for std::map<T, variable>
 
-template <template <typename> class Allocator, typename Key>
+template <typename Allocator, typename Key>
 struct overloader<
     std::map<Key, basic_variable<Allocator>>,
     basic_variable<Allocator>>

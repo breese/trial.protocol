@@ -64,10 +64,10 @@ struct is_string<std::basic_string<CharT>>
 {
 };
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 using is_array = std::is_same<T, typename basic_variable<Allocator>::array_type>;
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 using is_map = std::is_same<T, typename basic_variable<Allocator>::map_type>;
 
 } // namespace detail
@@ -76,7 +76,7 @@ using is_map = std::is_same<T, typename basic_variable<Allocator>::map_type>;
 // variable::traits
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::traits
 {
@@ -87,14 +87,14 @@ struct basic_variable<Allocator>::traits
 // variable::tag_traits
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T, typename>
 struct basic_variable<Allocator>::tag_traits
 {
     using type = T;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -103,7 +103,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = nullable;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -112,7 +112,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = bool;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -121,7 +121,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = int;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -130,7 +130,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = double;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -139,7 +139,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = typename basic_variable<Allocator>::string_type;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -148,7 +148,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = typename basic_variable<Allocator>::wstring_type;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -157,7 +157,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = typename basic_variable<Allocator>::u16string_type;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -166,7 +166,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = typename basic_variable<Allocator>::u32string_type;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -175,7 +175,7 @@ struct basic_variable<Allocator>::tag_traits<
     using type = typename basic_variable<Allocator>::array_type;
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::tag_traits<
     T,
@@ -199,7 +199,7 @@ struct overloader
 
 // Null
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -248,7 +248,7 @@ struct overloader<
 
 // Boolean
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -493,7 +493,7 @@ struct overloader<
 
 // Signed integer
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -729,7 +729,7 @@ struct overloader<
 
 // Unsigned integer
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -965,7 +965,7 @@ struct overloader<
 
 // Floating-point
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -1255,7 +1255,7 @@ struct string_overloader<
 
 // string_type
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -1337,7 +1337,7 @@ struct overloader<
 
 // wstring_type
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -1418,7 +1418,7 @@ struct overloader<
 
 // u16string_type
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -1498,7 +1498,7 @@ struct overloader<
 
 // u32string_type
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -1577,7 +1577,7 @@ struct overloader<
 
 // Array
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -1672,7 +1672,7 @@ struct overloader<
 
 // Map
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct overloader<
     basic_variable<Allocator>,
     U,
@@ -1776,7 +1776,7 @@ struct operator_overloader
     static_assert_t<T, U> unsupported_type;
 };
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 struct operator_overloader<
     basic_variable<Allocator>,
     U,
@@ -1843,7 +1843,7 @@ struct operator_overloader<
     }
 };
 
-template <typename T, template <typename> class Allocator>
+template <typename T, typename Allocator>
 struct operator_overloader<
     T,
     basic_variable<Allocator>,
@@ -1862,7 +1862,7 @@ struct operator_overloader<
     }
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct operator_overloader<
     basic_variable<Allocator>,
     basic_variable<Allocator>>
@@ -2079,7 +2079,7 @@ namespace detail
 //   assert(data.same<float&>(), false);
 //   assert(data.same<const float>(), false);
 
-template <template <typename> class Allocator, typename T, typename = void>
+template <typename Allocator, typename T, typename = void>
 struct same_overloader
 {
     static constexpr bool same(std::size_t which) noexcept
@@ -2088,7 +2088,7 @@ struct same_overloader
     }
 };
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 struct same_overloader<
     Allocator,
     T,
@@ -2111,7 +2111,7 @@ struct same_overloader<
 namespace detail
 {
 
-template <template <typename> class Allocator, typename Iterator, typename = void>
+template <typename Allocator, typename Iterator, typename = void>
 struct iterator_overloader
 {
     using variable_type = basic_variable<Allocator>;
@@ -2158,7 +2158,7 @@ struct iterator_overloader
     }
 };
 
-template <template <typename> class Allocator, typename Iterator>
+template <typename Allocator, typename Iterator>
 struct iterator_overloader<
     Allocator,
     Iterator,
@@ -2209,7 +2209,7 @@ struct iterator_overloader<
 // variable::iterator_base
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base()
     : scope(nullptr),
@@ -2217,7 +2217,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base()
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(const iterator_base& other)
     : scope(other.scope),
@@ -2225,7 +2225,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(const iterat
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(iterator_base&& other)
     : scope(std::move(other.scope)),
@@ -2233,7 +2233,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(iterator_bas
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
                                                                     bool initialize)
@@ -2273,7 +2273,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
                                                                     array_iterator where)
@@ -2282,7 +2282,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
                                                                     map_iterator where)
@@ -2291,7 +2291,7 @@ basic_variable<Allocator>::iterator_base<Derived, T>::iterator_base(pointer p,
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::operator= (const Derived& other) -> Derived&
 {
@@ -2300,7 +2300,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator= (const Deri
     return *static_cast<Derived*>(this);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::operator= (Derived&& other) -> Derived&
 {
@@ -2309,7 +2309,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator= (Derived&& 
     return *static_cast<Derived*>(this);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ () -> Derived&
 {
@@ -2339,7 +2339,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ () -> Deri
     return *static_cast<Derived*>(this);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ (int) -> Derived
 {
@@ -2350,7 +2350,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator++ (int) -> D
     return result;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-- () -> Derived&
 {
@@ -2386,7 +2386,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-- () -> Deri
     return *static_cast<Derived*>(this);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-- (int) -> Derived
 {
@@ -2397,7 +2397,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-- (int) -> D
     return result;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::key() const -> const_reference
 {
@@ -2413,7 +2413,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::key() const -> const_
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::value() -> reference
 {
@@ -2440,7 +2440,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() -> reference
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::value() const -> const_reference
 {
@@ -2467,7 +2467,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() const -> cons
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () -> pointer
 {
@@ -2494,7 +2494,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () -> poin
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Derived& other) const
 {
@@ -2526,7 +2526,7 @@ bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Der
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Derived, typename T>
 bool basic_variable<Allocator>::iterator_base<Derived, T>::operator!= (const Derived& other) const
 {
@@ -2537,45 +2537,45 @@ bool basic_variable<Allocator>::iterator_base<Derived, T>::operator!= (const Der
 // variable::iterator
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::iterator::iterator()
     : super()
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::iterator::iterator(const iterator& other)
     : super(other)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::iterator::iterator(iterator&& other)
     : super(std::move(other))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::iterator::iterator(pointer p, bool initialize)
     : super(p, initialize)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::iterator::iterator(pointer p,
                                               typename super::array_iterator where)
     : super(p, where)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::iterator::iterator(pointer p,
                                               typename super::map_iterator where)
     : super(p, where)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::iterator::iterator(const const_iterator& other)
     : super(const_cast<pointer>(other.scope))
 {
@@ -2593,13 +2593,13 @@ basic_variable<Allocator>::iterator::iterator(const const_iterator& other)
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::iterator::operator= (const iterator& other) -> iterator&
 {
     return super::operator=(other);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::iterator::operator= (iterator&& other) -> iterator&
 {
     return super::operator=(std::forward<iterator&&>(other));
@@ -2609,31 +2609,31 @@ auto basic_variable<Allocator>::iterator::operator= (iterator&& other) -> iterat
 // variable::const_iterator
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::const_iterator::const_iterator()
     : super()
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::const_iterator::const_iterator(const const_iterator& other)
     : super(other)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::const_iterator::const_iterator(const_iterator&& other)
     : super(std::move(other))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::const_iterator::const_iterator(pointer p, bool initialize)
     : super(p, initialize)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::const_iterator::const_iterator(const iterator& other)
     : super(other.scope)
 {
@@ -2655,20 +2655,20 @@ basic_variable<Allocator>::const_iterator::const_iterator(const iterator& other)
 // variable::key_iterator
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::key_iterator::key_iterator()
     : super()
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::key_iterator::key_iterator(const key_iterator& other)
     : super(other),
       index(other.index)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::key_iterator::key_iterator(key_iterator&& other)
 {
     super::scope = std::move(other.scope);
@@ -2676,26 +2676,26 @@ basic_variable<Allocator>::key_iterator::key_iterator(key_iterator&& other)
     index = std::move(other.index);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::key_iterator::key_iterator(pointer p, bool initialize)
     : super(p, initialize),
       index(0)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::key_iterator::operator= (const key_iterator& other) -> key_iterator&
 {
     return super::operator=(other);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::key_iterator::operator= (key_iterator&& other) -> key_iterator&
 {
     return super::operator=(std::forward<key_iterator>(other));
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::key_iterator::key() const -> const_reference
 {
     assert(super::scope);
@@ -2719,7 +2719,7 @@ auto basic_variable<Allocator>::key_iterator::key() const -> const_reference
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::key_iterator::operator++ () -> key_iterator&
 {
     assert(super::scope);
@@ -2744,7 +2744,7 @@ auto basic_variable<Allocator>::key_iterator::operator++ () -> key_iterator&
     return super::operator++();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::key_iterator::base() const -> const_iterator
 {
     assert(super::scope);
@@ -2759,7 +2759,7 @@ auto basic_variable<Allocator>::key_iterator::base() const -> const_iterator
 // storage visitors
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 struct basic_variable<Allocator>::similar_visitor
 {
@@ -2777,13 +2777,13 @@ struct basic_variable<Allocator>::similar_visitor
 // variable
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable()
     : storage(null)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const basic_variable& other)
     : storage(null)
 {
@@ -2855,7 +2855,7 @@ basic_variable<Allocator>::basic_variable(const basic_variable& other)
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(basic_variable&& other) noexcept
     : storage(null)
 {
@@ -2928,14 +2928,14 @@ basic_variable<Allocator>::basic_variable(basic_variable&& other) noexcept
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 basic_variable<Allocator>::basic_variable(T value)
     : storage(typename detail::overloader<value_type, typename std::decay<T>::type>::type(std::move(value)))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const std::initializer_list<value_type>& init)
     : storage(null)
 {
@@ -2963,61 +2963,61 @@ basic_variable<Allocator>::basic_variable(const std::initializer_list<value_type
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const nullable&)
     : storage(null)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const char *value)
     : storage(string_type(value))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const wchar_t *value)
     : storage(wstring_type(value))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const char16_t *value)
     : storage(u16string_type(value))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const char32_t *value)
     : storage(u32string_type(value))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const typename basic_variable::array_type& value)
     : storage(value)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(typename basic_variable::array_type&& value)
     : storage(std::move(value))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(const typename basic_variable::map_type& value)
     : storage(value)
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::basic_variable(typename basic_variable::map_type&& value)
     : storage(std::move(value))
 {
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic_variable&
 {
     switch (other.code())
@@ -3089,7 +3089,7 @@ auto basic_variable<Allocator>::operator= (const basic_variable& other) -> basic
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator= (basic_variable&& other) -> basic_variable&
 {
     switch (other.code())
@@ -3161,7 +3161,7 @@ auto basic_variable<Allocator>::operator= (basic_variable&& other) -> basic_vari
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 auto basic_variable<Allocator>::operator= (T value) -> basic_variable&
 {
@@ -3169,42 +3169,42 @@ auto basic_variable<Allocator>::operator= (T value) -> basic_variable&
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator= (nullable) -> basic_variable&
 {
     storage = null;
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator= (const char *value) -> basic_variable&
 {
     storage = string_type{value};
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator= (const wchar_t *value) -> basic_variable&
 {
     storage = wstring_type{value};
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator= (const char16_t *value) -> basic_variable&
 {
     storage = u16string_type{value};
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator= (const char32_t *value) -> basic_variable&
 {
     storage = u32string_type{value};
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 auto basic_variable<Allocator>::operator+= (const T& other) -> basic_variable&
 {
@@ -3212,7 +3212,7 @@ auto basic_variable<Allocator>::operator+= (const T& other) -> basic_variable&
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator+= (const basic_variable& other) -> basic_variable&
 {
     switch (other.code())
@@ -3305,35 +3305,35 @@ auto basic_variable<Allocator>::operator+= (const basic_variable& other) -> basi
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator+= (const char *other) -> basic_variable&
 {
     detail::overloader<value_type, string_type>::append(*this, other);
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator+= (const wchar_t *other) -> basic_variable&
 {
     detail::overloader<value_type, wstring_type>::append(*this, other);
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator+= (const char16_t *other) -> basic_variable&
 {
     detail::overloader<value_type, u16string_type>::append(*this, other);
     return *this;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator+= (const char32_t *other) -> basic_variable&
 {
     detail::overloader<value_type, u32string_type>::append(*this, other);
     return *this;
 }
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 auto operator+ (const basic_variable<Allocator>& lhs, const U& rhs) -> basic_variable<Allocator>
 {
     basic_variable<Allocator> result(lhs);
@@ -3341,7 +3341,7 @@ auto operator+ (const basic_variable<Allocator>& lhs, const U& rhs) -> basic_var
     return result;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto operator+ (nullable,
                 const basic_variable<Allocator>& rhs) -> basic_variable<Allocator>
 {
@@ -3350,14 +3350,14 @@ auto operator+ (nullable,
     return result;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename R>
 basic_variable<Allocator>::operator R() const
 {
     return value<R>();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Tag>
 auto basic_variable<Allocator>::value(std::error_code& error) const noexcept -> typename tag_traits<typename std::decay<Tag>::type>::type
 {
@@ -3365,7 +3365,7 @@ auto basic_variable<Allocator>::value(std::error_code& error) const noexcept -> 
     return detail::overloader<value_type, return_type>::convert(*this, error);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Tag>
 auto basic_variable<Allocator>::value() const -> typename tag_traits<typename std::decay<Tag>::type>::type
 {
@@ -3376,7 +3376,7 @@ auto basic_variable<Allocator>::value() const -> typename tag_traits<typename st
     return result;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename R>
 auto basic_variable<Allocator>::assume_value() & noexcept -> R&
 {
@@ -3384,7 +3384,7 @@ auto basic_variable<Allocator>::assume_value() & noexcept -> R&
     return storage.template get<typename std::decay<R>::type>();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename R>
 auto basic_variable<Allocator>::assume_value() const & noexcept -> const R&
 {
@@ -3392,7 +3392,7 @@ auto basic_variable<Allocator>::assume_value() const & noexcept -> const R&
     return storage.template get<typename std::decay<R>::type>();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator>::operator bool() const
 {
     switch (code())
@@ -3442,7 +3442,7 @@ basic_variable<Allocator>::operator bool() const
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator[] (size_type position) & -> basic_variable&
 {
     switch (symbol())
@@ -3455,7 +3455,7 @@ auto basic_variable<Allocator>::operator[] (size_type position) & -> basic_varia
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator[] (size_type position) const & -> const basic_variable&
 {
     switch (symbol())
@@ -3468,7 +3468,7 @@ auto basic_variable<Allocator>::operator[] (size_type position) const & -> const
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& key) & -> basic_variable&
 {
     switch (symbol())
@@ -3484,7 +3484,7 @@ auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& k
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& key) const & -> const basic_variable&
 {
     switch (symbol())
@@ -3497,7 +3497,7 @@ auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& k
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename Tag>
 bool basic_variable<Allocator>::is() const noexcept
 {
@@ -3505,14 +3505,14 @@ bool basic_variable<Allocator>::is() const noexcept
     return storage.template call<similar_visitor<tag_type>, bool>();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename T>
 bool basic_variable<Allocator>::same() const noexcept
 {
     return detail::same_overloader<Allocator, T>::same(storage.index());
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 dynamic::code::value basic_variable<Allocator>::code() const noexcept
 {
     switch (storage.index())
@@ -3565,7 +3565,7 @@ dynamic::code::value basic_variable<Allocator>::code() const noexcept
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 dynamic::symbol::value basic_variable<Allocator>::symbol() const noexcept
 {
     switch (storage.index())
@@ -3607,7 +3607,7 @@ dynamic::symbol::value basic_variable<Allocator>::symbol() const noexcept
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 bool basic_variable<Allocator>::empty() const noexcept
 {
     switch (symbol())
@@ -3630,7 +3630,7 @@ bool basic_variable<Allocator>::empty() const noexcept
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::size() const noexcept -> size_type
 {
     switch (symbol())
@@ -3653,7 +3653,7 @@ auto basic_variable<Allocator>::size() const noexcept -> size_type
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::max_size() const noexcept -> size_type
 {
     switch (symbol())
@@ -3676,7 +3676,7 @@ auto basic_variable<Allocator>::max_size() const noexcept -> size_type
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 void basic_variable<Allocator>::clear() noexcept
 {
     switch (code())
@@ -3759,7 +3759,7 @@ void basic_variable<Allocator>::clear() noexcept
     }
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
 {
     switch (symbol())
@@ -3790,7 +3790,7 @@ auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
     throw dynamic::error(incompatible_type);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename InputIterator>
 void basic_variable<Allocator>::insert(InputIterator begin,
                                        InputIterator end)
@@ -3799,7 +3799,7 @@ void basic_variable<Allocator>::insert(InputIterator begin,
         ::insert(*this, std::move(begin), std::move(end));
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::insert(const_iterator where, const basic_variable& value) -> iterator
 {
     switch (symbol())
@@ -3830,7 +3830,7 @@ auto basic_variable<Allocator>::insert(const_iterator where, const basic_variabl
     throw dynamic::error(incompatible_type);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 template <typename InputIterator>
 void basic_variable<Allocator>::insert(const_iterator where,
                                        InputIterator begin,
@@ -3840,7 +3840,7 @@ void basic_variable<Allocator>::insert(const_iterator where,
         ::insert(*this, std::move(where), std::move(begin), std::move(end));
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::erase(iterator where) -> iterator
 {
     // The iterator to iterator signature was introduced in C++17 as a
@@ -3871,7 +3871,7 @@ auto basic_variable<Allocator>::erase(iterator where) -> iterator
     return where;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::erase(const_iterator where) -> iterator
 {
     // The const_iterator to iterator signature was introduced in C++11 by
@@ -3904,7 +3904,7 @@ auto basic_variable<Allocator>::erase(const_iterator where) -> iterator
     return result;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::erase(const_iterator first, const_iterator last) -> iterator
 {
     using array_iterator = typename basic_variable::const_iterator::array_iterator;
@@ -3933,98 +3933,98 @@ auto basic_variable<Allocator>::erase(const_iterator first, const_iterator last)
     return result;
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 void basic_variable<Allocator>::swap(basic_variable& other) noexcept
 {
     using std::swap;
     swap(*this, other);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::begin() & -> iterator
 {
     return iterator(this);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::begin() const & -> const_iterator
 {
     return const_iterator(this);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::cbegin() const & -> const_iterator
 {
     return begin();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::end() & -> iterator
 {
     return iterator(this, false);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::end() const & -> const_iterator
 {
     return const_iterator(this, false);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::cend() const & -> const_iterator
 {
     return end();
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::rbegin() & -> reverse_iterator
 {
     return reverse_iterator(end());
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::rbegin() const & -> const_reverse_iterator
 {
     return const_reverse_iterator(cend());
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::crbegin() const & -> const_reverse_iterator
 {
     return const_reverse_iterator(cend());
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::rend() & -> reverse_iterator
 {
     return reverse_iterator(begin());
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::rend() const & -> const_reverse_iterator
 {
     return const_reverse_iterator(cbegin());
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::crend() const & -> const_reverse_iterator
 {
     return const_reverse_iterator(cbegin());
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::key_begin() const & -> key_iterator
 {
     return key_iterator(this);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 auto basic_variable<Allocator>::key_end() const & -> key_iterator
 {
     return key_iterator(this, false);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 bool basic_variable<Allocator>::is_pair() const
 {
     return is<array>() && (size() == 2);
@@ -4032,21 +4032,21 @@ bool basic_variable<Allocator>::is_pair() const
 
 // Container comparison operators are noexcept from C++14
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 auto operator== (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     -> typename std::enable_if<!std::is_same<U, basic_variable<Allocator>>::value, bool>::type
 {
     return detail::operator_overloader<basic_variable<Allocator>, U>::equal(lhs, rhs);
 }
 
-template <typename T, template <typename> class Allocator>
+template <typename T, typename Allocator>
 auto operator== (const T& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     -> typename std::enable_if<!std::is_same<T, basic_variable<Allocator>>::value, bool>::type
 {
     return detail::operator_overloader<T, basic_variable<Allocator>>::equal(lhs, rhs);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 bool operator== (const basic_variable<Allocator>& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     return detail::operator_overloader<basic_variable<Allocator>, basic_variable<Allocator>>::equal(lhs, rhs);
@@ -4058,27 +4058,27 @@ bool operator!= (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     return !(lhs == rhs);
 }
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 auto operator< (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     -> typename std::enable_if<!std::is_same<U, basic_variable<Allocator>>::value, bool>::type
 {
     return detail::operator_overloader<basic_variable<Allocator>, U>::less(lhs, rhs);
 }
 
-template <typename T, template <typename> class Allocator>
+template <typename T, typename Allocator>
 auto operator< (const T& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
     -> typename std::enable_if<!std::is_same<T, basic_variable<Allocator>>::value, bool>::type
 {
     return detail::operator_overloader<T, basic_variable<Allocator>>::less(lhs, rhs);
 }
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 bool operator< (const basic_variable<Allocator>& lhs, const basic_variable<Allocator>& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     return detail::operator_overloader<basic_variable<Allocator>, basic_variable<Allocator>>::less(lhs, rhs);
 }
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 bool operator<= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     if (lhs.template same<nullable>())
@@ -4087,7 +4087,7 @@ bool operator<= (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAM
     return !(rhs < lhs);
 }
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 bool operator> (const basic_variable<Allocator>& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 {
     if (lhs.template same<nullable>())
@@ -4106,7 +4106,7 @@ bool operator>= (const T& lhs, const U& rhs) TRIAL_DYNAMIC_CXX14(noexcept)
 // Factories
 //-----------------------------------------------------------------------------
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct basic_array
 {
     static basic_variable<Allocator> make()
@@ -4141,7 +4141,7 @@ struct basic_array
     }
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct basic_map
 {
     static basic_variable<Allocator> make()

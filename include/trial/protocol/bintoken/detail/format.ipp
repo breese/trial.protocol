@@ -23,7 +23,7 @@ namespace bintoken
 namespace detail
 {
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct basic_formatter
 {
     using variable_type = trial::dynamic::basic_variable<Allocator>;

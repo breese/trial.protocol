@@ -21,7 +21,7 @@ namespace dynamic
 namespace key
 {
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 auto count(const basic_variable<Allocator>& self,
            const T& other) -> typename basic_variable<Allocator>::size_type
 {
@@ -59,7 +59,7 @@ auto count(const basic_variable<Allocator>& self,
 namespace value
 {
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 auto count(const basic_variable<Allocator>& self,
            const T& other) -> typename basic_variable<Allocator>::size_type
 {

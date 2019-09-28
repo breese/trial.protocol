@@ -30,7 +30,7 @@ namespace partial
 //! @param[out] writer Writer pointing to an arbitrary location within a buffer.
 //! @throws json::error if input contains a wstring, u16string, or u32string.
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
             json::writer& writer)
 {
@@ -46,7 +46,7 @@ void format(const trial::dynamic::basic_variable<Allocator>& data,
 //! @returns Buffer containing the formatted JSON output.
 //! @throws json::error if input contains a wstring, u16string, or u32string.
 
-template <typename T, template <typename> class Allocator>
+template <typename T, typename Allocator>
 auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
 {
     T result;
@@ -61,7 +61,7 @@ auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
 //! @param[out] result Buffer containing the formatted JSON output.
 //! @throws json::error if input contains a wstring, u16string, or u32string.
 
-template <typename T, template <typename> class Allocator>
+template <typename T, typename Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
             T& result)
 {

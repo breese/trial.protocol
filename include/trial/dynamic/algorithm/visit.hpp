@@ -40,7 +40,7 @@ namespace dynamic
 //! @param[in] variable Non-const dynamic variable.
 //! @returns Return type of `Visitor::operator()(nullable)`.
 
-template <typename Visitor, template <typename> class Allocator>
+template <typename Visitor, typename Allocator>
 auto visit(Visitor&& visitor, basic_variable<Allocator>& variable)
     -> decltype(std::forward<Visitor>(visitor).operator()(variable.template assume_value<nullable>()))
 {
@@ -96,7 +96,7 @@ auto visit(Visitor&& visitor, basic_variable<Allocator>& variable)
 
 //! @brief Immutable visitation
 
-template <typename Visitor, template <typename> class Allocator>
+template <typename Visitor, typename Allocator>
 auto visit(Visitor&& visitor, const basic_variable<Allocator>& variable)
     -> decltype(std::forward<Visitor>(visitor).operator()(variable.template assume_value<nullable>()))
 {

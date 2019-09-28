@@ -31,7 +31,7 @@ namespace partial
 //! @param[out] writer Writer pointing to arbitrary location within a buffer.
 //! @throw bintoken::error if input contains a long double, wstring, u16string,
 //!        or u32string.
-template <template <typename> class Allocator>
+template <typename Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
             bintoken::writer& writer)
 {
@@ -48,7 +48,7 @@ void format(const trial::dynamic::basic_variable<Allocator>& data,
 //! @throw bintoken::error if input contains a long double, wstring, u16string,
 //!        or u32string.
 
-template <typename T, template <typename> class Allocator>
+template <typename T, typename Allocator>
 auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
 {
     T result;
@@ -64,7 +64,7 @@ auto format(const trial::dynamic::basic_variable<Allocator>& data) -> T
 //! @throw bintoken::error if input contains a long double, wstring, u16string,
 //!        or u32string.
 
-template <typename T, template <typename> class Allocator>
+template <typename T, typename Allocator>
 void format(const trial::dynamic::basic_variable<Allocator>& data,
             T& result)
 {

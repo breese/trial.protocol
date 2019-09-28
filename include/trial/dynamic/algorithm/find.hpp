@@ -25,7 +25,7 @@ namespace dynamic
 namespace key
 {
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 auto find(const basic_variable<Allocator>& self,
           const T& other) -> typename basic_variable<Allocator>::key_iterator
 {
@@ -64,7 +64,7 @@ auto find(const basic_variable<Allocator>& self,
 namespace value
 {
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 auto find(basic_variable<Allocator>& self,
           const T& other) -> typename basic_variable<Allocator>::iterator
 {
@@ -94,7 +94,7 @@ auto find(basic_variable<Allocator>& self,
     TRIAL_DYNAMIC_UNREACHABLE();
 }
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 auto find(const basic_variable<Allocator>& self,
           const T& other) -> typename basic_variable<Allocator>::const_iterator
 {

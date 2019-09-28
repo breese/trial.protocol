@@ -23,7 +23,7 @@ namespace dynamic
 namespace convert
 {
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct overloader<basic_variable<Allocator>, boost::any>
 {
     using variable_type = basic_variable<Allocator>;
@@ -156,7 +156,7 @@ struct overloader<basic_variable<Allocator>, boost::any>
     }
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct overloader<boost::any, basic_variable<Allocator>>
 {
     using variable_type = basic_variable<Allocator>;
@@ -230,7 +230,7 @@ struct overloader<boost::any, basic_variable<Allocator>>
     }
 };
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 struct overloader<std::vector<boost::any>, basic_variable<Allocator>>
 {
     using variable_type = basic_variable<Allocator>;

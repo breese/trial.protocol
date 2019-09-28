@@ -35,8 +35,8 @@ namespace detail
 
 template <typename T, typename U, typename> struct overloader;
 template <typename T, typename U, typename> struct operator_overloader;
-template <template <typename> class A, typename T, typename> struct same_overloader;
-template <template <typename> class A, typename U, typename> struct iterator_overloader;
+template <typename A, typename T, typename> struct same_overloader;
+template <typename A, typename U, typename> struct iterator_overloader;
 
 } // namespace detail
 
@@ -48,8 +48,8 @@ struct string {};
 struct wstring {};
 struct u16string {};
 struct u32string {};
-template <template <typename> class Allocator> struct basic_array;
-template <template <typename> class Allocator> struct basic_map;
+template <typename Allocator> struct basic_array;
+template <typename Allocator> struct basic_map;
 
 //! @brief Dynamic variable.
 //!
@@ -86,7 +86,7 @@ template <template <typename> class Allocator> struct basic_map;
 //!
 //! @tparam Allocator Allocator type (defaults to `std::allocator`)
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 class basic_variable
 {
     template <typename T> struct traits;
@@ -113,7 +113,7 @@ public:
     using value_type = basic_variable<Allocator>;
     using reference = typename std::add_lvalue_reference<value_type>::type;
     using const_reference = typename std::add_const<reference>::type;
-    using allocator_type = Allocator<value_type>;
+    using allocator_type = typename std::allocator_traits<Allocator>::template rebind_alloc<value_type>;
     using difference_type = std::ptrdiff_t;
     using size_type = std::size_t;
 private:
@@ -1004,19 +1004,19 @@ private:
 #endif
 };
 
-template <template <typename> class Allocator, typename U>
+template <typename Allocator, typename U>
 basic_variable<Allocator> operator+ (const basic_variable<Allocator>&, const U&);
 
-template <template <typename> class Allocator>
+template <typename Allocator>
 basic_variable<Allocator> operator+ (nullable, const basic_variable<Allocator>&);
 
 // Comparison operators defined in variable.ipp
 
 // Convenience
 
-using variable = basic_variable<std::allocator>;
-using array = basic_array<std::allocator>;
-using map = basic_map<std::allocator>;
+using variable = basic_variable<std::allocator<char>>;
+using array = basic_array<std::allocator<char>>;
+using map = basic_map<std::allocator<char>>;
 
 } // namespace dynamic
 } // namespace trial

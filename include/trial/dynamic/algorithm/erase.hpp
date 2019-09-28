@@ -22,7 +22,7 @@ namespace dynamic
 namespace key
 {
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 auto erase(basic_variable<Allocator>& self,
            const T& other) -> typename basic_variable<Allocator>::key_iterator
 {

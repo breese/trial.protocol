@@ -26,7 +26,7 @@ namespace json
 namespace detail
 {
 
-template <typename CharT, template <typename> class Allocator>
+template <typename CharT, typename Allocator>
 class basic_parser
 {
 public:

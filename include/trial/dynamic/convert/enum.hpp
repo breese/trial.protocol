@@ -44,7 +44,7 @@ struct is_enum
 template <typename T>
 struct use_underlying_type : public std::false_type {};
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 struct overloader<
     basic_variable<Allocator>,
     T,
@@ -58,7 +58,7 @@ struct overloader<
     }
 };
 
-template <template <typename> class Allocator, typename T>
+template <typename Allocator, typename T>
 struct overloader<
     T,
     basic_variable<Allocator>,
