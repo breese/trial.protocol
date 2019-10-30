@@ -76,7 +76,7 @@ skip(basic_reader<CharT> &reader)
     std::error_code ec;
     auto ret = skip(reader, ec);
     if (ec)
-        throw std::system_error(ec);
+        throw json::error(ec);
     return ret;
 }
 
