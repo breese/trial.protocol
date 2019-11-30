@@ -39,6 +39,8 @@ public:
     using size_type = typename detail::basic_decoder<CharT>::size_type;
     using view_type = typename detail::basic_decoder<CharT>::view_type;
 
+    basic_reader();
+
     //! @brief Construct an incremental JSON reader.
     //!
     //! The first token is automatically parsed.
@@ -66,6 +68,17 @@ public:
     //! @param[in] expect Expected value of current token.
     //! @returns false if current token does not have the expected value.
     bool next(token::code::value expect);
+
+    //! @brief Parse the next token from a new view.
+    //!
+    //! The reader replaces its internal view with the @c view passed as
+    //! argument.
+    //!
+    //! The nesting levels are retained.
+    //!
+    //! @param[in] view  A string view of a JSON formatted buffer.
+    //! @returns false if an error occurred or end-of-input was reached, true otherwise.
+    bool next(const view_type& view);
 
     //! @brief Get the current nesting level.
     //!

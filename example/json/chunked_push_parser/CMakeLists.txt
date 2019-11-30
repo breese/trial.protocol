@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+# Copyright (C) 2019 Bjorn Reese <breese@users.sourceforge.net>
 #
 # Distributed under the Boost Software License, Version 1.0.
 #    (See accompanying file LICENSE_1_0.txt or copy at
@@ -8,7 +8,8 @@
 #
 ###############################################################################
 
-add_subdirectory(pretty_printer)
-add_subdirectory(property_tree)
-add_subdirectory(push_parser)
-add_subdirectory(chunked_push_parser)
+add_executable(json_chunked_push_parser
+  main.cpp
+)
+
+target_link_libraries(json_chunked_push_parser trial-protocol)

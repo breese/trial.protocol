@@ -37,6 +37,7 @@ public:
     using value_type = CharT;
     using view_type = core::detail::basic_string_view<CharT, core::char_traits<CharT>>;
 
+    basic_decoder() = default;
     basic_decoder(const view_type& input);
 
     void next() BOOST_NOEXCEPT;

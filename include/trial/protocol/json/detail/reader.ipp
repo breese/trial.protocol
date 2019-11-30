@@ -96,6 +96,12 @@ struct basic_reader<CharT>::overloader<
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
+basic_reader<CharT>::basic_reader()
+{
+    stack.push(token::detail::code::end);
+}
+
+template <typename CharT>
 basic_reader<CharT>::basic_reader(const view_type& input)
     : decoder(input)
 {
@@ -209,6 +215,13 @@ bool basic_reader<CharT>::next(token::code::value expect)
         return false;
     }
     return next();
+}
+
+template <typename CharT>
+bool basic_reader<CharT>::next(const view_type& view)
+{
+    decoder = decoder_type(view);
+    return (category() != token::category::status);
 }
 
 template <typename CharT>
