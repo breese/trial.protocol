@@ -55,7 +55,7 @@ public:
     using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT;
-    static bool is_digit(value_type value) BOOST_NOEXCEPT;
+    static constexpr bool is_digit(value_type value) BOOST_NOEXCEPT;
     static bool is_hexdigit(value_type value) BOOST_NOEXCEPT;
     static bool is_keyword(value_type value) BOOST_NOEXCEPT;
     static traits_category to_category(value_type value) BOOST_NOEXCEPT;

@@ -11,14 +11,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cstdlib>
+#include <cmath>
 #include <limits>
 #include <string>
 #include <sstream>
 #include <iomanip>
 #include <locale>
 #include <trial/protocol/core/detail/string_view.hpp>
-#include <trial/protocol/core/char_traits.hpp>
+#include <trial/protocol/json/detail/traits.hpp>
 
 namespace trial
 {
@@ -28,6 +28,79 @@ namespace json
 {
 namespace detail
 {
+
+template <typename Real>
+Real power(Real number, int exponent)
+{
+    switch (exponent)
+    {
+    case 0: return Real(1.0);
+    case 1: return number * Real(1E0);
+    case 2: return number * Real(1E1);
+    case 3: return number * Real(1E2);
+    case 4: return number * Real(1E3);
+    case 5: return number * Real(1E4);
+    case 6: return number * Real(1E5);
+    case 7: return number * Real(1E6);
+    case 8: return number * Real(1E7);
+    case 9: return number * Real(1E8);
+    case 10: return number * Real(1E9);
+    default: return std::pow(number, exponent);
+    }
+}
+
+template <typename CharT, typename RealT>
+RealT parse(const CharT *head) noexcept
+{
+    static constexpr RealT zero = RealT(0.0);
+    static constexpr RealT one = RealT(1.0);
+    static constexpr RealT base = RealT(10.0);
+
+    RealT result = zero;
+    const bool is_negative = *head == detail::traits<CharT>::alpha_minus;
+    if (is_negative)
+    {
+        ++head;
+    }
+    while (detail::traits<CharT>::is_digit(*head))
+    {
+        result *= base;
+        result += *head - detail::traits<CharT>::alpha_0;
+        ++head;
+    }
+    if (*head == '.')
+    {
+        ++head;
+        RealT fraction = zero;
+        RealT scale = one;
+        while ((*head >= detail::traits<CharT>::alpha_0) && (*head <= detail::traits<CharT>::alpha_9))
+        {
+            scale *= base;
+            fraction *= base;
+            fraction += *head - detail::traits<CharT>::alpha_0;
+            ++head;
+        }
+        result += fraction / scale;
+    }
+    if ((*head == detail::traits<CharT>::alpha_e) || (*head == detail::traits<CharT>::alpha_E))
+    {
+        ++head;
+        const bool is_exponent_negative = *head == detail::traits<CharT>::alpha_minus;
+        if (is_exponent_negative || *head == detail::traits<CharT>::alpha_plus)
+        {
+            ++head;
+        }
+        int exponent = 0;
+        while ((*head >= detail::traits<CharT>::alpha_0) && (*head <= detail::traits<CharT>::alpha_9))
+        {
+            exponent *= 10;
+            exponent += *head - detail::traits<CharT>::alpha_0;
+            ++head;
+        }
+        result *= detail::power<RealT>(base, is_exponent_negative ? -exponent : exponent);
+    }
+    return is_negative ? -result : result;
+}
 
 template <typename CharT, typename ReturnType>
 struct string_converter
@@ -52,7 +125,7 @@ struct string_converter<CharT, float>
 
     static float decode(const string_view& view)
     {
-        return std::strtof(view.data(), nullptr);
+        return detail::parse<CharT, float>(view.data());
     }
 };
 
@@ -74,7 +147,7 @@ struct string_converter<CharT, double>
 
     static double decode(const string_view& view)
     {
-        return std::strtod(view.data(), nullptr);
+        return detail::parse<CharT, double>(view.data());
     }
 };
 
@@ -96,7 +169,7 @@ struct string_converter<CharT, long double>
 
     static long double decode(const string_view& view)
     {
-        return std::strtold(view.data(), nullptr);
+        return detail::parse<CharT, long double>(view.data());
     }
 };
 

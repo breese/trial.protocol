@@ -38,17 +38,9 @@ inline bool traits<char>::is_space(value_type value) BOOST_NOEXCEPT
     }
 }
 
-inline bool traits<char>::is_digit(value_type value) BOOST_NOEXCEPT
+constexpr bool traits<char>::is_digit(value_type value) BOOST_NOEXCEPT
 {
-    switch (value)
-    {
-    case 0x30: case 0x31: case 0x32: case 0x33:
-    case 0x34: case 0x35: case 0x36: case 0x37:
-    case 0x38: case 0x39:
-        return true;
-    default:
-        return false;
-    }
+    return ((value >= 0x30) && (value <= 0x39));
 }
 
 inline bool traits<char>::is_hexdigit(value_type value) BOOST_NOEXCEPT
