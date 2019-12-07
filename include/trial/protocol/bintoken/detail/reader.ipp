@@ -80,7 +80,7 @@ struct reader::overloader<bool>
         {
         case token::code::true_value:
         case token::code::false_value:
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             *output = convert(self);
             return size_type(1);
@@ -174,7 +174,7 @@ struct reader::overloader<
         case token::code::int64:
         case token::code::float32:
         case token::code::float64:
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(output, output_length);
 
@@ -183,7 +183,7 @@ struct reader::overloader<
         case token::code::array32_int8:
         case token::code::array64_int8:
             assert(sizeof(ReturnType) == token::int8::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(output, output_length);
 
@@ -192,7 +192,7 @@ struct reader::overloader<
         case token::code::array32_int16:
         case token::code::array64_int16:
             assert(sizeof(ReturnType) == token::int16::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(output, output_length);
 
@@ -201,7 +201,7 @@ struct reader::overloader<
         case token::code::array32_int32:
         case token::code::array64_int32:
             assert(sizeof(ReturnType) == token::int32::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(output, output_length);
 
@@ -210,7 +210,7 @@ struct reader::overloader<
         case token::code::array32_int64:
         case token::code::array64_int64:
             assert(sizeof(ReturnType) == token::int64::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(output, output_length);
 
@@ -219,7 +219,7 @@ struct reader::overloader<
         case token::code::array32_float32:
         case token::code::array64_float32:
             assert(sizeof(ReturnType) == token::float32::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(output, output_length);
 
@@ -228,7 +228,7 @@ struct reader::overloader<
         case token::code::array32_float64:
         case token::code::array64_float64:
             assert(sizeof(ReturnType) == token::float64::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(output, output_length);
 
@@ -309,7 +309,7 @@ struct reader::overloader<
         case token::code::array32_int8:
         case token::code::array64_int8:
             assert(sizeof(ReturnType) == token::int8::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
                                       output_length);
@@ -319,7 +319,7 @@ struct reader::overloader<
         case token::code::array32_int16:
         case token::code::array64_int16:
             assert(sizeof(ReturnType) == token::int16::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
                                       output_length);
@@ -329,7 +329,7 @@ struct reader::overloader<
         case token::code::array32_int32:
         case token::code::array64_int32:
             assert(sizeof(ReturnType) == token::int32::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
                                       output_length);
@@ -339,7 +339,7 @@ struct reader::overloader<
         case token::code::array32_int64:
         case token::code::array64_int64:
             assert(sizeof(ReturnType) == token::int64::size);
-            if (self.length() != output_length)
+            if (self.length() > output_length)
                 throw bintoken::error(overflow);
             return self.decoder.array(reinterpret_cast<typename std::make_signed<ReturnType>::type *>(output),
                                       output_length);
