@@ -56,6 +56,9 @@ public:
     token::symbol::value symbol() const;
     token::category::value category() const;
 
+    const json::basic_reader<value_type>& reader() const;
+    void reader(json::basic_reader<value_type>);
+
 #ifndef BOOST_DOXYGEN_INVOKED
     // Ignore these
     void load(boost::archive::version_type&) {}
@@ -74,7 +77,10 @@ private:
     void next(token::code::value);
 
 private:
-    json::basic_reader<value_type> reader;
+    struct
+    {
+        json::basic_reader<value_type> reader;
+    } member;
 #endif
 };
 

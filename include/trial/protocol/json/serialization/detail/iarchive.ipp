@@ -22,20 +22,20 @@ namespace json
 
 template <typename CharT>
 basic_iarchive<CharT>::basic_iarchive(const json::reader& reader)
-    : reader(reader)
+    : member{ std::move(reader) }
 {
 }
 
 template <typename CharT>
 basic_iarchive<CharT>::basic_iarchive(const json::reader::view_type& view)
-    : reader(view)
+    : member{ view }
 {
 }
 
 template <typename CharT>
 template <typename Iterator>
 basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
-    : reader(typename json::basic_reader<CharT>::view_type(&*begin, std::distance(begin, end)))
+    : member{ typename json::basic_reader<CharT>::view_type(&*begin, std::distance(begin, end)) }
 {
 }
 
@@ -66,7 +66,7 @@ template <typename CharT>
 template <typename T>
 void basic_iarchive<CharT>::load(T& value)
 {
-    value = reader.template value<T>();
+    value = member.reader.template value<T>();
     next();
 }
 
@@ -74,42 +74,54 @@ template <typename CharT>
 template <typename Tag>
 bool basic_iarchive<CharT>::at() const
 {
-    return (reader.code() == Tag::code);
+    return (member.reader.code() == Tag::code);
 }
 
 template <typename CharT>
 token::code::value basic_iarchive<CharT>::code() const
 {
-    return reader.code();
+    return member.reader.code();
 }
 
 template <typename CharT>
 token::symbol::value basic_iarchive<CharT>::symbol() const
 {
-    return reader.symbol();
+    return member.reader.symbol();
 }
 
 template <typename CharT>
 token::category::value basic_iarchive<CharT>::category() const
 {
-    return reader.category();
+    return member.reader.category();
+}
+
+template <typename CharT>
+auto basic_iarchive<CharT>::reader() const -> const basic_reader<value_type>&
+{
+    return member.reader;
+}
+
+template <typename CharT>
+void basic_iarchive<CharT>::reader(basic_reader<value_type> input)
+{
+    member.reader =  std::move(input);
 }
 
 template <typename CharT>
 void basic_iarchive<CharT>::next()
 {
-    if (!reader.next() && (reader.symbol() == token::symbol::error))
+    if (!member.reader.next() && (member.reader.symbol() == token::symbol::error))
     {
-        throw json::error(reader.error());
+        throw json::error(member.reader.error());
     }
 }
 
 template <typename CharT>
 void basic_iarchive<CharT>::next(token::code::value expect)
 {
-    if (!reader.next(expect) && (reader.symbol() == token::symbol::error))
+    if (!member.reader.next(expect) && (member.reader.symbol() == token::symbol::error))
     {
-        throw json::error(reader.error());
+        throw json::error(member.reader.error());
     }
 }
 
