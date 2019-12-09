@@ -21,11 +21,24 @@ namespace token = json::token;
 namespace basic_suite
 {
 
-void test_empty()
+void api_default_ctor()
 {
     const char input[] = "";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+}
+
+void api_copy_ctor()
+{
+    const char input[] = "[ null ]";
+    json::reader reader(input);
+    reader.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    json::reader copy(reader);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::null);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
 }
 
 void test_null()
@@ -160,7 +173,8 @@ void fail_true_comma_true()
 
 void run()
 {
-    test_empty();
+    api_default_ctor();
+    api_copy_ctor();
     test_null();
     test_false();
     test_true();

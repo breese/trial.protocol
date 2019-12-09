@@ -110,13 +110,6 @@ basic_reader<CharT>::basic_reader(const view_type& input)
 }
 
 template <typename CharT>
-basic_reader<CharT>::basic_reader(const basic_reader<CharT>& other)
-    : decoder(other.decoder)
-{
-    stack.push(token::detail::code::end);
-}
-
-template <typename CharT>
 auto basic_reader<CharT>::level() const BOOST_NOEXCEPT -> size_type
 {
     assert(stack.size() > 0);

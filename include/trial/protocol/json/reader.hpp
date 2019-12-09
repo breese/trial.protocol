@@ -56,7 +56,7 @@ public:
     //! parsing independently from where the input reader had reached.
     //!
     //! @param[in] other The reader that is copied.
-    basic_reader(const basic_reader& other);
+    basic_reader(const basic_reader& other) = default;
 
     //! @brief Parse the next token.
     //!
