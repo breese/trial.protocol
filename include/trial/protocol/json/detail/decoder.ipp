@@ -271,7 +271,7 @@ ReturnType basic_decoder<CharT>::signed_integer_value() const
             }
             result *= ReturnType(10);
 
-            const ReturnType digit = ReturnType(traits<CharT>::to_int(*it));
+            const ReturnType digit = *it - traits<CharT>::alpha_0;
             if (lowest + digit > result + 1) {
                 // Overflow
                 current.code = token::detail::code::error_invalid_value;
@@ -315,7 +315,7 @@ ReturnType basic_decoder<CharT>::unsigned_integer_value() const
         }
         result *= ReturnType(10);
 
-        const ReturnType digit = ReturnType(traits<CharT>::to_int(*it));
+        const ReturnType digit = *it - traits<CharT>::alpha_0;
         if (max - digit < result) {
             // Overflow
             current.code = token::detail::code::error_invalid_value;
