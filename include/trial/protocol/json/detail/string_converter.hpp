@@ -73,7 +73,7 @@ RealT parse(const CharT *head) noexcept
         ++head;
         RealT fraction = zero;
         RealT scale = one;
-        while ((*head >= detail::traits<CharT>::alpha_0) && (*head <= detail::traits<CharT>::alpha_9))
+        while (detail::traits<CharT>::is_digit(*head))
         {
             scale *= base;
             fraction *= base;
@@ -91,7 +91,7 @@ RealT parse(const CharT *head) noexcept
             ++head;
         }
         int exponent = 0;
-        while ((*head >= detail::traits<CharT>::alpha_0) && (*head <= detail::traits<CharT>::alpha_9))
+        while (detail::traits<CharT>::is_digit(*head))
         {
             exponent *= 10;
             exponent += *head - detail::traits<CharT>::alpha_0;
