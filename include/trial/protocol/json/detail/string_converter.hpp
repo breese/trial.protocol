@@ -62,10 +62,13 @@ RealT parse(const CharT *head) noexcept
     {
         ++head;
     }
-    while (detail::traits<CharT>::is_digit(*head))
+    while (true)
     {
+        const unsigned delta = *head - detail::traits<CharT>::alpha_0;
+        if (delta > 9)
+            break;
         result *= base;
-        result += *head - detail::traits<CharT>::alpha_0;
+        result += delta;
         ++head;
     }
     if (*head == '.')
@@ -73,11 +76,14 @@ RealT parse(const CharT *head) noexcept
         ++head;
         RealT fraction = zero;
         RealT scale = one;
-        while (detail::traits<CharT>::is_digit(*head))
+        while (true)
         {
+            const unsigned delta = *head - detail::traits<CharT>::alpha_0;
+            if (delta > 9)
+                break;
             scale *= base;
             fraction *= base;
-            fraction += *head - detail::traits<CharT>::alpha_0;
+            fraction += delta;
             ++head;
         }
         result += fraction / scale;
@@ -91,10 +97,16 @@ RealT parse(const CharT *head) noexcept
             ++head;
         }
         int exponent = 0;
-        while (detail::traits<CharT>::is_digit(*head))
+        const int max = std::numeric_limits<int>::max();
+        while (true)
         {
+            const unsigned delta = *head - detail::traits<CharT>::alpha_0;
+            if (delta > 9)
+                break;
+            if (max / 10 < exponent) // Overflow
+                return std::numeric_limits<RealT>::infinity();
             exponent *= 10;
-            exponent += *head - detail::traits<CharT>::alpha_0;
+            exponent += delta;
             ++head;
         }
         result *= detail::power<RealT>(base, is_exponent_negative ? -exponent : exponent);
