@@ -22,3 +22,6 @@ endfunction()
 
 # bintoken
 trial_protocol_add_benchmark(benchmark_bintoken_reader bintoken/benchmark_reader.cpp)
+
+# json
+trial_protocol_add_benchmark(benchmark_json_reader json/benchmark_reader.cpp)
