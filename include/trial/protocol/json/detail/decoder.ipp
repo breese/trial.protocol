@@ -694,31 +694,22 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
                 case traits<CharT>::alpha_u:
                     switch (std::distance(marker, end))
                     {
-                    case 0:
-                        goto eof;
-                    case 1:
-                        if (!traits<CharT>::is_hexdigit(*marker))
-                            goto error;
-                        ++marker;
-                        goto eof;
-                    case 2:
-                        if (!traits<CharT>::is_hexdigit(*marker))
-                            goto error;
-                        ++marker;
-                        if (!traits<CharT>::is_hexdigit(*marker))
-                            goto error;
-                        ++marker;
-                        goto eof;
                     case 3:
                         if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
+                        // FALLTHROUGH
+                    case 2:
                         if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
+                        // FALLTHROUGH
+                    case 1:
                         if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
+                        // FALLTHROUGH
+                    case 0:
                         goto eof;
                     default:
                         if (!traits<CharT>::is_hexdigit(*marker))
