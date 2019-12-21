@@ -802,20 +802,16 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
 template <typename CharT>
 void basic_decoder<CharT>::skip_whitespaces() BOOST_NOEXCEPT
 {
-    typename view_type::size_type size = typename view_type::size_type();
-    typename view_type::const_iterator end = input.end();
-    for (typename view_type::const_iterator it = input.begin();
-         it != end;
-         ++it)
+    typename view_type::const_iterator it = input.begin();
+    while (true)
     {
-        if (!traits<CharT>::is_space(*it))
-            break;
-        ++size;
+        if (!traits<CharT>::is_space(it[0])) { break; }
+        if (!traits<CharT>::is_space(it[1])) { it += 1; break; }
+        if (!traits<CharT>::is_space(it[2])) { it += 2; break; }
+        if (!traits<CharT>::is_space(it[3])) { it += 3; break; }
+        it += 4;
     }
-    if (size > 0)
-    {
-        input.remove_prefix(size);
-    }
+    input.remove_prefix(std::distance(input.begin(), it));
 }
 
 template <typename CharT>
