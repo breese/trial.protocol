@@ -698,19 +698,23 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
                         if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        // FALLTHROUGH
+                        goto case_2;
                     case 2:
+                    case_2:
                         if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        // FALLTHROUGH
+                        goto case_1;
                     case 1:
+                    case_1:
                         if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        // FALLTHROUGH
+                        goto case_0;
                     case 0:
+                    case_0:
                         goto eof;
+
                     default:
                         if (!traits<CharT>::is_hexdigit(*marker))
                             goto error;
@@ -751,29 +755,33 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
             if ((*marker & 0xC0) != 0x80)
                 goto error;
             ++marker;
-            // FALLTHROUGH
+            goto case_extra_4;
         case traits_category::extra_4:
+        case_extra_4:
             if (marker == end)
                 goto error;
             if ((*marker & 0xC0) != 0x80)
                 goto error;
             ++marker;
-            // FALLTHROUGH
+            goto case_extra_3;
         case traits_category::extra_3:
+        case_extra_3:
             if (marker == end)
                 goto error;
             if ((*marker & 0xC0) != 0x80)
                 goto error;
             ++marker;
-            // FALLTHROUGH
+            goto case_extra_2;
         case traits_category::extra_2:
+        case_extra_2:
             if (marker == end)
                 goto error;
             if ((*marker & 0xC0) != 0x80)
                 goto error;
             ++marker;
-            // FALLTHROUGH
+            goto case_extra_1;
         case traits_category::extra_1:
+        case_extra_1:
             if (marker == end)
                 goto error;
             if ((*marker & 0xC0) != 0x80)

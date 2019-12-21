@@ -2124,14 +2124,15 @@ struct iterator_overloader
         {
         case symbol::null:
             self = basic_array<Allocator>::make();
-            // FALLTHROUGH
+            goto case_array;
         case symbol::array:
-            {
-                // Insert at end
-                auto& array = self.template assume_value<typename variable_type::array_type>();
-                array.insert(array.end(), begin, end);
-            }
-            break;
+        case_array:
+        {
+            // Insert at end
+            auto& array = self.template assume_value<typename variable_type::array_type>();
+            array.insert(array.end(), begin, end);
+        }
+        break;
 
         default:
             throw dynamic::error(incompatible_type);
@@ -3475,8 +3476,9 @@ auto basic_variable<Allocator>::operator[] (const typename map_type::key_type& k
     {
     case symbol::null:
         *this = basic_map<Allocator>::make();
-        // FALLTHROUGH
+        goto case_map;
     case symbol::map:
+    case_map:
         return assume_value<map_type>()[key];
 
     default:
@@ -3766,13 +3768,14 @@ auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
     {
     case symbol::null:
         *this = basic_array<Allocator>::make();
-        // FALLTHROUGH
+        goto case_array;
     case symbol::array:
-        {
-            // Insert at end
-            auto& array = assume_value<array_type>();
-            array.emplace_back(value);
-            return iterator(this, --array.end());
+    case_array:
+    {
+        // Insert at end
+        auto& array = assume_value<array_type>();
+        array.emplace_back(value);
+        return iterator(this, --array.end());
         }
 
     case symbol::map:
