@@ -123,6 +123,18 @@ public:
     //! @throws json::error If requested type is incompatible with the current token.
     template <typename ReturnType> ReturnType value() const;
 
+    //! @brief Converts the current value into T.
+    //!
+    //! The following conversions are valid:
+    //! -# Convert a symbol::boolean token into bool.
+    //! -# Convert a symbol::integer token into an integral C++ type (expect bool.)
+    //! -# Convert a symbol::real token into a floating-point C++ type.
+    //! -# Convert a symbol::string token into std::string.
+    //!
+    //! @param[out] output The converted value if no error occurs.
+    //! @throws json::error If requested type is incompatible with the current token.
+    template <typename T> void value(T& output) const;
+
     //! @returns A view of the current value before it is converted into its type.
     const view_type& literal() const BOOST_NOEXCEPT;
 
@@ -133,11 +145,6 @@ public:
 private:
     template <typename ReturnType, typename Enable = void>
     struct overloader;
-
-    template <typename ReturnType> ReturnType bool_value() const;
-    template <typename ReturnType> ReturnType integer_value() const;
-    template <typename ReturnType> ReturnType real_value() const;
-    template <typename ReturnType> ReturnType string_value() const;
 
 private:
     using decoder_type = detail::basic_decoder<value_type>;

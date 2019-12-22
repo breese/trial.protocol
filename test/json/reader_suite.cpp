@@ -78,6 +78,17 @@ void test_true()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
 }
 
+void test_true_output()
+{
+    const char input[] = "true";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::true_value);
+    bool result;
+    TRIAL_PROTOCOL_TEST_NO_THROW(reader.value(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result, true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+}
+
 void test_integer()
 {
     const char input[] = "1";
@@ -101,6 +112,17 @@ void test_integer_const()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
 }
 
+void test_integer_output()
+{
+    const char input[] = "1";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
+    int result;
+    TRIAL_PROTOCOL_TEST_NO_THROW(reader.value(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result, 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+}
+
 void test_float()
 {
     const char input[] = "1.0";
@@ -111,6 +133,17 @@ void test_float()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<float>(), 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "1.0");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+}
+
+void test_float_output()
+{
+    const char input[] = "1.0";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
+    float result;
+    TRIAL_PROTOCOL_TEST_NO_THROW(reader.value(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result, 1.0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
 }
 
@@ -161,6 +194,20 @@ void test_string_allocator()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
 }
 
+void test_string_output()
+{
+    const char input[] = "\"alpha\"";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    std::string result;
+    reader.value(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(result, "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+}
+
 void fail_true_space_true()
 {
     const char input[] = "true true";
@@ -192,13 +239,17 @@ void run()
     test_null();
     test_false();
     test_true();
+    test_true_output();
     test_integer();
     test_integer_const();
+    test_integer_output();
     test_float();
+    test_float_output();
     test_double();
     test_long_double();
     test_string();
     test_string_allocator();
+    test_string_output();
     fail_true_space_true();
     fail_true_comma_true();
 }

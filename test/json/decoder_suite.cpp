@@ -20,6 +20,123 @@ namespace token = json::token;
 using decoder_type = json::detail::basic_decoder<char>;
 
 //-----------------------------------------------------------------------------
+// API
+//-----------------------------------------------------------------------------
+
+namespace api_suite
+{
+
+void api_null()
+{
+    const char input[] = "null";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::null);
+}
+
+void api_false()
+{
+    const char input[] = "false";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::false_value);
+}
+
+void api_true()
+{
+    const char input[] = "true";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::true_value);
+}
+
+void api_signed()
+{
+    const char input[] = "42";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<int>(), 42);
+}
+
+void api_signed_output()
+{
+    const char input[] = "42";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
+    int result = {};
+    TRIAL_PROTOCOL_TEST_NO_THROW(decoder.value(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result, 42);
+}
+
+void api_unsigned()
+{
+    const char input[] = "42";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<unsigned int>(), 42);
+}
+
+void api_unsigned_output()
+{
+    const char input[] = "42";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::integer);
+    unsigned int result = {};
+    TRIAL_PROTOCOL_TEST_NO_THROW(decoder.value(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result, 42);
+}
+
+void api_real()
+{
+    const char input[] = "3.5";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::real);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<double>(), 3.5);
+}
+
+void api_real_output()
+{
+    const char input[] = "3.5";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::real);
+    double result = {};
+    TRIAL_PROTOCOL_TEST_NO_THROW(decoder.value(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result, 3.5);
+}
+
+void api_string()
+{
+    const char input[] = "\"alpha\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::string>(), "alpha");
+}
+
+void api_string_output()
+{
+    const char input[] = "\"alpha\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
+    std::string result;
+    TRIAL_PROTOCOL_TEST_NO_THROW(decoder.value(result));
+    TRIAL_PROTOCOL_TEST_EQUAL(result, "alpha");
+}
+
+void run()
+{
+    api_null();
+    api_false();
+    api_true();
+    api_signed();
+    api_signed_output();
+    api_unsigned();
+    api_unsigned_output();
+    api_real();
+    api_real_output();
+    api_string();
+    api_string_output();
+}
+
+} // namespace api_suite
+
+//-----------------------------------------------------------------------------
 // Whitespaces
 //-----------------------------------------------------------------------------
 
@@ -2031,6 +2148,7 @@ void run()
 
 int main()
 {
+    api_suite::run();
     whitespace_suite::run();
     basic_suite::run();
     integer_suite::run();

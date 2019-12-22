@@ -43,7 +43,35 @@ struct basic_reader<CharT>::overloader<
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.template integer_value<ReturnType>();
+        ReturnType result;
+        value(self, result);
+        return result;
+    }
+
+    inline static void value(const basic_reader<CharT>& self,
+                             ReturnType& output)
+    {
+        switch (self.decoder.code())
+        {
+        case token::detail::code::integer:
+        {
+            self.decoder.value(output);
+            if (self.symbol() == token::symbol::error)
+            {
+                throw json::error(self.error());
+            }
+        }
+        break;
+
+        case token::detail::code::real:
+            using real_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
+            output = ReturnType(std::round(self.decoder.template value<real_return_type>()));
+            break;
+
+        default:
+            self.decoder.code(token::detail::code::error_invalid_value);
+            throw json::error(self.error());
+        }
     }
 };
 
@@ -57,7 +85,28 @@ struct basic_reader<CharT>::overloader<
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.template real_value<ReturnType>();
+        ReturnType result;
+        value(self, result);
+        return result;
+    }
+
+    inline static void value(const basic_reader<CharT>& self,
+                             ReturnType& output)
+    {
+        switch (self.decoder.code())
+        {
+        case token::detail::code::integer:
+            using integer_return_type = typename core::detail::make_integral<ReturnType>::type;
+            output = ReturnType(self.decoder.template value<integer_return_type>());
+            break;
+
+        case token::detail::code::real:
+            return self.decoder.value(output);
+
+        default:
+            self.decoder.code(token::detail::code::error_invalid_value);
+            throw json::error(self.error());
+        }
     }
 };
 
@@ -71,7 +120,28 @@ struct basic_reader<CharT>::overloader<
 {
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
-        return self.template bool_value<ReturnType>();
+        ReturnType result;
+        value(self, result);
+        return result;
+    }
+
+    inline static void value(const basic_reader<CharT>& self,
+                             ReturnType& output)
+    {
+        switch (self.decoder.code())
+        {
+        case token::detail::code::true_value:
+            output = true;
+            break;
+
+        case token::detail::code::false_value:
+            output = false;
+            break;
+
+        default:
+            self.decoder.code(token::detail::code::error_invalid_value);
+            throw json::error(self.error());
+        }
     }
 };
 
@@ -86,7 +156,23 @@ struct basic_reader<CharT>::overloader<
 
     inline static return_type value(const basic_reader<CharT>& self)
     {
-        return self.template string_value<return_type>();
+        return_type result;
+        value(self, result);
+        return result;
+    }
+
+    inline static void value(const basic_reader<CharT>& self,
+                             return_type& output)
+    {
+        switch (self.decoder.code())
+        {
+        case token::detail::code::string:
+            return self.decoder.value(output);
+
+        default:
+            self.decoder.code(token::detail::code::error_invalid_value);
+            throw json::error(self.error());
+        }
     }
 };
 
@@ -225,6 +311,14 @@ T basic_reader<CharT>::value() const
 }
 
 template <typename CharT>
+template <typename T>
+void basic_reader<CharT>::value(T& output) const
+{
+    using return_type = typename std::remove_cv<typename std::decay<T>::type>::type;
+    basic_reader<CharT>::overloader<return_type>::value(*this, output);
+}
+
+template <typename CharT>
 auto basic_reader<CharT>::literal() const BOOST_NOEXCEPT -> const view_type&
 {
     return decoder.literal();
@@ -234,84 +328,6 @@ template <typename CharT>
 auto basic_reader<CharT>::tail() const BOOST_NOEXCEPT -> const view_type&
 {
     return decoder.tail();
-}
-
-template <typename CharT>
-template <typename ReturnType>
-ReturnType basic_reader<CharT>::bool_value() const
-{
-    switch (decoder.code())
-    {
-    case token::detail::code::true_value:
-        return true;
-
-    case token::detail::code::false_value:
-        return false;
-
-    default:
-        decoder.code(token::detail::code::error_invalid_value);
-        throw json::error(error());
-    }
-}
-
-template <typename CharT>
-template <typename ReturnType>
-ReturnType basic_reader<CharT>::integer_value() const
-{
-    switch (decoder.code())
-    {
-    case token::detail::code::integer:
-        {
-            ReturnType result = decoder.template value<ReturnType>();
-            if (symbol() == token::symbol::error)
-            {
-                throw json::error(error());
-            }
-            return result;
-        }
-
-    case token::detail::code::real:
-        using real_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
-        return ReturnType(std::round(decoder.template value<real_return_type>()));
-
-    default:
-        decoder.code(token::detail::code::error_invalid_value);
-        throw json::error(error());
-    }
-}
-
-template <typename CharT>
-template <typename ReturnType>
-ReturnType basic_reader<CharT>::real_value() const
-{
-    switch (decoder.code())
-    {
-    case token::detail::code::integer:
-        using integer_return_type = typename core::detail::make_integral<ReturnType>::type;
-        return ReturnType(decoder.template value<integer_return_type>());
-
-    case token::detail::code::real:
-        return decoder.template value<ReturnType>();
-
-    default:
-        decoder.code(token::detail::code::error_invalid_value);
-        throw json::error(error());
-    }
-}
-
-template <typename CharT>
-template <typename ReturnType>
-ReturnType basic_reader<CharT>::string_value() const
-{
-    switch (decoder.code())
-    {
-    case token::detail::code::string:
-        return decoder.template value<ReturnType>();
-
-    default:
-        decoder.code(token::detail::code::error_invalid_value);
-        throw json::error(error());
-    }
 }
 
 //-----------------------------------------------------------------------------

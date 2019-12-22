@@ -48,6 +48,7 @@ public:
     const view_type& literal() const BOOST_NOEXCEPT;
     const view_type& tail() const BOOST_NOEXCEPT;
     template <typename ReturnType> ReturnType value() const;
+    template <typename T> void value(T&) const;
 
 private:
     token::detail::code::value next_token(token::detail::code::value) BOOST_NOEXCEPT;
@@ -62,10 +63,10 @@ private:
 
     template <typename ReturnType, typename Enable = void>
     struct overloader;
-    template <typename ReturnType> ReturnType signed_integer_value() const;
-    template <typename ReturnType> ReturnType unsigned_integer_value() const;
-    template <typename ReturnType> ReturnType real_value() const;
-    template <typename ReturnType> ReturnType string_value() const;
+    template <typename T> void signed_integer_value(T&) const;
+    template <typename T> void unsigned_integer_value(T&) const;
+    template <typename T> void real_value(T&) const;
+    template <typename T> void string_value(T&) const;
 
 private:
     view_type input;
