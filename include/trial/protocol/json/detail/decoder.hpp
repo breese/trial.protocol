@@ -65,7 +65,7 @@ private:
     template <typename ReturnType> ReturnType signed_integer_value() const;
     template <typename ReturnType> ReturnType unsigned_integer_value() const;
     template <typename ReturnType> ReturnType real_value() const;
-    std::basic_string<CharT> string_value() const;
+    template <typename ReturnType> ReturnType string_value() const;
 
 private:
     view_type input;

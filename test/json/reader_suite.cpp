@@ -8,6 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <scoped_allocator>
 #include <trial/protocol/json/reader.hpp>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
 
@@ -147,6 +148,19 @@ void test_string()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
 }
 
+void test_string_allocator()
+{
+    const char input[] = "\"alpha\"";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::data);
+    using string_type = std::basic_string<char, std::char_traits<char>, std::scoped_allocator_adaptor<std::allocator<char>>>;
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<string_type>(), "alpha");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"alpha\"");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+}
+
 void fail_true_space_true()
 {
     const char input[] = "true true";
@@ -184,6 +198,7 @@ void run()
     test_double();
     test_long_double();
     test_string();
+    test_string_allocator();
     fail_true_space_true();
     fail_true_comma_true();
 }

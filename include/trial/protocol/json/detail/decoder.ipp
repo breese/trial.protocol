@@ -101,18 +101,19 @@ struct basic_decoder<CharT>::overloader<ReturnType,
 // Strings
 
 template <typename CharT>
-template <typename ReturnType>
-struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename std::enable_if<std::is_same<ReturnType, std::basic_string<CharT> >::value>::type>
+template <typename CharTraits, typename Allocator>
+struct basic_decoder<CharT>::overloader<std::basic_string<CharT, CharTraits, Allocator>>
 {
-    inline static std::basic_string<CharT> value(const basic_decoder<CharT>& self)
+    using return_type = std::basic_string<CharT, CharTraits, Allocator>;
+
+    inline static return_type value(const basic_decoder<CharT>& self)
     {
         if (self.code() != token::detail::code::string)
         {
             self.current.code = token::detail::code::error_incompatible_type;
             throw json::error(self.error());
         }
-        return self.string_value();
+        return self.string_value<return_type>();
     }
 };
 
@@ -338,7 +339,8 @@ ReturnType basic_decoder<CharT>::real_value() const
 }
 
 template <typename CharT>
-std::basic_string<CharT> basic_decoder<CharT>::string_value() const
+template <typename ReturnType>
+ReturnType basic_decoder<CharT>::string_value() const
 {
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     assert(current.code == token::detail::code::string);
@@ -346,7 +348,7 @@ std::basic_string<CharT> basic_decoder<CharT>::string_value() const
     const typename view_type::size_type  approximateSize = literal().size();
     assert(approximateSize >= 2);
 
-    std::basic_string<CharT> result;
+    ReturnType result;
     result.reserve(approximateSize);
 
     typename view_type::const_iterator begin = literal().begin();

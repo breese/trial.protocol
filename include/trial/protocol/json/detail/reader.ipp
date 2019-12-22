@@ -78,12 +78,11 @@ struct basic_reader<CharT>::overloader<
 // Strings
 
 template <typename CharT>
-template <typename ReturnType>
+template <typename CharTraits, typename Allocator>
 struct basic_reader<CharT>::overloader<
-    ReturnType,
-    typename std::enable_if<std::is_same< ReturnType, std::basic_string<CharT> >::value>::type>
+    std::basic_string<CharT, CharTraits, Allocator>>
 {
-    using return_type = std::basic_string<CharT>;
+    using return_type = std::basic_string<CharT, CharTraits, Allocator>;
 
     inline static return_type value(const basic_reader<CharT>& self)
     {
