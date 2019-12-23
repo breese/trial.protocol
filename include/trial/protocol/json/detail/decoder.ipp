@@ -640,16 +640,21 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     type = token::detail::code::end;
                     goto end;
                 }
-                typename view_type::const_iterator fraction_begin = input.begin();
-                while (!input.empty() && traits<CharT>::is_digit(input.front()))
+                typename view_type::const_iterator it = input.begin();
+                while (true)
                 {
-                    input.remove_prefix(1);
+                    if (!traits<CharT>::is_digit(it[0])) { break; }
+                    if (!traits<CharT>::is_digit(it[1])) { it += 1; break; }
+                    if (!traits<CharT>::is_digit(it[2])) { it += 2; break; }
+                    if (!traits<CharT>::is_digit(it[3])) { it += 3; break; }
+                    it += 4;
                 }
-                if (input.begin() == fraction_begin)
+                if (it == input.begin())
                 {
                     type = token::detail::code::error_unexpected_token;
                     goto end;
                 }
+                input.remove_prefix(std::distance(input.begin(), it));
             }
             if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
                                    (input.front() == traits<CharT>::alpha_e)))
