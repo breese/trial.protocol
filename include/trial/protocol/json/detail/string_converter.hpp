@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <limits>
+#include <algorithm>
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -87,9 +88,9 @@ RealT from_string(const CharT * const head, std::size_t size) noexcept
             const auto delta100 = unsigned(current[1] - detail::traits<CharT>::alpha_0);
             const auto delta10 = unsigned(current[2] - detail::traits<CharT>::alpha_0);
             const auto delta1 = unsigned(current[3] - detail::traits<CharT>::alpha_0);
-            const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
-            if (delta1000 > 9 || delta100 > 9 || delta10 > 9 || delta1 > 9)
+            if (std::max(delta1000, delta100) > 9 || std::max(delta10, delta1) > 9)
                 break;
+            const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
             fraction = fraction * superbase + delta;
             scale *= superbase;
             current += 4;
