@@ -29,87 +29,106 @@ namespace json
 namespace detail
 {
 
-template <typename Real>
-Real power(Real number, int exponent)
+template <typename RealT>
+RealT power10(int exponent)
 {
     switch (exponent)
     {
-    case 0: return Real(1.0);
-    case 1: return number * Real(1E0);
-    case 2: return number * Real(1E1);
-    case 3: return number * Real(1E2);
-    case 4: return number * Real(1E3);
-    case 5: return number * Real(1E4);
-    case 6: return number * Real(1E5);
-    case 7: return number * Real(1E6);
-    case 8: return number * Real(1E7);
-    case 9: return number * Real(1E8);
-    case 10: return number * Real(1E9);
-    default: return std::pow(number, exponent);
+    case 0: return RealT(1.0);
+    case 1: return RealT(1E1);
+    case 2: return RealT(1E2);
+    case 3: return RealT(1E3);
+    case 4: return RealT(1E4);
+    case 5: return RealT(1E5);
+    case 6: return RealT(1E6);
+    case 7: return RealT(1E7);
+    case 8: return RealT(1E8);
+    case 9: return RealT(1E9);
+    case 10: return RealT(1E10);
+    default: return std::pow(RealT(10), exponent);
     }
 }
 
-template <typename CharT, typename RealT>
-RealT parse(const CharT *head) noexcept
+template <typename RealT, typename CharT>
+RealT from_string(const CharT * const head, std::size_t size) noexcept
 {
     static constexpr RealT zero = RealT(0.0);
     static constexpr RealT one = RealT(1.0);
     static constexpr RealT base = RealT(10.0);
 
+    const CharT *tail = head + size;
+    const CharT *current = head;
     RealT result = zero;
-    const bool is_negative = *head == detail::traits<CharT>::alpha_minus;
+    const bool is_negative = *current == detail::traits<CharT>::alpha_minus;
     if (is_negative)
     {
-        ++head;
+        ++current;
     }
     while (true)
     {
-        const unsigned delta = *head - detail::traits<CharT>::alpha_0;
+        const unsigned delta = *current - detail::traits<CharT>::alpha_0;
         if (delta > 9)
             break;
         result *= base;
         result += delta;
-        ++head;
+        ++current;
     }
-    if (*head == '.')
+    if (*current == '.')
     {
-        ++head;
+        ++current;
         RealT fraction = zero;
         RealT scale = one;
-        while (true)
+        // The following loop is an optimization. Measure the performance before making
+        // any changes to this loop.
+        static constexpr RealT superbase = RealT(1e4);
+        while (tail - current > 4)
         {
-            const unsigned delta = *head - detail::traits<CharT>::alpha_0;
+            const auto delta1000 = unsigned(current[0] - detail::traits<CharT>::alpha_0);
+            const auto delta100 = unsigned(current[1] - detail::traits<CharT>::alpha_0);
+            const auto delta10 = unsigned(current[2] - detail::traits<CharT>::alpha_0);
+            const auto delta1 = unsigned(current[3] - detail::traits<CharT>::alpha_0);
+            const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
+            if (delta1000 > 9 || delta100 > 9 || delta10 > 9 || delta1 > 9)
+                break;
+            fraction = fraction * superbase + delta;
+            scale *= superbase;
+            current += 4;
+        }
+
+        while (tail > current)
+        {
+            const unsigned delta = *current - detail::traits<CharT>::alpha_0;
             if (delta > 9)
                 break;
             scale *= base;
             fraction *= base;
             fraction += delta;
-            ++head;
+            ++current;
         }
         result += fraction / scale;
     }
-    if ((*head == detail::traits<CharT>::alpha_e) || (*head == detail::traits<CharT>::alpha_E))
+    if ((*current == detail::traits<CharT>::alpha_e) || (*current == detail::traits<CharT>::alpha_E))
     {
-        ++head;
-        const bool is_exponent_negative = *head == detail::traits<CharT>::alpha_minus;
-        if (is_exponent_negative || *head == detail::traits<CharT>::alpha_plus)
+        ++current;
+        const bool is_exponent_negative = *current == detail::traits<CharT>::alpha_minus;
+        if (is_exponent_negative || *current == detail::traits<CharT>::alpha_plus)
         {
-            ++head;
+            ++current;
         }
         int exponent = 0;
         const int max = std::numeric_limits<int>::max();
         while (true)
         {
-            const unsigned delta = *head - detail::traits<CharT>::alpha_0;
+            const unsigned delta = *current - detail::traits<CharT>::alpha_0;
             if (delta > 9)
                 break;
             if (max / 10 < exponent) // Overflow
                 return std::numeric_limits<RealT>::infinity();
             exponent *= 10;
             exponent += delta;
-            ++head;
+            ++current;
         }
-        result *= detail::power<RealT>(base, is_exponent_negative ? -exponent : exponent);
+        result *= detail::power10<RealT>(is_exponent_negative ? -exponent : exponent);
     }
     return is_negative ? -result : result;
 }
@@ -137,7 +156,7 @@ struct string_converter<CharT, float>
 
     static float decode(const string_view& view)
     {
-        return detail::parse<CharT, float>(view.data());
+        return detail::from_string<float>(view.data(), view.size());
     }
 };
 
@@ -159,7 +178,7 @@ struct string_converter<CharT, double>
 
     static double decode(const string_view& view)
     {
-        return detail::parse<CharT, double>(view.data());
+        return detail::from_string<double>(view.data(), view.size());
     }
 };
 
@@ -181,7 +200,7 @@ struct string_converter<CharT, long double>
 
     static long double decode(const string_view& view)
     {
-        return detail::parse<CharT, long double>(view.data());
+        return detail::from_string<long double>(view.data(), view.size());
     }
 };
 

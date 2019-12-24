@@ -151,6 +151,40 @@ BENCHMARK(value_float);
 BENCHMARK(value_double);
 BENCHMARK(value_long_double);
 
+void value_float_fraction(benchmark::State& state)
+{
+    char input[] = "45.550544999999943";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<float>());
+    }
+}
+
+void value_double_fraction(benchmark::State& state)
+{
+    char input[] = "45.550544999999943";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_long_double_fraction(benchmark::State& state)
+{
+    char input[] = "45.550544999999943";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<long double>());
+    }
+}
+
+BENCHMARK(value_float_fraction);
+BENCHMARK(value_double_fraction);
+BENCHMARK(value_long_double_fraction);
+
 void parse_string8(benchmark::State& state)
 {
     char input[] = "\"ABCDEFGH\"";
