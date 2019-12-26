@@ -385,7 +385,8 @@ void basic_decoder<CharT>::string_value(T& result) const
 
     const typename view_type::size_type  approximateSize = literal().size();
     assert(approximateSize >= 2);
-    result.reserve(approximateSize);
+    if (result.capacity() < approximateSize)
+        result.reserve(approximateSize);
 
     typename view_type::const_iterator begin = literal().begin();
     typename view_type::const_iterator end = literal().end();
