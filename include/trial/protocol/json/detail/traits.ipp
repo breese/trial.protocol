@@ -326,6 +326,15 @@ inline int traits<char>::to_int(value_type value) BOOST_NOEXCEPT
     return 0;
 }
 
+inline auto traits<char>::skip_narrow(const value_type *marker) noexcept -> const value_type *
+{
+    while (traits<value_type>::to_category(*marker) == traits_category::narrow)
+    {
+        ++marker;
+    }
+    return marker;
+}
+
 inline const std::basic_string<char>& traits<char>::false_text() BOOST_NOEXCEPT
 {
     static std::basic_string<value_type> text("false");
@@ -541,6 +550,15 @@ inline int traits<unsigned char>::to_int(value_type value) BOOST_NOEXCEPT
         return value - alpha_a + 10;
     assert(false);
     return 0;
+}
+
+inline auto traits<unsigned char>::skip_narrow(const value_type *marker) noexcept -> const value_type *
+{
+    while (traits<value_type>::to_category(*marker) == traits_category::narrow)
+    {
+        ++marker;
+    }
+    return marker;
 }
 
 inline auto traits<unsigned char>::false_text() BOOST_NOEXCEPT -> const string_type&

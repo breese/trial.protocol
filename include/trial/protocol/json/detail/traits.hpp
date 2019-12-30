@@ -28,6 +28,7 @@ namespace detail
 template <typename CharT>
 class traits
 {
+    static int count_narrow(const CharT * const) noexcept;
 };
 
 enum class traits_category
@@ -79,6 +80,8 @@ public:
     }
     static traits_category to_category(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
+
+    static const value_type *skip_narrow(const value_type *) noexcept;
 
     static const string_type& false_text() BOOST_NOEXCEPT;
     static const string_type& true_text() BOOST_NOEXCEPT;
@@ -167,6 +170,7 @@ public:
     static bool is_keyword(value_type value) BOOST_NOEXCEPT;
     static traits_category to_category(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
+    static const value_type *skip_narrow(const value_type *) noexcept;
 
     static const string_type& false_text() BOOST_NOEXCEPT;
     static const string_type& true_text() BOOST_NOEXCEPT;

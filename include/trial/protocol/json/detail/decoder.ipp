@@ -476,11 +476,7 @@ void basic_decoder<CharT>::string_value(T& result) const
         case traits_category::narrow:
         {
             typename view_type::const_iterator head = it;
-            do
-            {
-                ++it;
-            }
-            while (traits<CharT>::to_category(*it) == traits_category::narrow);
+            it = traits<CharT>::skip_narrow(++it);
             result.insert(result.end(), head, it);
             continue;
         }
