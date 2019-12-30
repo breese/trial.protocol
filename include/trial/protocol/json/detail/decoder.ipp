@@ -388,13 +388,17 @@ void basic_decoder<CharT>::string_value(T& result) const
     if (result.capacity() < approximateSize)
         result.reserve(approximateSize);
 
-    typename view_type::const_iterator begin = literal().begin();
-    typename view_type::const_iterator end = literal().end();
-    for (typename view_type::const_iterator it = begin;
-         it != end;
-         ++it)
+    // Skip initial and terminating quotes
+    assert(literal().front() == traits<CharT>::alpha_quote);
+    assert(literal().back() == traits<CharT>::alpha_quote);
+    typename view_type::const_iterator begin = literal().begin() + 1;
+    typename view_type::const_iterator end = literal().end() - 1;
+    typename view_type::const_iterator it = begin;
+    while (it != end)
     {
-        if (*it == traits<CharT>::alpha_reverse_solidus)
+        switch (traits<CharT>::to_category(*it))
+        {
+        case traits_category::escape:
         {
             assert(std::distance(it, end) >= 2);
             ++it;
@@ -465,15 +469,28 @@ void basic_decoder<CharT>::string_value(T& result) const
                 assert(false);
                 break;
             }
+            ++it;
+            continue;
         }
-        else if (*it == traits<CharT>::alpha_quote)
+
+        case traits_category::narrow:
         {
-            assert((it == begin) || (it + 1 == end));
-            // Ignore initial and terminating quotes
+            typename view_type::const_iterator head = it;
+            do
+            {
+                ++it;
+            }
+            while (traits<CharT>::to_category(*it) == traits_category::narrow);
+            result.insert(result.end(), head, it);
+            continue;
         }
-        else
+
+        default:
         {
             result += *it;
+            ++it;
+            continue;
+        }
         }
     }
 }
