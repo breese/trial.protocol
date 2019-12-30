@@ -801,10 +801,7 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
             return token::detail::code::string;
 
         case traits_category::narrow:
-            while (traits<CharT>::to_category(*marker) == traits_category::narrow)
-            {
-                ++marker;
-            }
+            marker = traits<CharT>::skip_narrow(marker);
             break;
 
         case traits_category::extra_5:
