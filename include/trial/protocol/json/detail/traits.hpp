@@ -44,6 +44,14 @@ enum class traits_category
     illegal
 };
 
+enum
+{
+    character_space = 1 << 0,    // 0x09 | 0x0A | 0x0D | 0x20
+    character_digit = 1 << 1,    // 0-9
+    character_hexdigit = 1 << 2, // 0-9 | A-F | a-f
+    character_keyword = 1 << 3   // A-Z | a-z
+};
+
 //-----------------------------------------------------------------------------
 // char specialization
 //-----------------------------------------------------------------------------
@@ -51,32 +59,25 @@ enum class traits_category
 template <>
 class traits<char>
 {
-    enum
-    {
-        character_space = 1 << 0,    // 0x09 | 0x0A | 0x0D | 0x20
-        character_digit = 1 << 1,    // 0-9
-        character_hexdigit = 1 << 2, // 0-9 | A-F | a-f
-        character_keyword = 1 << 3   // A-Z | a-z
-    };
 public:
     using value_type = char;
     using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
 
     static bool is_space(value_type value) BOOST_NOEXCEPT
     {
-        return flags(std::uint8_t(value)) & character_space;
+        return flags(value) & character_space;
     }
     static bool is_digit(value_type value) BOOST_NOEXCEPT
     {
-        return flags(std::uint8_t(value)) & character_digit;
+        return flags(value) & character_digit;
     }
     static bool is_hexdigit(value_type value) BOOST_NOEXCEPT
     {
-        return flags(std::uint8_t(value)) & character_hexdigit;
+        return flags(value) & character_hexdigit;
     }
     static bool is_keyword(value_type value) BOOST_NOEXCEPT
     {
-        return flags(std::uint8_t(value)) & character_keyword;
+        return flags(value) & character_keyword;
     }
     static traits_category to_category(value_type value) BOOST_NOEXCEPT;
     static int to_int(value_type value) BOOST_NOEXCEPT;
@@ -129,7 +130,108 @@ public:
 private:
     static bool is_hex_upper(value_type value) BOOST_NOEXCEPT;
     static bool is_hex_lower(value_type value) BOOST_NOEXCEPT;
-    static std::uint8_t flags(std::uint8_t index)
+    static std::uint8_t flags(value_type index)
+    {
+        static constexpr std::uint8_t data[] = {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+            0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+            0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+        return data[std::uint8_t(index)];
+    };
+};
+
+//-----------------------------------------------------------------------------
+// unsigned char specialization
+//-----------------------------------------------------------------------------
+
+template <>
+class traits<unsigned char>
+{
+public:
+    using value_type = unsigned char;
+    using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
+
+    static bool is_space(value_type value) BOOST_NOEXCEPT
+    {
+        return flags(value) & character_space;
+    }
+    static bool is_digit(value_type value) BOOST_NOEXCEPT
+    {
+        return flags(value) & character_digit;
+    }
+    static bool is_hexdigit(value_type value) BOOST_NOEXCEPT
+    {
+        return flags(value) & character_hexdigit;
+    }
+    static bool is_keyword(value_type value) BOOST_NOEXCEPT
+    {
+        return flags(value) & character_keyword;
+    }
+    static traits_category to_category(value_type value) BOOST_NOEXCEPT;
+    static int to_int(value_type value) BOOST_NOEXCEPT;
+    static const value_type *skip_narrow(const value_type *) noexcept;
+
+    static const string_type& false_text() BOOST_NOEXCEPT;
+    static const string_type& true_text() BOOST_NOEXCEPT;
+    static const string_type& null_text() BOOST_NOEXCEPT;
+
+    BOOST_STATIC_CONSTANT(value_type, alpha_backspace = '\b');
+    BOOST_STATIC_CONSTANT(value_type, alpha_formfeed = '\f');
+    BOOST_STATIC_CONSTANT(value_type, alpha_newline = '\n');
+    BOOST_STATIC_CONSTANT(value_type, alpha_tab = '\t');
+    BOOST_STATIC_CONSTANT(value_type, alpha_return = '\r');
+    BOOST_STATIC_CONSTANT(value_type, alpha_quote = '"');
+    BOOST_STATIC_CONSTANT(value_type, alpha_plus = '+');
+    BOOST_STATIC_CONSTANT(value_type, alpha_comma = ',');
+    BOOST_STATIC_CONSTANT(value_type, alpha_minus = '-');
+    BOOST_STATIC_CONSTANT(value_type, alpha_dot = '.');
+    BOOST_STATIC_CONSTANT(value_type, alpha_solidus = '/');
+    BOOST_STATIC_CONSTANT(value_type, alpha_0 = '0');
+    BOOST_STATIC_CONSTANT(value_type, alpha_1 = '1');
+    BOOST_STATIC_CONSTANT(value_type, alpha_2 = '2');
+    BOOST_STATIC_CONSTANT(value_type, alpha_3 = '3');
+    BOOST_STATIC_CONSTANT(value_type, alpha_4 = '4');
+    BOOST_STATIC_CONSTANT(value_type, alpha_5 = '5');
+    BOOST_STATIC_CONSTANT(value_type, alpha_6 = '6');
+    BOOST_STATIC_CONSTANT(value_type, alpha_7 = '7');
+    BOOST_STATIC_CONSTANT(value_type, alpha_8 = '8');
+    BOOST_STATIC_CONSTANT(value_type, alpha_9 = '9');
+    BOOST_STATIC_CONSTANT(value_type, alpha_colon = ':');
+    BOOST_STATIC_CONSTANT(value_type, alpha_question_mark = '?');
+    BOOST_STATIC_CONSTANT(value_type, alpha_A = 'A');
+    BOOST_STATIC_CONSTANT(value_type, alpha_E = 'E');
+    BOOST_STATIC_CONSTANT(value_type, alpha_a = 'a');
+    BOOST_STATIC_CONSTANT(value_type, alpha_b = 'b');
+    BOOST_STATIC_CONSTANT(value_type, alpha_e = 'e');
+    BOOST_STATIC_CONSTANT(value_type, alpha_f = 'f');
+    BOOST_STATIC_CONSTANT(value_type, alpha_n = 'n');
+    BOOST_STATIC_CONSTANT(value_type, alpha_r = 'r');
+    BOOST_STATIC_CONSTANT(value_type, alpha_t = 't');
+    BOOST_STATIC_CONSTANT(value_type, alpha_u = 'u');
+    BOOST_STATIC_CONSTANT(value_type, alpha_bracket_open = '[');
+    BOOST_STATIC_CONSTANT(value_type, alpha_reverse_solidus = '\\');
+    BOOST_STATIC_CONSTANT(value_type, alpha_bracket_close = ']');
+    BOOST_STATIC_CONSTANT(value_type, alpha_brace_open = '{');
+    BOOST_STATIC_CONSTANT(value_type, alpha_brace_close = '}');
+
+private:
+    static bool is_hex_upper(value_type value) BOOST_NOEXCEPT;
+    static bool is_hex_lower(value_type value) BOOST_NOEXCEPT;
+    static std::uint8_t flags(value_type index)
     {
         static constexpr std::uint8_t data[] = {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00,
@@ -151,73 +253,6 @@ private:
         };
         return data[index];
     };
-};
-
-//-----------------------------------------------------------------------------
-// unsigned char specialization
-//-----------------------------------------------------------------------------
-
-template <>
-class traits<unsigned char>
-{
-public:
-    using value_type = unsigned char;
-    using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
-
-    static bool is_space(value_type value) BOOST_NOEXCEPT;
-    static bool is_digit(value_type value) BOOST_NOEXCEPT;
-    static bool is_hexdigit(value_type value) BOOST_NOEXCEPT;
-    static bool is_keyword(value_type value) BOOST_NOEXCEPT;
-    static traits_category to_category(value_type value) BOOST_NOEXCEPT;
-    static int to_int(value_type value) BOOST_NOEXCEPT;
-    static const value_type *skip_narrow(const value_type *) noexcept;
-
-    static const string_type& false_text() BOOST_NOEXCEPT;
-    static const string_type& true_text() BOOST_NOEXCEPT;
-    static const string_type& null_text() BOOST_NOEXCEPT;
-
-    BOOST_STATIC_CONSTANT(value_type, alpha_backspace = '\b');
-    BOOST_STATIC_CONSTANT(value_type, alpha_formfeed = '\f');
-    BOOST_STATIC_CONSTANT(value_type, alpha_newline = '\n');
-    BOOST_STATIC_CONSTANT(value_type, alpha_tab = '\t');
-    BOOST_STATIC_CONSTANT(value_type, alpha_return = '\r');
-    BOOST_STATIC_CONSTANT(value_type, alpha_quote = '"');
-    BOOST_STATIC_CONSTANT(value_type, alpha_plus = '+');
-    BOOST_STATIC_CONSTANT(value_type, alpha_comma = ',');
-    BOOST_STATIC_CONSTANT(value_type, alpha_minus = '-');
-    BOOST_STATIC_CONSTANT(value_type, alpha_dot = '.');
-    BOOST_STATIC_CONSTANT(value_type, alpha_solidus = '/');
-    BOOST_STATIC_CONSTANT(value_type, alpha_0 = '0');
-    BOOST_STATIC_CONSTANT(value_type, alpha_1 = '1');
-    BOOST_STATIC_CONSTANT(value_type, alpha_2 = '2');
-    BOOST_STATIC_CONSTANT(value_type, alpha_3 = '3');
-    BOOST_STATIC_CONSTANT(value_type, alpha_4 = '4');
-    BOOST_STATIC_CONSTANT(value_type, alpha_5 = '5');
-    BOOST_STATIC_CONSTANT(value_type, alpha_6 = '6');
-    BOOST_STATIC_CONSTANT(value_type, alpha_7 = '7');
-    BOOST_STATIC_CONSTANT(value_type, alpha_8 = '8');
-    BOOST_STATIC_CONSTANT(value_type, alpha_9 = '9');
-    BOOST_STATIC_CONSTANT(value_type, alpha_colon = ':');
-    BOOST_STATIC_CONSTANT(value_type, alpha_question_mark = '?');
-    BOOST_STATIC_CONSTANT(value_type, alpha_A = 'A');
-    BOOST_STATIC_CONSTANT(value_type, alpha_E = 'E');
-    BOOST_STATIC_CONSTANT(value_type, alpha_a = 'a');
-    BOOST_STATIC_CONSTANT(value_type, alpha_b = 'b');
-    BOOST_STATIC_CONSTANT(value_type, alpha_e = 'e');
-    BOOST_STATIC_CONSTANT(value_type, alpha_f = 'f');
-    BOOST_STATIC_CONSTANT(value_type, alpha_n = 'n');
-    BOOST_STATIC_CONSTANT(value_type, alpha_r = 'r');
-    BOOST_STATIC_CONSTANT(value_type, alpha_t = 't');
-    BOOST_STATIC_CONSTANT(value_type, alpha_u = 'u');
-    BOOST_STATIC_CONSTANT(value_type, alpha_bracket_open = '[');
-    BOOST_STATIC_CONSTANT(value_type, alpha_reverse_solidus = '\\');
-    BOOST_STATIC_CONSTANT(value_type, alpha_bracket_close = ']');
-    BOOST_STATIC_CONSTANT(value_type, alpha_brace_open = '{');
-    BOOST_STATIC_CONSTANT(value_type, alpha_brace_close = '}');
-
-private:
-    static bool is_hex_upper(value_type value) BOOST_NOEXCEPT;
-    static bool is_hex_lower(value_type value) BOOST_NOEXCEPT;
 };
 
 } // namespace detail
