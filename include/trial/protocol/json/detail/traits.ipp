@@ -27,30 +27,6 @@ namespace detail
 // char specialization
 //-----------------------------------------------------------------------------
 
-inline bool traits<char>::is_hex_upper(value_type value) BOOST_NOEXCEPT
-{
-    switch (value)
-    {
-    case 0x41: case 0x42: case 0x43: case 0x44: // A-F
-    case 0x45: case 0x46:
-        return true;
-    default:
-        return false;
-    }
-}
-
-inline bool traits<char>::is_hex_lower(value_type value) BOOST_NOEXCEPT
-{
-    switch (value)
-    {
-    case 0x61: case 0x62: case 0x63: case 0x64: // a-f
-    case 0x65: case 0x66:
-        return true;
-    default:
-        return false;
-    }
-}
-
 inline traits_category traits<char>::to_category(value_type value) BOOST_NOEXCEPT
 {
     static constexpr traits_category data[] = {
@@ -356,30 +332,6 @@ inline const std::basic_string<char>& traits<char>::null_text() BOOST_NOEXCEPT
 //-----------------------------------------------------------------------------
 // unsigned char specialization
 //-----------------------------------------------------------------------------
-
-inline bool traits<unsigned char>::is_hex_upper(value_type value) BOOST_NOEXCEPT
-{
-    switch (value)
-    {
-    case 0x41: case 0x42: case 0x43: case 0x44: // A-F
-    case 0x45: case 0x46:
-        return true;
-    default:
-        return false;
-    }
-}
-
-inline bool traits<unsigned char>::is_hex_lower(value_type value) BOOST_NOEXCEPT
-{
-    switch (value)
-    {
-    case 0x61: case 0x62: case 0x63: case 0x64: // a-f
-    case 0x65: case 0x66:
-        return true;
-    default:
-        return false;
-    }
-}
 
 inline traits_category traits<unsigned char>::to_category(value_type value) BOOST_NOEXCEPT
 {
