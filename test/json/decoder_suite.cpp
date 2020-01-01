@@ -20,6 +20,21 @@ namespace token = json::token;
 using decoder_type = json::detail::basic_decoder<char>;
 
 //-----------------------------------------------------------------------------
+
+namespace std
+{
+std::ostream& operator<< (std::ostream& stream,
+                          const decoder_type::view_type& value)
+{
+    for (auto&& item : value)
+    {
+        stream << item;
+    }
+    return stream;
+}
+} // namespace std
+
+//-----------------------------------------------------------------------------
 // API
 //-----------------------------------------------------------------------------
 
@@ -434,7 +449,7 @@ void test_lowest()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << signed(value);
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -447,7 +462,7 @@ void test_lowest()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -460,7 +475,7 @@ void test_lowest()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -473,7 +488,7 @@ void test_lowest()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -486,7 +501,7 @@ void test_lowest()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -503,7 +518,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << signed(value);
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -516,7 +531,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << unsigned(value);
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -529,7 +544,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -542,7 +557,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -555,7 +570,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -568,7 +583,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -581,7 +596,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -594,7 +609,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -607,7 +622,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -620,7 +635,7 @@ void test_max()
         stream.precision(std::numeric_limits<integer_type>::max_digits10);
         stream << value;
         auto input = stream.str();
-        decoder_type decoder(input);
+        decoder_type decoder(input.data(), input.size());
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
         TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<integer_type>(), value);
         decoder.next();
@@ -1421,7 +1436,7 @@ void test_00()
 {
     const char input[] = "\"\x00\"";
     core::detail::string_view view(input, sizeof(input)); // Capture nil character
-    decoder_type decoder(view);
+    decoder_type decoder(view.data(), view.size());
     TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::error_unexpected_token);
 }
 

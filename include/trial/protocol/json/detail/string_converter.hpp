@@ -155,9 +155,9 @@ struct string_converter<CharT, float>
         return {work.begin(), work.end()};
     }
 
-    static float decode(const string_view& view)
+    static float decode(const CharT *data, std::size_t size)
     {
-        return detail::from_string<float>(view.data(), view.size());
+        return detail::from_string<float>(data, size);
     }
 };
 
@@ -177,9 +177,9 @@ struct string_converter<CharT, double>
         return {work.begin(), work.end()};
     }
 
-    static double decode(const string_view& view)
+    static double decode(const CharT *data, std::size_t size)
     {
-        return detail::from_string<double>(view.data(), view.size());
+        return detail::from_string<double>(data, size);
     }
 };
 
@@ -199,9 +199,9 @@ struct string_converter<CharT, long double>
         return {work.begin(), work.end()};
     }
 
-    static long double decode(const string_view& view)
+    static long double decode(const CharT *data, std::size_t size)
     {
-        return detail::from_string<long double>(view.data(), view.size());
+        return detail::from_string<long double>(data, size);
     }
 };
 

@@ -35,10 +35,55 @@ class basic_decoder
 public:
     using size_type = std::size_t;
     using value_type = CharT;
-    using view_type = core::detail::basic_string_view<CharT, core::char_traits<CharT>>;
+    using const_pointer = const value_type *;
+    class view_type
+    {
+    public:
+        view_type() noexcept = default;
+        view_type(const view_type&) noexcept = default;
+        view_type(view_type&&) noexcept = default;
+        view_type& operator=(const view_type&) noexcept = delete;
+        view_type& operator=(view_type&&) noexcept = default;
+
+        view_type(const_pointer first, const_pointer last) : head(first), tail(last) {}
+        view_type(const_pointer first, size_type size) : head(first), tail(head + size) {}
+
+        const_pointer data() const noexcept { return head; }
+        size_type size() const noexcept { return tail - head; }
+        bool empty() const noexcept { return head == tail; }
+        value_type front() const noexcept { return *head; }
+        value_type back() const noexcept { return *(tail - 1); }
+        value_type operator[](size_type index) const noexcept { return head[index]; }
+
+        void remove_prefix(size_type prefix) noexcept { head += prefix; }
+
+        const_pointer begin() const noexcept { return head; }
+        const_pointer end() const noexcept { return tail; }
+
+        // For test purposes
+        template <std::size_t M>
+        bool operator==(const char (&rhs)[M]) const noexcept
+        {
+            const auto rhs_size = M - 1;
+            if (size() != rhs_size)
+                return false;
+            for (std::size_t k = 0; k < rhs_size; ++k)
+            {
+                if ((*this)[k] != rhs[k])
+                    return false;
+            }
+            return true;
+        }
+    private:
+        const_pointer head = nullptr;
+        const_pointer tail = nullptr;
+    };
 
     basic_decoder() = default;
-    basic_decoder(const view_type& input);
+    basic_decoder(const_pointer first, const_pointer last);
+    basic_decoder(const_pointer first, size_type length);
+    template <std::size_t M>
+    basic_decoder(const value_type (&array)[M]);
 
     void next() BOOST_NOEXCEPT;
 

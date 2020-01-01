@@ -157,11 +157,26 @@ struct basic_decoder<CharT>::overloader<std::basic_string<CharT, CharTraits, All
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
-basic_decoder<CharT>::basic_decoder(const view_type& view)
-    : input(view)
+basic_decoder<CharT>::basic_decoder(const_pointer first,
+                                    const_pointer last)
+    : input(first, last)
 {
     current.code = token::detail::code::error_uninitialized;
     next();
+}
+
+template <typename CharT>
+basic_decoder<CharT>::basic_decoder(const_pointer first,
+                                    size_type length)
+    : basic_decoder(first, first + length)
+{
+}
+
+template <typename CharT>
+template <std::size_t M>
+basic_decoder<CharT>::basic_decoder(const value_type (&array)[M])
+    : basic_decoder(array, array + M - 1) // Skip terminating zero
+{
 }
 
 template <typename CharT>
@@ -296,7 +311,7 @@ void basic_decoder<CharT>::signed_integer_value(T& result) const
     static_assert(std::is_signed<T>::value, "T must be signed");
     assert(current.code == token::detail::code::integer);
 
-    typename view_type::const_iterator it = literal().begin();
+    auto it = literal().begin();
 
     const bool is_negative = (*it == traits<CharT>::alpha_minus);
     if (is_negative)
@@ -336,7 +351,7 @@ void basic_decoder<CharT>::unsigned_integer_value(T& result) const
 {
     assert(current.code == token::detail::code::integer);
 
-    typename view_type::const_iterator it = literal().begin();
+    auto it = literal().begin();
 
     const bool is_negative = (*it == traits<CharT>::alpha_minus);
     if (is_negative)
@@ -373,7 +388,7 @@ void basic_decoder<CharT>::real_value(T& output) const
 {
     assert(current.code == token::detail::code::real);
 
-    output = string_converter<CharT, T>::decode(current.view);
+    output = string_converter<CharT, T>::decode(current.view.data(), current.view.size());
 }
 
 template <typename CharT>
@@ -383,7 +398,7 @@ void basic_decoder<CharT>::string_value(T& result) const
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     assert(current.code == token::detail::code::string);
 
-    const typename view_type::size_type  approximateSize = literal().size();
+    const auto approximateSize = literal().size();
     assert(approximateSize >= 2);
     if (result.capacity() < approximateSize)
         result.reserve(approximateSize);
@@ -391,9 +406,9 @@ void basic_decoder<CharT>::string_value(T& result) const
     // Skip initial and terminating quotes
     assert(literal().front() == traits<CharT>::alpha_quote);
     assert(literal().back() == traits<CharT>::alpha_quote);
-    typename view_type::const_iterator begin = literal().begin() + 1;
-    typename view_type::const_iterator end = literal().end() - 1;
-    typename view_type::const_iterator it = begin;
+    const auto begin = literal().begin() + 1;
+    const auto end = literal().end() - 1;
+    auto it = begin;
     while (it != end)
     {
         switch (traits<CharT>::to_category(*it))
@@ -475,7 +490,7 @@ void basic_decoder<CharT>::string_value(T& result) const
 
         case traits_category::narrow:
         {
-            typename view_type::const_iterator head = it;
+            const auto head = it;
             it = traits<CharT>::skip_narrow(++it);
             result.insert(result.end(), head, it);
             continue;
@@ -515,7 +530,7 @@ template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
 {
     token::detail::code::value type = token::detail::code::false_value;
-    typename view_type::const_iterator begin = input.begin();
+    auto begin = input.begin();
 
     const std::size_t size = traits<CharT>::false_text().size();
     if (input.size() < size)
@@ -537,7 +552,7 @@ token::detail::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
     }
 
  end:
-    current.view = view_type(begin, std::distance(begin, input.begin()));
+    current.view = view_type(begin, input.begin());
     return type;
 }
 
@@ -545,7 +560,7 @@ template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
 {
     token::detail::code::value type = token::detail::code::null;
-    typename view_type::const_iterator begin = input.begin();
+    auto begin = input.begin();
 
     const std::size_t size = traits<CharT>::null_text().size();
     if (input.size() < size)
@@ -567,7 +582,7 @@ token::detail::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
     }
 
  end:
-    current.view = view_type(begin, std::distance(begin, input.begin()));
+    current.view = view_type(begin, input.begin());
     return type;
 }
 
@@ -575,7 +590,7 @@ template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
 {
     token::detail::code::value type = token::detail::code::true_value;
-    typename view_type::const_iterator begin = input.begin();
+    auto begin = input.begin();
 
     const std::size_t size = traits<CharT>::true_text().size();
     if (input.size() < size)
@@ -597,14 +612,14 @@ token::detail::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
     }
 
  end:
-    current.view = view_type(begin, std::distance(begin, input.begin()));
+    current.view = view_type(begin, input.begin());
     return type;
 }
 
 template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
 {
-    typename view_type::const_iterator begin = input.begin();
+    auto begin = input.begin();
     token::detail::code::value type = token::detail::code::integer;
 
     const bool is_negative = (*begin == traits<CharT>::alpha_minus);
@@ -619,7 +634,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
     }
 
     {
-        typename view_type::const_iterator digit_begin = input.begin();
+        auto digit_begin = input.begin();
         if (input.front() == traits<CharT>::alpha_0)
         {
             input.remove_prefix(1);
@@ -654,7 +669,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     type = token::detail::code::end;
                     goto end;
                 }
-                typename view_type::const_iterator it = input.begin();
+                auto it = input.begin();
                 while (true)
                 {
                     if (!traits<CharT>::is_digit(it[0])) { break; }
@@ -699,7 +714,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                         goto end;
                     }
                 }
-                typename view_type::const_iterator exponent_begin = input.begin();
+                auto exponent_begin = input.begin();
                 while (!input.empty() && traits<CharT>::is_digit(input.front()))
                 {
                     input.remove_prefix(1);
@@ -713,8 +728,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
         }
     }
  end:
-    std::size_t size = std::distance(begin, input.begin());
-    current.view = view_type(begin, size);
+    current.view = view_type(begin, input.begin());
     return type;
 }
 
@@ -723,8 +737,8 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
 {
     assert(input.front() == traits<CharT>::alpha_quote);
 
-    typename view_type::const_iterator marker = input.begin();
-    typename view_type::const_iterator end = input.end();
+    auto marker = input.begin();
+    const auto end = input.end();
     ++marker; // Skip initial '"'
     while (marker != end)
     {
@@ -796,7 +810,7 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
 
         case traits_category::quote:
             // Handle end of string
-            current.view = view_type(input.begin(), std::distance(input.begin(), marker)); // Includes terminating '"'
+            current.view = view_type(input.begin(), marker); // Includes terminating '"'
             input.remove_prefix(std::distance(input.begin(), marker));
             return token::detail::code::string;
 
@@ -852,14 +866,14 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
     }
  eof:
  error:
-    current.view = view_type(input.begin(), std::distance(input.begin(), marker));
+    current.view = view_type(input.begin(), marker);
     return token::detail::code::error_unexpected_token;
 }
 
 template <typename CharT>
 void basic_decoder<CharT>::skip_whitespaces() BOOST_NOEXCEPT
 {
-    typename view_type::const_iterator it = input.begin();
+    auto it = input.begin();
     while (true)
     {
         if (!traits<CharT>::is_space(it[0])) { break; }

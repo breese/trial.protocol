@@ -37,7 +37,7 @@ class basic_reader
 public:
     using value_type = typename detail::basic_decoder<CharT>::value_type;
     using size_type = typename detail::basic_decoder<CharT>::size_type;
-    using view_type = typename detail::basic_decoder<CharT>::view_type;
+    using view_type = core::detail::basic_string_view<CharT, core::char_traits<CharT>>;
 
     basic_reader();
 
@@ -136,10 +136,10 @@ public:
     template <typename T> void value(T& output) const;
 
     //! @returns A view of the current value before it is converted into its type.
-    const view_type& literal() const BOOST_NOEXCEPT;
+    view_type literal() const BOOST_NOEXCEPT;
 
     //! @returns A view of the remaining buffer.
-    const view_type& tail() const BOOST_NOEXCEPT;
+    view_type tail() const BOOST_NOEXCEPT;
 
 #ifndef BOOST_DOXYGEN_INVOKED
 private:

@@ -188,7 +188,7 @@ basic_reader<CharT>::basic_reader()
 
 template <typename CharT>
 basic_reader<CharT>::basic_reader(const view_type& input)
-    : decoder(input)
+    : decoder(input.begin(), input.end())
 {
     stack.push(token::detail::code::end);
     decoder.code(stack.top().check_outer(decoder));
@@ -298,7 +298,7 @@ bool basic_reader<CharT>::next(token::code::value expect)
 template <typename CharT>
 bool basic_reader<CharT>::next(const view_type& view)
 {
-    decoder = decoder_type(view);
+    decoder = decoder_type(view.data(), view.size());
     return (category() != token::category::status);
 }
 
@@ -319,15 +319,15 @@ void basic_reader<CharT>::value(T& output) const
 }
 
 template <typename CharT>
-auto basic_reader<CharT>::literal() const BOOST_NOEXCEPT -> const view_type&
+auto basic_reader<CharT>::literal() const BOOST_NOEXCEPT -> view_type
 {
-    return decoder.literal();
+    return view_type(decoder.literal().data(), decoder.literal().size());
 }
 
 template <typename CharT>
-auto basic_reader<CharT>::tail() const BOOST_NOEXCEPT -> const view_type&
+auto basic_reader<CharT>::tail() const BOOST_NOEXCEPT -> view_type
 {
-    return decoder.tail();
+    return view_type(decoder.tail().data(), decoder.tail().size());
 }
 
 //-----------------------------------------------------------------------------
