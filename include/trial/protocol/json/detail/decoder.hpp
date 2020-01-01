@@ -55,7 +55,7 @@ public:
         value_type back() const noexcept { return *(tail - 1); }
         value_type operator[](size_type index) const noexcept { return head[index]; }
 
-        void remove_prefix(size_type prefix) noexcept { head += prefix; }
+        void remove_front(size_type amount = 1) noexcept { head += amount; }
 
         const_pointer begin() const noexcept { return head; }
         const_pointer end() const noexcept { return tail; }

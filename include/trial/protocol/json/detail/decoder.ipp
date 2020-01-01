@@ -522,7 +522,7 @@ template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_token(token::detail::code::value type) BOOST_NOEXCEPT
 {
     current.view = view_type(input.begin(), 1);
-    input.remove_prefix(1);
+    input.remove_front();
     return type;
 }
 
@@ -543,11 +543,11 @@ token::detail::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
         type = token::detail::code::error_unexpected_token;
         goto end;
     }
-    input.remove_prefix(size);
+    input.remove_front(size);
     if (!at_keyword_end())
     {
         while (!at_keyword_end())
-            input.remove_prefix(1);
+            input.remove_front();
         type = token::detail::code::error_unexpected_token;
     }
 
@@ -573,11 +573,11 @@ token::detail::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
         type = token::detail::code::error_unexpected_token;
         goto end;
     }
-    input.remove_prefix(size);
+    input.remove_front(size);
     if (!at_keyword_end())
     {
         while (!at_keyword_end())
-            input.remove_prefix(1);
+            input.remove_front();
         type = token::detail::code::error_unexpected_token;
     }
 
@@ -603,11 +603,11 @@ token::detail::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
         type = token::detail::code::error_unexpected_token;
         goto end;
     }
-    input.remove_prefix(size);
+    input.remove_front(size);
     if (!at_keyword_end())
     {
         while (!at_keyword_end())
-            input.remove_prefix(1);
+            input.remove_front();
         type = token::detail::code::error_unexpected_token;
     }
 
@@ -625,7 +625,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
     const bool is_negative = (*begin == traits<CharT>::alpha_minus);
     if (is_negative)
     {
-        input.remove_prefix(1); // Skip '-'
+        input.remove_front(); // Skip '-'
         if (input.empty())
         {
             type = token::detail::code::end;
@@ -637,7 +637,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
         auto digit_begin = input.begin();
         if (input.front() == traits<CharT>::alpha_0)
         {
-            input.remove_prefix(1);
+            input.remove_front();
             if (!input.empty() && traits<CharT>::is_digit(input.front()))
             {
                 // Leading zeros not allowed
@@ -649,7 +649,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
         {
             while (!input.empty() && traits<CharT>::is_digit(input.front()))
             {
-                input.remove_prefix(1);
+                input.remove_front();
             }
         }
         if (input.begin() == digit_begin)
@@ -663,7 +663,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
             if (input.front() == traits<CharT>::alpha_dot)
             {
                 type = token::detail::code::real;
-                input.remove_prefix(1);
+                input.remove_front();
                 if (input.empty())
                 {
                     type = token::detail::code::end;
@@ -683,13 +683,13 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     type = token::detail::code::error_unexpected_token;
                     goto end;
                 }
-                input.remove_prefix(std::distance(input.begin(), it));
+                input.remove_front(std::distance(input.begin(), it));
             }
             if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
                                    (input.front() == traits<CharT>::alpha_e)))
             {
                 type = token::detail::code::real;
-                input.remove_prefix(1);
+                input.remove_front();
                 if (input.empty())
                 {
                     type = token::detail::code::end;
@@ -698,7 +698,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
 
                 if (input.front() == traits<CharT>::alpha_plus)
                 {
-                    input.remove_prefix(1);
+                    input.remove_front();
                     if (input.empty())
                     {
                         type = token::detail::code::end;
@@ -707,7 +707,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                 }
                 else if (input.front() == traits<CharT>::alpha_minus)
                 {
-                    input.remove_prefix(1);
+                    input.remove_front();
                     if (input.empty())
                     {
                         type = token::detail::code::end;
@@ -717,7 +717,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                 auto exponent_begin = input.begin();
                 while (!input.empty() && traits<CharT>::is_digit(input.front()))
                 {
-                    input.remove_prefix(1);
+                    input.remove_front();
                 }
                 if (input.begin() == exponent_begin)
                 {
@@ -811,7 +811,7 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
         case traits_category::quote:
             // Handle end of string
             current.view = view_type(input.begin(), marker); // Includes terminating '"'
-            input.remove_prefix(std::distance(input.begin(), marker));
+            input.remove_front(std::distance(input.begin(), marker));
             return token::detail::code::string;
 
         case traits_category::narrow:
@@ -882,7 +882,7 @@ void basic_decoder<CharT>::skip_whitespaces() BOOST_NOEXCEPT
         if (!traits<CharT>::is_space(it[3])) { it += 3; break; }
         it += 4;
     }
-    input.remove_prefix(std::distance(input.begin(), it));
+    input.remove_front(std::distance(input.begin(), it));
 }
 
 template <typename CharT>
