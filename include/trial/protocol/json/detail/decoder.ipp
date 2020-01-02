@@ -709,9 +709,8 @@ void basic_decoder<CharT>::string_value(T& result) const
     // Skip initial and terminating quotes
     assert(literal().front() == traits<CharT>::alpha_quote);
     assert(literal().back() == traits<CharT>::alpha_quote);
-    const auto begin = literal().begin() + 1;
     const auto end = literal().end() - 1;
-    auto it = begin;
+    auto it = literal().begin() + 1;
     while (it != end)
     {
         switch (traits<CharT>::to_category(*it))
@@ -752,16 +751,11 @@ void basic_decoder<CharT>::string_value(T& result) const
                 {
                     // Convert \uXXXX value to UTF-8
                     assert(std::distance(it, end) >= 5);
-                    std::uint32_t number = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        ++it;
-                        number <<= 4;
-                        if (traits<CharT>::is_hexdigit(*it))
-                        {
-                            number += std::uint32_t(traits<CharT>::to_int(*it));
-                        }
-                    }
+                    std::uint32_t number = (std::uint32_t(traits<CharT>::to_int(it[1])) << 12)
+                        + (std::uint32_t(traits<CharT>::to_int(it[2])) << 8)
+                        + (std::uint32_t(traits<CharT>::to_int(it[3])) << 4)
+                        + (std::uint32_t(traits<CharT>::to_int(it[4])));
+                    it += 4;
                     if (number <= 0x007F)
                     {
                         // 0xxxxxxx
@@ -795,9 +789,49 @@ void basic_decoder<CharT>::string_value(T& result) const
         {
             const auto head = it;
             it = traits<CharT>::skip_narrow(++it);
-            result.insert(result.end(), head, it);
+            result.append(head, it);
             continue;
         }
+
+        case traits_category::extra_1:
+            result += it[0];
+            result += it[1];
+            it += 2;
+            continue;
+
+        case traits_category::extra_2:
+            result += it[0];
+            result += it[1];
+            result += it[2];
+            it += 3;
+            continue;
+
+        case traits_category::extra_3:
+            result += it[0];
+            result += it[1];
+            result += it[2];
+            result += it[3];
+            it += 4;
+            continue;
+
+        case traits_category::extra_4:
+            result += it[0];
+            result += it[1];
+            result += it[2];
+            result += it[3];
+            result += it[4];
+            it += 5;
+            continue;
+
+        case traits_category::extra_5:
+            result += it[0];
+            result += it[1];
+            result += it[2];
+            result += it[3];
+            result += it[4];
+            result += it[5];
+            it += 6;
+            continue;
 
         default:
         {
