@@ -118,8 +118,10 @@ public:
     BOOST_STATIC_CONSTANT(value_type, alpha_b = 'b');
     BOOST_STATIC_CONSTANT(value_type, alpha_e = 'e');
     BOOST_STATIC_CONSTANT(value_type, alpha_f = 'f');
+    BOOST_STATIC_CONSTANT(value_type, alpha_l = 'l');
     BOOST_STATIC_CONSTANT(value_type, alpha_n = 'n');
     BOOST_STATIC_CONSTANT(value_type, alpha_r = 'r');
+    BOOST_STATIC_CONSTANT(value_type, alpha_s = 's');
     BOOST_STATIC_CONSTANT(value_type, alpha_t = 't');
     BOOST_STATIC_CONSTANT(value_type, alpha_u = 'u');
     BOOST_STATIC_CONSTANT(value_type, alpha_bracket_open = '[');
@@ -225,8 +227,10 @@ public:
     BOOST_STATIC_CONSTANT(value_type, alpha_b = 'b');
     BOOST_STATIC_CONSTANT(value_type, alpha_e = 'e');
     BOOST_STATIC_CONSTANT(value_type, alpha_f = 'f');
+    BOOST_STATIC_CONSTANT(value_type, alpha_l = 'l');
     BOOST_STATIC_CONSTANT(value_type, alpha_n = 'n');
     BOOST_STATIC_CONSTANT(value_type, alpha_r = 'r');
+    BOOST_STATIC_CONSTANT(value_type, alpha_s = 's');
     BOOST_STATIC_CONSTANT(value_type, alpha_t = 't');
     BOOST_STATIC_CONSTANT(value_type, alpha_u = 'u');
     BOOST_STATIC_CONSTANT(value_type, alpha_bracket_open = '[');

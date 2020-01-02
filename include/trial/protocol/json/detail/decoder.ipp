@@ -833,29 +833,31 @@ template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
 {
     token::detail::code::value type = token::detail::code::false_value;
-    auto begin = input.begin();
+    auto marker = input.begin();
 
-    const std::size_t size = traits<CharT>::false_text().size();
-    if (input.size() < size)
+    const std::size_t false_length = 5;
+    if (input.size() < false_length)
     {
         type = token::detail::code::error_unexpected_token;
-        goto end;
     }
-    if (traits<CharT>::false_text().compare(0, size, begin, size) != 0)
+    else if ((marker[1] == traits<CharT>::alpha_a) &&
+             (marker[2] == traits<CharT>::alpha_l) &&
+             (marker[3] == traits<CharT>::alpha_s) &&
+             (marker[4] == traits<CharT>::alpha_e))
+    {
+        input.remove_front(false_length);
+        if (!at_keyword_end())
+        {
+            while (!at_keyword_end())
+                input.remove_front();
+            type = token::detail::code::error_unexpected_token;
+        }
+    }
+    else
     {
         type = token::detail::code::error_unexpected_token;
-        goto end;
     }
-    input.remove_front(size);
-    if (!at_keyword_end())
-    {
-        while (!at_keyword_end())
-            input.remove_front();
-        type = token::detail::code::error_unexpected_token;
-    }
-
- end:
-    current.view = view_type(begin, input.begin());
+    current.view = view_type(marker, input.begin());
     return type;
 }
 
@@ -863,29 +865,30 @@ template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
 {
     token::detail::code::value type = token::detail::code::null;
-    auto begin = input.begin();
+    auto marker = input.begin();
 
-    const std::size_t size = traits<CharT>::null_text().size();
-    if (input.size() < size)
+    const std::size_t null_size = 4;
+    if (input.size() < null_size)
     {
         type = token::detail::code::error_unexpected_token;
-        goto end;
     }
-    if (traits<CharT>::null_text().compare(0, size, begin, size) != 0)
+    else if ((marker[1] == traits<CharT>::alpha_u) &&
+             (marker[2] == traits<CharT>::alpha_l) &&
+             (marker[3] == traits<CharT>::alpha_l))
+    {
+        input.remove_front(null_size);
+        if (!at_keyword_end())
+        {
+            while (!at_keyword_end())
+                input.remove_front();
+            type = token::detail::code::error_unexpected_token;
+        }
+    }
+    else
     {
         type = token::detail::code::error_unexpected_token;
-        goto end;
     }
-    input.remove_front(size);
-    if (!at_keyword_end())
-    {
-        while (!at_keyword_end())
-            input.remove_front();
-        type = token::detail::code::error_unexpected_token;
-    }
-
- end:
-    current.view = view_type(begin, input.begin());
+    current.view = view_type(marker, input.begin());
     return type;
 }
 
@@ -893,29 +896,30 @@ template <typename CharT>
 token::detail::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
 {
     token::detail::code::value type = token::detail::code::true_value;
-    auto begin = input.begin();
+    auto marker = input.begin();
 
-    const std::size_t size = traits<CharT>::true_text().size();
-    if (input.size() < size)
+    const std::size_t true_size = 4;
+    if (input.size() < true_size)
     {
         type = token::detail::code::error_unexpected_token;
-        goto end;
     }
-    if (traits<CharT>::true_text().compare(0, size, begin, size) != 0)
+    else if ((marker[1] == traits<CharT>::alpha_r) &&
+             (marker[2] == traits<CharT>::alpha_u) &&
+             (marker[3] == traits<CharT>::alpha_e))
+    {
+        input.remove_front(true_size);
+        if (!at_keyword_end())
+        {
+            while (!at_keyword_end())
+                input.remove_front();
+            type = token::detail::code::error_unexpected_token;
+        }
+    }
+    else
     {
         type = token::detail::code::error_unexpected_token;
-        goto end;
     }
-    input.remove_front(size);
-    if (!at_keyword_end())
-    {
-        while (!at_keyword_end())
-            input.remove_front();
-        type = token::detail::code::error_unexpected_token;
-    }
-
- end:
-    current.view = view_type(begin, input.begin());
+    current.view = view_type(marker, input.begin());
     return type;
 }
 
