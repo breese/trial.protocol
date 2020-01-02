@@ -161,7 +161,7 @@ basic_decoder<CharT>::basic_decoder(const_pointer first,
                                     const_pointer last)
     : input(first, last)
 {
-    current.code = token::detail::code::error_uninitialized;
+    current.code = token::detail::code::uninitialized;
     next();
 }
 
@@ -200,24 +200,12 @@ std::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
 template <typename CharT>
 void basic_decoder<CharT>::next() BOOST_NOEXCEPT
 {
-    switch (current.code)
+    if (current.code < 0)
+        return; // Already marked as error
+    if (current.code == token::detail::code::end)
     {
-    case token::detail::code::error_uninitialized:
-        break;
-    case token::detail::code::error_unexpected_token:
-    case token::detail::code::error_invalid_key:
-    case token::detail::code::error_invalid_value:
-    case token::detail::code::error_incompatible_type:
-    case token::detail::code::error_unbalanced_end_array:
-    case token::detail::code::error_unbalanced_end_object:
-    case token::detail::code::error_expected_end_array:
-    case token::detail::code::error_expected_end_object:
-        return;
-    case token::detail::code::end:
         current.code = token::detail::code::error_unexpected_token;
         return;
-    default:
-        break;
     }
 
     skip_whitespaces();

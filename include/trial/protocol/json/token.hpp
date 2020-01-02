@@ -31,16 +31,8 @@ struct code
 {
     enum value
     {
-        end,
-        error_uninitialized,
-        error_unexpected_token,
-        error_invalid_key,
-        error_invalid_value,
-        error_incompatible_type,
-        error_unbalanced_end_array,
-        error_unbalanced_end_object,
-        error_expected_end_array,
-        error_expected_end_object,
+        end = 0,
+        uninitialized,
 
         null,
         true_value,
@@ -55,7 +47,16 @@ struct code
         end_object,
 
         value_separator,
-        name_separator
+        name_separator,
+
+        error_unexpected_token = -1,
+        error_invalid_key = -2,
+        error_invalid_value = -3,
+        error_incompatible_type = -4,
+        error_unbalanced_end_array = -5,
+        error_unbalanced_end_object = -6,
+        error_expected_end_array = -7,
+        error_expected_end_object = -8
     };
 };
 
