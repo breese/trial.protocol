@@ -12,6 +12,3 @@ add_subdirectory(pretty_printer)
 add_subdirectory(property_tree)
 add_subdirectory(push_parser)
 add_subdirectory(chunked_push_parser)
-
-# FIXME
-add_subdirectory(count_push_parser)
