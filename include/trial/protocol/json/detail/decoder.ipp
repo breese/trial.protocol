@@ -392,7 +392,6 @@ void basic_decoder<CharT>::real_value(T& output) const
     static constexpr T one = T(1.0);
     static constexpr T base = T(10.0);
 
-    const CharT * const end = current.view.end();
     const CharT *marker = current.view.begin();
     T result = zero;
     const bool is_negative = *marker == detail::traits<CharT>::alpha_minus;
@@ -413,35 +412,270 @@ void basic_decoder<CharT>::real_value(T& output) const
     {
         ++marker;
         T fraction = zero;
-        T scale = one;
-        // The following loop is an optimization. Measure the performance before making
-        // any changes to this loop.
-        static constexpr T superbase = T(1e4);
-        while (end - marker > 4)
-        {
-            const auto delta1000 = unsigned(marker[0] - detail::traits<CharT>::alpha_0);
-            const auto delta100 = unsigned(marker[1] - detail::traits<CharT>::alpha_0);
-            const auto delta10 = unsigned(marker[2] - detail::traits<CharT>::alpha_0);
-            const auto delta1 = unsigned(marker[3] - detail::traits<CharT>::alpha_0);
-            const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
-            if (std::max(delta1000, delta100) > 9 || std::max(delta10, delta1) > 9)
-                break;
-            fraction = fraction * superbase + delta;
-            scale *= superbase;
-            marker += 4;
-        }
 
-        while (end > marker)
+        static constexpr T em1[] = { 0e-1, 1e-1, 2e-1, 3e-1, 4e-1, 5e-1, 6e-1, 7e-1, 8e-1, 9e-1 };
+        static constexpr T em2[] = { 0e-2, 1e-2, 2e-2, 3e-2, 4e-2, 5e-2, 6e-2, 7e-2, 8e-2, 9e-2 };
+        static constexpr T em3[] = { 0e-3, 1e-3, 2e-3, 3e-3, 4e-3, 5e-3, 6e-3, 7e-3, 8e-3, 9e-3 };
+        static constexpr T em4[] = { 0e-4, 1e-4, 2e-4, 3e-4, 4e-4, 5e-4, 6e-4, 7e-4, 8e-4, 9e-4 };
+        static constexpr T em5[] = { 0e-5, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5, 6e-5, 7e-5, 8e-5, 9e-5 };
+        static constexpr T em6[] = { 0e-6, 1e-6, 2e-6, 3e-6, 4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6 };
+        static constexpr T em7[] = { 0e-7, 1e-7, 2e-7, 3e-7, 4e-7, 5e-7, 6e-7, 7e-7, 8e-7, 9e-7 };
+        static constexpr T em8[] = { 0e-8, 1e-8, 2e-8, 3e-8, 4e-8, 5e-8, 6e-8, 7e-8, 8e-8, 9e-8 };
+        static constexpr T em9[] = { 0e-9, 1e-9, 2e-9, 3e-9, 4e-9, 5e-9, 6e-9, 7e-9, 8e-9, 9e-9 };
+        static constexpr T em10[] = { 0e-10, 1e-10, 2e-10, 3e-10, 4e-10, 5e-10, 6e-10, 7e-10, 8e-10, 9e-10 };
+        static constexpr T em11[] = { 0e-11, 1e-11, 2e-11, 3e-11, 4e-11, 5e-11, 6e-11, 7e-11, 8e-11, 9e-11 };
+        static constexpr T em12[] = { 0e-12, 1e-12, 2e-12, 3e-12, 4e-12, 5e-12, 6e-12, 7e-12, 8e-12, 9e-12 };
+        static constexpr T em13[] = { 0e-13, 1e-13, 2e-13, 3e-13, 4e-13, 5e-13, 6e-13, 7e-13, 8e-13, 9e-13 };
+        static constexpr T em14[] = { 0e-14, 1e-14, 2e-14, 3e-14, 4e-14, 5e-14, 6e-14, 7e-14, 8e-14, 9e-14 };
+        static constexpr T em15[] = { 0e-15, 1e-15, 2e-15, 3e-15, 4e-15, 5e-15, 6e-15, 7e-15, 8e-15, 9e-15 };
+        static constexpr T em16[] = { 0e-16, 1e-16, 2e-16, 3e-16, 4e-16, 5e-16, 6e-16, 7e-16, 8e-16, 9e-16 };
+        static constexpr T em17[] = { 0e-17, 1e-17, 2e-17, 3e-17, 4e-17, 5e-17, 6e-17, 7e-17, 8e-17, 9e-17 };
+        static constexpr T em18[] = { 0e-18, 1e-18, 2e-18, 3e-18, 4e-18, 5e-18, 6e-18, 7e-18, 8e-18, 9e-18 };
+
+        const auto fraction_size = current.real.fraction_end - marker;
+        switch (fraction_size)
         {
-            const unsigned delta = *marker - detail::traits<CharT>::alpha_0;
-            if (delta > 9)
-                break;
-            scale *= base;
-            fraction *= base;
-            fraction += delta;
-            ++marker;
+        default:
+        {
+            static constexpr T superbase = T(1e4);
+            T scale = one;
+
+            auto it = marker;
+            while (current.real.fraction_end - it > 4)
+            {
+                const auto delta1000 = unsigned(it[0] - detail::traits<CharT>::alpha_0);
+                const auto delta100 = unsigned(it[1] - detail::traits<CharT>::alpha_0);
+                const auto delta10 = unsigned(it[2] - detail::traits<CharT>::alpha_0);
+                const auto delta1 = unsigned(it[3] - detail::traits<CharT>::alpha_0);
+                const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
+                fraction = fraction * superbase + delta;
+                scale *= superbase;
+                it += 4;
+            }
+
+            while (current.real.fraction_end > it)
+            {
+                const unsigned delta = *it - detail::traits<CharT>::alpha_0;
+                scale *= base;
+                fraction *= base;
+                fraction += delta;
+                ++it;
+            }
+            fraction /= scale;
+            break;
         }
-        result += fraction / scale;
+        case 18:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += em12[unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            fraction += em13[unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
+            fraction += em14[unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
+            fraction += em15[unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
+            fraction += em16[unsigned(marker[15] - detail::traits<CharT>::alpha_0)];
+            fraction += em17[unsigned(marker[16] - detail::traits<CharT>::alpha_0)];
+            fraction += em18[unsigned(marker[17] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 17:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += em12[unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            fraction += em13[unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
+            fraction += em14[unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
+            fraction += em15[unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
+            fraction += em16[unsigned(marker[15] - detail::traits<CharT>::alpha_0)];
+            fraction += em17[unsigned(marker[16] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 16:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += em12[unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            fraction += em13[unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
+            fraction += em14[unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
+            fraction += em15[unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
+            fraction += em16[unsigned(marker[15] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 15:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += em12[unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            fraction += em13[unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
+            fraction += em14[unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
+            fraction += em15[unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 14:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += em12[unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            fraction += em13[unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
+            fraction += em14[unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 13:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += em12[unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            fraction += em13[unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 12:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += em12[unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 11:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += em11[unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 10:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += em10[unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 9:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += em9[unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 8:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += em8[unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 7:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += em7[unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 6:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += em6[unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 5:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += em5[unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 4:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += em4[unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 3:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += em3[unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 2:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += em2[unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 1:
+            fraction += em1[unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            break;
+        case 0:
+            break;
+        }
+        marker += fraction_size;
+        result += fraction;
     }
     if ((*marker == detail::traits<CharT>::alpha_e) || (*marker == detail::traits<CharT>::alpha_E))
     {
@@ -764,6 +998,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     type = token::detail::code::error_unexpected_token;
                     goto end;
                 }
+                current.real.fraction_end = it;
                 input.remove_front(std::distance(input.begin(), it));
             }
             if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||

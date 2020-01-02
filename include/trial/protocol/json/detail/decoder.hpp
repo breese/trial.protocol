@@ -119,6 +119,10 @@ private:
     {
         mutable token::detail::code::value code;
         view_type view;
+        struct
+        {
+            const_pointer fraction_end = nullptr;
+        } real;
     } current;
 };
 

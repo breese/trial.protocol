@@ -28,11 +28,14 @@ namespace i_number_suite
 
 void i_number_double_huge_neg_exp()
 {
+    const long double tolerance = 1e-18;
     const char input[] = "123.456e-789";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "123.456e-789");
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.value<long double>(), 123.456e-789L);
+    TRIAL_PROTOCOL_TEST_CLOSE(reader.value<long double>(),
+                              123.456e-789L,
+                              tolerance);
 }
 
 void i_number_huge_exp()
