@@ -388,7 +388,88 @@ void basic_decoder<CharT>::real_value(T& output) const
 {
     assert(current.code == token::detail::code::real);
 
-    output = string_converter<CharT, T>::decode(current.view.data(), current.view.size());
+    static constexpr T zero = T(0.0);
+    static constexpr T one = T(1.0);
+    static constexpr T base = T(10.0);
+
+    const CharT * const end = current.view.end();
+    const CharT *marker = current.view.begin();
+    T result = zero;
+    const bool is_negative = *marker == detail::traits<CharT>::alpha_minus;
+    if (is_negative)
+    {
+        ++marker;
+    }
+    while (true)
+    {
+        const unsigned delta = *marker - detail::traits<CharT>::alpha_0;
+        if (delta > 9)
+            break;
+        result *= base;
+        result += delta;
+        ++marker;
+    }
+    if (*marker == '.')
+    {
+        ++marker;
+        T fraction = zero;
+        T scale = one;
+        // The following loop is an optimization. Measure the performance before making
+        // any changes to this loop.
+        static constexpr T superbase = T(1e4);
+        while (end - marker > 4)
+        {
+            const auto delta1000 = unsigned(marker[0] - detail::traits<CharT>::alpha_0);
+            const auto delta100 = unsigned(marker[1] - detail::traits<CharT>::alpha_0);
+            const auto delta10 = unsigned(marker[2] - detail::traits<CharT>::alpha_0);
+            const auto delta1 = unsigned(marker[3] - detail::traits<CharT>::alpha_0);
+            const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
+            if (std::max(delta1000, delta100) > 9 || std::max(delta10, delta1) > 9)
+                break;
+            fraction = fraction * superbase + delta;
+            scale *= superbase;
+            marker += 4;
+        }
+
+        while (end > marker)
+        {
+            const unsigned delta = *marker - detail::traits<CharT>::alpha_0;
+            if (delta > 9)
+                break;
+            scale *= base;
+            fraction *= base;
+            fraction += delta;
+            ++marker;
+        }
+        result += fraction / scale;
+    }
+    if ((*marker == detail::traits<CharT>::alpha_e) || (*marker == detail::traits<CharT>::alpha_E))
+    {
+        ++marker;
+        const bool is_exponent_negative = *marker == detail::traits<CharT>::alpha_minus;
+        if (is_exponent_negative || *marker == detail::traits<CharT>::alpha_plus)
+        {
+            ++marker;
+        }
+        int exponent = 0;
+        const int max = std::numeric_limits<int>::max();
+        while (true)
+        {
+            const unsigned delta = *marker - detail::traits<CharT>::alpha_0;
+            if (delta > 9)
+                break;
+            if (max / 10 < exponent) // Overflow
+            {
+                output = std::numeric_limits<T>::infinity();
+                return;
+            }
+            exponent *= 10;
+            exponent += delta;
+            ++marker;
+        }
+        result *= detail::power10<T>(is_exponent_negative ? -exponent : exponent);
+    }
+    output = is_negative ? -result : result;
 }
 
 template <typename CharT>

@@ -50,90 +50,6 @@ RealT power10(int exponent)
     }
 }
 
-template <typename RealT, typename CharT>
-RealT from_string(const CharT * const head, std::size_t size) noexcept
-{
-    static constexpr RealT zero = RealT(0.0);
-    static constexpr RealT one = RealT(1.0);
-    static constexpr RealT base = RealT(10.0);
-
-    const CharT *tail = head + size;
-    const CharT *current = head;
-    RealT result = zero;
-    const bool is_negative = *current == detail::traits<CharT>::alpha_minus;
-    if (is_negative)
-    {
-        ++current;
-    }
-    while (true)
-    {
-        const unsigned delta = *current - detail::traits<CharT>::alpha_0;
-        if (delta > 9)
-            break;
-        result *= base;
-        result += delta;
-        ++current;
-    }
-    if (*current == '.')
-    {
-        ++current;
-        RealT fraction = zero;
-        RealT scale = one;
-        // The following loop is an optimization. Measure the performance before making
-        // any changes to this loop.
-        static constexpr RealT superbase = RealT(1e4);
-        while (tail - current > 4)
-        {
-            const auto delta1000 = unsigned(current[0] - detail::traits<CharT>::alpha_0);
-            const auto delta100 = unsigned(current[1] - detail::traits<CharT>::alpha_0);
-            const auto delta10 = unsigned(current[2] - detail::traits<CharT>::alpha_0);
-            const auto delta1 = unsigned(current[3] - detail::traits<CharT>::alpha_0);
-            if (std::max(delta1000, delta100) > 9 || std::max(delta10, delta1) > 9)
-                break;
-            const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
-            fraction = fraction * superbase + delta;
-            scale *= superbase;
-            current += 4;
-        }
-
-        while (tail > current)
-        {
-            const unsigned delta = *current - detail::traits<CharT>::alpha_0;
-            if (delta > 9)
-                break;
-            scale *= base;
-            fraction *= base;
-            fraction += delta;
-            ++current;
-        }
-        result += fraction / scale;
-    }
-    if ((*current == detail::traits<CharT>::alpha_e) || (*current == detail::traits<CharT>::alpha_E))
-    {
-        ++current;
-        const bool is_exponent_negative = *current == detail::traits<CharT>::alpha_minus;
-        if (is_exponent_negative || *current == detail::traits<CharT>::alpha_plus)
-        {
-            ++current;
-        }
-        int exponent = 0;
-        const int max = std::numeric_limits<int>::max();
-        while (true)
-        {
-            const unsigned delta = *current - detail::traits<CharT>::alpha_0;
-            if (delta > 9)
-                break;
-            if (max / 10 < exponent) // Overflow
-                return std::numeric_limits<RealT>::infinity();
-            exponent *= 10;
-            exponent += delta;
-            ++current;
-        }
-        result *= detail::power10<RealT>(is_exponent_negative ? -exponent : exponent);
-    }
-    return is_negative ? -result : result;
-}
-
 template <typename CharT, typename ReturnType>
 struct string_converter
 {
@@ -154,11 +70,6 @@ struct string_converter<CharT, float>
         std::string work = stream.str();
         return {work.begin(), work.end()};
     }
-
-    static float decode(const CharT *data, std::size_t size)
-    {
-        return detail::from_string<float>(data, size);
-    }
 };
 
 template <typename CharT>
@@ -176,11 +87,6 @@ struct string_converter<CharT, double>
         std::string work = stream.str();
         return {work.begin(), work.end()};
     }
-
-    static double decode(const CharT *data, std::size_t size)
-    {
-        return detail::from_string<double>(data, size);
-    }
 };
 
 template <typename CharT>
@@ -197,11 +103,6 @@ struct string_converter<CharT, long double>
         stream << std::showpoint << std::setprecision(std::numeric_limits<long double>::digits10) << value;
         std::string work = stream.str();
         return {work.begin(), work.end()};
-    }
-
-    static long double decode(const CharT *data, std::size_t size)
-    {
-        return detail::from_string<long double>(data, size);
     }
 };
 
