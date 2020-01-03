@@ -121,7 +121,7 @@ struct basic_decoder<CharT>::overloader<ReturnType,
             throw json::error(self.error());
         }
         output = {};
-        return self.template real_value(output);
+        return self.real_value(output);
     }
 };
 
@@ -148,7 +148,7 @@ struct basic_decoder<CharT>::overloader<std::basic_string<CharT, CharTraits, All
             self.current.code = token::detail::code::error_incompatible_type;
             throw json::error(self.error());
         }
-        self.string_value<return_type>(output);
+        self.string_value(output);
     }
 };
 
@@ -159,9 +159,9 @@ struct basic_decoder<CharT>::overloader<std::basic_string<CharT, CharTraits, All
 template <typename CharT>
 basic_decoder<CharT>::basic_decoder(const_pointer first,
                                     const_pointer last)
-    : input(first, last)
+    : input(first, last),
+      current{token::detail::code::uninitialized, {}, {}}
 {
-    current.code = token::detail::code::uninitialized;
     next();
 }
 
@@ -420,7 +420,7 @@ void basic_decoder<CharT>::real_value(T& output) const
         static constexpr T em17[] = { 0e-17, 1e-17, 2e-17, 3e-17, 4e-17, 5e-17, 6e-17, 7e-17, 8e-17, 9e-17 };
         static constexpr T em18[] = { 0e-18, 1e-18, 2e-18, 3e-18, 4e-18, 5e-18, 6e-18, 7e-18, 8e-18, 9e-18 };
 
-        const auto fraction_size = current.real.fraction_end - marker;
+        const auto fraction_size = current.scan.real.fraction_end - marker;
         switch (fraction_size)
         {
         default:
@@ -429,7 +429,7 @@ void basic_decoder<CharT>::real_value(T& output) const
             T scale = one;
 
             auto it = marker;
-            while (current.real.fraction_end - it > 4)
+            while (current.scan.real.fraction_end - it > 4)
             {
                 const auto delta1000 = unsigned(it[0] - detail::traits<CharT>::alpha_0);
                 const auto delta100 = unsigned(it[1] - detail::traits<CharT>::alpha_0);
@@ -441,7 +441,7 @@ void basic_decoder<CharT>::real_value(T& output) const
                 it += 4;
             }
 
-            while (current.real.fraction_end > it)
+            while (current.scan.real.fraction_end > it)
             {
                 const unsigned delta = *it - detail::traits<CharT>::alpha_0;
                 scale *= base;
@@ -711,6 +711,7 @@ void basic_decoder<CharT>::string_value(T& result) const
     assert(literal().back() == traits<CharT>::alpha_quote);
     const auto end = literal().end() - 1;
     auto it = literal().begin() + 1;
+    int segment_index = 0;
     while (it != end)
     {
         switch (traits<CharT>::to_category(*it))
@@ -788,7 +789,15 @@ void basic_decoder<CharT>::string_value(T& result) const
         case traits_category::narrow:
         {
             const auto head = it;
-            it = traits<CharT>::skip_narrow(++it);
+            if (segment_index < current.scan.string.length)
+            {
+                it = current.scan.string.segment[segment_index];
+                ++segment_index;
+            }
+            else
+            {
+                it = traits<CharT>::skip_narrow(++it);
+            }
             result.append(head, it);
             continue;
         }
@@ -1024,7 +1033,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     type = token::detail::code::error_unexpected_token;
                     goto end;
                 }
-                current.real.fraction_end = it;
+                current.scan.real.fraction_end = it;
                 input.remove_front(std::distance(input.begin(), it));
             }
             if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
@@ -1079,6 +1088,7 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
 {
     assert(input.front() == traits<CharT>::alpha_quote);
 
+    current.scan.string.length = 0;
     auto marker = input.begin();
     const auto end = input.end();
     ++marker; // Skip initial '"'
@@ -1157,7 +1167,14 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
             return token::detail::code::string;
 
         case traits_category::narrow:
-            marker = traits<CharT>::skip_narrow(marker);
+            {
+                marker = traits<CharT>::skip_narrow(marker);
+                if (current.scan.string.length < segment_max)
+                {
+                    current.scan.string.segment[current.scan.string.length] = marker;
+                    ++current.scan.string.length;
+                }
+            }
             break;
 
         case traits_category::extra_5:

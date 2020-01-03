@@ -114,15 +114,26 @@ private:
     template <typename T> void string_value(T&) const;
 
 private:
+    static constexpr int segment_max = 32;
     view_type input;
     struct
     {
         mutable token::detail::code::value code;
         view_type view;
-        struct
+        union
         {
-            const_pointer fraction_end = nullptr;
-        } real;
+            // Auxillary information collected during scanning.
+            // Only add trivially destructible types.
+            struct
+            {
+                const_pointer fraction_end;
+            } real;
+            struct
+            {
+                int length;
+                const_pointer segment[segment_max];
+            } string;
+        } scan;
     } current;
 };
 
