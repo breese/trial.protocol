@@ -85,26 +85,26 @@ public:
     template <std::size_t M>
     basic_decoder(const value_type (&array)[M]);
 
-    void next() BOOST_NOEXCEPT;
+    void next() noexcept;
 
-    void code(token::detail::code::value) BOOST_NOEXCEPT;
-    token::detail::code::value code() const BOOST_NOEXCEPT;
-    std::error_code error() const BOOST_NOEXCEPT;
-    const view_type& literal() const BOOST_NOEXCEPT;
-    const view_type& tail() const BOOST_NOEXCEPT;
+    void code(token::detail::code::value) noexcept;
+    token::detail::code::value code() const noexcept;
+    std::error_code error() const noexcept;
+    const view_type& literal() const noexcept;
+    const view_type& tail() const noexcept;
     template <typename ReturnType> ReturnType value() const;
     template <typename T> void value(T&) const;
 
 private:
-    token::detail::code::value next_token(token::detail::code::value) BOOST_NOEXCEPT;
-    token::detail::code::value next_f_keyword() BOOST_NOEXCEPT;
-    token::detail::code::value next_n_keyword() BOOST_NOEXCEPT;
-    token::detail::code::value next_t_keyword() BOOST_NOEXCEPT;
-    token::detail::code::value next_number() BOOST_NOEXCEPT;
-    token::detail::code::value next_string() BOOST_NOEXCEPT;
+    token::detail::code::value next_token(token::detail::code::value) noexcept;
+    token::detail::code::value next_f_keyword() noexcept;
+    token::detail::code::value next_n_keyword() noexcept;
+    token::detail::code::value next_t_keyword() noexcept;
+    token::detail::code::value next_number() noexcept;
+    token::detail::code::value next_string() noexcept;
 
-    void skip_whitespaces() BOOST_NOEXCEPT;
-    bool at_keyword_end() const BOOST_NOEXCEPT;
+    void skip_whitespaces() noexcept;
+    bool at_keyword_end() const noexcept;
 
     template <typename ReturnType, typename Enable = void>
     struct overloader;
@@ -122,7 +122,7 @@ private:
     view_type input;
     struct
     {
-        mutable token::detail::code::value code;
+        token::detail::code::value code;
         view_type view;
         union
         {

@@ -64,8 +64,8 @@ struct basic_decoder<CharT>::overloader<ReturnType,
     {
         if (self.code() != token::detail::code::integer)
         {
-            self.current.code = token::detail::code::error_incompatible_type;
-            throw json::error(self.error());
+            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
+            throw json::error(errc);
         }
         output = {};
         return self.signed_integer_value(output);
@@ -90,8 +90,8 @@ struct basic_decoder<CharT>::overloader<ReturnType,
     {
         if (self.code() != token::detail::code::integer)
         {
-            self.current.code = token::detail::code::error_incompatible_type;
-            throw json::error(self.error());
+            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
+            throw json::error(errc);
         }
         output = {};
         return self.unsigned_integer_value(output);
@@ -117,8 +117,8 @@ struct basic_decoder<CharT>::overloader<ReturnType,
     {
         if (self.code() != token::detail::code::real)
         {
-            self.current.code = token::detail::code::error_incompatible_type;
-            throw json::error(self.error());
+            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
+            throw json::error(errc);
         }
         output = {};
         return self.real_value(output);
@@ -145,8 +145,8 @@ struct basic_decoder<CharT>::overloader<std::basic_string<CharT, CharTraits, All
     {
         if (self.code() != token::detail::code::string)
         {
-            self.current.code = token::detail::code::error_incompatible_type;
-            throw json::error(self.error());
+            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
+            throw json::error(errc);
         }
         self.string_value(output);
     }
@@ -311,16 +311,16 @@ void basic_decoder<CharT>::signed_integer_value(T& result) const
         {
             if (lowest / T(10) > result) {
                 // Overflow
-                current.code = token::detail::code::error_invalid_value;
-                throw json::error(error());
+                auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+                throw json::error(errc);
             }
             result *= T(10);
 
             const T digit = *it - traits<CharT>::alpha_0;
             if (lowest + digit > result + 1) {
                 // Overflow
-                current.code = token::detail::code::error_invalid_value;
-                throw json::error(error());
+                auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+                throw json::error(errc);
             }
             result -= digit;
 
@@ -344,8 +344,8 @@ void basic_decoder<CharT>::unsigned_integer_value(T& result) const
     const bool is_negative = (*it == traits<CharT>::alpha_minus);
     if (is_negative)
     {
-        current.code = token::detail::code::error_invalid_value;
-        throw json::error(error());
+        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+        throw json::error(errc);
     }
 
     const T max = std::numeric_limits<T>::max();
@@ -353,16 +353,16 @@ void basic_decoder<CharT>::unsigned_integer_value(T& result) const
     {
         if (max / T(10) < result) {
             // Overflow
-            current.code = token::detail::code::error_invalid_value;
-            throw json::error(error());
+            auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+            throw json::error(errc);
         }
         result *= T(10);
 
         const T digit = *it - traits<CharT>::alpha_0;
         if (max - digit < result) {
             // Overflow
-            current.code = token::detail::code::error_invalid_value;
-            throw json::error(error());
+            auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+            throw json::error(errc);
         }
         result += digit;
 
@@ -381,8 +381,8 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        current.code = token::detail::code::error_invalid_value;
-        throw json::error(error());
+        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+        throw json::error(errc);
     }
 
     static constexpr T number[][10] = {
@@ -428,8 +428,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const
         goto digit_1;
     }
 
-    current.code = token::detail::code::error_invalid_value;
-    throw json::error(error());
+    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
 
 digit_2:
     result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
@@ -449,8 +448,8 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        current.code = token::detail::code::error_invalid_value;
-        throw json::error(error());
+        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+        throw json::error(errc);
     }
 
     static constexpr T number[][10] = {
@@ -521,8 +520,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const
         goto digit_1;
     }
 
-    current.code = token::detail::code::error_invalid_value;
-    throw json::error(error());
+    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
 
 digit_4:
     result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
@@ -546,8 +544,8 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        current.code = token::detail::code::error_invalid_value;
-        throw json::error(error());
+        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+        throw json::error(errc);
     }
 
     static constexpr T number[][10] = {
@@ -670,8 +668,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const
         goto digit_1;
     }
 
-    current.code = token::detail::code::error_invalid_value;
-    throw json::error(error());
+    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
 
 digit_9:
     result += number[8][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
@@ -705,8 +702,8 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        current.code = token::detail::code::error_invalid_value;
-        throw json::error(error());
+        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
+        throw json::error(errc);
     }
 
     static constexpr T number[][10] = {
@@ -936,8 +933,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const
         goto digit_1;
     }
 
-    current.code = token::detail::code::error_invalid_value;
-    throw json::error(error());
+    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
 
 digit_19:
     result += number[18][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
