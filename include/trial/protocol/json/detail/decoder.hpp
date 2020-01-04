@@ -110,6 +110,10 @@ private:
     struct overloader;
     template <typename T> void signed_integer_value(T&) const;
     template <typename T> void unsigned_integer_value(T&) const;
+    void unsigned_integer_value(std::uint8_t&) const;
+    void unsigned_integer_value(std::uint16_t&) const;
+    void unsigned_integer_value(std::uint32_t&) const;
+    void unsigned_integer_value(std::uint64_t&) const;
     template <typename T> void real_value(T&) const;
     template <typename T> void string_value(T&) const;
 
@@ -126,12 +130,13 @@ private:
             // Only add trivially destructible types.
             struct
             {
-                const_pointer fraction_end;
-            } real;
+                const_pointer integer_tail;
+                const_pointer fraction_tail;
+            } number;
             struct
             {
                 int length;
-                const_pointer segment[segment_max];
+                const_pointer segment_tail[segment_max];
             } string;
         } scan;
     } current;

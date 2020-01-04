@@ -371,6 +371,616 @@ void basic_decoder<CharT>::unsigned_integer_value(T& result) const
 }
 
 template <typename CharT>
+void basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const
+{
+    using T = std::uint8_t;
+
+    assert(current.code == token::detail::code::integer);
+
+    auto marker = current.view.begin();
+
+    if (*marker == traits<CharT>::alpha_minus)
+    {
+        current.code = token::detail::code::error_invalid_value;
+        throw json::error(error());
+    }
+
+    static constexpr T number[][10] = {
+        { UINT8_C(0), UINT8_C(1), UINT8_C(2), UINT8_C(3), UINT8_C(4), UINT8_C(5), UINT8_C(6), UINT8_C(7), UINT8_C(8), UINT8_C(9) },
+        { UINT8_C(0), UINT8_C(10), UINT8_C(20), UINT8_C(30), UINT8_C(40), UINT8_C(50), UINT8_C(60), UINT8_C(70), UINT8_C(80), UINT8_C(90) },
+        { UINT8_C(0), UINT8_C(100), UINT8_C(200) }
+    };
+
+    constexpr int max_digits = 3; // Nudge optimizer to reduce jumps
+    T result = {};
+    switch (max_digits - (current.scan.number.integer_tail - marker))
+    {
+    default:
+        break;
+
+    case max_digits - 3:
+    {
+        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit3 > 2)
+            break;
+        result += number[2][digit3];
+        if (digit3 < 2)
+            goto digit_2;
+
+        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit2 > 5)
+            break;
+        result += number[1][digit2];
+        if (digit2 < 5)
+            goto digit_1;
+
+        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit1 > 5)
+            break;
+        result += number[0][digit1];
+
+        output = result;
+        return;
+    }
+    case max_digits - 2:
+        goto digit_2;
+    case max_digits - 1:
+        goto digit_1;
+    }
+
+    current.code = token::detail::code::error_invalid_value;
+    throw json::error(error());
+
+digit_2:
+    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_1:
+    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    output = result;
+}
+
+template <typename CharT>
+void basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const
+{
+    using T = std::uint16_t;
+
+    assert(current.code == token::detail::code::integer);
+
+    auto marker = current.view.begin();
+
+    if (*marker == traits<CharT>::alpha_minus)
+    {
+        current.code = token::detail::code::error_invalid_value;
+        throw json::error(error());
+    }
+
+    static constexpr T number[][10] = {
+        { UINT16_C(0), UINT16_C(1), UINT16_C(2), UINT16_C(3), UINT16_C(4), UINT16_C(5), UINT16_C(6), UINT16_C(7), UINT16_C(8), UINT16_C(9) },
+        { UINT16_C(0), UINT16_C(10), UINT16_C(20), UINT16_C(30), UINT16_C(40), UINT16_C(50), UINT16_C(60), UINT16_C(70), UINT16_C(80), UINT16_C(90) },
+        { UINT16_C(0), UINT16_C(100), UINT16_C(200), UINT16_C(300), UINT16_C(400), UINT16_C(500), UINT16_C(600), UINT16_C(700), UINT16_C(800), UINT16_C(900) },
+        { UINT16_C(0), UINT16_C(1000), UINT16_C(2000), UINT16_C(3000), UINT16_C(4000), UINT16_C(5000), UINT16_C(6000), UINT16_C(7000), UINT16_C(8000), UINT16_C(9000) },
+        { UINT16_C(0), UINT16_C(10000), UINT16_C(20000), UINT16_C(30000), UINT16_C(40000), UINT16_C(50000), UINT16_C(60000) }
+    };
+
+    constexpr int max_digits = 5;
+    T result = {};
+    switch (max_digits - (current.scan.number.integer_tail - marker))
+    {
+    default:
+        break;
+
+    case max_digits - 5:
+    {
+        const auto digit5 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit5 > 6)
+            break;
+        result += number[4][digit5];
+        if (digit5 < 6)
+            goto digit_4;
+        assert(digit5 == 6);
+
+        const auto digit4 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit4 > 5)
+            break;
+        result += number[3][digit4];
+        if (digit4 < 5)
+            goto digit_3;
+        assert(digit4 == 5);
+
+        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit3 > 5)
+            break;
+        result += number[2][digit3];
+        if (digit3 < 5)
+            goto digit_2;
+        assert(digit3 == 5);
+
+        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit2 > 3)
+            break;
+        result += number[1][digit2];
+        if (digit2 < 3)
+            goto digit_1;
+        assert(digit2 == 3);
+
+        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit1 > 5)
+            break;
+        result += number[0][digit1];
+
+        output = result;
+        return;
+    }
+
+    case max_digits - 4:
+        goto digit_4;
+    case max_digits - 3:
+        goto digit_3;
+    case max_digits - 2:
+        goto digit_2;
+    case max_digits - 1:
+        goto digit_1;
+    }
+
+    current.code = token::detail::code::error_invalid_value;
+    throw json::error(error());
+
+digit_4:
+    result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_3:
+    result += number[2][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_2:
+    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_1:
+    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    output = result;
+}
+
+template <typename CharT>
+void basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const
+{
+    using T = std::uint32_t;
+
+    assert(current.code == token::detail::code::integer);
+
+    auto marker = current.view.begin();
+
+    if (*marker == traits<CharT>::alpha_minus)
+    {
+        current.code = token::detail::code::error_invalid_value;
+        throw json::error(error());
+    }
+
+    static constexpr T number[][10] = {
+        { UINT32_C(0), UINT32_C(1), UINT32_C(2), UINT32_C(3), UINT32_C(4), UINT32_C(5), UINT32_C(6), UINT32_C(7), UINT32_C(8), UINT32_C(9) },
+        { UINT32_C(0), UINT32_C(10), UINT32_C(20), UINT32_C(30), UINT32_C(40), UINT32_C(50), UINT32_C(60), UINT32_C(70), UINT32_C(80), UINT32_C(90) },
+        { UINT32_C(0), UINT32_C(100), UINT32_C(200), UINT32_C(300), UINT32_C(400), UINT32_C(500), UINT32_C(600), UINT32_C(700), UINT32_C(800), UINT32_C(900) },
+        { UINT32_C(0), UINT32_C(1000), UINT32_C(2000), UINT32_C(3000), UINT32_C(4000), UINT32_C(5000), UINT32_C(6000), UINT32_C(7000), UINT32_C(8000), UINT32_C(9000) },
+        { UINT32_C(0), UINT32_C(10000), UINT32_C(20000), UINT32_C(30000), UINT32_C(40000), UINT32_C(50000), UINT32_C(60000), UINT32_C(70000), UINT32_C(80000), UINT32_C(90000) },
+        { UINT32_C(0), UINT32_C(100000), UINT32_C(200000), UINT32_C(300000), UINT32_C(400000), UINT32_C(500000), UINT32_C(600000), UINT32_C(700000), UINT32_C(800000), UINT32_C(900000) },
+        { UINT32_C(0), UINT32_C(1000000), UINT32_C(2000000), UINT32_C(3000000), UINT32_C(4000000), UINT32_C(5000000), UINT32_C(6000000), UINT32_C(7000000), UINT32_C(8000000), UINT32_C(9000000) },
+        { UINT32_C(0), UINT32_C(10000000), UINT32_C(20000000), UINT32_C(30000000), UINT32_C(40000000), UINT32_C(50000000), UINT32_C(60000000), UINT32_C(70000000), UINT32_C(80000000), UINT32_C(90000000) },
+        { UINT32_C(0), UINT32_C(100000000), UINT32_C(200000000), UINT32_C(300000000), UINT32_C(400000000), UINT32_C(500000000), UINT32_C(600000000), UINT32_C(700000000), UINT32_C(800000000), UINT32_C(900000000) },
+        { UINT32_C(0), UINT32_C(1000000000), UINT32_C(2000000000), UINT32_C(3000000000), UINT32_C(4000000000) }
+    };
+
+    constexpr int max_digits = 10;
+    T result = {};
+    switch (max_digits - (current.scan.number.integer_tail - marker))
+    {
+    default:
+        break;
+
+    case max_digits - 10:
+    {
+        const auto digit10 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit10 > 4)
+            break;
+        result += number[9][digit10];
+        if (digit10 < 4)
+            goto digit_9;
+        assert(digit10 == 4);
+
+        const auto digit9 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit9 > 2)
+            break;
+        result += number[8][digit9];
+        if (digit9 < 2)
+            goto digit_8;
+        assert(digit9 == 2);
+
+        const auto digit8 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        assert(digit8 <= 9);
+        result += number[7][digit8];
+        if (digit8 < 9)
+            goto digit_7;
+        assert(digit8 == 9);
+
+        const auto digit7 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit7 > 4)
+            break;
+        result += number[6][digit7];
+        if (digit7 < 4)
+            goto digit_6;
+        assert(digit7 == 4);
+
+        const auto digit6 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        assert(digit6 <= 9);
+        result += number[5][digit6];
+        if (digit6 < 9)
+            goto digit_5;
+        assert(digit6 == 9);
+
+        const auto digit5 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit5 > 6)
+            break;
+        result += number[4][digit5];
+        if (digit5 < 6)
+            goto digit_4;
+        assert(digit5 == 6);
+
+        const auto digit4 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit4 > 7)
+            break;
+        result += number[3][digit4];
+        if (digit4 < 7)
+            goto digit_3;
+        assert(digit4 == 7);
+
+        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit3 > 2)
+            break;
+        result += number[2][digit3];
+        if (digit3 < 2)
+            goto digit_2;
+        assert(digit3 == 2);
+
+        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        assert(digit2 <= 9);
+        result += number[1][digit2];
+        if (digit2 < 9)
+            goto digit_1;
+        assert(digit2 == 9);
+
+        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit1 > 5)
+            break;
+        result += number[0][digit1];
+
+        output = result;
+        return;
+    }
+
+    case max_digits - 9:
+        goto digit_9;
+    case max_digits - 8:
+        goto digit_8;
+    case max_digits - 7:
+        goto digit_7;
+    case max_digits - 6:
+        goto digit_6;
+    case max_digits - 5:
+        goto digit_5;
+    case max_digits - 4:
+        goto digit_4;
+    case max_digits - 3:
+        goto digit_3;
+    case max_digits - 2:
+        goto digit_2;
+    case max_digits - 1:
+        goto digit_1;
+    }
+
+    current.code = token::detail::code::error_invalid_value;
+    throw json::error(error());
+
+digit_9:
+    result += number[8][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_8:
+    result += number[7][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_7:
+    result += number[6][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_6:
+    result += number[5][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_5:
+    result += number[4][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_4:
+    result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_3:
+    result += number[2][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_2:
+    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_1:
+    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    output = result;
+}
+
+template <typename CharT>
+void basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const
+{
+    using T = std::uint64_t;
+
+    assert(current.code == token::detail::code::integer);
+
+    auto marker = current.view.begin();
+
+    if (*marker == traits<CharT>::alpha_minus)
+    {
+        current.code = token::detail::code::error_invalid_value;
+        throw json::error(error());
+    }
+
+    static constexpr T number[][10] = {
+        { UINT64_C(0), UINT64_C(1), UINT64_C(2), UINT64_C(3), UINT64_C(4), UINT64_C(5), UINT64_C(6), UINT64_C(7), UINT64_C(8), UINT64_C(9) },
+        { UINT64_C(0), UINT64_C(10), UINT64_C(20), UINT64_C(30), UINT64_C(40), UINT64_C(50), UINT64_C(60), UINT64_C(70), UINT64_C(80), UINT64_C(90) },
+        { UINT64_C(0), UINT64_C(100), UINT64_C(200), UINT64_C(300), UINT64_C(400), UINT64_C(500), UINT64_C(600), UINT64_C(700), UINT64_C(800), UINT64_C(900) },
+        { UINT64_C(0), UINT64_C(1000), UINT64_C(2000), UINT64_C(3000), UINT64_C(4000), UINT64_C(5000), UINT64_C(6000), UINT64_C(7000), UINT64_C(8000), UINT64_C(9000) },
+        { UINT64_C(0), UINT64_C(10000), UINT64_C(20000), UINT64_C(30000), UINT64_C(40000), UINT64_C(50000), UINT64_C(60000), UINT64_C(70000), UINT64_C(80000), UINT64_C(90000) },
+        { UINT64_C(0), UINT64_C(100000), UINT64_C(200000), UINT64_C(300000), UINT64_C(400000), UINT64_C(500000), UINT64_C(600000), UINT64_C(700000), UINT64_C(800000), UINT64_C(900000) },
+        { UINT64_C(0), UINT64_C(1000000), UINT64_C(2000000), UINT64_C(3000000), UINT64_C(4000000), UINT64_C(5000000), UINT64_C(6000000), UINT64_C(7000000), UINT64_C(8000000), UINT64_C(9000000) },
+        { UINT64_C(0), UINT64_C(10000000), UINT64_C(20000000), UINT64_C(30000000), UINT64_C(40000000), UINT64_C(50000000), UINT64_C(60000000), UINT64_C(70000000), UINT64_C(80000000), UINT64_C(90000000) },
+        { UINT64_C(0), UINT64_C(100000000), UINT64_C(200000000), UINT64_C(300000000), UINT64_C(400000000), UINT64_C(500000000), UINT64_C(600000000), UINT64_C(700000000), UINT64_C(800000000), UINT64_C(900000000) },
+        { UINT64_C(0), UINT64_C(1000000000), UINT64_C(2000000000), UINT64_C(3000000000), UINT64_C(4000000000), UINT64_C(5000000000), UINT64_C(6000000000), UINT64_C(7000000000), UINT64_C(8000000000), UINT64_C(9000000000) },
+        { UINT64_C(0), UINT64_C(10000000000), UINT64_C(20000000000), UINT64_C(30000000000), UINT64_C(40000000000), UINT64_C(50000000000), UINT64_C(60000000000), UINT64_C(70000000000), UINT64_C(80000000000), UINT64_C(90000000000) },
+        { UINT64_C(0), UINT64_C(100000000000), UINT64_C(200000000000), UINT64_C(300000000000), UINT64_C(400000000000), UINT64_C(500000000000), UINT64_C(600000000000), UINT64_C(700000000000), UINT64_C(800000000000), UINT64_C(900000000000) },
+        { UINT64_C(0), UINT64_C(1000000000000), UINT64_C(2000000000000), UINT64_C(3000000000000), UINT64_C(4000000000000), UINT64_C(5000000000000), UINT64_C(6000000000000), UINT64_C(7000000000000), UINT64_C(8000000000000), UINT64_C(9000000000000) },
+        { UINT64_C(0), UINT64_C(10000000000000), UINT64_C(20000000000000), UINT64_C(30000000000000), UINT64_C(40000000000000), UINT64_C(50000000000000), UINT64_C(60000000000000), UINT64_C(70000000000000), UINT64_C(80000000000000), UINT64_C(90000000000000) },
+        { UINT64_C(0), UINT64_C(100000000000000), UINT64_C(200000000000000), UINT64_C(300000000000000), UINT64_C(400000000000000), UINT64_C(500000000000000), UINT64_C(600000000000000), UINT64_C(700000000000000), UINT64_C(800000000000000), UINT64_C(900000000000000) },
+        { UINT64_C(0), UINT64_C(1000000000000000), UINT64_C(2000000000000000), UINT64_C(3000000000000000), UINT64_C(4000000000000000), UINT64_C(5000000000000000), UINT64_C(6000000000000000), UINT64_C(7000000000000000), UINT64_C(8000000000000000), UINT64_C(9000000000000000) },
+        { UINT64_C(0), UINT64_C(10000000000000000), UINT64_C(20000000000000000), UINT64_C(30000000000000000), UINT64_C(40000000000000000), UINT64_C(50000000000000000), UINT64_C(60000000000000000), UINT64_C(70000000000000000), UINT64_C(80000000000000000), UINT64_C(90000000000000000) },
+        { UINT64_C(0), UINT64_C(100000000000000000), UINT64_C(200000000000000000), UINT64_C(300000000000000000), UINT64_C(400000000000000000), UINT64_C(500000000000000000), UINT64_C(600000000000000000), UINT64_C(700000000000000000), UINT64_C(800000000000000000), UINT64_C(900000000000000000) },
+        { UINT64_C(0), UINT64_C(1000000000000000000), UINT64_C(2000000000000000000), UINT64_C(3000000000000000000), UINT64_C(4000000000000000000), UINT64_C(5000000000000000000), UINT64_C(6000000000000000000), UINT64_C(7000000000000000000), UINT64_C(8000000000000000000), UINT64_C(9000000000000000000) },
+        { UINT64_C(0), UINT64_C(10000000000000000000) }
+    };
+
+    constexpr int max_digits = 20;
+    T result = {};
+    switch (max_digits - (current.scan.number.integer_tail - marker))
+    {
+    default:
+        break;
+
+    case max_digits - 20:
+    {
+        const auto digit20 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit20 > 1)
+            break;
+        result += number[19][digit20];
+        if (digit20 < 1)
+            goto digit_19;
+        assert(digit20 == 1);
+
+        const auto digit19 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit19 > 8)
+            break;
+        result += number[18][digit19];
+        if (digit19 < 8)
+            goto digit_18;
+        assert(digit19 == 8);
+
+        const auto digit18 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit18 > 4)
+            break;
+        result += number[17][digit18];
+        if (digit18 < 4)
+            goto digit_17;
+        assert(digit18 == 4);
+
+        const auto digit17 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit17 > 4)
+            break;
+        result += number[16][digit17];
+        if (digit17 < 4)
+            goto digit_16;
+        assert(digit17 == 4);
+
+        const auto digit16 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit16 > 6)
+            break;
+        result += number[15][digit16];
+        if (digit16 < 6)
+            goto digit_15;
+        assert(digit16 == 6);
+
+        const auto digit15 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit15 > 7)
+            break;
+        result += number[14][digit15];
+        if (digit15 < 7)
+            goto digit_14;
+        assert(digit15 == 7);
+
+        const auto digit14 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit14 > 4)
+            break;
+        result += number[13][digit14];
+        if (digit14 < 4)
+            goto digit_13;
+        assert(digit14 == 4);
+
+        const auto digit13 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit13 > 4)
+            break;
+        result += number[12][digit13];
+        if (digit13 < 4)
+            goto digit_12;
+        assert(digit13 == 4);
+
+        const auto digit12 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit12 > 0)
+            break;
+        result += number[11][digit12];
+        assert(digit12 == 0);
+
+        const auto digit11 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit11 > 7)
+            break;
+        result += number[10][digit11];
+        if (digit11 < 7)
+            goto digit_10;
+        assert(digit11 == 7);
+
+        const auto digit10 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit10 > 3)
+            break;
+        result += number[9][digit10];
+        if (digit10 < 3)
+            goto digit_9;
+        assert(digit10 == 3);
+
+        const auto digit9 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit9 > 7)
+            break;
+        result += number[8][digit9];
+        if (digit9 < 7)
+            goto digit_8;
+        assert(digit9 == 7);
+
+        const auto digit8 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit8 > 0)
+            break;
+        result += number[7][digit8];
+        assert(digit8 == 0);
+
+        const auto digit7 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        assert(digit7 <= 9);
+        result += number[6][digit7];
+        if (digit7 < 9)
+            goto digit_6;
+        assert(digit7 == 9);
+
+        const auto digit6 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit6 > 5)
+            break;
+        result += number[5][digit6];
+        if (digit6 < 5)
+            goto digit_5;
+        assert(digit6 == 5);
+
+        const auto digit5 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit5 > 5)
+            break;
+        result += number[4][digit5];
+        if (digit5 < 5)
+            goto digit_4;
+        assert(digit5 == 5);
+
+        const auto digit4 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit4 > 1)
+            break;
+        result += number[3][digit4];
+        if (digit4 < 1)
+            goto digit_3;
+        assert(digit4 == 1);
+
+        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit3 > 6)
+            break;
+        result += number[2][digit3];
+        if (digit3 < 6)
+            goto digit_2;
+        assert(digit3 == 6);
+
+        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit2 > 1)
+            break;
+        result += number[1][digit2];
+        if (digit2 < 1)
+            goto digit_1;
+        assert(digit2 == 1);
+
+        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        if (digit1 > 5)
+            break;
+        result += number[0][digit1];
+
+        output = result;
+        return;
+    }
+    case max_digits - 19:
+        goto digit_19;
+    case max_digits - 18:
+        goto digit_18;
+    case max_digits - 17:
+        goto digit_17;
+    case max_digits - 16:
+        goto digit_16;
+    case max_digits - 15:
+        goto digit_15;
+    case max_digits - 14:
+        goto digit_14;
+    case max_digits - 13:
+        goto digit_13;
+    case max_digits - 12:
+        goto digit_12;
+    case max_digits - 11:
+        goto digit_11;
+    case max_digits - 10:
+        goto digit_10;
+    case max_digits - 9:
+        goto digit_9;
+    case max_digits - 8:
+        goto digit_8;
+    case max_digits - 7:
+        goto digit_7;
+    case max_digits - 6:
+        goto digit_6;
+    case max_digits - 5:
+        goto digit_5;
+    case max_digits - 4:
+        goto digit_4;
+    case max_digits - 3:
+        goto digit_3;
+    case max_digits - 2:
+        goto digit_2;
+    case max_digits - 1:
+        goto digit_1;
+    }
+
+    current.code = token::detail::code::error_invalid_value;
+    throw json::error(error());
+
+digit_19:
+    result += number[18][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_18:
+    result += number[17][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_17:
+    result += number[16][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_16:
+    result += number[15][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_15:
+    result += number[14][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_14:
+    result += number[13][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_13:
+    result += number[12][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_12:
+    result += number[11][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_11:
+    result += number[10][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_10:
+    result += number[9][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_9:
+    result += number[8][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_8:
+    result += number[7][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_7:
+    result += number[6][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_6:
+    result += number[5][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_5:
+    result += number[4][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_4:
+    result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_3:
+    result += number[2][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_2:
+    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+digit_1:
+    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    output = result;
+}
+
+template <typename CharT>
 template <typename T>
 void basic_decoder<CharT>::real_value(T& output) const
 {
@@ -420,7 +1030,7 @@ void basic_decoder<CharT>::real_value(T& output) const
         static constexpr T em17[] = { 0e-17, 1e-17, 2e-17, 3e-17, 4e-17, 5e-17, 6e-17, 7e-17, 8e-17, 9e-17 };
         static constexpr T em18[] = { 0e-18, 1e-18, 2e-18, 3e-18, 4e-18, 5e-18, 6e-18, 7e-18, 8e-18, 9e-18 };
 
-        const auto fraction_size = current.scan.real.fraction_end - marker;
+        const auto fraction_size = current.scan.number.fraction_tail - marker;
         switch (fraction_size)
         {
         default:
@@ -429,7 +1039,7 @@ void basic_decoder<CharT>::real_value(T& output) const
             T scale = one;
 
             auto it = marker;
-            while (current.scan.real.fraction_end - it > 4)
+            while (current.scan.number.fraction_tail - it > 4)
             {
                 const auto delta1000 = unsigned(it[0] - detail::traits<CharT>::alpha_0);
                 const auto delta100 = unsigned(it[1] - detail::traits<CharT>::alpha_0);
@@ -441,7 +1051,7 @@ void basic_decoder<CharT>::real_value(T& output) const
                 it += 4;
             }
 
-            while (current.scan.real.fraction_end > it)
+            while (current.scan.number.fraction_tail > it)
             {
                 const unsigned delta = *it - detail::traits<CharT>::alpha_0;
                 scale *= base;
@@ -791,7 +1401,7 @@ void basic_decoder<CharT>::string_value(T& result) const
             const auto head = it;
             if (segment_index < current.scan.string.length)
             {
-                it = current.scan.string.segment[segment_index];
+                it = current.scan.string.segment_tail[segment_index];
                 ++segment_index;
             }
             else
@@ -1008,6 +1618,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
             type = token::detail::code::error_unexpected_token;
             goto end;
         }
+        current.scan.number.integer_tail = input.begin();
         if (!input.empty())
         {
             if (input.front() == traits<CharT>::alpha_dot)
@@ -1033,7 +1644,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
                     type = token::detail::code::error_unexpected_token;
                     goto end;
                 }
-                current.scan.real.fraction_end = it;
+                current.scan.number.fraction_tail = it;
                 input.remove_front(std::distance(input.begin(), it));
             }
             if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
@@ -1171,7 +1782,7 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
                 marker = traits<CharT>::skip_narrow(marker);
                 if (current.scan.string.length < segment_max)
                 {
-                    current.scan.string.segment[current.scan.string.length] = marker;
+                    current.scan.string.segment_tail[current.scan.string.length] = marker;
                     ++current.scan.string.length;
                 }
             }

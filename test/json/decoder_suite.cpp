@@ -707,6 +707,422 @@ void fail_as_string()
                                     json::error, "incompatible type");
 }
 
+void test_uint8_1()
+{
+    const char input[] = "1";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint8_t>(), 1U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint8_2()
+{
+    const char input[] = "12";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint8_t>(), 12U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint8_3()
+{
+    const char input[] = "123";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint8_t>(), 123U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void fail_uint8_too_large()
+{
+    const char input[] = "256";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::uint8_t>(),
+                                    json::error, "invalid value");
+}
+
+void test_uint16_1()
+{
+    const char input[] = "1";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint16_t>(), 1U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint16_2()
+{
+    const char input[] = "12";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint16_t>(), 12U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint16_3()
+{
+    const char input[] = "123";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint16_t>(), 123U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint16_4()
+{
+    const char input[] = "1234";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint16_t>(), 1234U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint16_5()
+{
+    const char input[] = "12345";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint16_t>(), 12345U);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void fail_uint16_too_large()
+{
+    const char input[] = "65536";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::uint16_t>(),
+                                    json::error, "invalid value");
+}
+
+void test_uint32_1()
+{
+    const char input[] = "1";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 1UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_2()
+{
+    const char input[] = "12";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 12UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_3()
+{
+    const char input[] = "123";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 123UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_4()
+{
+    const char input[] = "1234";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 1234UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_5()
+{
+    const char input[] = "12345";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 12345UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_6()
+{
+    const char input[] = "123456";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 123456UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_7()
+{
+    const char input[] = "1234567";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 1234567UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_8()
+{
+    const char input[] = "12345678";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 12345678UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_9()
+{
+    const char input[] = "123456789";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 123456789UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint32_10()
+{
+    const char input[] = "1234567890";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint32_t>(), 1234567890UL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void fail_uint32_too_large()
+{
+    const char input[] = "4294967296";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::uint32_t>(),
+                                    json::error, "invalid value");
+}
+
+void test_uint64_1()
+{
+    const char input[] = "1";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 1ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_2()
+{
+    const char input[] = "12";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 12ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_3()
+{
+    const char input[] = "123";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 123ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_4()
+{
+    const char input[] = "1234";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 1234ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_5()
+{
+    const char input[] = "12345";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 12345ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_6()
+{
+    const char input[] = "123456";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 123456ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_7()
+{
+    const char input[] = "1234567";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 1234567ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_8()
+{
+    const char input[] = "12345678";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 12345678ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_9()
+{
+    const char input[] = "123456789";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 123456789ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_10()
+{
+    const char input[] = "1234567890";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 1234567890ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_11()
+{
+    const char input[] = "12345678901";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 12345678901ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_12()
+{
+    const char input[] = "123456789012";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 123456789012ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_13()
+{
+    const char input[] = "1234567890123";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 1234567890123ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_14()
+{
+    const char input[] = "12345678901234";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 12345678901234ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_15()
+{
+    const char input[] = "123456789012345";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 123456789012345ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_16()
+{
+    const char input[] = "1234567890123456";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 1234567890123456ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_17()
+{
+    const char input[] = "12345678901234567";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 12345678901234567ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_18()
+{
+    const char input[] = "123456789012345678";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 123456789012345678ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_19()
+{
+    const char input[] = "1234567890123456789";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 1234567890123456789ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void test_uint64_20()
+{
+    const char input[] = "12345678901234567890";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.value<std::uint64_t>(), 12345678901234567890ULL);
+    decoder.next();
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::end);
+}
+
+void fail_uint64_too_large()
+{
+    const char input[] = "18446744073709551616";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::detail::code::integer);
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(decoder.value<std::uint64_t>(),
+                                    json::error, "invalid value");
+}
+
 void test_short()
 {
     const char input[] = "1";
@@ -817,6 +1233,52 @@ void run()
     fail_too_large2();
     fail_as_float();
     fail_as_string();
+
+    test_uint8_1();
+    test_uint8_2();
+    test_uint8_3();
+    fail_uint8_too_large();
+
+    test_uint16_1();
+    test_uint16_2();
+    test_uint16_3();
+    test_uint16_4();
+    test_uint16_5();
+    fail_uint16_too_large();
+
+    test_uint32_1();
+    test_uint32_2();
+    test_uint32_3();
+    test_uint32_4();
+    test_uint32_5();
+    test_uint32_6();
+    test_uint32_7();
+    test_uint32_8();
+    test_uint32_9();
+    test_uint32_10();
+    fail_uint32_too_large();
+
+    test_uint64_1();
+    test_uint64_2();
+    test_uint64_3();
+    test_uint64_4();
+    test_uint64_5();
+    test_uint64_6();
+    test_uint64_7();
+    test_uint64_8();
+    test_uint64_9();
+    test_uint64_10();
+    test_uint64_11();
+    test_uint64_12();
+    test_uint64_13();
+    test_uint64_14();
+    test_uint64_15();
+    test_uint64_16();
+    test_uint64_17();
+    test_uint64_18();
+    test_uint64_19();
+    test_uint64_20();
+    fail_uint64_too_large();
 
     test_short();
     test_int();
