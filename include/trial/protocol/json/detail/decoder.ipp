@@ -92,7 +92,7 @@ struct basic_decoder<CharT>::overloader<ReturnType,
             return json::incompatible_type;
         }
         output = {};
-        return self.unsigned_integer_value(output);
+        return self.unsigned_integer_value(self.literal().begin(), output);
     }
 };
 
@@ -292,87 +292,62 @@ auto basic_decoder<CharT>::value(T& output) const noexcept -> json::errc
 
 template <typename CharT>
 template <typename T>
-auto basic_decoder<CharT>::signed_integer_value(T& result) const noexcept -> json::errc
+auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> json::errc
 {
     static_assert(std::is_signed<T>::value, "T must be signed");
+    using unsigned_type = typename std::make_unsigned<T>::type;
     assert(current.code == token::detail::code::integer);
 
-    auto it = literal().begin();
+    auto marker = current.view.begin();
 
-    const bool is_negative = (*it == traits<CharT>::alpha_minus);
+    unsigned_type result = {};
+    const bool is_negative = (*marker == traits<CharT>::alpha_minus);
     if (is_negative)
     {
-        ++it; // Skip minus
+        ++marker; // Skip minus
 
-        const T lowest = std::numeric_limits<T>::lowest();
-        while (it != literal().end())
+        const auto errc = unsigned_integer_value(marker, result);
+        if (errc == json::no_error)
         {
-            if (lowest / T(10) > result) {
-                // Overflow
+            if (result > unsigned_type(-std::numeric_limits<T>::lowest()))
                 return json::invalid_value;
-            }
-            result *= T(10);
-
-            const T digit = *it - traits<CharT>::alpha_0;
-            if (lowest + digit > result + 1) {
-                // Overflow
-                return json::invalid_value;
-            }
-            result -= digit;
-
-            ++it;
+            output = -T(result);
         }
+        return  errc;
     }
     else
     {
-        return unsigned_integer_value(result);
+        const auto errc = unsigned_integer_value(marker, result);
+        if (errc == json::no_error)
+        {
+            if (result > unsigned_type(std::numeric_limits<T>::max()))
+                return json::invalid_value;
+            output = T(result);
+        }
+        return errc;
     }
-    return json::no_error;
 }
 
 template <typename CharT>
 template <typename T>
-auto basic_decoder<CharT>::unsigned_integer_value(T& result) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  T& output) const noexcept -> json::errc
 {
-    assert(current.code == token::detail::code::integer);
-
-    auto it = literal().begin();
-
-    const bool is_negative = (*it == traits<CharT>::alpha_minus);
-    if (is_negative)
-    {
-        return json::invalid_value;
-    }
-
-    const T max = std::numeric_limits<T>::max();
-    while (it != literal().end())
-    {
-        if (max / T(10) < result) {
-            // Overflow
-            return json::invalid_value;
-        }
-        result *= T(10);
-
-        const T digit = *it - traits<CharT>::alpha_0;
-        if (max - digit < result) {
-            // Overflow
-            return json::invalid_value;
-        }
-        result += digit;
-
-        ++it;
-    }
-    return json::no_error;
+    // Coerce into largest supported integer type
+    std::uint64_t result = {};
+    const auto errc = unsigned_integer_value(marker, result);
+    if (errc == no_error)
+        output = T(result);
+    return errc;
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  std::uint8_t& output) const noexcept -> json::errc
 {
     using T = std::uint8_t;
 
     assert(current.code == token::detail::code::integer);
-
-    auto marker = current.view.begin();
 
     if (*marker == traits<CharT>::alpha_minus)
     {
@@ -433,13 +408,12 @@ digit_1:
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  std::uint16_t& output) const noexcept -> json::errc
 {
     using T = std::uint16_t;
 
     assert(current.code == token::detail::code::integer);
-
-    auto marker = current.view.begin();
 
     if (*marker == traits<CharT>::alpha_minus)
     {
@@ -529,13 +503,12 @@ digit_1:
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  std::uint32_t& output) const noexcept -> json::errc
 {
     using T = std::uint32_t;
 
     assert(current.code == token::detail::code::integer);
-
-    auto marker = current.view.begin();
 
     if (*marker == traits<CharT>::alpha_minus)
     {
@@ -687,13 +660,12 @@ digit_1:
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  std::uint64_t& output) const noexcept -> json::errc
 {
     using T = std::uint64_t;
 
     assert(current.code == token::detail::code::integer);
-
-    auto marker = current.view.begin();
 
     if (*marker == traits<CharT>::alpha_minus)
     {
