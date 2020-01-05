@@ -531,7 +531,7 @@ void n_array_colon_after_close()
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_array_comma_and_number()
@@ -540,7 +540,7 @@ void n_array_comma_and_number()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_array_double_comma()
@@ -552,7 +552,7 @@ void n_array_double_comma()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_array_double_extra_comma()
@@ -564,7 +564,7 @@ void n_array_double_extra_comma()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "x");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_array_extra_close()
@@ -665,7 +665,7 @@ void n_array_just_comma()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_array_just_minus()
@@ -683,7 +683,7 @@ void n_array_missing_value()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_array_newlines_unclosed()
@@ -725,7 +725,7 @@ void n_array_number_and_several_commas()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_array_spaces_vertical_tab_formfeed()
@@ -1497,7 +1497,7 @@ void n_object_double_colon()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "x");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_name_separator);
 }
 
 void n_object_emoji()
@@ -1639,7 +1639,7 @@ void n_object_several_trailing_commas()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 0);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_object_single_quote()
@@ -1746,7 +1746,7 @@ void n_object_two_commas_in_a_row()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "b");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_object_unquoted_key()
@@ -2411,7 +2411,7 @@ void n_structure_open_array_comma()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
 }
 
 void n_structure_open_array_open_object()

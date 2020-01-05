@@ -549,7 +549,7 @@ void fail_missing_begin_after_comma()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), ",");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
@@ -868,7 +868,7 @@ void fail_outer()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
 }
 
@@ -908,7 +908,7 @@ void fail_missing_begin_after_comma()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), ",");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "}");

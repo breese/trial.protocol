@@ -152,17 +152,17 @@ private:
 
     struct frame
     {
-        frame(token::detail::code::value);
+        frame(token::code::value);
 
         bool is_array() const;
         bool is_object() const;
 
-        token::detail::code::value next(decoder_type&);
-        token::detail::code::value check_outer(decoder_type&);
-        token::detail::code::value check_array(decoder_type&);
-        token::detail::code::value check_object(decoder_type&);
+        token::code::value next(decoder_type&);
+        token::code::value check_outer(decoder_type&);
+        token::code::value check_array(decoder_type&);
+        token::code::value check_object(decoder_type&);
 
-        token::detail::code::value scope;
+        token::code::value scope;
         size_type counter;
     };
     std::stack<frame> stack;

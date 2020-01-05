@@ -31,6 +31,9 @@ inline symbol::value symbol::convert(code::value value)
     case code::end:
         return symbol::end;
 
+    case code::uninitialized:
+    case code::error_name_separator:
+    case code::error_value_separator:
     case code::error_unexpected_token:
     case code::error_invalid_key:
     case code::error_invalid_value:
@@ -103,24 +106,6 @@ inline category::value category::convert(code::value value)
 {
     return category::convert(symbol::convert(value));
 }
-
-namespace detail
-{
-
-inline token::code::value convert(detail::code::value value)
-{
-    switch (value)
-    {
-    case detail::code::value_separator:
-    case detail::code::name_separator:
-        return token::code::error_unexpected_token;
-
-    default:
-        return token::code::value(value);
-    }
-}
-
-} // namespace detail
 
 } // namespace token
 } // namespace json

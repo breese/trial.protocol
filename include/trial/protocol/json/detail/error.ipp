@@ -75,6 +75,8 @@ inline enum errc to_errc(token::code::value value) noexcept
 {
     switch (value)
     {
+    case token::code::error_name_separator:
+    case token::code::error_value_separator:
     case token::code::error_unexpected_token:
         return unexpected_token;
 

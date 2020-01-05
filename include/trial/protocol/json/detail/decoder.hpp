@@ -87,8 +87,8 @@ public:
 
     void next() noexcept;
 
-    void code(token::detail::code::value) noexcept;
-    token::detail::code::value code() const noexcept;
+    void code(token::code::value) noexcept;
+    token::code::value code() const noexcept;
     std::error_code error() const noexcept;
     const view_type& literal() const noexcept;
     const view_type& tail() const noexcept;
@@ -96,12 +96,12 @@ public:
     template <typename T> json::errc value(T&) const noexcept;
 
 private:
-    token::detail::code::value next_token(token::detail::code::value) noexcept;
-    token::detail::code::value next_f_keyword() noexcept;
-    token::detail::code::value next_n_keyword() noexcept;
-    token::detail::code::value next_t_keyword() noexcept;
-    token::detail::code::value next_number() noexcept;
-    token::detail::code::value next_string() noexcept;
+    token::code::value next_token(token::code::value) noexcept;
+    token::code::value next_f_keyword() noexcept;
+    token::code::value next_n_keyword() noexcept;
+    token::code::value next_t_keyword() noexcept;
+    token::code::value next_number() noexcept;
+    token::code::value next_string() noexcept;
 
     void skip_whitespaces() noexcept;
     bool at_keyword_end() const noexcept;
@@ -122,7 +122,7 @@ private:
     view_type input;
     struct
     {
-        token::detail::code::value code;
+        token::code::value code;
         view_type view;
         union
         {
