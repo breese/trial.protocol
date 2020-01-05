@@ -44,33 +44,30 @@ struct basic_reader<CharT>::overloader<
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
         ReturnType result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const basic_reader<CharT>& self,
-                             ReturnType& output)
+    inline static json::errc value(const basic_reader<CharT>& self,
+                                   ReturnType& output) noexcept
     {
         switch (self.decoder.code())
         {
         case token::detail::code::integer:
-        {
-            self.decoder.value(output);
-            if (self.symbol() == token::symbol::error)
-            {
-                throw json::error(self.error());
-            }
-        }
-        break;
+            return self.decoder.value(output);
 
         case token::detail::code::real:
+        {
             using real_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
-            output = ReturnType(std::round(self.decoder.template value<real_return_type>()));
-            break;
+            real_return_type result = {};
+            const auto errc = self.decoder.value(result);
+            if (errc == no_error)
+                output = ReturnType(std::round(result));
+            return errc;
+        }
 
         default:
-            self.decoder.code(token::detail::code::error_invalid_value);
-            throw json::error(self.error());
+            return json::invalid_value;
         }
     }
 };
@@ -86,26 +83,30 @@ struct basic_reader<CharT>::overloader<
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
         ReturnType result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const basic_reader<CharT>& self,
-                             ReturnType& output)
+    inline static json::errc value(const basic_reader<CharT>& self,
+                                   ReturnType& output) noexcept
     {
         switch (self.decoder.code())
         {
         case token::detail::code::integer:
+        {
             using integer_return_type = typename core::detail::make_integral<ReturnType>::type;
-            output = ReturnType(self.decoder.template value<integer_return_type>());
-            break;
+            integer_return_type result = {};
+            const auto errc = self.decoder.value(result);
+            if (errc == no_error)
+                output = ReturnType(result);
+            return errc;
+        }
 
         case token::detail::code::real:
             return self.decoder.value(output);
 
         default:
-            self.decoder.code(token::detail::code::error_invalid_value);
-            throw json::error(self.error());
+            return json::invalid_value;
         }
     }
 };
@@ -121,26 +122,25 @@ struct basic_reader<CharT>::overloader<
     inline static ReturnType value(const basic_reader<CharT>& self)
     {
         ReturnType result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const basic_reader<CharT>& self,
-                             ReturnType& output)
+    inline static json::errc value(const basic_reader<CharT>& self,
+                                   ReturnType& output) noexcept
     {
         switch (self.decoder.code())
         {
         case token::detail::code::true_value:
             output = true;
-            break;
+            return no_error;
 
         case token::detail::code::false_value:
             output = false;
-            break;
+            return no_error;
 
         default:
-            self.decoder.code(token::detail::code::error_invalid_value);
-            throw json::error(self.error());
+            return json::invalid_value;
         }
     }
 };
@@ -157,12 +157,12 @@ struct basic_reader<CharT>::overloader<
     inline static return_type value(const basic_reader<CharT>& self)
     {
         return_type result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const basic_reader<CharT>& self,
-                             return_type& output)
+    inline static json::errc value(const basic_reader<CharT>& self,
+                                   return_type& output) noexcept
     {
         switch (self.decoder.code())
         {
@@ -170,8 +170,7 @@ struct basic_reader<CharT>::overloader<
             return self.decoder.value(output);
 
         default:
-            self.decoder.code(token::detail::code::error_invalid_value);
-            throw json::error(self.error());
+            return json::invalid_value;
         }
     }
 };
@@ -195,32 +194,32 @@ basic_reader<CharT>::basic_reader(const view_type& input)
 }
 
 template <typename CharT>
-auto basic_reader<CharT>::level() const BOOST_NOEXCEPT -> size_type
+auto basic_reader<CharT>::level() const noexcept -> size_type
 {
     assert(stack.size() > 0);
     return stack.size() - 1;
 }
 
 template <typename CharT>
-token::code::value basic_reader<CharT>::code() const BOOST_NOEXCEPT
+token::code::value basic_reader<CharT>::code() const noexcept
 {
     return token::detail::convert(decoder.code());
 }
 
 template <typename CharT>
-token::symbol::value basic_reader<CharT>::symbol() const BOOST_NOEXCEPT
+token::symbol::value basic_reader<CharT>::symbol() const noexcept
 {
     return token::symbol::convert(code());
 }
 
 template <typename CharT>
-token::category::value basic_reader<CharT>::category() const BOOST_NOEXCEPT
+token::category::value basic_reader<CharT>::category() const noexcept
 {
     return token::category::convert(code());
 }
 
 template <typename CharT>
-std::error_code basic_reader<CharT>::error() const BOOST_NOEXCEPT
+std::error_code basic_reader<CharT>::error() const noexcept
 {
     return decoder.error();
 }
@@ -312,20 +311,20 @@ T basic_reader<CharT>::value() const
 
 template <typename CharT>
 template <typename T>
-void basic_reader<CharT>::value(T& output) const
+auto basic_reader<CharT>::value(T& output) const noexcept -> json::errc
 {
     using return_type = typename std::remove_cv<typename std::decay<T>::type>::type;
-    basic_reader<CharT>::overloader<return_type>::value(*this, output);
+    return basic_reader<CharT>::overloader<return_type>::value(*this, output);
 }
 
 template <typename CharT>
-auto basic_reader<CharT>::literal() const BOOST_NOEXCEPT -> view_type
+auto basic_reader<CharT>::literal() const noexcept -> view_type
 {
     return view_type(decoder.literal().data(), decoder.literal().size());
 }
 
 template <typename CharT>
-auto basic_reader<CharT>::tail() const BOOST_NOEXCEPT -> view_type
+auto basic_reader<CharT>::tail() const noexcept -> view_type
 {
     return view_type(decoder.tail().data(), decoder.tail().size());
 }

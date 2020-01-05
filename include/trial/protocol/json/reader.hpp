@@ -86,22 +86,22 @@ public:
     //! The outermost root level is 0.
     //!
     //! @returns The current nesting level.
-    size_type level() const BOOST_NOEXCEPT;
+    size_type level() const noexcept;
 
     //! @brief Get the current token as a detailed code.
     //!
     //! @returns The code of the current token.
-    token::code::value code() const BOOST_NOEXCEPT;
+    token::code::value code() const noexcept;
 
     //! @brief Get the current token as a symbol.
     //!
     //! @returns The symbol of the current token.
-    token::symbol::value symbol() const BOOST_NOEXCEPT;
+    token::symbol::value symbol() const noexcept;
 
     //! @brief Get the current token as a category.
     //!
     //! @returns The category of the current token.
-    token::category::value category() const BOOST_NOEXCEPT;
+    token::category::value category() const noexcept;
 
     //! @brief Get the current error.
     //!
@@ -109,7 +109,7 @@ public:
     //! in an error, the json::no_error enumerator is used.
     //!
     //! @returns The current error code.
-    std::error_code error() const BOOST_NOEXCEPT;
+    std::error_code error() const noexcept;
 
     //! @brief Converts the current value into ReturnType.
     //!
@@ -120,7 +120,7 @@ public:
     //! -# Convert a symbol::string token into std::string.
     //!
     //! @returns The converted value.
-    //! @throws json::error If requested type is incompatible with the current token.
+    //! @throws json::error if requested type is incompatible with the current token.
     template <typename ReturnType> ReturnType value() const;
 
     //! @brief Converts the current value into T.
@@ -132,14 +132,14 @@ public:
     //! -# Convert a symbol::string token into std::string.
     //!
     //! @param[out] output The converted value if no error occurs.
-    //! @throws json::error If requested type is incompatible with the current token.
-    template <typename T> void value(T& output) const;
+    //! @returns json::errc if requested type is incompatible with the current token.
+    template <typename T> json::errc value(T& output) const noexcept;
 
     //! @returns A view of the current value before it is converted into its type.
-    view_type literal() const BOOST_NOEXCEPT;
+    view_type literal() const noexcept;
 
     //! @returns A view of the remaining buffer.
-    view_type tail() const BOOST_NOEXCEPT;
+    view_type tail() const noexcept;
 
 #ifndef BOOST_DOXYGEN_INVOKED
 private:
@@ -148,7 +148,7 @@ private:
 
 private:
     using decoder_type = detail::basic_decoder<value_type>;
-    mutable decoder_type decoder;
+    decoder_type decoder;
 
     struct frame
     {

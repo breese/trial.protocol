@@ -40,7 +40,7 @@ enum errc
 
 const std::error_category& error_category();
 
-enum errc to_errc(token::code::value);
+enum errc to_errc(token::code::value) noexcept;
 
 inline std::error_code make_error_code(json::errc e = no_error)
 {
@@ -58,6 +58,8 @@ public:
         : system_error(make_error_code(e))
     {}
 };
+
+inline void throw_on_error(enum json::errc);
 
 } // namespace json
 } // namespace protocol

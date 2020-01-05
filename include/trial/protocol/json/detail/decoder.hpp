@@ -93,7 +93,7 @@ public:
     const view_type& literal() const noexcept;
     const view_type& tail() const noexcept;
     template <typename ReturnType> ReturnType value() const;
-    template <typename T> void value(T&) const;
+    template <typename T> json::errc value(T&) const noexcept;
 
 private:
     token::detail::code::value next_token(token::detail::code::value) noexcept;
@@ -108,14 +108,14 @@ private:
 
     template <typename ReturnType, typename Enable = void>
     struct overloader;
-    template <typename T> void signed_integer_value(T&) const;
-    template <typename T> void unsigned_integer_value(T&) const;
-    void unsigned_integer_value(std::uint8_t&) const;
-    void unsigned_integer_value(std::uint16_t&) const;
-    void unsigned_integer_value(std::uint32_t&) const;
-    void unsigned_integer_value(std::uint64_t&) const;
-    template <typename T> void real_value(T&) const;
-    template <typename T> void string_value(T&) const;
+    template <typename T> json::errc signed_integer_value(T&) const noexcept;
+    template <typename T> json::errc unsigned_integer_value(T&) const noexcept;
+    json::errc unsigned_integer_value(std::uint8_t&) const noexcept;
+    json::errc unsigned_integer_value(std::uint16_t&) const noexcept;
+    json::errc unsigned_integer_value(std::uint32_t&) const noexcept;
+    json::errc unsigned_integer_value(std::uint64_t&) const noexcept;
+    template <typename T> void real_value(T&) const noexcept;
+    template <typename T> void string_value(T&) const noexcept;
 
 private:
     static constexpr int segment_max = 32;

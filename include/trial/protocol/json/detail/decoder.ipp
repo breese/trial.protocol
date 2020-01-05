@@ -55,17 +55,16 @@ struct basic_decoder<CharT>::overloader<ReturnType,
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
         ReturnType result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const basic_decoder<CharT>& self,
-                             ReturnType& output)
+    inline static json::errc value(const basic_decoder<CharT>& self,
+                                   ReturnType& output) noexcept
     {
         if (self.code() != token::detail::code::integer)
         {
-            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
-            throw json::error(errc);
+            return json::incompatible_type;
         }
         output = {};
         return self.signed_integer_value(output);
@@ -81,17 +80,16 @@ struct basic_decoder<CharT>::overloader<ReturnType,
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
         ReturnType result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const basic_decoder<CharT>& self,
-                             ReturnType& output)
+    inline static json::errc value(const basic_decoder<CharT>& self,
+                                   ReturnType& output) noexcept
     {
         if (self.code() != token::detail::code::integer)
         {
-            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
-            throw json::error(errc);
+            return json::incompatible_type;
         }
         output = {};
         return self.unsigned_integer_value(output);
@@ -108,20 +106,20 @@ struct basic_decoder<CharT>::overloader<ReturnType,
     inline static ReturnType value(const basic_decoder<CharT>& self)
     {
         ReturnType result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const  basic_decoder<CharT>& self,
-                             ReturnType& output)
+    inline static json::errc value(const  basic_decoder<CharT>& self,
+                                   ReturnType& output) noexcept
     {
         if (self.code() != token::detail::code::real)
         {
-            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
-            throw json::error(errc);
+            return json::incompatible_type;
         }
         output = {};
-        return self.real_value(output);
+        self.real_value(output);
+        return json::no_error;
     }
 };
 
@@ -136,19 +134,19 @@ struct basic_decoder<CharT>::overloader<std::basic_string<CharT, CharTraits, All
     inline static return_type value(const basic_decoder<CharT>& self)
     {
         return_type result;
-        value(self, result);
+        throw_on_error(value(self, result));
         return result;
     }
 
-    inline static void value(const basic_decoder<CharT>& self,
-                             return_type& output)
+    inline static json::errc value(const basic_decoder<CharT>& self,
+                                   return_type& output) noexcept
     {
         if (self.code() != token::detail::code::string)
         {
-            auto errc = to_errc(token::detail::convert(token::detail::code::error_incompatible_type));
-            throw json::error(errc);
+            return json::incompatible_type;
         }
         self.string_value(output);
+        return json::no_error;
     }
 };
 
@@ -180,25 +178,25 @@ basic_decoder<CharT>::basic_decoder(const value_type (&array)[M])
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::code(token::detail::code::value code) BOOST_NOEXCEPT
+void basic_decoder<CharT>::code(token::detail::code::value code) noexcept
 {
     current.code = code;
 }
 
 template <typename CharT>
-token::detail::code::value basic_decoder<CharT>::code() const BOOST_NOEXCEPT
+token::detail::code::value basic_decoder<CharT>::code() const noexcept
 {
     return current.code;
 }
 
 template <typename CharT>
-std::error_code basic_decoder<CharT>::error() const BOOST_NOEXCEPT
+std::error_code basic_decoder<CharT>::error() const noexcept
 {
     return json::make_error_code(to_errc(token::detail::convert(code())));
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::next() BOOST_NOEXCEPT
+void basic_decoder<CharT>::next() noexcept
 {
     if (current.code < 0)
         return; // Already marked as error
@@ -287,14 +285,14 @@ ReturnType basic_decoder<CharT>::value() const
 
 template <typename CharT>
 template <typename T>
-void basic_decoder<CharT>::value(T& output) const
+auto basic_decoder<CharT>::value(T& output) const noexcept -> json::errc
 {
-    basic_decoder<CharT>::overloader<T>::value(*this, output);
+    return basic_decoder<CharT>::overloader<T>::value(*this, output);
 }
 
 template <typename CharT>
 template <typename T>
-void basic_decoder<CharT>::signed_integer_value(T& result) const
+auto basic_decoder<CharT>::signed_integer_value(T& result) const noexcept -> json::errc
 {
     static_assert(std::is_signed<T>::value, "T must be signed");
     assert(current.code == token::detail::code::integer);
@@ -311,16 +309,14 @@ void basic_decoder<CharT>::signed_integer_value(T& result) const
         {
             if (lowest / T(10) > result) {
                 // Overflow
-                auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-                throw json::error(errc);
+                return json::invalid_value;
             }
             result *= T(10);
 
             const T digit = *it - traits<CharT>::alpha_0;
             if (lowest + digit > result + 1) {
                 // Overflow
-                auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-                throw json::error(errc);
+                return json::invalid_value;
             }
             result -= digit;
 
@@ -329,13 +325,14 @@ void basic_decoder<CharT>::signed_integer_value(T& result) const
     }
     else
     {
-        unsigned_integer_value(result);
+        return unsigned_integer_value(result);
     }
+    return json::no_error;
 }
 
 template <typename CharT>
 template <typename T>
-void basic_decoder<CharT>::unsigned_integer_value(T& result) const
+auto basic_decoder<CharT>::unsigned_integer_value(T& result) const noexcept -> json::errc
 {
     assert(current.code == token::detail::code::integer);
 
@@ -344,8 +341,7 @@ void basic_decoder<CharT>::unsigned_integer_value(T& result) const
     const bool is_negative = (*it == traits<CharT>::alpha_minus);
     if (is_negative)
     {
-        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-        throw json::error(errc);
+        return json::invalid_value;
     }
 
     const T max = std::numeric_limits<T>::max();
@@ -353,25 +349,24 @@ void basic_decoder<CharT>::unsigned_integer_value(T& result) const
     {
         if (max / T(10) < result) {
             // Overflow
-            auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-            throw json::error(errc);
+            return json::invalid_value;
         }
         result *= T(10);
 
         const T digit = *it - traits<CharT>::alpha_0;
         if (max - digit < result) {
             // Overflow
-            auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-            throw json::error(errc);
+            return json::invalid_value;
         }
         result += digit;
 
         ++it;
     }
+    return json::no_error;
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const
+auto basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const noexcept -> json::errc
 {
     using T = std::uint8_t;
 
@@ -381,8 +376,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-        throw json::error(errc);
+        return json::invalid_value;
     }
 
     static constexpr T number[][10] = {
@@ -420,7 +414,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const
         result += number[0][digit1];
 
         output = result;
-        return;
+        return json::no_error;
     }
     case max_digits - 2:
         goto digit_2;
@@ -428,17 +422,18 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint8_t& output) const
         goto digit_1;
     }
 
-    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
+    return json::invalid_value;
 
 digit_2:
     result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
 digit_1:
     result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
     output = result;
+    return json::no_error;
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const
+auto basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const noexcept -> json::errc
 {
     using T = std::uint16_t;
 
@@ -448,8 +443,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-        throw json::error(errc);
+        return json::invalid_value;
     }
 
     static constexpr T number[][10] = {
@@ -507,7 +501,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const
         result += number[0][digit1];
 
         output = result;
-        return;
+        return json::no_error;
     }
 
     case max_digits - 4:
@@ -520,7 +514,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint16_t& output) const
         goto digit_1;
     }
 
-    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
+    return json::invalid_value;
 
 digit_4:
     result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
@@ -531,10 +525,11 @@ digit_2:
 digit_1:
     result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
     output = result;
+    return json::no_error;
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const
+auto basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const noexcept -> json::errc
 {
     using T = std::uint32_t;
 
@@ -544,8 +539,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-        throw json::error(errc);
+        return json::invalid_value;
     }
 
     static constexpr T number[][10] = {
@@ -645,7 +639,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const
         result += number[0][digit1];
 
         output = result;
-        return;
+        return json::no_error;
     }
 
     case max_digits - 9:
@@ -668,7 +662,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint32_t& output) const
         goto digit_1;
     }
 
-    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
+    return json::invalid_value;
 
 digit_9:
     result += number[8][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
@@ -689,10 +683,11 @@ digit_2:
 digit_1:
     result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
     output = result;
+    return json::no_error;
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const
+auto basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const noexcept -> json::errc
 {
     using T = std::uint64_t;
 
@@ -702,8 +697,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const
 
     if (*marker == traits<CharT>::alpha_minus)
     {
-        auto errc = to_errc(token::detail::convert(token::detail::code::error_invalid_value));
-        throw json::error(errc);
+        return json::invalid_value;
     }
 
     static constexpr T number[][10] = {
@@ -891,7 +885,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const
         result += number[0][digit1];
 
         output = result;
-        return;
+        return json::no_error;
     }
     case max_digits - 19:
         goto digit_19;
@@ -933,7 +927,7 @@ void basic_decoder<CharT>::unsigned_integer_value(std::uint64_t& output) const
         goto digit_1;
     }
 
-    throw json::error(to_errc(token::detail::convert(token::detail::code::error_invalid_value)));
+    return json::invalid_value;
 
 digit_19:
     result += number[18][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
@@ -974,11 +968,12 @@ digit_2:
 digit_1:
     result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
     output = result;
+    return json::no_error;
 }
 
 template <typename CharT>
 template <typename T>
-void basic_decoder<CharT>::real_value(T& output) const
+void basic_decoder<CharT>::real_value(T& output) const noexcept
 {
     assert(current.code == token::detail::code::real);
 
@@ -1302,7 +1297,7 @@ void basic_decoder<CharT>::real_value(T& output) const
 
 template <typename CharT>
 template <typename T>
-void basic_decoder<CharT>::string_value(T& result) const
+void basic_decoder<CharT>::string_value(T& result) const noexcept
 {
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     assert(current.code == token::detail::code::string);
@@ -1459,19 +1454,19 @@ void basic_decoder<CharT>::string_value(T& result) const
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::literal() const BOOST_NOEXCEPT -> const view_type&
+auto basic_decoder<CharT>::literal() const noexcept -> const view_type&
 {
     return current.view;
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::tail() const BOOST_NOEXCEPT -> const view_type&
+auto basic_decoder<CharT>::tail() const noexcept -> const view_type&
 {
     return input;
 }
 
 template <typename CharT>
-token::detail::code::value basic_decoder<CharT>::next_token(token::detail::code::value type) BOOST_NOEXCEPT
+token::detail::code::value basic_decoder<CharT>::next_token(token::detail::code::value type) noexcept
 {
     current.view = view_type(input.begin(), 1);
     input.remove_front();
@@ -1479,7 +1474,7 @@ token::detail::code::value basic_decoder<CharT>::next_token(token::detail::code:
 }
 
 template <typename CharT>
-token::detail::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
+token::detail::code::value basic_decoder<CharT>::next_f_keyword() noexcept
 {
     token::detail::code::value type = token::detail::code::false_value;
     auto marker = input.begin();
@@ -1511,7 +1506,7 @@ token::detail::code::value basic_decoder<CharT>::next_f_keyword() BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-token::detail::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
+token::detail::code::value basic_decoder<CharT>::next_n_keyword() noexcept
 {
     token::detail::code::value type = token::detail::code::null;
     auto marker = input.begin();
@@ -1542,7 +1537,7 @@ token::detail::code::value basic_decoder<CharT>::next_n_keyword() BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-token::detail::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
+token::detail::code::value basic_decoder<CharT>::next_t_keyword() noexcept
 {
     token::detail::code::value type = token::detail::code::true_value;
     auto marker = input.begin();
@@ -1573,7 +1568,7 @@ token::detail::code::value basic_decoder<CharT>::next_t_keyword() BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
+token::detail::code::value basic_decoder<CharT>::next_number() noexcept
 {
     auto begin = input.begin();
     token::detail::code::value type = token::detail::code::integer;
@@ -1691,7 +1686,7 @@ token::detail::code::value basic_decoder<CharT>::next_number() BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
+token::detail::code::value basic_decoder<CharT>::next_string() noexcept
 {
     assert(input.front() == traits<CharT>::alpha_quote);
 
@@ -1837,7 +1832,7 @@ token::detail::code::value basic_decoder<CharT>::next_string() BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-void basic_decoder<CharT>::skip_whitespaces() BOOST_NOEXCEPT
+void basic_decoder<CharT>::skip_whitespaces() noexcept
 {
     auto it = input.begin();
     while (true)
@@ -1852,7 +1847,7 @@ void basic_decoder<CharT>::skip_whitespaces() BOOST_NOEXCEPT
 }
 
 template <typename CharT>
-bool basic_decoder<CharT>::at_keyword_end() const BOOST_NOEXCEPT
+bool basic_decoder<CharT>::at_keyword_end() const noexcept
 {
     if (input.empty())
     {

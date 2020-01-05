@@ -71,7 +71,7 @@ inline const std::error_category& error_category()
     return instance;
 }
 
-inline enum errc to_errc(token::code::value value)
+inline enum errc to_errc(token::code::value value) noexcept
 {
     switch (value)
     {
@@ -104,6 +104,11 @@ inline enum errc to_errc(token::code::value value)
     }
 }
 
+inline void throw_on_error(enum json::errc e)
+{
+    if (e != no_error)
+        throw error(e);
+}
 } // namespace json
 } // namespace protocol
 } // namespace trial
