@@ -1289,27 +1289,27 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             case traits<CharT>::alpha_quote:
             case traits<CharT>::alpha_reverse_solidus:
             case traits<CharT>::alpha_solidus:
-                result += *it;
+                result.push_back(*it);
                 break;
 
             case traits<CharT>::alpha_b:
-                result += traits<CharT>::alpha_backspace;
+                result.push_back(traits<CharT>::alpha_backspace);
                 break;
 
             case traits<CharT>::alpha_f:
-                result += traits<CharT>::alpha_formfeed;
+                result.push_back(traits<CharT>::alpha_formfeed);
                 break;
 
             case traits<CharT>::alpha_n:
-                result += traits<CharT>::alpha_newline;
+                result.push_back(traits<CharT>::alpha_newline);
                 break;
 
             case traits<CharT>::alpha_r:
-                result += traits<CharT>::alpha_return;
+                result.push_back(traits<CharT>::alpha_return);
                 break;
 
             case traits<CharT>::alpha_t:
-                result += traits<CharT>::alpha_tab;
+                result.push_back(traits<CharT>::alpha_tab);
                 break;
 
             case traits<CharT>::alpha_u:
@@ -1324,20 +1324,20 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
                     if (number <= 0x007F)
                     {
                         // 0xxxxxxx
-                        result += std::char_traits<CharT>::to_char_type(number & 0x7F);
+                        result.push_back(std::char_traits<CharT>::to_char_type(number & 0x7F));
                     }
                     else if (number <= 0x07FF)
                     {
                         // 110xxxxx 10xxxxxx
-                        result += 0xC0 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x1F);
-                        result += 0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F);
+                        result.push_back(0xC0 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x1F));
+                        result.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
                     }
                     else
                     {
                         // 1110xxxx 10xxxxxx 10xxxxxx
-                        result += 0xE0 | std::char_traits<CharT>::to_char_type((number >> 12) & 0x0F);
-                        result += 0x80 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x3F);
-                        result += 0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F);
+                        result.push_back(0xE0 | std::char_traits<CharT>::to_char_type((number >> 12) & 0x0F));
+                        result.push_back(0x80 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x3F));
+                        result.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
                     }
                 }
                 break;
@@ -1362,53 +1362,38 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             {
                 it = traits<CharT>::skip_narrow(++it);
             }
-            result.append(head, it);
+            result.append(head, it - head);
             continue;
         }
 
         case traits_category::extra_1:
-            result += it[0];
-            result += it[1];
+            result.append(it, 2);
             it += 2;
             continue;
 
         case traits_category::extra_2:
-            result += it[0];
-            result += it[1];
-            result += it[2];
+            result.append(it, 3);
             it += 3;
             continue;
 
         case traits_category::extra_3:
-            result += it[0];
-            result += it[1];
-            result += it[2];
-            result += it[3];
+            result.append(it, 4);
             it += 4;
             continue;
 
         case traits_category::extra_4:
-            result += it[0];
-            result += it[1];
-            result += it[2];
-            result += it[3];
-            result += it[4];
+            result.append(it, 5);
             it += 5;
             continue;
 
         case traits_category::extra_5:
-            result += it[0];
-            result += it[1];
-            result += it[2];
-            result += it[3];
-            result += it[4];
-            result += it[5];
+            result.append(it, 6);
             it += 6;
             continue;
 
         default:
         {
-            result += *it;
+            result.push_back(*it);
             ++it;
             continue;
         }
