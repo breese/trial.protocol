@@ -96,12 +96,12 @@ public:
     template <typename T> json::errc value(T&) const noexcept;
 
 private:
-    token::code::value next_token(token::code::value) noexcept;
-    token::code::value next_f_keyword() noexcept;
-    token::code::value next_n_keyword() noexcept;
-    token::code::value next_t_keyword() noexcept;
-    token::code::value next_number() noexcept;
-    token::code::value next_string() noexcept;
+    void next_token(token::code::value) noexcept;
+    void next_f_keyword() noexcept;
+    void next_n_keyword() noexcept;
+    void next_t_keyword() noexcept;
+    void next_number() noexcept;
+    void next_string() noexcept;
 
     void skip_whitespaces() noexcept;
     bool at_keyword_end() const noexcept;
