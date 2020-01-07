@@ -180,7 +180,7 @@ private:
             return reader.template value<bool>();
 
         case token::symbol::integer:
-            if (reader.literal()[0] == detail::traits<char>::alpha_minus)
+            if (reader.literal()[0] == detail::alphabet<CharT>::minus)
             {
                 return compact<variable_type>(reader.template value<std::intmax_t>());
             }

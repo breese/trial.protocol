@@ -308,7 +308,7 @@ auto basic_encoder<CharT, N>::integral_value(const T& data) -> size_type
     auto number = unsigned_type(detail::absolute<T>::value(data));
     if (number == 0)
     {
-        *where = traits<CharT>::alpha_0;
+        *where = alphabet<CharT>::digit_0;
         ++where;
     }
     else
@@ -316,7 +316,7 @@ auto basic_encoder<CharT, N>::integral_value(const T& data) -> size_type
         const T base = T(10);
         while (number != 0)
         {
-            *where = traits<CharT>::alpha_0 + (number % base);
+            *where = alphabet<CharT>::digit_0 + (number % base);
             ++where;
             number /= base;
         }
@@ -330,7 +330,7 @@ auto basic_encoder<CharT, N>::integral_value(const T& data) -> size_type
     }
     if (is_negative)
     {
-        buffer().write(traits<CharT>::alpha_minus);
+        buffer().write(alphabet<CharT>::minus);
     }
     while (begin != output.end())
     {
@@ -369,53 +369,53 @@ auto basic_encoder<CharT, N>::string_value(const T& data) -> size_type
         return 0;
     }
 
-    buffer().write(traits<CharT>::alpha_quote);
+    buffer().write(alphabet<CharT>::quote);
     typename T::const_iterator it = data.begin();
     while (it != data.end())
     {
         switch (*it)
         {
-        case traits<CharT>::alpha_quote:
-        case traits<CharT>::alpha_reverse_solidus:
-        case traits<CharT>::alpha_solidus:
-            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
+        case alphabet<CharT>::quote:
+        case alphabet<CharT>::reverse_solidus:
+        case alphabet<CharT>::solidus:
+            if (write(alphabet<CharT>::reverse_solidus) == 0)
                 return 0;
             buffer().write(*it);
             ++size;
             break;
 
-        case traits<CharT>::alpha_backspace:
-            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
+        case alphabet<CharT>::backspace:
+            if (write(alphabet<CharT>::reverse_solidus) == 0)
                 return 0;
-            buffer().write(traits<CharT>::alpha_b);
+            buffer().write(alphabet<CharT>::letter_b);
             ++size;
             break;
 
-        case traits<CharT>::alpha_formfeed:
-            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
+        case alphabet<CharT>::formfeed:
+            if (write(alphabet<CharT>::reverse_solidus) == 0)
                 return 0;
-            buffer().write(traits<CharT>::alpha_f);
+            buffer().write(alphabet<CharT>::letter_f);
             ++size;
             break;
 
-        case traits<CharT>::alpha_newline:
-            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
+        case alphabet<CharT>::newline:
+            if (write(alphabet<CharT>::reverse_solidus) == 0)
                 return 0;
-            buffer().write(traits<CharT>::alpha_n);
+            buffer().write(alphabet<CharT>::letter_n);
             ++size;
             break;
 
-        case traits<CharT>::alpha_return:
-            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
+        case alphabet<CharT>::carriage_return:
+            if (write(alphabet<CharT>::reverse_solidus) == 0)
                 return 0;
-            buffer().write(traits<CharT>::alpha_r);
+            buffer().write(alphabet<CharT>::letter_r);
             ++size;
             break;
 
-        case traits<CharT>::alpha_tab:
-            if (write(traits<CharT>::alpha_reverse_solidus) == 0)
+        case alphabet<CharT>::tabulator:
+            if (write(alphabet<CharT>::reverse_solidus) == 0)
                 return 0;
-            buffer().write(traits<CharT>::alpha_t);
+            buffer().write(alphabet<CharT>::letter_t);
             ++size;
             break;
 
@@ -436,7 +436,7 @@ auto basic_encoder<CharT, N>::string_value(const T& data) -> size_type
                 typename T::value_type first = *it;
                 if (++it == data.end())
                 {
-                    if (write(traits<CharT>::alpha_question_mark) == 0)
+                    if (write(alphabet<CharT>::question_mark) == 0)
                         return 0;
                     continue;
                 }
@@ -454,7 +454,7 @@ auto basic_encoder<CharT, N>::string_value(const T& data) -> size_type
                 typename T::value_type first = *it;
                 if (++it == data.end())
                 {
-                    if (write(traits<CharT>::alpha_question_mark) == 0)
+                    if (write(alphabet<CharT>::question_mark) == 0)
                         return 0;
                     continue;
                 }
@@ -464,7 +464,7 @@ auto basic_encoder<CharT, N>::string_value(const T& data) -> size_type
                     typename T::value_type second = *it;
                     if (++it == data.end())
                     {
-                        if (write(traits<CharT>::alpha_question_mark) == 0)
+                        if (write(alphabet<CharT>::question_mark) == 0)
                             return 0;
                         continue;
                     }
@@ -478,13 +478,13 @@ auto basic_encoder<CharT, N>::string_value(const T& data) -> size_type
                     }
                 }
             }
-            if (write(traits<CharT>::alpha_question_mark) == 0)
+            if (write(alphabet<CharT>::question_mark) == 0)
                 return 0;
             break;
         }
         ++it;
     }
-    buffer().write(traits<CharT>::alpha_quote);
+    buffer().write(alphabet<CharT>::quote);
 
     return size;
 }
@@ -498,37 +498,37 @@ auto basic_encoder<CharT, N>::null_value() -> size_type
 template <typename CharT, std::size_t N>
 auto basic_encoder<CharT, N>::begin_array_value() -> size_type
 {
-    return write(traits<CharT>::alpha_bracket_open);
+    return write(alphabet<CharT>::bracket_open);
 }
 
 template <typename CharT, std::size_t N>
 auto basic_encoder<CharT, N>::end_array_value() -> size_type
 {
-    return write(traits<CharT>::alpha_bracket_close);
+    return write(alphabet<CharT>::bracket_close);
 }
 
 template <typename CharT, std::size_t N>
 auto basic_encoder<CharT, N>::begin_object_value() -> size_type
 {
-    return write(traits<CharT>::alpha_brace_open);
+    return write(alphabet<CharT>::brace_open);
 }
 
 template <typename CharT, std::size_t N>
 auto basic_encoder<CharT, N>::end_object_value() -> size_type
 {
-    return write(traits<CharT>::alpha_brace_close);
+    return write(alphabet<CharT>::brace_close);
 }
 
 template <typename CharT, std::size_t N>
 auto basic_encoder<CharT, N>::value_separator_value() -> size_type
 {
-    return write(traits<CharT>::alpha_comma);
+    return write(alphabet<CharT>::comma);
 }
 
 template <typename CharT, std::size_t N>
 auto basic_encoder<CharT, N>::name_separator_value() -> size_type
 {
-    return write(traits<CharT>::alpha_colon);
+    return write(alphabet<CharT>::colon);
 }
 
 template <typename CharT, std::size_t N>

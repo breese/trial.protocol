@@ -293,11 +293,11 @@ inline traits_category traits<char>::to_category(value_type value) BOOST_NOEXCEP
 inline int traits<char>::to_int(value_type value) BOOST_NOEXCEPT
 {
     if (is_digit(value))
-        return value - alpha_0;
+        return value - alphabet<value_type>::digit_0;
     if (is_hex_upper(value))
-        return value - alpha_A + 10;
+        return value - alphabet<value_type>::letter_A + 10;
     if (is_hex_lower(value))
-        return value - alpha_a + 10;
+        return value - alphabet<value_type>::letter_a + 10;
     assert(false);
     return 0;
 }
@@ -599,11 +599,11 @@ inline traits_category traits<unsigned char>::to_category(value_type value) BOOS
 inline int traits<unsigned char>::to_int(value_type value) BOOST_NOEXCEPT
 {
     if (is_digit(value))
-        return value - alpha_0;
+        return value - alphabet<value_type>::digit_0;
     if (is_hex_upper(value))
-        return value - alpha_A + 10;
+        return value - alphabet<value_type>::letter_A + 10;
     if (is_hex_lower(value))
-        return value - alpha_a + 10;
+        return value - alphabet<value_type>::letter_a + 10;
     assert(false);
     return 0;
 }

@@ -216,47 +216,47 @@ void basic_decoder<CharT>::next() noexcept
 
     switch (input.front())
     {
-    case traits<CharT>::alpha_f:
+    case alphabet<CharT>::letter_f:
         return next_f_keyword();
 
-    case traits<CharT>::alpha_n:
+    case alphabet<CharT>::letter_n:
         return next_n_keyword();
 
-    case traits<CharT>::alpha_t:
+    case alphabet<CharT>::letter_t:
         return next_t_keyword();
 
-    case traits<CharT>::alpha_minus:
-    case traits<CharT>::alpha_0:
-    case traits<CharT>::alpha_1:
-    case traits<CharT>::alpha_2:
-    case traits<CharT>::alpha_3:
-    case traits<CharT>::alpha_4:
-    case traits<CharT>::alpha_5:
-    case traits<CharT>::alpha_6:
-    case traits<CharT>::alpha_7:
-    case traits<CharT>::alpha_8:
-    case traits<CharT>::alpha_9:
+    case alphabet<CharT>::minus:
+    case alphabet<CharT>::digit_0:
+    case alphabet<CharT>::digit_1:
+    case alphabet<CharT>::digit_2:
+    case alphabet<CharT>::digit_3:
+    case alphabet<CharT>::digit_4:
+    case alphabet<CharT>::digit_5:
+    case alphabet<CharT>::digit_6:
+    case alphabet<CharT>::digit_7:
+    case alphabet<CharT>::digit_8:
+    case alphabet<CharT>::digit_9:
         return next_number();
 
-    case traits<CharT>::alpha_quote:
+    case alphabet<CharT>::quote:
         return next_string();
 
-    case traits<CharT>::alpha_brace_open:
+    case alphabet<CharT>::brace_open:
         return next_token(token::code::begin_object);
 
-    case traits<CharT>::alpha_brace_close:
+    case alphabet<CharT>::brace_close:
         return next_token(token::code::end_object);
 
-    case traits<CharT>::alpha_bracket_open:
+    case alphabet<CharT>::bracket_open:
         return next_token(token::code::begin_array);
 
-    case traits<CharT>::alpha_bracket_close:
+    case alphabet<CharT>::bracket_close:
         return next_token(token::code::end_array);
 
-    case traits<CharT>::alpha_comma:
+    case alphabet<CharT>::comma:
         return next_token(token::code::error_value_separator);
 
-    case traits<CharT>::alpha_colon:
+    case alphabet<CharT>::colon:
         return next_token(token::code::error_name_separator);
 
     default:
@@ -290,7 +290,7 @@ auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> jso
     auto marker = current.view.begin();
 
     unsigned_type result = {};
-    const bool is_negative = (*marker == traits<CharT>::alpha_minus);
+    const bool is_negative = (*marker == alphabet<CharT>::minus);
     if (is_negative)
     {
         ++marker; // Skip minus
@@ -338,7 +338,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     assert(current.code == token::code::integer);
 
-    if (*marker == traits<CharT>::alpha_minus)
+    if (*marker == alphabet<CharT>::minus)
     {
         return json::invalid_value;
     }
@@ -358,21 +358,21 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     case max_digits - 3:
     {
-        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit3 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit3 > 2)
             break;
         result += number[2][digit3];
         if (digit3 < 2)
             goto digit_2;
 
-        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit2 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit2 > 5)
             break;
         result += number[1][digit2];
         if (digit2 < 5)
             goto digit_1;
 
-        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit1 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit1 > 5)
             break;
         result += number[0][digit1];
@@ -389,9 +389,9 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
     return json::invalid_value;
 
 digit_2:
-    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[1][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_1:
-    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[0][unsigned(*marker++ - alphabet<CharT>::digit_0)];
     output = result;
     return json::no_error;
 }
@@ -404,7 +404,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     assert(current.code == token::code::integer);
 
-    if (*marker == traits<CharT>::alpha_minus)
+    if (*marker == alphabet<CharT>::minus)
     {
         return json::invalid_value;
     }
@@ -426,7 +426,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     case max_digits - 5:
     {
-        const auto digit5 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit5 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit5 > 6)
             break;
         result += number[4][digit5];
@@ -434,7 +434,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_4;
         assert(digit5 == 6);
 
-        const auto digit4 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit4 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit4 > 5)
             break;
         result += number[3][digit4];
@@ -442,7 +442,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_3;
         assert(digit4 == 5);
 
-        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit3 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit3 > 5)
             break;
         result += number[2][digit3];
@@ -450,7 +450,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_2;
         assert(digit3 == 5);
 
-        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit2 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit2 > 3)
             break;
         result += number[1][digit2];
@@ -458,7 +458,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_1;
         assert(digit2 == 3);
 
-        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit1 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit1 > 5)
             break;
         result += number[0][digit1];
@@ -480,13 +480,13 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
     return json::invalid_value;
 
 digit_4:
-    result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[3][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_3:
-    result += number[2][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[2][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_2:
-    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[1][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_1:
-    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[0][unsigned(*marker++ - alphabet<CharT>::digit_0)];
     output = result;
     return json::no_error;
 }
@@ -499,7 +499,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     assert(current.code == token::code::integer);
 
-    if (*marker == traits<CharT>::alpha_minus)
+    if (*marker == alphabet<CharT>::minus)
     {
         return json::invalid_value;
     }
@@ -526,7 +526,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     case max_digits - 10:
     {
-        const auto digit10 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit10 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit10 > 4)
             break;
         result += number[9][digit10];
@@ -534,7 +534,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_9;
         assert(digit10 == 4);
 
-        const auto digit9 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit9 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit9 > 2)
             break;
         result += number[8][digit9];
@@ -542,14 +542,14 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_8;
         assert(digit9 == 2);
 
-        const auto digit8 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit8 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         assert(digit8 <= 9);
         result += number[7][digit8];
         if (digit8 < 9)
             goto digit_7;
         assert(digit8 == 9);
 
-        const auto digit7 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit7 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit7 > 4)
             break;
         result += number[6][digit7];
@@ -557,14 +557,14 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_6;
         assert(digit7 == 4);
 
-        const auto digit6 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit6 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         assert(digit6 <= 9);
         result += number[5][digit6];
         if (digit6 < 9)
             goto digit_5;
         assert(digit6 == 9);
 
-        const auto digit5 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit5 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit5 > 6)
             break;
         result += number[4][digit5];
@@ -572,7 +572,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_4;
         assert(digit5 == 6);
 
-        const auto digit4 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit4 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit4 > 7)
             break;
         result += number[3][digit4];
@@ -580,7 +580,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_3;
         assert(digit4 == 7);
 
-        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit3 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit3 > 2)
             break;
         result += number[2][digit3];
@@ -588,14 +588,14 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_2;
         assert(digit3 == 2);
 
-        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit2 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         assert(digit2 <= 9);
         result += number[1][digit2];
         if (digit2 < 9)
             goto digit_1;
         assert(digit2 == 9);
 
-        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit1 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit1 > 5)
             break;
         result += number[0][digit1];
@@ -627,23 +627,23 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
     return json::invalid_value;
 
 digit_9:
-    result += number[8][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[8][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_8:
-    result += number[7][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[7][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_7:
-    result += number[6][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[6][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_6:
-    result += number[5][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[5][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_5:
-    result += number[4][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[4][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_4:
-    result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[3][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_3:
-    result += number[2][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[2][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_2:
-    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[1][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_1:
-    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[0][unsigned(*marker++ - alphabet<CharT>::digit_0)];
     output = result;
     return json::no_error;
 }
@@ -656,7 +656,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     assert(current.code == token::code::integer);
 
-    if (*marker == traits<CharT>::alpha_minus)
+    if (*marker == alphabet<CharT>::minus)
     {
         return json::invalid_value;
     }
@@ -693,7 +693,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     case max_digits - 20:
     {
-        const auto digit20 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit20 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit20 > 1)
             break;
         result += number[19][digit20];
@@ -701,7 +701,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_19;
         assert(digit20 == 1);
 
-        const auto digit19 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit19 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit19 > 8)
             break;
         result += number[18][digit19];
@@ -709,7 +709,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_18;
         assert(digit19 == 8);
 
-        const auto digit18 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit18 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit18 > 4)
             break;
         result += number[17][digit18];
@@ -717,7 +717,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_17;
         assert(digit18 == 4);
 
-        const auto digit17 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit17 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit17 > 4)
             break;
         result += number[16][digit17];
@@ -725,7 +725,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_16;
         assert(digit17 == 4);
 
-        const auto digit16 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit16 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit16 > 6)
             break;
         result += number[15][digit16];
@@ -733,7 +733,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_15;
         assert(digit16 == 6);
 
-        const auto digit15 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit15 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit15 > 7)
             break;
         result += number[14][digit15];
@@ -741,7 +741,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_14;
         assert(digit15 == 7);
 
-        const auto digit14 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit14 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit14 > 4)
             break;
         result += number[13][digit14];
@@ -749,7 +749,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_13;
         assert(digit14 == 4);
 
-        const auto digit13 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit13 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit13 > 4)
             break;
         result += number[12][digit13];
@@ -757,13 +757,13 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_12;
         assert(digit13 == 4);
 
-        const auto digit12 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit12 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit12 > 0)
             break;
         result += number[11][digit12];
         assert(digit12 == 0);
 
-        const auto digit11 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit11 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit11 > 7)
             break;
         result += number[10][digit11];
@@ -771,7 +771,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_10;
         assert(digit11 == 7);
 
-        const auto digit10 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit10 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit10 > 3)
             break;
         result += number[9][digit10];
@@ -779,7 +779,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_9;
         assert(digit10 == 3);
 
-        const auto digit9 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit9 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit9 > 7)
             break;
         result += number[8][digit9];
@@ -787,20 +787,20 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_8;
         assert(digit9 == 7);
 
-        const auto digit8 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit8 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit8 > 0)
             break;
         result += number[7][digit8];
         assert(digit8 == 0);
 
-        const auto digit7 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit7 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         assert(digit7 <= 9);
         result += number[6][digit7];
         if (digit7 < 9)
             goto digit_6;
         assert(digit7 == 9);
 
-        const auto digit6 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit6 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit6 > 5)
             break;
         result += number[5][digit6];
@@ -808,7 +808,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_5;
         assert(digit6 == 5);
 
-        const auto digit5 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit5 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit5 > 5)
             break;
         result += number[4][digit5];
@@ -816,7 +816,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_4;
         assert(digit5 == 5);
 
-        const auto digit4 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit4 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit4 > 1)
             break;
         result += number[3][digit4];
@@ -824,7 +824,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_3;
         assert(digit4 == 1);
 
-        const auto digit3 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit3 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit3 > 6)
             break;
         result += number[2][digit3];
@@ -832,7 +832,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_2;
         assert(digit3 == 6);
 
-        const auto digit2 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit2 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit2 > 1)
             break;
         result += number[1][digit2];
@@ -840,7 +840,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
             goto digit_1;
         assert(digit2 == 1);
 
-        const auto digit1 = unsigned(*marker++ - detail::traits<CharT>::alpha_0);
+        const auto digit1 = unsigned(*marker++ - alphabet<CharT>::digit_0);
         if (digit1 > 5)
             break;
         result += number[0][digit1];
@@ -891,43 +891,43 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
     return json::invalid_value;
 
 digit_19:
-    result += number[18][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[18][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_18:
-    result += number[17][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[17][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_17:
-    result += number[16][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[16][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_16:
-    result += number[15][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[15][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_15:
-    result += number[14][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[14][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_14:
-    result += number[13][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[13][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_13:
-    result += number[12][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[12][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_12:
-    result += number[11][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[11][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_11:
-    result += number[10][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[10][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_10:
-    result += number[9][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[9][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_9:
-    result += number[8][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[8][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_8:
-    result += number[7][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[7][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_7:
-    result += number[6][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[6][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_6:
-    result += number[5][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[5][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_5:
-    result += number[4][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[4][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_4:
-    result += number[3][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[3][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_3:
-    result += number[2][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[2][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_2:
-    result += number[1][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[1][unsigned(*marker++ - alphabet<CharT>::digit_0)];
 digit_1:
-    result += number[0][unsigned(*marker++ - detail::traits<CharT>::alpha_0)];
+    result += number[0][unsigned(*marker++ - alphabet<CharT>::digit_0)];
     output = result;
     return json::no_error;
 }
@@ -944,14 +944,14 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
 
     const CharT *marker = current.view.begin();
     T result = zero;
-    const bool is_negative = *marker == detail::traits<CharT>::alpha_minus;
+    const bool is_negative = *marker == alphabet<CharT>::minus;
     if (is_negative)
     {
         ++marker;
     }
     while (true)
     {
-        const unsigned delta = *marker - detail::traits<CharT>::alpha_0;
+        const unsigned delta = *marker - alphabet<CharT>::digit_0;
         if (delta > 9)
             break;
         result *= base;
@@ -995,10 +995,10 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             auto it = marker;
             while (current.scan.number.fraction_tail - it > 4)
             {
-                const auto delta1000 = unsigned(it[0] - detail::traits<CharT>::alpha_0);
-                const auto delta100 = unsigned(it[1] - detail::traits<CharT>::alpha_0);
-                const auto delta10 = unsigned(it[2] - detail::traits<CharT>::alpha_0);
-                const auto delta1 = unsigned(it[3] - detail::traits<CharT>::alpha_0);
+                const auto delta1000 = unsigned(it[0] - alphabet<CharT>::digit_0);
+                const auto delta100 = unsigned(it[1] - alphabet<CharT>::digit_0);
+                const auto delta10 = unsigned(it[2] - alphabet<CharT>::digit_0);
+                const auto delta1 = unsigned(it[3] - alphabet<CharT>::digit_0);
                 const auto delta = delta1000 * 1000 + delta100 * 100 + delta10 * 10 + delta1;
                 fraction = fraction * superbase + delta;
                 scale *= superbase;
@@ -1007,7 +1007,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
 
             while (current.scan.number.fraction_tail > it)
             {
-                const unsigned delta = *it - detail::traits<CharT>::alpha_0;
+                const unsigned delta = *it - alphabet<CharT>::digit_0;
                 scale *= base;
                 fraction *= base;
                 fraction += delta;
@@ -1017,211 +1017,211 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             break;
         }
         case 18:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[11][unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[12][unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[13][unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[14][unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[15][unsigned(marker[15] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[16][unsigned(marker[16] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[17][unsigned(marker[17] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
+            fraction += fractions[11][unsigned(marker[11] - alphabet<CharT>::digit_0)];
+            fraction += fractions[12][unsigned(marker[12] - alphabet<CharT>::digit_0)];
+            fraction += fractions[13][unsigned(marker[13] - alphabet<CharT>::digit_0)];
+            fraction += fractions[14][unsigned(marker[14] - alphabet<CharT>::digit_0)];
+            fraction += fractions[15][unsigned(marker[15] - alphabet<CharT>::digit_0)];
+            fraction += fractions[16][unsigned(marker[16] - alphabet<CharT>::digit_0)];
+            fraction += fractions[17][unsigned(marker[17] - alphabet<CharT>::digit_0)];
             break;
         case 17:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[11][unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[12][unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[13][unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[14][unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[15][unsigned(marker[15] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[16][unsigned(marker[16] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
+            fraction += fractions[11][unsigned(marker[11] - alphabet<CharT>::digit_0)];
+            fraction += fractions[12][unsigned(marker[12] - alphabet<CharT>::digit_0)];
+            fraction += fractions[13][unsigned(marker[13] - alphabet<CharT>::digit_0)];
+            fraction += fractions[14][unsigned(marker[14] - alphabet<CharT>::digit_0)];
+            fraction += fractions[15][unsigned(marker[15] - alphabet<CharT>::digit_0)];
+            fraction += fractions[16][unsigned(marker[16] - alphabet<CharT>::digit_0)];
             break;
         case 16:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[11][unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[12][unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[13][unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[14][unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[15][unsigned(marker[15] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
+            fraction += fractions[11][unsigned(marker[11] - alphabet<CharT>::digit_0)];
+            fraction += fractions[12][unsigned(marker[12] - alphabet<CharT>::digit_0)];
+            fraction += fractions[13][unsigned(marker[13] - alphabet<CharT>::digit_0)];
+            fraction += fractions[14][unsigned(marker[14] - alphabet<CharT>::digit_0)];
+            fraction += fractions[15][unsigned(marker[15] - alphabet<CharT>::digit_0)];
             break;
         case 15:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[11][unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[12][unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[13][unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[14][unsigned(marker[14] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
+            fraction += fractions[11][unsigned(marker[11] - alphabet<CharT>::digit_0)];
+            fraction += fractions[12][unsigned(marker[12] - alphabet<CharT>::digit_0)];
+            fraction += fractions[13][unsigned(marker[13] - alphabet<CharT>::digit_0)];
+            fraction += fractions[14][unsigned(marker[14] - alphabet<CharT>::digit_0)];
             break;
         case 14:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[11][unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[12][unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[13][unsigned(marker[13] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
+            fraction += fractions[11][unsigned(marker[11] - alphabet<CharT>::digit_0)];
+            fraction += fractions[12][unsigned(marker[12] - alphabet<CharT>::digit_0)];
+            fraction += fractions[13][unsigned(marker[13] - alphabet<CharT>::digit_0)];
             break;
         case 13:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[11][unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[12][unsigned(marker[12] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
+            fraction += fractions[11][unsigned(marker[11] - alphabet<CharT>::digit_0)];
+            fraction += fractions[12][unsigned(marker[12] - alphabet<CharT>::digit_0)];
             break;
         case 12:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[11][unsigned(marker[11] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
+            fraction += fractions[11][unsigned(marker[11] - alphabet<CharT>::digit_0)];
             break;
         case 11:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[10][unsigned(marker[10] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
+            fraction += fractions[10][unsigned(marker[10] - alphabet<CharT>::digit_0)];
             break;
         case 10:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[9][unsigned(marker[9] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
+            fraction += fractions[9][unsigned(marker[9] - alphabet<CharT>::digit_0)];
             break;
         case 9:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[8][unsigned(marker[8] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
+            fraction += fractions[8][unsigned(marker[8] - alphabet<CharT>::digit_0)];
             break;
         case 8:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[7][unsigned(marker[7] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
+            fraction += fractions[7][unsigned(marker[7] - alphabet<CharT>::digit_0)];
             break;
         case 7:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[6][unsigned(marker[6] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
+            fraction += fractions[6][unsigned(marker[6] - alphabet<CharT>::digit_0)];
             break;
         case 6:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[5][unsigned(marker[5] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
+            fraction += fractions[5][unsigned(marker[5] - alphabet<CharT>::digit_0)];
             break;
         case 5:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[4][unsigned(marker[4] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
+            fraction += fractions[4][unsigned(marker[4] - alphabet<CharT>::digit_0)];
             break;
         case 4:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[3][unsigned(marker[3] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
+            fraction += fractions[3][unsigned(marker[3] - alphabet<CharT>::digit_0)];
             break;
         case 3:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[2][unsigned(marker[2] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
+            fraction += fractions[2][unsigned(marker[2] - alphabet<CharT>::digit_0)];
             break;
         case 2:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
-            fraction += fractions[1][unsigned(marker[1] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
+            fraction += fractions[1][unsigned(marker[1] - alphabet<CharT>::digit_0)];
             break;
         case 1:
-            fraction += fractions[0][unsigned(marker[0] - detail::traits<CharT>::alpha_0)];
+            fraction += fractions[0][unsigned(marker[0] - alphabet<CharT>::digit_0)];
             break;
         case 0:
             break;
@@ -1229,11 +1229,11 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
         marker += fraction_size;
         result += fraction;
     }
-    if ((*marker == detail::traits<CharT>::alpha_e) || (*marker == detail::traits<CharT>::alpha_E))
+    if ((*marker == alphabet<CharT>::letter_e) || (*marker == alphabet<CharT>::letter_E))
     {
         ++marker;
-        const bool is_exponent_negative = *marker == detail::traits<CharT>::alpha_minus;
-        if (is_exponent_negative || *marker == detail::traits<CharT>::alpha_plus)
+        const bool is_exponent_negative = *marker == alphabet<CharT>::minus;
+        if (is_exponent_negative || *marker == alphabet<CharT>::plus)
         {
             ++marker;
         }
@@ -1241,7 +1241,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
         const int max = std::numeric_limits<int>::max();
         while (true)
         {
-            const unsigned delta = *marker - detail::traits<CharT>::alpha_0;
+            const unsigned delta = *marker - alphabet<CharT>::digit_0;
             if (delta > 9)
                 break;
             if (max / 10 < exponent) // Overflow
@@ -1271,8 +1271,8 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
         result.reserve(approximateSize);
 
     // Skip initial and terminating quotes
-    assert(literal().front() == traits<CharT>::alpha_quote);
-    assert(literal().back() == traits<CharT>::alpha_quote);
+    assert(literal().front() == alphabet<CharT>::quote);
+    assert(literal().back() == alphabet<CharT>::quote);
     const auto end = literal().end() - 1;
     auto it = literal().begin() + 1;
     int segment_index = 0;
@@ -1286,33 +1286,33 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             ++it;
             switch (*it)
             {
-            case traits<CharT>::alpha_quote:
-            case traits<CharT>::alpha_reverse_solidus:
-            case traits<CharT>::alpha_solidus:
+            case alphabet<CharT>::quote:
+            case alphabet<CharT>::reverse_solidus:
+            case alphabet<CharT>::solidus:
                 result.push_back(*it);
                 break;
 
-            case traits<CharT>::alpha_b:
-                result.push_back(traits<CharT>::alpha_backspace);
+            case alphabet<CharT>::letter_b:
+                result.push_back(alphabet<CharT>::backspace);
                 break;
 
-            case traits<CharT>::alpha_f:
-                result.push_back(traits<CharT>::alpha_formfeed);
+            case alphabet<CharT>::letter_f:
+                result.push_back(alphabet<CharT>::formfeed);
                 break;
 
-            case traits<CharT>::alpha_n:
-                result.push_back(traits<CharT>::alpha_newline);
+            case alphabet<CharT>::letter_n:
+                result.push_back(alphabet<CharT>::newline);
                 break;
 
-            case traits<CharT>::alpha_r:
-                result.push_back(traits<CharT>::alpha_return);
+            case alphabet<CharT>::letter_r:
+                result.push_back(alphabet<CharT>::carriage_return);
                 break;
 
-            case traits<CharT>::alpha_t:
-                result.push_back(traits<CharT>::alpha_tab);
+            case alphabet<CharT>::letter_t:
+                result.push_back(alphabet<CharT>::tabulator);
                 break;
 
-            case traits<CharT>::alpha_u:
+            case alphabet<CharT>::letter_u:
                 {
                     // Convert \uXXXX value to UTF-8
                     assert(std::distance(it, end) >= 5);
@@ -1432,10 +1432,10 @@ void basic_decoder<CharT>::next_f_keyword() noexcept
     {
         type = token::code::error_unexpected_token;
     }
-    else if ((marker[1] == traits<CharT>::alpha_a) &&
-             (marker[2] == traits<CharT>::alpha_l) &&
-             (marker[3] == traits<CharT>::alpha_s) &&
-             (marker[4] == traits<CharT>::alpha_e))
+    else if ((marker[1] == alphabet<CharT>::letter_a) &&
+             (marker[2] == alphabet<CharT>::letter_l) &&
+             (marker[3] == alphabet<CharT>::letter_s) &&
+             (marker[4] == alphabet<CharT>::letter_e))
     {
         input.remove_front(false_length);
         if (!at_keyword_end())
@@ -1464,9 +1464,9 @@ void basic_decoder<CharT>::next_n_keyword() noexcept
     {
         type = token::code::error_unexpected_token;
     }
-    else if ((marker[1] == traits<CharT>::alpha_u) &&
-             (marker[2] == traits<CharT>::alpha_l) &&
-             (marker[3] == traits<CharT>::alpha_l))
+    else if ((marker[1] == alphabet<CharT>::letter_u) &&
+             (marker[2] == alphabet<CharT>::letter_l) &&
+             (marker[3] == alphabet<CharT>::letter_l))
     {
         input.remove_front(null_size);
         if (!at_keyword_end())
@@ -1495,9 +1495,9 @@ void basic_decoder<CharT>::next_t_keyword() noexcept
     {
         type = token::code::error_unexpected_token;
     }
-    else if ((marker[1] == traits<CharT>::alpha_r) &&
-             (marker[2] == traits<CharT>::alpha_u) &&
-             (marker[3] == traits<CharT>::alpha_e))
+    else if ((marker[1] == alphabet<CharT>::letter_r) &&
+             (marker[2] == alphabet<CharT>::letter_u) &&
+             (marker[3] == alphabet<CharT>::letter_e))
     {
         input.remove_front(true_size);
         if (!at_keyword_end())
@@ -1521,7 +1521,7 @@ void basic_decoder<CharT>::next_number() noexcept
     auto begin = input.begin();
     token::code::value type = token::code::integer;
 
-    const bool is_negative = (*begin == traits<CharT>::alpha_minus);
+    const bool is_negative = (*begin == alphabet<CharT>::minus);
     if (is_negative)
     {
         input.remove_front(); // Skip '-'
@@ -1534,7 +1534,7 @@ void basic_decoder<CharT>::next_number() noexcept
 
     {
         auto digit_begin = input.begin();
-        if (input.front() == traits<CharT>::alpha_0)
+        if (input.front() == alphabet<CharT>::digit_0)
         {
             input.remove_front();
             if (!input.empty() && traits<CharT>::is_digit(input.front()))
@@ -1560,7 +1560,7 @@ void basic_decoder<CharT>::next_number() noexcept
         current.scan.number.integer_tail = input.begin();
         if (!input.empty())
         {
-            if (input.front() == traits<CharT>::alpha_dot)
+            if (input.front() == alphabet<CharT>::dot)
             {
                 type = token::code::real;
                 input.remove_front();
@@ -1586,8 +1586,8 @@ void basic_decoder<CharT>::next_number() noexcept
                 current.scan.number.fraction_tail = it;
                 input.remove_front(std::distance(input.begin(), it));
             }
-            if (!input.empty() && ((input.front() == traits<CharT>::alpha_E) ||
-                                   (input.front() == traits<CharT>::alpha_e)))
+            if (!input.empty() && ((input.front() == alphabet<CharT>::letter_E) ||
+                                   (input.front() == alphabet<CharT>::letter_e)))
             {
                 type = token::code::real;
                 input.remove_front();
@@ -1597,7 +1597,7 @@ void basic_decoder<CharT>::next_number() noexcept
                     goto end;
                 }
 
-                if (input.front() == traits<CharT>::alpha_plus)
+                if (input.front() == alphabet<CharT>::plus)
                 {
                     input.remove_front();
                     if (input.empty())
@@ -1606,7 +1606,7 @@ void basic_decoder<CharT>::next_number() noexcept
                         goto end;
                     }
                 }
-                else if (input.front() == traits<CharT>::alpha_minus)
+                else if (input.front() == alphabet<CharT>::minus)
                 {
                     input.remove_front();
                     if (input.empty())
@@ -1636,7 +1636,7 @@ void basic_decoder<CharT>::next_number() noexcept
 template <typename CharT>
 void basic_decoder<CharT>::next_string() noexcept
 {
-    assert(input.front() == traits<CharT>::alpha_quote);
+    assert(input.front() == alphabet<CharT>::quote);
 
     current.scan.string.length = 0;
     auto marker = input.begin();
@@ -1653,17 +1653,17 @@ void basic_decoder<CharT>::next_string() noexcept
                     goto eof;
                 switch (*marker++)
                 {
-                case traits<CharT>::alpha_quote:
-                case traits<CharT>::alpha_reverse_solidus:
-                case traits<CharT>::alpha_solidus:
-                case traits<CharT>::alpha_b:
-                case traits<CharT>::alpha_f:
-                case traits<CharT>::alpha_n:
-                case traits<CharT>::alpha_r:
-                case traits<CharT>::alpha_t:
+                case alphabet<CharT>::quote:
+                case alphabet<CharT>::reverse_solidus:
+                case alphabet<CharT>::solidus:
+                case alphabet<CharT>::letter_b:
+                case alphabet<CharT>::letter_f:
+                case alphabet<CharT>::letter_n:
+                case alphabet<CharT>::letter_r:
+                case alphabet<CharT>::letter_t:
                     break;
 
-                case traits<CharT>::alpha_u:
+                case alphabet<CharT>::letter_u:
                     switch (std::distance(marker, end))
                     {
                     case 3:
