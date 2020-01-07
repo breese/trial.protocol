@@ -14,7 +14,6 @@
 #include <cstddef> // std::size_t
 #include <string>
 #include <boost/config.hpp>
-#include <trial/protocol/core/char_traits.hpp>
 
 namespace trial
 {
@@ -160,16 +159,11 @@ class traits<char>
 {
 public:
     using value_type = char;
-    using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
 
     static traits_category to_category(value_type value) noexcept;
     static int to_int(value_type value) noexcept;
 
     static const value_type *skip_narrow(const value_type *) noexcept;
-
-    static const string_type& false_text() noexcept;
-    static const string_type& true_text() noexcept;
-    static const string_type& null_text() noexcept;
 
 private:
     static bool is_hex_upper(value_type value) noexcept
@@ -237,15 +231,10 @@ class traits<unsigned char>
 {
 public:
     using value_type = unsigned char;
-    using string_type = std::basic_string<value_type, core::char_traits<value_type>>;
 
     static traits_category to_category(value_type value) noexcept;
     static int to_int(value_type value) noexcept;
     static const value_type *skip_narrow(const value_type *) noexcept;
-
-    static const string_type& false_text() noexcept;
-    static const string_type& true_text() noexcept;
-    static const string_type& null_text() noexcept;
 
 private:
     static bool is_hex_upper(value_type value) noexcept

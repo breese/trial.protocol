@@ -268,11 +268,24 @@ auto basic_encoder<CharT, N>::value(bool data) -> size_type
 {
     if (data)
     {
-        return write(traits<CharT>::true_text());
+        static constexpr CharT true_text[] = {
+            alphabet<CharT>::letter_t,
+            alphabet<CharT>::letter_r,
+            alphabet<CharT>::letter_u,
+            alphabet<CharT>::letter_e
+        };
+        return write(view_type(true_text, sizeof(true_text)));
     }
     else
     {
-        return write(traits<CharT>::false_text());
+        static constexpr CharT false_text[] = {
+            alphabet<CharT>::letter_f,
+            alphabet<CharT>::letter_a,
+            alphabet<CharT>::letter_l,
+            alphabet<CharT>::letter_s,
+            alphabet<CharT>::letter_e
+        };
+        return write(view_type(false_text, sizeof(false_text)));
     }
 }
 
@@ -349,7 +362,7 @@ auto basic_encoder<CharT, N>::floating_value(const T& data) -> size_type
     case FP_INFINITE:
     case FP_NAN:
         // Infinity and NaN must be encoded as null
-        return write(traits<CharT>::null_text());
+        return null_value();
     default:
         return write(detail::string_converter<CharT, T>::encode(data));
     }
@@ -492,7 +505,13 @@ auto basic_encoder<CharT, N>::string_value(const T& data) -> size_type
 template <typename CharT, std::size_t N>
 auto basic_encoder<CharT, N>::null_value() -> size_type
 {
-    return write(traits<CharT>::null_text());
+    static constexpr CharT null_text[] = {
+        alphabet<CharT>::letter_n,
+        alphabet<CharT>::letter_u,
+        alphabet<CharT>::letter_l,
+        alphabet<CharT>::letter_l
+    };
+    return write(view_type(null_text, sizeof(null_text)));
 }
 
 template <typename CharT, std::size_t N>

@@ -311,24 +311,6 @@ inline auto traits<char>::skip_narrow(const value_type *marker) noexcept -> cons
     return marker;
 }
 
-inline const std::basic_string<char>& traits<char>::false_text() BOOST_NOEXCEPT
-{
-    static std::basic_string<value_type> text("false");
-    return text;
-}
-
-inline const std::basic_string<char>& traits<char>::true_text() BOOST_NOEXCEPT
-{
-    static std::basic_string<value_type> text("true");
-    return text;
-}
-
-inline const std::basic_string<char>& traits<char>::null_text() BOOST_NOEXCEPT
-{
-    static std::basic_string<value_type> text("null");
-    return text;
-}
-
 //-----------------------------------------------------------------------------
 // unsigned char specialization
 //-----------------------------------------------------------------------------
@@ -615,24 +597,6 @@ inline auto traits<unsigned char>::skip_narrow(const value_type *marker) noexcep
         ++marker;
     }
     return marker;
-}
-
-inline auto traits<unsigned char>::false_text() BOOST_NOEXCEPT -> const string_type&
-{
-    static string_type text(reinterpret_cast<const value_type *>("false"));
-    return text;
-}
-
-inline auto traits<unsigned char>::true_text() BOOST_NOEXCEPT -> const string_type&
-{
-    static string_type text(reinterpret_cast<const value_type *>("true"));
-    return text;
-}
-
-inline auto traits<unsigned char>::null_text() BOOST_NOEXCEPT -> const string_type&
-{
-    static string_type text(reinterpret_cast<const value_type *>("null"));
-    return text;
 }
 
 } // namespace detail
