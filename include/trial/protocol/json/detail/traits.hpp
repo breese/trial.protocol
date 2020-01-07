@@ -23,11 +23,15 @@ namespace json
 {
 namespace detail
 {
+namespace traits
+{
 
 template <typename CharT>
 struct alphabet
 {
 };
+
+//-----------------------------------------------------------------------------
 
 enum
 {
@@ -37,8 +41,6 @@ enum
     character_hex_lower = 1 << 3, // a-f
     character_alpha = 1 << 4      // A-Z | a-z
 };
-
-//-----------------------------------------------------------------------------
 
 template <typename CharT>
 std::uint8_t flags(CharT index) noexcept
@@ -93,7 +95,7 @@ int to_hexint(CharT value) noexcept;
 
 //-----------------------------------------------------------------------------
 
-enum class traits_category
+enum class category
 {
     narrow,
     extra_1,
@@ -107,13 +109,14 @@ enum class traits_category
 };
 
 template <typename CharT>
-auto to_category(CharT value) noexcept -> traits_category;
+auto to_category(CharT value) noexcept -> category;
 
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
 auto skip_narrow(const CharT *) noexcept -> const CharT *;
 
+} // namespace traits
 } // namespace detail
 } // namespace json
 } // namespace protocol
