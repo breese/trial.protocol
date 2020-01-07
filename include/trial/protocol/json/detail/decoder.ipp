@@ -1278,7 +1278,7 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
     int segment_index = 0;
     while (it != end)
     {
-        switch (traits<CharT>::to_category(*it))
+        switch (to_category(*it))
         {
         case traits_category::escape:
         {
@@ -1316,10 +1316,11 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
                 {
                     // Convert \uXXXX value to UTF-8
                     assert(std::distance(it, end) >= 5);
-                    std::uint32_t number = (std::uint32_t(traits<CharT>::to_int(it[1])) << 12)
-                        + (std::uint32_t(traits<CharT>::to_int(it[2])) << 8)
-                        + (std::uint32_t(traits<CharT>::to_int(it[3])) << 4)
-                        + (std::uint32_t(traits<CharT>::to_int(it[4])));
+                    std::uint32_t number =
+                        (std::uint32_t(to_hexint(it[1])) << 12)
+                        + (std::uint32_t(to_hexint(it[2])) << 8)
+                        + (std::uint32_t(to_hexint(it[3])) << 4)
+                        + (std::uint32_t(to_hexint(it[4])));
                     it += 4;
                     if (number <= 0x007F)
                     {
@@ -1360,7 +1361,7 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             }
             else
             {
-                it = traits<CharT>::skip_narrow(++it);
+                it = skip_narrow(++it);
             }
             result.append(head, it - head);
             continue;
@@ -1644,7 +1645,7 @@ void basic_decoder<CharT>::next_string() noexcept
     ++marker; // Skip initial '"'
     while (marker != end)
     {
-        switch (traits<CharT>::to_category(*marker++))
+        switch (to_category(*marker++))
         {
         case traits_category::escape:
             {
@@ -1719,7 +1720,7 @@ void basic_decoder<CharT>::next_string() noexcept
 
         case traits_category::narrow:
             {
-                marker = traits<CharT>::skip_narrow(marker);
+                marker = skip_narrow(marker);
                 if (current.scan.string.length < segment_max)
                 {
                     current.scan.string.segment_tail[current.scan.string.length] = marker;

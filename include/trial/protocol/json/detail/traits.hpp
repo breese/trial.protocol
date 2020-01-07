@@ -29,25 +29,6 @@ struct alphabet
 {
 };
 
-template <typename CharT>
-class traits
-{
-    static int count_narrow(const CharT * const) noexcept;
-};
-
-enum class traits_category
-{
-    narrow,
-    extra_1,
-    extra_2,
-    extra_3,
-    extra_4,
-    extra_5,
-    quote,
-    escape,
-    illegal
-};
-
 enum
 {
     character_space = 1 << 0,     // 0x09 | 0x0A | 0x0D | 0x20
@@ -56,6 +37,8 @@ enum
     character_hex_lower = 1 << 3, // a-f
     character_alpha = 1 << 4      // A-Z | a-z
 };
+
+//-----------------------------------------------------------------------------
 
 template <typename CharT>
 std::uint8_t flags(CharT index) noexcept
@@ -105,147 +88,31 @@ bool is_alpha(CharT value) noexcept
     return flags(value) & character_alpha;
 }
 
-//-----------------------------------------------------------------------------
-// char specialization
-//-----------------------------------------------------------------------------
-
-template <>
-struct alphabet<char>
-{
-    static constexpr char backspace = '\b';
-    static constexpr char formfeed = '\f';
-    static constexpr char newline = '\n';
-    static constexpr char tabulator = '\t';
-    static constexpr char carriage_return = '\r';
-    static constexpr char quote = '"';
-    static constexpr char plus = '+';
-    static constexpr char comma = ',';
-    static constexpr char minus = '-';
-    static constexpr char dot = '.';
-    static constexpr char solidus = '/';
-    static constexpr char digit_0 = '0';
-    static constexpr char digit_1 = '1';
-    static constexpr char digit_2 = '2';
-    static constexpr char digit_3 = '3';
-    static constexpr char digit_4 = '4';
-    static constexpr char digit_5 = '5';
-    static constexpr char digit_6 = '6';
-    static constexpr char digit_7 = '7';
-    static constexpr char digit_8 = '8';
-    static constexpr char digit_9 = '9';
-    static constexpr char colon = ':';
-    static constexpr char question_mark = '?';
-    static constexpr char letter_A = 'A';
-    static constexpr char letter_E = 'E';
-    static constexpr char letter_a = 'a';
-    static constexpr char letter_b = 'b';
-    static constexpr char letter_e = 'e';
-    static constexpr char letter_f = 'f';
-    static constexpr char letter_l = 'l';
-    static constexpr char letter_n = 'n';
-    static constexpr char letter_r = 'r';
-    static constexpr char letter_s = 's';
-    static constexpr char letter_t = 't';
-    static constexpr char letter_u = 'u';
-    static constexpr char bracket_open = '[';
-    static constexpr char reverse_solidus = '\\';
-    static constexpr char bracket_close = ']';
-    static constexpr char brace_open = '{';
-    static constexpr char brace_close = '}';
-};
-
-template <>
-class traits<char>
-{
-public:
-    using value_type = char;
-
-    static traits_category to_category(value_type value) noexcept;
-    static int to_int(value_type value) noexcept;
-
-    static const value_type *skip_narrow(const value_type *) noexcept;
-
-private:
-    static bool is_hex_upper(value_type value) noexcept
-    {
-        return flags(value) & character_hex_upper;
-    }
-    static bool is_hex_lower(value_type value) noexcept
-    {
-        return flags(value) & character_hex_lower;
-    }
-};
+template <typename CharT>
+int to_hexint(CharT value) noexcept;
 
 //-----------------------------------------------------------------------------
-// unsigned char specialization
+
+enum class traits_category
+{
+    narrow,
+    extra_1,
+    extra_2,
+    extra_3,
+    extra_4,
+    extra_5,
+    quote,
+    escape,
+    illegal
+};
+
+template <typename CharT>
+auto to_category(CharT value) noexcept -> traits_category;
+
 //-----------------------------------------------------------------------------
 
-
-template <>
-struct alphabet<unsigned char>
-{
-    static constexpr unsigned char backspace = '\b';
-    static constexpr unsigned char formfeed = '\f';
-    static constexpr unsigned char newline = '\n';
-    static constexpr unsigned char tabulator = '\t';
-    static constexpr unsigned char carriage_return = '\r';
-    static constexpr unsigned char quote = '"';
-    static constexpr unsigned char plus = '+';
-    static constexpr unsigned char comma = ',';
-    static constexpr unsigned char minus = '-';
-    static constexpr unsigned char dot = '.';
-    static constexpr unsigned char solidus = '/';
-    static constexpr unsigned char digit_0 = '0';
-    static constexpr unsigned char digit_1 = '1';
-    static constexpr unsigned char digit_2 = '2';
-    static constexpr unsigned char digit_3 = '3';
-    static constexpr unsigned char digit_4 = '4';
-    static constexpr unsigned char digit_5 = '5';
-    static constexpr unsigned char digit_6 = '6';
-    static constexpr unsigned char digit_7 = '7';
-    static constexpr unsigned char digit_8 = '8';
-    static constexpr unsigned char digit_9 = '9';
-    static constexpr unsigned char colon = ':';
-    static constexpr unsigned char question_mark = '?';
-    static constexpr unsigned char letter_A = 'A';
-    static constexpr unsigned char letter_E = 'E';
-    static constexpr unsigned char letter_a = 'a';
-    static constexpr unsigned char letter_b = 'b';
-    static constexpr unsigned char letter_e = 'e';
-    static constexpr unsigned char letter_f = 'f';
-    static constexpr unsigned char letter_l = 'l';
-    static constexpr unsigned char letter_n = 'n';
-    static constexpr unsigned char letter_r = 'r';
-    static constexpr unsigned char letter_s = 's';
-    static constexpr unsigned char letter_t = 't';
-    static constexpr unsigned char letter_u = 'u';
-    static constexpr unsigned char bracket_open = '[';
-    static constexpr unsigned char reverse_solidus = '\\';
-    static constexpr unsigned char bracket_close = ']';
-    static constexpr unsigned char brace_open = '{';
-    static constexpr unsigned char brace_close = '}';
-};
-
-template <>
-class traits<unsigned char>
-{
-public:
-    using value_type = unsigned char;
-
-    static traits_category to_category(value_type value) noexcept;
-    static int to_int(value_type value) noexcept;
-    static const value_type *skip_narrow(const value_type *) noexcept;
-
-private:
-    static bool is_hex_upper(value_type value) noexcept
-    {
-        return flags(value) & character_hex_upper;
-    }
-    static bool is_hex_lower(value_type value) noexcept
-    {
-        return flags(value) & character_hex_lower;
-    }
-};
+template <typename CharT>
+auto skip_narrow(const CharT *) noexcept -> const CharT *;
 
 } // namespace detail
 } // namespace json
