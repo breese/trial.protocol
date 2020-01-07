@@ -1537,7 +1537,7 @@ void basic_decoder<CharT>::next_number() noexcept
         if (input.front() == alphabet<CharT>::digit_0)
         {
             input.remove_front();
-            if (!input.empty() && traits<CharT>::is_digit(input.front()))
+            if (!input.empty() && is_digit(input.front()))
             {
                 // Leading zeros not allowed
                 type = token::code::error_invalid_value;
@@ -1546,7 +1546,7 @@ void basic_decoder<CharT>::next_number() noexcept
         }
         else
         {
-            while (!input.empty() && traits<CharT>::is_digit(input.front()))
+            while (!input.empty() && is_digit(input.front()))
             {
                 input.remove_front();
             }
@@ -1572,10 +1572,10 @@ void basic_decoder<CharT>::next_number() noexcept
                 auto it = input.begin();
                 while (true)
                 {
-                    if (!traits<CharT>::is_digit(it[0])) { break; }
-                    if (!traits<CharT>::is_digit(it[1])) { it += 1; break; }
-                    if (!traits<CharT>::is_digit(it[2])) { it += 2; break; }
-                    if (!traits<CharT>::is_digit(it[3])) { it += 3; break; }
+                    if (!is_digit(it[0])) { break; }
+                    if (!is_digit(it[1])) { it += 1; break; }
+                    if (!is_digit(it[2])) { it += 2; break; }
+                    if (!is_digit(it[3])) { it += 3; break; }
                     it += 4;
                 }
                 if (it == input.begin())
@@ -1616,7 +1616,7 @@ void basic_decoder<CharT>::next_number() noexcept
                     }
                 }
                 auto exponent_begin = input.begin();
-                while (!input.empty() && traits<CharT>::is_digit(input.front()))
+                while (!input.empty() && is_digit(input.front()))
                 {
                     input.remove_front();
                 }
@@ -1667,19 +1667,19 @@ void basic_decoder<CharT>::next_string() noexcept
                     switch (std::distance(marker, end))
                     {
                     case 3:
-                        if (!traits<CharT>::is_hexdigit(*marker))
+                        if (!is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         goto case_2;
                     case 2:
                     case_2:
-                        if (!traits<CharT>::is_hexdigit(*marker))
+                        if (!is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         goto case_1;
                     case 1:
                     case_1:
-                        if (!traits<CharT>::is_hexdigit(*marker))
+                        if (!is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         goto case_0;
@@ -1688,16 +1688,16 @@ void basic_decoder<CharT>::next_string() noexcept
                         goto eof;
 
                     default:
-                        if (!traits<CharT>::is_hexdigit(*marker))
+                        if (!is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<CharT>::is_hexdigit(*marker))
+                        if (!is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<CharT>::is_hexdigit(*marker))
+                        if (!is_hexdigit(*marker))
                             goto error;
                         ++marker;
-                        if (!traits<CharT>::is_hexdigit(*marker))
+                        if (!is_hexdigit(*marker))
                             goto error;
                         ++marker;
                         break;
@@ -1786,10 +1786,10 @@ void basic_decoder<CharT>::skip_whitespaces() noexcept
     auto it = input.begin();
     while (true)
     {
-        if (!traits<CharT>::is_space(it[0])) { break; }
-        if (!traits<CharT>::is_space(it[1])) { it += 1; break; }
-        if (!traits<CharT>::is_space(it[2])) { it += 2; break; }
-        if (!traits<CharT>::is_space(it[3])) { it += 3; break; }
+        if (!is_space(it[0])) { break; }
+        if (!is_space(it[1])) { it += 1; break; }
+        if (!is_space(it[2])) { it += 2; break; }
+        if (!is_space(it[3])) { it += 3; break; }
         it += 4;
     }
     input.remove_front(std::distance(input.begin(), it));
@@ -1802,7 +1802,7 @@ bool basic_decoder<CharT>::at_keyword_end() const noexcept
     {
         return true;
     }
-    return !traits<CharT>::is_keyword(input.front());
+    return !is_alpha(input.front());
 }
 
 } // namespace detail
