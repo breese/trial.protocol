@@ -1361,7 +1361,7 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             }
             else
             {
-                it = traits::skip_narrow(++it);
+                it = traits::skip_narrow(++it, end);
             }
             result.append(head, it - head);
             continue;
@@ -1570,15 +1570,7 @@ void basic_decoder<CharT>::next_number() noexcept
                     type = token::code::end;
                     goto end;
                 }
-                auto it = input.begin();
-                while (true)
-                {
-                    if (!traits::is_digit(it[0])) { break; }
-                    if (!traits::is_digit(it[1])) { it += 1; break; }
-                    if (!traits::is_digit(it[2])) { it += 2; break; }
-                    if (!traits::is_digit(it[3])) { it += 3; break; }
-                    it += 4;
-                }
+                auto it = traits::skip_digits(input.begin(), input.end());
                 if (it == input.begin())
                 {
                     type = token::code::error_unexpected_token;
@@ -1720,7 +1712,7 @@ void basic_decoder<CharT>::next_string() noexcept
 
         case traits::category::narrow:
             {
-                marker = traits::skip_narrow(marker);
+                marker = traits::skip_narrow(marker, end);
                 if (current.scan.string.length < segment_max)
                 {
                     current.scan.string.segment_tail[current.scan.string.length] = marker;

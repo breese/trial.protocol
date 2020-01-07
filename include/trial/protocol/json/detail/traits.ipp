@@ -304,11 +304,29 @@ int to_hexint(CharT value) noexcept
 //-----------------------------------------------------------------------------
 
 template <typename CharT>
-auto skip_narrow(const CharT *marker) noexcept -> const CharT *
+auto skip_narrow(const CharT *marker,
+                 const CharT * const tail) noexcept -> const CharT *
 {
+    (void)tail;
     while (to_category(*marker) == category::narrow)
     {
         ++marker;
+    }
+    return marker;
+}
+
+template <typename CharT>
+auto skip_digits(const CharT *marker,
+                 const CharT * const tail) noexcept -> const CharT *
+{
+    (void)tail;
+    while (true)
+    {
+        if (!is_digit(marker[0])) { break; }
+        if (!is_digit(marker[1])) { marker += 1; break; }
+        if (!is_digit(marker[2])) { marker += 2; break; }
+        if (!is_digit(marker[3])) { marker += 3; break; }
+        marker += 4;
     }
     return marker;
 }
