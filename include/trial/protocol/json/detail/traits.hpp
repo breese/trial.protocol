@@ -111,14 +111,6 @@ enum class category
 template <typename CharT>
 auto to_category(CharT value) noexcept -> category;
 
-//-----------------------------------------------------------------------------
-
-template <typename CharT>
-auto skip_narrow(const CharT *, const CharT * const) noexcept -> const CharT *;
-
-template <typename CharT>
-auto skip_digits(const CharT *, const CharT * const) noexcept -> const CharT *;
-
 } // namespace traits
 } // namespace detail
 } // namespace json

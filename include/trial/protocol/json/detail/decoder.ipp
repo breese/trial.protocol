@@ -19,6 +19,7 @@
 #include <trial/protocol/json/detail/string_converter.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
+#include <trial/protocol/json/detail/scan.hpp>
 #include <trial/protocol/json/error.hpp>
 
 // http://tools.ietf.org/html/rfc7159
@@ -1361,7 +1362,7 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             }
             else
             {
-                it = traits::skip_narrow(++it, end);
+                it = scan_narrow(++it, end);
             }
             result.append(head, it - head);
             continue;
@@ -1570,7 +1571,7 @@ void basic_decoder<CharT>::next_number() noexcept
                     type = token::code::end;
                     goto end;
                 }
-                auto it = traits::skip_digits(input.begin(), input.end());
+                auto it = scan_digit(input.begin(), input.end());
                 if (it == input.begin())
                 {
                     type = token::code::error_unexpected_token;
@@ -1712,7 +1713,7 @@ void basic_decoder<CharT>::next_string() noexcept
 
         case traits::category::narrow:
             {
-                marker = traits::skip_narrow(marker, end);
+                marker = scan_narrow(marker, end);
                 if (current.scan.string.length < segment_max)
                 {
                     current.scan.string.segment_tail[current.scan.string.length] = marker;
