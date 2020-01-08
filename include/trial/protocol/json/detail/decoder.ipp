@@ -1358,13 +1358,13 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             if (segment_index < current.scan.string.length)
             {
                 it = current.scan.string.segment_tail[segment_index];
-                ++segment_index;
             }
             else
             {
                 it = scan_narrow(++it, end);
             }
             result.append(head, it - head);
+            ++segment_index;
             continue;
         }
 
@@ -1714,11 +1714,10 @@ void basic_decoder<CharT>::next_string() noexcept
         case traits::category::narrow:
             {
                 marker = scan_narrow(marker, end);
-                if (current.scan.string.length < segment_max)
-                {
-                    current.scan.string.segment_tail[current.scan.string.length] = marker;
-                    ++current.scan.string.length;
-                }
+                // Insert the first segment_max number of segments into the array, and
+                // insert all surplus segments in the last array entry.
+                current.scan.string.segment_tail[current.scan.string.length] = marker;
+                current.scan.string.length =+ (current.scan.string.length <= segment_max);
             }
             break;
 
