@@ -1548,10 +1548,8 @@ void basic_decoder<CharT>::next_number() noexcept
         }
         else
         {
-            while (!input.empty() && traits::is_digit(input.front()))
-            {
-                input.remove_front();
-            }
+            const auto marker = scan_digit(input.begin(), input.end());
+            input.remove_front(std::distance(input.begin(), marker));
         }
         if (input.begin() == digit_begin)
         {
