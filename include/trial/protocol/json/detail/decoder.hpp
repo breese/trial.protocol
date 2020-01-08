@@ -136,7 +136,7 @@ private:
             struct
             {
                 int length;
-                const_pointer segment_tail[segment_max + 1];
+                const_pointer segment_tail[segment_max];
             } string;
         } scan;
     } current;
