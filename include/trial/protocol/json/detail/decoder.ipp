@@ -1775,15 +1775,7 @@ void basic_decoder<CharT>::next_string() noexcept
 template <typename CharT>
 void basic_decoder<CharT>::skip_whitespaces() noexcept
 {
-    auto it = input.begin();
-    while (true)
-    {
-        if (!traits::is_space(it[0])) { break; }
-        if (!traits::is_space(it[1])) { it += 1; break; }
-        if (!traits::is_space(it[2])) { it += 2; break; }
-        if (!traits::is_space(it[3])) { it += 3; break; }
-        it += 4;
-    }
+    const auto it = scan_whitespace(input.begin(), input.end());
     input.remove_front(std::distance(input.begin(), it));
 }
 

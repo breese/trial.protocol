@@ -13,6 +13,7 @@
 
 #include <trial/protocol/core/detail/bit.hpp>
 #include <trial/protocol/core/detail/simd.hpp>
+#include <trial/protocol/json/detail/traits.hpp>
 
 namespace trial
 {
@@ -78,6 +79,22 @@ auto scan_digit(const CharT *marker,
         if (!traits::is_digit(marker[1])) { marker += 1; break; }
         if (!traits::is_digit(marker[2])) { marker += 2; break; }
         if (!traits::is_digit(marker[3])) { marker += 3; break; }
+        marker += 4;
+    }
+    return marker;
+}
+
+template <typename CharT>
+auto scan_whitespace(const CharT *marker,
+                     const CharT * const tail) noexcept -> const CharT *
+{
+    (void)tail;
+    while (true)
+    {
+        if (!traits::is_space(marker[0])) { break; }
+        if (!traits::is_space(marker[1])) { marker += 1; break; }
+        if (!traits::is_space(marker[2])) { marker += 2; break; }
+        if (!traits::is_space(marker[3])) { marker += 3; break; }
         marker += 4;
     }
     return marker;
