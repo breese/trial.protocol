@@ -959,7 +959,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
         result += delta;
         ++marker;
     }
-    if (*marker == '.')
+    if (*marker == traits::alphabet<CharT>::dot)
     {
         ++marker;
         T fraction = zero;
