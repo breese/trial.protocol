@@ -38,27 +38,27 @@ namespace detail
 
 #if defined(__GNUC__) || defined(__clang__)
 
-constexpr int countl_zero(unsigned char x) noexcept
+inline constexpr int countl_zero(unsigned char x) noexcept
 {
     return __builtin_ctz(x);
 }
 
-constexpr int countl_zero(unsigned short x) noexcept
+inline constexpr int countl_zero(unsigned short x) noexcept
 {
     return __builtin_ctz(x);
 }
 
-constexpr int countl_zero(unsigned x) noexcept
+inline constexpr int countl_zero(unsigned x) noexcept
 {
     return __builtin_ctz(x);
 }
 
-constexpr int countl_zero(unsigned long x) noexcept
+inline constexpr int countl_zero(unsigned long x) noexcept
 {
         return __builtin_ctzl(x);
 }
 
-constexpr int countl_zero(unsigned long long x) noexcept
+inline constexpr int countl_zero(unsigned long long x) noexcept
 {
         return __builtin_ctzll(x);
 }
