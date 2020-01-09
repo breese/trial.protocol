@@ -14,6 +14,8 @@
 #if __cplusplus >= 201806L
 # define TRIAL_PROTOCOL_HAS_HEADER_BIT 1
 # include <bit>
+#else
+# include <type_traits>
 #endif
 
 namespace trial
@@ -31,11 +33,35 @@ using std::countl_zero;
 
 #else
 
+namespace detail
+{
+
+#if defined(__GNUC__) || defined(__clang__)
+
+constexpr int countl_zero(unsigned x) noexcept
+{
+    return __builtin_ctz(x);
+}
+
+constexpr int countl_zero(unsigned long x) noexcept
+{
+        return __builtin_ctzl(x);
+}
+
+constexpr int countl_zero(unsigned long long x) noexcept
+{
+        return __builtin_ctzll(x);
+}
+
+#endif
+
+} // namespace detail
+
 template <typename T>
-int countl_zero(T x) noexcept
+constexpr int countl_zero(T x) noexcept
 {
 #if defined(__GNUC__) || defined(__clang__)
-    return __builtin_ctz(x);
+    return detail::countl_zero(typename std::make_unsigned<T>::type(x));
 #else
 # error "No countl_zero implementation"
 #endif
