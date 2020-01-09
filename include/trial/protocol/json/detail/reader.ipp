@@ -338,6 +338,25 @@ basic_reader<CharT>::frame::frame(token::code::value scope)
     : scope(scope),
       counter(0)
 {
+    switch (scope)
+    {
+    case token::code::end:
+        check = &frame::check_outer;
+        break;
+
+    case token::code::end_array:
+        check = &frame::check_array;
+        break;
+
+    case token::code::end_object:
+        check = &frame::check_object;
+        break;
+
+    default:
+        assert(false);
+        check = nullptr;
+        break;
+    }
 }
 
 template <typename CharT>
@@ -357,20 +376,7 @@ token::code::value basic_reader<CharT>::frame::next(decoder_type& decoder)
 {
     decoder.next();
 
-    switch (scope)
-    {
-    case token::code::end:
-        return check_outer(decoder);
-
-    case token::code::end_array:
-        return check_array(decoder);
-
-    case token::code::end_object:
-        return check_object(decoder);
-
-    default:
-        return token::code::error_unexpected_token;
-    }
+    return (this->*check)(decoder);
 }
 
 template <typename CharT>

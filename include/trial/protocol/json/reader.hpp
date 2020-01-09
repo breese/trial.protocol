@@ -164,6 +164,7 @@ private:
 
         token::code::value scope;
         size_type counter;
+        token::code::value (frame::*check)(decoder_type&);
     };
     std::stack<frame> stack;
 #endif
