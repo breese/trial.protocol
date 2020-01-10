@@ -1212,124 +1212,54 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             break;
         }
         case 18:
-            fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[2][unsigned(marker[2] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[3][unsigned(marker[3] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[4][unsigned(marker[4] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[5][unsigned(marker[5] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[6][unsigned(marker[6] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[7][unsigned(marker[7] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[8][unsigned(marker[8] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[9][unsigned(marker[9] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[10][unsigned(marker[10] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[11][unsigned(marker[11] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[12][unsigned(marker[12] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[13][unsigned(marker[13] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[14][unsigned(marker[14] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[15][unsigned(marker[15] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[16][unsigned(marker[16] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[17][unsigned(marker[17] - traits::alphabet<CharT>::digit_0)];
+        {
+            std::uint64_t integer;
+            unsigned_integer_value(marker, marker + 18, integer);
+            fraction += integer * T(1e-18);
             break;
+        }
         case 17:
-            fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[2][unsigned(marker[2] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[3][unsigned(marker[3] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[4][unsigned(marker[4] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[5][unsigned(marker[5] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[6][unsigned(marker[6] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[7][unsigned(marker[7] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[8][unsigned(marker[8] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[9][unsigned(marker[9] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[10][unsigned(marker[10] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[11][unsigned(marker[11] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[12][unsigned(marker[12] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[13][unsigned(marker[13] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[14][unsigned(marker[14] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[15][unsigned(marker[15] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[16][unsigned(marker[16] - traits::alphabet<CharT>::digit_0)];
+        {
+            std::uint64_t integer;
+            unsigned_integer_value(marker, marker + 17, integer);
+            fraction += integer * T(1e-17);
             break;
+        }
         case 16:
-            fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[2][unsigned(marker[2] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[3][unsigned(marker[3] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[4][unsigned(marker[4] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[5][unsigned(marker[5] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[6][unsigned(marker[6] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[7][unsigned(marker[7] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[8][unsigned(marker[8] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[9][unsigned(marker[9] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[10][unsigned(marker[10] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[11][unsigned(marker[11] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[12][unsigned(marker[12] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[13][unsigned(marker[13] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[14][unsigned(marker[14] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[15][unsigned(marker[15] - traits::alphabet<CharT>::digit_0)];
+        {
+            std::uint64_t integer;
+            unsigned_integer_value(marker, marker + 16, integer);
+            fraction += integer * T(1e-16);
             break;
+        }
         case 15:
-            fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[2][unsigned(marker[2] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[3][unsigned(marker[3] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[4][unsigned(marker[4] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[5][unsigned(marker[5] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[6][unsigned(marker[6] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[7][unsigned(marker[7] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[8][unsigned(marker[8] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[9][unsigned(marker[9] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[10][unsigned(marker[10] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[11][unsigned(marker[11] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[12][unsigned(marker[12] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[13][unsigned(marker[13] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[14][unsigned(marker[14] - traits::alphabet<CharT>::digit_0)];
+        {
+            std::uint64_t integer;
+            unsigned_integer_value(marker, marker + 15, integer);
+            fraction += integer * T(1e-15);
             break;
+        }
         case 14:
-            fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[2][unsigned(marker[2] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[3][unsigned(marker[3] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[4][unsigned(marker[4] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[5][unsigned(marker[5] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[6][unsigned(marker[6] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[7][unsigned(marker[7] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[8][unsigned(marker[8] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[9][unsigned(marker[9] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[10][unsigned(marker[10] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[11][unsigned(marker[11] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[12][unsigned(marker[12] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[13][unsigned(marker[13] - traits::alphabet<CharT>::digit_0)];
+        {
+            std::uint64_t integer;
+            unsigned_integer_value(marker, marker + 14, integer);
+            fraction += integer * T(1e-14);
             break;
+        }
         case 13:
-            fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[2][unsigned(marker[2] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[3][unsigned(marker[3] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[4][unsigned(marker[4] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[5][unsigned(marker[5] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[6][unsigned(marker[6] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[7][unsigned(marker[7] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[8][unsigned(marker[8] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[9][unsigned(marker[9] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[10][unsigned(marker[10] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[11][unsigned(marker[11] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[12][unsigned(marker[12] - traits::alphabet<CharT>::digit_0)];
+        {
+            std::uint64_t integer;
+            unsigned_integer_value(marker, marker + 13, integer);
+            fraction += integer * T(1e-13);
             break;
+        }
         case 12:
-            fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[2][unsigned(marker[2] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[3][unsigned(marker[3] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[4][unsigned(marker[4] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[5][unsigned(marker[5] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[6][unsigned(marker[6] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[7][unsigned(marker[7] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[8][unsigned(marker[8] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[9][unsigned(marker[9] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[10][unsigned(marker[10] - traits::alphabet<CharT>::digit_0)];
-            fraction += fractions[11][unsigned(marker[11] - traits::alphabet<CharT>::digit_0)];
+        {
+            std::uint64_t integer;
+            unsigned_integer_value(marker, marker + 12, integer);
+            fraction += integer * T(1e-12);
             break;
+        }
         case 11:
             fraction += fractions[0][unsigned(marker[0] - traits::alphabet<CharT>::digit_0)];
             fraction += fractions[1][unsigned(marker[1] - traits::alphabet<CharT>::digit_0)];

@@ -185,6 +185,205 @@ BENCHMARK(value_float_fraction);
 BENCHMARK(value_double_fraction);
 BENCHMARK(value_long_double_fraction);
 
+void value_real_1(benchmark::State& state)
+{
+    char input[] = "0.1";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_2(benchmark::State& state)
+{
+    char input[] = "0.12";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_3(benchmark::State& state)
+{
+    char input[] = "0.123";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_4(benchmark::State& state)
+{
+    char input[] = "0.1234";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_5(benchmark::State& state)
+{
+    char input[] = "0.12345";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_6(benchmark::State& state)
+{
+    char input[] = "0.123456";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_7(benchmark::State& state)
+{
+    char input[] = "0.1234567";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_8(benchmark::State& state)
+{
+    char input[] = "0.12345678";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_9(benchmark::State& state)
+{
+    char input[] = "0.123456789";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_10(benchmark::State& state)
+{
+    char input[] = "0.1234567890";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_11(benchmark::State& state)
+{
+    char input[] = "0.12345678901";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_12(benchmark::State& state)
+{
+    char input[] = "0.123456789012";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_13(benchmark::State& state)
+{
+    char input[] = "0.1234567890123";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_14(benchmark::State& state)
+{
+    char input[] = "0.12345678901234";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_15(benchmark::State& state)
+{
+    char input[] = "0.123456789012345";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_16(benchmark::State& state)
+{
+    char input[] = "0.1234567890123456";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_17(benchmark::State& state)
+{
+    char input[] = "0.12345678901234567";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+void value_real_18(benchmark::State& state)
+{
+    char input[] = "0.123456789012345678";
+    json::reader reader(input);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(reader.value<double>());
+    }
+}
+
+BENCHMARK(value_real_1);
+BENCHMARK(value_real_2);
+BENCHMARK(value_real_3);
+BENCHMARK(value_real_4);
+BENCHMARK(value_real_5);
+BENCHMARK(value_real_6);
+BENCHMARK(value_real_7);
+BENCHMARK(value_real_8);
+BENCHMARK(value_real_9);
+BENCHMARK(value_real_10);
+BENCHMARK(value_real_11);
+BENCHMARK(value_real_12);
+BENCHMARK(value_real_13);
+BENCHMARK(value_real_14);
+BENCHMARK(value_real_15);
+BENCHMARK(value_real_16);
+BENCHMARK(value_real_17);
+BENCHMARK(value_real_18);
+
 void parse_string8(benchmark::State& state)
 {
     char input[] = "\"ABCDEFGH\"";
