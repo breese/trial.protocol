@@ -1558,22 +1558,28 @@ void basic_decoder<CharT>::next_f_keyword() noexcept
     {
         type = token::code::error_unexpected_token;
     }
-    else if ((marker[1] == traits::alphabet<CharT>::letter_a) &&
-             (marker[2] == traits::alphabet<CharT>::letter_l) &&
-             (marker[3] == traits::alphabet<CharT>::letter_s) &&
-             (marker[4] == traits::alphabet<CharT>::letter_e))
-    {
-        input.remove_front(false_length);
-        if (!at_keyword_end())
-        {
-            while (!at_keyword_end())
-                input.remove_front();
-            type = token::code::error_unexpected_token;
-        }
-    }
     else
     {
-        type = token::code::error_unexpected_token;
+        static constexpr const CharT false_suffix[] = {
+            traits::alphabet<CharT>::letter_a,
+            traits::alphabet<CharT>::letter_l,
+            traits::alphabet<CharT>::letter_s,
+            traits::alphabet<CharT>::letter_e
+        };
+        if (std::memcmp(&marker[1], false_suffix, sizeof(false_suffix)) == 0)
+        {
+            input.remove_front(false_length);
+            if (!at_keyword_end())
+            {
+                while (!at_keyword_end())
+                    input.remove_front();
+                type = token::code::error_unexpected_token;
+            }
+        }
+        else
+        {
+            type = token::code::error_unexpected_token;
+        }
     }
     current.view = view_type(marker, input.begin());
     current.code = type;
@@ -1590,21 +1596,28 @@ void basic_decoder<CharT>::next_n_keyword() noexcept
     {
         type = token::code::error_unexpected_token;
     }
-    else if ((marker[1] == traits::alphabet<CharT>::letter_u) &&
-             (marker[2] == traits::alphabet<CharT>::letter_l) &&
-             (marker[3] == traits::alphabet<CharT>::letter_l))
-    {
-        input.remove_front(null_size);
-        if (!at_keyword_end())
-        {
-            while (!at_keyword_end())
-                input.remove_front();
-            type = token::code::error_unexpected_token;
-        }
-    }
     else
     {
-        type = token::code::error_unexpected_token;
+        static constexpr const CharT null_keyword[] = {
+            traits::alphabet<CharT>::letter_n,
+            traits::alphabet<CharT>::letter_u,
+            traits::alphabet<CharT>::letter_l,
+            traits::alphabet<CharT>::letter_l
+        };
+        if (std::memcmp(marker, null_keyword, sizeof(null_keyword)) == 0)
+        {
+            input.remove_front(null_size);
+            if (!at_keyword_end())
+            {
+                while (!at_keyword_end())
+                    input.remove_front();
+                type = token::code::error_unexpected_token;
+            }
+        }
+        else
+        {
+            type = token::code::error_unexpected_token;
+        }
     }
     current.view = view_type(marker, input.begin());
     current.code = type;
@@ -1621,21 +1634,28 @@ void basic_decoder<CharT>::next_t_keyword() noexcept
     {
         type = token::code::error_unexpected_token;
     }
-    else if ((marker[1] == traits::alphabet<CharT>::letter_r) &&
-             (marker[2] == traits::alphabet<CharT>::letter_u) &&
-             (marker[3] == traits::alphabet<CharT>::letter_e))
-    {
-        input.remove_front(true_size);
-        if (!at_keyword_end())
-        {
-            while (!at_keyword_end())
-                input.remove_front();
-            type = token::code::error_unexpected_token;
-        }
-    }
     else
     {
-        type = token::code::error_unexpected_token;
+        static constexpr const CharT true_keyword[] = {
+            traits::alphabet<CharT>::letter_t,
+            traits::alphabet<CharT>::letter_r,
+            traits::alphabet<CharT>::letter_u,
+            traits::alphabet<CharT>::letter_e
+        };
+        if (std::memcmp(marker, true_keyword, sizeof(true_keyword)) == 0)
+        {
+            input.remove_front(true_size);
+            if (!at_keyword_end())
+            {
+                while (!at_keyword_end())
+                    input.remove_front();
+                type = token::code::error_unexpected_token;
+            }
+        }
+        else
+        {
+            type = token::code::error_unexpected_token;
+        }
     }
     current.view = view_type(marker, input.begin());
     current.code = type;
