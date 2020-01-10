@@ -93,7 +93,9 @@ struct basic_decoder<CharT>::overloader<ReturnType,
             return json::incompatible_type;
         }
         output = {};
-        return self.unsigned_integer_value(self.literal().begin(), output);
+        return self.unsigned_integer_value(self.literal().begin(),
+                                           self.current.scan.number.integer_tail,
+                                           output);
     }
 };
 
@@ -296,7 +298,9 @@ auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> jso
     {
         ++marker; // Skip minus
 
-        const auto errc = unsigned_integer_value(marker, result);
+        const auto errc = unsigned_integer_value(marker,
+                                                 current.scan.number.integer_tail,
+                                                 result);
         if (errc == json::no_error)
         {
             if (result > unsigned_type(-std::numeric_limits<T>::lowest()))
@@ -307,7 +311,9 @@ auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> jso
     }
     else
     {
-        const auto errc = unsigned_integer_value(marker, result);
+        const auto errc = unsigned_integer_value(marker,
+                                                 current.scan.number.integer_tail,
+                                                 result);
         if (errc == json::no_error)
         {
             if (result > unsigned_type(std::numeric_limits<T>::max()))
@@ -320,12 +326,13 @@ auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> jso
 
 template <typename CharT>
 template <typename T>
-auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+auto basic_decoder<CharT>::unsigned_integer_value(const_pointer head,
+                                                  const_pointer tail,
                                                   T& output) const noexcept -> json::errc
 {
     // Coerce into largest supported integer type
     std::uint64_t result = {};
-    const auto errc = unsigned_integer_value(marker, result);
+    const auto errc = unsigned_integer_value(head, tail, result);
     if (errc == no_error)
         output = T(result);
     return errc;
@@ -333,6 +340,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
 template <typename CharT>
 auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  const_pointer tail,
                                                   std::uint8_t& output) const noexcept -> json::errc
 {
     using T = std::uint8_t;
@@ -352,7 +360,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     constexpr int max_digits = 3; // Nudge optimizer to reduce jumps
     T result = {};
-    switch (max_digits - (current.scan.number.integer_tail - marker))
+    switch (max_digits - (tail - marker))
     {
     default:
         break;
@@ -399,6 +407,7 @@ digit_1:
 
 template <typename CharT>
 auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  const_pointer tail,
                                                   std::uint16_t& output) const noexcept -> json::errc
 {
     using T = std::uint16_t;
@@ -420,7 +429,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     constexpr int max_digits = 5;
     T result = {};
-    switch (max_digits - (current.scan.number.integer_tail - marker))
+    switch (max_digits - (tail - marker))
     {
     default:
         break;
@@ -494,6 +503,7 @@ digit_1:
 
 template <typename CharT>
 auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  const_pointer tail,
                                                   std::uint32_t& output) const noexcept -> json::errc
 {
     using T = std::uint32_t;
@@ -520,7 +530,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     constexpr int max_digits = 10;
     T result = {};
-    switch (max_digits - (current.scan.number.integer_tail - marker))
+    switch (max_digits - (tail - marker))
     {
     default:
         break;
@@ -651,6 +661,7 @@ digit_1:
 
 template <typename CharT>
 auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
+                                                  const_pointer tail,
                                                   std::uint64_t& output) const noexcept -> json::errc
 {
     using T = std::uint64_t;
@@ -687,7 +698,7 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 
     constexpr int max_digits = 20;
     T result = {};
-    switch (max_digits - (current.scan.number.integer_tail - marker))
+    switch (max_digits - (tail - marker))
     {
     default:
         break;

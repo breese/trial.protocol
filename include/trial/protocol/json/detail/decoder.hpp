@@ -109,11 +109,11 @@ private:
     template <typename ReturnType, typename Enable = void>
     struct overloader;
     template <typename T> json::errc signed_integer_value(T&) const noexcept;
-    template <typename T> json::errc unsigned_integer_value(const_pointer, T&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, std::uint8_t&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, std::uint16_t&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, std::uint32_t&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, std::uint64_t&) const noexcept;
+    template <typename T> json::errc unsigned_integer_value(const_pointer, const_pointer, T&) const noexcept;
+    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint8_t&) const noexcept;
+    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint16_t&) const noexcept;
+    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint32_t&) const noexcept;
+    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint64_t&) const noexcept;
     template <typename T> void real_value(T&) const noexcept;
     template <typename T> void string_value(T&) const noexcept;
 
