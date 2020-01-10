@@ -92,8 +92,11 @@ struct basic_decoder<CharT>::overloader<ReturnType,
         {
             return json::incompatible_type;
         }
+        const auto head = self.literal().begin();
+        if (*head == traits::alphabet<CharT>::minus)
+            return json::invalid_value;
         output = {};
-        return self.unsigned_integer_value(self.literal().begin(),
+        return self.unsigned_integer_value(head,
                                            self.current.scan.number.integer_tail,
                                            output);
     }
@@ -345,13 +348,6 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
 {
     using T = std::uint8_t;
 
-    assert(current.code == token::code::integer);
-
-    if (*marker == traits::alphabet<CharT>::minus)
-    {
-        return json::invalid_value;
-    }
-
     static constexpr T number[][10] = {
         { UINT8_C(0), UINT8_C(1), UINT8_C(2), UINT8_C(3), UINT8_C(4), UINT8_C(5), UINT8_C(6), UINT8_C(7), UINT8_C(8), UINT8_C(9) },
         { UINT8_C(0), UINT8_C(10), UINT8_C(20), UINT8_C(30), UINT8_C(40), UINT8_C(50), UINT8_C(60), UINT8_C(70), UINT8_C(80), UINT8_C(90) },
@@ -411,13 +407,6 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
                                                   std::uint16_t& output) const noexcept -> json::errc
 {
     using T = std::uint16_t;
-
-    assert(current.code == token::code::integer);
-
-    if (*marker == traits::alphabet<CharT>::minus)
-    {
-        return json::invalid_value;
-    }
 
     static constexpr T number[][10] = {
         { UINT16_C(0), UINT16_C(1), UINT16_C(2), UINT16_C(3), UINT16_C(4), UINT16_C(5), UINT16_C(6), UINT16_C(7), UINT16_C(8), UINT16_C(9) },
@@ -512,13 +501,6 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
                                                   std::uint32_t& output) const noexcept -> json::errc
 {
     using T = std::uint32_t;
-
-    assert(current.code == token::code::integer);
-
-    if (*marker == traits::alphabet<CharT>::minus)
-    {
-        return json::invalid_value;
-    }
 
     static constexpr T number[][10] = {
         { UINT32_C(0), UINT32_C(1), UINT32_C(2), UINT32_C(3), UINT32_C(4), UINT32_C(5), UINT32_C(6), UINT32_C(7), UINT32_C(8), UINT32_C(9) },
@@ -705,13 +687,6 @@ auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
                                                   std::uint64_t& output) const noexcept -> json::errc
 {
     using T = std::uint64_t;
-
-    assert(current.code == token::code::integer);
-
-    if (*marker == traits::alphabet<CharT>::minus)
-    {
-        return json::invalid_value;
-    }
 
     static constexpr T number[][10] = {
         { UINT64_C(0), UINT64_C(1), UINT64_C(2), UINT64_C(3), UINT64_C(4), UINT64_C(5), UINT64_C(6), UINT64_C(7), UINT64_C(8), UINT64_C(9) },
