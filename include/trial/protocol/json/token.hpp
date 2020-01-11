@@ -28,8 +28,12 @@ struct code
 {
     enum value
     {
+        // Some parts of the code depends on the ordering
+
         end = 0,
         uninitialized,
+        error_value_separator,
+        error_name_separator,
 
         null,
         true_value,
@@ -42,9 +46,6 @@ struct code
         end_array,
         begin_object,
         end_object,
-
-        error_value_separator,
-        error_name_separator,
 
         error_unexpected_token = -1,
         error_invalid_key = -2,

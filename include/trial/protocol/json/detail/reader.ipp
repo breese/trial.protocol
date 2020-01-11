@@ -279,7 +279,7 @@ bool basic_reader<CharT>::next()
         decoder.code(stack.top().next(decoder));
     }
 
-    return (category() != token::category::status);
+    return code() >= token::code::null;
 }
 
 template <typename CharT>
