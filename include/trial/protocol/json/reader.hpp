@@ -13,7 +13,6 @@
 
 #include <string>
 #include <stack>
-#include <boost/config.hpp>
 #include <trial/protocol/json/error.hpp>
 #include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
@@ -152,19 +151,21 @@ private:
 
     struct frame
     {
-        frame(token::code::value);
+        frame(token::null) noexcept;
+        frame(token::begin_array) noexcept;
+        frame(token::begin_object) noexcept;
 
-        bool is_array() const;
-        bool is_object() const;
+        bool is_array() const noexcept;
+        bool is_object() const noexcept;
 
-        token::code::value next(decoder_type&);
-        token::code::value check_outer(decoder_type&);
-        token::code::value check_array(decoder_type&);
-        token::code::value check_object(decoder_type&);
+        token::code::value next(decoder_type&) noexcept;
+        token::code::value check_outer(decoder_type&) noexcept;
+        token::code::value check_array(decoder_type&) noexcept;
+        token::code::value check_object(decoder_type&) noexcept;
 
-        token::code::value scope;
         size_type counter;
-        token::code::value (frame::*check)(decoder_type&);
+        token::code::value scope;
+        token::code::value (frame::*check)(decoder_type&) noexcept;
     };
     std::stack<frame> stack;
 #endif
