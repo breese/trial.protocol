@@ -1510,29 +1510,84 @@ void basic_decoder<CharT>::string_value(Collector& collector) const noexcept
         }
 
         case traits::category::extra_1:
-            collector.append(it, 2);
-            it += 2;
+        {
+            const auto head = it;
+            if (segment_index < current.scan.string.length)
+            {
+                it = current.scan.string.segment_tail[segment_index];
+                ++segment_index;
+            }
+            else
+            {
+                it += 2;
+            }
+            collector.append(head, std::distance(head, it));
             continue;
+        }
 
         case traits::category::extra_2:
-            collector.append(it, 3);
-            it += 3;
+        {
+            const auto head = it;
+            if (segment_index < current.scan.string.length)
+            {
+                it = current.scan.string.segment_tail[segment_index];
+                ++segment_index;
+            }
+            else
+            {
+                it += 3;
+            }
+            collector.append(head, std::distance(head, it));
             continue;
+        }
 
         case traits::category::extra_3:
-            collector.append(it, 4);
-            it += 4;
+        {
+            const auto head = it;
+            if (segment_index < current.scan.string.length)
+            {
+                it = current.scan.string.segment_tail[segment_index];
+                ++segment_index;
+            }
+            else
+            {
+                it += 4;
+            }
+            collector.append(head, std::distance(head, it));
             continue;
+        }
 
         case traits::category::extra_4:
-            collector.append(it, 5);
-            it += 5;
+        {
+            const auto head = it;
+            if (segment_index < current.scan.string.length)
+            {
+                it = current.scan.string.segment_tail[segment_index];
+                ++segment_index;
+            }
+            else
+            {
+                it += 5;
+            }
+            collector.append(head, std::distance(head, it));
             continue;
+        }
 
         case traits::category::extra_5:
-            collector.append(it, 6);
-            it += 6;
+        {
+            const auto head = it;
+            if (segment_index < current.scan.string.length)
+            {
+                it = current.scan.string.segment_tail[segment_index];
+                ++segment_index;
+            }
+            else
+            {
+                it += 6;
+            }
+            collector.append(head, std::distance(head, it));
             continue;
+        }
 
         default:
         {
@@ -1820,6 +1875,7 @@ void basic_decoder<CharT>::next_string() noexcept
     current.scan.string.length = 0;
     auto marker = input.begin();
     const auto end = input.end();
+    bool in_segment = false;
     ++marker; // Skip initial '"'
     while (marker != end)
     {
@@ -1886,6 +1942,7 @@ void basic_decoder<CharT>::next_string() noexcept
                 default:
                     goto error;
                 }
+                in_segment = false;
             }
             break;
 
@@ -1899,10 +1956,15 @@ void basic_decoder<CharT>::next_string() noexcept
         case traits::category::narrow:
             {
                 marker = scan_narrow(marker, end);
-                if (current.scan.string.length < segment_max)
+                if (in_segment)
+                {
+                    current.scan.string.segment_tail[current.scan.string.length - 1] = marker;
+                }
+                else if (current.scan.string.length < segment_max)
                 {
                     current.scan.string.segment_tail[current.scan.string.length] = marker;
                     ++current.scan.string.length;
+                    in_segment = true;
                 }
             }
             break;
@@ -1947,6 +2009,17 @@ void basic_decoder<CharT>::next_string() noexcept
             if ((*marker & 0xC0) != 0x80)
                 goto error;
             ++marker;
+
+            if (in_segment)
+            {
+                current.scan.string.segment_tail[current.scan.string.length - 1] = marker;
+            }
+            else if (current.scan.string.length < segment_max)
+            {
+                current.scan.string.segment_tail[current.scan.string.length] = marker;
+                ++current.scan.string.length;
+                in_segment = true;
+            }
             break;
 
         case traits::category::illegal:
