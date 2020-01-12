@@ -22,7 +22,7 @@
 #include <trial/protocol/json/detail/scan.hpp>
 #include <trial/protocol/json/error.hpp>
 
-// http://tools.ietf.org/html/rfc7159
+// http://tools.ietf.org/html/rfc8259
 
 //-----------------------------------------------------------------------------
 
@@ -1676,6 +1676,16 @@ void basic_decoder<CharT>::next_t_keyword() noexcept
 template <typename CharT>
 void basic_decoder<CharT>::next_number() noexcept
 {
+    // RFC 8259, section 6
+    //
+    // number = [ minus ] int [ frac ] [ exp ]
+    //
+    // int = zero / ( digit1-9 *digit)
+    //
+    // frac = dot 1*digit
+    //
+    // exp = e [ minus / plus ] 1*digit
+
     auto begin = input.begin();
     token::code::value type = token::code::integer;
 
@@ -1784,6 +1794,22 @@ void basic_decoder<CharT>::next_number() noexcept
 template <typename CharT>
 void basic_decoder<CharT>::next_string() noexcept
 {
+    // RFC 8259, section 7
+    //
+    // string = quote *char quote
+    //
+    // char = unescaped /
+    //        escape (
+    //          quote
+    //          reverse-solidus
+    //          solidus
+    //          backspace
+    //          form-feed
+    //          line-feed
+    //          carriage-return
+    //          tab
+    //          'u' 4hexdig )
+
     assert(input.front() == traits::alphabet<CharT>::quote);
 
     current.scan.string.length = 0;

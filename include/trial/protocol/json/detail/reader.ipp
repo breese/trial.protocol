@@ -380,7 +380,7 @@ token::code::value basic_reader<CharT>::frame::next(decoder_type& decoder) noexc
 template <typename CharT>
 token::code::value basic_reader<CharT>::frame::check_outer(decoder_type& decoder) noexcept
 {
-    // RFC 7159, section 2
+    // RFC 8259, section 2
     //
     // JSON-text = value
 
@@ -409,7 +409,7 @@ token::code::value basic_reader<CharT>::frame::check_outer(decoder_type& decoder
 template <typename CharT>
 token::code::value basic_reader<CharT>::frame::check_array(decoder_type& decoder) noexcept
 {
-    // RFC 7159, section 5
+    // RFC 8259, section 5
     //
     // array = begin-array [ value *( value-separator value ) ] end-array
 
@@ -459,7 +459,7 @@ token::code::value basic_reader<CharT>::frame::check_array(decoder_type& decoder
 template <typename CharT>
 token::code::value basic_reader<CharT>::frame::check_object(decoder_type& decoder) noexcept
 {
-    // RFC 7159, section 4
+    // RFC 8259, section 4
     //
     // object = begin-object [ member *( value-separator member ) ]
     //          end-object
