@@ -1466,15 +1466,21 @@ void basic_decoder<CharT>::string_value(Collector& collector) const noexcept
                     else if (number <= 0x07FF)
                     {
                         // 110xxxxx 10xxxxxx
-                        collector.push_back(0xC0 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x1F));
-                        collector.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
+                        const value_type data[] = {
+                            CharT(0xC0 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x1F)),
+                            CharT(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F))
+                        };
+                        collector.append(data, 2);
                     }
                     else
                     {
                         // 1110xxxx 10xxxxxx 10xxxxxx
-                        collector.push_back(0xE0 | std::char_traits<CharT>::to_char_type((number >> 12) & 0x0F));
-                        collector.push_back(0x80 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x3F));
-                        collector.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
+                        const value_type data[] = {
+                            CharT(0xE0 | std::char_traits<CharT>::to_char_type((number >> 12) & 0x0F)),
+                            CharT(0x80 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x3F)),
+                            CharT(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F))
+                        };
+                        collector.append(data, 3);
                     }
                 }
                 break;
