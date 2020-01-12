@@ -25,3 +25,4 @@ trial_protocol_add_benchmark(benchmark_bintoken_reader bintoken/benchmark_reader
 
 # json
 trial_protocol_add_benchmark(benchmark_json_reader json/benchmark_reader.cpp)
+trial_protocol_add_benchmark(benchmark_json_real json/benchmark_real.cpp)

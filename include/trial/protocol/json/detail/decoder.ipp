@@ -1138,19 +1138,16 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
     static constexpr T base = T(10.0);
 
     const CharT *marker = current.view.begin();
-    T result = zero;
     const bool is_negative = *marker == traits::alphabet<CharT>::minus;
     if (is_negative)
     {
         ++marker;
     }
-    while (true)
+    T result = unsigned(*marker++ - traits::alphabet<CharT>::digit_0);
+    while (marker != current.scan.number.integer_tail)
     {
-        const unsigned delta = *marker - traits::alphabet<CharT>::digit_0;
-        if (delta > 9)
-            break;
         result *= base;
-        result += delta;
+        result += unsigned(*marker - traits::alphabet<CharT>::digit_0);
         ++marker;
     }
     if (*marker == traits::alphabet<CharT>::dot)
