@@ -28,7 +28,8 @@ namespace traits
 template <typename CharT>
 auto to_category(CharT value) noexcept -> category
 {
-    static constexpr category data[] = {
+    static constexpr category lower[] = {
+        // 0x00
         category::illegal,
         category::illegal,
         category::illegal,
@@ -45,6 +46,7 @@ auto to_category(CharT value) noexcept -> category
         category::illegal,
         category::illegal,
         category::illegal,
+        // 0x10
         category::illegal,
         category::illegal,
         category::illegal,
@@ -61,6 +63,7 @@ auto to_category(CharT value) noexcept -> category
         category::illegal,
         category::illegal,
         category::illegal,
+        // 0x20
         category::narrow,
         category::narrow,
         category::quote,
@@ -77,6 +80,7 @@ auto to_category(CharT value) noexcept -> category
         category::narrow,
         category::narrow,
         category::narrow,
+        // 0x30
         category::narrow,
         category::narrow,
         category::narrow,
@@ -93,6 +97,7 @@ auto to_category(CharT value) noexcept -> category
         category::narrow,
         category::narrow,
         category::narrow,
+        // 0x40
         category::narrow,
         category::narrow,
         category::narrow,
@@ -109,6 +114,7 @@ auto to_category(CharT value) noexcept -> category
         category::narrow,
         category::narrow,
         category::narrow,
+        // 0x50
         category::narrow,
         category::narrow,
         category::narrow,
@@ -125,6 +131,7 @@ auto to_category(CharT value) noexcept -> category
         category::narrow,
         category::narrow,
         category::narrow,
+        // 0x60
         category::narrow,
         category::narrow,
         category::narrow,
@@ -141,6 +148,7 @@ auto to_category(CharT value) noexcept -> category
         category::narrow,
         category::narrow,
         category::narrow,
+        // 0x70
         category::narrow,
         category::narrow,
         category::narrow,
@@ -156,71 +164,10 @@ auto to_category(CharT value) noexcept -> category
         category::narrow,
         category::narrow,
         category::narrow,
-        category::narrow,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
-        category::illegal,
+        category::narrow
+    };
+    static constexpr category upper[] = {
+        // 0xC0
         category::extra_1,
         category::extra_1,
         category::extra_1,
@@ -237,6 +184,7 @@ auto to_category(CharT value) noexcept -> category
         category::extra_1,
         category::extra_1,
         category::extra_1,
+        // 0xD0
         category::extra_1,
         category::extra_1,
         category::extra_1,
@@ -253,6 +201,7 @@ auto to_category(CharT value) noexcept -> category
         category::extra_1,
         category::extra_1,
         category::extra_1,
+        // 0xE0
         category::extra_2,
         category::extra_2,
         category::extra_2,
@@ -269,6 +218,7 @@ auto to_category(CharT value) noexcept -> category
         category::extra_2,
         category::extra_2,
         category::extra_2,
+        // 0xF0
         category::extra_3,
         category::extra_3,
         category::extra_3,
@@ -286,7 +236,10 @@ auto to_category(CharT value) noexcept -> category
         category::extra_5,
         category::extra_5
     };
-    return data[std::uint8_t(value)];
+    const std::uint8_t index = value;
+    return (index < 0x80)
+        ? lower[index]
+        : (index < 0xC0) ? category::illegal : upper[index - 0xC0];
 }
 
 template <typename CharT>
