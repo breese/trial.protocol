@@ -134,6 +134,16 @@ public:
     //! @returns json::errc if requested type is incompatible with the current token.
     template <typename T> json::errc value(T& output) const noexcept;
 
+    //! @brief Collects a converted string.
+    //!
+    //! The Collector must implement the following functions:
+    //! -# push_back(value_type)
+    //! -# append(const value_type *, size_type)
+    //!
+    //! @param[out] collector The object that receives the converted string.
+    //! @returns json::errc if requested type is incompatible with the current token.
+    template <typename Collector> json::errc string(Collector& collector) const noexcept;
+
     //! @returns A view of the current value before it is converted into its type.
     view_type literal() const noexcept;
 

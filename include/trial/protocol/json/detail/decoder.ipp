@@ -286,6 +286,13 @@ auto basic_decoder<CharT>::value(T& output) const noexcept -> json::errc
 }
 
 template <typename CharT>
+template <typename Collector>
+void basic_decoder<CharT>::string(Collector& collector) const noexcept
+{
+    string_value(collector);
+}
+
+template <typename CharT>
 template <typename T>
 auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> json::errc
 {
@@ -1393,8 +1400,8 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
 }
 
 template <typename CharT>
-template <typename T>
-void basic_decoder<CharT>::string_value(T& result) const noexcept
+template <typename Collector>
+void basic_decoder<CharT>::string_value(Collector& collector) const noexcept
 {
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     assert(current.code == token::code::string);
@@ -1418,27 +1425,27 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             case traits::alphabet<CharT>::quote:
             case traits::alphabet<CharT>::reverse_solidus:
             case traits::alphabet<CharT>::solidus:
-                result.push_back(*it);
+                collector.push_back(*it);
                 break;
 
             case traits::alphabet<CharT>::letter_b:
-                result.push_back(traits::alphabet<CharT>::backspace);
+                collector.push_back(traits::alphabet<CharT>::backspace);
                 break;
 
             case traits::alphabet<CharT>::letter_f:
-                result.push_back(traits::alphabet<CharT>::formfeed);
+                collector.push_back(traits::alphabet<CharT>::formfeed);
                 break;
 
             case traits::alphabet<CharT>::letter_n:
-                result.push_back(traits::alphabet<CharT>::newline);
+                collector.push_back(traits::alphabet<CharT>::newline);
                 break;
 
             case traits::alphabet<CharT>::letter_r:
-                result.push_back(traits::alphabet<CharT>::carriage_return);
+                collector.push_back(traits::alphabet<CharT>::carriage_return);
                 break;
 
             case traits::alphabet<CharT>::letter_t:
-                result.push_back(traits::alphabet<CharT>::tabulator);
+                collector.push_back(traits::alphabet<CharT>::tabulator);
                 break;
 
             case traits::alphabet<CharT>::letter_u:
@@ -1454,20 +1461,20 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
                     if (number <= 0x007F)
                     {
                         // 0xxxxxxx
-                        result.push_back(std::char_traits<CharT>::to_char_type(number & 0x7F));
+                        collector.push_back(std::char_traits<CharT>::to_char_type(number & 0x7F));
                     }
                     else if (number <= 0x07FF)
                     {
                         // 110xxxxx 10xxxxxx
-                        result.push_back(0xC0 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x1F));
-                        result.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
+                        collector.push_back(0xC0 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x1F));
+                        collector.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
                     }
                     else
                     {
                         // 1110xxxx 10xxxxxx 10xxxxxx
-                        result.push_back(0xE0 | std::char_traits<CharT>::to_char_type((number >> 12) & 0x0F));
-                        result.push_back(0x80 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x3F));
-                        result.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
+                        collector.push_back(0xE0 | std::char_traits<CharT>::to_char_type((number >> 12) & 0x0F));
+                        collector.push_back(0x80 | std::char_traits<CharT>::to_char_type((number >> 6) & 0x3F));
+                        collector.push_back(0x80 | std::char_traits<CharT>::to_char_type(number & 0x3F));
                     }
                 }
                 break;
@@ -1492,38 +1499,38 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
             {
                 it = scan_narrow(++it, end);
             }
-            result.append(head, it - head);
+            collector.append(head, std::distance(head, it));
             continue;
         }
 
         case traits::category::extra_1:
-            result.append(it, 2);
+            collector.append(it, 2);
             it += 2;
             continue;
 
         case traits::category::extra_2:
-            result.append(it, 3);
+            collector.append(it, 3);
             it += 3;
             continue;
 
         case traits::category::extra_3:
-            result.append(it, 4);
+            collector.append(it, 4);
             it += 4;
             continue;
 
         case traits::category::extra_4:
-            result.append(it, 5);
+            collector.append(it, 5);
             it += 5;
             continue;
 
         case traits::category::extra_5:
-            result.append(it, 6);
+            collector.append(it, 6);
             it += 6;
             continue;
 
         default:
         {
-            result.push_back(*it);
+            collector.push_back(*it);
             ++it;
             continue;
         }

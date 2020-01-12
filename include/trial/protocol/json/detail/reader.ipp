@@ -318,6 +318,15 @@ auto basic_reader<CharT>::value(T& output) const noexcept -> json::errc
 }
 
 template <typename CharT>
+template <typename Collector>
+auto basic_reader<CharT>::string(Collector& collector) const noexcept -> json::errc
+{
+    if (decoder.code() != token::code::string)
+        return errc::incompatible_type;
+    decoder.string(collector);
+}
+
+template <typename CharT>
 auto basic_reader<CharT>::literal() const noexcept -> view_type
 {
     return view_type(decoder.literal().data(), decoder.literal().size());

@@ -2620,6 +2620,131 @@ void run()
 } // namespace view_suite
 
 //-----------------------------------------------------------------------------
+
+namespace collector_suite
+{
+
+template <std::size_t N>
+class array_collector
+{
+public:
+    using value_type = char;
+    using size_type = std::size_t;
+    using const_pointer = const value_type *;
+
+    void push_back(value_type input)
+    {
+        ++count;
+        if (tail < N)
+            storage[tail++] = input;
+    }
+
+    void append(const_pointer first, size_type length)
+    {
+        count += length;
+        const auto begin = tail;
+        for (size_type k = begin; k < std::min(begin + length, N); ++k)
+        {
+            storage[tail++] = *first++;
+        }
+    }
+
+    const char *result()
+    {
+        storage[tail] = 0;
+        return storage;
+    }
+
+private:
+    value_type storage[N + 1];
+    size_type tail = 0;
+    size_type count = 0;
+};
+
+class compare_collector
+{
+public:
+    using value_type = typename std::string::value_type;
+    using size_type = typename std::string::size_type;
+    using const_pointer = const value_type *;
+
+    compare_collector(std::string needle)
+        : needle(std::move(needle))
+    {
+    }
+
+    void push_back(value_type input)
+    {
+        if (count > needle.size())
+            equal = false;
+        else
+            equal = equal && (needle[count] == input);
+        ++count;
+    }
+
+    void append(const_pointer first, size_type length)
+    {
+        const auto last = first + length;
+        for (auto current = first; current != last; ++current)
+        {
+            push_back(*current);
+        }
+    }
+
+    bool result() const
+    {
+        return equal && (count != 0);
+    }
+
+private:
+    std::string needle;
+    size_type count = 0;
+    bool equal = true;
+};
+
+void collect_string()
+{
+    std::string collector;
+
+    const char input[] = "\"alpha\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
+    decoder.string(collector);
+    TRIAL_PROTOCOL_TEST_EQUAL(collector, "alpha");
+}
+
+void collect_array()
+{
+    array_collector<4> collector;
+
+    const char input[] = "\"alpha\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
+    decoder.string(collector);
+    TRIAL_PROTOCOL_TEST_EQUAL(collector.result(), std::string("alph"));
+}
+
+void compare()
+{
+    compare_collector compare("alpha");
+
+    const char input[] = "\"alpha\"";
+    decoder_type decoder(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(decoder.code(), token::code::string);
+    decoder.string(compare);
+    TRIAL_PROTOCOL_TEST(compare.result());
+}
+
+void run()
+{
+    collect_string();
+    collect_array();
+    compare();
+}
+
+} // namespace collector_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -2636,6 +2761,7 @@ int main()
     pangram_suite::run();
     container_suite::run();
     view_suite::run();
+    collector_suite::run();
 
     return boost::report_errors();
 }

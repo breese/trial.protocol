@@ -54,6 +54,7 @@ public:
     const view_type& tail() const noexcept;
     template <typename ReturnType> ReturnType value() const;
     template <typename T> json::errc value(T&) const noexcept;
+    template <typename Collector> void string(Collector&) const noexcept;
 
 private:
     void next_token(token::code::value) noexcept;
@@ -75,7 +76,7 @@ private:
     json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint32_t&) const noexcept;
     json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint64_t&) const noexcept;
     template <typename T> void real_value(T&) const noexcept;
-    template <typename T> void string_value(T&) const noexcept;
+    template <typename Collector> void string_value(Collector&) const noexcept;
 
 private:
     static constexpr int segment_max = 32;
