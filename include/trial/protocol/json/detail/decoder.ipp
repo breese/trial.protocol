@@ -1399,11 +1399,6 @@ void basic_decoder<CharT>::string_value(T& result) const noexcept
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
     assert(current.code == token::code::string);
 
-    const auto approximateSize = literal().size();
-    assert(approximateSize >= 2);
-    if (result.capacity() < approximateSize)
-        result.reserve(approximateSize);
-
     // Skip initial and terminating quotes
     assert(literal().front() == traits::alphabet<CharT>::quote);
     assert(literal().back() == traits::alphabet<CharT>::quote);

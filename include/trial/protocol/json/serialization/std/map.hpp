@@ -94,6 +94,7 @@ struct load_overloader< json::basic_iarchive<CharT>,
         {
             // We cannot use std::map<Key, T>::value_type because it has a const key
             std::pair<std::string, T> value;
+            value.first.reserve(archive.reader().literal().size());
             archive.load_override(value.first, protocol_version);
             archive.load_override(value.second, protocol_version);
             data.insert(value);

@@ -122,13 +122,18 @@ private:
         {
             // Key
             std::string key;
+            key.reserve(reader.literal().size());
             switch (reader.symbol())
             {
             case token::symbol::end_object:
                 return scope;
             case token::symbol::string:
-                key = reader.template value<std::string>();
+            {
+                const auto err = reader.value(key);
+                if (err != json::no_error)
+                    throw json::error(make_error_code(err));
                 break;
+            }
             default:
                 throw json::error(make_error_code(json::invalid_key));
             }
@@ -193,7 +198,14 @@ private:
             return compact<variable_type>(reader.template value<long double>());
 
         case token::symbol::string:
-            return reader.template value<std::string>();
+        {
+            std::string value;
+            value.reserve(reader.literal().size());
+            const auto err = reader.value(value);
+            if (err != json::no_error)
+                throw json::error(make_error_code(err));
+            return value;
+        }
 
         default:
             throw json::error(make_error_code(json::unexpected_token));
