@@ -145,11 +145,11 @@ private:
             switch (reader.symbol())
             {
             case token::symbol::begin_array:
-                scope.insert({ key, parse_array() });
+                scope.insert({ std::move(key), std::move(parse_array()) });
                 break;
 
             case token::symbol::begin_object:
-                scope.insert({ key, parse_object() });
+                scope.insert({ std::move(key), std::move(parse_object()) });
                 break;
 
             case token::symbol::end_array:
@@ -163,7 +163,7 @@ private:
                 break;
 
             default:
-                scope.insert({ key, parse_value() });
+                scope.insert({ std::move(key), std::move(parse_value()) });
                 break;
             }
         }

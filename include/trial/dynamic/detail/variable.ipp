@@ -3762,7 +3762,7 @@ void basic_variable<Allocator>::clear() noexcept
 }
 
 template <typename Allocator>
-auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
+auto basic_variable<Allocator>::insert(basic_variable value) -> iterator
 {
     switch (symbol())
     {
@@ -3774,14 +3774,14 @@ auto basic_variable<Allocator>::insert(const basic_variable& value) -> iterator
     {
         // Insert at end
         auto& array = assume_value<array_type>();
-        array.emplace_back(value);
+        array.emplace_back(std::move(value));
         return iterator(this, --array.end());
         }
 
     case symbol::map:
         if (value.is_pair())
         {
-            auto result = assume_value<map_type>().insert(pair_type{value[0], value[1]});
+            auto result = assume_value<map_type>().insert(pair_type{std::move(value[0]), std::move(value[1])});
             return iterator(this, std::move(result.first));
         }
         break;

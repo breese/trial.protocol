@@ -806,7 +806,7 @@ public:
     //! array       | Insert `element` at end.
     //! map         | Insert `element`, otherwise fails if `element` is not pair.
 
-    iterator insert(const basic_variable& element);
+    iterator insert(basic_variable element);
 
     //! @brief Inserts range into variable.
     //!
