@@ -169,7 +169,7 @@ void fail_invalid_token_in_middle_of_object()
     json::reader reader(R"({"skip": "me"  {)");
     std::error_code ec;
     auto skipped = json::partial::skip(reader, ec);
-    TRIAL_PROTOCOL_TEST_EQUAL(skipped, R"({"skip": "me")");
+    TRIAL_PROTOCOL_TEST_EQUAL(skipped, R"({"skip": "me"  )");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::error);
     TRIAL_PROTOCOL_TEST_EQUAL(ec, json::errc::insufficient_tokens);
 }

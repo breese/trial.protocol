@@ -48,22 +48,44 @@ skip(basic_reader<CharT> &reader, std::error_code &ec)
             return ret;
         }
     case token::symbol::begin_array:
-    case token::symbol::begin_object:
         {
-            auto ret_begin = reader.literal().data();
-            const auto outer_level = reader.level();
-            const CharT *ret_end;
-            do {
-                ret_end = reader.tail().data();
-                if (!reader.next()) {
-                    if (reader.level() != outer_level)
+            const CharT * const head = reader.literal().data();
+            const size_type current_level = reader.level();
+            do
+            {
+                if (!reader.next())
+                {
+                    if (reader.code() == token::code::error_expected_end_array)
                         ec = errc::insufficient_tokens;
                     else
                         ec = reader.error();
-                    break;
+                    return view_type(head, std::distance(head, reader.literal().begin()));
                 }
-            } while (reader.level() != outer_level);
-            return {ret_begin, static_cast<size_type>(ret_end - ret_begin)};
+            } while (reader.level() >= current_level);
+            const CharT * const tail = reader.literal().end();
+            if (!reader.next()) // Skip over end_array
+                ec = reader.error();
+            return view_type(head, std::distance(head, tail));
+        }
+    case token::symbol::begin_object:
+        {
+            const CharT * const head = reader.literal().data();
+            const size_type current_level = reader.level();
+            do
+            {
+                if (!reader.next())
+                {
+                    if (reader.code() == token::code::error_expected_end_object)
+                        ec = errc::insufficient_tokens;
+                    else
+                        ec = reader.error();
+                    return view_type(head, std::distance(head, reader.literal().begin()));
+                }
+            } while (reader.level() >= current_level);
+            const CharT * const tail = reader.literal().end();
+            if (!reader.next()) // Skip over end_object
+                ec = reader.error();
+            return view_type(head, std::distance(head, tail));
         }
     }
     return {};

@@ -287,12 +287,12 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::structural);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::structural);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -303,14 +303,14 @@ void test_integer_one()
     const char input[] = "[1]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -321,7 +321,7 @@ void test_integer_many()
     const char input[] = "[1,2,3]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "1,2,3]");
 
@@ -348,7 +348,7 @@ void test_integer_many()
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
 
@@ -362,20 +362,20 @@ void test_integer_nested_one()
     const char input[] = "[[1]]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -386,13 +386,13 @@ void test_integer_nested_many_siblings()
     const char input[] = "[[1],[2]]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "[1],[2]]");
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "1],[2]]");
 
@@ -405,13 +405,13 @@ void test_integer_nested_many_siblings()
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",[2]]");
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "2]]");
 
@@ -424,13 +424,13 @@ void test_integer_nested_many_siblings()
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "]");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
 
@@ -444,7 +444,7 @@ void fail_missing_value()
     const char input[] = "[,]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "[");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",]");
 
@@ -459,7 +459,7 @@ void fail_trailing_separator()
     const char input[] = "[1,]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
@@ -475,7 +475,7 @@ void fail_empty_mismatched()
     const char input[] = "[}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::expected_end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "}");
@@ -487,7 +487,7 @@ void fail_integer_one_mismatched()
     const char input[] = "[1}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<int>(), 1);
@@ -503,10 +503,10 @@ void fail_outer()
     const char input[] = "[],false";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), ",");
@@ -528,10 +528,10 @@ void fail_missing_begin_after_array()
     const char input[] = "[]]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unbalanced_end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -544,10 +544,10 @@ void fail_missing_begin_after_comma()
     const char input[] = "[],]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -560,10 +560,10 @@ void fail_concatenated_arrays()
     const char input[] = "[][]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -576,12 +576,13 @@ void fail_nested_concatenated_arrays()
     const char input[] = "[[][]]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
@@ -624,12 +625,12 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::structural);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::structural);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -640,7 +641,7 @@ void test_one()
     const char input[] = "{\"alpha\":1}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
@@ -651,7 +652,7 @@ void test_one()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -662,7 +663,7 @@ void test_many()
     const char input[] = "{\"alpha\":1,\"bravo\":2}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "{");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "\"alpha\":1,\"bravo\":2}");
 
@@ -696,7 +697,7 @@ void test_many()
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "}");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "");
 
@@ -710,14 +711,14 @@ void test_nested_one()
     const char input[] = "{\"alpha\":{\"helium\":2}}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "helium");
@@ -728,10 +729,10 @@ void test_nested_one()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -742,7 +743,7 @@ void fail_missing_colon()
     const char input[] = "{\"key\"}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
@@ -756,7 +757,7 @@ void fail_missing_value()
     const char input[] = "{\"key\":}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
@@ -769,7 +770,7 @@ void fail_trailing_separator()
     const char input[] = "{\"key\":1,}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
@@ -785,7 +786,7 @@ void fail_invalid_integer_key()
     const char input[] = "{1:1}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::invalid_key);
@@ -798,7 +799,7 @@ void fail_invalid_null_key()
     const char input[] = "{null:1}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::invalid_key);
@@ -811,7 +812,7 @@ void fail_invalid_true_key()
     const char input[] = "{true:1}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::invalid_key);
@@ -822,7 +823,7 @@ void fail_invalid_object_key()
     const char input[] = "{{\"key\":1}:2}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::invalid_key);
@@ -833,7 +834,7 @@ void fail_empty_mismatched()
     const char input[] = "{]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::expected_end_object);
@@ -844,7 +845,7 @@ void fail_one_mismatched()
     const char input[] = "{\"alpha\":1]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
@@ -863,10 +864,10 @@ void fail_outer()
     const char input[] = "{},true";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
@@ -887,10 +888,10 @@ void fail_missing_begin_after_object()
     const char input[] = "{}}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unbalanced_end_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -903,10 +904,10 @@ void fail_missing_begin_after_comma()
     const char input[] = "{},}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_value_separator);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -919,10 +920,10 @@ void fail_concatenated_objects()
     const char input[] = "{}{}";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
@@ -935,12 +936,13 @@ void fail_nested_concatenated_objects()
     const char input[] = "[{}{}]";
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);

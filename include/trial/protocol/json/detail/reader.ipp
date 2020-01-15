@@ -190,7 +190,27 @@ basic_reader<CharT>::basic_reader(const view_type& input)
     : decoder(input.begin(), input.end())
 {
     stack.push(token::null{});
-    decoder.code(stack.top().check_outer(decoder));
+    switch (decoder.code())
+    {
+    case token::code::begin_array:
+        stack.push(token::begin_array{});
+        break;
+
+    case token::code::end_array:
+        decoder.code(token::code::error_unbalanced_end_array);
+        break;
+
+    case token::code::begin_object:
+        stack.push(token::begin_object{});
+        break;
+
+    case token::code::end_object:
+        decoder.code(token::code::error_unbalanced_end_object);
+        break;
+
+    default:
+        break;
+    }
 }
 
 template <typename CharT>
@@ -227,56 +247,28 @@ std::error_code basic_reader<CharT>::error() const noexcept
 template <typename CharT>
 bool basic_reader<CharT>::next()
 {
-    const token::code::value current = decoder.code();
-    switch (current)
+    auto& frame = stack.top();
+    const auto ret = (frame.*frame.next)(decoder);
+    switch (ret)
     {
     case token::code::begin_array:
         stack.push(token::begin_array{});
-        break;
-
-    case token::code::end_array:
-        if (stack.empty())
-        {
-            decoder.code(token::code::error_unbalanced_end_array);
-            return false;
-        }
-        if (!stack.top().is_array())
-        {
-            decoder.code(token::code::error_expected_end_array);
-            return false;
-        }
-        stack.pop();
+        decoder.code(ret);
         break;
 
     case token::code::begin_object:
         stack.push(token::begin_object{});
+        decoder.code(ret);
         break;
 
+    case token::code::end_array:
     case token::code::end_object:
-        if (stack.empty())
-        {
-            decoder.code(token::code::error_unbalanced_end_object);
-            return false;
-        }
-        if (!stack.top().is_object())
-        {
-            decoder.code(token::code::error_expected_end_object);
-            return false;
-        }
         stack.pop();
         break;
 
     default:
+        decoder.code(ret);
         break;
-    }
-
-    if (stack.empty())
-    {
-        decoder.code(token::code::error_unexpected_token);
-    }
-    else
-    {
-        decoder.code(stack.top().next(decoder));
     }
 
     return code() >= token::code::null;
@@ -346,7 +338,7 @@ template <typename CharT>
 basic_reader<CharT>::frame::frame(token::null) noexcept
     : counter(0),
       scope(token::code::end),
-      check(&frame::check_outer)
+      next(&frame::next_outer)
 {
 }
 
@@ -354,7 +346,7 @@ template <typename CharT>
 basic_reader<CharT>::frame::frame(token::begin_array) noexcept
     : counter(0),
       scope(token::code::end_array),
-      check(&frame::check_array)
+      next(&frame::next_array)
 {
 }
 
@@ -362,7 +354,7 @@ template <typename CharT>
 basic_reader<CharT>::frame::frame(token::begin_object) noexcept
     : counter(0),
       scope(token::code::end_object),
-      check(&frame::check_object)
+      next(&frame::next_object)
 {
 }
 
@@ -379,20 +371,13 @@ bool basic_reader<CharT>::frame::is_object() const noexcept
 }
 
 template <typename CharT>
-token::code::value basic_reader<CharT>::frame::next(decoder_type& decoder) noexcept
-{
-    decoder.next();
-
-    return (this->*check)(decoder);
-}
-
-template <typename CharT>
-token::code::value basic_reader<CharT>::frame::check_outer(decoder_type& decoder) noexcept
+token::code::value basic_reader<CharT>::frame::next_outer(decoder_type& decoder) noexcept
 {
     // RFC 8259, section 2
     //
     // JSON-text = value
 
+    decoder.next();
     switch (decoder.code())
     {
     case token::code::end_array:
@@ -409,19 +394,20 @@ token::code::value basic_reader<CharT>::frame::check_outer(decoder_type& decoder
     default:
         // Only accept one token in the outer scope
         ++counter;
-        if (counter > 1)
+        if (counter > 0)
             return token::code::error_unexpected_token;
         return decoder.code();
     }
 }
 
 template <typename CharT>
-token::code::value basic_reader<CharT>::frame::check_array(decoder_type& decoder) noexcept
+token::code::value basic_reader<CharT>::frame::next_array(decoder_type& decoder) noexcept
 {
     // RFC 8259, section 5
     //
     // array = begin-array [ value *( value-separator value ) ] end-array
 
+    decoder.next();
     const token::code::value current = decoder.code();
 
     ++counter;
@@ -466,7 +452,7 @@ token::code::value basic_reader<CharT>::frame::check_array(decoder_type& decoder
 }
 
 template <typename CharT>
-token::code::value basic_reader<CharT>::frame::check_object(decoder_type& decoder) noexcept
+token::code::value basic_reader<CharT>::frame::next_object(decoder_type& decoder) noexcept
 {
     // RFC 8259, section 4
     //
@@ -475,6 +461,7 @@ token::code::value basic_reader<CharT>::frame::check_object(decoder_type& decode
     //
     // member = string name-separator value
 
+    decoder.next();
     const token::code::value current = decoder.code();
 
     ++counter;
