@@ -336,38 +336,20 @@ auto basic_reader<CharT>::tail() const noexcept -> view_type
 
 template <typename CharT>
 basic_reader<CharT>::frame::frame(token::null) noexcept
-    : counter(0),
-      scope(token::code::end),
-      next(&frame::next_outer)
+    : next(&frame::next_outer)
 {
 }
 
 template <typename CharT>
 basic_reader<CharT>::frame::frame(token::begin_array) noexcept
-    : counter(0),
-      scope(token::code::end_array),
-      next(&frame::next_array)
+    : next(&frame::next_array)
 {
 }
 
 template <typename CharT>
 basic_reader<CharT>::frame::frame(token::begin_object) noexcept
-    : counter(0),
-      scope(token::code::end_object),
-      next(&frame::next_object)
+    : next(&frame::next_object)
 {
-}
-
-template <typename CharT>
-bool basic_reader<CharT>::frame::is_array() const noexcept
-{
-    return scope == token::code::end_array;
-}
-
-template <typename CharT>
-bool basic_reader<CharT>::frame::is_object() const noexcept
-{
-    return scope == token::code::end_object;
 }
 
 template <typename CharT>
@@ -393,10 +375,7 @@ token::code::value basic_reader<CharT>::frame::next_outer(decoder_type& decoder)
 
     default:
         // Only accept one token in the outer scope
-        ++counter;
-        if (counter > 0)
-            return token::code::error_unexpected_token;
-        return decoder.code();
+        return token::code::error_unexpected_token;
     }
 }
 
@@ -409,46 +388,41 @@ token::code::value basic_reader<CharT>::frame::next_array(decoder_type& decoder)
 
     decoder.next();
     const token::code::value current = decoder.code();
-
-    ++counter;
-    if (counter % 2 == 0)
+    switch (current)
     {
-        // Expect separator
-        switch (current)
-        {
-        case token::code::end_array:
-            return current;
+    case token::code::end_array:
+        return current;
 
-        case token::code::error_value_separator:
-            // Skip over separator
-            decoder.next();
-            ++counter;
-            // Prohibit trailing separator
-            if (decoder.code() == token::code::end_array)
-                return token::code::error_unexpected_token;
-            return decoder.code();
+    case token::code::end_object:
+        return token::code::error_expected_end_array;
 
-        default:
-            return token::code::error_expected_end_array;
-        }
-    }
-    else
-    {
-        // Expect value
-        switch (current)
-        {
-        case token::code::end_array:
-            return current;
-
-        case token::code::end_object:
-            return token::code::error_expected_end_array;
-
-        default:
-            break;
-        }
+    default:
+        next = &frame::next_array_value;
         return current;
     }
-    return token::code::error_unexpected_token;
+}
+
+template <typename CharT>
+token::code::value basic_reader<CharT>::frame::next_array_value(decoder_type& decoder) noexcept
+{
+    decoder.next();
+    const token::code::value current = decoder.code();
+    switch (current)
+    {
+    case token::code::end_array:
+        return current;
+
+    case token::code::error_value_separator:
+        // Skip over separator
+        decoder.next();
+        // Prohibit trailing separator
+        if (decoder.code() == token::code::end_array)
+            return token::code::error_unexpected_token;
+        return decoder.code();
+
+    default:
+        return token::code::error_expected_end_array;
+    }
 }
 
 template <typename CharT>
@@ -462,71 +436,70 @@ token::code::value basic_reader<CharT>::frame::next_object(decoder_type& decoder
     // member = string name-separator value
 
     decoder.next();
-    const token::code::value current = decoder.code();
-
-    ++counter;
-    if (counter % 4 == 0)
+    const auto current = decoder.code();
+    switch (current)
     {
-        // Expect value separator
-        switch (current)
+    case token::code::error_value_separator:
+    case token::code::error_name_separator:
+        return token::code::error_unexpected_token;
+
+    case token::code::end_array:
+        return token::code::error_expected_end_object;
+
+    case token::code::end_object:
+        return current;
+
+    default:
+        // Key must be string type
+        if (current != token::code::string)
+            return token::code::error_invalid_key;
+        next = &frame::next_object_key;
+        return current;
+    }
+}
+
+template <typename CharT>
+token::code::value basic_reader<CharT>::frame::next_object_key(decoder_type& decoder) noexcept
+{
+    decoder.next();
+    if (decoder.code() == token::code::error_name_separator)
+    {
+        decoder.next();
+        switch (decoder.code())
         {
+        case token::code::end_array:
         case token::code::end_object:
-            return current;
-
-        case token::code::error_value_separator:
-            decoder.next();
-            ++counter;
-            // Prohibit trailing separator
-            if (decoder.code() == token::code::end_object)
-                return token::code::error_unexpected_token;
-            return decoder.code();
-
-        default:
-            return token::code::error_expected_end_object;
-        }
-    }
-    else if (counter % 4 == 2)
-    {
-        // Expect name separator
-        if (current == token::code::error_name_separator)
-        {
-            decoder.next();
-            ++counter;
-            switch (decoder.code())
-            {
-            case token::code::end_array:
-            case token::code::end_object:
-                return token::code::error_unexpected_token;
-
-            default:
-                return decoder.code();
-            }
-        }
-    }
-    else
-    {
-        // Expect value
-        switch (current)
-        {
-        case token::code::error_value_separator:
-        case token::code::error_name_separator:
             return token::code::error_unexpected_token;
 
-        case token::code::end_array:
-            return token::code::error_expected_end_object;
-
-        case token::code::end_object:
-            return current;
-
         default:
-            // Key must be string type
-            if ((counter % 4 == 1) && (current != token::code::string))
-                return token::code::error_invalid_key;
-            return current;
+            next = &frame::next_object_value;
+            return decoder.code();
         }
     }
-
     return token::code::error_unexpected_token;
+}
+
+template <typename CharT>
+token::code::value basic_reader<CharT>::frame::next_object_value(decoder_type& decoder) noexcept
+{
+    decoder.next();
+    const auto current = decoder.code();
+    switch (current)
+    {
+    case token::code::end_object:
+        return current;
+
+    case token::code::error_value_separator:
+        decoder.next();
+        // Prohibit trailing separator
+        if (decoder.code() == token::code::end_object)
+            return token::code::error_unexpected_token;
+        next = &frame::next_object_key;
+        return decoder.code();
+
+    default:
+        return token::code::error_expected_end_object;
+    }
 }
 
 } // namespace json

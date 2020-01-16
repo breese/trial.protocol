@@ -165,16 +165,15 @@ private:
         frame(token::begin_array) noexcept;
         frame(token::begin_object) noexcept;
 
-        bool is_array() const noexcept;
-        bool is_object() const noexcept;
+        token::code::value (frame::*next)(decoder_type&) noexcept;
 
+    private:
         token::code::value next_outer(decoder_type&) noexcept;
         token::code::value next_array(decoder_type&) noexcept;
+        token::code::value next_array_value(decoder_type&) noexcept;
         token::code::value next_object(decoder_type&) noexcept;
-
-        size_type counter;
-        token::code::value scope;
-        token::code::value (frame::*next)(decoder_type&) noexcept;
+        token::code::value next_object_key(decoder_type&) noexcept;
+        token::code::value next_object_value(decoder_type&) noexcept;
     };
     std::stack<frame> stack;
 #endif
