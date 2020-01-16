@@ -13,8 +13,6 @@
 
 #include <cstddef> // std::size_t
 #include <cstdint>
-#include <string>
-#include <boost/config.hpp>
 #include <trial/protocol/core/detail/string_view.hpp>
 #include <trial/protocol/core/detail/span.hpp>
 #include <trial/protocol/core/char_traits.hpp>
@@ -52,11 +50,25 @@ public:
     std::error_code error() const noexcept;
     const view_type& literal() const noexcept;
     const view_type& tail() const noexcept;
-    template <typename ReturnType> ReturnType value() const;
+    template <typename T> json::errc signed_value(T&) const noexcept;
+    template <typename T> json::errc unsigned_value(T&) const noexcept;
+    template <typename Collector> void string_value(Collector&) const noexcept;
     template <typename T> json::errc value(T&) const noexcept;
-    template <typename Collector> void string(Collector&) const noexcept;
+    template <typename T> void real_value(T&) const noexcept;
+
+    // For testing purposes
+    template <typename T> T signed_value() const;
+    template <typename T> T unsigned_value() const;
+    template <typename T> T real_value() const;
+    template <typename T> T string_value() const;
 
 private:
+    template <typename T> json::errc unsigned_value(const_pointer, const_pointer, T&) const noexcept;
+    json::errc unsigned_value(const_pointer, const_pointer, std::uint8_t&) const noexcept;
+    json::errc unsigned_value(const_pointer, const_pointer, std::uint16_t&) const noexcept;
+    json::errc unsigned_value(const_pointer, const_pointer, std::uint32_t&) const noexcept;
+    json::errc unsigned_value(const_pointer, const_pointer, std::uint64_t&) const noexcept;
+
     void next_token(token::code::value) noexcept;
     void next_f_keyword() noexcept;
     void next_n_keyword() noexcept;
@@ -66,17 +78,6 @@ private:
 
     void skip_whitespaces() noexcept;
     bool at_keyword_end() const noexcept;
-
-    template <typename ReturnType, typename Enable = void>
-    struct overloader;
-    template <typename T> json::errc signed_integer_value(T&) const noexcept;
-    template <typename T> json::errc unsigned_integer_value(const_pointer, const_pointer, T&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint8_t&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint16_t&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint32_t&) const noexcept;
-    json::errc unsigned_integer_value(const_pointer, const_pointer, std::uint64_t&) const noexcept;
-    template <typename T> void real_value(T&) const noexcept;
-    template <typename Collector> void string_value(Collector&) const noexcept;
 
 private:
     static constexpr int segment_max = 32;

@@ -32,85 +32,6 @@ struct basic_reader<CharT>::overloader
 {
 };
 
-// Integers (not booleans)
-
-template <typename CharT>
-template <typename ReturnType>
-struct basic_reader<CharT>::overloader<
-    ReturnType,
-    typename std::enable_if<std::is_integral<ReturnType>::value &&
-                            !core::detail::is_bool<ReturnType>::value>::type>
-{
-    inline static ReturnType value(const basic_reader<CharT>& self)
-    {
-        ReturnType result;
-        throw_on_error(value(self, result));
-        return result;
-    }
-
-    inline static json::errc value(const basic_reader<CharT>& self,
-                                   ReturnType& output) noexcept
-    {
-        switch (self.decoder.code())
-        {
-        case token::code::integer:
-            return self.decoder.value(output);
-
-        case token::code::real:
-        {
-            using real_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
-            real_return_type result = {};
-            const auto errc = self.decoder.value(result);
-            if (errc == no_error)
-                output = ReturnType(std::round(result));
-            return errc;
-        }
-
-        default:
-            return json::invalid_value;
-        }
-    }
-};
-
-// Floating-point numbers
-
-template <typename CharT>
-template <typename ReturnType>
-struct basic_reader<CharT>::overloader<
-    ReturnType,
-    typename std::enable_if<std::is_floating_point<ReturnType>::value>::type>
-{
-    inline static ReturnType value(const basic_reader<CharT>& self)
-    {
-        ReturnType result;
-        throw_on_error(value(self, result));
-        return result;
-    }
-
-    inline static json::errc value(const basic_reader<CharT>& self,
-                                   ReturnType& output) noexcept
-    {
-        switch (self.decoder.code())
-        {
-        case token::code::integer:
-        {
-            using integer_return_type = typename core::detail::make_integral<ReturnType>::type;
-            integer_return_type result = {};
-            const auto errc = self.decoder.value(result);
-            if (errc == no_error)
-                output = ReturnType(result);
-            return errc;
-        }
-
-        case token::code::real:
-            return self.decoder.value(output);
-
-        default:
-            return json::invalid_value;
-        }
-    }
-};
-
 // Booleans
 
 template <typename CharT>
@@ -145,6 +66,127 @@ struct basic_reader<CharT>::overloader<
     }
 };
 
+// Signed integers
+
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_integral<ReturnType>::value &&
+                            std::is_signed<ReturnType>::value &&
+                            !core::detail::is_bool<ReturnType>::value>::type>
+{
+    inline static ReturnType value(const basic_reader<CharT>& self)
+    {
+        ReturnType result;
+        throw_on_error(value(self, result));
+        return result;
+    }
+
+    inline static json::errc value(const basic_reader<CharT>& self,
+                                   ReturnType& output) noexcept
+    {
+        switch (self.decoder.code())
+        {
+        case token::code::integer:
+            return self.decoder.signed_value(output);
+
+        case token::code::real:
+        {
+            using real_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
+            real_return_type result = {};
+            self.decoder.real_value(result);
+            output = ReturnType(std::round(result));
+            return json::no_error;
+        }
+
+        default:
+            return json::invalid_value;
+        }
+    }
+};
+
+// Unsigned integers
+
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_integral<ReturnType>::value &&
+                            std::is_unsigned<ReturnType>::value &&
+                            !core::detail::is_bool<ReturnType>::value>::type>
+{
+    inline static ReturnType value(const basic_reader<CharT>& self)
+    {
+        ReturnType result;
+        throw_on_error(value(self, result));
+        return result;
+    }
+
+    inline static json::errc value(const basic_reader<CharT>& self,
+                                   ReturnType& output) noexcept
+    {
+        switch (self.decoder.code())
+        {
+        case token::code::integer:
+            return self.decoder.unsigned_value(output);
+
+        case token::code::real:
+        {
+            using real_return_type = typename core::detail::make_floating_point<typename std::make_signed<ReturnType>::type>::type;
+            real_return_type result = {};
+            self.decoder.real_value(result);
+            output = ReturnType(std::round(result));
+            return json::no_error;
+        }
+
+        default:
+            return json::invalid_value;
+        }
+    }
+};
+
+// Floating-point numbers
+
+template <typename CharT>
+template <typename ReturnType>
+struct basic_reader<CharT>::overloader<
+    ReturnType,
+    typename std::enable_if<std::is_floating_point<ReturnType>::value>::type>
+{
+    inline static ReturnType value(const basic_reader<CharT>& self)
+    {
+        ReturnType result;
+        throw_on_error(value(self, result));
+        return result;
+    }
+
+    inline static json::errc value(const basic_reader<CharT>& self,
+                                   ReturnType& output) noexcept
+    {
+        switch (self.decoder.code())
+        {
+        case token::code::integer:
+        {
+            using integer_return_type = typename core::detail::make_integral<ReturnType>::type;
+            integer_return_type result = {};
+            const auto errc = self.decoder.signed_value(result);
+            if (errc == no_error)
+                output = ReturnType(result);
+            return errc;
+        }
+
+        case token::code::real:
+            output = {};
+            self.decoder.real_value(output);
+            return json::no_error;
+
+        default:
+            return json::invalid_value;
+        }
+    }
+};
+
 // Strings
 
 template <typename CharT>
@@ -164,14 +206,12 @@ struct basic_reader<CharT>::overloader<
     inline static json::errc value(const basic_reader<CharT>& self,
                                    return_type& output) noexcept
     {
-        switch (self.decoder.code())
+        if (self.decoder.code() == token::code::string)
         {
-        case token::code::string:
-            return self.decoder.value(output);
-
-        default:
-            return json::invalid_value;
+            self.decoder.string_value(output);
+            return json::no_error;
         }
+        return json::invalid_value;
     }
 };
 

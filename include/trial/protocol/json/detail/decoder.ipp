@@ -35,131 +35,6 @@ namespace json
 namespace detail
 {
 
-//-----------------------------------------------------------------------------
-// decoder::overloader
-//-----------------------------------------------------------------------------
-
-template <typename CharT>
-template <typename ReturnType, typename Enable>
-struct basic_decoder<CharT>::overloader
-{
-};
-
-// Integers
-
-template <typename CharT>
-template <typename ReturnType>
-struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename std::enable_if<std::is_integral<ReturnType>::value &&
-                                                                std::is_signed<ReturnType>::value>::type>
-{
-    inline static ReturnType value(const basic_decoder<CharT>& self)
-    {
-        ReturnType result;
-        throw_on_error(value(self, result));
-        return result;
-    }
-
-    inline static json::errc value(const basic_decoder<CharT>& self,
-                                   ReturnType& output) noexcept
-    {
-        if (self.code() != token::code::integer)
-        {
-            return json::incompatible_type;
-        }
-        output = {};
-        return self.signed_integer_value(output);
-    }
-};
-
-template <typename CharT>
-template <typename ReturnType>
-struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename std::enable_if<std::is_integral<ReturnType>::value &&
-                                                                std::is_unsigned<ReturnType>::value>::type>
-{
-    inline static ReturnType value(const basic_decoder<CharT>& self)
-    {
-        ReturnType result;
-        throw_on_error(value(self, result));
-        return result;
-    }
-
-    inline static json::errc value(const basic_decoder<CharT>& self,
-                                   ReturnType& output) noexcept
-    {
-        if (self.code() != token::code::integer)
-        {
-            return json::incompatible_type;
-        }
-        const auto head = self.literal().begin();
-        if (*head == traits::alphabet<CharT>::minus)
-            return json::invalid_value;
-        output = {};
-        return self.unsigned_integer_value(head,
-                                           self.current.scan.number.integer_tail,
-                                           output);
-    }
-};
-
-// Floating-point numbers
-
-template <typename CharT>
-template <typename ReturnType>
-struct basic_decoder<CharT>::overloader<ReturnType,
-                                        typename std::enable_if<std::is_floating_point<ReturnType>::value>::type>
-{
-    inline static ReturnType value(const basic_decoder<CharT>& self)
-    {
-        ReturnType result;
-        throw_on_error(value(self, result));
-        return result;
-    }
-
-    inline static json::errc value(const  basic_decoder<CharT>& self,
-                                   ReturnType& output) noexcept
-    {
-        if (self.code() != token::code::real)
-        {
-            return json::incompatible_type;
-        }
-        output = {};
-        self.real_value(output);
-        return json::no_error;
-    }
-};
-
-// Strings
-
-template <typename CharT>
-template <typename CharTraits, typename Allocator>
-struct basic_decoder<CharT>::overloader<std::basic_string<CharT, CharTraits, Allocator>>
-{
-    using return_type = std::basic_string<CharT, CharTraits, Allocator>;
-
-    inline static return_type value(const basic_decoder<CharT>& self)
-    {
-        return_type result;
-        throw_on_error(value(self, result));
-        return result;
-    }
-
-    inline static json::errc value(const basic_decoder<CharT>& self,
-                                   return_type& output) noexcept
-    {
-        if (self.code() != token::code::string)
-        {
-            return json::incompatible_type;
-        }
-        self.string_value(output);
-        return json::no_error;
-    }
-};
-
-//-----------------------------------------------------------------------------
-// basic_decoder
-//-----------------------------------------------------------------------------
-
 template <typename CharT>
 basic_decoder<CharT>::basic_decoder(const_pointer first,
                                     const_pointer last)
@@ -272,31 +147,11 @@ void basic_decoder<CharT>::next() noexcept
 }
 
 template <typename CharT>
-template <typename ReturnType>
-ReturnType basic_decoder<CharT>::value() const
-{
-    return basic_decoder<CharT>::overloader<ReturnType>::value(*this);
-}
-
-template <typename CharT>
 template <typename T>
-auto basic_decoder<CharT>::value(T& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::signed_value(T& output) const noexcept -> json::errc
 {
-    return basic_decoder<CharT>::overloader<T>::value(*this, output);
-}
+    static_assert(std::is_signed<T>::value, "T must be signed integer");
 
-template <typename CharT>
-template <typename Collector>
-void basic_decoder<CharT>::string(Collector& collector) const noexcept
-{
-    string_value(collector);
-}
-
-template <typename CharT>
-template <typename T>
-auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> json::errc
-{
-    static_assert(std::is_signed<T>::value, "T must be signed");
     using unsigned_type = typename std::make_unsigned<T>::type;
     assert(current.code == token::code::integer);
 
@@ -308,9 +163,9 @@ auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> jso
     {
         ++marker; // Skip minus
 
-        const auto errc = unsigned_integer_value(marker,
-                                                 current.scan.number.integer_tail,
-                                                 result);
+        const auto errc = unsigned_value(marker,
+                                         current.scan.number.integer_tail,
+                                         result);
         if (errc == json::no_error)
         {
             if (result > unsigned_type(-std::numeric_limits<T>::lowest()))
@@ -321,9 +176,9 @@ auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> jso
     }
     else
     {
-        const auto errc = unsigned_integer_value(marker,
-                                                 current.scan.number.integer_tail,
-                                                 result);
+        const auto errc = unsigned_value(marker,
+                                         current.scan.number.integer_tail,
+                                         result);
         if (errc == json::no_error)
         {
             if (result > unsigned_type(std::numeric_limits<T>::max()))
@@ -336,22 +191,24 @@ auto basic_decoder<CharT>::signed_integer_value(T& output) const noexcept -> jso
 
 template <typename CharT>
 template <typename T>
-auto basic_decoder<CharT>::unsigned_integer_value(const_pointer head,
-                                                  const_pointer tail,
-                                                  T& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_value(const_pointer head,
+                                          const_pointer tail,
+                                          T& output) const noexcept -> json::errc
 {
+    static_assert(std::is_unsigned<T>::value, "T must be unsigned integer");
+
     // Coerce into largest supported integer type
     std::uint64_t result = {};
-    const auto errc = unsigned_integer_value(head, tail, result);
+    const auto errc = unsigned_value(head, tail, result);
     if (errc == no_error)
         output = T(result);
     return errc;
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
-                                                  const_pointer tail,
-                                                  std::uint8_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_value(const_pointer marker,
+                                          const_pointer tail,
+                                          std::uint8_t& output) const noexcept -> json::errc
 {
     using T = std::uint8_t;
 
@@ -408,9 +265,9 @@ error:
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
-                                                  const_pointer tail,
-                                                  std::uint16_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_value(const_pointer marker,
+                                          const_pointer tail,
+                                          std::uint16_t& output) const noexcept -> json::errc
 {
     using T = std::uint16_t;
 
@@ -501,9 +358,9 @@ error:
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
-                                                  const_pointer tail,
-                                                  std::uint32_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_value(const_pointer marker,
+                                          const_pointer tail,
+                                          std::uint32_t& output) const noexcept -> json::errc
 {
     using T = std::uint32_t;
 
@@ -686,9 +543,9 @@ error:
 }
 
 template <typename CharT>
-auto basic_decoder<CharT>::unsigned_integer_value(const_pointer marker,
-                                                  const_pointer tail,
-                                                  std::uint64_t& output) const noexcept -> json::errc
+auto basic_decoder<CharT>::unsigned_value(const_pointer marker,
+                                          const_pointer tail,
+                                          std::uint64_t& output) const noexcept -> json::errc
 {
     using T = std::uint64_t;
 
@@ -1132,8 +989,46 @@ error:
 
 template <typename CharT>
 template <typename T>
+T basic_decoder<CharT>::signed_value() const
+{
+    if (current.code != token::code::integer)
+        throw_on_error(errc::incompatible_type);
+
+    T result = {};
+    throw_on_error(signed_value(result));
+    return result;
+}
+
+template <typename CharT>
+template <typename T>
+T basic_decoder<CharT>::unsigned_value() const
+{
+    if (current.code != token::code::integer)
+        throw_on_error(errc::incompatible_type);
+
+    T result = {};
+    throw_on_error(unsigned_value(literal().begin(), literal().end(), result));
+    return result;
+}
+
+template <typename CharT>
+template <typename T>
+auto basic_decoder<CharT>::unsigned_value(T& output) const noexcept -> json::errc
+{
+    if (current.code != token::code::integer)
+        return errc::incompatible_type;
+    if (literal().front() == traits::alphabet<CharT>::minus)
+        return errc::invalid_value;
+
+    return unsigned_value(literal().begin(), literal().end(), output);
+}
+
+template <typename CharT>
+template <typename T>
 void basic_decoder<CharT>::real_value(T& output) const noexcept
 {
+    static_assert(std::is_floating_point<T>::value, "T must be floating-point");
+
     assert(current.code == token::code::real);
 
     static constexpr T zero = T(0.0);
@@ -1215,7 +1110,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             const auto head = marker;
             marker += 18;
             std::uint64_t integer;
-            unsigned_integer_value(head, marker, integer);
+            unsigned_value(head, marker, integer);
             fraction += integer * T(1e-18);
             break;
         }
@@ -1224,7 +1119,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             const auto head = marker;
             marker += 17;
             std::uint64_t integer;
-            unsigned_integer_value(head, marker, integer);
+            unsigned_value(head, marker, integer);
             fraction += integer * T(1e-17);
             break;
         }
@@ -1233,7 +1128,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             const auto head = marker;
             marker += 16;
             std::uint64_t integer;
-            unsigned_integer_value(head, marker, integer);
+            unsigned_value(head, marker, integer);
             fraction += integer * T(1e-16);
             break;
         }
@@ -1242,7 +1137,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             const auto head = marker;
             marker += 15;
             std::uint64_t integer;
-            unsigned_integer_value(head, marker, integer);
+            unsigned_value(head, marker, integer);
             fraction += integer * T(1e-15);
             break;
         }
@@ -1251,7 +1146,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             const auto head = marker;
             marker += 14;
             std::uint64_t integer;
-            unsigned_integer_value(head, marker, integer);
+            unsigned_value(head, marker, integer);
             fraction += integer * T(1e-14);
             break;
         }
@@ -1260,7 +1155,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             const auto head = marker;
             marker += 13;
             std::uint64_t integer;
-            unsigned_integer_value(head, marker, integer);
+            unsigned_value(head, marker, integer);
             fraction += integer * T(1e-13);
             break;
         }
@@ -1269,7 +1164,7 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
             const auto head = marker;
             marker += 12;
             std::uint64_t integer;
-            unsigned_integer_value(head, marker, integer);
+            unsigned_value(head, marker, integer);
             fraction += integer * T(1e-12);
             break;
         }
@@ -1393,6 +1288,18 @@ void basic_decoder<CharT>::real_value(T& output) const noexcept
         result *= detail::power10<T>(is_exponent_negative ? -exponent : exponent);
     }
     output = is_negative ? -result : result;
+}
+
+template <typename CharT>
+template <typename T>
+T basic_decoder<CharT>::real_value() const
+{
+    if (current.code != token::code::real)
+        throw_on_error(errc::incompatible_type);
+
+    T result = {};
+    real_value(result);
+    return result;
 }
 
 template <typename CharT>
@@ -1593,6 +1500,18 @@ void basic_decoder<CharT>::string_value(Collector& collector) const noexcept
         }
         }
     }
+}
+
+template <typename CharT>
+template <typename T>
+T basic_decoder<CharT>::string_value() const
+{
+    if (current.code != token::code::string)
+        throw_on_error(errc::incompatible_type);
+
+    T result = {};
+    string_value(result);
+    return result;
 }
 
 template <typename CharT>
