@@ -86,7 +86,12 @@ void basic_decoder<CharT>::next() noexcept
         current.code = token::code::error_unexpected_token;
         return;
     }
+    assume_next();
+}
 
+template <typename CharT>
+void basic_decoder<CharT>::assume_next() noexcept
+{
     skip_whitespaces();
 
     if (input.empty())

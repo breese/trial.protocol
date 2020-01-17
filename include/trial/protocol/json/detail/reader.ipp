@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <type_traits>
+#include <trial/protocol/core/detail/config.hpp>
 #include <trial/protocol/core/detail/type_traits.hpp>
 
 namespace trial
@@ -447,22 +448,20 @@ token::code::value basic_reader<CharT>::frame::next_array_value(decoder_type& de
 {
     decoder.next();
     const token::code::value current = decoder.code();
-    switch (current)
+    if (TRIAL_LIKELY(current == token::code::error_value_separator))
     {
-    case token::code::end_array:
-        return current;
-
-    case token::code::error_value_separator:
         // Skip over separator
-        decoder.next();
+        decoder.assume_next();
         // Prohibit trailing separator
         if (decoder.code() == token::code::end_array)
             return token::code::error_unexpected_token;
         return decoder.code();
-
-    default:
-        return token::code::error_expected_end_array;
     }
+    else if (current == token::code::end_array)
+    {
+        return current;
+    }
+    return token::code::error_expected_end_array;
 }
 
 template <typename CharT>
@@ -504,7 +503,7 @@ token::code::value basic_reader<CharT>::frame::next_object_key(decoder_type& dec
     decoder.next();
     if (decoder.code() == token::code::error_name_separator)
     {
-        decoder.next();
+        decoder.assume_next();
         switch (decoder.code())
         {
         case token::code::end_array:
@@ -524,22 +523,20 @@ token::code::value basic_reader<CharT>::frame::next_object_value(decoder_type& d
 {
     decoder.next();
     const auto current = decoder.code();
-    switch (current)
+    if (TRIAL_LIKELY(current == token::code::error_value_separator))
     {
-    case token::code::end_object:
-        return current;
-
-    case token::code::error_value_separator:
-        decoder.next();
+        decoder.assume_next();
         // Prohibit trailing separator
         if (decoder.code() == token::code::end_object)
             return token::code::error_unexpected_token;
         next = &frame::next_object_key;
         return decoder.code();
-
-    default:
-        return token::code::error_expected_end_object;
     }
+    else if (current == token::code::end_object)
+    {
+        return current;
+    }
+    return token::code::error_expected_end_object;
 }
 
 } // namespace json

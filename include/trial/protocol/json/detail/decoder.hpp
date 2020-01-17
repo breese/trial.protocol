@@ -44,6 +44,7 @@ public:
     basic_decoder(const value_type (&array)[M]);
 
     void next() noexcept;
+    inline void assume_next() noexcept;
 
     void code(token::code::value) noexcept;
     token::code::value code() const noexcept;
