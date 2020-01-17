@@ -58,14 +58,15 @@ auto scan_digit(const CharT *marker,
                 const CharT * const tail) noexcept -> const CharT *
 {
 #if defined(TRIAL_PROTOCOL_USE_SSE2)
-    const auto digit_0 = _mm_set1_epi8(0x30);
-    const auto digit_9 = _mm_set1_epi8(0x39);
+    // Shift digits to range [0x75, 0x7F] to make single range comparison
+    const auto offset = _mm_set1_epi8(0x7F - 0x39);
+    const auto legal = _mm_set1_epi8(0x7F - 10);
     while (tail - marker > 16)
     {
-        const auto data = _mm_loadu_si128((const __m128i *)marker);
-        const auto avoid = _mm_or_si128(_mm_cmplt_epi8(data, digit_0),
-                                        _mm_cmpgt_epi8(data, digit_9));
-        const auto mask = _mm_movemask_epi8(avoid);
+        auto data = _mm_loadu_si128((const __m128i *)marker);
+        data = _mm_add_epi8(data, offset);
+        data = _mm_cmplt_epi8(data, legal);
+        const auto mask = _mm_movemask_epi8(data);
         if (mask != 0)
             return marker + core::detail::countl_zero(mask);
         marker += 16;
