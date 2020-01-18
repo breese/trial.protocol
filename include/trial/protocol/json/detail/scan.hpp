@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <trial/protocol/core/detail/config.hpp>
 #include <trial/protocol/core/detail/bit.hpp>
 #include <trial/protocol/core/detail/simd.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
@@ -90,13 +91,14 @@ auto scan_whitespace(const CharT *marker,
                      const CharT * const tail) noexcept -> const CharT *
 {
     (void)tail;
-    while (true)
+    while (TRIAL_LIKELY(traits::is_space(marker[0])))
     {
-        if (!traits::is_space(marker[0])) { break; }
         if (!traits::is_space(marker[1])) { marker += 1; break; }
         if (!traits::is_space(marker[2])) { marker += 2; break; }
         if (!traits::is_space(marker[3])) { marker += 3; break; }
-        marker += 4;
+        if (!traits::is_space(marker[4])) { marker += 4; break; }
+        if (!traits::is_space(marker[5])) { marker += 5; break; }
+        marker += 6;
     }
     return marker;
 }
