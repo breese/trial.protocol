@@ -12,10 +12,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #if !defined(TRIAL_LIKELY)
-# if defined(__GNUC__) || defined(__clang__)
+# if __cplusplus >= 201803L
+#  define TRIAL_LIKELY(x) [[likely]] (x)
+#  define TRIAL_UNLIKELY(x) [[unlikely]] (x)
+# elif defined(__GNUC__) || defined(__clang__)
 #  define TRIAL_LIKELY(x) __builtin_expect(bool(x), 1)
-#  else
+#  define TRIAL_UNLIKELY(x) __builtin_expect(bool(x), 0)
+# else
 #  define TRIAL_LIKELY(x) x
+#  define TRIAL_UNLIKELY(x) x
 # endif
 #endif
 

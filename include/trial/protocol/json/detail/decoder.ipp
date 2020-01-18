@@ -16,6 +16,7 @@
 #include <iterator>
 #include <limits>
 #include <type_traits>
+#include <trial/protocol/core/detail/config.hpp>
 #include <trial/protocol/json/detail/string_converter.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
 #include <trial/protocol/json/detail/traits.hpp>
@@ -94,7 +95,7 @@ void basic_decoder<CharT>::assume_next() noexcept
 {
     skip_whitespaces();
 
-    if (input.empty())
+    if (TRIAL_UNLIKELY(input.empty()))
     {
         current.code = token::code::value::end;
         return;
