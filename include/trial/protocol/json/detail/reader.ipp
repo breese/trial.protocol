@@ -354,9 +354,12 @@ template <typename CharT>
 template <typename Collector>
 auto basic_reader<CharT>::string(Collector& collector) const noexcept -> json::errc
 {
-    if (decoder.code() != token::code::string)
-        return errc::incompatible_type;
-    decoder.string_value(collector);
+    if (decoder.code() == token::code::string)
+    {
+        decoder.string_value(collector);
+        return errc::no_error;
+    }
+    return errc::incompatible_type;
 }
 
 template <typename CharT>
