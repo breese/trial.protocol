@@ -30,15 +30,17 @@ auto scan_narrow(const CharT *marker,
                  const CharT * const tail) noexcept -> const CharT *
 {
 #if defined(TRIAL_PROTOCOL_USE_SSE2)
-    const auto quote = _mm_set1_epi8(0x22);
-    const auto escape = _mm_set1_epi8(0x5C);
-    const auto control = _mm_set1_epi8(0x20); // and extra
+    // Swaps space and quote characters
+    const auto permuter = _mm_set1_epi8(0x02);
+    // Covers permuted quote and control characters + extra characters
+    const auto lower = _mm_set1_epi8(0x21);
+    const auto escape = _mm_set1_epi8(0x5e);
     while (tail - marker > 16)
     {
-        const auto data = _mm_loadu_si128((const __m128i *)marker);
-        const auto avoid = _mm_or_si128(_mm_or_si128(_mm_cmpeq_epi8(data, quote),
-                                                     _mm_cmpeq_epi8(data, escape)),
-                                        _mm_cmplt_epi8(data, control));
+        const auto data = _mm_xor_si128(_mm_loadu_si128((const __m128i *)marker),
+                                        permuter);
+        const auto avoid = _mm_or_si128(_mm_cmpeq_epi8(data, escape),
+                                        _mm_cmplt_epi8(data, lower));
         const auto mask = _mm_movemask_epi8(avoid);
         if (mask != 0)
             return marker + core::detail::countl_zero(mask);
