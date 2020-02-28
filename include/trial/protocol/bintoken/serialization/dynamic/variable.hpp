@@ -118,8 +118,9 @@ struct save_overloader< protocol::bintoken::oarchive,
             ar.template save<bintoken::token::null>();
             for (auto it = data.begin(); it != data.end(); ++it)
             {
-                auto value = std::make_pair(it.key(), it.value());;
-                ar.save_override(value, protocol_version);
+                auto value = std::make_pair(it.key(), it.value());
+                ar.save_override(value.first, protocol_version);
+                ar.save_override(value.second, protocol_version);
             }
             ar.template save<bintoken::token::end_assoc_array>();
             break;
@@ -136,14 +137,15 @@ struct load_overloader< protocol::bintoken::iarchive,
                      const unsigned int /* protocol_version */)
     {
         using namespace trial::protocol::bintoken;
-        switch (ar.symbol())
+        switch (ar.code())
         {
-        case token::symbol::null:
+        case token::code::null:
             ar.template load<token::null>();
             data = dynamic::null;
             break;
 
-        case token::symbol::boolean:
+        case token::code::false_value:
+        case token::code::true_value:
             {
                 bool value = {};
                 ar.load(value);
@@ -151,23 +153,58 @@ struct load_overloader< protocol::bintoken::iarchive,
             }
             break;
 
-        case token::symbol::integer:
+        case token::code::int8:
             {
-                std::intmax_t value = {};
+                std::int8_t value = {};
                 ar.load(value);
                 data = value;
             }
             break;
 
-        case token::symbol::real:
+        case token::code::int16:
             {
-                long double value = {};
+                std::int16_t value = {};
                 ar.load(value);
                 data = value;
             }
             break;
 
-        case token::symbol::string:
+        case token::code::int32:
+            {
+                std::int32_t value = {};
+                ar.load(value);
+                data = value;
+            }
+            break;
+
+        case token::code::int64:
+            {
+                std::int64_t value = {};
+                ar.load(value);
+                data = value;
+            }
+            break;
+
+        case token::code::float32:
+            {
+                float value = {};
+                ar.load(value);
+                data = value;
+            }
+            break;
+
+        case token::code::float64:
+            {
+                double value = {};
+                ar.load(value);
+                data = value;
+            }
+            break;
+
+        case token::code::string8:
+        case token::code::string16:
+        case token::code::string32:
+        case token::code::string64:
             {
                 std::string value;
                 ar.load(value);
@@ -175,7 +212,7 @@ struct load_overloader< protocol::bintoken::iarchive,
             }
             break;
 
-        case token::symbol::begin_array:
+        case token::code::begin_array:
             {
                 ar.template load<token::begin_array>();
 
@@ -193,7 +230,25 @@ struct load_overloader< protocol::bintoken::iarchive,
             }
             break;
 
-        case token::symbol::begin_assoc_array:
+        case token::code::deprecated_begin_assoc_array:
+            {
+                ar.template load<token::deprecated_begin_assoc_array>();
+
+                boost::optional<std::size_t> count;
+                ar.load_override(count);
+
+                data = dynamic::map::make();
+                while (!ar.template at<token::deprecated_end_assoc_array>())
+                {
+                    std::pair<std::string, dynamic::variable> value;
+                    ar.load_override(value);
+                    data.insert(data.end(), { std::move(value.first), std::move(value.second) });
+                }
+                ar.template load<token::deprecated_end_assoc_array>();
+            }
+            break;
+
+        case token::code::begin_assoc_array:
             {
                 ar.template load<token::begin_assoc_array>();
 
@@ -204,7 +259,8 @@ struct load_overloader< protocol::bintoken::iarchive,
                 while (!ar.template at<token::end_assoc_array>())
                 {
                     std::pair<std::string, dynamic::variable> value;
-                    ar.load_override(value);
+                    ar.load_override(value.first);
+                    ar.load_override(value.second);
                     data.insert(data.end(), { std::move(value.first), std::move(value.second) });
                 }
                 ar.template load<token::end_assoc_array>();

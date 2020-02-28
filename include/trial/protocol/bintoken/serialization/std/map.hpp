@@ -37,7 +37,8 @@ struct save_overloader< protocol::bintoken::oarchive,
              it != data.end();
              ++it)
         {
-            ar.save_override(*it, protocol_version);
+            ar.save_override(it->first, protocol_version);
+            ar.save_override(it->second, protocol_version);
         }
         ar.save<bintoken::token::end_assoc_array>();
     }
@@ -51,17 +52,44 @@ struct load_overloader< protocol::bintoken::iarchive,
                      std::map<Key, T, Compare, Allocator>& data,
                      const unsigned int protocol_version)
     {
-        ar.load<bintoken::token::begin_assoc_array>();
-        boost::optional<std::size_t> count;
-        ar.load_override(count, protocol_version);
-        while (!ar.at<bintoken::token::end_assoc_array>())
+        switch (ar.code())
         {
-            // We cannot use std::map<Key, T>::value_type because it has a const key
-            std::pair<Key, T> value;
-            ar.load_override(value, protocol_version);
-            data.insert(value);
+        case bintoken::token::code::deprecated_begin_assoc_array:
+        {
+            ar.load<bintoken::token::deprecated_begin_assoc_array>();
+            boost::optional<std::size_t> count;
+            ar.load_override(count, protocol_version);
+            while (!ar.at<bintoken::token::deprecated_end_assoc_array>())
+            {
+                // We cannot use std::map<Key, T>::value_type because it has a const key
+                std::pair<Key, T> value;
+                ar.load_override(value, protocol_version);
+                data.insert(value);
+            }
+            ar.load<bintoken::token::deprecated_end_assoc_array>();
+            break;
         }
-        ar.load<bintoken::token::end_assoc_array>();
+
+        case bintoken::token::code::begin_assoc_array:
+        {
+            ar.load<bintoken::token::begin_assoc_array>();
+            boost::optional<std::size_t> count;
+            ar.load_override(count, protocol_version);
+            while (!ar.at<bintoken::token::end_assoc_array>())
+            {
+                // We cannot use std::map<Key, T>::value_type because it has a const key
+                std::pair<Key, T> value;
+                ar.load_override(value.first, protocol_version);
+                ar.load_override(value.second, protocol_version);
+                data.insert(value);
+            }
+            ar.load<bintoken::token::end_assoc_array>();
+            break;
+        }
+
+        default:
+            throw bintoken::error(bintoken::unexpected_token);
+        }
     }
 };
 

@@ -901,10 +901,8 @@ void test_map()
 
     output_type expected[] = { bintoken::token::code::begin_assoc_array,
                                bintoken::token::code::null,
-                               bintoken::token::code::begin_record,
                                bintoken::token::code::string8, 0x03, 0x41, 0x42, 0x43,
                                bintoken::token::code::true_value,
-                               bintoken::token::code::end_record,
                                bintoken::token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),

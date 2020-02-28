@@ -98,8 +98,10 @@ struct code
         end_record = 0x91,
         begin_array = 0x92,
         end_array = 0x93,
-        begin_assoc_array = 0x9C,
-        end_assoc_array = 0x9D
+        deprecated_begin_assoc_array = 0x9C,
+        deprecated_end_assoc_array = 0x9D,
+        begin_assoc_array = 0x9E,
+        end_assoc_array = 0x9F
     };
 };
 
@@ -199,6 +201,22 @@ struct end_assoc_array
     using type = void;
     static const std::size_t size = 0;
     static const token::code::value code = token::code::end_assoc_array;
+    static bool same(token::code::value);
+};
+
+struct deprecated_begin_assoc_array
+{
+    using type = void;
+    static const std::size_t size = 0;
+    static const token::code::value code = token::code::deprecated_begin_assoc_array;
+    static bool same(token::code::value);
+};
+
+struct deprecated_end_assoc_array
+{
+    using type = void;
+    static const std::size_t size = 0;
+    static const token::code::value code = token::code::deprecated_end_assoc_array;
     static bool same(token::code::value);
 };
 

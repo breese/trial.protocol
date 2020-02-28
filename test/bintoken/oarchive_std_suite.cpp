@@ -743,10 +743,8 @@ void test_string_bool_one()
 
     output_type expected[] = { token::code::begin_assoc_array,
                               token::code::null,
-                              token::code::begin_record,
                               token::code::string8, 0x01, 0x41,
                               token::code::true_value,
-                              token::code::end_record,
                               token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
@@ -764,14 +762,10 @@ void test_string_bool_two()
 
     output_type expected[] = { token::code::begin_assoc_array,
                               token::code::null,
-                              token::code::begin_record,
                               token::code::string8, 0x01, 0x41,
                               token::code::true_value,
-                              token::code::end_record,
-                              token::code::begin_record,
                               token::code::string8, 0x01, 0x42,
                               token::code::false_value,
-                              token::code::end_record,
                               token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),
@@ -789,14 +783,10 @@ void test_int_string_two()
 
     output_type expected[] = { token::code::begin_assoc_array,
                               token::code::null,
-                              token::code::begin_record,
                               0x11,
                               token::code::string8, 0x01, 0x41,
-                              token::code::end_record,
-                              token::code::begin_record,
                               0x12,
                               token::code::string8, 0x01, 0x42,
-                              token::code::end_record,
                               token::code::end_assoc_array };
     TRIAL_PROTOCOL_TEST_ALL_WITH(result.begin(), result.end(),
                                  expected, expected + sizeof(expected),

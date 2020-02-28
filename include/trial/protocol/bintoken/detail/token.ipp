@@ -105,9 +105,11 @@ inline symbol::value symbol::convert(code::value value)
     case code::end_array:
         return symbol::end_array;
 
+    case code::deprecated_begin_assoc_array:
     case code::begin_assoc_array:
         return symbol::begin_assoc_array;
 
+    case code::deprecated_end_assoc_array:
     case code::end_assoc_array:
         return symbol::end_assoc_array;
     }
@@ -183,6 +185,16 @@ inline bool begin_assoc_array::same(token::code::value v)
 }
 
 inline bool end_assoc_array::same(token::code::value v)
+{
+    return (v == code);
+}
+
+inline bool deprecated_begin_assoc_array::same(token::code::value v)
+{
+    return (v == code);
+}
+
+inline bool deprecated_end_assoc_array::same(token::code::value v)
 {
     return (v == code);
 }
@@ -327,6 +339,18 @@ struct is_tag<token::begin_assoc_array>
 
 template <>
 struct is_tag<token::end_assoc_array>
+{
+    static const bool value = true;
+};
+
+template <>
+struct is_tag<token::deprecated_begin_assoc_array>
+{
+    static const bool value = true;
+};
+
+template <>
+struct is_tag<token::deprecated_end_assoc_array>
 {
     static const bool value = true;
 };

@@ -556,6 +556,14 @@ inline void decoder::next() BOOST_NOEXCEPT
             current.code = advance<token::end_assoc_array>();
             break;
 
+        case token::code::deprecated_begin_assoc_array:
+            current.code = advance<token::deprecated_begin_assoc_array>();
+            break;
+
+        case token::code::deprecated_end_assoc_array:
+            current.code = advance<token::deprecated_end_assoc_array>();
+            break;
+
         case token::code::int8:
             current.code = advance<token::int8>();
             break;

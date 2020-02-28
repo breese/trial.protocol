@@ -807,11 +807,33 @@ void run()
 namespace map_suite
 {
 
+void deprecated_test_bool_empty()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 0x00,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 0);
+}
+
 void test_bool_empty()
 {
     const value_type input[] = { token::code::begin_assoc_array,
                                  0x00,
                                  token::code::end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 0);
+}
+
+void deprecated_test_bool_empty_uncounted()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::deprecated_end_assoc_array };
     format::iarchive in(input);
     std::map<std::string, bool> value;
     TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
@@ -829,14 +851,28 @@ void test_bool_empty_uncounted()
     TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 0);
 }
 
-void test_bool_one()
+void deprecated_test_bool_one()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::string8, 0x01, 0x41,
                                  token::code::true_value,
                                  token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(value["A"], true);
+}
+
+void test_bool_one()
+{
+    const value_type input[] = { token::code::begin_assoc_array,
+                                 token::code::null,
+                                 token::code::string8, 0x01, 0x41,
+                                 token::code::true_value,
                                  token::code::end_assoc_array };
     format::iarchive in(input);
     std::map<std::string, bool> value;
@@ -845,9 +881,9 @@ void test_bool_one()
     TRIAL_PROTOCOL_TEST_EQUAL(value["A"], true);
 }
 
-void test_bool_two()
+void deprecated_test_bool_two()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::string8, 0x01, 0x41,
@@ -857,6 +893,23 @@ void test_bool_two()
                                  token::code::string8, 0x01, 0x42,
                                  token::code::false_value,
                                  token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(value["A"], true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value["B"], false);
+}
+
+void test_bool_two()
+{
+    const value_type input[] = { token::code::begin_assoc_array,
+                                 token::code::null,
+                                 token::code::string8, 0x01, 0x41,
+                                 token::code::true_value,
+                                 token::code::string8, 0x01, 0x42,
+                                 token::code::false_value,
                                  token::code::end_assoc_array };
     format::iarchive in(input);
     std::map<std::string, bool> value;
@@ -873,7 +926,7 @@ void fail_missing_end()
     format::iarchive in(input);
     std::map<std::string, bool> value;
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
-                                    format::error, "unexpected token");
+                                    format::error, "invalid value");
 }
 
 void fail_missing_begin()
@@ -898,7 +951,7 @@ void fail_missing_count()
 
 void fail_missing_pair_end()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::string8, 0x01, 0x41,
@@ -911,7 +964,7 @@ void fail_missing_pair_end()
 
 void fail_missing_pair_second()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::string8, 0x01, 0x41 };
@@ -923,7 +976,7 @@ void fail_missing_pair_second()
 
 void fail_missing_pair_first()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record };
     format::iarchive in(input);
@@ -934,7 +987,7 @@ void fail_missing_pair_first()
 
 void fail_unexpected_key_int()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  0x00,
@@ -949,13 +1002,13 @@ void fail_unexpected_key_int()
 
 void fail_unexpected_key_null()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::null,
                                  token::code::true_value,
                                  token::code::end_record,
-                                 token::code::end_assoc_array };
+                                 token::code::deprecated_end_assoc_array };
     format::iarchive in(input);
     std::map<std::string, bool> value;
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
@@ -964,13 +1017,13 @@ void fail_unexpected_key_null()
 
 void fail_unexpected_value_int()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::string8, 0x01, 0x41,
                                  0x00,
                                  token::code::end_record,
-                                 token::code::end_assoc_array };
+                                 token::code::deprecated_end_assoc_array };
     format::iarchive in(input);
     std::map<std::string, bool> value;
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
@@ -979,13 +1032,225 @@ void fail_unexpected_value_int()
 
 void fail_unexpected_value_null()
 {
-    const value_type input[] = { token::code::begin_assoc_array,
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::string8, 0x01, 0x41,
                                  token::code::null,
                                  token::code::end_record,
-                                 token::code::end_assoc_array };
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "incompatible type");
+}
+
+void run()
+{
+    deprecated_test_bool_empty();
+    test_bool_empty();
+    deprecated_test_bool_empty_uncounted();
+    test_bool_empty_uncounted();
+    deprecated_test_bool_one();
+    test_bool_one();
+    deprecated_test_bool_two();
+    test_bool_two();
+    fail_missing_end();
+    fail_missing_begin();
+    fail_missing_count();
+    fail_missing_pair_end();
+    fail_missing_pair_second();
+    fail_missing_pair_first();
+    fail_unexpected_key_int();
+    fail_unexpected_key_null();
+    fail_unexpected_value_int();
+    fail_unexpected_value_null();
+}
+
+} // namespace map_suite
+
+namespace deprecated_map_suite
+{
+
+void test_bool_empty()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 0x00,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 0);
+}
+
+void test_bool_empty_uncounted()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 0);
+}
+
+void test_bool_one()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x01, 0x41,
+                                 token::code::true_value,
+                                 token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(value["A"], true);
+}
+
+void test_bool_two()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x01, 0x41,
+                                 token::code::true_value,
+                                 token::code::end_record,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x01, 0x42,
+                                 token::code::false_value,
+                                 token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.size(), 2);
+    TRIAL_PROTOCOL_TEST_EQUAL(value["A"], true);
+    TRIAL_PROTOCOL_TEST_EQUAL(value["B"], false);
+}
+
+void fail_missing_end()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "unexpected token");
+}
+
+void fail_missing_begin()
+{
+    const value_type input[] = { token::code::null,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "unexpected token");
+}
+
+void fail_missing_count()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "invalid value");
+}
+
+void fail_missing_pair_end()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x01, 0x41,
+                                 token::code::true_value };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "unexpected token");
+}
+
+void fail_missing_pair_second()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x01, 0x41 };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "incompatible type");
+}
+
+void fail_missing_pair_first()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "invalid value");
+}
+
+void fail_unexpected_key_int()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 0x00,
+                                 token::code::true_value,
+                                 token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "invalid value");
+}
+
+void fail_unexpected_key_null()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::null,
+                                 token::code::true_value,
+                                 token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "invalid value");
+}
+
+void fail_unexpected_value_int()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x01, 0x41,
+                                 0x00,
+                                 token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
+    format::iarchive in(input);
+    std::map<std::string, bool> value;
+    TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
+                                    format::error, "incompatible type");
+}
+
+void fail_unexpected_value_null()
+{
+    const value_type input[] = { token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::begin_record,
+                                 token::code::string8, 0x01, 0x41,
+                                 token::code::null,
+                                 token::code::end_record,
+                                 token::code::deprecated_end_assoc_array };
     format::iarchive in(input);
     std::map<std::string, bool> value;
     TRIAL_PROTOCOL_TEST_THROW_EQUAL(in >> value,
@@ -1010,7 +1275,7 @@ void run()
     fail_unexpected_value_null();
 }
 
-} // namespace map_suite
+} // namespace deprecated_map_suite
 
 //-----------------------------------------------------------------------------
 // Container struct
@@ -1087,6 +1352,19 @@ void test_set_one()
     TRIAL_PROTOCOL_TEST_EQUAL(value.data.count(0x12), 1);
 }
 
+void deprecated_test_map_empty()
+{
+    const value_type input[] = { token::code::begin_record,
+                                 token::code::deprecated_begin_assoc_array,
+                                 token::code::null,
+                                 token::code::deprecated_end_assoc_array,
+                                 token::code::end_record };
+    format::iarchive in(input);
+    type_struct< std::map<std::string, bool> > value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.data.size(), 0);
+}
+
 void test_map_empty()
 {
     const value_type input[] = { token::code::begin_record,
@@ -1100,15 +1378,31 @@ void test_map_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(value.data.size(), 0);
 }
 
-void test_map_one()
+void deprecated_test_map_one()
 {
     const value_type input[] = { token::code::begin_record,
-                                 token::code::begin_assoc_array,
+                                 token::code::deprecated_begin_assoc_array,
                                  token::code::null,
                                  token::code::begin_record,
                                  token::code::string8, 0x01, 0x41,
                                  token::code::true_value,
                                  token::code::end_record,
+                                 token::code::deprecated_end_assoc_array,
+                                 token::code::end_record };
+    format::iarchive in(input);
+    type_struct< std::map<std::string, bool> > value;
+    TRIAL_PROTOCOL_TEST_NO_THROW(in >> value);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.data.size(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(value.data["A"], true);
+}
+
+void test_map_one()
+{
+    const value_type input[] = { token::code::begin_record,
+                                 token::code::begin_assoc_array,
+                                 token::code::null,
+                                 token::code::string8, 0x01, 0x41,
+                                 token::code::true_value,
                                  token::code::end_assoc_array,
                                  token::code::end_record };
     format::iarchive in(input);
@@ -1124,7 +1418,9 @@ void run()
     test_vector_one();
     test_set_empty();
     test_set_one();
+    deprecated_test_map_empty();
     test_map_empty();
+    deprecated_test_map_one();
     test_map_one();
 }
 
@@ -1143,6 +1439,7 @@ int main()
     compact_vector_suite::run();
     set_suite::run();
     map_suite::run();
+    deprecated_map_suite::run();
     container_suite::run();
 
     return boost::report_errors();
