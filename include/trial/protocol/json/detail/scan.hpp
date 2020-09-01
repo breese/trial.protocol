@@ -48,10 +48,14 @@ auto scan_narrow(const CharT *marker,
     }
 #endif
 
-    (void)tail;
-    while (traits::to_category(*marker) == traits::category::narrow)
+    while (marker != tail)
     {
-        ++marker;
+        if (traits::to_category(*marker) == traits::category::narrow)
+        {
+            ++marker;
+        }
+        else
+            break;
     }
     return marker;
 }
@@ -76,14 +80,14 @@ auto scan_digit(const CharT *marker,
     }
 #endif
 
-    (void)tail;
-    while (true)
+    while (marker != tail)
     {
-        if (!traits::is_digit(marker[0])) { break; }
-        if (!traits::is_digit(marker[1])) { marker += 1; break; }
-        if (!traits::is_digit(marker[2])) { marker += 2; break; }
-        if (!traits::is_digit(marker[3])) { marker += 3; break; }
-        marker += 4;
+        if (traits::is_digit(*marker))
+        {
+            ++marker;
+        }
+        else
+            break;
     }
     return marker;
 }
@@ -92,15 +96,14 @@ template <typename CharT>
 auto scan_whitespace(const CharT *marker,
                      const CharT * const tail) noexcept -> const CharT *
 {
-    (void)tail;
-    while (TRIAL_LIKELY(traits::is_space(marker[0])))
+    while (marker != tail)
     {
-        if (!traits::is_space(marker[1])) { marker += 1; break; }
-        if (!traits::is_space(marker[2])) { marker += 2; break; }
-        if (!traits::is_space(marker[3])) { marker += 3; break; }
-        if (!traits::is_space(marker[4])) { marker += 4; break; }
-        if (!traits::is_space(marker[5])) { marker += 5; break; }
-        marker += 6;
+        if (traits::is_space(*marker))
+        {
+            ++marker;
+        }
+        else
+            break;
     }
     return marker;
 }
