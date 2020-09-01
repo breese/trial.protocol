@@ -636,6 +636,24 @@ void test_empty()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
 }
 
+void test_empty2()
+{
+    boost::string_view input{"{}\n\n{}", 3};
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::begin_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::structural);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.category(), token::category::structural);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
+}
+
 void test_one()
 {
     const char input[] = "{\"alpha\":1}";
@@ -953,6 +971,7 @@ void fail_nested_concatenated_objects()
 void run()
 {
     test_empty();
+    test_empty2();
     test_one();
     test_many();
     test_nested_one();
