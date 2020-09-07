@@ -13,6 +13,7 @@
 
 #include <string>
 #include <stack>
+#include <vector>
 #include <trial/protocol/json/error.hpp>
 #include <trial/protocol/json/token.hpp>
 #include <trial/protocol/json/detail/decoder.hpp>
@@ -175,7 +176,7 @@ private:
         token::code::value next_object_key(decoder_type&) noexcept;
         token::code::value next_object_value(decoder_type&) noexcept;
     };
-    std::stack<frame> stack;
+    std::stack<frame, std::vector<frame>> stack;
 #endif
 };
 

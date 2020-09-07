@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <stack>
+#include <vector>
 #include <trial/protocol/buffer/base.hpp>
 #include <trial/protocol/json/error.hpp>
 #include <trial/protocol/json/token.hpp>
@@ -85,7 +86,7 @@ private:
         token::code::value code;
         std::size_t counter;
     };
-    std::stack<frame> stack;
+    std::stack<frame, std::vector<frame>> stack;
 #endif // BOOST_DOXYGEN_INVOKED
 };
 
