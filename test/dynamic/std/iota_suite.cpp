@@ -20,12 +20,14 @@ using namespace trial::dynamic;
 
 void test_array_boolean()
 {
+#if __cplusplus < 201703L // bool.operator++ forbidden since C++17
     variable data = array::repeat(4, null);
     std::iota(data.begin(), data.end(), false);
     variable result = array::make({ false, true, true, true });
     TRIAL_PROTOCOL_TEST_ALL_WITH(data.begin(), data.end(),
                                  result.begin(), result.end(),
                                  std::equal_to<variable>());
+#endif
 }
 
 void test_array_integer()

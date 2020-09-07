@@ -11,18 +11,29 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#if __cpp_lib_string_view >= 201606L
+
+#define TRIAL_PROTOCOL_USE_STD_STRING_VIEW 1
+
+#else
+
 #include <boost/version.hpp>
 
-#if !defined(TRIAL_PROTOCOL_USE_BOOST_STRING_REF)
-# if BOOST_VERSION < 106200
-#  define TRIAL_PROTOCOL_USE_BOOST_STRING_REF 1
+# if !defined(TRIAL_PROTOCOL_USE_BOOST_STRING_REF)
+#  if BOOST_VERSION < 106200
+#   define TRIAL_PROTOCOL_USE_BOOST_STRING_REF 1
+#  endif
 # endif
+
 #endif
 
-#if TRIAL_PROTOCOL_USE_BOOST_STRING_REF
-#include <boost/utility/string_ref.hpp>
+#if TRIAL_PROTOCOL_USE_STD_STRING_VIEW
+# include <string_view>
+# include <cstring>
+#elif TRIAL_PROTOCOL_USE_BOOST_STRING_REF
+# include <boost/utility/string_ref.hpp>
 #else
-#include <boost/utility/string_view.hpp>
+ #include <boost/utility/string_view.hpp>
 #endif
 
 namespace trial
@@ -34,7 +45,10 @@ namespace core
 namespace detail
 {
 
-#if TRIAL_PROTOCOL_USE_BOOST_STRING_REF
+#if TRIAL_PROTOCOL_USE_STD_STRING_VIEW
+template<class CharT, typename Traits = std::char_traits<CharT>>
+using basic_string_view = std::basic_string_view<CharT, Traits>;
+#elif TRIAL_PROTOCOL_USE_BOOST_STRING_REF
 template<class CharT, typename Traits = std::char_traits<CharT>>
 using basic_string_view = boost::basic_string_ref<CharT, Traits>;
 #else
