@@ -12,34 +12,38 @@
 #include <cstdint>
 #include <cstring>
 #include <string>
-#include <trial/protocol/json/reader.hpp>
+#include <trial/protocol/json/chunk_reader.hpp>
 
 namespace example
 {
 
 namespace json = trial::protocol::json;
 
-#define TRIAL_PROTOCOL_JSON_EXAMPLE_BUFFER_SIZE 2048
+#define TRIAL_PROTOCOL_JSON_EXAMPLE_BUFFER_SIZE 8192
 
 template <typename Callbacks>
 class chunked_push_parser
 {
+    using view_type = json::chunk_reader::view_type;
+
 public:
-    void parse(const json::reader::view_type& input)
+    void parse(const view_type& input)
     {
-        length = 0;
-        if (!reader.tail().empty())
-        {
-            // Copy left-overs from last call
-            length = reader.tail().size();
-            std::memmove(&buffer, reader.tail().data(), reader.tail().size());
-        }
         assert(length + input.size() < sizeof(buffer));
         std::memcpy(&buffer[length], input.data(), input.size());
         length += input.size();
-        reader.next(json::reader::view_type(buffer, length));
+        if (reader.next(view_type(buffer, length)))
+        {
+            parse_loop();
 
-        parse_loop();
+            if (reader.tail().data() != buffer)
+            {
+                // Copy left-overs for next call
+                length = reader.tail().size();
+                std::memmove(&buffer, reader.tail().data(), length);
+                reader.shift({ buffer, length });
+            }
+        }
     }
 
 private:
@@ -88,14 +92,13 @@ private:
             default:
                 break;
             }
-
         } while (reader.next());
     }
 
 private:
     char buffer[TRIAL_PROTOCOL_JSON_EXAMPLE_BUFFER_SIZE];
     std::size_t length = 0;
-    json::reader reader;
+    json::chunk_reader reader;
     Callbacks callbacks;
 };
 

@@ -35,7 +35,7 @@ public:
     span() noexcept = default;
     span(const span&) noexcept = default;
     span(span&&) noexcept = default;
-    span& operator=(const span&) noexcept = delete;
+    span& operator=(const span&) noexcept = default;
     span& operator=(span&&) noexcept = default;
 
     span(const_pointer first, const_pointer last)

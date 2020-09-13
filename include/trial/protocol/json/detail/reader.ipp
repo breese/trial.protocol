@@ -288,6 +288,13 @@ std::error_code basic_reader<CharT>::error() const noexcept
 template <typename CharT>
 bool basic_reader<CharT>::next()
 {
+    decoder.next();
+    return next_frame();
+}
+
+template <typename CharT>
+bool basic_reader<CharT>::next_frame()
+{
     auto& frame = stack.top();
     const auto ret = (frame.*frame.next)(decoder);
     switch (ret)
@@ -325,13 +332,6 @@ bool basic_reader<CharT>::next(token::code::value expect)
         return false;
     }
     return next();
-}
-
-template <typename CharT>
-bool basic_reader<CharT>::next(const view_type& view)
-{
-    decoder = decoder_type(view.data(), view.size());
-    return (category() != token::category::status);
 }
 
 template <typename CharT>
@@ -403,7 +403,6 @@ token::code::value basic_reader<CharT>::frame::next_outer(decoder_type& decoder)
     //
     // JSON-text = value
 
-    decoder.next();
     switch (decoder.code())
     {
     case token::code::end_array:
@@ -430,7 +429,6 @@ token::code::value basic_reader<CharT>::frame::next_array(decoder_type& decoder)
     //
     // array = begin-array [ value *( value-separator value ) ] end-array
 
-    decoder.next();
     const token::code::value current = decoder.code();
     switch (current)
     {
@@ -449,7 +447,6 @@ token::code::value basic_reader<CharT>::frame::next_array(decoder_type& decoder)
 template <typename CharT>
 token::code::value basic_reader<CharT>::frame::next_array_value(decoder_type& decoder) noexcept
 {
-    decoder.next();
     const token::code::value current = decoder.code();
     if (TRIAL_LIKELY(current == token::code::error_value_separator))
     {
@@ -477,7 +474,6 @@ token::code::value basic_reader<CharT>::frame::next_object(decoder_type& decoder
     //
     // member = string name-separator value
 
-    decoder.next();
     const auto current = decoder.code();
     switch (current)
     {
@@ -503,7 +499,6 @@ token::code::value basic_reader<CharT>::frame::next_object(decoder_type& decoder
 template <typename CharT>
 token::code::value basic_reader<CharT>::frame::next_object_key(decoder_type& decoder) noexcept
 {
-    decoder.next();
     if (decoder.code() == token::code::error_name_separator)
     {
         decoder.assume_next();
@@ -524,7 +519,6 @@ token::code::value basic_reader<CharT>::frame::next_object_key(decoder_type& dec
 template <typename CharT>
 token::code::value basic_reader<CharT>::frame::next_object_value(decoder_type& decoder) noexcept
 {
-    decoder.next();
     const auto current = decoder.code();
     if (TRIAL_LIKELY(current == token::code::error_value_separator))
     {

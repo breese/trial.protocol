@@ -32,6 +32,7 @@ struct code
 
         end = 0,
         uninitialized,
+        shifted,
         error_value_separator,
         error_name_separator,
 

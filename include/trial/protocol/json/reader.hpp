@@ -58,6 +58,11 @@ public:
     //! @param[in] other The reader that is copied.
     basic_reader(const basic_reader& other) = default;
 
+    basic_reader(basic_reader&&) = default;
+
+    basic_reader& operator=(const basic_reader&) = default;
+    basic_reader& operator=(basic_reader&&) = default;
+
     //! @brief Parse the next token.
     //!
     //! @returns false if an error occurred or end-of-input was reached, true otherwise.
@@ -68,17 +73,6 @@ public:
     //! @param[in] expect Expected value of current token.
     //! @returns false if current token does not have the expected value.
     bool next(token::code::value expect);
-
-    //! @brief Parse the next token from a new view.
-    //!
-    //! The reader replaces its internal view with the @c view passed as
-    //! argument.
-    //!
-    //! The nesting levels are retained.
-    //!
-    //! @param[in] view  A string view of a JSON formatted buffer.
-    //! @returns false if an error occurred or end-of-input was reached, true otherwise.
-    bool next(const view_type& view);
 
     //! @brief Get the current nesting level.
     //!
@@ -152,11 +146,13 @@ public:
     view_type tail() const noexcept;
 
 #ifndef BOOST_DOXYGEN_INVOKED
-private:
+protected:
     template <typename ReturnType, typename Enable = void>
     struct overloader;
 
-private:
+    bool next_frame();
+
+protected:
     using decoder_type = detail::basic_decoder<value_type>;
     decoder_type decoder;
 

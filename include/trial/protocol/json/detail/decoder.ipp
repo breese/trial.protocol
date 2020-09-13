@@ -37,6 +37,13 @@ namespace detail
 {
 
 template <typename CharT>
+basic_decoder<CharT>::basic_decoder()
+    : input(nullptr, nullptr),
+      current{ token::code::uninitialized, {}, {} }
+{
+}
+
+template <typename CharT>
 basic_decoder<CharT>::basic_decoder(const_pointer first,
                                     const_pointer last)
     : input(first, last),
@@ -57,6 +64,18 @@ template <std::size_t M>
 basic_decoder<CharT>::basic_decoder(const value_type (&array)[M])
     : basic_decoder(array, array + M - 1) // Skip terminating zero
 {
+}
+
+template <typename CharT>
+void basic_decoder<CharT>::shift(const_pointer first,
+                                 size_type length)
+{
+    assert(length >= input.size());
+
+    input = view_type(first, first + length);
+    current.code = token::code::shifted;
+    current.view = view_type(input.data(), size_type(0));
+    current.scan.string.length = 0;
 }
 
 template <typename CharT>

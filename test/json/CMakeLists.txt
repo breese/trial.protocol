@@ -12,6 +12,7 @@
 trial_add_test(json_decoder_suite decoder_suite.cpp)
 trial_add_test(json_encoder_suite encoder_suite.cpp)
 trial_add_test(json_reader_suite reader_suite.cpp)
+trial_add_test(json_chunk_reader_suite chunk_reader_suite.cpp)
 trial_add_test(json_writer_suite writer_suite.cpp)
 
 # Serialization

@@ -32,6 +32,7 @@ inline symbol::value symbol::convert(code::value value)
         return symbol::end;
 
     case code::uninitialized:
+    case code::shifted:
     case code::error_name_separator:
     case code::error_value_separator:
     case code::error_unexpected_token:

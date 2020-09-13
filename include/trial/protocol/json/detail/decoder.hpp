@@ -37,14 +37,21 @@ public:
     using const_pointer = const value_type *;
     using view_type = core::detail::span<value_type>;
 
-    basic_decoder() = default;
+    basic_decoder();
     basic_decoder(const_pointer first, const_pointer last);
     basic_decoder(const_pointer first, size_type length);
     template <std::size_t M>
     basic_decoder(const value_type (&array)[M]);
 
+    basic_decoder(const basic_decoder&) = default;
+    basic_decoder(basic_decoder&&) = default;
+    basic_decoder& operator=(const basic_decoder&) = default;
+    basic_decoder& operator=(basic_decoder&&) = default;
+
     void next() noexcept;
     inline void assume_next() noexcept;
+
+    void shift(const_pointer first, size_type length);
 
     void code(token::code::value) noexcept;
     token::code::value code() const noexcept;
