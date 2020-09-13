@@ -87,6 +87,7 @@ public:
     using super::tail;
 
 private:
+    bool next_frame();
     bool full_token();
 };
 

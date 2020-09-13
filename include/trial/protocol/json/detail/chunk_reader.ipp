@@ -18,15 +18,15 @@ namespace json
 template <typename CharT>
 bool basic_chunk_reader<CharT>::next()
 {
-    auto backup = *this;
+    auto before_decoder = super::decoder;
     super::decoder.next();
-    if (super::decoder.code() == token::code::end)
-        goto error;
-    if (super::next_frame())
-        if (full_token())
+    if (super::decoder.code() != token::code::end)
+    {
+        if (next_frame())
             return true;
-error:
-    *this = std::move(backup);
+    }
+    // Restore decoder
+    super::decoder = std::move(before_decoder);
     return false;
 }
 
@@ -54,20 +54,14 @@ bool basic_chunk_reader<CharT>::next(const view_type& view)
     }
 
     // Replace decoder but retain reader state
-    auto backup = *this;
+    auto before_decoder = super::decoder;
     super::decoder.shift(view.data(), view.size());
     super::decoder.next();
-    switch (super::decoder.code())
-    {
-    case token::code::error_invalid_value:
+    if (super::decoder.code() == token::code::error_invalid_value)
         return true;
-    default:
-        break;
-    }
-    if (super::next_frame())
-        if (full_token())
-            return true;
-    *this = std::move(backup);
+    if (next_frame())
+        return true;
+    super::decoder = std::move(before_decoder);
     return false;
 }
 
@@ -91,19 +85,14 @@ bool basic_chunk_reader<CharT>::finish(const view_type& view)
     }
 
     // Replace decoder but retain reader state
-    auto backup = *this;
+    auto before_decoder = super::decoder;
     super::decoder.shift(view.data(), view.size());
     super::decoder.next();
-    switch (super::decoder.code())
-    {
-    case token::code::error_invalid_value:
+    if (super::decoder.code() == token::code::error_invalid_value)
         return true;
-    default:
-        break;
-    }
-    if (super::next_frame())
+    if (next_frame())
         return true;
-    *this = std::move(backup);
+    super::decoder = std::move(before_decoder);
     return false;
 }
 
@@ -111,6 +100,32 @@ template <typename CharT>
 void basic_chunk_reader<CharT>::shift(view_type view)
 {
     super::decoder.shift(view.data(), view.size());
+}
+
+template <typename CharT>
+bool basic_chunk_reader<CharT>::next_frame()
+{
+    // Restore topmost frame if parsing fails
+
+    auto before_level = level();
+    auto before_frame = super::stack.top();
+    if (super::next_frame())
+        if (full_token())
+            return true;
+    const auto after_level = level();
+    if (before_level < after_level)
+    {
+        super::stack.push(before_frame);
+    }
+    else if (before_level == after_level)
+    {
+        super::stack.top() = before_frame;
+    }
+    else
+    {
+        assert(false);
+    }
+    return false;
 }
 
 template <typename CharT>
