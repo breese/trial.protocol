@@ -31,6 +31,7 @@ class basic_parser
 {
 public:
     using variable_type = dynamic::basic_variable<Allocator>;
+    using string_type = typename variable_type::string_type;
 
     basic_parser(basic_reader<CharT>& reader)
         : reader(reader)
@@ -121,7 +122,7 @@ private:
         while (reader.next())
         {
             // Key
-            std::string key;
+            string_type key;
             key.reserve(reader.literal().size());
             switch (reader.symbol())
             {
@@ -199,7 +200,7 @@ private:
 
         case token::symbol::string:
         {
-            std::string value;
+            string_type value;
             value.reserve(reader.literal().size());
             const auto err = reader.value(value);
             if (err != json::no_error)
