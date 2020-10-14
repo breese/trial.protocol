@@ -555,6 +555,17 @@ void fail_missing_begin_after_comma()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "]");
 }
 
+void fail_missing_end()
+{
+    const char input[] = "[";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
+}
+
 void fail_concatenated_arrays()
 {
     const char input[] = "[][]";
@@ -605,6 +616,7 @@ void run()
     fail_missing_begin();
     fail_missing_begin_after_array();
     fail_missing_begin_after_comma();
+    fail_missing_end();
     fail_concatenated_arrays();
     fail_nested_concatenated_arrays();
 }
