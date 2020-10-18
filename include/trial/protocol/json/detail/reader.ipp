@@ -436,6 +436,7 @@ token::code::value basic_reader<CharT>::frame::next_array(decoder_type& decoder)
         return current;
 
     case token::code::end_object:
+    case token::code::end:
         return token::code::error_expected_end_array;
 
     default:
@@ -482,6 +483,7 @@ token::code::value basic_reader<CharT>::frame::next_object(decoder_type& decoder
         return token::code::error_unexpected_token;
 
     case token::code::end_array:
+    case token::code::end:
         return token::code::error_expected_end_object;
 
     case token::code::end_object:

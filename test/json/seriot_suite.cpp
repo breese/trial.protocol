@@ -2315,7 +2315,7 @@ void n_structure_lone_open_bracket()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_array);
 }
 
 void n_structure_no_data()
@@ -2422,7 +2422,7 @@ void n_structure_open_array_open_object()
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_object);
 }
 
 void n_structure_open_array_open_string()
@@ -2451,7 +2451,7 @@ void n_structure_open_object()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_key);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_expected_end_object);
 }
 
 void n_structure_open_object_close_array()
