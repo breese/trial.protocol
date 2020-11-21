@@ -673,7 +673,7 @@ void test_one()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
@@ -698,7 +698,7 @@ void test_many()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), "\"alpha\":1,\"bravo\":2}");
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"alpha\"");
@@ -712,7 +712,7 @@ void test_many()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.tail(), ",\"bravo\":2}");
 
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "bravo");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"bravo\"");
@@ -743,14 +743,14 @@ void test_nested_one()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "helium");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 2);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
@@ -775,7 +775,7 @@ void fail_missing_colon()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -789,7 +789,7 @@ void fail_missing_value()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.error(), json::unexpected_token);
@@ -802,7 +802,7 @@ void fail_trailing_separator()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
@@ -877,7 +877,7 @@ void fail_one_mismatched()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "alpha");
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 1);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);

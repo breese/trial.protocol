@@ -80,7 +80,7 @@ private:
             case json::token::symbol::end_object:
                 return;
 
-            case json::token::symbol::string:
+            case json::token::symbol::key:
                 parse_object_element(scope);
                 break;
 
@@ -92,7 +92,7 @@ private:
 
     void parse_object_element(Ptree& scope)
     {
-        assert(reader.symbol() == json::token::symbol::string);
+        assert(reader.symbol() == json::token::symbol::key);
 
         const string_type key = reader.template value<string_type>();
         Ptree& child = scope.push_back(std::make_pair(key, Ptree()))->second;

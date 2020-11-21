@@ -152,7 +152,7 @@ private:
 
     void print_object_element(int count)
     {
-        if (reader.symbol() != json::token::symbol::string)
+        if (reader.symbol() != json::token::symbol::key)
             throw json::error(make_error_code(json::invalid_key));
 
         // Print value separator

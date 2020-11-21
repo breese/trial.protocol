@@ -48,6 +48,7 @@ public:
                 callbacks.on_real(reader.value<double>());
                 break;
 
+            case json::token::symbol::key:
             case json::token::symbol::string:
                 callbacks.on_string(reader.value<std::string>());
                 break;

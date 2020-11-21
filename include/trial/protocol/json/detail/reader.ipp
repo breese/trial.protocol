@@ -207,12 +207,15 @@ struct basic_reader<CharT>::overloader<
     inline static json::errc value(const basic_reader<CharT>& self,
                                    return_type& output) noexcept
     {
-        if (self.decoder.code() == token::code::string)
+        switch (self.decoder.code())
         {
+        case token::code::string:
+        case token::code::key:
             self.decoder.string_value(output);
             return json::no_error;
+        default:
+            return json::invalid_value;
         }
-        return json::invalid_value;
     }
 };
 
@@ -494,7 +497,7 @@ token::code::value basic_reader<CharT>::frame::next_object(decoder_type& decoder
         if (current != token::code::string)
             return token::code::error_invalid_key;
         next = &frame::next_object_key;
-        return current;
+        return token::code::key;
     }
 }
 
@@ -525,11 +528,17 @@ token::code::value basic_reader<CharT>::frame::next_object_value(decoder_type& d
     if (TRIAL_LIKELY(current == token::code::error_value_separator))
     {
         decoder.assume_next();
-        // Prohibit trailing separator
-        if (decoder.code() == token::code::end_object)
+        switch (decoder.code())
+        {
+        case token::code::end_object:
+            // Prohibit trailing separator
             return token::code::error_unexpected_token;
-        next = &frame::next_object_key;
-        return decoder.code();
+        case token::code::string:
+            next = &frame::next_object_key;
+            return token::code::key;
+        default:
+            return decoder.code();
+        }
     }
     else if (current == token::code::end_object)
     {

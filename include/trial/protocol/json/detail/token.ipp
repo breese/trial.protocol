@@ -61,6 +61,9 @@ inline symbol::value symbol::convert(code::value value)
     case code::string:
         return symbol::string;
 
+    case code::key:
+        return symbol::key;
+
     case code::begin_array:
         return symbol::begin_array;
 
@@ -91,6 +94,7 @@ inline category::value category::convert(symbol::value value)
     case symbol::integer:
     case symbol::real:
     case symbol::string:
+    case symbol::key:
         return category::data;
 
     case symbol::begin_array:

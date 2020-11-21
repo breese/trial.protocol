@@ -505,7 +505,7 @@ void parse_nested_map()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::key);
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), json::token::symbol::begin_object);
 

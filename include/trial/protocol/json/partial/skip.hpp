@@ -41,6 +41,7 @@ skip(basic_reader<CharT> &reader, std::error_code &ec)
     case token::symbol::integer:
     case token::symbol::real:
     case token::symbol::string:
+    case token::symbol::key:
         {
             auto ret = reader.literal();
             if (!reader.next())

@@ -70,6 +70,7 @@ private:
                 break;
 
             case json::token::symbol::string:
+            case json::token::symbol::key:
                 callbacks.on_string(reader.value<std::string>());
                 break;
 

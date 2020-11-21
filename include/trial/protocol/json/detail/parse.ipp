@@ -128,7 +128,7 @@ private:
             {
             case token::symbol::end_object:
                 return scope;
-            case token::symbol::string:
+            case token::symbol::key:
             {
                 const auto err = reader.value(key);
                 if (err != json::no_error)

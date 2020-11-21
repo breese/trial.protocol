@@ -42,6 +42,7 @@ struct code
         integer,
         real,
         string,
+        key,
 
         begin_array,
         end_array,
@@ -71,6 +72,7 @@ struct symbol
         integer,
         real,
         string,
+        key,
 
         begin_array,
         end_array,

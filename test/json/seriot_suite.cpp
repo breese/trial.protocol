@@ -150,7 +150,7 @@ void i_object_key_lone_2nd_surrogate()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"\\uDFAA\""); // No knowledge of surrogates
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
@@ -1461,7 +1461,7 @@ void n_object_bad_value()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "x");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -1482,7 +1482,7 @@ void n_object_comma_instead_of_colon()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "x");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -1494,7 +1494,7 @@ void n_object_double_colon()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "x");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_name_separator);
@@ -1515,7 +1515,7 @@ void n_object_garbage_at_end()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -1539,7 +1539,7 @@ void n_object_missing_colon()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -1560,7 +1560,7 @@ void n_object_missing_semicolon()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -1572,7 +1572,7 @@ void n_object_missing_value()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
@@ -1584,7 +1584,7 @@ void n_object_no_colon()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     // Should this be code::end instead?
@@ -1633,7 +1633,7 @@ void n_object_several_trailing_commas()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "id");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
@@ -1657,7 +1657,7 @@ void n_object_trailing_comma()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "id");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
@@ -1672,7 +1672,7 @@ void n_object_trailing_comment()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -1689,7 +1689,7 @@ void n_object_trailing_comment_open()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -1706,7 +1706,7 @@ void n_object_trailing_comment_slash_open()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -1723,7 +1723,7 @@ void n_object_trailing_comment_slash_open_incomplete()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -1740,7 +1740,7 @@ void n_object_two_commas_in_a_row()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -1764,7 +1764,7 @@ void n_object_unterminated_value()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -1777,13 +1777,13 @@ void n_object_with_single_string()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "foo");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "bar");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -1795,7 +1795,7 @@ void n_object_with_trailing_garbage()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -2268,7 +2268,7 @@ void n_structure_comma_instead_of_closing_brace()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "x");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::true_value);
@@ -2362,7 +2362,7 @@ void n_structure_object_unclosed_no_value()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
@@ -2374,7 +2374,7 @@ void n_structure_object_with_comment()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
@@ -2386,7 +2386,7 @@ void n_structure_object_with_trailing_garbage()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::true_value);
@@ -2528,7 +2528,7 @@ void n_structure_trailing_hash()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -2602,7 +2602,7 @@ void n_structure_unclosed_object()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "asd");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3173,13 +3173,13 @@ void y_object()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "asd");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "sdf");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "dfg");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3196,7 +3196,7 @@ void y_object_basic()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "asd");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3213,13 +3213,13 @@ void y_object_duplicated_key()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "b");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3236,13 +3236,13 @@ void y_object_duplicated_key_and_value()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "b");
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3270,7 +3270,7 @@ void y_object_empty_key()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
@@ -3287,7 +3287,7 @@ void y_object_escaped_null_in_key()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.literal(), "\"foo\\u0000bar\"");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
@@ -3304,13 +3304,13 @@ void y_object_extreme_numbers()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "min");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<double>(), -1e+28);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "max");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
@@ -3327,14 +3327,14 @@ void y_object_long_strings()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "x");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "id");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3344,7 +3344,7 @@ void y_object_long_strings()
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "id");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3361,7 +3361,7 @@ void y_object_simple()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
@@ -3379,7 +3379,7 @@ void y_object_string_unicode()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "title");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -3396,7 +3396,7 @@ void y_object_with_newlines()
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     reader.next();
-    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.value<std::string>(), "a");
     reader.next();
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);

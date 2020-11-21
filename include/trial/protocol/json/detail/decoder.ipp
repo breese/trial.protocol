@@ -1332,7 +1332,7 @@ template <typename Collector>
 void basic_decoder<CharT>::string_value(Collector& collector) const noexcept
 {
     // FIXME: Validate string [ http://www.w3.org/International/questions/qa-forms-utf-8 ]
-    assert(current.code == token::code::string);
+    assert(current.code == token::code::string || current.code == token::code::key);
 
     // Skip initial and terminating quotes
     assert(literal().front() == traits::alphabet<CharT>::quote);
