@@ -146,7 +146,7 @@ private:
         if (reader.symbol() != json::token::symbol::end_object)
             throw json::error(make_error_code(json::expected_end_object));
         newline();
-        indent(reader.level() - 1);
+        indent(reader.level());
         writer.literal("}");
     }
 
@@ -162,12 +162,13 @@ private:
             newline();
         }
 
+        indent(reader.level());
+
         json::reader::view_type key = reader.literal();
         if (!reader.next())
             throw json::error(make_error_code(json::invalid_value));
 
         // Print key
-        indent(reader.level());
         writer.literal(key);
 
         // Print key separator
