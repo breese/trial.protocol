@@ -208,6 +208,16 @@ void test_string_output()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
 }
 
+void test_string_collector()
+{
+    const char input[] = "\"alpha\"";
+    json::reader reader(input);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    std::string result;
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.string(result), json::errc::no_error);
+    TRIAL_PROTOCOL_TEST_EQUAL(result, "alpha");
+}
+
 void fail_true_space_true()
 {
     const char input[] = "true true";
@@ -250,6 +260,7 @@ void run()
     test_string();
     test_string_allocator();
     test_string_output();
+    test_string_collector();
     fail_true_space_true();
     fail_true_comma_true();
 }
@@ -768,6 +779,27 @@ void test_nested_one()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.level(), 0);
 }
 
+void test_string_collector()
+{
+    const char input[] = "{\"alpha\":\"hydrogen\"}";
+    json::reader reader(input);
+    std::string result;
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::key);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.string(result), json::errc::no_error);
+    TRIAL_PROTOCOL_TEST_EQUAL(result, "alpha");
+    result.clear();
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.string(result), json::errc::no_error);
+    TRIAL_PROTOCOL_TEST_EQUAL(result, "hydrogen");
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), true);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_object);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.next(), false);
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end);
+}
+
 void fail_missing_colon()
 {
     const char input[] = "{\"key\"}";
@@ -1000,6 +1032,7 @@ void run()
     test_one();
     test_many();
     test_nested_one();
+    test_string_collector();
     fail_missing_colon();
     fail_missing_value();
     fail_trailing_separator();

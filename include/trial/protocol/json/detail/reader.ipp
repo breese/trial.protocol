@@ -357,12 +357,15 @@ template <typename CharT>
 template <typename Collector>
 auto basic_reader<CharT>::string(Collector& collector) const noexcept -> json::errc
 {
-    if (decoder.code() == token::code::string)
+    switch (decoder.code())
     {
+    case token::code::string:
+    case token::code::key:
         decoder.string_value(collector);
         return errc::no_error;
+    default:
+        return errc::incompatible_type;
     }
-    return errc::incompatible_type;
 }
 
 template <typename CharT>
