@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <functional>
+#include <limits>
 #include <trial/protocol/core/detail/lightweight_test.hpp>
 #include <trial/dynamic/variable.hpp>
 
