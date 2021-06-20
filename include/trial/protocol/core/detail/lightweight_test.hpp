@@ -219,6 +219,16 @@ void test_all_with_impl(FormattedOutputFunction& output,
 }
 #endif
 
+inline void throw_failed_impl(const char *expr, const char *excep, const char *file, int line, const char *function)
+{
+#if BOOST_VERSION >= 107400
+    ::boost::detail::throw_failed_impl(expr, excep, file, line, function);
+#else
+    (void)expr;
+    ::boost::detail::throw_failed_impl(excep, file, line, function);
+#endif
+}
+
 } // namespace detail
 } // namespace core
 } // namespace protocol
@@ -231,16 +241,16 @@ void test_all_with_impl(FormattedOutputFunction& output,
 #define TRIAL_PROTOCOL_TEST_THROW_EQUAL(EXPR, EXCEP, MSG)               \
     try {                                                               \
         EXPR;                                                           \
-        ::boost::detail::throw_failed_impl                              \
-              (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);     \
+        ::trial::protocol::core::detail::throw_failed_impl              \
+              (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
     }                                                                   \
     catch(EXCEP const& ex) {                                            \
         ::trial::protocol::core::detail::test_eq_impl                   \
             (#EXPR, #EXPR, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, std::string(ex.what()), MSG); \
     }                                                                   \
     catch(...) {                                                        \
-        ::boost::detail::throw_failed_impl                              \
-            (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);       \
+        ::trial::protocol::core::detail::throw_failed_impl              \
+            (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);\
     }
 
 #define TRIAL_PROTOCOL_TEST_NO_THROW(EXPR)                              \
