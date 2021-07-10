@@ -58,6 +58,9 @@ public:
 
         case insufficient_tokens:
             return "algorithm used requires more tokens than available";
+
+        case field_not_found:
+            return "request field(s) not found";
         }
         return "trial.protocol.json error";
     }

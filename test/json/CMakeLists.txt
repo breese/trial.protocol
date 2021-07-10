@@ -19,6 +19,7 @@ trial_add_test(json_writer_suite writer_suite.cpp)
 trial_add_test(json_iarchive_suite iarchive_suite.cpp)
 trial_add_test(json_oarchive_suite oarchive_suite.cpp)
 trial_add_test(json_partial_skip_suite skip_suite.cpp)
+trial_add_test(json_partial_scan_suite scan_suite.cpp)
 
 # Tree processing
 trial_add_test(json_parse_suite parse_suite.cpp)
