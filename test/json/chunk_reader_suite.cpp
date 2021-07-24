@@ -35,9 +35,9 @@ void string_missing_array_end()
     json::chunk_reader reader;
     TRIAL_PROTOCOL_TEST(reader.resume("[\"a\""));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST(reader.next());
+    TRIAL_PROTOCOL_TEST(reader.try_next());
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
-    TRIAL_PROTOCOL_TEST(!reader.next());
+    TRIAL_PROTOCOL_TEST(reader.try_next().empty());
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST(reader.resume("]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);

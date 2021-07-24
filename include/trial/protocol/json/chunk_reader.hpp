@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <trial/tribool.hpp>
 #include <trial/protocol/json/reader.hpp>
 
 namespace trial
@@ -38,7 +39,7 @@ public:
     //!
     //! @returns false if an error occurred or end-of-input was reached, true otherwise.
 
-    bool next();
+    tribool try_next();
 
     //! @brief Parse the next token from a new view.
     //!

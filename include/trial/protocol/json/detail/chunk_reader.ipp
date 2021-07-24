@@ -16,7 +16,7 @@ namespace json
 {
 
 template <typename CharT>
-bool basic_chunk_reader<CharT>::next()
+tribool basic_chunk_reader<CharT>::try_next()
 {
     auto before_decoder = super::decoder;
     super::decoder.next();
@@ -24,10 +24,11 @@ bool basic_chunk_reader<CharT>::next()
     {
         if (next_frame())
             return true;
+        return false;
     }
     // Restore decoder
     super::decoder = std::move(before_decoder);
-    return false;
+    return {};
 }
 
 template <typename CharT>

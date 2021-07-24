@@ -93,7 +93,7 @@ private:
             default:
                 break;
             }
-        } while (reader.next());
+        } while (reader.try_next());
     }
 
 private:
