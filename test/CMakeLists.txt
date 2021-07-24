@@ -35,6 +35,8 @@ function(trial_add_test name)
   add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
 endfunction()
 
+trial_add_test(tribool_suite tribool_suite.cpp)
+
 add_subdirectory(core)
 add_subdirectory(buffer)
 add_subdirectory(dynamic)
