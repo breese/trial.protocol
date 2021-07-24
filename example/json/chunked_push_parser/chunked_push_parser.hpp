@@ -32,7 +32,7 @@ public:
         assert(length + input.size() < sizeof(buffer));
         std::memcpy(&buffer[length], input.data(), input.size());
         length += input.size();
-        if (reader.next(view_type(buffer, length)))
+        if (reader.resume(view_type(buffer, length)))
         {
             parse_loop();
 

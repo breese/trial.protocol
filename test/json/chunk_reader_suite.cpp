@@ -22,9 +22,9 @@ namespace string_suite
 void string_missing_quote()
 {
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(!reader.next("\""));
+    TRIAL_PROTOCOL_TEST(!reader.resume("\""));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(!reader.next("\"a"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("\"a"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
     TRIAL_PROTOCOL_TEST(reader.finish("\"a\""));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
@@ -33,13 +33,13 @@ void string_missing_quote()
 void string_missing_array_end()
 {
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(reader.next("[\"a\""));
+    TRIAL_PROTOCOL_TEST(reader.resume("[\"a\""));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
     TRIAL_PROTOCOL_TEST(reader.next());
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
     TRIAL_PROTOCOL_TEST(!reader.next());
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
-    TRIAL_PROTOCOL_TEST(reader.next("]"));
+    TRIAL_PROTOCOL_TEST(reader.resume("]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
 }
 
@@ -60,7 +60,7 @@ void outer_int()
 {
     // "0" is legal, but we must specify that we reached the input end
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(!reader.next("0"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized); // Retains old state
     TRIAL_PROTOCOL_TEST(reader.finish("0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
@@ -71,11 +71,11 @@ void outer_real()
 {
     // "0.0" is legal
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(!reader.next("0"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized); // Retains old state
-    TRIAL_PROTOCOL_TEST(!reader.next("0."));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0."));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized); // Retains old state
-    TRIAL_PROTOCOL_TEST(!reader.next("0.0"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0.0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized); // Retains old state
     TRIAL_PROTOCOL_TEST(reader.finish("0.0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
@@ -85,9 +85,9 @@ void outer_zero_one_fail()
 {
     // "01" is illegal
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(!reader.next("0"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(reader.next("01"));
+    TRIAL_PROTOCOL_TEST(reader.resume("01"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_value);
 }
 
@@ -95,13 +95,13 @@ void array_int()
 {
     // "[0]"
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(reader.next("["));
+    TRIAL_PROTOCOL_TEST(reader.resume("["));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST(!reader.next("0")); // Single zero is legal, but defer until next input
+    TRIAL_PROTOCOL_TEST(!reader.resume("0")); // Single zero is legal, but defer until next input
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array); // Retains old state
-    TRIAL_PROTOCOL_TEST(reader.next("0]"));
+    TRIAL_PROTOCOL_TEST(reader.resume("0]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST(reader.next("]"));
+    TRIAL_PROTOCOL_TEST(reader.resume("]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
 }
 
@@ -109,17 +109,17 @@ void array_int_int()
 {
     // "[0,1]"
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(reader.next("["));
+    TRIAL_PROTOCOL_TEST(reader.resume("["));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST(!reader.next("0")); // Single zero is legal, but defer until next input
+    TRIAL_PROTOCOL_TEST(!reader.resume("0")); // Single zero is legal, but defer until next input
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array); // Retains old state
-    TRIAL_PROTOCOL_TEST(reader.next("0,1"));
+    TRIAL_PROTOCOL_TEST(reader.resume("0,1"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST(!reader.next(",1"));
+    TRIAL_PROTOCOL_TEST(!reader.resume(",1"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer); // Retains old state
-    TRIAL_PROTOCOL_TEST(reader.next(",1]"));
+    TRIAL_PROTOCOL_TEST(reader.resume(",1]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::integer);
-    TRIAL_PROTOCOL_TEST(reader.next("]"));
+    TRIAL_PROTOCOL_TEST(reader.resume("]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
 }
 
@@ -127,17 +127,17 @@ void array_real()
 {
     // "[0.0]"
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(reader.next("["));
+    TRIAL_PROTOCOL_TEST(reader.resume("["));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST(!reader.next("0"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array); // Retains old state
-    TRIAL_PROTOCOL_TEST(!reader.next("0."));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0."));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array); // Retains old state
-    TRIAL_PROTOCOL_TEST(!reader.next("0.0"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0.0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array); // Retains old state
-    TRIAL_PROTOCOL_TEST(reader.next("0.0]"));
+    TRIAL_PROTOCOL_TEST(reader.resume("0.0]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::real);
-    TRIAL_PROTOCOL_TEST(reader.next("]"));
+    TRIAL_PROTOCOL_TEST(reader.resume("]"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
 }
 
@@ -145,11 +145,11 @@ void array_zero_one_fail()
 {
     // "[01]" is illegal
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(reader.next("["));
+    TRIAL_PROTOCOL_TEST(reader.resume("["));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST(!reader.next("0"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("0"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array); // Retains old state
-    TRIAL_PROTOCOL_TEST(reader.next("01")); // Leading zero is illegal
+    TRIAL_PROTOCOL_TEST(reader.resume("01")); // Leading zero is illegal
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_invalid_value);
 }
 
@@ -174,11 +174,11 @@ namespace whitespace_suite
 void white_only()
 {
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(!reader.next("\n"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("\n"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(!reader.next("\n\n"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("\n\n"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(!reader.next("\n\n\n"));
+    TRIAL_PROTOCOL_TEST(!reader.resume("\n\n\n"));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
 }
 
@@ -186,30 +186,30 @@ void white_keyword()
 {
     const char input[] = "\n\nnull";
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(!reader.next(json::chunk_reader::view_type(input, 1)));
+    TRIAL_PROTOCOL_TEST(!reader.resume(json::chunk_reader::view_type(input, 1)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(!reader.next(json::chunk_reader::view_type(input, 2)));
+    TRIAL_PROTOCOL_TEST(!reader.resume(json::chunk_reader::view_type(input, 2)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(!reader.next(json::chunk_reader::view_type(input, 3)));
+    TRIAL_PROTOCOL_TEST(!reader.resume(json::chunk_reader::view_type(input, 3)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(!reader.next(json::chunk_reader::view_type(input, 4)));
+    TRIAL_PROTOCOL_TEST(!reader.resume(json::chunk_reader::view_type(input, 4)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(!reader.next(json::chunk_reader::view_type(input, 5)));
+    TRIAL_PROTOCOL_TEST(!reader.resume(json::chunk_reader::view_type(input, 5)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(reader.next(json::chunk_reader::view_type(input, 6)));
+    TRIAL_PROTOCOL_TEST(reader.resume(json::chunk_reader::view_type(input, 6)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::null);
 }
 
 void white_array_empty()
 {
     json::chunk_reader reader;
-    TRIAL_PROTOCOL_TEST(!reader.next(json::chunk_reader::view_type("\n[", 1)));
+    TRIAL_PROTOCOL_TEST(!reader.resume(json::chunk_reader::view_type("\n[", 1)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::uninitialized);
-    TRIAL_PROTOCOL_TEST(reader.next(json::chunk_reader::view_type("\n[", 2)));
+    TRIAL_PROTOCOL_TEST(reader.resume(json::chunk_reader::view_type("\n[", 2)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
-    TRIAL_PROTOCOL_TEST(!reader.next(json::chunk_reader::view_type("\n]", 1)));
+    TRIAL_PROTOCOL_TEST(!reader.resume(json::chunk_reader::view_type("\n]", 1)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array); // Retains old state
-    TRIAL_PROTOCOL_TEST(reader.next(json::chunk_reader::view_type("\n]", 2)));
+    TRIAL_PROTOCOL_TEST(reader.resume(json::chunk_reader::view_type("\n]", 2)));
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
 }
 

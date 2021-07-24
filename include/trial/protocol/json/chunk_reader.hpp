@@ -50,7 +50,7 @@ public:
     //! @param[in] view  A string view of a JSON formatted chunk.
     //! @returns false if an error occurred or end-of-input was reached, true otherwise.
 
-    bool next(const view_type& view);
+    bool resume(const view_type& view);
 
     //! @brief Parse the final token from a new view.
     //!
