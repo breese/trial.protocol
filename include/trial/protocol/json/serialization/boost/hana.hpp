@@ -64,11 +64,17 @@ struct load_overloader<json::basic_iarchive<CharT>,
             }
 
             // skip key
-            //json::partial::skip(ar.reader());
-            json::partial::skip(const_cast<json::reader&>(ar.reader()));
+            {
+                auto r = ar.reader();
+                json::partial::skip(r);
+                ar.reader(std::move(r));
+            }
             // skip value
-            //json::partial::skip(ar.reader());
-            json::partial::skip(const_cast<json::reader&>(ar.reader()));
+            {
+                auto r = ar.reader();
+                json::partial::skip(r);
+                ar.reader(std::move(r));
+            }
 
             // TODO: actually decode stuff
             //ar >> x;
