@@ -23,19 +23,21 @@ namespace protocol
 namespace json
 {
 
-template <typename CharT>
+template <typename Reader>
 class basic_iarchive
-    : public boost::archive::detail::common_iarchive< basic_iarchive<CharT> >
+    : public boost::archive::detail::common_iarchive< basic_iarchive<Reader> >
 {
     friend class boost::archive::load_access;
 
 public:
-    using value_type = CharT;
+    using reader_type = typename std::decay<Reader>::type;
+    using value_type = typename reader_type::value_type;
 
-    basic_iarchive(const json::reader&);
-    basic_iarchive(const json::reader::view_type&);
-    template <typename Iterator>
-    basic_iarchive(Iterator begin, Iterator end);
+    basic_iarchive(Reader);
+
+    template <typename T,
+              typename = typename std::enable_if<!std::is_same<basic_iarchive, typename std::decay<T>::type>::value>::type>
+    basic_iarchive(T&&);
 
     template<typename T>
     void load_override(T& data);
@@ -56,8 +58,7 @@ public:
     token::symbol::value symbol() const;
     token::category::value category() const;
 
-    const json::basic_reader<value_type>& reader() const;
-    void reader(json::basic_reader<value_type>);
+    const reader_type& reader() const;
 
 #ifndef BOOST_DOXYGEN_INVOKED
     // Ignore these
@@ -79,12 +80,13 @@ private:
 private:
     struct
     {
-        json::basic_reader<value_type> reader;
+        Reader reader;
     } member;
 #endif
 };
 
-using iarchive = basic_iarchive<char>;
+using iarchive = basic_iarchive<basic_reader<char>>;
+using iarchive_view = basic_iarchive<basic_reader<char>&>;
 
 } // namespace json
 } // namespace protocol

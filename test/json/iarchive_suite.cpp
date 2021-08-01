@@ -15,6 +15,52 @@
 using namespace trial::protocol;
 
 //-----------------------------------------------------------------------------
+// API
+//-----------------------------------------------------------------------------
+
+namespace api_suite
+{
+
+static_assert(!std::is_default_constructible<json::iarchive>::value,
+              "not default constructible");
+static_assert(!std::is_copy_constructible<json::iarchive>::value,
+              "not copy constructible");
+static_assert(!std::is_move_constructible<json::iarchive>::value,
+              "not move constructible");
+static_assert(std::is_constructible<json::iarchive, json::reader>::value,
+              "constructible with reader");
+
+static_assert(!std::is_default_constructible<json::iarchive_view>::value,
+              "not default constructible");
+static_assert(!std::is_copy_constructible<json::iarchive_view>::value,
+              "not copy constructible");
+static_assert(!std::is_move_constructible<json::iarchive_view>::value,
+              "not move constructible");
+static_assert(std::is_constructible<json::iarchive_view, json::reader&>::value,
+              "constructible with reader");
+
+void api_ctor()
+{
+    const char input[] = "";
+    {
+        json::iarchive in(input);
+        TRIAL_PROTOCOL_TEST_EQUAL(in.code(), json::token::code::end);
+    }
+    {
+        json::reader reader(input);
+        json::iarchive_view in(reader);
+        TRIAL_PROTOCOL_TEST_EQUAL(in.code(), json::token::code::end);
+    }
+}
+
+void run()
+{
+    api_ctor();
+}
+
+} // namespace api_suite
+
+//-----------------------------------------------------------------------------
 // Basic types
 //-----------------------------------------------------------------------------
 
@@ -817,6 +863,7 @@ void run()
 
 int main()
 {
+    api_suite::run();
     basic_suite::run();
     integer_suite::run();
     number_suite::run();

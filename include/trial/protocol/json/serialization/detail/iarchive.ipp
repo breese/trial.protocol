@@ -20,95 +20,83 @@ namespace protocol
 namespace json
 {
 
-template <typename CharT>
-basic_iarchive<CharT>::basic_iarchive(const json::reader& reader)
-    : member{ std::move(reader) }
+template <typename Reader>
+basic_iarchive<Reader>::basic_iarchive(Reader reader)
+    : member{ std::forward<Reader>(reader) }
 {
 }
 
-template <typename CharT>
-basic_iarchive<CharT>::basic_iarchive(const json::reader::view_type& view)
-    : member{ view }
+template <typename Reader>
+template <typename T, typename>
+basic_iarchive<Reader>::basic_iarchive(T&& input)
+    : member{ Reader{std::forward<T>(input)} }
 {
 }
 
-template <typename CharT>
-template <typename Iterator>
-basic_iarchive<CharT>::basic_iarchive(Iterator begin, Iterator end)
-    : member{ typename json::basic_reader<CharT>::view_type(&*begin, std::distance(begin, end)) }
-{
-}
-
-template <typename CharT>
+template <typename Reader>
 template<typename T>
-void basic_iarchive<CharT>::load_override(T& data)
+void basic_iarchive<Reader>::load_override(T& data)
 {
-    serialization::load_overloader<basic_iarchive<CharT>, T>::
+    serialization::load_overloader<basic_iarchive<Reader>, T>::
         load(*this, data, 0);
 }
 
-template <typename CharT>
+template <typename Reader>
 template<typename T>
-void basic_iarchive<CharT>::load_override(T& data, long protocol_version)
+void basic_iarchive<Reader>::load_override(T& data, long protocol_version)
 {
-    serialization::load_overloader<basic_iarchive<CharT>, T>::
+    serialization::load_overloader<basic_iarchive<Reader>, T>::
         load(*this, data, protocol_version);
 }
 
-template <typename CharT>
+template <typename Reader>
 template <typename Tag>
-void basic_iarchive<CharT>::load()
+void basic_iarchive<Reader>::load()
 {
     next(Tag::code);
 }
 
-template <typename CharT>
+template <typename Reader>
 template <typename T>
-void basic_iarchive<CharT>::load(T& value)
+void basic_iarchive<Reader>::load(T& value)
 {
     value = member.reader.template value<T>();
     next();
 }
 
-template <typename CharT>
+template <typename Reader>
 template <typename Tag>
-bool basic_iarchive<CharT>::at() const
+bool basic_iarchive<Reader>::at() const
 {
     return (member.reader.code() == Tag::code);
 }
 
-template <typename CharT>
-token::code::value basic_iarchive<CharT>::code() const
+template <typename Reader>
+token::code::value basic_iarchive<Reader>::code() const
 {
     return member.reader.code();
 }
 
-template <typename CharT>
-token::symbol::value basic_iarchive<CharT>::symbol() const
+template <typename Reader>
+token::symbol::value basic_iarchive<Reader>::symbol() const
 {
     return member.reader.symbol();
 }
 
-template <typename CharT>
-token::category::value basic_iarchive<CharT>::category() const
+template <typename Reader>
+token::category::value basic_iarchive<Reader>::category() const
 {
     return member.reader.category();
 }
 
-template <typename CharT>
-auto basic_iarchive<CharT>::reader() const -> const basic_reader<value_type>&
+template <typename Reader>
+auto basic_iarchive<Reader>::reader() const -> const reader_type&
 {
     return member.reader;
 }
 
-template <typename CharT>
-void basic_iarchive<CharT>::reader(basic_reader<value_type> input)
-{
-    member.reader =  std::move(input);
-}
-
-template <typename CharT>
-void basic_iarchive<CharT>::next()
+template <typename Reader>
+void basic_iarchive<Reader>::next()
 {
     if (!member.reader.next() && (member.reader.symbol() == token::symbol::error))
     {
@@ -116,8 +104,8 @@ void basic_iarchive<CharT>::next()
     }
 }
 
-template <typename CharT>
-void basic_iarchive<CharT>::next(token::code::value expect)
+template <typename Reader>
+void basic_iarchive<Reader>::next(token::code::value expect)
 {
     if (!member.reader.next(expect) && (member.reader.symbol() == token::symbol::error))
     {

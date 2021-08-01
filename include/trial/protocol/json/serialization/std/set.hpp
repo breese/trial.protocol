@@ -40,11 +40,11 @@ struct save_overloader< json::basic_oarchive<CharT>,
     }
 };
 
-template <typename CharT, typename Key, typename Compare, typename Allocator>
-struct load_overloader< json::basic_iarchive<CharT>,
+template <typename Reader, typename Key, typename Compare, typename Allocator>
+struct load_overloader< json::basic_iarchive<Reader>,
                         typename std::set<Key, Compare, Allocator> >
 {
-    static void load(json::basic_iarchive<CharT>& archive,
+    static void load(json::basic_iarchive<Reader>& archive,
                      std::set<Key, Compare, Allocator>& data,
                      const unsigned int protocol_version)
     {

@@ -33,12 +33,13 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
     }
 };
 
-template <typename CharT>
-struct load_overloader< protocol::json::basic_iarchive<CharT>,
-                        std::basic_string<CharT> >
+template <typename Reader>
+struct load_overloader< protocol::json::basic_iarchive<Reader>,
+                        std::basic_string<typename std::decay<Reader>::type::value_type> >
 {
-    static void load(protocol::json::basic_iarchive<CharT>& ar,
-                     std::basic_string<CharT>& data,
+    using value_type = typename std::decay<Reader>::type::value_type;
+    static void load(protocol::json::basic_iarchive<Reader>& ar,
+                     std::basic_string<value_type>& data,
                      const unsigned int)
     {
         ar.load(data);

@@ -23,23 +23,23 @@ namespace boost
 namespace serialization
 {
 
-template <typename CharT, typename T, std::size_t N>
-void load(trial::protocol::json::basic_iarchive<CharT>& ar,
+template <typename Reader, typename T, std::size_t N>
+void load(trial::protocol::json::basic_iarchive<Reader>& ar,
           T (&data)[N],
           const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    load_overloader<trial::protocol::json::basic_iarchive<CharT>, T[N]>::
+    load_overloader<trial::protocol::json::basic_iarchive<Reader>, T[N]>::
         load(ar, data, version);
 }
 
-template <typename CharT, typename T, std::size_t N>
-void serialize(trial::protocol::json::basic_iarchive<CharT>& ar,
+template <typename Reader, typename T, std::size_t N>
+void serialize(trial::protocol::json::basic_iarchive<Reader>& ar,
                T (&data)[N],
                const unsigned int version)
 {
     using namespace trial::protocol::serialization;
-    serialize_overloader<trial::protocol::json::basic_iarchive<CharT>, T[N]>::
+    serialize_overloader<trial::protocol::json::basic_iarchive<Reader>, T[N]>::
         serialize(ar, data, version);
 }
 
@@ -57,11 +57,11 @@ namespace protocol
 namespace serialization
 {
 
-template <typename CharT, typename T, std::size_t N>
-struct load_overloader< json::basic_iarchive<CharT>,
+template <typename Reader, typename T, std::size_t N>
+struct load_overloader< json::basic_iarchive<Reader>,
                         T[N] >
 {
-    static void load(json::basic_iarchive<CharT>& ar,
+    static void load(json::basic_iarchive<Reader>& ar,
                      T (&data)[N],
                      const unsigned int protocol_version)
     {

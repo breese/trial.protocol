@@ -41,11 +41,11 @@ struct save_overloader< protocol::json::basic_oarchive<CharT>,
     }
 };
 
-template <typename CharT, typename T>
-struct load_overloader< protocol::json::basic_iarchive<CharT>,
+template <typename Reader, typename T>
+struct load_overloader< protocol::json::basic_iarchive<Reader>,
                         typename boost::optional<T> >
 {
-    static void load(protocol::json::basic_iarchive<CharT>& ar,
+    static void load(protocol::json::basic_iarchive<Reader>& ar,
                      boost::optional<T>& data,
                      const unsigned int protocol_version)
     {
