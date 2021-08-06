@@ -24,12 +24,12 @@ namespace partial
 
 namespace detail {
 template<class CharT>
-struct CopyAndLookAheadCollector
+struct copy_and_look_ahead_collector
 {
     using view_type = typename basic_reader<CharT>::view_type;
     using size_type = typename basic_reader<CharT>::size_type;
 
-    CopyAndLookAheadCollector(view_type key)
+    copy_and_look_ahead_collector(view_type key)
         : pattern{key}
     {}
 
@@ -96,7 +96,7 @@ auto/*=bool*/ copy_and_look_ahead(const basic_reader<CharT> &reader_,
 
         // Key
         assert(reader.symbol() == json::token::symbol::key);
-        detail::CopyAndLookAheadCollector<CharT> collector{/*pattern=*/key};
+        detail::copy_and_look_ahead_collector<CharT> collector{/*pattern=*/key};
         {
             auto ec = reader.string(collector);
             assert(!ec); (void)ec;
@@ -143,7 +143,8 @@ bool copy_and_look_ahead(const basic_reader<CharT> &reader,
         if (reader.symbol() != json::token::symbol::string)
             return;
 
-        detail::CopyAndLookAheadCollector<CharT> collector{/*pattern=*/value};
+        detail::copy_and_look_ahead_collector<CharT>
+            collector{/*pattern=*/value};
         {
             auto ec = reader.string(collector);
             assert(!ec); (void)ec;
