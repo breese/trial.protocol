@@ -69,19 +69,17 @@ struct copy_and_look_ahead_collector
 } // namespace detail
 
 template<class CharT, class F>
-auto/*=bool*/ copy_and_look_ahead(const basic_reader<CharT> &reader_,
+auto/*=bool*/ copy_and_look_ahead(basic_reader<CharT> reader,
                                   typename basic_reader<CharT>::view_type key,
                                   F&& on_value, std::error_code &ec)
-    -> decltype(on_value(const_cast<basic_reader<CharT>&>(reader_)), true)
+    -> decltype(on_value(reader), true)
 {
     assert(!ec);
 
-    if (reader_.symbol() != json::token::symbol::begin_object) {
+    if (reader.symbol() != json::token::symbol::begin_object) {
         ec = errc::field_not_found;
         return false;
     }
-
-    basic_reader<CharT> reader(reader_);
 
     if (!reader.next()) {
         ec = reader.error();
@@ -120,20 +118,21 @@ auto/*=bool*/ copy_and_look_ahead(const basic_reader<CharT> &reader_,
 }
 
 template<class CharT, class F>
-auto/*=bool*/ copy_and_look_ahead(const basic_reader<CharT> &reader,
+auto/*=bool*/ copy_and_look_ahead(basic_reader<CharT> reader,
                                   typename basic_reader<CharT>::view_type key,
                                   F&& on_value)
     -> decltype(on_value(const_cast<basic_reader<CharT>&>(reader)), true)
 {
     std::error_code ec;
-    bool ret = copy_and_look_ahead(reader, key, std::forward<F>(on_value), ec);
+    bool ret = copy_and_look_ahead(std::move(reader), key,
+                                   std::forward<F>(on_value), ec);
     if (ec)
         throw json::error(ec);
     return ret;
 }
 
 template<class CharT>
-bool copy_and_look_ahead(const basic_reader<CharT> &reader,
+bool copy_and_look_ahead(basic_reader<CharT> reader,
                          const typename basic_reader<CharT>::view_type key,
                          const typename basic_reader<CharT>::view_type value,
                          std::error_code &ec)
@@ -153,17 +152,17 @@ bool copy_and_look_ahead(const basic_reader<CharT> &reader,
         if (!ret)
             ec = errc::field_not_found;
     };
-    copy_and_look_ahead(reader, key, on_value, ec);
+    copy_and_look_ahead(std::move(reader), key, on_value, ec);
     return ret;
 }
 
 template<class CharT>
-bool copy_and_look_ahead(const basic_reader<CharT> &reader,
+bool copy_and_look_ahead(basic_reader<CharT> reader,
                          const typename basic_reader<CharT>::view_type key,
                          const typename basic_reader<CharT>::view_type value)
 {
     std::error_code ec;
-    bool ret = copy_and_look_ahead(reader, key, value, ec);
+    bool ret = copy_and_look_ahead(std::move(reader), key, value, ec);
     if (ec)
         throw json::error(ec);
     return ret;
