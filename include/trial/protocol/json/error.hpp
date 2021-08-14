@@ -36,6 +36,7 @@ enum errc
     expected_end_object,
 
     insufficient_tokens,
+    expected_begin_object,
     field_not_found
 };
 

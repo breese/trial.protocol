@@ -77,7 +77,7 @@ auto/*=bool*/ copy_and_look_ahead(basic_reader<CharT> reader,
     assert(!ec);
 
     if (reader.symbol() != json::token::symbol::begin_object) {
-        ec = errc::field_not_found;
+        ec = errc::expected_begin_object;
         return false;
     }
 
