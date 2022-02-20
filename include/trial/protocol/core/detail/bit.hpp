@@ -72,6 +72,10 @@ constexpr int countl_zero(T x) noexcept
 {
 #if defined(__GNUC__) || defined(__clang__)
     return detail::countl_zero(typename std::make_unsigned<T>::type(x));
+#elif defined(_MSC_VER)
+    unsigned long trailing_zeroes = 0;
+    _BitScanForward(&trailing_zeroes, static_cast<unsigned long>(x));
+    return trailing_zeroes;
 #else
 # error "No countl_zero implementation"
 #endif

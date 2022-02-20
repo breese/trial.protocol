@@ -231,7 +231,7 @@ basic_reader<CharT>::basic_reader()
 
 template <typename CharT>
 basic_reader<CharT>::basic_reader(const view_type& input)
-    : decoder(input.begin(), input.end())
+    : decoder(input.data(), input.data() + input.size())
 {
     stack.push(token::null{});
     switch (decoder.code())

@@ -55,7 +55,7 @@ protected:
 
     virtual void write(const view_type& view)
     {
-        content.append(view.begin(), view.size());
+        content.append(view.data(), view.size());
     }
 
 private:
