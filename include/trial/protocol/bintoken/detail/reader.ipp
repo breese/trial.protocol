@@ -144,7 +144,7 @@ struct reader::overloader<
         case token::float32::code:
             {
                 token::float32::type result = self.decoder.value<token::float32>();
-                if (result > std::numeric_limits<ReturnType>::max())
+                if (ReturnType(result) > std::numeric_limits<ReturnType>::max())
                     throw bintoken::error(overflow);
                 return ReturnType(result);
             }
@@ -152,7 +152,7 @@ struct reader::overloader<
         case token::float64::code:
             {
                 token::float64::type result = self.decoder.value<token::float64>();
-                if (result > std::numeric_limits<ReturnType>::max())
+                if (ReturnType(result) > std::numeric_limits<ReturnType>::max())
                     throw bintoken::error(overflow);
                 return ReturnType(result);
             }
