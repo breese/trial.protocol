@@ -661,7 +661,7 @@ void test_empty()
 
 void test_empty2()
 {
-    boost::string_view input{"{}\n\n{}", 3};
+    json::reader::view_type input{"{}\n\n{}", 3};
     json::reader reader(input);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
     TRIAL_PROTOCOL_TEST_EQUAL(reader.symbol(), token::symbol::begin_object);
