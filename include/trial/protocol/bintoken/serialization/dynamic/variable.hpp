@@ -118,7 +118,9 @@ struct save_overloader< protocol::bintoken::oarchive,
             ar.template save<bintoken::token::null>();
             for (auto it = data.begin(); it != data.end(); ++it)
             {
-                auto value = std::make_pair(it.key(), it.value());
+                auto key = it.key();
+                auto val = it.value();
+                auto value = std::make_pair(std::move(key), std::move(val));
                 ar.save_override(value.first, protocol_version);
                 ar.save_override(value.second, protocol_version);
             }
