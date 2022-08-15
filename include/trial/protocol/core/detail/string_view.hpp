@@ -11,9 +11,18 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#if __cpp_lib_string_view >= 201606L
+#if defined(__has_include)
+# if __has_include(<version>)
+#  include <version>
+#  if __cpp_lib_string_view >= 201606L
+#   define TRIAL_PROTOCOL_USE_STD_STRING_VIEW 1
+#  endif
+# endif
+#endif
 
-#define TRIAL_PROTOCOL_USE_STD_STRING_VIEW 1
+#if TRIAL_PROTOCOL_USE_STD_STRING_VIEW
+# include <string_view>
+# include <cstring>
 
 #else
 
@@ -25,15 +34,12 @@
 #  endif
 # endif
 
-#endif
+# if TRIAL_PROTOCOL_USE_BOOST_STRING_REF
+#  include <boost/utility/string_ref.hpp>
+# else
+#  include <boost/utility/string_view.hpp>
+# endif
 
-#if TRIAL_PROTOCOL_USE_STD_STRING_VIEW
-# include <string_view>
-# include <cstring>
-#elif TRIAL_PROTOCOL_USE_BOOST_STRING_REF
-# include <boost/utility/string_ref.hpp>
-#else
- #include <boost/utility/string_view.hpp>
 #endif
 
 namespace trial
