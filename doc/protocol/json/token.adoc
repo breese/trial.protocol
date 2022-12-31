@@ -1,0 +1,97 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+///////////////////////////////////////////////////////////////////////////////
+
+[#protocol-json-token]
+=== Token
+
+The incremental parser and generator use tokens to identify data types as well
+as errors.
+All token-related types are located in the `trial::protocol::json::token`
+namespace, which we will simply refer to as `token` below.
+[NOTE]
+Tokens are located in the `<trial/protocol/json/token.hpp>` header.
+
+A token is represented by the `token::code` enumeration type with a constant
+for each possible token or error state. This means that each error is
+represented by its own enumerator constant.
+
+==== Token Symbols
+
+Working directly with `token::code` can be tedious.
+Suppose you want to check if an error occurred, then you have to check if the
+current token is one of the numerous error constants.
+Each `token::code` enumerator has therefore been grouped into a more convenient
+enumeration type called `token::symbol` that is better suited for normal
+operation.
+
+All `token::code` error constants have been grouped into the single
+`token::symbol::error` constant, and we can now check for errors with a single
+comparison.
+
+[cols="1,4",width="50%"]
+|===
+| _Symbol_ | _Description_
+| `boolean` | True or false.
+| `integer` | Integer number.
+| `number` | Floating-point number.
+| `string` | String value.
+| `null` | No data.
+| `begin_array` | Start of an array.
+| `end_array` | End of an array.
+| `begin_object` | Start of an associative array.
+| `end_object` | End of an associative array.
+| `end` | End of input or output buffer.
+| `error` | Erroneous format.
+|===
+
+The symbol type will be the preferred manner to use tokens in the examples
+throughout this documentation.
+In fact, we are not even going to describe the `token::code` enumerator constants
+here,footnote:[The description of all `token::code` enumerator constants can be
+found in the reference documentation.] because we are only interested in the
+subset that contains the error codes and they are described in the section on
+<<protocol-json-error,errors>>.
+
+==== Token Categories
+
+The symbol constants are grouped into the `token::category` enumeration type.
+There are different categories of tokens:
+
+[cols="1,4"]
+|===
+| _Category_ | _Description_
+| `data` | Data tokens have a value associated with them, whose content can be
+  retrieved. Examples of data tokens are booleans, numbers, and strings.
+| `structural` | Structural tokens wrap containers and separate items.
+| `nullable` | The nullable token is a special case, because it can represent
+  either a data token without and associated value or structural token without
+  an associated container, such as a missing integer or a missing array. The
+  nullable token is typeless.
+| `status` | A status token indicates another condition.
+|===
+
+The following table shows which categories the the various symbols belong to.
+
+[cols=">,<",width="50%"]
+|===
+| _Symbol_ | _Category_
+| `boolean` | `data`
+| `integer` | `data`
+| `number` | `data`
+| `string` | `data`
+| `null` | `nullable`
+| `begin_array` | `structural`
+| `end_array` | `structural`
+| `begin_object` | `structural`
+| `end_object` | `structural`
+| `separator` | `structural`
+| `end` | `status`
+| `error` | `status`
+|===

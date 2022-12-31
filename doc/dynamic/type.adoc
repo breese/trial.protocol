@@ -1,0 +1,48 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+///////////////////////////////////////////////////////////////////////////////
+
+[#dynamic-type]
+== Types
+
+=== Supported Types
+
+`dynamic::variable` supports a pre-defined list of fundamental data types,
+strings, and containers. These are generally referred to as the supported
+types.
+
+[options="header"]
+|===
+| Type                     | Description
+| `dynamic::nullable`       | No value.
+| `bool`                    | Boolean value.
+| `signed char`             | Very short signed integer.
+| `signed short int`        | Short signed integer.
+| `signed int`              | Signed integer.
+| `signed long int`         | Long signed integer.
+| `signed long long int`    | Very long signed integer.
+| `unsigned char`           | Very short unsigned integer.
+| `unsigned short int`      | Short unsigned integer.
+| `unsigned int`            | Unsigned integer.
+| `unsigned long int`       | Long unsigned integer.
+| `unsigned long long int`  | Very long unsigned integer.
+| `float`                   | Short floating-point number.
+| `double`                  | Floating-point number.
+| `long double`             | Long floating-point number.
+| `dynamic::string_type`    | Narrow-character string. Same as `std::string` by default.
+| `dynamic::wstring_type`   | Wide-character string. Same as `std::wstring` by default.
+| `dynamic::u16string_type` | UTF-16 character string. Same as `std::u16string` by default.
+| `dynamic::u32string_type` | UTF-32 character string. Same as `std::u32string` by default.
+| `dynamic::array_type`     | Sequence of `dynamic::variable`.
+| `dynamic::map_type`       | Sequence of key-value pairs of type `dynamic::variable`.
+|===
+
+=== Type Checking
+
+=== Comparison

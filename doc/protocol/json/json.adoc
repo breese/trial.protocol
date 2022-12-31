@@ -1,0 +1,37 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+///////////////////////////////////////////////////////////////////////////////
+
+[#protocol-json]
+== JSON
+
+http://json.org/[JSON] is a textual data format that encodes booleans, numbers,
+and strings, as well as http://en.wikipedia.org/wiki/Array_data_structure[arrays]
+and http://en.wikipedia.org/wiki/Associative_array[associative arrays] called
+JSON objects.
+
+[NOTE]
+Trial.Protocol supports the JSON format as described by
+http://tools.ietf.org/html/rfc7159[RFC 7159].
+No http://json5.org/[JSON extensions] are supported.
+
+Trial.Protocol provides the following classes for JSON parsing and generation.
+
+[cols="1h,^3,^3",options="header"]
+|===
+| | Parser | Generator
+| Incremental | <<protocol-json-reader,`json::reader`>> | <<protocol-json-writer,`json::writer`>>
+| Serialization | <<protocol-json-iarchive,`json::iarchive`>> | <<protocol-json-oarchive,`json::oarchive`>>
+| Document | `json::to_dynamic` | `json::from_dynamic` |
+|===
+
+include::tutorial.adoc[]
+include::design.adoc[]
+include::token.adoc[]
+include::error.adoc[]

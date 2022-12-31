@@ -1,94 +1,132 @@
-[/ 
-  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+///////////////////////////////////////////////////////////////////////////////
 
-  Distributed under the Boost Software License, Version 1.0.
-     (See accompanying file LICENSE_1_0.txt or copy at
-           http://www.boost.org/LICENSE_1_0.txt).
-]
+[#protocol-json-tutorial]
+=== Tutorial: Serialization
 
-[section:tutorial Tutorial]
+This tutorial shows how JSON serialization archives can be used to serialize
+and deserialize C++ data types in just a few lines of code.
 
-[section JSON serialization]
-
-This tutorial shows how [link protocol.json.oarchive `json::oarchive`] can be
-used to serialize C++ data into JSON in just a few lines of code.
-
-[heading POD serialization]
+[.lead]
+POD Serialization
 
 Let us start by serializing some plain old data.
 First we include some headers:
-```
+[source]
+----
 #include <trial/protocol/buffer/string.hpp> // Use std::string as output buffer
 #include <trial/protocol/json/serialization.hpp>
-```
+----
+
 The `<trial/protocol/json/serialization.hpp>` header is needed to get the
-[link protocol.json.oarchive JSON output archive] that converts our data into
+<<protocol-json-oarchive,JSON output archive>> that converts our data into
 JSON.
-The `json::oarchive` constructor takes an [link protocol.buffer output buffer],
+The `json::oarchive` constructor takes an <<protocol-buffer,output buffer>>,
 and because we want to serialize the result into a `std::string` we must
 include an appropriate wrapper from the `<trial/protocol/buffer/string.hpp>`
 header. If our output buffer had been of a different type, then we should have
 included another header.
 
 Next we serialize our data:
-```
+[source]
+----
 // Build data
-bool data = true;
+const bool data = true;
 
 // Serialization
-std::string result;
-trial::protocol::json::oarchive archive(result);
-archive << data;
+std::string json;
+trial::protocol::json::oarchive output(json);
+output << data;
+----
+The `json` string now contains the formatted JSON output.
+[source]
+----
+assert(json == "true");
+----
 
-assert(result == "true");
-```
+We can deserialize this result again with the <<protocol-json-iarchive,JSON input archive>>.
+[source]
+----
+bool result = false;
+trial::protocol::json::iarchive input(json);
+input >> result;
 
-[heading Non-intrusive serialization]
+assert(result == data);
+----
 
-There is build-in support for serialization of certain STL containers.
+[.lead]
+Non-intrusive Serialization
+
+There is built-in support for serialization of certain STL containers.
 The following example shows how to serialize an `std::map`.
 In addition to the previously mentioned headers, we also include headers to
 serialize both `std::string` and `std::map`.
 
-```
+[source]
+----
 #include <trial/protocol/buffer/string.hpp>
 #include <trial/protocol/json/serialization.hpp>
-```
+----
 The serialization code is exactly the same as in the previous example.
-```
+[source]
+----
 // Build data
 std::map<std::string, std::string> data;
 data["alpha"] = "hydrogen";
 data["bravo"] = "helium";
 
 // Serialization
-std::string result;
-trial::protocol::json::oarchive archive(result);
+std::string output;
+trial::protocol::json::oarchive archive(output);
 archive << data;
 
-assert(result == "{\"alpha\":\"hydrogen",\"bravo\":\"helium\"}");
-```
-[endsect]
+assert(output == "{\"alpha\":\"hydrogen\",\"bravo\":\"helium\"}");
+----
 
-[section Push parser]
+=== Tutorial: Push Parser
 
-This tutorial demonstrates how [link protocol.json.reader `json::reader`] can be
-used to create a push parser.
+In this tutorial we are going to use the incremental parser to build another
+kind of parser. This other kind of parser is also referred to as incremental,
+so we introduce a distinction between incremental pull parsers and incremental
+push parsers. The main difference between these two kinds of parser are the
+direction of control. With pull parsers the user extracts or pulls one token
+after another, whereas with push parser the tokens are automatically pushed
+to the user via callback functions.
+
+The incremental parsers supplied by Trial.Protocol are pull parsers. Pull
+parsers are well-suited to create other kinds of parser interfaces. In this
+tutorial we shall use pull parsers to create push parsers. The serialization
+archives from the previous tutorial are also build around pull parsers.
+
+// FIXME: Start with simple pull parser examples before creating the push parser
+
+<<protocol-json-reader,`json::reader`>> is a pull parser that lazily parses a
+single token in the input. The `json::reader::next()` function is used to
+advance the cursor to the next token. This tutorial demonstrates how
+`json::reader` can be used to create a push parser.
 
 A push parser iterates over the JSON input and invokes callback functions for
-each parsed data item.
-Each data type has a distinct callback function.
-The user provides the implemention of these callback functions.
-The design is a variation of the [@http://en.wikipedia.org/wiki/Builder_pattern
-Builder design pattern], and this is how an XML
-[@http://en.wikipedia.org/wiki/Simple_API_for_XML SAX] parser works.
+each parsed data item. Each data type has a distinct callback function. The
+user provides the implemention of these callback functions. The design is a
+variation of the http://en.wikipedia.org/wiki/Builder_pattern[Builder pattern],
+and this is how XML http://en.wikipedia.org/wiki/Simple_API_for_XML[SAX] parsers
+work.
 
-[heading Definitions]
+[.lead]
+Definitions
 
 First we define the `push_parser` class which takes the callback functions as
-a template parameter.[footnote We could also have used a polymorphic interface
+a template parameter.footnote:[We could also have used a polymorphic interface
 for the callback functions.]
-```
+[source]
+----
 #include <trial/protocol/json/reader.hpp>
 
 namespace json = trial::protocol::json;
@@ -105,11 +143,12 @@ private:
     Callbacks callbacks;
     json::reader reader;
 };
-```
+----
 The `Callbacks` template parameter must be a class that implements a member
-function for each callback function.
-The `Callbacks` class looks something like this:
-```
+function for each callback function. The `Callbacks` class could look something
+like this:
+[source]
+----
 #include <cstdint>
 #include <string>
 
@@ -126,26 +165,28 @@ public:
     void on_begin_object();
     void on_end_object();
 };
-```
+----
 We are not going to implement `my_callbacks` here, although a simple
 implementation could be to simply print the type and value in each callback
 function.
 
-[heading Execution]
+[.lead]
+Execution
 
 After these preliminary definitions, we have now arrived at the crux of the
 problem: how to implement the `push_parser::parse()` function.
-As this is a demonstration of the [link protocol.json.reader `json::reader`],
+As this is a demonstration of the <<protocol-json-reader,`json::reader`>>,
 we are naturally going to implement the push parser with a pull parser.
 Fortunately that is very simple:
 
-# Iterate over the JSON input using `json::reader::next()`.
-    # Identify the current token with `json::reader::symbol()`.
-    # Invoke the appropriate callback function.
-      The current value for data tokens is obtained with `json::reader::value<T>()`.
+. Iterate over the JSON input using `json::reader::next()`.
+.. Identify the current token with `json::reader::symbol()`.
+.. Invoke the appropriate callback function.
+   The current value for data tokens is obtained with `json::reader::value<T>()`.
       
 Here is the entire implementation in its full glory:
-```
+[source]
+----
 void push_parser::parse()
 {
     do
@@ -194,14 +235,12 @@ void push_parser::parse()
 
     } while (reader.next());
 }
-```
+----
 
 Finally, we use the above push parser as follows:
-```
+[source]
+----
 json::reader reader("[null,true,42]"); // Replace with actual JSON input
 push_parser<my_callbacks> parser(reader);
 parser.parse();
-```
-[endsect]
-
-[endsect]
+----

@@ -1,20 +1,22 @@
-[/ 
-  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+///////////////////////////////////////////////////////////////////////////////
 
-  Distributed under the Boost Software License, Version 1.0.
-     (See accompanying file LICENSE_1_0.txt or copy at
-           http://www.boost.org/LICENSE_1_0.txt).
-]
+[#protocol-json-design]
+=== Design Rationale
 
-[#protocol.json.design]
-[section Design Rationale]
+[.lead]
+Incremental
 
-[heading Incremental]
-
-The JSON parser is incremental because that is a versatile
-building-block for network wire protocols.
-Many other JSON parsers are restricted to the 
-[@http://en.wikipedia.org/wiki/Document_Object_Model Document Object Model],
+The JSON parser is incremental because that is a versatile building-block for
+network wire protocols. Many other JSON parsers are restricted to the
+http://en.wikipedia.org/wiki/Document_Object_Model[Document Object Model],
 wherein the entire JSON input is parsed into a parse tree before you can operate
 on it. If the JSON input should end up in your own C++ data structures, then the
 parse tree becomes an unnecessary intermediate step. In this case your program
@@ -22,32 +24,26 @@ becomes both slower and consumes more memory.
 
 A JSON DOM can be created using the incremental parser and Boost.Serialization.
 
-[/ incremental vs serialization vs sax]
-[/ The omission of a DOM is simply a matter of prioritization]
+[.lead]
+Iterator
 
-[heading Iterator]
-
-The ability of [link protocol.json.reader `json::reader`] to read the input one
+The ability of <<protocol-json-reader,`json::reader`>> to read the input one
 token at the time makes it work like an iterator.
 The design is build around the more traditional Iterator design pattern as
 described in the Gang-of-Four book, instead of C++ iterators.
 
-[heading Numbers]
+[.lead]
+Numbers
 
 JSON numbers are arithmetic - there is no distinction between integer and
 floating-point numbers.
-C++ does make that distinction, so [link protocol.json.reader `json::reader`]
+C++ does make that distinction, so <<protocol-json-reader,`json::reader`>>
 will identify numbers either as integers (identified by the
 `json::token::symbol::integer` token) if they consist solely of digits, or as
 floating-point numbers (identified by the `json::token::symbol::number` token)
 if they contain a decimal-point or an exponent.
 
-Regardless of how a number was identified, it can be converted using `json::reader::value<T>()`
-as either a C++ integer or floating-point number.
+Regardless of how a number was identified, it can be converted using
+`json::reader::value<T>()` as either a C++ integer or floating-point number.
 This means that integer numbers that are too big to fit into a C++ integer type
 such as `std::intmax_t` can be read as a floating-point number.
-
-[/ Limits]
-[/ bigint/multiprecision?]
-
-[endsect]

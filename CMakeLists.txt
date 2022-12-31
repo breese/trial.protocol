@@ -63,6 +63,8 @@ add_subdirectory(test/dynamic)
 add_subdirectory(test/json)
 add_subdirectory(test/bintoken)
 
+add_subdirectory(doc)
+
 ###############################################################################
 # Examples
 ###############################################################################
