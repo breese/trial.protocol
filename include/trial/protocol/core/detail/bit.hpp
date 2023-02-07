@@ -32,7 +32,7 @@ namespace detail
 template <typename T>
 constexpr int countl_zero(T x) noexcept
 {
-    return std::countl_zero(typename std::make_unsigned<T>::type(x));
+    return std::countr_zero(typename std::make_unsigned<T>::type(x));
 }
 
 #else
