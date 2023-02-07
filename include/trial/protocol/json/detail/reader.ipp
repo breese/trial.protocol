@@ -455,7 +455,7 @@ template <typename CharT>
 token::code::value basic_reader<CharT>::frame::next_array_value(decoder_type& decoder) noexcept
 {
     const token::code::value current = decoder.code();
-    if (TRIAL_LIKELY(current == token::code::error_value_separator))
+    if TRIAL_LIKELY(current == token::code::error_value_separator)
     {
         // Skip over separator
         decoder.assume_next();
@@ -528,7 +528,7 @@ template <typename CharT>
 token::code::value basic_reader<CharT>::frame::next_object_value(decoder_type& decoder) noexcept
 {
     const auto current = decoder.code();
-    if (TRIAL_LIKELY(current == token::code::error_value_separator))
+    if TRIAL_LIKELY(current == token::code::error_value_separator)
     {
         decoder.assume_next();
         switch (decoder.code())

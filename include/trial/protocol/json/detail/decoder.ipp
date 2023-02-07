@@ -114,7 +114,7 @@ void basic_decoder<CharT>::assume_next() noexcept
 {
     skip_whitespaces();
 
-    if (TRIAL_UNLIKELY(input.empty()))
+    if TRIAL_UNLIKELY(input.empty())
     {
         current.code = token::code::value::end;
         return;

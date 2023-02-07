@@ -33,7 +33,7 @@ bool basic_chunk_reader<CharT>::next()
 template <typename CharT>
 bool basic_chunk_reader<CharT>::next(const view_type& view)
 {
-    if (TRIAL_UNLIKELY(super::decoder.code() == token::code::uninitialized))
+    if TRIAL_UNLIKELY(super::decoder.code() == token::code::uninitialized)
     {
         // Create reader
         basic_chunk_reader other(view);
@@ -68,7 +68,7 @@ bool basic_chunk_reader<CharT>::next(const view_type& view)
 template <typename CharT>
 bool basic_chunk_reader<CharT>::finish(const view_type& view)
 {
-    if (TRIAL_UNLIKELY(super::decoder.code() == token::code::uninitialized))
+    if TRIAL_UNLIKELY(super::decoder.code() == token::code::uninitialized)
     {
         // Create reader
         basic_chunk_reader other(view);
