@@ -164,9 +164,6 @@ private:
 
         pointer operator-> () const;
 
-        bool operator== (const Derived&) const;
-        bool operator!= (const Derived&) const;
-
     protected:
         friend class basic_variable;
 
@@ -187,6 +184,8 @@ private:
         const_reference key() const;
         reference value();
         const_reference value() const;
+
+        bool equals(const Derived&) const;
 
     protected:
         using index_type = unsigned char;
@@ -233,6 +232,9 @@ public:
         reference operator* () { return super::value(); }
         const_reference operator* () const { return super::value(); }
 
+        bool operator==(const iterator& other) const { return super::equals(other); }
+        bool operator!=(const iterator& other) const { return !super::equals(other); }
+
     private:
         friend class basic_variable;
 
@@ -266,6 +268,9 @@ public:
         const_reference key() const { return super::key(); }
         const_reference value() const { return super::value(); }
         const_reference operator* () const { return super::value(); }
+
+        bool operator==(const const_iterator& other) const { return super::equals(other); }
+        bool operator!=(const const_iterator& other) const { return !super::equals(other); }
 
     private:
         friend class basic_variable;
@@ -310,6 +315,9 @@ public:
         //! key_iterator.
 
         const_iterator base() const;
+
+        bool operator==(const key_iterator& other) const { return super::equals(other); }
+        bool operator!=(const key_iterator& other) const { return !super::equals(other); }
 
     private:
         friend class basic_variable;

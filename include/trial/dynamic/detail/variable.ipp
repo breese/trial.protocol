@@ -2497,7 +2497,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () const -
 
 template <typename Allocator>
 template <typename Derived, typename T>
-bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Derived& other) const
+bool basic_variable<Allocator>::iterator_base<Derived, T>::equals(const Derived& other) const
 {
     if (!scope)
         return !other.scope;
@@ -2525,13 +2525,6 @@ bool basic_variable<Allocator>::iterator_base<Derived, T>::operator== (const Der
         return current.template get<map_iterator>() == other.current.template get<map_iterator>();
     }
     TRIAL_DYNAMIC_UNREACHABLE();
-}
-
-template <typename Allocator>
-template <typename Derived, typename T>
-bool basic_variable<Allocator>::iterator_base<Derived, T>::operator!= (const Derived& other) const
-{
-    return !(*this == other);
 }
 
 //-----------------------------------------------------------------------------
