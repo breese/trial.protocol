@@ -43,7 +43,7 @@ auto scan_narrow(const CharT *marker,
                                         _mm_cmplt_epi8(data, lower));
         const auto mask = _mm_movemask_epi8(avoid);
         if (mask != 0)
-            return marker + core::detail::countl_zero(mask);
+            return marker + core::detail::countr_zero(mask);
         marker += 16;
     }
 #endif
@@ -75,7 +75,7 @@ auto scan_digit(const CharT *marker,
         data = _mm_cmplt_epi8(data, legal);
         const auto mask = _mm_movemask_epi8(data);
         if (mask != 0)
-            return marker + core::detail::countl_zero(mask);
+            return marker + core::detail::countr_zero(mask);
         marker += 16;
     }
 #endif

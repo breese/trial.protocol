@@ -30,9 +30,9 @@ namespace detail
 #if defined(TRIAL_PROTOCOL_HAS_HEADER_BIT)
 
 template <typename T>
-constexpr int countl_zero(T x) noexcept
+constexpr int countr_zero(T x) noexcept
 {
-    return std::countl_zero(typename std::make_unsigned<T>::type(x));
+    return std::countr_zero(typename std::make_unsigned<T>::type(x));
 }
 
 #else
@@ -42,27 +42,27 @@ namespace detail
 
 #if defined(__GNUC__) || defined(__clang__)
 
-inline constexpr int countl_zero(unsigned char x) noexcept
+inline constexpr int countr_zero(unsigned char x) noexcept
 {
     return __builtin_ctz(x);
 }
 
-inline constexpr int countl_zero(unsigned short x) noexcept
+inline constexpr int countr_zero(unsigned short x) noexcept
 {
     return __builtin_ctz(x);
 }
 
-inline constexpr int countl_zero(unsigned x) noexcept
+inline constexpr int countr_zero(unsigned x) noexcept
 {
     return __builtin_ctz(x);
 }
 
-inline constexpr int countl_zero(unsigned long x) noexcept
+inline constexpr int countr_zero(unsigned long x) noexcept
 {
         return __builtin_ctzl(x);
 }
 
-inline constexpr int countl_zero(unsigned long long x) noexcept
+inline constexpr int countr_zero(unsigned long long x) noexcept
 {
         return __builtin_ctzll(x);
 }
@@ -72,16 +72,16 @@ inline constexpr int countl_zero(unsigned long long x) noexcept
 } // namespace detail
 
 template <typename T>
-constexpr int countl_zero(T x) noexcept
+constexpr int countr_zero(T x) noexcept
 {
 #if defined(__GNUC__) || defined(__clang__)
-    return detail::countl_zero(typename std::make_unsigned<T>::type(x));
+    return detail::countr_zero(typename std::make_unsigned<T>::type(x));
 #elif defined(_MSC_VER)
     unsigned long trailing_zeroes = 0;
     _BitScanForward(&trailing_zeroes, static_cast<unsigned long>(x));
     return trailing_zeroes;
 #else
-# error "No countl_zero implementation"
+# error "No countr_zero implementation"
 #endif
 }
 
