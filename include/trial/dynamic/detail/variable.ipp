@@ -2470,7 +2470,7 @@ auto basic_variable<Allocator>::iterator_base<Derived, T>::value() const -> cons
 
 template <typename Allocator>
 template <typename Derived, typename T>
-auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () -> pointer
+auto basic_variable<Allocator>::iterator_base<Derived, T>::operator-> () const -> pointer
 {
     assert(scope);
 

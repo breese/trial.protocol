@@ -162,7 +162,7 @@ private:
         Derived& operator-- ();
         Derived operator-- (int);
 
-        pointer operator-> ();
+        pointer operator-> () const;
 
         bool operator== (const Derived&) const;
         bool operator!= (const Derived&) const;
