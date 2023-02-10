@@ -13,14 +13,14 @@
 
 #if !defined(TRIAL_LIKELY)
 # if __cplusplus >= 201803L
-#  define TRIAL_LIKELY(x) [[likely]] (x)
-#  define TRIAL_UNLIKELY(x) [[unlikely]] (x)
+#  define TRIAL_LIKELY(x) (x) [[likely]]
+#  define TRIAL_UNLIKELY(x) (x) [[unlikely]]
 # elif defined(__GNUC__) || defined(__clang__)
-#  define TRIAL_LIKELY(x) __builtin_expect(bool(x), 1)
-#  define TRIAL_UNLIKELY(x) __builtin_expect(bool(x), 0)
+#  define TRIAL_LIKELY(x) (__builtin_expect(bool(x), 1))
+#  define TRIAL_UNLIKELY(x) (__builtin_expect(bool(x), 0))
 # else
-#  define TRIAL_LIKELY(x) x
-#  define TRIAL_UNLIKELY(x) x
+#  define TRIAL_LIKELY(x) (x)
+#  define TRIAL_UNLIKELY(x) (x)
 # endif
 #endif
 
