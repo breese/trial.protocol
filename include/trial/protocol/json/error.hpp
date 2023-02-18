@@ -35,7 +35,9 @@ enum errc
     expected_end_array,
     expected_end_object,
 
-    insufficient_tokens
+    insufficient_tokens,
+    expected_begin_object,
+    field_not_found
 };
 
 const std::error_category& error_category();
