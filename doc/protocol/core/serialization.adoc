@@ -1,17 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-//
 // Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
-//
-// Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file LICENSE_1_0.txt or copy at
-//          http://www.boost.org/LICENSE_1_0.txt)
-//
-///////////////////////////////////////////////////////////////////////////////
 
-[#protocol-core-serialization]
-=== Serialization
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+//]
 
-The Core Specialization contains the glue between Trial.Protocol and
+
+= Serialization
+
+The core serialization contains the glue between Trial.Protocol and
 Boost.Serialization. This glue is only needed when implementing a new protocol.
 Protocol users are instead referred to the serialization headers in the
 protocol-specific packages.

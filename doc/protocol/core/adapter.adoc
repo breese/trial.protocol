@@ -1,33 +1,37 @@
-///////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
 //
-// Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file LICENSE_1_0.txt or copy at
-//          http://www.boost.org/LICENSE_1_0.txt)
+//  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt).
 //
-///////////////////////////////////////////////////////////////////////////////
 
-[#protocol-core-adapter]
-=== Adapter
+= Adapter
 
-C++ data is encoded to a protocol-specific format with a protocol generator
-or output archive. The encoded result is written into the output buffer passed
-via the constructor of the protocol generator.
+TIP: The core component contains types that are used by all protocols
 
-Adapters are used to make the generator aware of the output buffer type.
+When generating a protocol-specific encoded output, the result is written to an
+output buffer. Several types of output buffers can be used, such as arrays,
+strings, and I/O streams. As these have different interfaces, each type is
+wrapped by an adapter. Custom output buffer types can be added with adapter
+traits.
+The output buffer is passed via the constructor of the protocol generator.
 
-Built-in adapters exists for the following output buffer types. Using any of
-these adapters requires the inclusion of the associated header file.
+Trial.protocol has support for a number of commonly used output buffer types.
+Using any of these requires the inclusion of an associated header file as
+shown in the table below.
 
-[cols="3,4",options="header"]
+
 |===
-| Type | Header file
-| CharT[N] | `<trial/protocol/buffer/array.hpp>`
-| `std::array<CharT>` | `<trial/protocol/buffer/array.hpp>`
-| `std::basic_ostream<CharT>` | `<trial/protocol/buffer/ostream.hpp>`
-| `std::basic_string<CharT>` | `<trial/protocol/buffer/string.hpp>`
-| `std::vector<CharT>` | `<trial/protocol/buffer/vector.hpp>`
+
+|Type |Header File 
+|`CharT[N]` |`<trial/protocol/buffer/array.hpp>`
+|`std::array<CharT, N>` |`<trial/protocol/buffer/array.hpp>`
+|`std::basic_ostream<CharT>`|`<trial/protocol/buffer/ostream.hpp>`
+|`std::basic_string<CharT>`|`<trial/protocol/buffer/string.hpp>`
+|`std::vector<CharT>`|`<trial/protocol/buffer/vector.hpp>`
+
 |===
 
 where `CharT` can be `char` or `unsigned char`. Wide characters are not
@@ -35,32 +39,31 @@ supported.
 
 Support for other output buffer types can be added via adapter traits.
 
-=== Adapter Traits
+== Adapter Traits
 
 The encoded output can be written to other output buffer types.
-This is done by specifying a buffer wrapper and a trait to select this
-buffer wrapper for the output buffer type.
+This is done by specifying a buffer adapter and a trait to select this
+buffer adapter for the output buffer type.
 
-The buffer wrapper musts inherit from `buffer::base` and implement the
+The buffer adapter must inherit from `buffer::base` and implement the
 following API:
 
-[options="header"]
-|====
-| Member | Description
-| `bool grow(size_type)` | Reserve space in the output buffer. Returns
-  false if the requested space cannot be reserved, in which case no further
-  data will be written to the output buffer.
-| `void write(value_type)` | Output a single character.
-| `void write(const view_type&)` | Output a sequence of characters.
-|====
 
-==== Tutorial: Deque Adapter
+|===
+| Member |Description
+|`bool grow(size_type)` |Reserve space in the output buffer. Returns false if the requested space cannot be reserved, in which case no further data will be written to the output buffer.
+|`void write(value_type)` |Output a single character.
+|`void write(const view_type&)` |Output a sequence of characters.
+|===
+
+=== Tutorial: Deque Adapter
 
 Assume that we add support for `std::deque`. First the buffer wrapper for
 `std::deque` is written like this:
 
-[source]
+[source, cpp]
 ----
+
 #include <deque>
 #include <trial/protocol/buffer/base.hpp>
 
@@ -98,14 +101,16 @@ private:
     std::deque<value_type>& buffer;
 };
 
-}
+} // namespace my
+
 ----
 
 Next we must make this wrapper known to the protocol generator, which is done
 as follows:
 
-[source]
+[source,cpp]
 ----
+
 namespace trial { namespace protocol { namespace buffer {
 
 template <typename T>
@@ -115,8 +120,13 @@ struct traits< std::deque<T> >
 };
 
 }}}
+
 ----
 
-[NOTE]
-The `traits` struct must be located inside the `trial::protocol::buffer`
-namespace.
+NOTE: The `traits` struct must be located inside the `trial::protocol::buffer` namespace.
+
+
+
+
+
+

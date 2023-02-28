@@ -8,7 +8,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-[#dynamic-design]
 == Design Rationale
 
 This section describes the principles behind the design of `dynamic::variable`.

@@ -12,7 +12,6 @@
 :toc: left
 :toclevels: 2
 :source-highlighter: pygments
-:source-language: C++
 
 = Trial.Dynamic
 Bjørn Reese
@@ -51,7 +50,7 @@ tree for network protocols, and protocol serialization.
 
 All examples throughout this documentation assumes the following prologue:
 
-[source]
+[source,cpp]
 ----
 #include <trial/dynamic/variable.hpp>
 namespace dynamic = trial::dynamic;
@@ -69,7 +68,7 @@ assert(data == dynamic::null);
 ----
 We can morph the above variable into a boolean type simply by assigning a boolean
 value to it.
-[source]
+[source,cpp]
 ----
 // Change into boolean
 data = true;
@@ -78,7 +77,7 @@ assert(data == true);
 ----
 We can even morph it into an array by assigning an
 http://en.cppreference.com/w/cpp/utility/initializer_list[initializer list] to it.
-[source]
+[source,cpp]
 ----
 // Change into array
 data = { 1, 20, 300 };
@@ -99,8 +98,9 @@ auto sum = std::accumulate(data.begin(), data.end(), dynamic::variable());
 assert(sum == 1 + 20 + 300);
 ----
 Finally we morph our variable into an associative array.
-[source]
+[source,cpp]
 ----
+
 // Change into associative array
 data =
   {
@@ -114,21 +114,5 @@ data =
   };
 assert(data.is<dynamic::map>());
 assert(data.size() == 7);
+
 ----
-
-include::type.adoc[]
-include::design.adoc[]
-//include::tutorial.adoc[]
-include::algorithm.adoc[]
-include::converter.adoc[]
-//include:allocator.adoc[]
-
-== Acknowledgement
-
-Ferruccio Barletta for a C++03 compliant https://github.com/ferruccio/dynamic-cpp[dynamic variable].
-
-Agustín Bergé for the article http://talesofcpp.fusionfenix.com/post-17/eggs.variant---part-i["Eggs.Variant - Part I"].
-
-Peter Dimov for the article "Simple pass:[C++11] metaprogramming" (http://pdimov.com/cpp2/simple_cxx11_metaprogramming.html[part 1] and http://pdimov.com/cpp2/simple_cxx11_metaprogramming_2.html[part 2].)
-
-Thomas Köppe for the article https://rawgit.com/google/cxx-std-draft/allocator-paper/allocator_user_guide.html["A Visitor's Guide to pass:[C++] Allocators"].
