@@ -1,14 +1,2 @@
-.gitignore
-*~
-bin
-lib
-CMakeFiles
-CMakeCache.txt
-Makefile
-cmake_install.cmake
-Testing/
-CTestTestfile.cmake
-doc/html
-doc/src
-doc/*.xml
-*.diff
+/node_modules 
+/build

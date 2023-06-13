@@ -1,0 +1,19 @@
+site:
+  title: trial.protocol
+  start_page: trial.protocol:home:introduction.adoc
+content:
+  sources:
+    - url: .
+      start_path: doc
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+  supplemental_files:
+  - path: partials/header-content.hubs
+    contents: ./supplemental-ui/partials/header-content.hbs
+  - path: partials/footer-content.hbs
+    content: ./supplemental-ui/partials/footer-content.hbs
+  - path: .nojekyll 
+    contents: |
+      static_files:
+      - .nojekyll
