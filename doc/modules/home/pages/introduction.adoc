@@ -1,0 +1,45 @@
+= Introduction 
+
+[IMPORTANT]
+====
+Trial.Protocol is not an official Boost library, Trial.Protocol is still work-in-progress
+====
+
+Trial.procol is a header only library.footnote:[Trial.Protocol serialization relies on Boost.Serialization, which is not header-only. Serialization is an optional feature.] for processing (parsing, manipulating, and generating) encoded data for network wire protocols. Trial.Protocol contains several interfaces for parsing and generating encoded data, as well as a heterogeneous tree data structure that can be used as a parse tree. 
+
+Currently supported protocols.footnote:[Trial.Protocol only supports protocols that can be tokenized without using a schema.] are: 
+
+. https://leminhos.gitlab.io/doc.trial.protocol/trial.protocol/protocol/json/json.html[JSON]
+. BinToken 
+
+== Levels of Abstraction 
+
+Protocol processing can be done at any of three levels of abstraction:
+
+. Incremental processors transforms the data token by token. There are two types of incremental processing: (i) push processing where the processing is done automatically and each token causes a callback to be invoked, and (ii) pull processing where the user has to advance manually from one token to the next.footnote:[Pull processors resembles a https://en.cppreference.com/w/cpp/concept/ForwardIterator[ForwardIterator], albeit with an interface closer to the https://en.wikipedia.org/wiki/Iterator_pattern[Iterator pattern].]Incremental processing is also called stream processing.
+. Serialization archives are used to transform directly between the protocol format and C++ data structures. The serialization archives do not go through an intermediate representation and can therefore perform faster and in less memory. The mapping between the protocol format and the C++ data structures can be specified both (i) intrusively by augmenting the C++ data structure with the mapping, and (ii) non-intrusively by specifying the mapping in separate function outside the C++ data structure.
+. Tree processing.footnote:[Tree processing is similar to creating a https://en.wikipedia.org/wiki/Document_Object_Model[Document Object Model]] transforms the the entire encoded data into a generic tree structure which can then be examined and manipulated with tree operations.
+
+At each level of abstraction there are processors for both parsing and generating protocol formats. These are summarized below.
+
+|===
+| | Parser | Generator
+| Incremental | The encoded input can be parsed token by token with an incremental parser. For each token we can query the current token type and value. | The encoded output can be generated token by token with an incremental generator. 
+| Serialization | The encoded input can be deserialized directly into arbitrary C++ data structures with an input archive. | Arbitrary C++ data structures can be serialized directly into encoded output with an output archive. 
+| Tree | The encoded input can be parsed into a dedicated parse tree. | The dedicated parse tree can be transformed into an encoded output. 
+|===
+
+The protocol generators can write the encoded output to different types of buffers as long as an https://leminhos.gitlab.io/doc.trial.protocol/trial.protocol/protocol/core/adapter.html[adapter] exists for the buffer type. The correct header files must be included for this to work seamlessly.
+
+
+[NOTE]
+====
+For brevity all examples in this documentation assumes 
+
+[source,cpp]
+----
+using namespace trial:protocol;
+----
+====
+// Serialization does not support pointers or inheritance/tracking 
+// Pointers/links can be implemented via http://www.w3.org/TR/json-ld/ 
