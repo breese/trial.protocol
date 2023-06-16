@@ -1,0 +1,73 @@
+////
+//  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+//
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+////
+
+= Error 
+
+The http://en.cppreference.com/w/cpp/header/system_error[`<system_error>`]
+framework is used for error codes and exceptions.
+
+NOTE: Error codes and utilities are located in the `<trial/protocol/json/error.hpp>` header.
+
+===== Error codes
+
+Trial.Protocol defines its own `json::error_category` with associated error
+enumerator constants.
+
+Normally, an `error_code` of the current error can be obtained via an `error()`
+member function.
+
+[source,cpp]
+----
+std::string input = "illegal";
+json::reader reader(input);
+
+assert(reader.symbol() == json::symbol::error);
+assert(reader.error() == json::invalid_value);
+
+----
+
+This conversion can also be done manually with `json::to_errc()` and
+`json::make_error_code()`.
+
+[source,cpp]
+----
+std::string input = "illegal";
+json::reader reader(input);
+
+assert(reader.symbol() == json::symbol::error);
+assert(reader.code() == json::code::error_invalid_value);
+
+enum json::errc ec = json::to_errc(reader.code());
+assert(ec == json::invalid_value);
+
+auto error = json::make_error_code(ec);
+assert(error == json::invalid_value);
+
+----
+
+
+The following error codes exists.
+
+.Error Codes 
+|===
+|`json::errc` |Description
+|`unexpected_token` |An unexpected token is encountered in the input.
+|`invalid_key` |An associative array key is not in a valid format.
+|`invalid_value` |The content is not in a valid format.
+|`incompatible_type` |Conversion between two incompatible types failed.
+|`unbalanced_end_array` |Encountered an end array token without a corresponding begin array token.
+|`unbalanced_end_object` |Encountered an end object token without a corresponding begin object token.
+|`expected_end_array` |Encountered an end array token outside an array.
+|`expected_end_object` |Encountered an end object token outside an associative array.
+|===
+
+=== Exception
+
+Conversion errors will result in `json::error` exceptions being thrown.
+`json::error` inherits from `std::system_error` which contains
+a `std::error_code`.

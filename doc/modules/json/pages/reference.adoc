@@ -1,0 +1,37 @@
+// 
+//  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+//
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+//
+
+= JSON Reference
+
+== <boost/libs/trial.protocol/include/trial/protocol/json/error.hpp>
+[source,cpp]
+----
+include::error.hpp[]
+----
+
+== <boost/libs/trial.protocol/include/trial/protocol/json/reader.hpp>
+[source,cpp]
+----
+include::reader.hpp[] 
+----
+
+== <boost/libs/trial.protocol/include/trial/protocol/json/serialization/iarchive.hpp>
+[source,cpp]
+----
+include::iarchive.hpp[] 
+
+----
+
+== <boost/libs/trial.protocol/include/trial/protocol/json/writer.hpp>
+
+[source,cpp]
+----
+
+include::writer.hpp[]
+
+----
