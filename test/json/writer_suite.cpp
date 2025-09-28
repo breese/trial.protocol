@@ -265,6 +265,19 @@ void test_nested_bool_one()
     TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[[false]]");
 }
 
+void test_literal()
+{
+    std::ostringstream result;
+    json::writer writer(result);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::begin_array>(), 1);
+    TRIAL_PROTOCOL_TEST_NO_THROW(writer.separator());
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.literal("null"), 4);
+    TRIAL_PROTOCOL_TEST_NO_THROW(writer.separator());
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.literal("null"), 4);
+    TRIAL_PROTOCOL_TEST_EQUAL(writer.value<token::end_array>(), 1);
+    TRIAL_PROTOCOL_TEST_EQUAL(result.str(), "[null,null]");
+}
+
 void fail_missing_begin()
 {
     std::ostringstream result;
@@ -288,6 +301,7 @@ void run()
     test_bool_one();
     test_bool_two();
     test_nested_bool_one();
+    test_literal();
     fail_missing_begin();
     fail_mismatched_end();
 }
