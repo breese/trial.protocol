@@ -57,6 +57,9 @@ public:
     //! @brief Write raw output.
     size_type literal(const view_type&) BOOST_NOEXCEPT;
 
+    //! @brief Write separator when called before literal()
+    void separator();
+
 #ifndef BOOST_DOXYGEN_INVOKED
 private:
     void validate_scope();

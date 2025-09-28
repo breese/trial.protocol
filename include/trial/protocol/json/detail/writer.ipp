@@ -150,6 +150,13 @@ auto basic_writer<CharT, N>::literal(const view_type& data) BOOST_NOEXCEPT -> si
 }
 
 template <typename CharT, std::size_t N>
+void basic_writer<CharT, N>::separator()
+{
+    validate_scope();
+    stack.top().write_separator();
+}
+
+template <typename CharT, std::size_t N>
 void basic_writer<CharT, N>::validate_scope()
 {
     if (stack.empty())
