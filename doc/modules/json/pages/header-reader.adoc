@@ -1,0 +1,171 @@
+:cpp: C++
+:space: &#160;&#160;&#160;&#160;&#160;
+
+=== Header <boost/libs/trial.protocol/include/trial/protocol/json/reader.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace protocol {
+    namespace json {
+      template<typename CharT> class basic_reader;
+
+      typedef basic_reader< char > reader;
+    }
+  }
+}
+----
+
+[[basic_reader]]
+== Class template basic_reader
+
+trial::protocol::json::basic_reader — Incremental JSON reader.
+
+
+== Synopsis
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/protocol/json/reader.hpp>
+
+template<typename CharT> 
+class basic_reader {
+public:
+  // types
+  typedef unspecified value_type;
+  typedef unspecified size_type; 
+  typedef unspecified view_type; 
+
+  // construct/copy/destruct
+  basic_reader(const view_type &);
+  basic_reader(const basic_reader &);
+
+  // public member functions
+  bool next();
+  bool next(token::code::value);
+  size_type level() const noexcept;
+  token::code::value code() const noexcept;
+  token::symbol::value symbol() const noexcept;
+  token::category::value category() const noexcept;
+  std::error_code error() const noexcept;
+  template<typename ReturnType> ReturnType value() const;
+  const view_type & literal() const noexcept;
+  const view_type & tail() const noexcept;
+};
+----
+
+== Description
+
+Parse a JSON formatted input buffer incrementally. Incrementally means that the reader only parses enough of the input to identify the next token. The entire input has to be parsed by repeating parsing the next token until the end of the input. 
+
+=== basic_reader public construct/copy/destruct
+
+1. `basic_reader([.blue]#const# view_type & view);` +
+Construct an incremental JSON reader. +
+The first token is automatically parsed. +
+The reader does not assume ownership of the view.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Parameters:* | {space} *view* {space} A string view of a JSON formatted buffer.
+|===
+
+2. `basic_reader([.blue]#const# xref:json:header-reader.adoc#basic_reader[basic_reader] & other);` +
+Copy-construct an incremental JSON reader. +
+Copies the internal parsing state from the input reader, and continues parsing independently from where the input reader had reached.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Parameters:* | {space} *other* {space} The reader that is copied.
+|===
+
+=== basic_reader public member functions
+
+1. `[.blue]#bool# next();` +
+Parse the next token.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} false if an error occurred or end-of-input was reached, true otherwise.
+|===
+
+2. `[.blue]#bool# next(token::code::value expect);` +
+Parse the next token if current token has a given value. + 
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Parameters:* | {space} *expect* {space}  Expected value of current token.
+| *Returns:* | {space} false if current token does not have the expected value.
+|===
+
+3. `size_type level() [.blue]#const noexcept#`; +
+Get the current nesting level. +
+Keep track of the nesting level of containers. The outermost root level is 0. +
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} The current nesting level.
+|===
+
+4. `token::code::value code() [.blue]#const noexcept#;` +
+Get the current token as a detailed code.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} The code of the current token.
+|===
+
+5. `token::symbol::value symbol() [.blue]#const noexcept;#` +
+Get the current token as a symbol.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} The symbol of the current token.
+|===
+
+6. `token::category::value category() [.blue]#const noexcept#;` +
+Get the current token as a category.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} The category of the current token.
+|===
+
+7. `std::error_code error() [.blue]#const noexcept#`; +
+Get the current error. +
+The error code contains an error enumerator. If parsing did not result in an error, the json::no_error enumerator is used.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} The current error code.
+|===
+
+
+8. `[.blue]#template#<[.blue]##typename## ReturnType> ReturnType value() [.blue]#const#;` +
+Converts the current value into ReturnType. +
+The following conversions are valid:
+a. Convert a symbol::boolean token into bool.
+b. Convert a symbol::integer token into an integral {cpp} type (expect bool.)
+c. Convert a symbol::real token into a floating-point {cpp} type.
+d. Convert a symbol::string token into `std::string.`
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} The converted value.
+| *Throws:* | {space} xref:json:error.adoc[json::error] If requested type is incompatible with the current token.
+|===
+
+9. `[.blue]#const# view_type & literal() [.blue]#const noexcept#`;
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} A view of the current value before it is converted into its type.
+|===
+
+
+10. `[.blue]#const# view_type & tail() [.blue]#const noexcept#`;
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Returns:* | {space} A view of the remaining buffer. 
+|===

@@ -1,0 +1,7 @@
+name: Trial.Protocol
+version: v1.0 
+asciidoc:
+  attributes:
+    table-caption: false
+nav: 
+- modules/nav.adoc

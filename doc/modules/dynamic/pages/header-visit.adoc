@@ -1,0 +1,58 @@
+:space: &#160;&#160;&#160;&#160;&#160;
+
+=== Header <boost/libs/trial.protocol/include/trial/dynamic/algorithm/visit.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace dynamic {
+    template<typename Visitor, template< typename > class Allocator> 
+      auto visit(Visitor &&, basic_variable< Allocator > &);
+
+    // Immutable visitation. 
+    template<typename Visitor, template< typename > class Allocator> 
+      auto visit(Visitor && visitor, 
+                 const basic_variable< Allocator > & variable);
+  }
+}
+----
+
+
+== Function template visit
+
+trial::dynamic::visit — Mutable visitation.
+
+=== Synopsis 
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/dynamic/algorithm/visit.hpp>
+
+
+template<typename Visitor, template< typename > class Allocator> 
+  auto visit(Visitor && visitor, basic_variable< Allocator > & variable);
+----
+
+== Description
+
+Invokes the call operator on the visitor whose type matches the stored type of the dynamic variable. The type is resolved using the normal rules for C++ function overloading. All call operators must use the same return type.
+
+[source,cpp]
+----
+struct visitor
+{
+  // Matches any stored type; returns nothing.
+  template <typename T> void operator()(T);
+};
+
+dynamic::variable data = 1;
+assert(data.same<int>());
+dynamic::visit(visitor{}, data); // Invokes visitor.operator()(int)
+----
+
+[%autowidth, frame=none, grid=none]
+|===
+| *Parameters:* | {space}&#160; *variable* {space} Non-const dynamic variable +
+                 {space}&#160; *visitor* {space} &#160;&#160; Visitor object.  
+| *Returns:* |{space} `Return type of Visitor::operator()(nullable).`
+|===

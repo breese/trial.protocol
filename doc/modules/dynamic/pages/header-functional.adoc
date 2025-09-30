@@ -1,0 +1,65 @@
+=== Header <boost/libs/trial.protocol/include/trial/dynamic/functional.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace dynamic {
+    template<typename T> struct is;
+    template<typename T> struct same;
+  }
+}
+----
+
+== Struct template is
+
+trial::dynamic::is — Function object to check if variable has a given tag.
+
+=== Synopsis
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/dynamic/functional.hpp>
+
+template<typename T> 
+struct is {
+
+  // public member functions
+  bool operator()(const variable &) const;
+};
+----
+
+== Description
+
+*See Also:* + 
+basic_variable<Allocator>::is<T>() 
+
+== is public member functions
+
+1. [.blue]#bool operator#()([.blue]#const# xref:dynamic:header-variable.adoc[variable] & value) [.blue]#const#;
+
+
+== Struct template same
+
+trial::dynamic::same — Function object to check if variable has exactly a given type.
+
+=== Synopsis
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/dynamic/functional.hpp>
+
+template<typename T> 
+struct same {
+
+  // public member functions
+  bool operator()(const variable &) const;
+};
+----
+
+== Description
+
+*See Also:* +
+
+basic_variable<Allocator>::same<T>() 
+
+same public member functions
+
+1. [.blue]#bool operator#()([.blue]#const# xref:dynamic:header-variable.adoc[variable] & value) [.blue]#const#;

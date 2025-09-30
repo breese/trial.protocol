@@ -1,0 +1,164 @@
+// 
+//  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+// Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+//
+
+= Functions
+
+== Construction
+
+Dynamic variables can be created in various ways.
+[width=100%]
+|===
+| `*Expression*` | `*Semantics*` | `*Conditions*`
+|`V v` |Creates a nullable variable. | _Effects:_
+
+http://en.cppreference.com/w/cpp/language/default_initialization[Default-initializes]
+variable to the nullable type.
+
+_Example:_
+
+[.red]#// Default-initializes to nullable type# + 
+dynamic::variable data; + 
+assert(data.is<dynamic::nullable>());
+
+|`V v(t)` +
+`V v = t` | Creates a variable of given supported type. | _Requires:_ 
+
+`T` shall be a supported type.
+
+_Effects:_ 
+
+http://en.cppreference.com/w/cpp/language/direct_initialization[Direct-initializes] variable to value.
+
+_Example:_
+
+[.red]#// Direct-initializes to integer type# +
+dynamic::variable data([.cyan]#1#); +
+assert(data.is<[.blue]##int##>());
+
+|`V v(u)` +
+`V v = u` |Creates a copy of another dynamic variable. | _Effects:_
+
+http://en.cppreference.com/w/cpp/language/copy_initialization[Copy-initializes]
+variable with the type and value from another dynamic variable.
+
+_Example:_
+
+[.red]#// Copy-initializes from other value# +
+dynamic::variable other([.cyan]#3.0#); +
+dynamic::variable data(other); +
+assert(data.is<[.blue]##double##>());
+
+|`V v { u1, u2, u3, ... }` +
+`V v = { u1, u2, u3, ... }` |Creates an array from initializer list. | _Effects:_
+
+http://en.cppreference.com/w/cpp/language/list_initialization[List-initializes] variable as array from initializer list.
+
+If the initializer list consists of a sequence of pairs, then the values will be stored as an associative array. Otherwise the values will be stored as an array. Nested lists are allowed.
+
+_Example:_
+
+[.red]#// List-initializes heterogenous array from initializer list# +
+dynamic::variable data { null, [.blue]#true#, [.cyan]#2#, [.cyan]#3.0#, [.cyan]#"alpha"# }; +
+assert(data.is<dynamic::array>()); +
+
+[.red]#// List-initializes nested integer array from initializer list# +
+dynamic::variable data { [.cyan]#1#, [.cyan]#2#, { [.cyan]#3#, [.cyan]#4# }, [.cyan]#5# }; +
+assert(data.is<dynamic::array>()); +
+
+| `V v { {u1, u2}, {u3, u4}, ... }` +
+`V v = { {u1, u2}, {u3, u4}, ... }` |Creates an associative array from initializer list. | _Requires:_ +
+Initializer list shall be a sequence of pairs{empty}footnote:[A pair is a dynamic variable containing an array with exactly two dynamic variables.].
+
+_Effects:_
+
+http://en.cppreference.com/w/cpp/language/list_initialization[List-initializes] variable as associative array from initializer list.
+
+If the initializer list consists of a sequence of pairs, then the values will be stored as an associative array. Otherwise the values will be stored as an array. Nested lists are allowed.
+
+_Example:_
+
+
+[.red]#// List-initializes associative array from initializer list# +
+dynamic::variable data { { [.cyan]#"alpha"#, [.cyan]#1# }, { [.cyan]#"bravo"#, [.cyan]#2# } }; +
+assert(data.is<dynamic::map>());
+
+
+| |Creates an array from factory method. |
+| |Creates an associative array from factory method. |
+
+|===
+
+// FIXME: Move to table above 
+== Factory Initialization
+
+Arrays and associated arrays can also be explicitly created with factories.
+
+[source,cpp]
+----
+// Example: List-initializes empty array from factory
+auto data = dynamic::array::make();
+assert(data.is<dynamic::array>());
+assert(data.size() == 0);
+
+----
+[source,cpp]
+----
+// Example: List-initializes array of 42 null values from factory
+auto data = dynamic::array::repeat(42, null);
+assert(data.is<dynamic::array>());
+assert(data.size() == 42);
+
+----
+
+== Capacity
+
+|===
+| `*Function*` | `*Returns*` | `*Description*`
+|`v.empty()` |`[.blue]#bool#` |Returns true if the variable is empty or nullable; return false otherwise.
+|`v.size()` |`size_type` |
+|`v.max_size()` |`size_type` |
+|===
+
+== Acessor
+
+The `assume_value()` functions have a narrow contract. The requested type `T` must match the stored type exactly. It is undefined behavior if the pre-condition `same<T>()` is false.
+
+|===
+| `*Function*` | `*Returns*` | `*Description*`
+|`v.value<T>()` |`T` |Returns stored element by value.
+|`v.[.blue]#operator# T()` |`T` |Conversion operator.
+
+Same operation as `v.value<T>()`.
+|`v.assume_value<T>()` |`T&` |Returns stored element by reference.
+|`v.assume_value<T>() [.blue]#const#` |`[.blue]#const# T&` |
+|`v.[.blue]#operator#[u]` |`[.blue]#const# variable&` |Looks up element by key `u`.
+|`v.[.blue]#operator#[n]` |`[.blue]#const# variable&` |Looks up element by integer position `n`.
+
+|===
+
+.Modifiers
+|===
+| `*Function*` | `*Returns*` | `*Description*`
+|`v.clear()` |`[.blue]#void#` |Erases all nested elements.
+|`v.erase(p)` |`iterator` |Erases element at position `p`.
+|`v.erase(i, j)` |`iterator` |Erases all elements in range [`i`, `j`).
+|`v.insert(t)` |`iterator` |Inserts element `t`.
+|`v.insert(p, t)` |`iterator` |Inserts element `t` at position `p`.
+|`v.insert(i, j)` |`[.blue]#void#` |Inserts elements in range [`i`, `j`).
+|`v.insert(p, i, j)` |`[.blue]#void#` |Inserts elements in range [`i`, `j`) at position `p`.
+|`v.swap(u)`| | 
+|===
+
+== Operators
+
+// FIXME: operator+
+// FIXME: operator+ 
+
+== Iterators
+
+// FIXME: begin() end() etc. 
