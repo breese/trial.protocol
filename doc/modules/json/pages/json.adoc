@@ -1,0 +1,29 @@
+// 
+//  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+//
+
+= JSON
+
+http://json.org/[JSON] is a textual data format that encodes booleans, numbers,
+and strings, as well as http://en.wikipedia.org/wiki/Array_data_structure[arrays]
+and http://en.wikipedia.org/wiki/Associative_array[associative arrays] (called JSON objects).
+
+
+
+NOTE: Trial.Protocol supports http://tools.ietf.org/html/rfc7159[RFC 7159]. No http://json5.org/[JSON extensions] are supported.
+
+== Overview
+
+Trial.Protocol provides the following classes for JSON parsing and generation.
+
+|===
+| | Parser | Generator
+|Incremental | https://leminhos.gitlab.io/doc.trial.protocol/trial.protocol/protocol/json/reader.html[json::reader] | https://leminhos.gitlab.io/doc.trial.protocol/trial.protocol/protocol/json/writer.html[json:writer]
+|Serialization| https://leminhos.gitlab.io/doc.trial.protocol/trial.protocol/protocol/json/iarchive.html[json:iarchive] | https://leminhos.gitlab.io/doc.trial.protocol/trial.protocol/protocol/json/oarchive.html[json::oarchive]
+|Tree | json::parse | json::format
+|===
+

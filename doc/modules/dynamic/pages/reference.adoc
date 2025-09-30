@@ -1,0 +1,41 @@
+= Dynamic Reference
+
+
+== <boost/libs/trial.protocol/include/trial/dynamic/algorithm/visit.hpp>
+
+[source,cpp]
+----
+include::../../../../src/dynamic/visit.hpp[]
+----
+
+== <boost/libs/trial.protocol/include/trial/dynamic/error.hpp>
+
+[source,cpp]
+----
+include::../../../../src/dynamic/error.hpp[]
+
+----
+
+== <boost/libs/trial.protocol/include/trial/dynamic/functional.hpp>
+
+[source,cpp]
+----
+include::../../../../src/dynamic/functional.hpp[]
+
+----
+
+== <boost/libs/trial.protocol/include/trial/dynamic/token.hpp>
+
+[source,cpp]
+----
+include::../../../../src/dynamic/token.hpp[]
+----
+
+== <boost/libs/trial.protocol/include/trial/dynamic/variable.hpp>
+
+
+[source,cpp]
+----
+include::../../../../src/dynamic/variable.hpp[]
+----
+

@@ -1,0 +1,7 @@
+name: trial.protocol
+version: protocol 
+asciidoc:
+  attributes:
+    table-caption: false
+nav: 
+- nav.adoc

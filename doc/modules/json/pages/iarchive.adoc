@@ -1,0 +1,56 @@
+// 
+//  Copyright (C) 2015 Bjorn Reese <breese@users.sourceforge.net>
+//
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+//
+
+= Input Archive
+
+Deserialization of JSON input directly into C++ data structures is done with
+the help of Boost.Serialization.
+The input archive transforms the entire JSON input into C++ data structures all
+at once.
+
+The full parser transforms the entire input into a data structure. This is done via an input archive (called iarchive.) You can either use a generic tree data structure, such as dynamic-cpp, as the Document Object Model, or you can parse the input directly into your own data structures or the standard containers in C++.
+
+// Intrusive vs non-intrusive
+
+=== Simple types
+
+[source,cpp]
+----
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/serialization.hpp>
+
+std::string input = "true";
+json::iarchive archive(input);
+
+bool result;
+archive >> result; // Read the boolean value
+assert(result == true);
+----
+
+=== Custom types
+
+==== STL types
+
+[source,cpp]
+----
+#include <trial/protocol/buffer/string.hpp>
+#include <trial/protocol/json/serialization.hpp>
+
+std::string input = "[1,2,3]";
+json::iarchive archive(input);
+
+std::vector<int> result;
+archive >> result; // Read the entire input into a vector
+assert(result == {1,2,3});
+
+----
+
+=== Integration with reader
+
+// Start with reader, then pass it to iarchive
+

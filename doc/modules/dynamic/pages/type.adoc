@@ -1,0 +1,181 @@
+// 
+//  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+//
+
+// FIXME: references 
+
+== Types
+
+`dynamic::variable` supports a pre-defined list of fundamental data types, strings, and containers.
+These are generally referred to as the _supported types_.
+Each type also belongs to a type category that is represented by a tag type.
+
+.Supported types and tags
+|===
+|Stored type |Tag type |Description
+|`dynamic::nullable` | `dynamic::nullable` |No value.
+|`bool` | `dynamic::boolean` |Boolean value.
+|`signed char` | `dynamic::integer` |Very short signed integer.
+|`signed short int` |`dynamic::integer` |Short signed integer.
+|`signed int` |`dynamic::integer` |Signed integer.
+|`signed long int` |`dynamic::integer` |Long signed integer.
+|`signed long long int` |`dynamic::integer` |Very long signed integer.
+|`unsigned char` |`dynamic::integer` |Very short unsigned integer.
+|`unsigned short int` |`dynamic::integer` |Short unsigned integer.
+|`unsigned int` |`dynamic::integer` |Unsigned integer.
+|`unsigned long int` |`dynamic::integer` |Long unsigned integer.
+|`unsigned long long int` |`dynamic::integer` |Very long unsigned integer.
+|`float` |`dynamic::real` |Short floating-point number.
+|`double` |`dynamic::real` |Floating-point number.
+|`long double` |`dynamic::real` |Long floating-point number.
+| dynamic::string_type` | `dynamic::string` |Narrow-character string. Same as `std::string` by default.
+| dynamic::wstring_type` | `dynamic::wstring` |Wide-character string. Same as `std::wstring` by default.
+| `dynamic::u16string_type` | `dynamic::u16string` |UTF-16 character string. Same as `std::u16string` by default.
+| `dynamic::u32string_type` | `dynamic::u32string` |UTF-32 character string. Same as `std::u32string` by default.
+| `dynamic::array_type` | `dynamic::array` |Sequence of zero or more `dynamic::variable`s.
+| `dynamic::map_type` | `dynamic::map` |Ordered sequence of zero or more key-value pairs sorted by the key. Both key and value are `dynamic::variable`.
+|===
+
+== Type Checking
+
+The current type of a variable can either be queried by type or tag.
+It is also possible to obtain an enumerator that identifies the current type.
+
+Query-by-type is done with the http://breese.github.io/trial/protocol/trial/dynamic/basic_variable.html#idm9983-bb[`same<T>()`] function, which returns true if the current value is stored as type `T`.
+
+[source,cpp]
+----
+dynamic::variable data = 3.0;
+assert(data.same<double>()); // Value is stored as a double.
+assert(!data.same<float>()); // Valus is not stored as a float.
+----
+
+Query-by-tag is done with the http://breese.github.io/trial/protocol/trial/dynamic/basic_variable.html#idm9962-bb[`is<T>()`] function, which returns true if the current value is stored as a type belonging to the category `T`.
+`T` can be a tag or a type. In the latter case the associated tag is looked up, and the variable is queried using this tag.
+
+[source,cpp]
+---- 
+dynamic::variable data = 3.0;
+assert(data.is<dynamic::real>()); // Value is stored as a floating-point number.
+assert(data.is<double>()); // Query using the dynamic::real tag.
+assert(data.is<float>()); // Query using the dynamic::real tag.
+----
+
+Notice that any supported floating-point type can be used to query for the tag.
+
+Query-by-enumeration is done with the http://breese.github.io/trial/protocol/trial/dynamic/basic_variable.html#idm9994-bb[`code()`] or http://breese.github.io/trial/protocol/trial/dynamic/basic_variable.html#idm10113-bb[`symbol()`] functions. These returns an enumerator that indicates the type. The enumerator is suitable for `switch` statements.
+
+[source,cpp]
+----
+switch (data.symbol())
+{
+case dynamic::symbol::integer:
+  break; // Do integer stuff
+case dynamic::symbol::real:
+  break; // Do floating-point number stuff
+default:
+  break; // Do other stuff
+}
+----
+
+.Codes and symbols
+|===
+|Stored type |Code |Symbol
+|`dynamic::nullable` | `dynamic::code::null` | `dynamic::symbol::null`
+|`bool` | `dynamic::code::boolean` | `dynamic::symbol::boolean`
+|`signed char` | `dynamic::code::signed_char` | `dynamic::symbol::integer`
+|`signed short int` | `dynamic::code::signed_short_integer` | `dynamic::symbol::integer`
+|`signed int` | `dynamic::code::signed_integer` | `dynamic::symbol::integer`
+|`signed long int` | `dynamic::code::signed_long_integer` | `dynamic::symbol::integer`
+|`signed long long int` |`dynamic::code::signed_long_long_integer` | `dynamic::symbol::integer`
+|`unsigned char` |`dynamic::code::unsigned_char` |`dynamic::symbol::integer`
+|`unsigned short int` |`dynamic::code::unsigned_short_integer` |`dynamic::symbol::integer`
+|`unsigned int` |`dynamic::code::unsigned_integer` |`dynamic::symbol::integer`
+|`unsigned long int` |`dynamic::code::unsigned_long_integer` |`dynamic::symbol::integer`
+|`unsigned long long int`| `dynamic::code::unsigned_long_long_integer` | `dynamic::symbol::integer`
+|`float` |`dynamic::code::real` |`dynamic::symbol::real`
+|`double` |`dynamic::code::long_real` | `dynamic::symbol::real`
+|`long double`| `dynamic::code::long_long_real` | `dynamic::symbol::real`
+|`dynamic::string_type` | `dynamic::code::string` |`dynamic::symbol::string`
+|`dynamic::wstring_type` | `dynamic::code::wstring` | `dynamic::symbol::wstring`
+|`dynamic::u16string_type` | `dynamic::code::u16string` | `dynamic::symbol::u16string`
+|`dynamic::u32string_type` | `dynamic::code::u32string` | `dynamic::symbol::u32string`
+|`dynamic::array_type` | `dynamic::code::array` | `dynamic::symbol::array`
+|`dynamic::map_type` | `dynamic::code::map` | `dynamic::symbol::map`
+|===
+
+=== Comparison
+
+A dynamic variable can be compared against another dynamic variable, or against a supported type. Supported types are grouped into comparison categories as shown below. Comparison against unsupported types results in a compile-time error.
+
+|===
+|Comparison category |Tag type |Rank
+|Nullable | http://breese.github.io/trial/protocol/trial_protocol/dynamic_variable/user_guide.html[`dynamic::nullable`] |0
+|Arithmetic | http://breese.github.io/trial/protocol/trial/dynamic/boolean.html[`dynamic::boolean`]
+http://breese.github.io/trial/protocol/trial/dynamic/integer.html[`dynamic::integer`]
+http://breese.github.io/trial/protocol/trial/dynamic/real.html[`dynamic::real`] |1
+|Narrow string |http://breese.github.io/trial/protocol/trial/dynamic/string.html[`dynamic::string`] |2
+|Wide string | http://breese.github.io/trial/protocol/trial/dynamic/wstring.html[`dynamic::wstring`] |3
+|UTF-16 string | http://breese.github.io/trial/protocol/trial/dynamic/u16string.html[`dynamic::u16string`] |4
+|UTF-32 string | http://breese.github.io/trial/protocol/trial/dynamic/u32string.html[`dynamic::u32string`] |5
+|Sequenced array | http://breese.github.io/trial/protocol/header/boost/libs/trial_protocol/include/trial/dynamic/variable_hpp.html#trial.dynamic.array[`dynamic::array`] |6
+|Associative array] | http://breese.github.io/trial/protocol/header/boost/libs/trial_protocol/include/trial/dynamic/variable_hpp.html#trial.dynamic.map[`dynamic::map`] |7
+|===
+
+Equality operations first check the argument types. If the argument types belong to different comparison categories, then they are unequal. Otherwise their values are compared according to the normal C++ rules, with the addition that null compares equal to null.
+
+[source,cpp]
+----
+dynamic::variable first;
+dynamic::variable second = 2;
+
+assert(first.is<dynamic::nullable>());
+assert(second.is<dynamic::integer>());
+
+assert(first != second); // Incompatible types are unequal
+----
+
+Relative operations first check the argument types. If the argument types belong to different comparison categories, then their ranks are compared. The ranks are shown in the table above. For example, a nullable type is always less than other types, while an associative array is always greater than other types. Otherwise their values are compared according to the normal C++ rules.
+
+[source,cpp]
+----
+dynamic::variable first;
+dynamic::variable second = 2;
+
+assert(first.is<dynamic::nullable>());
+assert(second.is<dynamic::integer>());
+
+assert(first < second); // Null is less than integers
+----
+
+Sequenced arrays perform a pair-wise comparison of the elements.
+
+[source,cpp]
+----
+dynamic::variable first = { 1, 20, 300 };
+dynamic::variable second = { 1, 20, 300 };
+
+assert(first == second);
+assert(first <= second);
+assert(!(first < second));
+assert(first >= second);
+assert(!(first > second));
+----
+
+Associative arrays perform a pair-wise comparison of the key-value elements.
+
+[source,cpp]
+----
+dynamic::variable first = { { "alpha", true } };
+dynamic::variable second = { { "alpha", true } };
+
+assert(first == second);
+assert(first <= second);
+assert(!(first < second));
+assert(first >= second);
+assert(!(first > second));
+----

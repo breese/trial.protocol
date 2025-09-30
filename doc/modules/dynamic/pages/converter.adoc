@@ -1,0 +1,120 @@
+//
+//  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+//
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt).
+//
+//
+
+= Converters 
+
+Converters are convenience functions for copying data between the dynamic variable and other containers.
+
+The general pattern is `OutputType dynamic::convert::into<OutputType>(InputType)`. The converter derives the `InputType` from the function parameter. The `OutputType` cannot be derived, so it must be specified explicitly as a template parameter.
+
+[source,cpp]
+----
+InputType input = /* input data */;
+
+auto output = dynamic::convert::into<OutputType>(input);
+----
+
+or...
+
+[source,cpp]
+----
+InputType input = /* input data */;
+
+OutputType output = dynamic::convert::into<decltype(output)>(input);
+
+----
+
+An error is raised when converting incompatible types. The error is either passed as an exception, or as an `std::error_code` if specified as output parameter.
+
+[source,cpp]
+----
+
+InputType input = /* input data */;
+std::error_code error;
+
+auto output = dynamic::convert::into<OutputType>(input, error);
+if (error)
+  /* Handle errors */
+
+----
+
+The converters for each container are located in separate header files.
+
+// enum
+//FIXME: empty section!
+
+== std::vector
+
+
+NOTE: `#include <trial/dynamic/convert/std/vector.hpp>`
+
+[source,cpp]
+----
+// Convert std::vector into dynamic variable
+std::vector<int> input = { 1, 2, 3, 4 };
+
+auto output = dynamic::convert::into<dynamic::variable>(input);
+assert(output.is<dynamic::array>());
+assert(output.size == 4);
+
+----
+
+[source,cpp]
+----
+// Convert dynamic variable into std::vector
+dynamic::variable input = { 1, 2, 3, 4 };
+
+auto output = dynamic::convert::into<std::vector<int>>(input);
+assert(output.size() == 4);
+
+----
+
+== std::map
+
+[note `#include <trial/dynamic/convert/std/map.hpp>`]
+
+[source,cpp]
+----
+// Convert std::map into dynamic variable
+std::map<std::string, std::string> input = { { "alpha", "hydrogen" }, { "bravo", "helium" } };
+
+auto output = dynamic::convert::info<dynamic::variable>(input);
+assert(output.is<dynamic::map>());
+assert(output.size == 2);
+
+----
+
+[source,cpp]
+----
+// Convert dynamic variable into std::map
+dynamic::variable input = { { "alpha", "hydrogen" }, { "bravo", "helium" } };
+
+auto output = dynamic::convert::info<std::map<std::string, std::string>>(input);
+assert(output.size() == 2);
+
+----
+
+== boost::any
+
+[NOTE]
+====
+`#include <trial/dynamic/convert/boost/any.hpp>`
+
+This creates a compile-time dependency on Boost.Any.
+====
+
+[source,cpp]
+----
+// Convert boost::any into dynamic variable
+boost::any input = 1;
+
+auto output = dynamic::convert::info<dynamic::variable>(input);
+assert(output.is<int>());
+
+----

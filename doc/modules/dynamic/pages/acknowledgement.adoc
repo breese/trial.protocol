@@ -1,0 +1,6 @@
+= Acknowledgement
+
+Ferrucio Barletta for an earlier C++ 03 compliant https://github.com/ferruccio/dynamic-cpp[dynamic variable]
+
+Agustín Bergé for the article http://talesofcpp.fusionfenix.com/post-17/eggs.variant---part-i["Eggs.variant - Part I"]
+Peter Dimov for the article "Simple C++11 metaprogramming" (http://pdimov.com/cpp2/simple_cxx11_metaprogramming.html[part 1] and http://pdimov.com/cpp2/simple_cxx11_metaprogramming_2.html[part 2]) 
