@@ -1,0 +1,48 @@
+:space: &#160;&#160;&#160;&#160;&#160;
+
+=== Header <boost/libs/trial.protocol/include/trial/protocol/json/writer.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace protocol {
+    namespace json {
+      template<typename CharT, std::size_t N = 2 * sizeof(void *)> 
+        class basic_writer;
+
+      typedef basic_writer< char > writer;
+    }
+  }
+}
+----
+
+
+== Class template basic_writer
+
+trial::protocol::json::basic_writer — Incremental JSON writer.
+
+== Description
+
+Generate JSON output incrementally by appending C++ data. 
+
+== basic_writer public construct/copy/destruct
+
+1. `[.blue]#template#<[.blue]##typename## T> basic_writer(T & buffer);` +
+Construct an incremental JSON writer. +
+The buffer type can be any for which a buffer wrapper exists.
++
+[%autowidth, frame=none, grid=none]
+|===
+| *Parameters:* | {space} *buffer* {space} A buffer where the JSON formatted output is stored.
+|=== 
+
+== basic_writer public member functions
+
+1. `std::error_code error() [.blue]#const noexcept#;`
+2. `size_type level() [.blue]#const noexcept#;`
+3. `[.blue]#template#<[.blue]##typename## T> size_type value();` +
+Write structural output. 
+4. `[.blue]#template#<[.blue]##typename## T> size_type value(T && value);` +
+Write data output.
+5. `size_type literal([.blue]#const# view_type &) [.blue]#noexcept#;` +
+Write raw output. 

@@ -1,0 +1,56 @@
+=== Header <boost/libs/trial.protocol/include/trial/dynamic/token.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace dynamic {
+    namespace token {
+      struct code;
+      struct symbol;
+    }
+  }
+}
+----
+
+[[struct_code]]
+== Struct code
+
+trial::dynamic::token::code
+
+=== Synopsis
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/dynamic/token.hpp>
+
+
+struct code {
+
+  enum value { null, boolean, signed_char, unsigned_char, 
+               signed_short_integer, unsigned_short_integer, signed_integer, 
+               unsigned_integer, signed_long_integer, unsigned_long_integer, 
+               signed_long_long_integer, unsigned_long_long_integer, real, 
+               long_real, long_long_real, string, wstring, u16string, 
+               u32string, array, map, float_number = = real, 
+               double_number = = long_real, 
+               long_double_number = = long_long_real };
+};
+----
+[[struct_symbol]]
+== Struct symbol
+
+trial::dynamic::token::symbol
+
+=== Synopsis
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/dynamic/token.hpp>
+
+
+struct symbol {
+
+  enum value { null, boolean, integer, real, string, wstring, u16string, 
+               u32string, array, map };
+};
+----

@@ -1,0 +1,51 @@
+===  Header <boost/libs/trial.protocol/include/trial/dynamic/error.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace dynamic {
+    class error;
+
+    // Error value. 
+    enum errc { no_error = = 0, incompatible_type };
+
+    // Error category. 
+    const std::error_category & error_category();
+
+    // Error code factory. 
+    std::error_code make_error_code(dynamic::errc e = no_error);
+  }
+}
+
+
+----
+   
+== Class error
+
+[[class_error]]
+trial::dynamic::error — Dynamic system error.
+
+=== Synopsis
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/dynamic/error.hpp>
+
+
+class error : public system_error {
+public:
+  // construct/copy/destruct
+  error(std::error_code);
+};
+----
+
+== Description
+
+Specialization of std::system_error that is used to distinguish between exceptions throw from Trial.Dynamic and other components. 
+
+=== error public construct/copy/destruct
+
+
+
+1. `error(std::error_code ec);` + 
+&#160;Constructs an exception from an error code. 

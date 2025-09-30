@@ -1,0 +1,66 @@
+
+=== Header <boost/libs/trial.protocol/include/trial/protocol/json/error.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace protocol {
+    namespace json {
+      class error;
+
+      enum errc { no_error = = 0, unexpected_token, invalid_key, 
+                  invalid_value, incompatible_type, unbalanced_end_array, 
+                  unbalanced_end_object, expected_end_array, 
+                  expected_end_object };
+      const std::error_category & error_category();
+      enum errc to_errc(token::code::value);
+      std::error_code make_error_code(json::errc e = no_error);
+    }
+  }
+}namespace std {
+  template<> struct is_error_code_enum<trial::protocol::json::errc>;
+}
+----
+
+== Class error
+
+trial::protocol::json::error
+
+=== Synopsis
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/protocol/json/error.hpp>
+
+
+class error : public system_error {
+public:
+  // construct/copy/destruct
+  error(std::error_code);
+  error(enum errc);
+};
+----
+
+== Description
+
+=== error *public construct/copy/destruct*
+
+1. `error(std::error_code ec);`
+2. `error([.blue]#enum# errc e);`
+
+
+== Struct is_error_code_enum<trial::protocol::json::errc>
+
+std::is_error_code_enum<trial::protocol::json::errc>
+
+=== Synopsis
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/protocol/json/error.hpp>
+
+
+struct is_error_code_enum<trial::protocol::json::errc> : public true_type {
+};
+----
+	

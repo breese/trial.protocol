@@ -1,0 +1,91 @@
+= Adapter Traits
+
+The encoded output can be written to other output buffer types.
+This is done by specifying a buffer adapter and a trait to select this
+buffer adapter for the output buffer type.
+
+The buffer adapter must inherit from `buffer::base` and implement the
+following API:
+
+
+|===
+| `*Member*` | `*Description*`
+|`[blue]#bool# grow(size_type)` |Reserve space in the output buffer. Returns false if the requested space cannot be reserved, in which case no further data will be written to the output buffer.
+|`[blue]#void# write(value_type)` |Output a single character.
+|`[blue]#void# write([blue]#const# view_type&)` |Output a sequence of characters.
+|===
+
+== Tutorial: Deque Adapter
+
+Assume that we add support for `std::deque`. First the buffer wrapper for
+`std::deque` is written like this:
+
+[source, cpp]
+----
+
+#include <deque>
+#include <trial/protocol/buffer/base.hpp>
+
+namespace my {
+
+template <CharT>
+class deque_wrapper : public buffer::base<CharT>
+{
+public:
+    using value_type = typename buffer::base<CharT>::value_type;
+    using size_type = typename buffer::base<CharT>::size_type;
+    using view_type = typename buffer::base<CharT>::view_type;
+
+    deque_wrapper(std::deque<value_type>& buffer)
+        : buffer(buffer)
+    {}
+
+protected:
+    virtual bool grow(size_type delta)
+    {
+        buffer.resize(buffer.size() + delta);
+    }
+
+    virtual void write(value_type value)
+    {
+        buffer.push_back(value);
+    }
+
+    virtual void write(const view_type& view)
+    {
+        buffer.insert(buffer.end(), view.begin(), view.end());
+    }
+
+private:
+    std::deque<value_type>& buffer;
+};
+
+} // namespace my
+
+----
+
+Next we must make this wrapper known to the protocol generator, which is done
+as follows:
+
+[source,cpp]
+----
+
+namespace trial { namespace protocol { namespace buffer {
+
+template <typename T>
+struct traits< std::deque<T> >
+{
+    using buffer_type = my::deque_wrapper<T>;
+};
+
+}}}
+
+----
+
+NOTE: The `traits` struct must be located inside the `trial::protocol::buffer` namespace.
+
+
+
+
+
+

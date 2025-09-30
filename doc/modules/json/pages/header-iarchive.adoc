@@ -1,0 +1,68 @@
+
+=== Header <boost/libs/trial.protocol/include/trial/protocol/json/serialization/iarchive.hpp>
+
+[source,cpp]
+----
+namespace trial {
+  namespace protocol {
+    namespace json {
+      [.blue]#template#<[.blue]##typename## CharT> class basic_iarchive;
+
+      typedef basic_iarchive< char > iarchive;
+    }
+  }
+}
+----
+
+== Class template basic_iarchive
+
+trial::protocol::json::basic_iarchive
+
+== Synopsis
+
+[source,cpp]
+----
+// In header: <boost/libs/trial.protocol/include/trial/protocol/json/serialization/iarchive.hpp>
+
+[.blue]#template#<[.blue]##typename## CharT> 
+class basic_iarchive {
+public:
+  // types
+  typedef CharT value_type;
+
+  // construct/copy/destruct
+  basic_iarchive(const json::reader &);
+  basic_iarchive(const json::reader::view_type &);
+  [.blue]#template#<[.blue]##typename## Iterator> basic_iarchive(Iterator, Iterator);
+
+  // public member functions
+  [.blue]#template#<[.blue]##typename## T> void load_override(T &);
+  [.blue]#template#<[.blue]##typename## T> void load_override(T &, long);
+  [.blue]#template#<[.blue]##typename## Tag> void load();
+  [.blue]#template#<[.blue]##typename## T> void load(T &);
+  [.blue]#template#<[.blue]##typename## Tag> bool at() const;
+  token::code::value code() const;
+  token::symbol::value symbol() const;
+  token::category::value category() const;
+};
+----
+
+
+== Description
+
+=== basic_iarchive public construct/copy/destruct
+
+1. `basic_iarchive([.blue]#const# xref:header-reader.adoc[json::reader] &);`
+2. `basic_iarchive([.blue]#const# json::reader::view_type &);`
+3. `[.blue]#template#<[.blue]##typename## Iterator> basic_iarchive(Iterator begin, Iterator end);`
+
+=== basic_iarchive public member functions
+
+1. `[.blue]#template#<[.blue]##typename## T> [.blue]#void# load_override(T & data);`
+2. `[.blue]#template#<[.blue]##typename## T> [.blue]#void# load_override(T & data, [.blue]#long#);`
+3. `[.blue]#template#<[.blue]##typename## Tag> [.blue]#void# load();`
+4. `[.blue]#template#<[.blue]##typename## T> [.blue]#void# load(T &);`
+5. `[.blue]#template#<[.blue]##typename## Tag> [.blue]#bool# at() [.blue]#const#;`
+6. `token::code::value code() [.blue]#const#;`
+7. `token::symbol::value symbol() [.blue]#const#;`
+8. `token::category::value category() [.blue]#const#;`

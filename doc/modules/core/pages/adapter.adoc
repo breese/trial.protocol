@@ -1,0 +1,34 @@
+//
+//
+//  Copyright (C) 2017 Bjorn Reese <breese@users.sourceforge.net>
+
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt).
+//
+
+= Adapter
+
+TIP: The core component contains types that are used by all protocols.
+
+When generating a protocol-specific encoded output, the result is written to an output buffer. Several types of output buffers can be used, such as arrays, strings, and I/O streams. As these have different interfaces, each type is wrapped by an adapter. Custom output buffer types can be added with adapter traits. The output buffer is passed via the constructor of the protocol generator.
+
+Trial.Protocol has support for a number of commonly used output buffer types. Using any of these requires the inclusion of an associated header file as shown in the table below.  
+
+
+|===
+
+|`*Type*` |`*Header File*`
+|`CharT[N]` |`<trial/protocol/buffer/array.hpp>`
+|`std::array<CharT, N>` |`<trial/protocol/buffer/array.hpp>`
+|`std::basic_ostream<CharT>`|`<trial/protocol/buffer/ostream.hpp>`
+|`std::basic_string<CharT>`|`<trial/protocol/buffer/string.hpp>`
+|`std::vector<CharT>`|`<trial/protocol/buffer/vector.hpp>`
+
+|===
+
+where `CharT` can be `[blue]#char#` or `[blue]#unsigned char#.` Wide characters are not
+supported.
+
+Support for other output buffer types can be added via adapter traits. 
+
