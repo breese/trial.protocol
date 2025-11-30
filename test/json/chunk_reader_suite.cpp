@@ -43,10 +43,20 @@ void string_missing_array_end()
     TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::end_array);
 }
 
+void string_invalid_token()
+{
+    json::chunk_reader reader;
+    TRIAL_PROTOCOL_TEST(reader.finish("\"a\"%"));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::string);
+    TRIAL_PROTOCOL_TEST(!reader.next());
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+}
+
 void run()
 {
     string_missing_quote();
     string_missing_array_end();
+    string_invalid_token();
 }
 
 } // namespace string_suite
@@ -168,6 +178,48 @@ void run()
 
 //-----------------------------------------------------------------------------
 
+namespace array_suite
+{
+
+void array_invalid_token()
+{
+    json::chunk_reader reader;
+    TRIAL_PROTOCOL_TEST(reader.finish("[%"));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_array);
+    TRIAL_PROTOCOL_TEST(!reader.next());
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+}
+
+void run()
+{
+    array_invalid_token();
+}
+
+} // namespace array_suite
+
+//-----------------------------------------------------------------------------
+
+namespace object_suite
+{
+
+void object_invalid_token()
+{
+    json::chunk_reader reader;
+    TRIAL_PROTOCOL_TEST(reader.finish("{%"));
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::begin_object);
+    TRIAL_PROTOCOL_TEST(!reader.next());
+    TRIAL_PROTOCOL_TEST_EQUAL(reader.code(), token::code::error_unexpected_token);
+}
+
+void run()
+{
+    object_invalid_token();
+}
+
+} // namespace object_suite
+
+//-----------------------------------------------------------------------------
+
 namespace whitespace_suite
 {
 
@@ -228,6 +280,8 @@ int main()
 {
     string_suite::run();
     number_suite::run();
+    array_suite::run();
+    object_suite::run();
     whitespace_suite::run();
 
     return boost::report_errors();
